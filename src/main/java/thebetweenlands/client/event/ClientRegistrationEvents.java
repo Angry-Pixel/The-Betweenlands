@@ -92,6 +92,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
+		event.register(MenuRegistry.CENSER.get(), CenserScreen::new);
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
 		event.register(MenuRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);

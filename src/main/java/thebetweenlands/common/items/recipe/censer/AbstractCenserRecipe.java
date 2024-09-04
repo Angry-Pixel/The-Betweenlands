@@ -2,6 +2,7 @@ package thebetweenlands.common.items.recipe.censer;
 
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -93,7 +94,7 @@ public abstract class AbstractCenserRecipe<T> implements CenserRecipe<T> {
 
 	@Override
 	public void getLocalizedEffectText(T context, Censer censer, List<Component> tooltip) {
-		tooltip.add(Component.translatable(String.format("tooltip.bl.censer.effect.%s", BLRegistries.CENSER_RECIPES.getKey(this).getPath())));
+		tooltip.add(Component.translatable(String.format("block.thebetweenlands.censer.effect.%s", BLRegistries.CENSER_RECIPES.getKey(this).getPath())));
 
 		int consumptionAmount = this.getConsumptionAmount(context, censer);
 
@@ -107,7 +108,7 @@ public abstract class AbstractCenserRecipe<T> implements CenserRecipe<T> {
 			float approxRemainingSeconds = approxRemainingTicks / 20.0f;
 			float approxRemainingMinutes = approxRemainingSeconds / 60.0f;
 
-			tooltip.add(Component.translatable("tooltip.bl.censer.remaining_duration", amountLeft, Mth.ceil(approxRemainingTicks), Mth.ceil(approxRemainingSeconds), Mth.ceil(approxRemainingMinutes), StringUtil.formatTickDuration(Mth.ceil(approxRemainingTicks), 20)));
+			tooltip.add(Component.translatable("block.thebetweenlands.censer.remaining_duration", amountLeft, Mth.ceil(approxRemainingTicks), Mth.ceil(approxRemainingSeconds), Mth.ceil(approxRemainingMinutes), StringUtil.formatTickDuration(Mth.ceil(approxRemainingTicks), 20)));
 		}
 	}
 
@@ -117,7 +118,7 @@ public abstract class AbstractCenserRecipe<T> implements CenserRecipe<T> {
 	}
 
 	@Override
-	public void render(T context, Censer censer, double x, double y, double z, float partialTicks) {
+	public void render(T context, Censer censer, BlockPos pos, float partialTicks) {
 
 	}
 

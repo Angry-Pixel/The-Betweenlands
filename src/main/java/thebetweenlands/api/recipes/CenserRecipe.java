@@ -1,5 +1,6 @@
 package thebetweenlands.api.recipes;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -154,12 +155,10 @@ public interface CenserRecipe<Context> {
 	 * Called when the censer is rendered with this recipe active
 	 * @param context
 	 * @param censer
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param pos
 	 * @param partialTicks
 	 */
-	void render(@Nullable Context context, Censer censer, double x, double y, double z, float partialTicks);
+	void render(@Nullable Context context, Censer censer, BlockPos pos, float partialTicks);
 
 	/**
 	 * Whether this recipe/effect creates dungeon fog that accelerates

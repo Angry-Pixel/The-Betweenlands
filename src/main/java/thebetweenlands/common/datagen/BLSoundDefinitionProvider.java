@@ -181,7 +181,7 @@ public class BLSoundDefinitionProvider extends SoundDefinitionsProvider {
 			sound("sorry")
 		).subtitle("blsubtitles.misc.angry_pebble"));
 		add(SoundRegistry.PEBBLE_HISS, definition().with(
-			sound("random/fuse")
+			vanillaSound("random/fuse")
 		).subtitle("blsubtitles.misc.angry_pebble.hiss"));
 		add(SoundRegistry.REJECTED, definition().with(
 			sound("rejected")
@@ -518,7 +518,7 @@ public class BLSoundDefinitionProvider extends SoundDefinitionsProvider {
 			sound("pyrad_living_3")
 		).subtitle("blsubtitles.entity.pyrad.living"));
 		add(SoundRegistry.PYRAD_SHOOT, definition().with(
-			sound("mob/ghast/fireball4")
+			vanillaSound("mob/ghast/fireball4")
 		).subtitle("blsubtitles.entity.pyrad.shoot"));
 		add(SoundRegistry.LURKER_HURT, definition().with(
 			sound("lurker_hurt_1"),
@@ -925,6 +925,10 @@ public class BLSoundDefinitionProvider extends SoundDefinitionsProvider {
 	}
 
 	protected static SoundDefinition.Sound sound(final String name) {
-		return sound(ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, name));
+		return sound(TheBetweenlands.prefix(name));
+	}
+
+	protected static SoundDefinition.Sound vanillaSound(final String name) {
+		return sound(ResourceLocation.withDefaultNamespace(name));
 	}
 }

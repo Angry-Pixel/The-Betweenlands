@@ -4,6 +4,10 @@
       "type": "minecraft:directory",
       "prefix": "fluid/",
       "source": "fluid"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "thebetweenlands:entity/block/censer_fog"
     }
   ]
 }

@@ -7,6 +7,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.WallSide;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
@@ -14,9 +16,11 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.*;
+import thebetweenlands.common.block.waterlog.SwampWallBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.generators.BlockStateProvider {
 
@@ -766,8 +770,25 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 	}
 
 	public void wallBlockWithItem(DeferredBlock<Block> block, DeferredBlock<Block> baseBlock) {
-		this.wallBlock((WallBlock) block.get(), this.blockTexture(baseBlock.get()));
+		MultiPartBlockStateBuilder builder = getMultipartBuilder(block.get())
+			.part().modelFile(models().wallPost(block.getId().getPath() + "_post", this.blockTexture(baseBlock.get()))).addModel()
+			.condition(WallBlock.UP, true).end();
+		WALL_PROPS.entrySet().stream()
+			.filter(e -> e.getKey().getAxis().isHorizontal())
+			.forEach(e -> {
+				wallSidePart(builder, models().wallSide(block.getId().getPath() + "_side", this.blockTexture(baseBlock.get())), e, WallSide.LOW);
+				wallSidePart(builder, models().wallSideTall(block.getId().getPath() + "_side_tall", this.blockTexture(baseBlock.get())), e, WallSide.TALL);
+			});
 		this.itemModels().wallInventory(block.getId().toString(), this.blockTexture(baseBlock.get()));
+	}
+
+	private void wallSidePart(MultiPartBlockStateBuilder builder, ModelFile model, Map.Entry<Direction, Property<WallSide>> entry, WallSide height) {
+		builder.part()
+			.modelFile(model)
+			.rotationY((((int) entry.getKey().toYRot()) + 180) % 360)
+			.uvLock(true)
+			.addModel()
+			.condition(entry.getValue(), height);
 	}
 
 	public void fenceBlockWithItem(DeferredBlock<Block> fence, DeferredBlock<Block> planks) {

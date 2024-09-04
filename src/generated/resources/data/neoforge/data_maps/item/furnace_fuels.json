@@ -1,0 +1,25 @@
+{
+  "values": {
+    "thebetweenlands:hearthgrove_bark": {
+      "burn_time": 800
+    },
+    "thebetweenlands:hearthgrove_log": {
+      "burn_time": 800
+    },
+    "thebetweenlands:sulfur": {
+      "burn_time": 1600
+    },
+    "thebetweenlands:tarred_hearthgrove_bark": {
+      "burn_time": 4800
+    },
+    "thebetweenlands:tarred_hearthgrove_log": {
+      "burn_time": 4800
+    },
+    "thebetweenlands:undying_embers": {
+      "burn_time": 20000
+    },
+    "thebetweenlands:weedwood_stick": {
+      "burn_time": 100
+    }
+  }
+}

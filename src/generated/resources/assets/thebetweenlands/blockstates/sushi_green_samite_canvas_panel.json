@@ -1,9 +1,23 @@
 {
   "variants": {
-    "axis=x": {
+    "axis=x,water_type=none": {
       "model": "thebetweenlands:block/sushi_green_samite_canvas_panel"
     },
-    "axis=z": {
+    "axis=x,water_type=swamp_water": {
+      "model": "thebetweenlands:block/sushi_green_samite_canvas_panel"
+    },
+    "axis=x,water_type=water": {
+      "model": "thebetweenlands:block/sushi_green_samite_canvas_panel"
+    },
+    "axis=z,water_type=none": {
+      "model": "thebetweenlands:block/sushi_green_samite_canvas_panel",
+      "y": 90
+    },
+    "axis=z,water_type=swamp_water": {
+      "model": "thebetweenlands:block/sushi_green_samite_canvas_panel",
+      "y": 90
+    },
+    "axis=z,water_type=water": {
       "model": "thebetweenlands:block/sushi_green_samite_canvas_panel",
       "y": 90
     }

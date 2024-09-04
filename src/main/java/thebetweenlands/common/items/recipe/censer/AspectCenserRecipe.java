@@ -1,5 +1,6 @@
 package thebetweenlands.common.items.recipe.censer;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
@@ -9,23 +10,25 @@ import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.client.shader.postprocessing.GroundFog;
+import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.items.AspectVialItem;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class AspectCenserRecipe extends AbstractCenserRecipe<AspectCenserRecipe.CenserRecipeAspectContext> {
 
 	@Override
 	public boolean matchesInput(ItemStack stack) {
-		return stack.getItem() instanceof AspectVialItem && !AspectContainerItem.fromItem(stack).getAspects().isEmpty();
+		return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().isPresent();
 	}
 
 	@Override
 	public int getInputAmount(ItemStack stack) {
-		return Math.min(AspectContainerItem.fromItem(stack).getAspects().getFirst().amount() / 5, 1000);
+		return Math.min(stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).amount() / 5, 1000);
 	}
 
 	@Override
 	public CenserRecipeAspectContext createContext(ItemStack stack) {
-		return new CenserRecipeAspectContext(AspectContainerItem.fromItem(stack).getAspects().get(0).type());
+		return new CenserRecipeAspectContext(stack);
 	}
 
 	@Override
@@ -35,7 +38,7 @@ public class AspectCenserRecipe extends AbstractCenserRecipe<AspectCenserRecipe.
 	}
 
 	@Override
-	public void render(CenserRecipeAspectContext context, Censer censer, double x, double y, double z, float partialTicks) {
+	public void render(CenserRecipeAspectContext context, Censer censer, BlockPos pos, float partialTicks) {
 		float effectStrength = censer.getEffectStrength(partialTicks);
 
 		if(effectStrength > 0.01F && ShaderHelper.INSTANCE.isWorldShaderActive()) {
@@ -59,14 +62,14 @@ public class AspectCenserRecipe extends AbstractCenserRecipe<AspectCenserRecipe.
 
 	@Override
 	public int getEffectColor(CenserRecipeAspectContext context, Censer censer, EffectColorType type) {
-		return context.type.value().color();
+		return context.stack().getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).getAspectColor();
 	}
 
 	@Override
 	public Holder<AspectType> getAspectFogType(CenserRecipeAspectContext context, Censer censer) {
-		return context.type();
+		return context.stack().getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().orElse(null);
 	}
 
-	public record CenserRecipeAspectContext(Holder<AspectType> type) {
+	public record CenserRecipeAspectContext(ItemStack stack) {
 	}
 }

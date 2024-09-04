@@ -50,7 +50,7 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 
 	public CenserBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(ENABLED, false).setValue(WATER_TYPE, WaterType.NONE));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(ENABLED, true).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 			return InteractionResult.SUCCESS;
 		} else {
 			if (level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
-				player.openMenu(censer);
+				player.openMenu(censer, buf -> buf.writeBlockPos(pos));
 			}
 			return InteractionResult.CONSUME;
 		}
@@ -112,7 +112,6 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 			}
 		}
 	}
-
 
 	@Nullable
 	@Override

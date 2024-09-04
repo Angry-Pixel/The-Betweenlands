@@ -1,65 +1,193 @@
 {
   "variants": {
-    "facing=east,half=bottom,open=false": {
+    "facing=east,half=bottom,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
       "y": 90
     },
-    "facing=east,half=bottom,open=true": {
+    "facing=east,half=bottom,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
+      "y": 90
+    },
+    "facing=east,half=bottom,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
+      "y": 90
+    },
+    "facing=east,half=bottom,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "y": 90
     },
-    "facing=east,half=top,open=false": {
+    "facing=east,half=bottom,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "y": 90
+    },
+    "facing=east,half=bottom,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "y": 90
+    },
+    "facing=east,half=top,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
       "y": 90
     },
-    "facing=east,half=top,open=true": {
+    "facing=east,half=top,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
+      "y": 90
+    },
+    "facing=east,half=top,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
+      "y": 90
+    },
+    "facing=east,half=top,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "x": 180,
       "y": 270
     },
-    "facing=north,half=bottom,open=false": {
+    "facing=east,half=top,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180,
+      "y": 270
+    },
+    "facing=east,half=top,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=bottom,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom"
     },
-    "facing=north,half=bottom,open=true": {
+    "facing=north,half=bottom,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom"
+    },
+    "facing=north,half=bottom,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom"
+    },
+    "facing=north,half=bottom,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open"
     },
-    "facing=north,half=top,open=false": {
+    "facing=north,half=bottom,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open"
+    },
+    "facing=north,half=bottom,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open"
+    },
+    "facing=north,half=top,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_top"
     },
-    "facing=north,half=top,open=true": {
+    "facing=north,half=top,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top"
+    },
+    "facing=north,half=top,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top"
+    },
+    "facing=north,half=top,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "x": 180,
       "y": 180
     },
-    "facing=south,half=bottom,open=false": {
+    "facing=north,half=top,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180,
+      "y": 180
+    },
+    "facing=north,half=top,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,half=bottom,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
       "y": 180
     },
-    "facing=south,half=bottom,open=true": {
+    "facing=south,half=bottom,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
+      "y": 180
+    },
+    "facing=south,half=bottom,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
+      "y": 180
+    },
+    "facing=south,half=bottom,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "y": 180
     },
-    "facing=south,half=top,open=false": {
+    "facing=south,half=bottom,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "y": 180
+    },
+    "facing=south,half=bottom,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "y": 180
+    },
+    "facing=south,half=top,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
       "y": 180
     },
-    "facing=south,half=top,open=true": {
+    "facing=south,half=top,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
+      "y": 180
+    },
+    "facing=south,half=top,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
+      "y": 180
+    },
+    "facing=south,half=top,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "x": 180
     },
-    "facing=west,half=bottom,open=false": {
+    "facing=south,half=top,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180
+    },
+    "facing=south,half=top,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180
+    },
+    "facing=west,half=bottom,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
       "y": 270
     },
-    "facing=west,half=bottom,open=true": {
+    "facing=west,half=bottom,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
+      "y": 270
+    },
+    "facing=west,half=bottom,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_bottom",
+      "y": 270
+    },
+    "facing=west,half=bottom,open=true,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "y": 270
     },
-    "facing=west,half=top,open=false": {
+    "facing=west,half=bottom,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "y": 270
+    },
+    "facing=west,half=bottom,open=true,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "y": 270
+    },
+    "facing=west,half=top,open=false,water_type=none": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
       "y": 270
     },
-    "facing=west,half=top,open=true": {
+    "facing=west,half=top,open=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
+      "y": 270
+    },
+    "facing=west,half=top,open=false,water_type=water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_top",
+      "y": 270
+    },
+    "facing=west,half=top,open=true,water_type=none": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180,
+      "y": 90
+    },
+    "facing=west,half=top,open=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
+      "x": 180,
+      "y": 90
+    },
+    "facing=west,half=top,open=true,water_type=water": {
       "model": "thebetweenlands:block/treated_weedwood_trapdoor_open",
       "x": 180,
       "y": 90

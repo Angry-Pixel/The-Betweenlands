@@ -1,205 +1,615 @@
 {
   "variants": {
-    "facing=east,half=bottom,shape=inner_left": {
+    "facing=east,half=bottom,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "y": 270
     },
-    "facing=east,half=bottom,shape=inner_right": {
+    "facing=east,half=bottom,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=east,half=bottom,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=east,half=bottom,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner"
     },
-    "facing=east,half=bottom,shape=outer_left": {
+    "facing=east,half=bottom,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner"
+    },
+    "facing=east,half=bottom,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner"
+    },
+    "facing=east,half=bottom,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "y": 270
     },
-    "facing=east,half=bottom,shape=outer_right": {
+    "facing=east,half=bottom,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=east,half=bottom,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=east,half=bottom,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer"
     },
-    "facing=east,half=bottom,shape=straight": {
+    "facing=east,half=bottom,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer"
+    },
+    "facing=east,half=bottom,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer"
+    },
+    "facing=east,half=bottom,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs"
     },
-    "facing=east,half=top,shape=inner_left": {
+    "facing=east,half=bottom,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs"
+    },
+    "facing=east,half=bottom,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs"
+    },
+    "facing=east,half=top,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180
     },
-    "facing=east,half=top,shape=inner_right": {
+    "facing=east,half=top,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=east,half=top,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=east,half=top,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "facing=east,half=top,shape=outer_left": {
+    "facing=east,half=top,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=east,half=top,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=east,half=top,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180
     },
-    "facing=east,half=top,shape=outer_right": {
+    "facing=east,half=top,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=east,half=top,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=east,half=top,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "facing=east,half=top,shape=straight": {
+    "facing=east,half=top,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=east,half=top,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=east,half=top,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "x": 180
     },
-    "facing=north,half=bottom,shape=inner_left": {
+    "facing=east,half=top,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=east,half=top,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=north,half=bottom,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "y": 180
     },
-    "facing=north,half=bottom,shape=inner_right": {
+    "facing=north,half=bottom,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=north,half=bottom,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=north,half=bottom,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "y": 270
     },
-    "facing=north,half=bottom,shape=outer_left": {
+    "facing=north,half=bottom,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=north,half=bottom,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=north,half=bottom,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "y": 180
     },
-    "facing=north,half=bottom,shape=outer_right": {
+    "facing=north,half=bottom,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=north,half=bottom,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=north,half=bottom,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "y": 270
     },
-    "facing=north,half=bottom,shape=straight": {
+    "facing=north,half=bottom,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=north,half=bottom,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=north,half=bottom,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "y": 270
     },
-    "facing=north,half=top,shape=inner_left": {
+    "facing=north,half=bottom,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=north,half=bottom,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=north,half=top,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "facing=north,half=top,shape=inner_right": {
+    "facing=north,half=top,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=top,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=top,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180
     },
-    "facing=north,half=top,shape=outer_left": {
+    "facing=north,half=top,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=north,half=top,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=north,half=top,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "facing=north,half=top,shape=outer_right": {
+    "facing=north,half=top,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=top,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=top,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180
     },
-    "facing=north,half=top,shape=straight": {
+    "facing=north,half=top,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=north,half=top,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=north,half=top,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "facing=south,half=bottom,shape=inner_left": {
+    "facing=north,half=top,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,half=top,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=south,half=bottom,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner"
     },
-    "facing=south,half=bottom,shape=inner_right": {
+    "facing=south,half=bottom,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner"
+    },
+    "facing=south,half=bottom,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner"
+    },
+    "facing=south,half=bottom,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "y": 90
     },
-    "facing=south,half=bottom,shape=outer_left": {
+    "facing=south,half=bottom,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=bottom,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=bottom,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer"
     },
-    "facing=south,half=bottom,shape=outer_right": {
+    "facing=south,half=bottom,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer"
+    },
+    "facing=south,half=bottom,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer"
+    },
+    "facing=south,half=bottom,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "y": 90
     },
-    "facing=south,half=bottom,shape=straight": {
+    "facing=south,half=bottom,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=bottom,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=bottom,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "y": 90
     },
-    "facing=south,half=top,shape=inner_left": {
+    "facing=south,half=bottom,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=bottom,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=top,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "facing=south,half=top,shape=inner_right": {
+    "facing=south,half=top,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=south,half=top,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=south,half=top,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "facing=south,half=top,shape=outer_left": {
+    "facing=south,half=top,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,half=top,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,half=top,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "facing=south,half=top,shape=outer_right": {
+    "facing=south,half=top,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=south,half=top,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=south,half=top,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "facing=south,half=top,shape=straight": {
+    "facing=south,half=top,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,half=top,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,half=top,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "facing=west,half=bottom,shape=inner_left": {
+    "facing=south,half=top,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=south,half=top,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=west,half=bottom,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "y": 90
     },
-    "facing=west,half=bottom,shape=inner_right": {
+    "facing=west,half=bottom,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=west,half=bottom,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=west,half=bottom,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "y": 180
     },
-    "facing=west,half=bottom,shape=outer_left": {
+    "facing=west,half=bottom,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=bottom,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=bottom,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "y": 90
     },
-    "facing=west,half=bottom,shape=outer_right": {
+    "facing=west,half=bottom,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=west,half=bottom,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=west,half=bottom,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "y": 180
     },
-    "facing=west,half=bottom,shape=straight": {
+    "facing=west,half=bottom,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=bottom,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=bottom,shape=straight,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "y": 180
     },
-    "facing=west,half=top,shape=inner_left": {
+    "facing=west,half=bottom,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=bottom,shape=straight,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=top,shape=inner_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "facing=west,half=top,shape=inner_right": {
+    "facing=west,half=top,shape=inner_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=west,half=top,shape=inner_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=west,half=top,shape=inner_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "facing=west,half=top,shape=outer_left": {
+    "facing=west,half=top,shape=inner_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=west,half=top,shape=inner_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_inner",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=west,half=top,shape=outer_left,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "facing=west,half=top,shape=outer_right": {
+    "facing=west,half=top,shape=outer_left,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=west,half=top,shape=outer_left,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=west,half=top,shape=outer_right,water_type=none": {
       "model": "thebetweenlands:block/weedwood_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "facing=west,half=top,shape=straight": {
+    "facing=west,half=top,shape=outer_right,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=west,half=top,shape=outer_right,water_type=water": {
+      "model": "thebetweenlands:block/weedwood_stairs_outer",
+      "uvlock": true,
+      "x": 180,
+      "y": 270
+    },
+    "facing=west,half=top,shape=straight,water_type=none": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=west,half=top,shape=straight,water_type=swamp_water": {
+      "model": "thebetweenlands:block/weedwood_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
+    },
+    "facing=west,half=top,shape=straight,water_type=water": {
       "model": "thebetweenlands:block/weedwood_stairs",
       "uvlock": true,
       "x": 180,

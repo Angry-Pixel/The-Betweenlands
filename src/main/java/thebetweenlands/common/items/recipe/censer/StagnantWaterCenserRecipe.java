@@ -22,7 +22,7 @@ public class StagnantWaterCenserRecipe extends AbstractCenserRecipe<Void> {
 	}
 
 	@Override
-	public void render(Void context, Censer censer, double x, double y, double z, float partialTicks) {
+	public void render(Void context, Censer censer, BlockPos pos, float partialTicks) {
 		float effectStrength = censer.getEffectStrength(partialTicks);
 
 		if(effectStrength > 0.01F && ShaderHelper.INSTANCE.isWorldShaderActive()) {

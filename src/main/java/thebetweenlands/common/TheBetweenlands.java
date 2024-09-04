@@ -83,6 +83,7 @@ public class TheBetweenlands {
 		EntityPredicateRegistry.PREDICATES.register(eventbus);
 		LootFunctionRegistry.FUNCTIONS.register(eventbus);
 		AspectCalculatorRegistry.CALCULATORS.register(eventbus);
+		CenserRecipeRegistry.RECIPES.register(eventbus);
 
 		StorageRegistry.preInit();
 	}

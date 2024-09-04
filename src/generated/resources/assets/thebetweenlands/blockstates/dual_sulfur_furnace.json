@@ -1,32 +1,92 @@
 {
   "variants": {
-    "facing=east,lit=false": {
+    "facing=east,lit=false,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace",
       "y": 90
     },
-    "facing=east,lit=true": {
+    "facing=east,lit=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace",
+      "y": 90
+    },
+    "facing=east,lit=false,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace",
+      "y": 90
+    },
+    "facing=east,lit=true,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace_active",
       "y": 90
     },
-    "facing=north,lit=false": {
+    "facing=east,lit=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active",
+      "y": 90
+    },
+    "facing=east,lit=true,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active",
+      "y": 90
+    },
+    "facing=north,lit=false,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace"
     },
-    "facing=north,lit=true": {
+    "facing=north,lit=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace"
+    },
+    "facing=north,lit=false,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace"
+    },
+    "facing=north,lit=true,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace_active"
     },
-    "facing=south,lit=false": {
+    "facing=north,lit=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active"
+    },
+    "facing=north,lit=true,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active"
+    },
+    "facing=south,lit=false,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace",
       "y": 180
     },
-    "facing=south,lit=true": {
+    "facing=south,lit=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace",
+      "y": 180
+    },
+    "facing=south,lit=false,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace",
+      "y": 180
+    },
+    "facing=south,lit=true,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace_active",
       "y": 180
     },
-    "facing=west,lit=false": {
+    "facing=south,lit=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active",
+      "y": 180
+    },
+    "facing=south,lit=true,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active",
+      "y": 180
+    },
+    "facing=west,lit=false,water_type=none": {
       "model": "thebetweenlands:block/dual_sulfur_furnace",
       "y": 270
     },
-    "facing=west,lit=true": {
+    "facing=west,lit=false,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace",
+      "y": 270
+    },
+    "facing=west,lit=false,water_type=water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace",
+      "y": 270
+    },
+    "facing=west,lit=true,water_type=none": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active",
+      "y": 270
+    },
+    "facing=west,lit=true,water_type=swamp_water": {
+      "model": "thebetweenlands:block/dual_sulfur_furnace_active",
+      "y": 270
+    },
+    "facing=west,lit=true,water_type=water": {
       "model": "thebetweenlands:block/dual_sulfur_furnace_active",
       "y": 270
     }

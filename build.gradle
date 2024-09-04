@@ -84,10 +84,20 @@ repositories {
 		name "Jared's Maven" // JEI
 		url 'https://maven.blamejared.com/'
 	}
+
+	maven {
+		name 'Curseforge Maven'
+		url "https://www.cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
 }
 
 dependencies {
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
+
+	runtimeOnly "curse.maven:atlasviewer-633577:5490697"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -111,7 +121,7 @@ task serverJar(type: Jar, dependsOn: jar) {
 	group = 'build'
 	description = "Creates server jar files"
 	archiveClassifier = 'server'
-	
+
 	from(zipTree(jar.archiveFile)) {
 		exclude "assets/thebetweenlands/sounds/**"
 		exclude "assets/thebetweenlands/models/**"
@@ -119,10 +129,10 @@ task serverJar(type: Jar, dependsOn: jar) {
 		exclude "assets/thebetweenlands/textures/**"
 		exclude "assets/thebetweenlands/shaders/**"
 	}
-	
+
 	manifest {
 		attributes jar.manifest.getAttributes()
-		
+
 		attributes ([
 			"ModSide": "SERVER"
 		])
