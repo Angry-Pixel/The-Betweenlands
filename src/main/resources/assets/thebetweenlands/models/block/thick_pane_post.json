@@ -1,15 +1,16 @@
 {
-    "ambientocclusion": false,
-    "textures": {
-        "particle": "#pane"
-    },
-    "elements": [
-        {   "from": [ 6, 0, 6 ],
-            "to": [ 10, 16, 10 ],
-            "faces": {
-                "down":  { "uv": [  6, 6,  10,  10 ], "texture": "#pane", "cullface": "down" },
-                "up":    { "uv": [  6, 6,  10,  10 ], "texture": "#pane", "cullface": "up" }
-            }
-        }
-    ]
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "#pane"
+  },
+  "elements": [
+    {
+      "from": [ 6, 0, 6 ],
+      "to": [ 10, 16, 10 ],
+      "faces": {
+        "down": { "uv": [ 6, 6, 10, 10 ], "texture": "#pane", "cullface": "down" },
+        "up": { "uv": [ 6, 6, 10, 10 ], "texture": "#pane", "cullface": "up" }
+      }
+    }
+  ]
 }

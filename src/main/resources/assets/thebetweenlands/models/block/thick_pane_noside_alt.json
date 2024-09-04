@@ -1,14 +1,15 @@
 {
-    "ambientocclusion": false,
-    "textures": {
-        "particle": "#pane"
-    },
-    "elements": [
-        {   "from": [ 6, 0, 6 ],
-            "to": [ 10, 16, 10 ],
-            "faces": {
-                "east": { "uv": [  6, 0,  10, 16 ], "texture": "#pane" }
-            }
-        }
-    ]
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "#pane"
+  },
+  "elements": [
+    {
+      "from": [ 6, 0, 6 ],
+      "to": [ 10, 16, 10 ],
+      "faces": {
+        "east": { "uv": [ 6, 0, 10, 16 ], "texture": "#pane" }
+      }
+    }
+  ]
 }

@@ -1,0 +1,118 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "bricks": "thebetweenlands:block/mud_bricks",
+    "front": "thebetweenlands:block/climbable_mud_bricks_front",
+    "bark": "thebetweenlands:block/rotten_bark_rotated",
+    "particle": "#bricks"
+  },
+  "elements": [
+    {
+      "name": "main",
+      "from": [0, 0, 2],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#bricks"},
+        "east": {"uv": [0, 0, 14, 16], "texture": "#bricks"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#bricks"},
+        "west": {"uv": [2, 0, 16, 16], "texture": "#bricks"},
+        "up": {"uv": [0, 0, 16, 14], "texture": "#bricks"},
+        "down": {"uv": [0, 0, 16, 14], "texture": "#bricks"}
+      }
+    },
+    {
+      "name": "top_rung",
+      "from": [2, 14, 0],
+      "to": [12, 15, 2],
+      "faces": {
+        "north": {"uv": [4, 1, 14, 2], "texture": "#front"},
+        "east": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "west": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "up": {"uv": [4, 1, 14, 3], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "mid_top_rung_1",
+      "from": [1, 10, 0],
+      "to": [13, 11, 2],
+      "faces": {
+        "north": {"uv": [3, 5, 15, 6], "texture": "#front"},
+        "east": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "west": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "up": {"uv": [2, 1, 14, 3], "texture": "#bark"},
+        "down": {"uv": [2, 1, 14, 3], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "mid_rung_2",
+      "from": [3, 5, 0],
+      "to": [14, 6, 2],
+      "faces": {
+        "north": {"uv": [2, 10, 13, 11], "texture": "#front"},
+        "east": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "west": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "down": {"uv": [2, 8, 14, 10], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "bottom_rung",
+      "from": [2, 2, 0],
+      "to": [14, 3, 2],
+      "faces": {
+        "north": {"uv": [2, 13, 14, 14], "texture": "#front"},
+        "east": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "west": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "up": {"uv": [2, 8, 14, 10], "texture": "#bark"},
+        "down": {"uv": [2, 13, 14, 15], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "mid_top_rung_2",
+      "from": [2, 9, 0],
+      "to": [14, 10, 2],
+      "faces": {
+        "north": {"uv": [3, 6, 15, 7], "texture": "#front"},
+        "east": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "west": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "up": {"uv": [2, 1, 14, 3], "texture": "#bark"},
+        "down": {"uv": [2, 1, 14, 3], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "mid_rung",
+      "from": [2, 6, 0],
+      "to": [15, 7, 2],
+      "faces": {
+        "north": {"uv": [1, 9, 14, 10], "texture": "#front"},
+        "east": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "west": {"uv": [0, 0, 2, 1], "texture": "#bark"},
+        "up": {"uv": [2, 4, 14, 6], "texture": "#bark"},
+        "down": {"uv": [2, 8, 15, 10], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "bottom_rung_2",
+      "from": [1, 1, 0],
+      "to": [13, 2, 2],
+      "faces": {
+        "north": {"uv": [3, 14, 15, 15], "texture": "#front"},
+        "east": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "west": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "up": {"uv": [2, 9, 14, 11], "texture": "#bark"},
+        "down": {"uv": [2, 13, 14, 15], "texture": "#bark"}
+      }
+    },
+    {
+      "name": "top_rung_2",
+      "from": [2, 13, 0],
+      "to": [14, 14, 2],
+      "faces": {
+        "north": {"uv": [2, 2, 14, 3], "texture": "#front"},
+        "east": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "west": {"uv": [0, 1, 2, 2], "texture": "#bark"},
+        "up": {"uv": [2, 1, 14, 3], "texture": "#bark"},
+        "down": {"uv": [2, 1, 14, 3], "texture": "#bark"}
+      }
+    }
+  ]
+}

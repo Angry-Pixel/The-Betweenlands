@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/climbable_mud_bricks"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 270
+    }
+  }
+}

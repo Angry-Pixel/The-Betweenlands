@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/broken_mud_tiles",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/broken_mud_tiles"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/broken_mud_tiles",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/broken_mud_tiles",
+      "y": 270
+    }
+  }
+}

@@ -1,10 +1,10 @@
 {
-    "parent": "minecraft:block/block",
-    "loader": "thebetweenlands:root",
-    "textures": {
-        "particle": "thebetweenlands:block/stalactite_middle",
-        "top": "thebetweenlands:block/stalactite_top",
-        "middle": "thebetweenlands:block/stalactite_middle",
-        "bottom": "thebetweenlands:block/stalactite_bottom"
-    }
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:root",
+  "textures": {
+    "particle": "thebetweenlands:block/stalactite_middle",
+    "top": "thebetweenlands:block/stalactite_top",
+    "middle": "thebetweenlands:block/stalactite_middle",
+    "bottom": "thebetweenlands:block/stalactite_bottom"
+  }
 }

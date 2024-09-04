@@ -1,21 +1,21 @@
 {
-	"parent": "block/block",
-	"textures": {
-		"side": "thebetweenlands:block/rubber_log_stump",
-		"top": "thebetweenlands:block/rubber_log_top",
+  "parent": "block/block",
+  "textures": {
+    "side": "thebetweenlands:block/rubber_log_stump",
+    "top": "thebetweenlands:block/rubber_log_top",
     "particle": "#side"
-	},
-	"elements": [
-		{
-			"from": [4, 4, 12],
-			"to": [12, 12, 16],
-			"faces": {
-				"east": {"uv": [4, 0, 12, 4], "rotation": 270, "texture": "#side"},
-				"south": {"uv": [4, 4, 12, 12], "cullface": "south", "texture": "#top"},
-				"west": {"uv": [4, 0, 12, 4], "rotation": 90, "texture": "#side"},
-				"up": {"uv": [4, 0, 12, 4], "rotation": 180, "texture": "#side"},
-				"down": {"uv": [4, 0, 12, 4], "texture": "#side"}
-			}
-		}
-	]
+  },
+  "elements": [
+    {
+      "from": [4, 4, 12],
+      "to": [12, 12, 16],
+      "faces": {
+        "east": {"uv": [4, 0, 12, 4], "rotation": 270, "texture": "#side"},
+        "south": {"uv": [4, 4, 12, 12], "cullface": "south", "texture": "#top"},
+        "west": {"uv": [4, 0, 12, 4], "rotation": 90, "texture": "#side"},
+        "up": {"uv": [4, 0, 12, 4], "rotation": 180, "texture": "#side"},
+        "down": {"uv": [4, 0, 12, 4], "texture": "#side"}
+      }
+    }
+  ]
 }

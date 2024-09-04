@@ -439,10 +439,37 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, BlockRegistry.SLUDGY_MUD_BRICKS_2);
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, BlockRegistry.SLUDGY_MUD_BRICKS_3);
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, BlockRegistry.SLUDGY_MUD_BRICKS_4);
+		this.getVariantBuilder(BlockRegistry.BEAM_RELAY.get()).forAllStatesExcept(state -> {
+			Direction dir = state.getValue(BlockStateProperties.FACING);
+			return ConfiguredModel.builder().modelFile(this.models().getExistingFile(this.modLoc("block/beam_relay")))
+				.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isVertical() ? 270 : 0)
+				.rotationY(dir.getAxis().isHorizontal() ? (int) dir.getOpposite().toYRot() : 0).build();
+		}, BeamRelayBlock.POWERED);
+		this.simpleBlockItem(BlockRegistry.BEAM_RELAY);
+		this.getVariantBuilder(BlockRegistry.BEAM_TUBE.get())
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y)
+			.modelForState().modelFile(this.models().getExistingFile(this.modLoc("block/beam_tube"))).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Z)
+			.modelForState().modelFile(this.models().getExistingFile(this.modLoc("block/beam_tube"))).rotationX(90).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.X)
+			.modelForState().modelFile(this.models().getExistingFile(this.modLoc("block/beam_tube"))).rotationX(90).rotationY(90).addModel();
+		this.simpleBlockItem(BlockRegistry.BEAM_TUBE);
+		this.getVariantBuilder(BlockRegistry.BEAM_LENS_SUPPORT.get())
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y)
+			.modelForState().modelFile(this.models().getExistingFile(this.modLoc("block/beam_lens_support"))).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Z)
+			.modelForState().modelFile(this.models().getExistingFile(this.modLoc("block/beam_lens_support"))).rotationX(90).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.X)
+			.modelForState().modelFile(this.models().getExistingFile(this.modLoc("block/beam_lens_support"))).rotationX(90).rotationY(90).addModel();
+		this.simpleBlockItem(BlockRegistry.BEAM_LENS_SUPPORT);
 		this.builtinEntityAndItem(BlockRegistry.MUD_BRICK_ALCOVE, this.modLoc("block/particle/mud_brick_alcove_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_1, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_2, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_3, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
+		this.horizontalBlock(BlockRegistry.CLIMBABLE_MUD_BRICKS.get(), this.models().getExistingFile(this.modLoc("block/climbable_mud_bricks")));
+		this.simpleBlockItem(BlockRegistry.CLIMBABLE_MUD_BRICKS);
+		this.horizontalBlock(BlockRegistry.BROKEN_MUD_TILES.get(), this.models().getExistingFile(this.modLoc("block/broken_mud_tiles")));
+		this.simpleBlockItem(BlockRegistry.BROKEN_MUD_TILES);
 		//rotten beams
 		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_1, this.modLoc("block/rotten_bark_carved_1"), this.modLoc("block/rotten_bark_rotated"));
 		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_2, this.modLoc("block/rotten_bark_carved_2"), this.modLoc("block/rotten_bark_rotated"));
