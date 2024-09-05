@@ -83,11 +83,6 @@ public class ItemCageBlock extends BaseEntityBlock {
 		super.destroy(level, pos, state);
 	}
 
-	@Override
-	protected RenderShape getRenderShape(BlockState state) {
-		return RenderShape.MODEL;
-	}
-
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

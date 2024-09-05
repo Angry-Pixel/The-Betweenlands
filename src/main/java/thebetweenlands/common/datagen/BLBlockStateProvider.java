@@ -417,7 +417,7 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 //		this.simpleBlockWithItem(BlockRegistry.DECAYED_MUD_TILES);
 		this.simpleBlockWithItem(BlockRegistry.CRACKED_MUD_TILES);
 //		this.simpleBlockWithItem(BlockRegistry.CRACKED_DECAYED_MUD_TILES);
-		//puffshroom
+		this.simpleBlockWithItem(BlockRegistry.PUFFSHROOM.get(), this.models().cubeTop(BlockRegistry.PUFFSHROOM.getId().getPath(), this.modLoc("block/mud_tiles"), this.modLoc("block/mud_tiles_cracked_layer")));
 		this.simpleBlockWithItem(BlockRegistry.CARVED_MUD_BRICKS);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_CARVED_MUD_BRICKS_1);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_CARVED_MUD_BRICKS_2);

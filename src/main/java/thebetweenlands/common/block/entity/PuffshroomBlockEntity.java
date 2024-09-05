@@ -6,6 +6,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -149,20 +150,16 @@ public class PuffshroomBlockEntity extends SyncedBlockEntity {
 		entity.renderTicks++;
 	}
 
-	protected Player findEnemyToAttack(Level level, BlockPos pos, BlockState state) {
+	protected void findEnemyToAttack(Level level, BlockPos pos, BlockState state) {
 		if (!this.active_1 && this.animation_1 == 0) {
-			List<Player> list = level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(2.0D));
-			for (Player player : list) {
-				if (!player.isCreative() && !player.isSpectator()) {
-					this.active_1 = true;
-					this.cooldown = 120;
-					this.pause = true;
-					level.sendBlockUpdated(pos, state, state, 2);
-					return player;
-				}
+			List<Player> list = level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(2.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
+			if (!list.isEmpty()) {
+				this.active_1 = true;
+				this.cooldown = 120;
+				this.pause = true;
+				level.sendBlockUpdated(pos, state, state, 2);
 			}
 		}
-		return null;
 	}
 
 	@Override
