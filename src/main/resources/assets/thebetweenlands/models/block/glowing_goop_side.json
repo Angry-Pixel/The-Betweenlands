@@ -1,0 +1,45 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "translucent",
+  "textures": {
+    "1": "thebetweenlands:block/glowing_goop",
+    "2": "thebetweenlands:block/glowing_goop_drip",
+    "particle": "thebetweenlands:block/glowing_goop"
+  },
+  "elements": [
+    {
+      "name": "outer",
+      "from": [2, 0, 2],
+      "to": [14, 4, 14],
+      "faces": {
+        "north": {"uv": [2, 2, 14, 6], "texture": "#1"},
+        "east": {"uv": [2, 2, 14, 6], "texture": "#1"},
+        "south": {"uv": [2, 2, 14, 6], "texture": "#1"},
+        "west": {"uv": [2, 2, 14, 6], "texture": "#1"},
+        "up": {"uv": [2, 2, 14, 14], "texture": "#1"}
+      }
+    },
+    {
+      "name": "inner",
+      "from": [4, 1, 4],
+      "to": [12, 3, 12],
+      "faces": {
+        "north": {"uv": [4, 2, 12, 4], "texture": "#1"},
+        "east": {"uv": [4, 2, 12, 4], "texture": "#1"},
+        "south": {"uv": [4, 2, 12, 4], "texture": "#1"},
+        "west": {"uv": [4, 2, 12, 4], "texture": "#1"},
+        "up": {"uv": [4, 4, 12, 12], "texture": "#1"}
+      }
+    },
+    {
+      "name": "overlay",
+      "from": [2, 0.01, 14],
+      "to": [14, 4.01, 28],
+      "faces": {
+        "east": {"uv": [6, 0, 10, 14], "rotation": 90, "texture": "#2"},
+        "west": {"uv": [6, 0, 10, 16], "rotation": 270, "texture": "#2"},
+        "up": {"uv": [2, 0, 14, 12], "texture": "#2"}
+      }
+    }
+  ]
+}

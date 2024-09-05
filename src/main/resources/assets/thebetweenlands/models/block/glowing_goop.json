@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "translucent",
+  "textures": {
+    "0": "thebetweenlands:block/glowing_goop",
+    "particle": "thebetweenlands:block/glowing_goop"
+  },
+  "elements": [
+    {
+      "name": "outer",
+      "from": [2, 0, 2],
+      "to": [14, 4, 14],
+      "faces": {
+        "north": {"uv": [2, 2, 14, 6], "texture": "#0"},
+        "east": {"uv": [2, 2, 14, 6], "texture": "#0"},
+        "south": {"uv": [2, 2, 14, 6], "texture": "#0"},
+        "west": {"uv": [2, 2, 14, 6], "texture": "#0"},
+        "up": {"uv": [2, 2, 14, 14], "texture": "#0"}
+      }
+    },
+    {
+      "name": "inner",
+      "from": [4, 1, 4],
+      "to": [12, 3, 12],
+      "faces": {
+        "north": {"uv": [4, 2, 12, 4], "texture": "#0"},
+        "east": {"uv": [4, 2, 12, 4], "texture": "#0"},
+        "south": {"uv": [4, 2, 12, 4], "texture": "#0"},
+        "west": {"uv": [4, 2, 12, 4], "texture": "#0"},
+        "up": {"uv": [4, 4, 12, 12], "texture": "#0"}
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-06T05:43:37.0797144	Block States: thebetweenlands
+// 1.21.1	2024-09-05T13:56:32.600735	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
 054597b2cc6147a93cbe8522b522e25baafe90fe assets/thebetweenlands/blockstates/angry_betweenstone.json
@@ -164,6 +164,7 @@ ad94a30e1455ef796c4b93b82423f425fb1ff625 assets/thebetweenlands/blockstates/gian
 5b468224b628baf1174c9b04baa98e5661d0f6b3 assets/thebetweenlands/blockstates/giant_root_stairs.json
 bb1f33c0569027530ef8b0d53de75cc6b1012d87 assets/thebetweenlands/blockstates/giant_root_trapdoor.json
 e5cd8ed8e401276262e72de74380d501c21801b1 assets/thebetweenlands/blockstates/glowing_betweenstone_tile.json
+8fcbb6fd04473a66113418ec70b571a430c86572 assets/thebetweenlands/blockstates/glowing_goop.json
 69eaa28ea56b7e64dadcda4c5b2e99fade391b5e assets/thebetweenlands/blockstates/glowing_smooth_cragrock.json
 eb21ed2bd9d7e1cf6118e6b2382a9cd100f89c8e assets/thebetweenlands/blockstates/gray_present.json
 045ce32bbdbb11cb01492b2b46b83f9a8bc7b930 assets/thebetweenlands/blockstates/green_dentrothyst.json
@@ -1716,6 +1717,7 @@ d79e934ce9ca7eeae4c3c9112507667571b31da9 assets/thebetweenlands/models/item/fish
 badfe9bbe239ed7e2c6cf60a1fe4cda653334516 assets/thebetweenlands/models/item/giant_root_stairs.json
 e19d16be2b4668da4727aca17d64946257cd6b83 assets/thebetweenlands/models/item/giant_root_trapdoor.json
 fcce17ac2ae4f1267276c7fd9ba3c5b920fcbf86 assets/thebetweenlands/models/item/glowing_betweenstone_tile.json
+706ed73a5bccf23a175852d55cd78f44a68efa74 assets/thebetweenlands/models/item/glowing_goop.json
 f6d2b4a39ab2d604f23786ab76bc1ee463115673 assets/thebetweenlands/models/item/glowing_smooth_cragrock.json
 cdb030a91b09386d714b70f642847649d44ae072 assets/thebetweenlands/models/item/gray_present.json
 bb0a819e27ea03056d24e534d853620a79b33839 assets/thebetweenlands/models/item/green_dentrothyst.json

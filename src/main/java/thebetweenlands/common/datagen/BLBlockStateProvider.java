@@ -651,6 +651,17 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.builtinEntityAndItem(BlockRegistry.FISH_TRIMMING_TABLE, this.modLoc("block/particle/fish_trimming_table_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.CRAB_POT, this.modLoc("block/particle/crab_pot_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.CRAB_POT_FILTER, this.modLoc("block/particle/crab_pot_filter_particle"), 0.625F, 0.0F);
+		ModelFile down = this.models().getExistingFile(this.modLoc("block/glowing_goop_down"));
+		ModelFile up = this.models().getExistingFile(this.modLoc("block/glowing_goop"));
+		ModelFile side = this.models().getExistingFile(this.modLoc("block/glowing_goop_side"));
+		this.getVariantBuilder(BlockRegistry.GLOWING_GOOP.get()).forAllStatesExcept(state -> {
+			Direction dir = state.getValue(BlockStateProperties.FACING);
+			return ConfiguredModel.builder()
+				.modelFile(dir == Direction.DOWN ? down : dir.getAxis().isHorizontal() ? side : up)
+				.rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 270 : 0)
+				.rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot())) % 360).build();
+		}, GlowingGoopBlock.WATER_TYPE);
+		this.basicItemTex(BlockRegistry.GLOWING_GOOP, false);
 		this.carpetBlockWithItem(BlockRegistry.REED_MAT);
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");

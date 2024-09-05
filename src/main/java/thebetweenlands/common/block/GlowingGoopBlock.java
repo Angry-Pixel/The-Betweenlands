@@ -3,8 +3,13 @@ package thebetweenlands.common.block;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -21,6 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 
+import java.util.List;
 import java.util.Map;
 
 public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLoggable {
@@ -30,7 +36,7 @@ public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLogg
 		Direction.WEST, Block.box(12.0D, 2.0D, 2.0D, 16.0D, 14.0D, 14.0D),
 		Direction.SOUTH, Block.box(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 4.0D),
 		Direction.EAST, Block.box(0.0D, 2.0D, 2.0D, 4.0D, 14.0D, 14.0D),
-		Direction.UP, Block.box(2.0D, 0.0D, 2.0D, 12.0D, 4.0D, 14.0D),
+		Direction.UP, Block.box(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D),
 		Direction.DOWN, Block.box(2.0D, 12.0D, 2.0D, 14.0D, 16.0D, 14.0D)
 	));
 
@@ -47,7 +53,7 @@ public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLogg
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection()).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+		return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 	}
 
 	@Override
@@ -66,6 +72,11 @@ public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLogg
 			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
 		}
 		return state.canSurvive(level, pos) ? super.updateShape(state, direction, neighborState, level, pos, neighborPos) : Blocks.AIR.defaultBlockState();
+	}
+
+	@Override
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override

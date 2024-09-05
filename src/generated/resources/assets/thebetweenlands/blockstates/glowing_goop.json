@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "thebetweenlands:block/glowing_goop_down",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "thebetweenlands:block/glowing_goop_side",
+      "x": 270,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/glowing_goop_side",
+      "x": 270,
+      "y": 180
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/glowing_goop_side",
+      "x": 270
+    },
+    "facing=up": {
+      "model": "thebetweenlands:block/glowing_goop"
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/glowing_goop_side",
+      "x": 270,
+      "y": 90
+    }
+  }
+}
