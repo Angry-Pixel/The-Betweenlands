@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/door_top_left_open",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "thebetweenlands:block/treated_nibbletwig_door_bottom",
     "top": "thebetweenlands:block/treated_nibbletwig_door_top"

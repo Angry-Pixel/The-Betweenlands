@@ -16,10 +16,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.*;
-import thebetweenlands.common.block.waterlog.SwampWallBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.generators.BlockStateProvider {
@@ -550,17 +548,17 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.getVariantBuilder(BlockRegistry.PORTAL.get()).forAllStates(state -> {
 			ModelFile file;
 			if (state.getValue(TreePortalBlock.AXIS) == Direction.Axis.Z) {
-				file = this.models().withExistingParent("tree_portal_ew", this.mcLoc("block/cube"))
+				file = this.models().withExistingParent("tree_portal_ew", this.mcLoc("block/cube")).renderType("translucent")
 					.texture("portal", this.modLoc("block/portal"))
 					.texture("particle", this.modLoc("block/portal"))
 					.element().from(6, 0, 0).to(10, 16, 16).face(Direction.WEST).texture("#portal").end().face(Direction.EAST).texture("#portal").end().end();
 			} else if (state.getValue(TreePortalBlock.AXIS) == Direction.Axis.X) {
-				file = this.models().withExistingParent("tree_portal_ns", this.mcLoc("block/cube"))
+				file = this.models().withExistingParent("tree_portal_ns", this.mcLoc("block/cube")).renderType("translucent")
 					.texture("portal", this.modLoc("block/portal"))
 					.texture("particle", this.modLoc("block/portal"))
 					.element().from(0, 0, 6).to(16, 16, 10).face(Direction.NORTH).texture("#portal").end().face(Direction.SOUTH).texture("#portal").end().end();
 			} else {
-				file = this.models().withExistingParent("tree_portal_ud", this.mcLoc("block/cube"))
+				file = this.models().withExistingParent("tree_portal_ud", this.mcLoc("block/cube")).renderType("translucent")
 					.texture("portal", this.modLoc("block/portal"))
 					.texture("particle", this.modLoc("block/portal"))
 					.element().from(0, 6, 0).to(16, 10, 16).face(Direction.UP).texture("#portal").end().face(Direction.DOWN).texture("#portal").end().end();
@@ -591,19 +589,19 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.ENERGY_BARRIER, "translucent");
 		this.torchBlockWithItem(BlockRegistry.SULFUR_TORCH, BlockRegistry.SULFUR_WALL_TORCH);
 		this.torchBlockWithItem(BlockRegistry.EXTINGUISHED_SULFUR_TORCH, BlockRegistry.EXTINGUISHED_SULFUR_WALL_TORCH);
-		this.trapdoorBlockWithItem(BlockRegistry.WEEDWOOD_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.RUBBER_TREE_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.SYRMORITE_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.GIANT_ROOT_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.HEARTHGROVE_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.NIBBLETWIG_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.ROTTEN_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.TREATED_WEEDWOOD_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.TREATED_RUBBER_TREE_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.TREATED_GIANT_ROOT_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.TREATED_HEARTHGROVE_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.TREATED_NIBBLETWIG_TRAPDOOR);
-		this.trapdoorBlockWithItem(BlockRegistry.TREATED_ROTTEN_TRAPDOOR);
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.WEEDWOOD_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.RUBBER_TREE_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.SYRMORITE_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.GIANT_ROOT_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.HEARTHGROVE_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.NIBBLETWIG_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.ROTTEN_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.TREATED_WEEDWOOD_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.TREATED_RUBBER_TREE_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.TREATED_GIANT_ROOT_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.TREATED_HEARTHGROVE_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.TREATED_NIBBLETWIG_TRAPDOOR, "cutout");
+		this.trapdoorRenderTypeBlockWithItem(BlockRegistry.TREATED_ROTTEN_TRAPDOOR, "cutout");
 		this.trapdoorBlockWithItem(BlockRegistry.SCABYST_TRAPDOOR);
 		this.getVariantBuilder(BlockRegistry.SYRMORITE_HOPPER.get()).forAllStatesExcept(state -> {
 			if (state.getValue(SyrmoriteHopperBlock.FACING) == Direction.DOWN) {
@@ -728,20 +726,20 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.stairBlockWithItem(BlockRegistry.TREATED_ROTTEN_STAIRS, BlockRegistry.TREATED_ROTTEN_PLANKS);
 		this.fenceBlockWithItem(BlockRegistry.TREATED_ROTTEN_FENCE, BlockRegistry.TREATED_ROTTEN_PLANKS);
 		this.gateBlockWithItem(BlockRegistry.TREATED_ROTTEN_FENCE_GATE, BlockRegistry.TREATED_ROTTEN_PLANKS);
-		this.doorBlockWithItem(BlockRegistry.WEEDWOOD_DOOR);
-		this.doorBlockWithItem(BlockRegistry.RUBBER_TREE_DOOR);
-		this.doorBlockWithItem(BlockRegistry.GIANT_ROOT_DOOR);
-		this.doorBlockWithItem(BlockRegistry.HEARTHGROVE_DOOR);
-		this.doorBlockWithItem(BlockRegistry.NIBBLETWIG_DOOR);
-		this.doorBlockWithItem(BlockRegistry.ROTTEN_DOOR);
-		this.doorBlockWithItem(BlockRegistry.SYRMORITE_DOOR);
+		this.doorBlockRenderTypeWithItem(BlockRegistry.WEEDWOOD_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.RUBBER_TREE_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.GIANT_ROOT_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.HEARTHGROVE_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.NIBBLETWIG_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.ROTTEN_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.SYRMORITE_DOOR, "cutout");
 		this.doorBlockWithItem(BlockRegistry.SCABYST_DOOR);
-		this.doorBlockWithItem(BlockRegistry.TREATED_WEEDWOOD_DOOR);
-		this.doorBlockWithItem(BlockRegistry.TREATED_RUBBER_TREE_DOOR);
-		this.doorBlockWithItem(BlockRegistry.TREATED_GIANT_ROOT_DOOR);
-		this.doorBlockWithItem(BlockRegistry.TREATED_HEARTHGROVE_DOOR);
-		this.doorBlockWithItem(BlockRegistry.TREATED_NIBBLETWIG_DOOR);
-		this.doorBlockWithItem(BlockRegistry.TREATED_ROTTEN_DOOR);
+		this.doorBlockRenderTypeWithItem(BlockRegistry.TREATED_WEEDWOOD_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.TREATED_RUBBER_TREE_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.TREATED_GIANT_ROOT_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.TREATED_HEARTHGROVE_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.TREATED_NIBBLETWIG_DOOR, "cutout");
+		this.doorBlockRenderTypeWithItem(BlockRegistry.TREATED_ROTTEN_DOOR, "cutout");
 		this.builtinEntity(BlockRegistry.WEEDWOOD_SIGN, this.modLoc("block/weedwood_planks"));
 		this.builtinEntity(BlockRegistry.WEEDWOOD_WALL_SIGN, this.modLoc("block/weedwood_planks"));
 		this.basicItemTex(BlockRegistry.WEEDWOOD_SIGN, false);
@@ -802,6 +800,12 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 
 	private void sidedBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation end) {
 		this.simpleBlock(block.get(), this.models().cubeColumn(block.getId().getPath(), side, end));
+		this.simpleBlockItem(block);
+	}
+
+	// TODO: add tuft model, or turn into a multimodel blockstate template
+	private void bottomSideTopTuftBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom, ResourceLocation tuft) {
+		this.simpleBlock(block.get(), this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top));
 		this.simpleBlockItem(block);
 	}
 
@@ -877,8 +881,18 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.itemModels().trapdoorBottom(trapdoor.getId().getPath(), this.blockTexture(trapdoor.get()));
 	}
 
+	public void trapdoorRenderTypeBlockWithItem(DeferredBlock<Block> trapdoor, String renderType) {
+		this.trapdoorBlockWithRenderType((TrapDoorBlock) trapdoor.get(), this.blockTexture(trapdoor.get()), true, renderType);
+		this.itemModels().trapdoorBottom(trapdoor.getId().getPath(), this.blockTexture(trapdoor.get()));
+	}
+
 	public void doorBlockWithItem(DeferredBlock<Block> door) {
 		this.doorBlock((DoorBlock) door.get(), this.blockTexture(door.get()).withSuffix("_bottom"), this.blockTexture(door.get()).withSuffix("_top"));
+		this.basicItemTex(door, false);
+	}
+
+	public void doorBlockRenderTypeWithItem(DeferredBlock<Block> door, String renderType) {
+		this.doorBlockWithRenderType((DoorBlock) door.get(), this.blockTexture(door.get()).withSuffix("_bottom"), this.blockTexture(door.get()).withSuffix("_top"), renderType);
 		this.basicItemTex(door, false);
 	}
 

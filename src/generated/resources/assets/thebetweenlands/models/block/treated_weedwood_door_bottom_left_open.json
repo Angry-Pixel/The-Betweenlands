@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/door_bottom_left_open",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "thebetweenlands:block/treated_weedwood_door_bottom",
     "top": "thebetweenlands:block/treated_weedwood_door_top"
