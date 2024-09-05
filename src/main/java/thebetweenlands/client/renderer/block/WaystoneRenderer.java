@@ -10,11 +10,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.WaystoneBlock;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
 
 public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity> {
@@ -55,5 +57,10 @@ public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity
 		int color = entity.getLevel() != null ? BiomeColors.getAverageGrassColor(entity.getLevel(), entity.getBlockPos()) : GrassColor.getDefaultColor();
 		this.waystone.render(stack, source.getBuffer(GRASS_TEXTURE), light, overlay, color);
 		stack.popPose();
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(WaystoneBlockEntity entity) {
+		return new AABB(entity.getBlockPos()).expandTowards(0.0D, 2.0D, 0.0D);
 	}
 }

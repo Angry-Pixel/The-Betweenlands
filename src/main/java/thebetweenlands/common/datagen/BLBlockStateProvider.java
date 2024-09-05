@@ -16,6 +16,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.*;
+import thebetweenlands.common.block.waterlog.SwampWallBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import java.util.Map;
@@ -619,7 +621,12 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 			}
 		}, SyrmoriteHopperBlock.ENABLED);
 		this.basicItemTex(BlockRegistry.SYRMORITE_HOPPER, false);
+		this.simpleBlock(BlockRegistry.MUD_FLOWER_POT.get(), this.models().withExistingParent(BlockRegistry.MUD_FLOWER_POT.getId().getPath(), this.modLoc("block/mud_flower_pot_base")).texture("pot", this.modLoc("block/mud_flower_pot")));
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
+		this.getVariantBuilder(BlockRegistry.MUD_FLOWER_POT_CANDLE.get()).forAllStatesExcept(state -> {
+			String model = BlockRegistry.MUD_FLOWER_POT_CANDLE.getId().getPath() + (state.getValue(MudFlowerPotCandleBlock.LIT) ? "" : "_unlit");
+			return ConfiguredModel.builder().modelFile(this.models().withExistingParent(model, this.modLoc("block/mud_flower_pot_base")).texture("pot", this.modLoc("block/" + model))).build();
+		}, SwampWaterLoggable.WATER_TYPE);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
 		this.builtinEntityAndItem(BlockRegistry.GECKO_CAGE, this.modLoc("block/weedwood_planks"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.MORTAR, this.modLoc("block/particle/mortar_particle"), 0.625F, 0.0F);

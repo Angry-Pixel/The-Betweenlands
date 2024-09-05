@@ -10,13 +10,18 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.SmokingRackBlock;
+import thebetweenlands.common.block.entity.MossBedBlockEntity;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.entities.fishing.anadia.Anadia;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
@@ -117,5 +122,10 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 			this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(SmokingRackBlockEntity entity) {
+		return new AABB(entity.getBlockPos()).expandTowards(0.0D, 1.0D, 0.0D);
 	}
 }
