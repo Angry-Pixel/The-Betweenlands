@@ -31,9 +31,11 @@ import javax.annotation.Nullable;
 public class MudFlowerPotCandleBlock extends Block implements SwampWaterLoggable {
 
 	public static final BooleanProperty LIT = BooleanProperty.create("lit");
-	protected static final VoxelShape POT = Block.box(5.5D, 0.0D, 5.5D, 11.5D, 7.0D, 11.5D);
-	protected static final VoxelShape CANDLE = Block.box(6.5D, 7.0D, 6.5D, 10.5D, 13.0D, 10.5D);
-	protected static final VoxelShape SHAPE = Shapes.or(POT, CANDLE);
+	protected static final VoxelShape SHAPE = Shapes.or(
+		Block.box(6.0D, 0.0D, 6.0D, 10.0D, 2.0D, 10.0D),
+		Block.box(6.5D, 2.0D, 6.5D, 9.5D, 3.0D, 9.5D),
+		Block.box(5.5D, 3.0D, 5.5D, 10.5D, 7.0D, 10.5D),
+		Block.box(6.5D, 7.0D, 6.5D, 9.5D, 13.0D, 9.5D));
 
 
 	public MudFlowerPotCandleBlock(Properties properties) {
@@ -89,13 +91,15 @@ public class MudFlowerPotCandleBlock extends Block implements SwampWaterLoggable
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+		WaterType type = WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType());
+		return super.getStateForPlacement(context).setValue(LIT, type == WaterType.NONE).setValue(WATER_TYPE, type);
 	}
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
 		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
 			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+			if (state.getValue(LIT)) state = state.setValue(LIT, false);
 		}
 
 		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);

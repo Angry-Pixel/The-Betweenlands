@@ -25,6 +25,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.entity.MudFlowerPotBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
@@ -36,7 +37,10 @@ import java.util.function.Supplier;
 
 public class MudFlowerPotBlock extends BaseEntityBlock implements SwampWaterLoggable {
 
-	protected static final VoxelShape SHAPE = Block.box(5.5D, 0.0D, 5.5D, 11.5D, 7.0D, 11.5D);
+	protected static final VoxelShape SHAPE = Shapes.or(
+		Block.box(6.0D, 0.0D, 6.0D, 10.0D, 2.0D, 10.0D),
+		Block.box(6.5D, 2.0D, 6.5D, 9.5D, 3.0D, 9.5D),
+		Block.box(5.5D, 3.0D, 5.5D, 10.5D, 7.0D, 10.5D));
 
 	public MudFlowerPotBlock(Properties properties) {
 		super(properties);
@@ -46,6 +50,11 @@ public class MudFlowerPotBlock extends BaseEntityBlock implements SwampWaterLogg
 	@Override
 	protected MapCodec<? extends BaseEntityBlock> codec() {
 		return null;
+	}
+
+	@Override
+	protected RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
 	}
 
 	@Override

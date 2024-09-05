@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "thebetweenlands:block/mud_flower_pot_candle_unlit"
+    },
+    "lit=true": {
+      "model": "thebetweenlands:block/mud_flower_pot_candle"
+    }
+  }
+}

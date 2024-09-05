@@ -1,0 +1,115 @@
+{
+  "texture_size": [32, 32],
+  "parent": "minecraft:block/block",
+  "render_type": "cutout",
+  "textures": {
+    "particle": "#pot"
+  },
+  "elements": [
+    {
+      "from": [6, 0, 6],
+      "to": [10, 2, 10],
+      "faces": {
+        "north": {"uv": [2, 2, 4, 3], "texture": "#pot"},
+        "east": {"uv": [4, 2, 6, 3], "texture": "#pot"},
+        "south": {"uv": [6, 2, 8, 3], "texture": "#pot"},
+        "west": {"uv": [0, 2, 2, 3], "texture": "#pot"},
+        "up": {"uv": [2, 0, 4, 2], "texture": "#pot"},
+        "down": {"uv": [4, 0, 6, 2], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [6.5, 2, 6.5],
+      "to": [9.5, 3, 9.5],
+      "faces": {
+        "north": {"uv": [1.5, 6, 3, 6.5], "texture": "#pot"},
+        "east": {"uv": [3, 6, 4.5, 6.5], "texture": "#pot"},
+        "south": {"uv": [4.5, 6, 6, 6.5], "texture": "#pot"},
+        "west": {"uv": [0, 6, 1.5, 6.5], "texture": "#pot"},
+        "up": {"uv": [1.5, 4.5, 3, 6], "texture": "#pot"},
+        "down": {"uv": [3, 4.5, 4.5, 6], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [5.5, 3, 5.5],
+      "to": [10.5, 6, 10.5],
+      "faces": {
+        "north": {"uv": [2.5, 9.5, 5, 11], "texture": "#pot"},
+        "east": {"uv": [5, 9.5, 7.5, 11], "texture": "#pot"},
+        "south": {"uv": [7.5, 9.5, 10, 11], "texture": "#pot"},
+        "west": {"uv": [0, 9.5, 2.5, 11], "texture": "#pot"},
+        "up": {"uv": [2.5, 7, 5, 9.5], "texture": "#pot"},
+        "down": {"uv": [5, 7, 7.5, 9.5], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [5.5, 6, 6.5],
+      "to": [6.5, 7, 10.5],
+      "faces": {
+        "north": {"uv": [7.5, 15, 8, 15.5], "texture": "#pot"},
+        "east": {"uv": [8, 15, 10, 15.5], "texture": "#pot"},
+        "south": {"uv": [10, 15, 10.5, 15.5], "texture": "#pot"},
+        "west": {"uv": [5.5, 15, 7.5, 15.5], "texture": "#pot"},
+        "up": {"uv": [7.5, 13, 8, 15], "texture": "#pot"},
+        "down": {"uv": [8, 13, 8.5, 15], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [9.5, 6, 5.5],
+      "to": [10.5, 7, 9.5],
+      "faces": {
+        "north": {"uv": [2, 15, 2.5, 15.5], "texture": "#pot"},
+        "east": {"uv": [2.5, 15, 4.5, 15.5], "texture": "#pot"},
+        "south": {"uv": [4.5, 15, 5, 15.5], "texture": "#pot"},
+        "west": {"uv": [0, 15, 2, 15.5], "texture": "#pot"},
+        "up": {"uv": [2, 13, 2.5, 15], "texture": "#pot"},
+        "down": {"uv": [2.5, 13, 3, 15], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [5.5, 6, 5.5],
+      "to": [9.5, 7, 6.5],
+      "faces": {
+        "north": {"uv": [0.5, 12, 2.5, 12.5], "texture": "#pot"},
+        "east": {"uv": [0, 12, 0.5, 12.5], "texture": "#pot"},
+        "south": {"uv": [3, 12, 5, 12.5], "texture": "#pot"},
+        "west": {"uv": [2.5, 12, 3, 12.5], "texture": "#pot"},
+        "up": {"uv": [0.5, 11.5, 2.5, 12], "texture": "#pot"},
+        "down": {"uv": [2.5, 11.5, 4.5, 12], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [6.5, 6, 9.5],
+      "to": [10.5, 7, 10.5],
+      "faces": {
+        "north": {"uv": [6, 12, 8, 12.5], "texture": "#pot"},
+        "east": {"uv": [5.5, 12, 6, 12.5], "texture": "#pot"},
+        "south": {"uv": [8.5, 12, 10.5, 12.5], "texture": "#pot"},
+        "west": {"uv": [8, 12, 8.5, 12.5], "texture": "#pot"},
+        "up": {"uv": [6, 11.5, 8, 12], "texture": "#pot"},
+        "down": {"uv": [8, 11.5, 10, 12], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [6.5, 6, 6.5],
+      "to": [9.5, 13, 9.5],
+      "faces": {
+        "north": {"uv": [10, 1.5, 11.5, 5], "texture": "#pot"},
+        "east": {"uv": [13, 1.5, 14.5, 5], "texture": "#pot"},
+        "south": {"uv": [11.5, 1.5, 13, 5], "texture": "#pot"},
+        "west": {"uv": [8.5, 1.5, 10, 5], "texture": "#pot"},
+        "up": {"uv": [10, 0, 11.5, 1.5], "texture": "#pot"},
+        "down": {"uv": [11.5, 0, 13, 1.5], "texture": "#pot"}
+      }
+    },
+    {
+      "from": [7.5, 12, 8],
+      "to": [8.5, 15, 8],
+      "rotation": {"angle": 22.5, "axis": "y", "origin": [8, 12, 8]},
+      "faces": {
+        "north": {"uv": [8.5, 5.5, 9, 7], "texture": "#pot"},
+        "south": {"uv": [9, 5.5, 9.5, 7], "texture": "#pot"}
+      }
+    }
+  ]
+}

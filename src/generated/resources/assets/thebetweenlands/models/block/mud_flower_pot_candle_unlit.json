@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/mud_flower_pot_base",
+  "textures": {
+    "pot": "thebetweenlands:block/mud_flower_pot_candle_unlit"
+  }
+}
