@@ -138,7 +138,7 @@ public class ExtendedReachHandler {
             if (player != null) {
                 ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
                 if (!stack.isEmpty() && stack.getItem() instanceof IExtendedReach extendedReach) {
-                	extendedReach.onSwing(player, stack);
+                	extendedReach.onSwing(player, stack, hitEntities);
                 }
             }
         	

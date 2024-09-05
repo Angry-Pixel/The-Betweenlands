@@ -1,8 +1,11 @@
 package thebetweenlands.api.item;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -32,11 +35,12 @@ public interface IExtendedReach {
 	
     /**
      * Called when the item is swung, return false on the server to cancel extra attack processing
-     * @param player
-     * @param stack
+     * @param player	The player swinging the weapon
+     * @param stack		The held item
+     * @param entities	List of entities in the direct line of the player's swing
      * @return false to cancel extra attack processing
      */
-    default boolean onSwing(@Nonnull Player player, ItemStack stack) {
+    default boolean onSwing(@Nonnull Player player, ItemStack stack, @Nullable List<Entity> entities) {
     	// Pass
     	return true;
     }

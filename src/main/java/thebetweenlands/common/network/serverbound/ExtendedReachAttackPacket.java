@@ -49,12 +49,13 @@ public class ExtendedReachAttackPacket implements CustomPacketPayload {
 			ctx.enqueueWork(() -> {
 				Player player = ctx.player();
 				
-				ItemStack heldItem = player.getMainHandItem();
+				ItemStack heldItem = player.getWeaponItem();
 				
 				if(!heldItem.isEmpty() && heldItem.getItem() instanceof IExtendedReach extendedReach) {
-					if(!extendedReach.onSwing(player, heldItem)) return;
-
 					List<Entity> entities = message.entityList.getEntities();
+					
+					if(!extendedReach.onSwing(player, heldItem, entities)) return;
+
 					for(Entity entity : entities) {
 						if (entity != null && entity.isAlive()) {
 							double reach = extendedReach.getReach(player, heldItem);
