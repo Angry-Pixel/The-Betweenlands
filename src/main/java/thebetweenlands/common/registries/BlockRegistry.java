@@ -186,7 +186,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> LOOT_POT_1 = register("loot_pot_1", () -> new LootPotBlock(LootPotBlock.POT_1, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> LOOT_POT_2 = register("loot_pot_2", () -> new LootPotBlock(LootPotBlock.POT_2, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> LOOT_POT_3 = register("loot_pot_3", () -> new LootPotBlock(LootPotBlock.POT_3, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> MOB_SPAWNER = register("mob_spawner", () -> new MobSpawnerBlock(BlockBehaviour.Properties.of().strength(10.0F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> MOB_SPAWNER = register("mob_spawner", () -> new MobSpawnerBlock(BlockBehaviour.Properties.of().noOcclusion().strength(10.0F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> TEMPLE_PILLAR = register("temple_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> BETWEENSTONE_PILLAR = register("betweenstone_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> PITSTONE_PILLAR = register("pitstone_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));

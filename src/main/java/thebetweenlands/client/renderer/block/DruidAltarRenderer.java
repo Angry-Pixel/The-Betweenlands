@@ -204,6 +204,6 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 
 	@Override
 	public AABB getRenderBoundingBox(DruidAltarBlockEntity entity) {
-		return BlockEntityRenderer.super.getRenderBoundingBox(entity).inflate(1.5D);
+		return BlockEntityRenderer.super.getRenderBoundingBox(entity).inflate(0.75D).expandTowards(0.0D, 1.0D, 0.0D);
 	}
 }

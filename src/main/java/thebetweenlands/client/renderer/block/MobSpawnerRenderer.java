@@ -12,8 +12,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 
 public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEntity> {
@@ -128,5 +130,10 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 		stack.scale(0.1F, 0.3F, 0.1F);
 		this.crystal.render(stack, source.getBuffer(TEXTURE), LightTexture.FULL_BRIGHT, overlay, color);
 		stack.popPose();
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(MobSpawnerBlockEntity entity) {
+		return new AABB(entity.getBlockPos()).inflate(0.25D, 0.5D, 0.25D);
 	}
 }
