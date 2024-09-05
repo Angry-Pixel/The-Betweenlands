@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -35,11 +36,11 @@ public class PuddleBlock extends Block {
 	private static final VoxelShape AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 	public final static IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 15);
 
-	public static final BooleanProperty NORTH = BooleanProperty.create("north");
-	public static final BooleanProperty EAST = BooleanProperty.create("east");
-	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
-	public static final BooleanProperty WEST = BooleanProperty.create("west");
-	private static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.SOUTH, SOUTH, Direction.EAST, EAST, Direction.WEST, WEST));
+	public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
+	public static final BooleanProperty EAST = BlockStateProperties.EAST;
+	public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
+	public static final BooleanProperty WEST = BlockStateProperties.WEST;
+	public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, NORTH, Direction.SOUTH, SOUTH, Direction.EAST, EAST, Direction.WEST, WEST));
 
 	public PuddleBlock(Properties properties) {
 		super(properties);
@@ -93,12 +94,12 @@ public class PuddleBlock extends Block {
 
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		return (state.canBeReplaced() || (state.getBlock() instanceof FarmablePlant plant && plant.canBeDestroyedByPuddles(level, pos, state))) && state.isFaceSturdy(level, pos.below(), Direction.UP);
+		return (state.canBeReplaced() || (state.getBlock() instanceof FarmablePlant plant && plant.canBeDestroyedByPuddles(level, pos, state))) && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP);
 	}
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		return state.canSurvive(level, pos) ? state : Blocks.AIR.defaultBlockState();
+		return state.canSurvive(level, pos) ? state.setValue(PROPERTY_BY_DIRECTION.get(direction), !neighborState.is(this) && level.getBlockState(neighborPos.below()).isFaceSturdy(level, neighborPos.below(), Direction.UP)) : Blocks.AIR.defaultBlockState();
 	}
 
 	@Override

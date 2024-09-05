@@ -68,6 +68,7 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.FILTERED_SILT);
 			output.accept(BlockRegistry.DEAD_GRASS);
 			output.accept(BlockRegistry.SOLID_TAR);
+			output.accept(BlockRegistry.PUDDLE);
 			output.accept(BlockRegistry.PEARL_BLOCK);
 			output.accept(BlockRegistry.ANCIENT_REMNANT_BLOCK);
 			output.accept(BlockRegistry.WEEDWOOD_LOG);

@@ -86,7 +86,13 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.simpleBlockWithItem(BlockRegistry.FILTERED_SILT);
 		this.bottomSideTopBlockWithItem(BlockRegistry.DEAD_GRASS, this.modLoc("block/dead_grass_side"), this.modLoc("block/dead_grass_top"), this.modLoc("block/swamp_dirt"));
 		this.simpleBlockWithItem(BlockRegistry.SOLID_TAR);
-		//puddle?
+		var builder = this.getMultipartBuilder(BlockRegistry.PUDDLE.get()).part().modelFile(this.models().getExistingFile(this.modLoc("block/puddle"))).addModel().end();
+		PuddleBlock.PROPERTY_BY_DIRECTION.forEach((dir, value) -> {
+			if (dir.getAxis().isHorizontal()) {
+				builder.part().modelFile(this.models().getExistingFile(this.modLoc("block/puddle_side"))).rotationY((((int) dir.toYRot()) + 180) % 360).addModel().condition(value, true);
+			}
+		});
+		this.simpleBlockItem(BlockRegistry.PUDDLE);
 		this.simpleBlockWithItem(BlockRegistry.PEARL_BLOCK);
 		this.simpleBlockWithItem(BlockRegistry.ANCIENT_REMNANT_BLOCK);
 		this.logBlockWithItem(BlockRegistry.WEEDWOOD_LOG); //TODO weedwood has 8 side variants
@@ -516,6 +522,14 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.simpleBlockWithItem(BlockRegistry.PURIFIED_SWAMP_DIRT);
 		//dug dirt and grass
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.BLACK_ICE, "translucent");
+		this.getVariantBuilder(BlockRegistry.SNOW.get()).forAllStates(state -> {
+			if (state.getValue(SnowLayerBlock.LAYERS) == 8) {
+				return ConfiguredModel.builder().modelFile(this.models().getExistingFile(this.mcLoc("block/snow_block"))).build();
+			} else {
+				return ConfiguredModel.builder().modelFile(this.models().getExistingFile(this.mcLoc("block/snow_height" + (state.getValue(SnowLayerBlock.LAYERS) * 2)))).build();
+			}
+		});
+		this.simpleBlockItem(BlockRegistry.SNOW.get(), this.models().getExistingFile(this.mcLoc("block/snow_height2")));
 		this.getVariantBuilder(BlockRegistry.PORTAL.get()).forAllStates(state -> {
 			ModelFile file;
 			if (state.getValue(TreePortalBlock.AXIS) == Direction.Axis.Z) {
@@ -552,6 +566,7 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.builtinEntityAndItem(BlockRegistry.COMPOST_BIN, this.modLoc("block/particle/compost_bin_particle"), 0.625F, 0.0F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_JUKEBOX.get(), this.models().cubeTop("weedwood_jukebox", this.modLoc("block/weedwood_jukebox_side"), this.modLoc("block/weedwood_jukebox_top")));
 		this.simpleBlockItem(BlockRegistry.WEEDWOOD_JUKEBOX);
+		this.simpleBlockWithItem(BlockRegistry.SLUDGE.get(), this.models().withExistingParent(BlockRegistry.SLUDGE.getId().getPath(), "block/snow_height2").texture("texture", this.modLoc("block/sludge")).texture("particle", this.modLoc("block/sludge")));
 		this.getVariantBuilder(BlockRegistry.SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/sulfur_furnace" + (state.getValue(SulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(SulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
 		this.simpleBlockItem(BlockRegistry.SULFUR_FURNACE);
 		this.getVariantBuilder(BlockRegistry.DUAL_SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/dual_sulfur_furnace" + (state.getValue(DualSulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(DualSulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());

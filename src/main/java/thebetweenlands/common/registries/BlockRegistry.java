@@ -89,7 +89,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> FILTERED_SILT = register("filtered_silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> DEAD_GRASS = register("dead_grass", () -> new DeadGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).randomTicks().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> SOLID_TAR = register("solid_tar", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> PUDDLE = BLOCKS.register("puddle", () -> new PuddleBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().replaceable().randomTicks().strength(0.1F)));
+	public static final DeferredBlock<Block> PUDDLE = register("puddle", () -> new PuddleBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().replaceable().randomTicks().strength(0.1F)));
 	public static final DeferredBlock<Block> PEARL_BLOCK = register("pearl_block", () -> new Block(BlockBehaviour.Properties.of().strength(1.2F, 8.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> ANCIENT_REMNANT_BLOCK = register("ancient_remnant_block", () -> new Block(BlockBehaviour.Properties.of().strength(1.2F, 8.0F).sound(SoundType.STONE)));
 

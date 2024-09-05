@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/snow_height2",
+  "textures": {
+    "particle": "thebetweenlands:block/sludge",
+    "texture": "thebetweenlands:block/sludge"
+  }
+}
