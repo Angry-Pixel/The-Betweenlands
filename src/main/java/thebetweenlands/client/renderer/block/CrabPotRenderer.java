@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -32,11 +33,13 @@ public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> 
 
 	private final BubblerCrabModel bubbler;
 	private final SiltCrabModel silt;
+	private final ItemRenderer itemRenderer;
 
 	public CrabPotRenderer(BlockEntityRendererProvider.Context context) {
 		this.pot = context.bakeLayer(BLModelLayers.CRAB_POT);
 		this.bubbler = new BubblerCrabModel(context.bakeLayer(BLModelLayers.BUBBLER_CRAB));
 		this.silt = new SiltCrabModel(context.bakeLayer(BLModelLayers.SILT_CRAB));
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -131,7 +134,7 @@ public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> 
 			stack.translate(x, y, z);
 			stack.scale(scale, scale, scale);
 			stack.mulPose(Axis.YP.rotationDegrees((float) Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y()));
-			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+			this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
 	}

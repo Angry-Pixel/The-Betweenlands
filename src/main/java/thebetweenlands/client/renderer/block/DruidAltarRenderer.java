@@ -3,13 +3,13 @@ package thebetweenlands.client.renderer.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -37,10 +37,12 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 
 	private final ModelPart altar;
 	private final ModelPart stones;
+	private final ItemRenderer itemRenderer;
 
 	public DruidAltarRenderer(BlockEntityRendererProvider.Context context) {
 		this.altar = context.bakeLayer(BLModelLayers.DRUID_ALTAR);
 		this.stones = context.bakeLayer(BLModelLayers.DRUID_STONES);
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 				stack.translate(midVec.x, yOff, midVec.z);
 				stack.scale(0.3F, 0.3F, 0.3F);
 				stack.mulPose(Axis.YP.rotationDegrees(-renderRotation * 2.0F));
-				Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, overlay, stack, source, null, 0);
+				this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, overlay, stack, source, null, 0);
 				stack.popPose();
 			}
 		}
@@ -126,7 +128,7 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 			stack.mulPose(Axis.YP.rotationDegrees(-renderRotation * 2.0F));
 			stack.scale(0.3F, 0.3F, 0.3F);
 
-			Minecraft.getInstance().getItemRenderer().renderStatic(itemTalisman, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, overlay, stack, source, null, 0);
+			this.itemRenderer.renderStatic(itemTalisman, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
 	}

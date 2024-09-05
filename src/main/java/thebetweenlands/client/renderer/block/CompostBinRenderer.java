@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -25,11 +26,13 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/compost_bin.png"));
 	private final ModelPart bin;
 	private final ModelPart lid;
+	private final ItemRenderer itemRenderer;
 
 	public CompostBinRenderer(BlockEntityRendererProvider.Context context) {
 		ModelPart part = context.bakeLayer(BLModelLayers.COMPOST_BIN);
 		this.bin = part;
 		this.lid = part.getChild("bin_top");
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 				stack.mulPose(Axis.YP.rotationDegrees(RandomSource.create(i * 12315L).nextFloat() * 360.0F));
 				stack.mulPose(Axis.XP.rotationDegrees(90.0f));
 
-				Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+				this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 
 				stack.popPose();
 			}

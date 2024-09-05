@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +32,7 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/smoking_rack.png"));
 	private static final RenderType ACTIVE_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/smoking_rack_smoked.png"));
 	private final ModelPart rack;
+	private final ItemRenderer itemRenderer;
 
 	private static final Vec3[] ITEM_OFFSETS = new Vec3[]{
 		new Vec3(0.0F, 1.55F, 0.0F),
@@ -44,6 +46,7 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 
 	public SmokingRackRenderer(BlockEntityRendererProvider.Context context) {
 		this.rack = context.bakeLayer(BLModelLayers.SMOKING_RACK);
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -111,7 +114,7 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 				stack.mulPose(Axis.ZP.rotationDegrees(45.0F));
 			}
 
-			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+			this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
 	}

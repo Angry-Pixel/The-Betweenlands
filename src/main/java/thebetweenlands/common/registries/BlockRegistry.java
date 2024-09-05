@@ -246,7 +246,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> NIBBLETWIG_STAIRS = register("nibbletwig_stairs", () -> new SwampStairBlock(NIBBLETWIG_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(NIBBLETWIG_PLANKS.get())));
 	public static final DeferredBlock<Block> POSSESSED_BLOCK = register("possessed_block", () -> new PossessedBlock(BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> ITEM_CAGE = register("item_cage", () -> new ItemCageBlock(BlockBehaviour.Properties.of().lightLevel(value -> 12).noOcclusion().strength(10.0F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> ITEM_SHELF = register("item_shelf", () -> new ItemShelfBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> ITEM_SHELF = register("item_shelf", () -> new ItemShelfBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> THATCH = register("thatch", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.AZALEA)));
 	public static final DeferredBlock<Block> CRAGROCK_SLAB = register("cragrock_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(CRAGROCK.get())));
 	public static final DeferredBlock<Block> PITSTONE_SLAB = register("pitstone_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(PITSTONE.get())));

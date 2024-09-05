@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -32,9 +33,11 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 
 	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/animator.png"));
 	private final ModelPart animator;
+	private final ItemRenderer itemRenderer;
 
 	public AnimatorRenderer(BlockEntityRendererProvider.Context context) {
 		this.animator = context.bakeLayer(BLModelLayers.ANIMATOR);
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -62,7 +65,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 					stack.scale(0.125F, 0.125F, 0.125F);
 					stack.mulPose(Axis.XP.rotationDegrees(90.0F));
 					stack.mulPose(Axis.ZP.rotationDegrees(random.nextFloat() * 360.0F));
-					Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(2), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+					this.itemRenderer.renderStatic(entity.getItem(2), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					stack.popPose();
 				}
 			}
@@ -74,7 +77,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 				stack.translate(0.0F, 0.43F, 0.0F);
 				stack.scale(0.18F, 0.18F, 0.18F);
 				stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) + Mth.HALF_PI));
-				Minecraft.getInstance().getItemRenderer().renderStatic(crystal, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+				this.itemRenderer.renderStatic(crystal, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
 			}
 
@@ -91,7 +94,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 					if (!(inputStack.getItem() instanceof SpawnEggItem) && recipe.value().getRenderEntity(input, entity.getLevel()) == null) {
 						stack.scale(0.3F, 0.3F, 0.3F);
 						stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) - Mth.HALF_PI));
-						Minecraft.getInstance().getItemRenderer().renderStatic(inputStack, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+						this.itemRenderer.renderStatic(inputStack, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					} else {
 						RenderSystem.enableBlend();
 						RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

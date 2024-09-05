@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/item_shelf",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/item_shelf"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/item_shelf",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/item_shelf",
+      "y": 270
+    }
+  }
+}

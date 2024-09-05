@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -23,11 +24,13 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/purifier.png"));
 	private final ModelPart base;
 	private final ModelPart fire;
+	private final ItemRenderer itemRenderer;
 
 	public PurifierRenderer(BlockEntityRendererProvider.Context context) {
 		ModelPart root = context.bakeLayer(BLModelLayers.PURIFIER);
 		this.base = root.getChild("base");
 		this.fire = root.getChild("fire_plate");
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -58,7 +61,7 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 				stack.scale(0.15F, 0.15F, 0.15F);
 				stack.mulPose(Axis.XN.rotationDegrees(90));
 				stack.mulPose(Axis.ZP.rotationDegrees(rand.nextFloat() * 360.0F));
-				Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(2), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+				this.itemRenderer.renderStatic(entity.getItem(2), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
 			}
 			stack.popPose();

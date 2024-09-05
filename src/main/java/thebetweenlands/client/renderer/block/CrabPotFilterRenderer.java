@@ -2,13 +2,13 @@ package thebetweenlands.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -21,9 +21,11 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 
 	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/crab_pot_filter.png"));
 	private final ModelPart filter;
+	private final ItemRenderer itemRenderer;
 
 	public CrabPotFilterRenderer(BlockEntityRendererProvider.Context context) {
 		this.filter = context.bakeLayer(BLModelLayers.CRAB_POT_FILTER);
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 				stack.scale(0.5F - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.0025F), 0.5F - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.0025F), 0.5F - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.0025F));
 				stack.mulPose(Axis.XP.rotationDegrees((entity.getFilteringAnimationScaled(200, partialTicks) * 2F)));
 				stack.mulPose(Axis.ZP.rotationDegrees((entity.getFilteringAnimationScaled(200, partialTicks) * 2F)));
-				Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+				this.itemRenderer.renderStatic(entity.getItem(1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
 				stack.popPose();
 			}
@@ -66,7 +68,7 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 					stack.scale(0.25F, 0.25F, 0.25F);
 					stack.mulPose(Axis.XP.rotationDegrees(90.0F));
 					stack.mulPose(Axis.ZP.rotationDegrees((float) (random.nextDouble() * 360.0F)));
-					Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+					this.itemRenderer.renderStatic(entity.getItem(1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					stack.popPose();
 				}
 				stack.popPose();

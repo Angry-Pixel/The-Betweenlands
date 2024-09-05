@@ -245,8 +245,9 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.stairBlockWithItem(BlockRegistry.HEARTHGROVE_STAIRS, BlockRegistry.HEARTHGROVE_PLANKS);
 		this.stairBlockWithItem(BlockRegistry.NIBBLETWIG_STAIRS, BlockRegistry.NIBBLETWIG_PLANKS);
 		this.simpleBlockWithItem(BlockRegistry.POSSESSED_BLOCK.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.BETWEENSTONE_BRICKS.get())));
-		//item cage
-		//item shelf
+		this.builtinEntityAndItem(BlockRegistry.ITEM_CAGE, this.modLoc("block/weedwood_planks"), 0.625F, 0.0F);
+		this.horizontalBlock(BlockRegistry.ITEM_SHELF.get(), this.models().getExistingFile(this.modLoc("block/item_shelf")));
+		this.simpleBlockItem(BlockRegistry.ITEM_SHELF);
 		this.simpleBlockWithItem(BlockRegistry.THATCH);
 		this.slabBlockWithItem(BlockRegistry.CRAGROCK_SLAB, BlockRegistry.CRAGROCK);
 		this.slabBlockWithItem(BlockRegistry.PITSTONE_SLAB, BlockRegistry.PITSTONE);

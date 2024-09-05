@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -33,6 +34,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 	private final ModelPart table;
 	private final ModelPart cleaver;
 	private final ModelPart blood;
+	private final ItemRenderer itemRenderer;
 
 	private static final Vec3[] ITEM_OFFSETS = new Vec3[]{
 		new Vec3(0.0F, -0.75F, 0.0F),
@@ -46,6 +48,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 		this.table = root.getChild("base");
 		this.cleaver = root.getChild("cleaver_blade");
 		this.blood = root.getChild("blood");
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -119,7 +122,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 			stack.scale(scale, scale, scale);
 			stack.mulPose(Axis.XN.rotationDegrees(90.0F));
 			stack.mulPose(Axis.ZP.rotationDegrees(rotation + 180));
-			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+			this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
 	}

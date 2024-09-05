@@ -2,12 +2,12 @@ package thebetweenlands.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import thebetweenlands.client.BLModelLayers;
@@ -20,11 +20,13 @@ public class MortarRenderer implements BlockEntityRenderer<MortarBlockEntity> {
 	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/pestle_and_mortar.png"));
 	private final ModelPart mortar;
 	private final ModelPart pestle;
+	private final ItemRenderer itemRenderer;
 
 	public MortarRenderer(BlockEntityRendererProvider.Context context) {
 		var root = context.bakeLayer(BLModelLayers.MORTAR);
 		this.mortar = root.getChild("mortar");
 		this.pestle = root.getChild("pestle");
+		this.itemRenderer = context.getItemRenderer();
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class MortarRenderer implements BlockEntityRenderer<MortarBlockEntity> {
 			stack.scale(0.15F, 0.15F, 0.15F);
 			stack.translate(0D, Mth.sin((entity.itemBob + partialTicks) / 10.0F) * 0.1F + 0.1F, 0D);
 			stack.mulPose(Axis.YP.rotationDegrees(entity.crystalRotation));
-			Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(3), ItemDisplayContext.GROUND, light, overlay, stack, source, null, 0);
+			this.itemRenderer.renderStatic(entity.getItem(3), ItemDisplayContext.GROUND, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
 	}
