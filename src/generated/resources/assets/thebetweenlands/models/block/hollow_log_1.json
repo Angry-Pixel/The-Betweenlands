@@ -1,0 +1,13 @@
+{
+  "parent": "thebetweenlands:block/cube_inner",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "down": "thebetweenlands:block/hollow_log_side",
+    "east": "thebetweenlands:block/hollow_log_side_moss",
+    "north": "thebetweenlands:block/hollow_log_end",
+    "particle": "thebetweenlands:block/hollow_log_side",
+    "south": "thebetweenlands:block/hollow_log_end",
+    "up": "thebetweenlands:block/hollow_log_side_hole",
+    "west": "thebetweenlands:block/hollow_log_side_moss"
+  }
+}

@@ -34,9 +34,9 @@ public class SmallHollowLogFeature extends Feature<NoneFeatureConfiguration> {
 		BlockState log = BlockRegistry.HOLLOW_LOG.get().defaultBlockState();
 		for (int l = 0; l < length; l++) {
 			if (offsetX != 0)
-				log = log.setValue(HollowLogBlock.AXIS, Direction.Axis.X);
+				log = log.setValue(HollowLogBlock.FACING, Direction.EAST);
 			else if (offsetZ != 0)
-				log = log.setValue(HollowLogBlock.AXIS, Direction.Axis.Z);
+				log = log.setValue(HollowLogBlock.FACING, Direction.SOUTH);
 			this.setBlock(level, pos.offset(offsetX * l, 0, offsetZ * l), log);
 
 			if (wasLastBranch)
@@ -45,9 +45,9 @@ public class SmallHollowLogFeature extends Feature<NoneFeatureConfiguration> {
 				wasLastBranch = true;
 				BlockState log2 = BlockRegistry.HOLLOW_LOG.get().defaultBlockState();
 				if (offsetX != 0)
-					log2 = log2.setValue(HollowLogBlock.AXIS, Direction.Axis.Z);
+					log2 = log2.setValue(HollowLogBlock.FACING, Direction.SOUTH);
 				else if (offsetZ != 0)
-					log2 = log2.setValue(HollowLogBlock.AXIS, Direction.Axis.X);
+					log2 = log2.setValue(HollowLogBlock.FACING, Direction.EAST);
 				BlockPos newPos = pos.offset(offsetX * l, 0, offsetZ * l);
 				if (rand.nextInt(2) == 0)
 					newPos = newPos.offset(offsetZ != 0 ? 1 : 0, 0, offsetX != 0 ? 1 : 0);

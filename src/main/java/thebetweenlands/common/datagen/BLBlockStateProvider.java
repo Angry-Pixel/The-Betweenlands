@@ -519,6 +519,23 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.basicItemTex(BlockRegistry.ROOT, false);
 		this.simpleBlock(BlockRegistry.GIANT_ROOT.get(), this.models().cubeAll("giant_root", this.modLoc("block/root_bottom")));
 		this.simpleBlockItem(BlockRegistry.GIANT_ROOT);
+		ModelFile log1 = this.models().withExistingParent("hollow_log_1", this.modLoc("block/cube_inner")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
+			.texture("down", this.modLoc("block/hollow_log_side")).texture("up", this.modLoc("block/hollow_log_side_hole"))
+			.texture("north", this.modLoc("block/hollow_log_end")).texture("south", this.modLoc("block/hollow_log_end"))
+			.texture("west", this.modLoc("block/hollow_log_side_moss")).texture("east", this.modLoc("block/hollow_log_side_moss"));
+		ModelFile log2 = this.models().withExistingParent("hollow_log_2", this.modLoc("block/cube_inner")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
+			.texture("down", this.modLoc("block/hollow_log_side_hole")).texture("up", this.modLoc("block/hollow_log_side"))
+			.texture("north", this.modLoc("block/hollow_log_end")).texture("south", this.modLoc("block/hollow_log_end"))
+			.texture("west", this.modLoc("block/hollow_log_side_moss")).texture("east", this.modLoc("block/hollow_log_side_moss"));
+		ModelFile log3 = this.models().withExistingParent("hollow_log_3", this.modLoc("block/cube_inner")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
+			.texture("down", this.modLoc("block/hollow_log_side")).texture("up", this.modLoc("block/hollow_log_side"))
+			.texture("north", this.modLoc("block/hollow_log_end")).texture("south", this.modLoc("block/hollow_log_end"))
+			.texture("west", this.modLoc("block/hollow_log_side_moss")).texture("east", this.modLoc("block/hollow_log_side_moss"));
+		this.getVariantBuilder(BlockRegistry.HOLLOW_LOG.get()).forAllStates(state -> ConfiguredModel.builder()
+			.modelFile(log1).rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).nextModel()
+			.modelFile(log2).rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).nextModel()
+			.modelFile(log3).rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build());
+		this.simpleBlockItem(BlockRegistry.HOLLOW_LOG.get(), this.models().getExistingFile(this.modLoc("block/hollow_log_1")));
 		this.simpleBlockWithItem(BlockRegistry.PURIFIED_SWAMP_DIRT);
 		//dug dirt and grass
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.BLACK_ICE, "translucent");
