@@ -1,7 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -96,9 +94,6 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 						stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) - Mth.HALF_PI));
 						this.itemRenderer.renderStatic(inputStack, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					} else {
-						RenderSystem.enableBlend();
-						RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-						RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.65F);
 						Entity renderEntity = this.fetchEntityForRendering(entity, recipe, input);
 						if (renderEntity != null) {
 							stack.translate(0.0D, renderEntity.getBbHeight() / 8.0D, 0.0D);
@@ -121,7 +116,6 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 							dispatcher.setRenderShadow(true);
 							dispatcher.setRenderHitBoxes(hitboxes);
 						}
-						RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 					}
 				}
 

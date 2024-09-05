@@ -1,7 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -43,14 +41,10 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 			BlockState compost = BlockRegistry.COMPOST_BLOCK.get().defaultBlockState();
 
 			stack.pushPose();
-			RenderSystem.disableCull();
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			stack.translate(0.5D, 0.005D, 0.5D);
 			stack.scale(0.8f, compostHeight, 0.8f);
 			//TODO render block pixel perfect instead of just stretching the block
 			Minecraft.getInstance().getBlockRenderer().renderSingleBlock(compost, stack, source, light, overlay);
-			RenderSystem.enableCull();
 			stack.popPose();
 		}
 
