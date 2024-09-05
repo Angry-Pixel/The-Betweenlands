@@ -62,33 +62,14 @@ public class RenderUtils {
 		}
 	}
 
-	public static void onRenderTick(RenderLevelStageEvent event) {
+	public static void tickFrameCounter(RenderLevelStageEvent event) {
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
 			frameCounter++;
 		}
 	}
 
-	public static void onClientTick(ClientTickEvent.Post event) {
+	public static void incrementTickCounter(ClientTickEvent.Post event) {
 		renderTickCounter++;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T extends RenderLayer<?, ?>> T getRenderLayer(LivingEntityRenderer<?, ?> renderer, Class<T> cls, boolean subclasses) {
-		try {
-			List<? extends  RenderLayer<?, ?>> layers = renderer.layers;
-			for(RenderLayer<?, ?> layer : layers) {
-				if(subclasses ? cls.isInstance(layer) : cls == layer.getClass()) {
-					return (T) layer;
-				}
-			}
-		} catch(Exception ex) {
-			throw new RuntimeException(ex);
-		}
-		return null;
-	}
-
-	public static boolean doesRendererHaveLayer(LivingEntityRenderer<?, ?> renderer, Class<? extends RenderLayer<?, ?>> cls, boolean subclasses) {
-		return getRenderLayer(renderer, cls, subclasses) != null;
 	}
 
 	/**

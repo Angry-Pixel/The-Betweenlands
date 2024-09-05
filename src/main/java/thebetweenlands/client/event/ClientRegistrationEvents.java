@@ -26,6 +26,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
@@ -51,6 +52,7 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.registries.*;
+import thebetweenlands.util.RenderUtils;
 
 public class ClientRegistrationEvents {
 
@@ -76,6 +78,8 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
 		MainMenuEvents.init();
 		ClientHandlerEvents.init();
+		NeoForge.EVENT_BUS.addListener(RenderUtils::incrementTickCounter);
+		NeoForge.EVENT_BUS.addListener(RenderUtils::tickFrameCounter);
 	}
 
 	private static void clientSetup(FMLClientSetupEvent event) {
