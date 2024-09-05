@@ -34,7 +34,6 @@ public class FeatureRegistry {
 	//Double Plant Cluster
 	public static final DeferredHolder<Feature<?>, Feature<PoolConfiguration>> FLUID_POOL = FEATURES.register("fluid_pool",
 		() -> new FluidPoolFeature(PoolConfiguration.CODEC));
-	//Giant Root
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> LAKE_CAVERN_SIMULACRUM = FEATURES.register("lake_cavern_simulacrum",
 		() -> new LakeCavernSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<ChanceConfiguration>> LYESTONE = FEATURES.register("lyestone",
@@ -46,12 +45,11 @@ public class FeatureRegistry {
 	//Root Pod Roots
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> ROOTMAN_SIMULACRUM = FEATURES.register("rootman_simulacrum",
 		() -> new RootmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
-	//Roots Cluster
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> ROOTS_CLUSTER = FEATURES.register("roots_cluster",
+		() -> new RootsClusterFeature(NoneFeatureConfiguration.CODEC));
 	//Rotten Logs
-	//Rotten Weedwood Tree TODO: Tree feature?
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SMALL_HOLLOW_LOG = FEATURES.register("small_hollow_log",
 		() -> new SmallHollowLogFeature(NoneFeatureConfiguration.CODEC));
-	//Small Spirit Tree
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SPELEOTHEM = FEATURES.register("speleothem",
 		() -> new SpeleothemFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SWAMP_KELP_CLUSTER = FEATURES.register("swamp_kelp_cluster",
