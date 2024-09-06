@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.WallSide;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
@@ -16,13 +17,12 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.*;
-import thebetweenlands.common.block.waterlog.SwampWallBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import java.util.Map;
 
-public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.generators.BlockStateProvider {
+public class BLBlockStateProvider extends BlockStateProvider {
 
 	public BLBlockStateProvider(PackOutput output, ExistingFileHelper helper) {
 		super(output, TheBetweenlands.ID, helper);
@@ -506,7 +506,17 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.fenceBlockWithItem(BlockRegistry.ROTTEN_FENCE, BlockRegistry.ROTTEN_PLANKS);
 		this.gateBlockWithItem(BlockRegistry.ROTTEN_FENCE_GATE, BlockRegistry.ROTTEN_PLANKS);
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.BULB_CAPPED_MUSHROOM_CAP, "translucent");
-		this.logBlockWithItem(BlockRegistry.BULB_CAPPED_MUSHROOM_STALK);
+		this.getVariantBuilder(BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get()).forAllStates(state -> {
+			ResourceLocation sideTex = this.modLoc("block/bulb_capped_mushroom_stalk_" + (state.getValue(BulbCappedMushroomStemBlock.GROUND) ? "bottomy" : "side"));
+			if (state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Z) {
+				return ConfiguredModel.builder().modelFile(this.models().cubeColumnHorizontal("bulb_capped_mushroom_stalk" + (state.getValue(BulbCappedMushroomStemBlock.GROUND) ? "_ground" : ""), sideTex, this.modLoc("block/bulb_capped_mushroom_stalk_end"))).rotationX(90).build();
+			} else if (state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.X) {
+				return ConfiguredModel.builder().modelFile(this.models().cubeColumnHorizontal("bulb_capped_mushroom_stalk_horizontal" + (state.getValue(BulbCappedMushroomStemBlock.GROUND) ? "_ground" : ""), sideTex, this.modLoc("block/bulb_capped_mushroom_stalk_end"))).rotationX(90).rotationY(90).build();
+			} else {
+				return ConfiguredModel.builder().modelFile(this.models().cubeColumn("bulb_capped_mushroom_stalk_horizontal" + (state.getValue(BulbCappedMushroomStemBlock.GROUND) ? "_ground" : ""), sideTex, this.modLoc("block/bulb_capped_mushroom_stalk_end"))).build();
+			}
+		});
+		this.simpleBlockItem(BlockRegistry.BULB_CAPPED_MUSHROOM_STALK);
 		this.getVariantBuilder(BlockRegistry.SHELF_FUNGUS.get()).forAllStates(state -> {
 			if (state.getValue(ShelfFungusBlock.TOP)) {
 				return ConfiguredModel.builder().modelFile(this.models().cubeBottomTop("shelf_fungus", this.modLoc("block/shelf_fungus_side"), this.modLoc("block/shelf_fungus_bottom"), this.modLoc("block/shelf_fungus_top"))).build();

@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "thebetweenlands:block/bulb_capped_mushroom_stalk_end",
-    "side": "thebetweenlands:block/bulb_capped_mushroom_stalk_side"
+    "side": "thebetweenlands:block/bulb_capped_mushroom_stalk_bottomy"
   }
 }
