@@ -2,13 +2,16 @@ package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import thebetweenlands.common.component.item.FluidComponent;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class FilteredSiltGlassJarBlockEntity extends SyncedBlockEntity implements IFluidHandler {
 
@@ -63,5 +66,25 @@ public class FilteredSiltGlassJarBlockEntity extends SyncedBlockEntity implement
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 		this.tank.readFromNBT(registries, tag);
+	}
+
+	@Override
+	protected void applyImplicitComponents(DataComponentInput input) {
+		super.applyImplicitComponents(input);
+		this.tank.setFluid(input.getOrDefault(DataComponentRegistry.STORED_FLUID, FluidComponent.EMPTY).makeFluidStack());
+	}
+
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components) {
+		super.collectImplicitComponents(components);
+		if (!this.tank.getFluid().isEmpty()) {
+			components.set(DataComponentRegistry.STORED_FLUID, FluidComponent.fromFluidStack(this.tank.getFluid()));
+		}
+	}
+
+	@Override
+	public void removeComponentsFromTag(CompoundTag tag) {
+		super.removeComponentsFromTag(tag);
+		tag.remove("Fluid");
 	}
 }

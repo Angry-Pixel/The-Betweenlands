@@ -123,6 +123,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT.get(), CrabPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT_FILTER.get(), CrabPotFilterRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.DRUID_ALTAR.get(), DruidAltarRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), FilteredSiltGlassJarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.GECKO_CAGE.get(), GeckoCageRenderer::new);
@@ -137,6 +138,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.OFFERING_TABLE.get(), OfferingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PUFFSHROOM.get(), PuffshroomRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.SILT_GLASS_JAR.get(), SiltGlassJarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
@@ -168,6 +170,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.FISHING_TACKLE_BOX, FishingTackleBoxModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.FISH_TRIMMING_TABLE, FishTrimmingTableModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.GECKO_CAGE, GeckoCageModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.GLASS_JAR, GlassJarModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ITEM_CAGE, ItemCageModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_1, LakeCavernSimulacrumModels::makeSimulacrum1);
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_2, LakeCavernSimulacrumModels::makeSimulacrum2);
@@ -267,6 +270,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.WIND_CHIME.asItem(), BlockRegistry.OFFERING_TABLE.asItem(), BlockRegistry.MOB_SPAWNER.asItem(),
 			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(),
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
+			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

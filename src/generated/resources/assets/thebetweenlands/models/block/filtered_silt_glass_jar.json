@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:builtin/entity",
+  "textures": {
+    "particle": "thebetweenlands:block/filtered_silt_glass_0"
+  }
+}

@@ -654,6 +654,7 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		ModelFile down = this.models().getExistingFile(this.modLoc("block/glowing_goop_down"));
 		ModelFile up = this.models().getExistingFile(this.modLoc("block/glowing_goop"));
 		ModelFile side = this.models().getExistingFile(this.modLoc("block/glowing_goop_side"));
+		this.builtinEntityAndItem(BlockRegistry.SILT_GLASS_JAR, this.modLoc("block/silt_glass"), 0.625F, 0.0F);
 		this.getVariantBuilder(BlockRegistry.GLOWING_GOOP.get()).forAllStatesExcept(state -> {
 			Direction dir = state.getValue(BlockStateProperties.FACING);
 			return ConfiguredModel.builder()
@@ -666,6 +667,7 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.SHADOW_WALKER, "translucent");
+		this.builtinEntityAndItem(BlockRegistry.FILTERED_SILT_GLASS_JAR, this.modLoc("block/filtered_silt_glass_0"), 0.625F, 0.0F);
 		this.simpleBlockWithItem(BlockRegistry.DULL_LAVENDER_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.MAROON_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.SHADOW_GREEN_SAMITE);

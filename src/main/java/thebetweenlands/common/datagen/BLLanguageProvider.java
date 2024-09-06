@@ -324,6 +324,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.FILTERED_SILT, "Filtered Silt");
 		this.addBlock(BlockRegistry.FILTERED_SILT_GLASS, "Filtered Silt Glass");
 		this.addBlock(BlockRegistry.FILTERED_SILT_GLASS_JAR, "Filtered Silt Glass Jar");
+		this.add("block.thebetweenlands.filtered_silt_glass_jar.empty", "It's Empty!");
+		this.add("block.thebetweenlands.filtered_silt_glass_jar.fluid", "Contains: %s");
+		this.add("block.thebetweenlands.filtered_silt_glass_jar.amount", "%sMb/4000Mb");
 		this.addBlock(BlockRegistry.FILTERED_SILT_GLASS_PANE, "Filtered Silt Glass Pane");
 		this.addBlock(BlockRegistry.FINE_LATTICE, "Fine Lattice");
 		this.addBlockWithDesc(BlockRegistry.FISH_TRIMMING_TABLE, "Trimming Table", "Uses a bone axe to chop caught fish and crabs.");
@@ -646,7 +649,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.SILK_COCOONED_WEEDWOOD_BUSH, "Silk Cocooned Weedwood Bush");
 		this.addBlock(BlockRegistry.SILT, "Silt");
 		this.addBlock(BlockRegistry.SILT_GLASS, "Silt Glass");
-		this.addBlock(BlockRegistry.SILT_GLASS_JAR, "Silt Glass Jar");
+		this.addBlockWithDesc(BlockRegistry.SILT_GLASS_JAR, "Silt Glass Jar", "Storage for Tiny Sludge Worms.\nUsing a Weedwood Fishing Rod on the jar adds a worm to the rod.");
+		this.add("block.thebetweenlands.silt_glass_jar.worms", "- §a%s Worms");
 		this.addBlock(BlockRegistry.SILT_GLASS_LANTERN, "Silt Glass Lantern");
 		this.addBlock(BlockRegistry.SILT_GLASS_PANE, "Silt Glass Pane");
 		this.addBlock(BlockRegistry.SLIMY_BONE_BLOCK, "Block of Slimy Bone");

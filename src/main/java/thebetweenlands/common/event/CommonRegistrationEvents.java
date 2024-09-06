@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -69,6 +71,7 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerBlockEntityValidBlocks);
 		bus.addListener(CommonRegistrationEvents::registerPackets);
 		bus.addListener(CommonRegistrationEvents::registerDataMaps);
+		bus.addListener(CommonRegistrationEvents::registerCapabilities);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::protectFromMagicDamage);
@@ -189,6 +192,10 @@ public class CommonRegistrationEvents {
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {
 		event.register(DataMapRegistry.DECAY_FOOD);
 		event.register(DataMapRegistry.FLUX_MULTIPLIER);
+	}
+
+	private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), (tile, context) -> tile.tank);
 	}
 
 	private static void protectFromMagicDamage(LivingIncomingDamageEvent event) {

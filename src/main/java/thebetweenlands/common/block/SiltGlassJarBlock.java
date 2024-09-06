@@ -1,21 +1,27 @@
 package thebetweenlands.common.block;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -24,6 +30,8 @@ import thebetweenlands.common.block.entity.SiltGlassJarBlockEntity;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+
+import java.util.List;
 
 public class SiltGlassJarBlock extends BaseEntityBlock {
 
@@ -108,6 +116,24 @@ public class SiltGlassJarBlock extends BaseEntityBlock {
 			}
 		}
 		return super.useWithoutItem(state, level, pos, player, hitResult);
+	}
+
+	@Override
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
+		if (stack.has(DataComponentRegistry.WORMS)) {
+			tooltip.add(Component.translatable(this.getDescriptionId() + ".worms", stack.get(DataComponentRegistry.WORMS)).withStyle(ChatFormatting.GRAY));
+		}
+	}
+
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+		if (level.getBlockEntity(pos) instanceof SiltGlassJarBlockEntity jar && jar.getItemCount() != 0) {
+			ItemStack stack = new ItemStack(this);
+			stack.applyComponents(jar.collectComponents());
+			return stack;
+		}
+		return super.getCloneItemStack(state, target, level, pos, player);
 	}
 
 	@Nullable

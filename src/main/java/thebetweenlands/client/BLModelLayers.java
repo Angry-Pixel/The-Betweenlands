@@ -25,6 +25,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation FISH_TRIMMING_TABLE = register("fish_trimming_table");
 	public static final ModelLayerLocation FISHING_TACKLE_BOX = register("fishing_tackle_box");
 	public static final ModelLayerLocation GECKO_CAGE = register("gecko_cage");
+	public static final ModelLayerLocation GLASS_JAR = register("glass_jar");
 	public static final ModelLayerLocation ITEM_CAGE = register("item_cage");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_1 = register("lake_cavern_simulacrum_1");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_2 = register("lake_cavern_simulacrum_2");

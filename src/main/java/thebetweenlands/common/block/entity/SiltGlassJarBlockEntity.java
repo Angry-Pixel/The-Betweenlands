@@ -3,12 +3,14 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class SiltGlassJarBlockEntity extends NoMenuContainerBlockEntity {
 
@@ -79,5 +81,25 @@ public class SiltGlassJarBlockEntity extends NoMenuContainerBlockEntity {
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.setItemCount(tag.getInt("item_count"));
+	}
+
+	@Override
+	protected void applyImplicitComponents(DataComponentInput input) {
+		super.applyImplicitComponents(input);
+		this.itemCount = input.getOrDefault(DataComponentRegistry.WORMS, 0);
+	}
+
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components) {
+		super.collectImplicitComponents(components);
+		if (this.itemCount != 0) {
+			components.set(DataComponentRegistry.WORMS, this.itemCount);
+		}
+	}
+
+	@Override
+	public void removeComponentsFromTag(CompoundTag tag) {
+		super.removeComponentsFromTag(tag);
+		tag.remove("item_count");
 	}
 }
