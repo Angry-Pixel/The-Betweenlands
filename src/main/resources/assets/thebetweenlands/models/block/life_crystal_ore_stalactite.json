@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "loader": "thebetweenlands:root",
+  "emissive_overlay": true,
   "textures": {
     "particle": "thebetweenlands:block/pitstone",
     "overlay": "thebetweenlands:block/life_crystal_ore",

@@ -40,7 +40,7 @@ import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 import thebetweenlands.util.StalactiteHelper.IStalactite;
 
-public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
+public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implements IUnbakedGeometry<RootGeometry> {
 
 	public static final ModelProperty<Boolean> NO_BOTTOM = new ModelProperty<>(Predicates.notNull());
 	public static final ModelProperty<Boolean> NO_TOP = new ModelProperty<>(Predicates.notNull());
@@ -59,10 +59,10 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 		TextureAtlasSprite textureOverlay = context.hasMaterial("overlay") ? spriteGetter.apply(context.getMaterial("overlay")) : UnitTextureAtlasSprite.INSTANCE;
 		TextureAtlasSprite textureParticle = context.hasMaterial("particle") ? spriteGetter.apply(context.getMaterial("particle")) : textureTop;
 		
-		return new RootDynamicModel(textureTop, textureMiddle, textureBottom, textureOverlay, textureParticle);
+		return new RootDynamicModel(textureTop, textureMiddle, textureBottom, textureOverlay, textureParticle, this.emissiveBase(), this.emissiveOverlay());
 	}
 
-	public record RootDynamicModel(TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom, TextureAtlasSprite textureOverlay, TextureAtlasSprite textureParticle) implements IDynamicBakedModel {
+	public record RootDynamicModel(TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom, TextureAtlasSprite textureOverlay, TextureAtlasSprite textureParticle, boolean emissiveBase, boolean emissiveOverlay) implements IDynamicBakedModel {
 
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random, ModelData extraData, @Nullable RenderType renderType) {
@@ -137,10 +137,17 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 					
 					if(i == 0) {
 						builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
+						if(emissiveBase)
+							builder.setLightmap(15, 15);
+						else
+							builder.removeLightmap();
 					}
 					else {
 						builder.setSprite(this.textureOverlay);
-						builder.setLightmap(15, 15);
+						if(emissiveOverlay)
+							builder.setLightmap(15, 15);
+						else
+							builder.removeLightmap();
 					}
 				
 					// front
@@ -280,7 +287,10 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 
 		@Override
 		public RootGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
-			return new RootGeometry();
+			boolean emissiveBase = jsonObject.has("emissive_base") && jsonObject.get("emissive_base").getAsBoolean();
+			boolean emissiveOverlay = jsonObject.has("emissive_overlay") && jsonObject.get("emissive_overlay").getAsBoolean();
+			
+			return new RootGeometry(emissiveBase, emissiveOverlay);
 		}
 	}
 }
