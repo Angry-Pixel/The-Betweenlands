@@ -1,0 +1,24 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:anadia_remains"
+    },
+    {
+      "item": "thebetweenlands:anadia_remains"
+    },
+    {
+      "item": "thebetweenlands:anadia_remains"
+    },
+    {
+      "item": "thebetweenlands:anadia_remains"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:clean_water"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:fish_oil"
+  }
+}

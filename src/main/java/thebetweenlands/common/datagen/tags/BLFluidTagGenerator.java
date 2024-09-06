@@ -21,7 +21,6 @@ public class BLFluidTagGenerator extends FluidTagsProvider {
 	public static final TagKey<Fluid> RUBBER = tag("rubber");
 	public static final TagKey<Fluid> FOG = tag("fog");
 	public static final TagKey<Fluid> SHALLOWBREATH = tag("shallowbreath");
-	public static final TagKey<Fluid> DYE = tag("dye");
 	public static final TagKey<Fluid> CLEAN_WATER = tag("clean_water");
 	public static final TagKey<Fluid> FISH_OIL = tag("fish_oil");
 
@@ -49,7 +48,6 @@ public class BLFluidTagGenerator extends FluidTagsProvider {
 		this.tag(RUBBER).add(FluidRegistry.RUBBER_STILL.get(), FluidRegistry.RUBBER_FLOW.get());
 		this.tag(FOG).add(FluidRegistry.FOG_STILL.get(), FluidRegistry.FOG_FLOW.get());
 		this.tag(SHALLOWBREATH).add(FluidRegistry.SHALLOWBREATH_STILL.get(), FluidRegistry.SHALLOWBREATH_FLOW.get());
-		this.tag(DYE).add(FluidRegistry.DYE_STILL.get(), FluidRegistry.DYE_FLOW.get());
 		this.tag(CLEAN_WATER).add(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.CLEAN_WATER_FLOW.get());
 		this.tag(FISH_OIL).add(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.FISH_OIL_FLOW.get());
 

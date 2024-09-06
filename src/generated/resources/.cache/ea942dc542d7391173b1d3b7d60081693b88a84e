@@ -1,6 +1,5 @@
-// 1.21.1	2024-08-19T14:57:04.6691059	Tags for minecraft:fluid mod id thebetweenlands
+// 1.21.1	2024-09-06T09:59:01.6829549	Tags for minecraft:fluid mod id thebetweenlands
 48e2d20a0a962e53a250c0694018c7bb378b1b5c data/thebetweenlands/tags/fluid/clean_water.json
-c5eab8eefcf542ab842ac19df0e72eee40a8b3c9 data/thebetweenlands/tags/fluid/dye.json
 e2ed24344c17fe427d4a097a16d47e1dae8e13cc data/thebetweenlands/tags/fluid/fish_oil.json
 0c1b04fb1d896a3fd8b792b9869ee642dd2f1538 data/thebetweenlands/tags/fluid/fog.json
 00dc288bf1f9eef94feac95f877de58b401ae2d0 data/thebetweenlands/tags/fluid/frog_leg_extract.json

@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-02T13:40:00.5121263	Item Models: thebetweenlands
+// 1.21.1	2024-09-05T21:36:11.2041866	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 6fc862383ed371b267e50e28fc279af7595b8763 assets/thebetweenlands/models/item/amate_paper.json
@@ -269,6 +269,7 @@ e9f5e55b56f6efd3806deca740592cbc186f3743 assets/thebetweenlands/models/item/rubb
 18e1273433794ba615c6a31f8f8fde075f558d8d assets/thebetweenlands/models/item/shockwave_sword_piece_3.json
 1bbc35be3755ef65c9d452e49b64e2022d7f640d assets/thebetweenlands/models/item/shockwave_sword_piece_4.json
 f393baaaab7d9f4b9125e78c7d246814b93d7028 assets/thebetweenlands/models/item/shoot_leaves.json
+ef181dcfe2863899b0331d61fd8d7539a5a797ec assets/thebetweenlands/models/item/silk_bundle.json
 f63a7e9342a8e736856c47325f2bc51f94fff8a8 assets/thebetweenlands/models/item/silk_grub.json
 f7aba0ac778750a3366b31a855f7ec2f5e6786cc assets/thebetweenlands/models/item/silk_grub_cocoon.json
 283fecb9655719554890126e06dfc53ae4c6f3f1 assets/thebetweenlands/models/item/silk_thread.json

@@ -13,6 +13,7 @@ import thebetweenlands.common.items.recipe.AnadiaSmokingRecipe;
 import thebetweenlands.common.items.recipe.AnadiaTrimmingRecipe;
 import thebetweenlands.common.items.recipe.MortarAspectrusRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
@@ -196,7 +197,37 @@ public class BLRecipeProvider extends RecipeProvider {
 		SmokingRackRecipeBuilder.smoking(ItemRegistry.RAW_SNAIL_FLESH, ItemRegistry.SMOKED_SNAIL_FLESH, 200).save(output);
 		SmokingRackRecipeBuilder.smoking(BlockRegistry.SWAMP_REED, ItemRegistry.DRIED_SWAMP_REED, 200).save(output);
 		SmokingRackRecipeBuilder.smoking(Ingredient.of(BlockRegistry.WEEDWOOD_LOG, BlockRegistry.WEEDWOOD_BARK), ItemRegistry.DRY_BARK, 400).save(output);
-
 		output.accept(TheBetweenlands.prefix("smoking_rack/anadia"), new AnadiaSmokingRecipe(), null);
+
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.DULL_LAVENDER_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_BLUE_EYED_GRASS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.MAROON_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_CRIMSON_SNAIL_SHELL).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.SHADOW_GREEN_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_PALE_GRASS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.CAMELOT_MAGENTA_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_MILKWEED).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.SAFFRON_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_GOLDEN_CLUB).requires(ItemRegistry.GROUND_MARSH_MARIGOLD).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.CARIBBEAN_GREEN_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_DEEP_WATER_CORAL).requires(ItemRegistry.GROUND_PALE_GRASS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.VIVID_TANGERINE_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_MARSH_HIBUSCUS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.CHAMPAGNE_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_BUTTON_BUSH).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.RAISIN_BLACK_DYE_STILL.get(), 1000).requires(ItemRegistry.CREMAINS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.SUSHI_GREEN_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_SWAMP_KELP).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.ELM_CYAN_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_DEEP_WATER_CORAL).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.CADMIUM_GREEN_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_POISON_IVY).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.LAVENDER_BLUE_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_BLUE_EYED_GRASS).requires(ItemRegistry.GROUND_PICKERELWEED).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.BROWN_RUST_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_COPPER_IRIS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.MIDNIGHT_PURPLE_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_PICKERELWEED).requires(ItemRegistry.CREMAINS).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.FISH_OIL_STILL.get(), FluidRegistry.PEWTER_GREY_DYE_STILL.get(), 1000).requires(ItemRegistry.GROUND_ANGLER_TOOTH).requires(ItemRegistry.CREMAINS).save(output);
+
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.FISH_OIL_STILL.get(), 1000).requires(ItemRegistry.ANADIA_REMAINS, 4).save(output);
+
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.NETTLE_SOUP_STILL.get(), 1000).requires(ItemRegistry.BLACK_HAT_MUSHROOM).requires(ItemRegistry.FLATHEAD_MUSHROOM).requires(Ingredient.of(BlockRegistry.NETTLE, BlockRegistry.FLOWERED_NETTLE)).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.NETTLE_TEA_STILL.get(), 1000).requires(ItemRegistry.NETTLE_LEAF, 4).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.PHEROMONE_EXTRACT_STILL.get(), 1000).requires(ItemRegistry.PHEROMONE_THORAXES).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.SWAMP_BROTH_STILL.get(), 1000).requires(ItemRegistry.RAW_SNAIL_FLESH).requires(ItemRegistry.SAP_BALL).requires(ItemRegistry.FLATHEAD_MUSHROOM).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.STURDY_STOCK_STILL.get(), 1000).requires(ItemRegistry.RAW_SNAIL_FLESH).requires(ItemRegistry.BARNACLE).requires(ItemRegistry.RAW_ANADIA_MEAT).requires(ItemRegistry.GROUND_ARROW_ARUM).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.PEAR_CORDIAL_STILL.get(), 1000).requires(ItemRegistry.MIDDLE_FRUIT).requires(ItemRegistry.SLUDGE_BALL).requires(ItemRegistry.SAP_SPIT).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.SHAMANS_BREW_STILL.get(), 1000).requires(BlockRegistry.WISP).requires(ItemRegistry.BULB_CAPPED_MUSHROOM).requires(ItemRegistry.GROUND_MIRE_CORAL).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.LAKE_BROTH_STILL.get(), 1000).requires(ItemRegistry.SILT_CRAB_CLAW).requires(ItemRegistry.BARNACLE).requires(ItemRegistry.GROUND_ALGAE).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.SHELL_STOCK_STILL.get(), 1000).requires(ItemRegistry.RAW_SNAIL_FLESH).requires(ItemRegistry.GROUND_CRIMSON_SNAIL_SHELL, 2).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), 1000).requires(ItemRegistry.RAW_FROG_LEGS, 4).save(output);
+		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.WITCH_TEA_STILL.get(), 1000).requires(ItemRegistry.TINY_SLUDGE_WORM).requires(ItemRegistry.CHIROMAW_WING).requires(ItemRegistry.RAW_FROG_LEGS).requires(ItemRegistry.YELLOW_DOTTED_FUNGUS).save(output);
 	}
 }

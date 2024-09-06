@@ -1,12 +1,16 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.recipes.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.items.recipe.*;
+
+import javax.annotation.Nullable;
 
 public class RecipeRegistry {
 
@@ -37,4 +41,17 @@ public class RecipeRegistry {
 	public static final DeferredHolder<RecipeType<?>, RecipeType<SmokingRackRecipe>> SMOKING_RECIPE = RECIPE_TYPES.register("smoking_rack", () -> RecipeType.simple(TheBetweenlands.prefix("smoking_rack")));
 	public static final DeferredHolder<RecipeType<?>, RecipeType<SteepingPotRecipe>> STEEPING_POT_RECIPE = RECIPE_TYPES.register("steeping_pot", () -> RecipeType.simple(TheBetweenlands.prefix("steeping_pot")));
 	public static final DeferredHolder<RecipeType<?>, RecipeType<TrimmingTableRecipe>> TRIMMING_TABLE_RECIPE = RECIPE_TYPES.register("trimming_table", () -> RecipeType.simple(TheBetweenlands.prefix("trimming_table")));
+
+	public static boolean doesSteepingPotUseItem(@Nullable Level level, ItemStack stack) {
+		if (level != null) {
+			for (RecipeHolder<SteepingPotRecipe> recipe : level.getRecipeManager().getAllRecipesFor(STEEPING_POT_RECIPE.get())) {
+				for (Ingredient ingredient : recipe.value().getIngredients()) {
+					if (ingredient.test(stack)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

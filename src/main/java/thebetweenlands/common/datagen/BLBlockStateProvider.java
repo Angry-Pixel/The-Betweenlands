@@ -677,6 +677,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.SHADOW_WALKER, "translucent");
+		this.builtinEntityAndItem(BlockRegistry.STEEPING_POT, this.modLoc("block/particle/steeping_pot_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.FILTERED_SILT_GLASS_JAR, this.modLoc("block/filtered_silt_glass_0"), 0.625F, 0.0F);
 		this.simpleBlockWithItem(BlockRegistry.DULL_LAVENDER_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.MAROON_SAMITE);

@@ -1,0 +1,18 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:ground_golden_club"
+    },
+    {
+      "item": "thebetweenlands:ground_marsh_marigold"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:fish_oil"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:saffron_dye"
+  }
+}

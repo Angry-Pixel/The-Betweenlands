@@ -144,10 +144,10 @@ public class ItemTooltipHandler {
 				usedInMachines.add(Component.translatable("item.thebetweenlands.steeping_pot_recipe").withStyle(ChatFormatting.GRAY));
 			}
 
-//			if (SteepingPotRecipes.getRecipeForInputStack(stack) != null) {
-//				usedInMachines.add(Component.translatable("tooltip.bl.recipes.silk_bundle_recipe"));
-//				usedInMachines.add(Component.translatable("tooltip.bl.recipes.steeping_pot_recipe"));
-//			}
+			if (RecipeRegistry.doesSteepingPotUseItem(event.getContext().level(), stack)) {
+				usedInMachines.add(Component.translatable("item.thebetweenlands.silk_bundle_recipe"));
+				usedInMachines.add(Component.translatable("item.thebetweenlands.steeping_pot_recipe"));
+			}
 
 			if (!usedInMachines.isEmpty()) {
 				toolTip.add(Component.translatable("item.thebetweenlands.used_in_recipes", usedInMachines.stream().map(Component::getString).collect(Collectors.joining(", "))).withStyle(ChatFormatting.GRAY));

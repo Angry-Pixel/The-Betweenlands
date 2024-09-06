@@ -1,0 +1,21 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:middle_fruit"
+    },
+    {
+      "item": "thebetweenlands:sludge_ball"
+    },
+    {
+      "item": "thebetweenlands:sap_spit"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:clean_water"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:pear_cordial"
+  }
+}

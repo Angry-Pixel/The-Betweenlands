@@ -1,0 +1,26 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:black_hat_mushroom_item"
+    },
+    {
+      "item": "thebetweenlands:flathead_mushroom_item"
+    },
+    [
+      {
+        "item": "thebetweenlands:nettle"
+      },
+      {
+        "item": "thebetweenlands:flowered_nettle"
+      }
+    ]
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:clean_water"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:nettle_soup"
+  }
+}

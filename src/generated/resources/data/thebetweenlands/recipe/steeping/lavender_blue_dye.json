@@ -1,0 +1,18 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:ground_blue_eyed_grass"
+    },
+    {
+      "item": "thebetweenlands:ground_pickerelweed"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:fish_oil"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:lavender_blue_dye"
+  }
+}

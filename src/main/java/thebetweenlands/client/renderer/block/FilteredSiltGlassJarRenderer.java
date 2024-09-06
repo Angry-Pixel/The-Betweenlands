@@ -37,7 +37,7 @@ public class FilteredSiltGlassJarRenderer implements BlockEntityRenderer<Filtere
 				float height = (0.6875F / entity.tank.getCapacity()) * entity.tank.getFluidAmount();
 
 				TextureAtlasSprite fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture());
-				int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor();
+				int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
 				RenderUtils.renderCuboid(stack.last(), source.getBuffer(RenderType.entityCutoutNoCull(fluidStillSprite.atlasLocation())), light, fluidColor, fluidStillSprite, 0.25F, 0.75F, 0.0625F, height, 0.25F, 0.75F);
 			}
 		}

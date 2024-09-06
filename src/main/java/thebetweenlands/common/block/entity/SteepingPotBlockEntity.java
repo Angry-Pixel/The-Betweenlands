@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -35,9 +36,7 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 
 	public int itemRotate = 0;
 	public int prevItemRotate = 0;
-	public int prevItemBob = 0;
 	public int itemBob = 0;
-	private boolean countUp = true;
 	private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
 	public SteepingPotBlockEntity(BlockPos pos, BlockState state) {
@@ -46,19 +45,9 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SteepingPotBlockEntity entity) {
 		entity.prevItemRotate = entity.itemRotate;
-		entity.prevItemBob = entity.itemBob;
 
 		if (level.isClientSide()) {
-			if (entity.countUp && entity.itemBob <= 20) {
-				entity.itemBob++;
-				if (entity.itemBob == 20)
-					entity.countUp = false;
-			}
-			if (!entity.countUp && entity.itemBob >= -20) {
-				entity.itemBob--;
-				if (entity.itemBob == -20)
-					entity.countUp = true;
-			}
+			entity.itemBob++;
 
 			if (entity.getHeatProgress() > 80 && entity.hasBundle()) {
 				if (entity.itemRotate < 180)
@@ -76,12 +65,12 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 					if (recipe.isPresent()) {
 						FluidStack outputFluid = recipe.get().value().getResultFluid(level.registryAccess());
 						if (!outputFluid.isEmpty()) {
-							entity.setTempFluidColour(outputFluid.getOrDefault(DataComponentRegistry.FLUID_COLOR, 0xFFFFFF));
+							entity.setTempFluidColour(IClientFluidTypeExtensions.of(outputFluid.getFluid()).getTintColor(outputFluid));
 							entity.hasCraftResult = true;
 						}
 					}
 				} else {
-					entity.setTempFluidColour(entity.tank.getFluid().getOrDefault(DataComponentRegistry.FLUID_COLOR, 0xFFFFFF));
+					entity.setTempFluidColour(IClientFluidTypeExtensions.of(entity.tank.getFluid().getFluid()).getTintColor(entity.tank.getFluid()));
 					entity.hasCraftResult = true;
 				}
 				level.sendBlockUpdated(pos, state, state, 2);

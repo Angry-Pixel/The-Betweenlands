@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:ground_poison_ivy"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:fish_oil"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:cadmium_green_dye"
+  }
+}

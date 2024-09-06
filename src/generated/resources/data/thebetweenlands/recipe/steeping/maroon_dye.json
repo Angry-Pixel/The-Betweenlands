@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:ground_crimson_snail_shell"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:fish_oil"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:maroon_dye"
+  }
+}

@@ -21,7 +21,7 @@ public record ItemSteepingPotRecipe(FluidIngredient inputFluid, NonNullList<Ingr
 	@Override
 	public boolean matches(FluidRecipeInput input, Level level) {
 		if (!this.inputFluid().test(input.getFluid())) return false;
-		if (input.size() != this.items().size()) {
+		if (input.ingredientCount() != this.items().size()) {
 			return false;
 		}
 		return input.size() == 1 && this.items().size() == 1

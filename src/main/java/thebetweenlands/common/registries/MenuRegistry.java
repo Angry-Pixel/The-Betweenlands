@@ -19,6 +19,7 @@ public class MenuRegistry {
 	public static final DeferredHolder<MenuType<?>, MenuType<FishingTackleBoxMenu>> FISHING_TACKLE_BOX = MENUS.register("fishing_tackle_box", () -> new MenuType<>(FishingTackleBoxMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<FishTrimmingTableMenu>> FISH_TRIMMING_TABLE = MENUS.register("fish_trimming_table", () -> IMenuTypeExtension.create(FishTrimmingTableMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<MortarMenu>> MORTAR = MENUS.register("mortar", () -> new MenuType<>(MortarMenu::new, FeatureFlags.REGISTRY.allFlags()));
+	public static final DeferredHolder<MenuType<?>, MenuType<SilkBundleMenu>> SILK_BUNDLE = MENUS.register("silk_bundle", () -> new MenuType<>(SilkBundleMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<SmokingRackMenu>> SMOKING_RACK = MENUS.register("smoking_rack", () -> new MenuType<>(SmokingRackMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<WeedwoodCraftingMenu>> WEEDWOOD_CRAFTING_TABLE = MENUS.register("weedwood_crafting_table", () -> IMenuTypeExtension.create(WeedwoodCraftingMenu::new));
 }

@@ -12,13 +12,16 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
@@ -27,6 +30,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtension
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
@@ -48,6 +52,7 @@ import thebetweenlands.common.block.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.fluid.ColoredFluid;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
@@ -101,6 +106,7 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
 		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
+		event.register(MenuRegistry.SILK_BUNDLE.get(), SilkBundleScreen::new);
 		event.register(MenuRegistry.SMOKING_RACK.get(), SmokingRackScreen::new);
 	}
 
@@ -142,6 +148,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.STEEPING_POT.get(), SteepingPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WAYSTONE.get(), WaystoneRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
 	}
@@ -171,6 +178,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.FISH_TRIMMING_TABLE, FishTrimmingTableModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.GECKO_CAGE, GeckoCageModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.GLASS_JAR, GlassJarModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.HANGING_STEEPING_POT, SteepingPotModel::makeHangingModel);
 		event.registerLayerDefinition(BLModelLayers.ITEM_CAGE, ItemCageModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_1, LakeCavernSimulacrumModels::makeSimulacrum1);
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_2, LakeCavernSimulacrumModels::makeSimulacrum2);
@@ -193,6 +201,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SMOKING_RACK, SmokingRackModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.SPIKE_BLOCK, SpikeTrapModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.SPOOP, SpikeTrapModel::makeSpoop);
+		event.registerLayerDefinition(BLModelLayers.STEEPING_POT, SteepingPotModel::makeNormalModel);
 		event.registerLayerDefinition(BLModelLayers.WAYSTONE, WaystoneModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.WIND_CHIME, WindChimeModel::makeModel);
 	}
@@ -270,7 +279,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.WIND_CHIME.asItem(), BlockRegistry.OFFERING_TABLE.asItem(), BlockRegistry.MOB_SPAWNER.asItem(),
 			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(),
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
-			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(),
+			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(), BlockRegistry.STEEPING_POT.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),
@@ -338,6 +347,22 @@ public class ClientRegistrationEvents {
 				@Override
 				public ResourceLocation getFlowingTexture() {
 					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_flowing");
+				}
+
+				@Override
+				public int getTintColor(FluidStack stack) {
+					if (stack.getFluid() instanceof ColoredFluid dye) {
+						return dye.getColor();
+					}
+					return IClientFluidTypeExtensions.super.getTintColor(stack);
+				}
+
+				@Override
+				public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
+					if (state.getType() instanceof ColoredFluid dye) {
+						return dye.getColor();
+					}
+					return IClientFluidTypeExtensions.super.getTintColor(state, getter, pos);
 				}
 			}, type.get());
 		}

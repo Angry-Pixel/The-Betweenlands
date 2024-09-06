@@ -1,0 +1,24 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:raw_frog_legs"
+    },
+    {
+      "item": "thebetweenlands:raw_frog_legs"
+    },
+    {
+      "item": "thebetweenlands:raw_frog_legs"
+    },
+    {
+      "item": "thebetweenlands:raw_frog_legs"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:clean_water"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:frog_leg_extract"
+  }
+}

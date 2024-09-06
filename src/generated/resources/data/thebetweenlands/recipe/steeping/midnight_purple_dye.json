@@ -1,0 +1,18 @@
+{
+  "type": "thebetweenlands:fluid_steeping",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:ground_pickerelweed"
+    },
+    {
+      "item": "thebetweenlands:cremains"
+    }
+  ],
+  "input_fluid": {
+    "fluid": "thebetweenlands:fish_oil"
+  },
+  "result": {
+    "amount": 1000,
+    "id": "thebetweenlands:midnight_purple_dye"
+  }
+}

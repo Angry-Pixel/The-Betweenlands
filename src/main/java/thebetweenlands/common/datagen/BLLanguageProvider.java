@@ -1139,6 +1139,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.NET, "Net");
 		this.addItem(ItemRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
 		this.addItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
+		this.addItem(ItemRegistry.SILK_BUNDLE, "Silk Bundle");
+		this.add("item.thebetweenlands.silk_bundle.item", "- %s");
 
 		this.addItem(ItemRegistry.AMATE_MAP, "Empty Amate Map");
 		this.addItem(ItemRegistry.FILLED_AMATE_MAP, "Amate Map");

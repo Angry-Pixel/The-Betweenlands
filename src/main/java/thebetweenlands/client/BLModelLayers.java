@@ -26,6 +26,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation FISHING_TACKLE_BOX = register("fishing_tackle_box");
 	public static final ModelLayerLocation GECKO_CAGE = register("gecko_cage");
 	public static final ModelLayerLocation GLASS_JAR = register("glass_jar");
+	public static final ModelLayerLocation HANGING_STEEPING_POT = register("hanging_steeping_pot");
 	public static final ModelLayerLocation ITEM_CAGE = register("item_cage");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_1 = register("lake_cavern_simulacrum_1");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_2 = register("lake_cavern_simulacrum_2");
@@ -48,6 +49,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SMOKING_RACK = register("smoking_rack");
 	public static final ModelLayerLocation SPIKE_BLOCK = register("spike_block");
 	public static final ModelLayerLocation SPOOP = register("spoop");
+	public static final ModelLayerLocation STEEPING_POT = register("steeping_pot");
 	public static final ModelLayerLocation WAYSTONE = register("waystone");
 	public static final ModelLayerLocation WIND_CHIME = register("wind_chime");
 

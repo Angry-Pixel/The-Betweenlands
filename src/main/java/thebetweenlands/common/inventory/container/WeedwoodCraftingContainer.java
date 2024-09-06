@@ -1,4 +1,4 @@
-package thebetweenlands.common.inventory;
+package thebetweenlands.common.inventory.container;
 
 import java.util.List;
 
@@ -11,9 +11,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
+import thebetweenlands.common.inventory.WeedwoodCraftingMenu;
 
 public class WeedwoodCraftingContainer implements CraftingContainer {
-	
+
 	public final WeedwoodCraftingMenu menu;
 	private final WeedwoodCraftingTableBlockEntity tile;
 
@@ -21,7 +22,7 @@ public class WeedwoodCraftingContainer implements CraftingContainer {
 		this.menu = menu;
 		this.tile = tile;
 	}
-	
+
 	@Override
 	public int getContainerSize() {
 		return 9;
@@ -49,11 +50,11 @@ public class WeedwoodCraftingContainer implements CraftingContainer {
 		CraftingContainer.super.stopOpen(player);
 		this.tile.closeInventory(this);
 	}
-	
+
 	protected NonNullList<ItemStack> getItemsMutable() {
 		return tile.getItems();
 	}
-	
+
 	@Override
 	public List<ItemStack> getItems() {
 		return List.copyOf(this.getItemsMutable());

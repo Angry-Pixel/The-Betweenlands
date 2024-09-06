@@ -1,11 +1,13 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -267,7 +269,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> URCHIN_SPIKE_UPGRADE = ITEMS.register("urchin_spike_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FISH_VORTEX_UPGRADE = ITEMS.register("fish_vortex_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	//stones
-	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(NonNullList.withSize(4, ItemStack.EMPTY))).stacksTo(1)));
 
 	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties()));
 	//explorer hat
@@ -442,10 +444,26 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> TAR_BUCKET = ITEMS.register("tar_bucket", () -> new BucketItem(FluidRegistry.TAR_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> RUBBER_BUCKET = ITEMS.register("rubber_bucket", () -> new BucketItem(FluidRegistry.RUBBER_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> DYE_BUCKET = ITEMS.register("dye_bucket", () -> new BucketItem(FluidRegistry.DYE_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CLEAN_WATER_BUCKET = ITEMS.register("clean_water_bucket", () -> new BucketItem(FluidRegistry.CLEAN_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FISH_OIL_BUCKET = ITEMS.register("fish_oil_bucket", () -> new BucketItem(FluidRegistry.FISH_OIL_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> PLANT_TONIC_BUCKET = ITEMS.register("plant_tonic_bucket", () -> new Item(new Item.Properties().stacksTo(1)));
+
+	public static final DeferredItem<Item> DULL_LAVENDER_DYE_BUCKET = ITEMS.register("dull_lavender_dye_bucket", () -> new BucketItem(FluidRegistry.DULL_LAVENDER_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> MAROON_DYE_BUCKET = ITEMS.register("maroon_dye_bucket", () -> new BucketItem(FluidRegistry.MAROON_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHADOW_GREEN_DYE_BUCKET = ITEMS.register("shadow_green_dye_bucket", () -> new BucketItem(FluidRegistry.SHADOW_GREEN_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CAMELOT_MAGENTA_DYE_BUCKET = ITEMS.register("camelot_magenta_dye_bucket", () -> new BucketItem(FluidRegistry.CAMELOT_MAGENTA_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SAFFRON_DYE_BUCKET = ITEMS.register("saffron_dye_bucket", () -> new BucketItem(FluidRegistry.SAFFRON_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CARIBBEAN_GREEN_DYE_BUCKET = ITEMS.register("caribbean_green_dye_bucket", () -> new BucketItem(FluidRegistry.CARIBBEAN_GREEN_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VIVID_TANGERINE_DYE_BUCKET = ITEMS.register("vivid_tangerine_dye_bucket", () -> new BucketItem(FluidRegistry.VIVID_TANGERINE_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CHAMPAGNE_DYE_BUCKET = ITEMS.register("champagne_dye_bucket", () -> new BucketItem(FluidRegistry.CHAMPAGNE_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> RAISIN_BLACK_DYE_BUCKET = ITEMS.register("raisin_black_dye_bucket", () -> new BucketItem(FluidRegistry.RAISIN_BLACK_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SUSHI_GREEN_DYE_BUCKET = ITEMS.register("sushi_green_dye_bucket", () -> new BucketItem(FluidRegistry.SUSHI_GREEN_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ELM_CYAN_DYE_BUCKET = ITEMS.register("elm_cyan_dye_bucket", () -> new BucketItem(FluidRegistry.ELM_CYAN_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CADMIUM_GREEN_DYE_BUCKET = ITEMS.register("cadmium_green_dye_bucket", () -> new BucketItem(FluidRegistry.CADMIUM_GREEN_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> LAVENDER_BLUE_DYE_BUCKET = ITEMS.register("lavender_blue_dye_bucket", () -> new BucketItem(FluidRegistry.LAVENDER_BLUE_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BROWN_RUST_DYE_BUCKET = ITEMS.register("brown_rust_dye_bucket", () -> new BucketItem(FluidRegistry.BROWN_RUST_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> MIDNIGHT_PURPLE_DYE_BUCKET = ITEMS.register("midnight_purple_dye_bucket", () -> new BucketItem(FluidRegistry.MIDNIGHT_PURPLE_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PEWTER_GREY_DYE_BUCKET = ITEMS.register("pewter_grey_dye_bucket", () -> new BucketItem(FluidRegistry.PEWTER_GREY_DYE_STILL.get(), new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> NETTLE_SOUP_BUCKET = ITEMS.register("nettle_soup_bucket", () -> new BucketItem(FluidRegistry.NETTLE_SOUP_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> NETTLE_TEA_BUCKET = ITEMS.register("nettle_tea_bucket", () -> new BucketItem(FluidRegistry.NETTLE_TEA_STILL.get(), new Item.Properties().stacksTo(1)));

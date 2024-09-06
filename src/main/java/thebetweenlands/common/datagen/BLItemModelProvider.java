@@ -179,6 +179,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.toolItem(ItemRegistry.HAG_HACKER);
 		this.toolItem(ItemRegistry.SWIFT_PICK);
 		this.toolItem(ItemRegistry.VOODOO_DOLL);
+		this.basicItem(ItemRegistry.SILK_BUNDLE);
 
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);
 		this.basicItem(ItemRegistry.RECORD_ASTATOS);

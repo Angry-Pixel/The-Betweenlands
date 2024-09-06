@@ -4,28 +4,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -88,21 +81,25 @@ public class RenderUtils {
 		float vHeight = vMax - vMin;
 
 		// top
-		addVertex(pose, consumer, light, color, xMax, yMax, zMin, uMin, vMin);
-		addVertex(pose, consumer, light, color, xMin, yMax, zMin, uMin, vMax);
-		addVertex(pose, consumer, light, color, xMin, yMax, zMax, uMax, vMax);
-		addVertex(pose, consumer, light, color, xMax, yMax, zMax, uMax, vMin);
+		renderTopQuad(pose, consumer, light, color, xMin, xMax, yMax, zMin, zMin, uMin, uMax, vMin, vMax);
 		// north
-		renderQuad(pose, consumer, light, color, xMin, xMax, yMin, yMax, zMin, zMin, uMin, uMax, vMin, vMin + (vHeight * yMax));
+		renderSideQuad(pose, consumer, light, color, xMin, xMax, yMin, yMax, zMin, zMin, uMin, uMax, vMin, vMin + (vHeight * yMax));
 		// south
-		renderQuad(pose, consumer, light, color, xMax, xMin, yMin, yMax, zMax, zMax, uMin, uMax, vMin, vMin + (vHeight * yMax));
+		renderSideQuad(pose, consumer, light, color, xMax, xMin, yMin, yMax, zMax, zMax, uMin, uMax, vMin, vMin + (vHeight * yMax));
 		// east
-		renderQuad(pose, consumer, light, color, xMin, xMin, yMin, yMax, zMax, zMin, uMin, uMax, vMin, vMin + (vHeight * yMax));
+		renderSideQuad(pose, consumer, light, color, xMin, xMin, yMin, yMax, zMax, zMin, uMin, uMax, vMin, vMin + (vHeight * yMax));
 		// west
-		renderQuad(pose, consumer, light, color, xMax, xMax, yMin, yMax, zMin, zMax, uMin, uMax, vMin, vMin + (vHeight * yMax));
+		renderSideQuad(pose, consumer, light, color, xMax, xMax, yMin, yMax, zMin, zMax, uMin, uMax, vMin, vMin + (vHeight * yMax));
 	}
 
-	private static void renderQuad(PoseStack.Pose pose, VertexConsumer consumer, int light, int color, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, float minU, float maxU, float minV, float maxV) {
+	public static void renderTopQuad(PoseStack.Pose pose, VertexConsumer consumer, int light, int color, float minX, float maxX, float height, float minZ, float maxZ, float minU, float maxU, float minV, float maxV) {
+		addVertex(pose, consumer, light, color, maxX, height, minZ, minU, minV);
+		addVertex(pose, consumer, light, color, minX, height, minZ, minU, maxV);
+		addVertex(pose, consumer, light, color, minX, height, maxZ, maxU, maxV);
+		addVertex(pose, consumer, light, color, maxX, height, maxZ, maxU, minV);
+	}
+
+	private static void renderSideQuad(PoseStack.Pose pose, VertexConsumer consumer, int light, int color, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, float minU, float maxU, float minV, float maxV) {
 		addVertex(pose, consumer, light, color, minX, minY, minZ, minU, minV);
 		addVertex(pose, consumer, light, color, minX, maxY, minZ, minU, maxV);
 		addVertex(pose, consumer, light, color, maxX, maxY, maxZ, maxU, maxV);
