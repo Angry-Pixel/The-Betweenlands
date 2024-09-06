@@ -7,10 +7,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class LifeCrystalStalactiteBlock extends StalactiteBlock {
+	
+	public final boolean isOre;
 
-
-	public LifeCrystalStalactiteBlock(Properties properties) {
+	public LifeCrystalStalactiteBlock(Properties properties, boolean isOre) {
 		super(properties);
+		this.isOre = isOre;
 	}
 	
 	@Override
@@ -19,5 +21,8 @@ public class LifeCrystalStalactiteBlock extends StalactiteBlock {
 		return block == BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE.get() || block == BlockRegistry.LIFE_CRYSTAL_STALACTITE.get();
 	}
 	
-	
+	@Override
+	public boolean doesRenderOverlay(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+		return state.getBlock() == this && this.isOre;
+	}
 }

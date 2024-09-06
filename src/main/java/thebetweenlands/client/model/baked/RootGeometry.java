@@ -16,7 +16,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
@@ -25,23 +24,23 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import net.neoforged.neoforge.client.textures.UnitTextureAtlasSprite;
 import thebetweenlands.common.block.StalactiteBlock;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 import thebetweenlands.util.StalactiteHelper.IStalactite;
 
-public record RootGeometry(ResourceLocation textureTop, ResourceLocation textureMiddle, ResourceLocation textureBottom, ResourceLocation textureParticle) implements IUnbakedGeometry<RootGeometry> {
+public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 
 	public static final ModelProperty<Boolean> NO_BOTTOM = new ModelProperty<>(Predicates.notNull());
 	public static final ModelProperty<Boolean> NO_TOP = new ModelProperty<>(Predicates.notNull());
@@ -50,18 +49,20 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 	public static final ModelProperty<Integer> POS_X = new ModelProperty<>(Predicates.notNull());
 	public static final ModelProperty<Integer> POS_Y = new ModelProperty<>(Predicates.notNull());
 	public static final ModelProperty<Integer> POS_Z = new ModelProperty<>(Predicates.notNull());
+	public static final ModelProperty<Boolean> HAS_OVERLAY = new ModelProperty<>(Predicates.notNull());
 
 	@Override
 	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
-		Material materialTop = new Material(InventoryMenu.BLOCK_ATLAS, this.textureTop);
-		Material materialMiddle = new Material(InventoryMenu.BLOCK_ATLAS, this.textureMiddle);
-		Material materialBottom = new Material(InventoryMenu.BLOCK_ATLAS, this.textureBottom);
-		Material materialParticle = new Material(InventoryMenu.BLOCK_ATLAS, this.textureParticle);
-
-		return new RootDynamicModel(spriteGetter.apply(materialTop), spriteGetter.apply(materialMiddle), spriteGetter.apply(materialBottom), spriteGetter.apply(materialParticle));
+		TextureAtlasSprite textureTop = spriteGetter.apply(context.getMaterial("top"));
+		TextureAtlasSprite textureMiddle = spriteGetter.apply(context.getMaterial("middle"));
+		TextureAtlasSprite textureBottom = spriteGetter.apply(context.getMaterial("bottom"));
+		TextureAtlasSprite textureOverlay = context.hasMaterial("overlay") ? spriteGetter.apply(context.getMaterial("overlay")) : UnitTextureAtlasSprite.INSTANCE;
+		TextureAtlasSprite textureParticle = context.hasMaterial("particle") ? spriteGetter.apply(context.getMaterial("particle")) : textureTop;
+		
+		return new RootDynamicModel(textureTop, textureMiddle, textureBottom, textureOverlay, textureParticle);
 	}
 
-	public record RootDynamicModel(TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom, TextureAtlasSprite textureParticle) implements IDynamicBakedModel {
+	public record RootDynamicModel(TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom, TextureAtlasSprite textureOverlay, TextureAtlasSprite textureParticle) implements IDynamicBakedModel {
 
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random, ModelData extraData, @Nullable RenderType renderType) {
@@ -123,50 +124,64 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 					core.tX = 0.5D;
 					core.tZ = 0.5D;
 				}
-
-//				QuadBakingVertexConsumer builder = new QuadBakingVertexConsumer();
-				QuadBuilder builder = new QuadBuilder(24, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
-
+				
 				boolean hasTop = distUp == 0 && !noTop;
 				boolean hasBottom = distDown == 0 && !noBottom;
 
-				builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
+				boolean hasOverlay = Optional.ofNullable(extraData.get(HAS_OVERLAY)).orElse(false);
 
-				// front
-				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-				// back
-				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-				// left
-				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-				// right
-				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+				QuadBuilder builder = new QuadBuilder(hasOverlay ? 40 : 24, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
 
-				// top
-				if (distUp == 0) {
+
+				for(int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
+					
+					if(i == 0) {
+						builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
+					}
+					else {
+						builder.setSprite(this.textureOverlay);
+						builder.setLightmap(15, 15);
+					}
+				
+					// front
+					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+					// back
+					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+					// left
+					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+					// right
+					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
-				}
-
-				// bottom
-				if (distDown == 0) {
-					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
+		
+					// Do not render overlay on top/bottom faces
+					if(i == 1) continue;
+					
+					// top
+					if (distUp == 0) {
+						builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+						builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
+					}
+		
+					// bottom
+					if (distDown == 0) {
+						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
+						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
+						builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
+						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
+					}
 				}
 
 				quads = builder.build().nonCulledQuads;
@@ -186,45 +201,49 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 			int distDown = 0;
 			boolean noTop = false;
 			boolean noBottom = false;
+			boolean hasOverlay = false;
 
 			final int pos_getY = pos.getY();
 
-			if(!(state.getBlock() instanceof IStalactite)) {
-				return coolAndGoodModelData.derive()
-					.with(POS_X, pos.getX()).with(POS_Y, pos_getY).with(POS_Z, pos.getZ())
-					.with(DIST_UP, 0).with(DIST_DOWN, 0)
-					.with(NO_TOP, noTop).with(NO_BOTTOM, noBottom)
-					.build();
+			if(state.getBlock() instanceof IStalactite stalactite) {
+				//TODO pool pos probably
+				MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
+				BlockState mutableBlockState = state;
+				
+				hasOverlay = stalactite.doesRenderOverlay(level, mutablePos, mutableBlockState);
+				
+				for (distUp = 0; distUp < maxLength; distUp++) {
+					mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY + (1 + distUp)));
+					if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
+						continue;
+					if (mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
+						noTop = true;
+					break;
+				}
+				for (distDown = 0; distDown < maxLength; distDown++) {
+					mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY - (1 + distDown)));
+					if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
+						continue;
+					if (mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
+						noBottom = true;
+					break;
+				}
+				
 			}
-			IStalactite stalactite = (IStalactite)state.getBlock();
-
-			//TODO pool pos probably
-			MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
-			BlockState mutableBlockState = state;
-			for (distUp = 0; distUp < maxLength; distUp++) {
-				mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY + (1 + distUp)));
-				if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
-					continue;
-				if (mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
-					noTop = true;
-				break;
-			}
-			for (distDown = 0; distDown < maxLength; distDown++) {
-				mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY - (1 + distDown)));
-				if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
-					continue;
-				if (mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
-					noBottom = true;
-				break;
-			}
-
+			
 			return coolAndGoodModelData.derive()
 				.with(POS_X, pos.getX()).with(POS_Y, pos_getY).with(POS_Z, pos.getZ())
 				.with(DIST_UP, distUp).with(DIST_DOWN, distDown)
 				.with(NO_TOP, noTop).with(NO_BOTTOM, noBottom)
+				.with(HAS_OVERLAY, hasOverlay)
 				.build();
 		}
 
+		@Override
+		public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data) {
+			return data.get(HAS_OVERLAY) ? ChunkRenderTypeSet.of(RenderType.TRANSLUCENT) : IDynamicBakedModel.super.getRenderTypes(state, rand, data);
+		}
+		
 		@Override
 		public boolean useAmbientOcclusion() {
 			return true;
@@ -242,7 +261,6 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 
 		@Override
 		public boolean isCustomRenderer() {
-			// TODO double check
 			return true;
 		}
 
@@ -262,34 +280,7 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 
 		@Override
 		public RootGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
-			JsonObject textures = jsonObject.getAsJsonObject("textures");
-			ResourceLocation
-				topTexture = MissingTextureAtlasSprite.getLocation(),
-				middleTexture = MissingTextureAtlasSprite.getLocation(),
-				bottomTexture = MissingTextureAtlasSprite.getLocation(),
-				particleTexture = MissingTextureAtlasSprite.getLocation();
-
-			try {
-				if (textures != null) {
-					String top = textures.get("top").getAsString();
-					String middle = textures.get("middle").getAsString();
-					String bottom = textures.get("bottom").getAsString();
-					String particle = textures.get("particle").getAsString();
-					topTexture = ResourceLocation.tryParse(top);
-					middleTexture = ResourceLocation.tryParse(middle);
-					bottomTexture = ResourceLocation.tryParse(bottom);
-					particleTexture = ResourceLocation.tryParse(particle);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			if(particleTexture == null || particleTexture.equals(MissingTextureAtlasSprite.getLocation())) {
-				particleTexture = topTexture;
-			}
-
-			return new RootGeometry(topTexture, middleTexture, bottomTexture, particleTexture);
+			return new RootGeometry();
 		}
-
 	}
 }

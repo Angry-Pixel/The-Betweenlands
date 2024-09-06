@@ -69,5 +69,9 @@ public class StalactiteHelper {
 		default boolean doesConnect(BlockAndTintGetter level, BlockPos pos, BlockState state) {
 			return state.getBlock() == this;
 		}
+
+		default boolean doesRenderOverlay(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+			return false;
+		}
 	}
 }

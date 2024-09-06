@@ -22,6 +22,7 @@ public class BetweenlandsConfig {
 	public static int portalBiomeSearchRange = 256;
 
 	public static int wispQuality = 50;
+	public static boolean fullbrightBlocks = true;
 	public static boolean useShader = true;
 	public static int shaderPriority = 0;
 	public static boolean dimensionShaderOnly = false;

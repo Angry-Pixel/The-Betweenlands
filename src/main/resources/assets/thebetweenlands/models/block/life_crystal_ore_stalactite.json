@@ -3,8 +3,9 @@
   "loader": "thebetweenlands:root",
   "textures": {
     "particle": "thebetweenlands:block/pitstone",
-    "top": "thebetweenlands:block/pitstone",
-    "middle": "minecraft:block/stone",
-    "bottom": "thebetweenlands:block/pitstone"
+    "overlay": "thebetweenlands:block/life_crystal_ore",
+    "top": "thebetweenlands:block/life_crystal_ore_background",
+    "middle": "thebetweenlands:block/life_crystal_ore_background",
+    "bottom": "thebetweenlands:block/life_crystal_ore_background"
   }
 }
