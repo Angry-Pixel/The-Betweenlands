@@ -47,7 +47,8 @@ public class FeatureRegistry {
 		() -> new RootmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> ROOTS_CLUSTER = FEATURES.register("roots_cluster",
 		() -> new RootsClusterFeature(NoneFeatureConfiguration.CODEC));
-	//Rotten Logs
+	public static final DeferredHolder<Feature<?>, Feature<RottenLogConfiguration>> ROTTEN_LOG = FEATURES.register("rotten_log",
+		() -> new RottenLogFeature(RottenLogConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SMALL_HOLLOW_LOG = FEATURES.register("small_hollow_log",
 		() -> new SmallHollowLogFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SPELEOTHEM = FEATURES.register("speleothem",
