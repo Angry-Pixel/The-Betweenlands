@@ -15,7 +15,8 @@ public class FeatureRegistry {
 
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",
 		() -> new BarnacleClusterFeature(BlockPlaceConfiguration.CODEC));
-	//Big Bulb Capped Mushroom
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BIG_BULB_CAPPED_MUSHROOM = FEATURES.register("big_bulb_capped_mushroom",
+		() -> new BigBulbCappedMushroomFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BLADDERWORT_CLUSTER = FEATURES.register("bladderwort_cluster",
 		() -> new BladderwortClusterFeature(NoneFeatureConfiguration.CODEC));
 	//Block Replacement Cluster
