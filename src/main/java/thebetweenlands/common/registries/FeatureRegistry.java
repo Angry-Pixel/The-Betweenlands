@@ -19,7 +19,8 @@ public class FeatureRegistry {
 		() -> new BigBulbCappedMushroomFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BLADDERWORT_CLUSTER = FEATURES.register("bladderwort_cluster",
 		() -> new BladderwortClusterFeature(NoneFeatureConfiguration.CODEC));
-	//Block Replacement Cluster
+	public static final DeferredHolder<Feature<?>, Feature<BlockReplacementConfiguration>> BLOCK_REPLACE_CLUSTER = FEATURES.register("block_replacement_cluster",
+		() -> new BlockReplacementClusterFeature(BlockReplacementConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_GRASS = FEATURES.register("cave_grass",
 		() -> new CaveGrassFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_HANGERS = FEATURES.register("cave_hangers",
