@@ -20,7 +20,7 @@ public class BlockReplacementClusterFeature extends Feature<BlockReplacementConf
 
 	@Override
 	public boolean place(FeaturePlaceContext<BlockReplacementConfiguration> context) {
-		return false;
+		return generate(context.level(), context.random(), context.origin(), context.config());
 	}
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, BlockReplacementConfiguration config) {
