@@ -250,5 +250,8 @@ public class ConfiguredFeatureRegistry {
 		context.register(WEEDWOOD_BUSH, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_BUSH.get(),
 			FeatureConfiguration.NONE));
 
+		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), FeatureConfiguration.NONE));
+		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
+		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
 	}
 }
