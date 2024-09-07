@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import thebetweenlands.common.block.MossBlock;
-import thebetweenlands.common.world.gen.WorldGenUtil;
+import thebetweenlands.util.WorldGenUtil;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 
 public class MossClusterFeature extends Feature<BlockPlaceConfiguration> {

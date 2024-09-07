@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen;
+package thebetweenlands.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;

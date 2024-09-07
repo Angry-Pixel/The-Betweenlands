@@ -9,7 +9,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
-import thebetweenlands.common.world.gen.WorldGenUtil;
+import thebetweenlands.util.WorldGenUtil;
 
 public class RootsClusterFeature extends Feature<NoneFeatureConfiguration> {
 

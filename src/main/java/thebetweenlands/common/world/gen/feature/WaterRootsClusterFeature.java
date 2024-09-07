@@ -12,7 +12,7 @@ import thebetweenlands.common.block.StalactiteBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
-import thebetweenlands.common.world.gen.WorldGenUtil;
+import thebetweenlands.util.WorldGenUtil;
 
 public class WaterRootsClusterFeature extends Feature<NoneFeatureConfiguration> {
 

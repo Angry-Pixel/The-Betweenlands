@@ -9,7 +9,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import thebetweenlands.common.block.PebblePileBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
-import thebetweenlands.common.world.gen.WorldGenUtil;
+import thebetweenlands.util.WorldGenUtil;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 
 public class PebbleClusterFeature extends Feature<PebbleClusterConfiguration> {
