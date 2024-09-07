@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:plant_cluster",
+  "config": {
+    "attempts": 256,
+    "offset": 8,
+    "state": {
+      "Name": "thebetweenlands:swamp_plant"
+    },
+    "underwater": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "thebetweenlands:barnacle_cluster",
+  "config": {
+    "attempts": 256,
+    "offset": 8,
+    "state": {
+      "Name": "thebetweenlands:barnacle",
+      "Properties": {
+        "facing": "north",
+        "stage": "1"
+      }
+    }
+  }
+}

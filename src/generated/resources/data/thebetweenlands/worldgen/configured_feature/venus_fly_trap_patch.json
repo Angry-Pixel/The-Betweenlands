@@ -1,0 +1,14 @@
+{
+  "type": "thebetweenlands:plant_cluster",
+  "config": {
+    "attempts": 64,
+    "offset": 5,
+    "state": {
+      "Name": "thebetweenlands:venus_fly_trap",
+      "Properties": {
+        "blooming": "false"
+      }
+    },
+    "underwater": false
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "thebetweenlands:pebble_cluster",
+  "config": {
+    "attempts": 128,
+    "offset": 8,
+    "state": {
+      "Name": "thebetweenlands:betweenstone_pebble",
+      "Properties": {
+        "pebbles": "1",
+        "plant": "false",
+        "water_type": "none"
+      }
+    },
+    "underwater": true
+  }
+}

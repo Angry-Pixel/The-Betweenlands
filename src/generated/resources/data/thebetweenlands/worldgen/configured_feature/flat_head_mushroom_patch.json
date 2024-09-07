@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:plant_cluster",
+  "config": {
+    "attempts": 40,
+    "offset": 5,
+    "state": {
+      "Name": "thebetweenlands:flathead_mushroom"
+    },
+    "underwater": false
+  }
+}

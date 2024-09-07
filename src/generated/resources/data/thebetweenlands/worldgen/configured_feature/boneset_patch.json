@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:plant_cluster",
+  "config": {
+    "attempts": 128,
+    "offset": 8,
+    "state": {
+      "Name": "thebetweenlands:boneset"
+    },
+    "underwater": false
+  }
+}

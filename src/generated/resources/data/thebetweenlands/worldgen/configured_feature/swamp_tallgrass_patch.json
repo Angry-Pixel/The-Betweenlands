@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:plant_cluster",
+  "config": {
+    "attempts": 28,
+    "offset": 8,
+    "state": {
+      "Name": "thebetweenlands:tall_swamp_grass",
+      "Properties": {
+        "facing": "north",
+        "half": "lower"
+      }
+    },
+    "underwater": false
+  }
+}

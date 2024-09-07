@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import thebetweenlands.common.block.BarnacleBlock;
 import thebetweenlands.util.WorldGenUtil;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 
@@ -45,7 +46,7 @@ public class BarnacleClusterFeature extends Feature<BlockPlaceConfiguration> {
 				}
 
 				if (!invalid) {
-					BlockState state = config.state().setValue(DirectionalBlock.FACING, opposite);
+					BlockState state = config.state().setValue(BarnacleBlock.STAGE, rand.nextInt(2) + 1).setValue(DirectionalBlock.FACING, opposite);
 					this.setBlock(level, mutable, state);
 					generated = true;
 				}

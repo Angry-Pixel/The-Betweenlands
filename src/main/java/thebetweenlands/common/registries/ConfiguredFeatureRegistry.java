@@ -6,15 +6,13 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
-import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
+import thebetweenlands.common.world.gen.feature.config.*;
 
 public class ConfiguredFeatureRegistry {
 
@@ -70,7 +68,7 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_PATCH_WATER = makeKey("pebble_patch_water");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BULB_CAPPED_MUSHROOM_PATCH = makeKey("bulb_capped_mushroom_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> NETTLE_PATCH = makeKey("nettle_patch");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> ARROW_ATUM_PATCH = makeKey("arrow_atum_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> ARROW_ARUM_PATCH = makeKey("arrow_arum_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PICKERELWEED_PATCH = makeKey("pickerelweed_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MARSH_HIBISCUS_PATCH = makeKey("marsh_hibiscus_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MARSH_MALLOW_PATCH = makeKey("marsh_mallow_patch");
@@ -176,6 +174,81 @@ public class ConfiguredFeatureRegistry {
 			new ConfiguredFeature<>(FeatureRegistry.FLUID_POOL.get(), new PoolConfiguration(BlockRegistry.STAGNANT_WATER.get().defaultBlockState(), 1.0D, 0)));
 		context.register(TAR_POOL,
 			new ConfiguredFeature<>(FeatureRegistry.FLUID_POOL.get(), new PoolConfiguration(BlockRegistry.TAR.get().defaultBlockState(), 1.0D, TheBetweenlands.CAVE_START + 5)));
+
+		context.register(SWAMP_TALLGRASS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.TALL_SWAMP_GRASS.get().defaultBlockState(), 8, 28, false)));
+		context.register(BARNACLE_PATCH, new ConfiguredFeature<>(FeatureRegistry.BARNACLE_CLUSTER.get(),
+			new BlockPlaceConfiguration(BlockRegistry.BARNACLE.get().defaultBlockState(), 8, 256)));
+		context.register(BLADDERWORT_PATCH, new ConfiguredFeature<>(FeatureRegistry.BLADDERWORT_CLUSTER.get(),
+			FeatureConfiguration.NONE));
+		context.register(MOSS_PATCH, new ConfiguredFeature<>(FeatureRegistry.MOSS_CLUSTER.get(),
+			new BlockPlaceConfiguration(BlockRegistry.MOSS.get().defaultBlockState(), 8, 256)));
+		context.register(LICHEN_PATCH, new ConfiguredFeature<>(FeatureRegistry.MOSS_CLUSTER.get(),
+			new BlockPlaceConfiguration(BlockRegistry.LICHEN.get().defaultBlockState(), 8, 256)));
+		context.register(PEBBLE_PATCH_LAND, new ConfiguredFeature<>(FeatureRegistry.PEBBLE_CLUSTER.get(),
+			new PebbleClusterConfiguration(BlockRegistry.BETWEENSTONE_PEBBLE.get().defaultBlockState(), 8, 128, false)));
+		context.register(PEBBLE_PATCH_WATER, new ConfiguredFeature<>(FeatureRegistry.PEBBLE_CLUSTER.get(),
+			new PebbleClusterConfiguration(BlockRegistry.BETWEENSTONE_PEBBLE.get().defaultBlockState(), 8, 128, true)));
+		context.register(BULB_CAPPED_MUSHROOM_PATCH, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(),
+			FeatureConfiguration.NONE));
+		context.register(NETTLE_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.NETTLE.get().defaultBlockState(), 3, 128, false)));
+		context.register(ARROW_ARUM_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.ARROW_ARUM.get().defaultBlockState(), 8, 128, false)));
+		context.register(PICKERELWEED_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.PICKERELWEED.get().defaultBlockState(), 8, 128, false)));
+		context.register(MARSH_HIBISCUS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.MARSH_HIBISCUS.get().defaultBlockState(), 8, 128, false)));
+		context.register(MARSH_MALLOW_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.MARSH_MALLOW.get().defaultBlockState(), 8, 128, false)));
+		context.register(BUTTON_BUSH_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.BUTTON_BUSH.get().defaultBlockState(), 8, 128, false)));
+		context.register(SOFT_RUSH_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.SOFT_RUSH.get().defaultBlockState(), 8, 128, false)));
+		context.register(BOTTLE_BRUSH_GRASS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.BOTTLE_BRUSH_GRASS.get().defaultBlockState(), 8, 128, false)));
+		context.register(SWAMP_PLANT_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.SWAMP_PLANT.get().defaultBlockState(), 8, 256, false)));
+		context.register(FLAT_HEAD_MUSHROOM_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.FLATHEAD_MUSHROOM.get().defaultBlockState(), 5, 40, false)));
+		context.register(BLACK_HAT_MUSHROOM_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.BLACK_HAT_MUSHROOM.get().defaultBlockState(), 5, 40, false)));
+		context.register(CATTAIL_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.CATTAIL.get().defaultBlockState(), 8, 128, false)));
+		context.register(VENUS_FLY_TRAP_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.VENUS_FLY_TRAP.get().defaultBlockState(), 5, 64, false)));
+		context.register(MIRE_CORAL_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.MIRE_CORAL.get().defaultBlockState(), 4, 10, true)));
+		context.register(DEEP_WATER_CORAL_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.DEEP_WATER_CORAL.get().defaultBlockState(), 4, 10, true)));
+		context.register(COPPER_IRIS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.COPPER_IRIS.get().defaultBlockState(), 8, 128, false)));
+		context.register(BLUE_IRIS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.BLUE_IRIS.get().defaultBlockState(), 8, 128, false)));
+		context.register(MILKWEED_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.MILKWEED.get().defaultBlockState(), 8, 128, false)));
+		context.register(SHOOTS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.SHOOTS.get().defaultBlockState(), 8, 128, false)));
+		context.register(BLUE_EYED_GRASS_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.BLUE_EYED_GRASS.get().defaultBlockState(), 8, 128, false)));
+		context.register(BONESET_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.BONESET.get().defaultBlockState(), 8, 128, false)));
+		context.register(SLUDGECREEP_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.SLUDGECREEP.get().defaultBlockState(), 8, 128, false)));
+		context.register(DEAD_WEEDWOOD_BUSH_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.DEAD_WEEDWOOD_BUSH.get().defaultBlockState(), 8, 128, false)));
+		context.register(WATER_WEED_PATCH, new ConfiguredFeature<>(FeatureRegistry.PLANT_CLUSTER.get(),
+			new PlantConfiguration(BlockRegistry.WATER_WEEDS.get().defaultBlockState(), 8, 128, true)));
+		context.register(REED_PATCH, new ConfiguredFeature<>(FeatureRegistry.SWAMP_REED_CLUSTER.get(),
+			FeatureConfiguration.NONE));
+		context.register(WATER_ROOTS, new ConfiguredFeature<>(FeatureRegistry.WATER_ROOTS_CLUSTER.get(),
+			FeatureConfiguration.NONE));
+		context.register(ROOTS, new ConfiguredFeature<>(FeatureRegistry.ROOTS_CLUSTER.get(),
+			FeatureConfiguration.NONE));
+		context.register(SWAMP_KELP_PATCH, new ConfiguredFeature<>(FeatureRegistry.SWAMP_KELP_CLUSTER.get(),
+			FeatureConfiguration.NONE));
+		context.register(WEEDWOOD_BUSH, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_BUSH.get(),
+			FeatureConfiguration.NONE));
 
 	}
 }

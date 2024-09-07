@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:plant_cluster",
+  "config": {
+    "attempts": 10,
+    "offset": 4,
+    "state": {
+      "Name": "thebetweenlands:mire_coral"
+    },
+    "underwater": true
+  }
+}
