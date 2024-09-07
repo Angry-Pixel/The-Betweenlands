@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/cube",
 	"textures": {
-		"particle": "thebetweenlands:blocks/swamp_dirt",
-		"extra": "thebetweenlands:blocks/dead_grass_extra"
+		"particle": "thebetweenlands:block/swamp_dirt",
+		"extra": "thebetweenlands:block/dead_grass_extra"
 	},
 	"elements": [
 		{

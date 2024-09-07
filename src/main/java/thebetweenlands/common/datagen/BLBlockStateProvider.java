@@ -420,9 +420,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_TOP_5);
 		this.simpleBlockWithItem(BlockRegistry.COMPACTED_MUD);
 		this.simpleBlockWithItem(BlockRegistry.MUD_TILES);
-//		this.simpleBlockWithItem(BlockRegistry.DECAYED_MUD_TILES);
+		this.simpleBlockItem(BlockRegistry.DECAYED_MUD_TILES);
 		this.simpleBlockWithItem(BlockRegistry.CRACKED_MUD_TILES);
-//		this.simpleBlockWithItem(BlockRegistry.CRACKED_DECAYED_MUD_TILES);
+		this.simpleBlockItem(BlockRegistry.CRACKED_DECAYED_MUD_TILES);
 		this.simpleBlockWithItem(BlockRegistry.PUFFSHROOM.get(), this.models().cubeTop(BlockRegistry.PUFFSHROOM.getId().getPath(), this.modLoc("block/mud_tiles"), this.modLoc("block/mud_tiles_cracked_layer")));
 		this.simpleBlockWithItem(BlockRegistry.CARVED_MUD_BRICKS);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_CARVED_MUD_BRICKS_1);

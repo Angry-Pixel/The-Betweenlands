@@ -32,8 +32,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 //TODO improve map colors
-//TODO write CTM loader for filtered glass (all variants), filtered glass pane, dug soil,
-//@SuppressWarnings("unused")
 public class BlockRegistry {
 
 	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TheBetweenlands.ID);
@@ -395,9 +393,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SLUDGY_WORM_PILLAR_TOP_5 = register("sludgy_worm_pillar_top_5", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> COMPACTED_MUD = register("compacted_mud", () -> new CompactMudBlock(BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> MUD_TILES = register("mud_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> DECAYED_MUD_TILES = register("decayed_mud_tiles", () -> new Block(BlockBehaviour.Properties.of().friction(0.98F).strength(1.5F, 10.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> DECAYED_MUD_TILES = register("decayed_mud_tiles", () -> new DecayedMudTilesBlock(BlockBehaviour.Properties.of().friction(0.98F).strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CRACKED_MUD_TILES = register("cracked_mud_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> CRACKED_DECAYED_MUD_TILES = register("cracked_decayed_mud_tiles", () -> new Block(BlockBehaviour.Properties.of().friction(0.98F).strength(1.5F, 10.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> CRACKED_DECAYED_MUD_TILES = register("cracked_decayed_mud_tiles", () -> new DecayedMudTilesBlock(BlockBehaviour.Properties.of().friction(0.98F).strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> PUFFSHROOM = register("puffshroom", () -> new PuffshroomBlock(BlockBehaviour.Properties.of().strength(8.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CARVED_MUD_BRICKS = register("carved_mud_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> SLUDGY_CARVED_MUD_BRICKS_1 = register("sludgy_carved_mud_bricks_1", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));

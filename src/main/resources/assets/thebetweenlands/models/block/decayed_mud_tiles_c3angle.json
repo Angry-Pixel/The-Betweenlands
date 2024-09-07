@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+    "textures": {
+		"particle": "thebetweenlands:block/mud_tiles_decay_island",
+        "down": "thebetweenlands:block/mud_tiles_decay_ne",
+		"up": "thebetweenlands:block/mud_tiles_decay_news",
+		"north": "thebetweenlands:block/mud_tiles_decay_nw",
+		"south": "thebetweenlands:block/mud_tiles_decay_news",
+		"west": "thebetweenlands:block/mud_tiles_decay_ne",
+		"east": "thebetweenlands:block/mud_tiles_decay_news"
+    }
+}
