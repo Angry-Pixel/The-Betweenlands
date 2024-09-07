@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-07T14:43:05.94904	Registries
+// 1.21.1	2024-09-07T17:37:23.7378768	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -133,9 +133,11 @@ f008e7689752fb448533c41a962033070db5f01b data/thebetweenlands/worldgen/configure
 28e9354491f83accbd14349ff9dd72ef4e74c8e2 data/thebetweenlands/worldgen/configured_feature/octine.json
 f284d54330618ed70649b09fa7db4952db1f8170 data/thebetweenlands/worldgen/configured_feature/rootman_simulacrum.json
 ea17736c2641e5db6132270c35e10d7a13029d15 data/thebetweenlands/worldgen/configured_feature/scabyst.json
+30fbd7f9a7d94d3c699ff33d22fc2ba3d82e5ff1 data/thebetweenlands/worldgen/configured_feature/stagnant_water_pool.json
 c25cc0c4f58a6ee883e7176d6256c46daa6965dd data/thebetweenlands/worldgen/configured_feature/sulfur.json
 0eaf1633589292a29fd2cd556f4dbdf29392a854 data/thebetweenlands/worldgen/configured_feature/swamp_dirt.json
 dd4606124b555312366dc1047be1aef055a2e549 data/thebetweenlands/worldgen/configured_feature/syrmorite.json
+853e8750c0d8ce2a87e2de24e7abbc50ae5c8240 data/thebetweenlands/worldgen/configured_feature/tar_pool.json
 b06338f56510fd3b1cf0f2ceff08568ddf9e4618 data/thebetweenlands/worldgen/configured_feature/valonite.json
 8aa6404569af4413950486f6f3bf76583d90467d data/thebetweenlands/worldgen/noise_settings/the_betweenlands.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/cragrock_tower.json

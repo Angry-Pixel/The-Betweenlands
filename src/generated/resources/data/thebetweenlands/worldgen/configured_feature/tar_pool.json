@@ -1,0 +1,13 @@
+{
+  "type": "thebetweenlands:fluid_pool",
+  "config": {
+    "fluid": {
+      "Name": "thebetweenlands:tar",
+      "Properties": {
+        "level": "0"
+      }
+    },
+    "min_y": 115,
+    "side": 1.0
+  }
+}

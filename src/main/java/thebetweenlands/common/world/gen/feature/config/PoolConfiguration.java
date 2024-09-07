@@ -12,6 +12,6 @@ public record PoolConfiguration(BlockState fluid, double size, int minY) impleme
 		instance -> instance.group(
 			BlockState.CODEC.fieldOf("fluid").forGetter(obj -> obj.fluid),
 			Codec.DOUBLE.fieldOf("side").forGetter(obj -> obj.size),
-			ExtraCodecs.POSITIVE_INT.fieldOf("min_y").forGetter(obj -> obj.minY)
+			ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_y").forGetter(obj -> obj.minY)
 		).apply(instance, PoolConfiguration::new));
 }

@@ -1,0 +1,13 @@
+{
+  "type": "thebetweenlands:fluid_pool",
+  "config": {
+    "fluid": {
+      "Name": "thebetweenlands:stagnant_water",
+      "Properties": {
+        "level": "0"
+      }
+    },
+    "min_y": 0,
+    "side": 1.0
+  }
+}
