@@ -7,20 +7,20 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import thebetweenlands.util.WorldGenUtil;
-import thebetweenlands.common.world.gen.feature.config.DoublePlantConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PlantConfiguration;
 
-public class DoublePlantClusterFeature extends Feature<DoublePlantConfiguration> {
+public class PlantClusterFeature extends Feature<PlantConfiguration> {
 
-	public DoublePlantClusterFeature(Codec<DoublePlantConfiguration> codec) {
+	public PlantClusterFeature(Codec<PlantConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<DoublePlantConfiguration> context) {
+	public boolean place(FeaturePlaceContext<PlantConfiguration> context) {
 		return generate(context.level(), context.random(), context.origin(), context.config());
 	}
 
-	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, DoublePlantConfiguration config) {
+	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, PlantConfiguration config) {
 		boolean generated = false;
 		pos = WorldGenUtil.loopUntilSolid(level, pos);
 		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();

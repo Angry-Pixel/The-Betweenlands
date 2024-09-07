@@ -33,8 +33,6 @@ public class FeatureRegistry {
 		() -> new CaveThornsFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> DEEPMAN_SIMULACRUM = FEATURES.register("deepman_simulacrum",
 		() -> new DeepmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
-	public static final DeferredHolder<Feature<?>, Feature<DoublePlantConfiguration>> DOUBLE_PLANT_CLUSTER = FEATURES.register("double_plant_cluster",
-		() -> new DoublePlantClusterFeature(DoublePlantConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<PoolConfiguration>> FLUID_POOL = FEATURES.register("fluid_pool",
 		() -> new FluidPoolFeature(PoolConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> LAKE_CAVERN_SIMULACRUM = FEATURES.register("lake_cavern_simulacrum",
@@ -47,6 +45,8 @@ public class FeatureRegistry {
 		() -> new MossClusterFeature(BlockPlaceConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<PebbleClusterConfiguration>> PEBBLE_CLUSTER = FEATURES.register("pebble_cluster",
 		() -> new PebbleClusterFeature(PebbleClusterConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<PlantConfiguration>> PLANT_CLUSTER = FEATURES.register("plant_cluster",
+		() -> new PlantClusterFeature(PlantConfiguration.CODEC));
 	//Root Pod Roots
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> ROOTMAN_SIMULACRUM = FEATURES.register("rootman_simulacrum",
 		() -> new RootmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
