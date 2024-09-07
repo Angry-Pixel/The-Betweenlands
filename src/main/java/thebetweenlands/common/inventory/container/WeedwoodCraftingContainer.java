@@ -51,7 +51,7 @@ public class WeedwoodCraftingContainer implements CraftingContainer {
 		this.tile.closeInventory(this);
 	}
 
-	protected NonNullList<ItemStack> getItemsMutable() {
+	public NonNullList<ItemStack> getItemsMutable() {
 		return tile.getItems();
 	}
 

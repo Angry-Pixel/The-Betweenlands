@@ -37,15 +37,15 @@ import javax.annotation.Nullable;
 public class PurifierBlockEntity extends BaseContainerBlockEntity {
 
 	private static final int MAX_TIME = 432;
-	public final FluidTank waterTank = new FluidTank(FluidType.BUCKET_VOLUME * 4, fluidStack -> fluidStack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4, fluidStack -> fluidStack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
 	public int time = 0;
 	protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
 	public final ContainerData data = new ContainerData() {
 		public int get(int index) {
 			return switch (index) {
 				case 0 -> PurifierBlockEntity.this.time;
-				case 1 -> PurifierBlockEntity.this.waterTank.getFluidAmount();
-				case 2 -> PurifierBlockEntity.this.waterTank.getCapacity();
+				case 1 -> PurifierBlockEntity.this.tank.getFluidAmount();
+				case 2 -> PurifierBlockEntity.this.tank.getCapacity();
 				default -> 0;
 			};
 		}
@@ -72,7 +72,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 			return;
 		ItemStack fuel = entity.getItems().get(1);
 		ItemStack input = entity.getItems().get(0);
-		if (!fuel.isEmpty() && !input.isEmpty() && !entity.waterTank.isEmpty()) {
+		if (!fuel.isEmpty() && !input.isEmpty() && !entity.tank.isEmpty()) {
 			RecipeHolder<PurifierRecipe> recipeholder = entity.quickCheck.getRecipeFor(new SingleRecipeInput(input), level).orElse(null);
 			if (entity.canPurify(level.registryAccess(), recipeholder)) {
 				entity.time++;
@@ -95,7 +95,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 
 	private boolean canPurify(RegistryAccess access, @Nullable RecipeHolder<PurifierRecipe> recipe) {
 		if (!this.getItems().getFirst().isEmpty() && recipe != null) {
-			if (recipe.value().requiredWater().getAmount() > this.waterTank.getFluidAmount()) return false;
+			if (recipe.value().requiredWater().getAmount() > this.tank.getFluidAmount()) return false;
 			ItemStack itemstack = recipe.value().assemble(new SingleRecipeInput(this.getItem(0)), access);
 			if (itemstack.isEmpty()) {
 				return false;
@@ -124,7 +124,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 			} else if (ItemStack.isSameItemSameComponents(output, recipeResult)) {
 				output.grow(recipeResult.getCount());
 			}
-			this.waterTank.drain(recipe.value().requiredWater(), IFluidHandler.FluidAction.EXECUTE);
+			this.tank.drain(recipe.value().requiredWater(), IFluidHandler.FluidAction.EXECUTE);
 			input.shrink(1);
 			this.getItems().get(1).shrink(1);
 			return true;
@@ -170,7 +170,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
 		tag.putInt("progress", this.time);
-		tag.put("tank", this.waterTank.writeToNBT(registries, new CompoundTag()));
+		tag.put("tank", this.tank.writeToNBT(registries, new CompoundTag()));
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.time = tag.getInt("progress");
-		this.waterTank.readFromNBT(registries, tag.getCompound("tank"));
+		this.tank.readFromNBT(registries, tag.getCompound("tank"));
 	}
 
 	@Nullable

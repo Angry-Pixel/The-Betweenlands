@@ -35,7 +35,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	public static final int MAX_INGREDIENTS = 6;
 
 	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_INGREDIENTS + 2, ItemStack.EMPTY);
-	public final FluidTank waterTank = new FluidTank(FluidType.BUCKET_VOLUME * 3, stack -> stack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 3, stack -> stack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
 
 	private int infusionTime = 0;
 	private int stirProgress = 90;
@@ -285,8 +285,8 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	public void extractFluids(Level level, BlockPos pos, BlockState state, FluidStack fluid) {
-		if (FluidStack.isSameFluidSameComponents(fluid, this.waterTank.getFluid())) {
-			this.waterTank.drain(fluid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+		if (FluidStack.isSameFluidSameComponents(fluid, this.tank.getFluid())) {
+			this.tank.drain(fluid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 		}
 		if (this.getWaterAmount() == 0) {
 			if (this.hasInfusion) {
@@ -323,7 +323,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			}
 			this.hasInfusion = false;
 			this.temp = 0;
-			this.waterTank.setFluid(new FluidStack(FluidRegistry.SWAMP_WATER_STILL, 0));
+			this.tank.setFluid(new FluidStack(FluidRegistry.SWAMP_WATER_STILL, 0));
 		}
 		this.evaporation = 0;
 		this.markForUpdate(level, pos, state);
@@ -334,15 +334,15 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	public int getWaterAmount() {
-		return this.waterTank.getFluidAmount();
+		return this.tank.getFluidAmount();
 	}
 
 	public int getTanksFullValue() {
-		return this.waterTank.getCapacity();
+		return this.tank.getCapacity();
 	}
 
 	public int getScaledWaterAmount(int scale) {
-		return !this.waterTank.getFluid().isEmpty() ? (int) ((float) this.waterTank.getFluid().getAmount() / (float) this.waterTank.getCapacity() * scale) : 0;
+		return !this.tank.getFluid().isEmpty() ? (int) ((float) this.tank.getFluid().getAmount() / (float) this.tank.getCapacity() * scale) : 0;
 	}
 
 	public boolean isValidCrystalInstalled() {
@@ -456,7 +456,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
-		tag.put("water_tank", this.waterTank.writeToNBT(registries, new CompoundTag()));
+		tag.put("water_tank", this.tank.writeToNBT(registries, new CompoundTag()));
 		tag.putInt("stir_progress", this.stirProgress);
 		tag.putInt("evaporation", this.evaporation);
 		tag.putInt("temperature", this.temp);
@@ -472,7 +472,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		super.loadAdditional(tag, registries);
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
-		this.waterTank.readFromNBT(registries, tag.getCompound("water_tank"));
+		this.tank.readFromNBT(registries, tag.getCompound("water_tank"));
 		this.stirProgress = tag.getInt("stir_progress");
 		this.evaporation = tag.getInt("evaporation");
 		this.temp = tag.getInt("temperature");
@@ -486,22 +486,22 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	@Override
 	public int getTanks() {
-		return this.waterTank.getTanks();
+		return this.tank.getTanks();
 	}
 
 	@Override
 	public FluidStack getFluidInTank(int tank) {
-		return this.waterTank.getFluidInTank(tank);
+		return this.tank.getFluidInTank(tank);
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return this.waterTank.getTankCapacity(tank);
+		return this.tank.getTankCapacity(tank);
 	}
 
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack) {
-		return this.waterTank.isFluidValid(tank, stack);
+		return this.tank.isFluidValid(tank, stack);
 	}
 
 	@Override
@@ -509,9 +509,9 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		if (this.hasInfusion) {
 			return 0; //Don't allow refill when infusing has already started
 		}
-		int filled = this.waterTank.fill(resource, FluidAction.SIMULATE);
+		int filled = this.tank.fill(resource, FluidAction.SIMULATE);
 		if (filled == resource.getAmount() && action.execute()) {
-			this.waterTank.fill(resource, FluidAction.EXECUTE);
+			this.tank.fill(resource, FluidAction.EXECUTE);
 			if (temp >= 3) {
 				temp = temp - temp / 3;
 				evaporation = 0;

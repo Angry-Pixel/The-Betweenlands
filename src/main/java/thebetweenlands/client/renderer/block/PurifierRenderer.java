@@ -44,8 +44,8 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 		if (entity.getBlockState().getValue(PurifierBlock.LIT)) {
 			this.fire.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		}
-		int amount = entity.waterTank.getFluidAmount();
-		int capacity = entity.waterTank.getCapacity();
+		int amount = entity.tank.getFluidAmount();
+		int capacity = entity.tank.getCapacity();
 		float size = 1F / capacity * amount;
 		if (!entity.getItem(2).isEmpty()) {
 			stack.pushPose();

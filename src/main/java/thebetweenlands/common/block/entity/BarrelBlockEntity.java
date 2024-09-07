@@ -21,7 +21,7 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider, IFluidHandler {
 
-	public final FluidTank fluidTank = new FluidTank(FluidType.BUCKET_VOLUME * 8);
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 8);
 
 	public BarrelBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.BARREL.get(), pos, state);
@@ -30,13 +30,13 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		this.fluidTank.writeToNBT(registries, tag);
+		this.tank.writeToNBT(registries, tag);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.fluidTank.readFromNBT(registries, tag);
+		this.tank.readFromNBT(registries, tag);
 	}
 
 	@Override
@@ -52,22 +52,22 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 
 	@Override
 	public int getTanks() {
-		return this.fluidTank.getTanks();
+		return this.tank.getTanks();
 	}
 
 	@Override
 	public FluidStack getFluidInTank(int tank) {
-		return this.fluidTank.getFluidInTank(tank);
+		return this.tank.getFluidInTank(tank);
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return this.fluidTank.getTankCapacity(tank);
+		return this.tank.getTankCapacity(tank);
 	}
 
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack) {
-		return this.fluidTank.isFluidValid(tank, stack);
+		return this.tank.isFluidValid(tank, stack);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 			boolean isFluidHot = resource.getFluid().getFluidType().getTemperature(resource) > 473.15F /*200°C*/ || resource.is(Fluids.LAVA);
 
 			if (!isFluidHot || (state.getBlock() instanceof BarrelBlock barrel && barrel.isHeatResistant(this.getLevel(), this.getBlockPos(), state))) {
-				int filled = this.fluidTank.fill(resource, action);
+				int filled = this.tank.fill(resource, action);
 
 				if (filled != 0 && action.execute()) {
 					this.setChanged();
@@ -98,7 +98,7 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 			this.setChanged();
 			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
-		return this.fluidTank.drain(resource, action);
+		return this.tank.drain(resource, action);
 	}
 
 	@Override
@@ -108,6 +108,6 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 			BlockState stat = this.getLevel().getBlockState(this.getBlockPos());
 			this.getLevel().sendBlockUpdated(this.getBlockPos(), stat, stat, 2);
 		}
-		return this.fluidTank.drain(maxDrain, action);
+		return this.tank.drain(maxDrain, action);
 	}
 }

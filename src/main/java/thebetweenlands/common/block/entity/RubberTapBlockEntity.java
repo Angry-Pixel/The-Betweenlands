@@ -15,7 +15,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 
 public class RubberTapBlockEntity extends SyncedBlockEntity implements IFluidHandler {
 
-	private final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME, fluidStack -> fluidStack.is(FluidRegistry.RUBBER_STILL.get()));
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME, fluidStack -> fluidStack.is(FluidRegistry.RUBBER_STILL.get()));
 	private int fillProgress = 0;
 
 	public RubberTapBlockEntity(BlockPos pos, BlockState state) {

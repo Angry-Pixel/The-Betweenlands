@@ -159,8 +159,8 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 			int y = pos.getY();
 			int z = pos.getZ();
 			if (infuser.getWaterAmount() > 0 && infuser.getTemperature() > 0) {
-				int amount = infuser.waterTank.getFluidAmount();
-				int capacity = infuser.waterTank.getCapacity();
+				int amount = infuser.tank.getFluidAmount();
+				int capacity = infuser.tank.getCapacity();
 				float size = 1.0F / capacity * amount;
 				float xx = x + 0.5F;
 				float yy = y + 0.35F + size * 0.5F;
@@ -203,7 +203,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public void handlePrecipitation(BlockState state, Level level, BlockPos pos, Biome.Precipitation precipitation) {
 		if (level.dimension() == DimensionRegistries.DIMENSION_KEY && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser) {
-			infuser.waterTank.fill(new FluidStack(FluidRegistry.SWAMP_WATER_STILL, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+			infuser.tank.fill(new FluidStack(FluidRegistry.SWAMP_WATER_STILL, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
 		}
 	}
 }

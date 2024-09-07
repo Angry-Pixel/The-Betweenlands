@@ -143,6 +143,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MOB_SPAWNER.get(), MobSpawnerRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MORTAR.get(), MortarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MOSS_BED.get(), MossBedRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.MOTH_HOUSE.get(), MothHouseRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_FLOWER_POT.get(), MudFlowerPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.OFFERING_TABLE.get(), OfferingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PUFFSHROOM.get(), PuffshroomRenderer::new);
@@ -196,6 +197,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.MOB_SPAWNER_CRYSTAL, MobSpawnerCrystalModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.MORTAR, MortarModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.MOSS_BED, MossBedModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.MOTH_HOUSE, MothHouseModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.OFFERING_TABLE, OfferingTableModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PUFFSHROOM, PuffshroomModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PURIFIER, PurifierModel::makeModel);
@@ -284,7 +286,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(),
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
 			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(), BlockRegistry.STEEPING_POT.asItem(),
-			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(),
+			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(), BlockRegistry.MOTH_HOUSE.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

@@ -25,6 +25,9 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.VanillaHopperItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
@@ -34,6 +37,8 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.capability.CenserWrapper;
+import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
 import thebetweenlands.common.command.ResetAspectsCommand;
@@ -195,9 +200,33 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.BARREL.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.CENSER.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.GRUB_HUB.get(), (tile, context) -> tile.tank);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.INFUSER.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.RUBBER_TAP.get(), (tile, context) -> tile.tank);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.BARREL.get(), (tile, context) -> tile.fluidTank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> tile.tank);
+
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ANIMATOR.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SULFUR_FURNACE.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CENSER.get(), (tile, context) -> new CenserWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CRAB_POT.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.COMPOST_BIN.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CRAB_POT_FILTER.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.DRUID_ALTAR.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.FISHING_TACKLE_BOX.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.GRUB_HUB.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SYRMORITE_HOPPER.get(), (tile, context) -> new VanillaHopperItemHandler(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ITEM_SHELF.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MORTAR.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MOTH_HOUSE.get(), (tile, context) -> new MothHouseWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new InvWrapper(tile));
 	}
 
 	private static void protectFromMagicDamage(LivingIncomingDamageEvent event) {

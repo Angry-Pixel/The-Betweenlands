@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import thebetweenlands.common.block.BLLanternBlock;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
@@ -27,9 +29,9 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	public static final int SLOT_GRUBS = 0;
 	public static final int SLOT_SILK = 1;
 
-	protected static final int MAX_GRUBS = 6;
-	protected static final int MAX_SILK_PER_GRUB = 3;
-	protected static final int BASE_TICKS_PER_SILK = 160;
+	public static final int MAX_GRUBS = 6;
+	public static final int MAX_SILK_PER_GRUB = 3;
+	public static final int BASE_TICKS_PER_SILK = 160;
 
 	private int productionTime = 0;
 	private float productionEfficiency = 0;
@@ -64,7 +66,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
 			if (entity.placerUUID != null && entity.getPlacer() == null && level.getGameTime() % 20 == 0) {
 				if (entity.updatePlacerFromUUID(level)) {
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 			}
 
@@ -95,19 +97,22 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 					} else if (silkStack.is(ItemRegistry.SILK_THREAD.get())) {
 						silkStack.grow(1);
 					}
-
-					level.sendBlockUpdated(pos, state, state, 2);
-
 					entity.resetProductionTime();
-
 					entity.setChanged();
 				}
 			}
 
 			if (wasWorking != entity.isWorking) {
-				level.sendBlockUpdated(pos, state, state, 2);
 				entity.setChanged();
 			}
+		}
+	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 	}
 
@@ -150,7 +155,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 
 	public int getSilkRenderStage() {
 		ItemStack silkStack = this.getItem(SLOT_SILK);
-		return 0;//Mth.ceil(Math.min(1.0f, silkStack.getCount() / (float) Math.min(this.inventoryHandler.getSlotLimit(SLOT_SILK), MAX_GRUBS * MAX_SILK_PER_GRUB)) * 3);
+		return Mth.ceil(Math.min(1.0f, silkStack.getCount() / (float) Math.min(64, MAX_GRUBS * MAX_SILK_PER_GRUB)) * 3);
 	}
 
 	private void updateEfficiency(Level level, BlockPos pos) {
@@ -180,17 +185,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 		this.productionEfficiency = lanternsNearby / 3.0f;
 	}
 
-	public int addGrubs(ItemStack stack) {
-		int count = stack.getCount();
-
-		int grubsAdded = count;//this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
-
-		this.setChanged();
-
-		return grubsAdded;
-	}
-
-	protected void onSilkRemoved(int count) {
+	public void onSilkRemoved(int count) {
 		int grubsToRemove = Mth.ceil(count / (float) MAX_SILK_PER_GRUB);
 
 		ItemStack grubsStack = this.getItem(SLOT_GRUBS);
@@ -210,7 +205,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	}
 
 	@Override
-	protected NonNullList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return this.items;
 	}
 

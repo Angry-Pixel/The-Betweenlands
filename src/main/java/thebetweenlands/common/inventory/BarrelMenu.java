@@ -36,7 +36,7 @@ public class BarrelMenu extends AbstractContainerMenu {
 	}
 
 	public FluidTank getTank() {
-		return this.barrel.fluidTank;
+		return this.barrel.tank;
 	}
 
 	@Override

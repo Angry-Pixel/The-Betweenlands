@@ -67,17 +67,17 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	@Nullable
 	private CenserRecipe<Object> currentRecipe;
 
-	private boolean internalSlotChanged = false;
+	public boolean internalSlotChanged = false;
 
 	private int maxFuelTicks;
 	private int fuelTicks;
 
-	private boolean checkInternalSlotForRecipes = true;
-	private boolean checkInputSlotForTransfer = true;
+	public boolean checkInternalSlotForRecipes = true;
+	public boolean checkInputSlotForTransfer = true;
 
 	private boolean isRecipeRunning = false;
 
-	private final FluidTank fluidTank = new FluidTank(FluidType.BUCKET_VOLUME * 8);
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 8);
 	private NonNullList<ItemStack> items = NonNullList.withSize(INV_SIZE, ItemStack.EMPTY);
 
 	public final ContainerData data = new ContainerData() {
@@ -123,7 +123,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 			if (entity.checkInternalSlotForRecipes) {
 				entity.checkInternalSlotForRecipes = false;
 
-				FluidStack fluid = entity.fluidTank.getFluid();
+				FluidStack fluid = entity.tank.getFluid();
 				ItemStack internalStack = entity.getItem(CenserBlockEntity.INTERNAL_SLOT);
 
 				if (fluid.getAmount() > 0) {
@@ -189,7 +189,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 						if (toRemove > 0) {
 							if (entity.isFluidRecipe) {
-								entity.fluidTank.drain(toRemove, IFluidHandler.FluidAction.EXECUTE);
+								entity.tank.drain(toRemove, IFluidHandler.FluidAction.EXECUTE);
 								entity.checkInputSlotForTransfer = true;
 							} else {
 								entity.remainingItemAmount = Math.max(0, entity.remainingItemAmount - toRemove);
@@ -301,7 +301,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 	protected void saveTag(CompoundTag tag, HolderLookup.Provider registries, boolean packet) {
 		ContainerHelper.saveAllItems(tag, this.items, registries);
-		tag.put("fluid_tank", this.fluidTank.writeToNBT(registries, new CompoundTag()));
+		tag.put("fluid_tank", this.tank.writeToNBT(registries, new CompoundTag()));
 		tag.putInt("remaining_item_amount", this.remainingItemAmount);
 		tag.putInt("consumption_ticks", this.consumptionTicks);
 		tag.putInt("max_consumption_ticks", this.maxConsumptionTicks);
@@ -333,7 +333,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	protected void loadTag(CompoundTag tag, HolderLookup.Provider registries, boolean packet) {
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
-		this.fluidTank.readFromNBT(registries, tag.getCompound("fluid_tank"));
+		this.tank.readFromNBT(registries, tag.getCompound("fluid_tank"));
 		this.remainingItemAmount = tag.getInt("remaining_item_amount");
 		this.consumptionTicks = tag.getInt("consumption_ticks");
 		this.maxConsumptionTicks = tag.getInt("max_consumption_ticks");
@@ -355,9 +355,9 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 			Object recipeContext = null;
 
 			if (this.isFluidRecipe) {
-				recipe = (CenserRecipe<Object>) this.getEffect(this.fluidTank.getFluid());
+				recipe = (CenserRecipe<Object>) this.getEffect(this.tank.getFluid());
 				if (recipe != null) {
-					recipeContext = recipe.createContext(this.fluidTank.getFluid());
+					recipeContext = recipe.createContext(this.tank.getFluid());
 				}
 			} else {
 				recipe = (CenserRecipe<Object>) this.getEffect(this.getItem(INTERNAL_SLOT));
@@ -410,7 +410,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	}
 
 	@Override
-	protected NonNullList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return this.items;
 	}
 
@@ -430,7 +430,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	}
 
 	protected boolean canRecipeRun(boolean isFluidRecipe, CenserRecipe<?> recipe) {
-		return !((isFluidRecipe && (this.fluidTank.getFluidAmount() <= 0 || !recipe.matchesInput(this.fluidTank.getFluid()))) ||
+		return !((isFluidRecipe && (this.tank.getFluidAmount() <= 0 || !recipe.matchesInput(this.tank.getFluid()))) ||
 			(!isFluidRecipe && (this.getItem(CenserBlockEntity.INTERNAL_SLOT).isEmpty() || this.remainingItemAmount <= 0 || !recipe.matchesInput(this.getItem(CenserBlockEntity.INTERNAL_SLOT)))));
 	}
 
@@ -445,7 +445,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	}
 
 	protected boolean isFilled() {
-		return this.fluidTank.getFluidAmount() > 0 || !this.getItem(CenserBlockEntity.INTERNAL_SLOT).isEmpty();
+		return this.tank.getFluidAmount() > 0 || !this.getItem(CenserBlockEntity.INTERNAL_SLOT).isEmpty();
 	}
 
 	@Nullable
@@ -460,12 +460,12 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 	@Override
 	public int getCurrentRemainingInputAmount() {
-		return this.isFluidRecipe ? this.fluidTank.getFluidAmount() : this.remainingItemAmount;
+		return this.isFluidRecipe ? this.tank.getFluidAmount() : this.remainingItemAmount;
 	}
 
 	@Override
 	public int getCurrentMaxInputAmount() {
-		return this.isFluidRecipe ? this.fluidTank.getCapacity() : 1000;
+		return this.isFluidRecipe ? this.tank.getCapacity() : 1000;
 	}
 
 	public int getFuelTicks() {
@@ -500,22 +500,22 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 	@Override
 	public int getTanks() {
-		return this.fluidTank.getTanks();
+		return this.tank.getTanks();
 	}
 
 	@Override
 	public FluidStack getFluidInTank(int tank) {
-		return this.fluidTank.getFluidInTank(tank);
+		return this.tank.getFluidInTank(tank);
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return this.fluidTank.getTankCapacity(tank);
+		return this.tank.getTankCapacity(tank);
 	}
 
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack) {
-		return this.fluidTank.isFluidValid(tank, stack);
+		return this.tank.isFluidValid(tank, stack);
 	}
 
 	@Override
@@ -529,7 +529,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 			this.checkInternalSlotForRecipes = true;
 			this.checkInputSlotForTransfer = true;
 		}
-		return this.fluidTank.fill(resource, action);
+		return this.tank.fill(resource, action);
 	}
 
 	@Override
@@ -540,7 +540,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 			this.checkInternalSlotForRecipes = true;
 			this.checkInputSlotForTransfer = true;
 		}
-		return this.fluidTank.drain(resource, action);
+		return this.tank.drain(resource, action);
 	}
 
 	@Override
@@ -551,7 +551,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 			this.checkInternalSlotForRecipes = true;
 			this.checkInputSlotForTransfer = true;
 		}
-		return this.fluidTank.drain(maxDrain, action);
+		return this.tank.drain(maxDrain, action);
 	}
 
 	@Override

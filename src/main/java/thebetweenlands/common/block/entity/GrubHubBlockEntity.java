@@ -18,7 +18,7 @@ import thebetweenlands.common.registries.*;
 
 public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
 
-	public FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME, stack -> stack.is(FluidRegistry.PHEROMONE_EXTRACT_STILL));
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME, stack -> stack.is(FluidRegistry.PHEROMONE_EXTRACT_STILL));
 	private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
 	public int switchTextureCount = 0;
