@@ -39,6 +39,8 @@ public class FeatureRegistry {
 		() -> new FluidPoolFeature(PoolConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> LAKE_CAVERN_SIMULACRUM = FEATURES.register("lake_cavern_simulacrum",
 		() -> new LakeCavernSimulacrumFeature(SimulacrumConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<ChanceConfiguration>> LIFE_GEM_ORE = FEATURES.register("life_gem_ore",
+		() -> new LifeGemOreFeature(ChanceConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<ChanceConfiguration>> LYESTONE = FEATURES.register("lyestone",
 		() -> new LyestoneFeature(ChanceConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> MOSS_CLUSTER = FEATURES.register("moss_cluster",

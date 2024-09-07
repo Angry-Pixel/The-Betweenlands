@@ -1,0 +1,6 @@
+{
+  "type": "thebetweenlands:life_gem_ore",
+  "config": {
+    "chance": 35
+  }
+}

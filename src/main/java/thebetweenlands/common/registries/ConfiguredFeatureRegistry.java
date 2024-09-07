@@ -4,7 +4,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
 
 public class ConfiguredFeatureRegistry {
 
@@ -102,7 +107,27 @@ public class ConfiguredFeatureRegistry {
 		return ResourceKey.create(Registries.CONFIGURED_FEATURE, TheBetweenlands.prefix(name));
 	}
 
-	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+	public static final RuleTest BETWEENSTONE_TEST = new BlockStateMatchTest(BlockRegistry.BETWEENSTONE.get().defaultBlockState());
+	public static final RuleTest PITSTONE_TEST = new BlockStateMatchTest(BlockRegistry.PITSTONE.get().defaultBlockState());
 
+	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+		context.register(SULFUR,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SULFUR_ORE.get().defaultBlockState(), 14)));
+		context.register(SYRMORITE,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SYRMORITE_ORE.get().defaultBlockState(), 7)));
+		context.register(BONE_ORE,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SLIMY_BONE_ORE.get().defaultBlockState(), 11)));
+		context.register(OCTINE,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.OCTINE_ORE.get().defaultBlockState(), 6)));
+		context.register(SWAMP_DIRT,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SWAMP_DIRT.get().defaultBlockState(), 25)));
+//		context.register(LIMESTONE, TODO: Ore sizes cannot be more than 64. This cannot datagen
+//			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.LIMESTONE.get().defaultBlockState(), 100)));
+		context.register(VALONITE,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(PITSTONE_TEST, BlockRegistry.VALONITE_ORE.get().defaultBlockState(), 5)));
+		context.register(SCABYST,
+			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(PITSTONE_TEST, BlockRegistry.SCABYST_ORE.get().defaultBlockState(), 6)));
+		context.register(LIFE_GEM,
+			new ConfiguredFeature<>(FeatureRegistry.LIFE_GEM_ORE.get(), new ChanceConfiguration(35)));
 	}
 }

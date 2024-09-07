@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "discard_chance_on_air_exposure": 0.0,
+    "size": 5,
+    "targets": [
+      {
+        "state": {
+          "Name": "thebetweenlands:valonite_ore"
+        },
+        "target": {
+          "block_state": {
+            "Name": "thebetweenlands:pitstone"
+          },
+          "predicate_type": "minecraft:blockstate_match"
+        }
+      }
+    ]
+  }
+}

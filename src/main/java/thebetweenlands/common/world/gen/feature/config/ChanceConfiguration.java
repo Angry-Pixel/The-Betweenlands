@@ -7,7 +7,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 public record ChanceConfiguration(int chance) implements FeatureConfiguration {
 
 	public static final Codec<ChanceConfiguration> CODEC = ExtraCodecs.POSITIVE_INT
-		.fieldOf("state")
+		.fieldOf("chance")
 		.xmap(ChanceConfiguration::new, obj -> obj.chance)
 		.codec();
 }
