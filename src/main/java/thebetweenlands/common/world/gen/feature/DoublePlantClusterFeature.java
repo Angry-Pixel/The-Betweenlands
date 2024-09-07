@@ -23,12 +23,13 @@ public class DoublePlantClusterFeature extends Feature<DoublePlantConfiguration>
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, DoublePlantConfiguration config) {
 		boolean generated = false;
 		pos = WorldGenUtil.loopUntilSolid(level, pos);
+		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		for (int i = 0; i < config.attempts(); i++) {
-			BlockPos offset = WorldGenUtil.randomOffset(rand, pos, config.offset(), config.offset() / 2 + 1, config.offset());
+			mutable = WorldGenUtil.randomOffset(rand, mutable, pos, config.offset(), config.offset() / 2 + 1, config.offset());
 
-			if ((level.getBlockState(offset).isAir() || (config.underwater() && !level.getFluidState(offset).isEmpty())) && (level.dimensionType().hasSkyLight() || offset.getY() < 254) && config.state().canSurvive(level, offset)) {
-				level.setBlock(offset, config.state(), 2);
+			if ((level.getBlockState(mutable).isAir() || (config.underwater() && !level.getFluidState(mutable).isEmpty())) && (level.dimensionType().hasSkyLight() || mutable.getY() < 254) && config.state().canSurvive(level, mutable)) {
+				level.setBlock(mutable, config.state(), 2);
 				generated = true;
 			}
 		}

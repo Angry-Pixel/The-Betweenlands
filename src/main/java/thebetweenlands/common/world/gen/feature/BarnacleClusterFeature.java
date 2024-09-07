@@ -30,7 +30,7 @@ public class BarnacleClusterFeature extends Feature<BlockPlaceConfiguration> {
 		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		for (int i = 0; i < config.attempts(); i++) {
-			mutable.set(WorldGenUtil.randomOffset(rand, pos, config.offset(), config.offset() / 2 + 1, config.offset()));
+			mutable = WorldGenUtil.randomOffset(rand, mutable, pos, config.offset(), config.offset() / 2 + 1, config.offset());
 
 			if (level.isAreaLoaded(mutable, 1) && level.getBlockState(mutable).getFluidState().is(FluidTags.WATER) && config.state().canSurvive(level, mutable)) {
 				Direction direction = Direction.BY_ID.apply(rand.nextInt(Direction.values().length));

@@ -26,14 +26,15 @@ public class PebbleClusterFeature extends Feature<PebbleClusterConfiguration> {
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, PebbleClusterConfiguration config) {
 		boolean generated = false;
 		pos = WorldGenUtil.loopUntilSolid(level, pos);
+		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		for (int i = 0; i < config.attempts(); i++) {
-			BlockPos offset = pos.offset(WorldGenUtil.randomOffset(rand, pos, config.offset(), config.offset() / 2 + 1, config.offset()));
-			BlockState offsetState = level.getBlockState(offset);
+			mutable = WorldGenUtil.randomOffset(rand, mutable, pos, config.offset(), config.offset() / 2 + 1, config.offset());
+			BlockState offsetState = level.getBlockState(mutable);
 
-			if (offsetState.isAir() && config.state().getBlock() instanceof PebblePileBlock && config.state().canSurvive(level, offset)) {
+			if (offsetState.isAir() && config.state().getBlock() instanceof PebblePileBlock && config.state().canSurvive(level, mutable)) {
 				int pileSize = rand.nextInt(4) + 1;
-				this.setBlock(level, offset, config.state()
+				this.setBlock(level, mutable, config.state()
 					.setValue(PebblePileBlock.PEBBLES, pileSize)
 					.setValue(PebblePileBlock.PLANT, rand.nextBoolean())
 					.setValue(PebblePileBlock.WATER_TYPE, SwampWaterLoggable.WaterType.getFromFluid(config.state().getFluidState().getType())));

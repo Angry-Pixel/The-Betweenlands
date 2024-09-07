@@ -27,4 +27,11 @@ public class WorldGenUtil {
 			rand.nextInt(offsetY) - rand.nextInt(offsetY),
 			rand.nextInt(offsetZ) - rand.nextInt(offsetZ));
 	}
+
+	public static BlockPos.MutableBlockPos randomOffset(RandomSource rand, BlockPos.MutableBlockPos mutable, BlockPos origin, int offsetX, int offsetY, int offsetZ) {
+		return mutable.setWithOffset(origin,
+			rand.nextInt(offsetX) - rand.nextInt(offsetX),
+			rand.nextInt(offsetY) - rand.nextInt(offsetY),
+			rand.nextInt(offsetZ) - rand.nextInt(offsetZ));
+	}
 }

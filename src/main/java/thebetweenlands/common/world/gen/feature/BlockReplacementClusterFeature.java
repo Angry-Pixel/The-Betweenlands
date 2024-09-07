@@ -25,19 +25,20 @@ public class BlockReplacementClusterFeature extends Feature<BlockReplacementConf
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, BlockReplacementConfiguration config) {
 		boolean generated = false;
 		pos = WorldGenUtil.loopUntilSolid(level, pos);
+		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		for (int i = 0; i < config.attempts; i++) {
-			BlockPos offset = WorldGenUtil.randomOffset(rand, pos, config.offset, config.offset / 2 + 1, config.offset);
+			mutable = WorldGenUtil.randomOffset(rand, mutable, pos, config.offset, config.offset / 2 + 1, config.offset);
 
-			if (level.isAreaLoaded(offset, 1)) {
-				BlockState state = level.getBlockState(offset);
+			if (level.isAreaLoaded(mutable, 1)) {
+				BlockState state = level.getBlockState(mutable);
 				for (OreConfiguration.TargetBlockState target : config.targets) {
 					if (target.target.test(state, rand)) {
 						BlockState setState = target.state;
 						if (config.inherit) {
 							setState.getBlock().withPropertiesOf(state);
 						}
-						this.setBlock(level, offset, setState);
+						this.setBlock(level, mutable, setState);
 						generated = true;
 					}
 				}
