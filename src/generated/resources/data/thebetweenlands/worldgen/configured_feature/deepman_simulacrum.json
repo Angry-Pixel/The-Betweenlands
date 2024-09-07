@@ -1,0 +1,29 @@
+{
+  "type": "thebetweenlands:deepman_simulacrum",
+  "config": {
+    "loot_table": "thebetweenlands:gameplay/deepman_simulacrum_offerings",
+    "variants": [
+      {
+        "Name": "thebetweenlands:deepman_simulacrum_1",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      },
+      {
+        "Name": "thebetweenlands:deepman_simulacrum_2",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      },
+      {
+        "Name": "thebetweenlands:deepman_simulacrum_3",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      }
+    ]
+  }
+}

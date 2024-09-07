@@ -1,15 +1,18 @@
 package thebetweenlands.common.registries;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 
 public class ConfiguredFeatureRegistry {
 
@@ -129,5 +132,28 @@ public class ConfiguredFeatureRegistry {
 			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(PITSTONE_TEST, BlockRegistry.SCABYST_ORE.get().defaultBlockState(), 6)));
 		context.register(LIFE_GEM,
 			new ConfiguredFeature<>(FeatureRegistry.LIFE_GEM_ORE.get(), new ChanceConfiguration(35)));
+
+		context.register(DEEPMAN_SIMULACRUM, new ConfiguredFeature<>(FeatureRegistry.DEEPMAN_SIMULACRUM.get(),
+			new SimulacrumConfiguration(
+				ImmutableList.of(
+					BlockRegistry.DEEPMAN_SIMULACRUM_1.get().defaultBlockState(),
+					BlockRegistry.DEEPMAN_SIMULACRUM_2.get().defaultBlockState(),
+					BlockRegistry.DEEPMAN_SIMULACRUM_3.get().defaultBlockState()),
+				LootTableRegistry.DEEPMAN_SIMULACRUM_OFFERINGS)));
+		context.register(LAKE_CAVERN_SIMULACRUM, new ConfiguredFeature<>(FeatureRegistry.LAKE_CAVERN_SIMULACRUM.get(),
+			new SimulacrumConfiguration(
+				ImmutableList.of(
+					BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.get().defaultBlockState(),
+					BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.get().defaultBlockState(),
+					BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.get().defaultBlockState()),
+				LootTableRegistry.LAKE_CAVERN_SIMULACRUM_OFFERINGS)));
+		context.register(ROOTMAN_SIMULACRUM, new ConfiguredFeature<>(FeatureRegistry.ROOTMAN_SIMULACRUM.get(),
+			new SimulacrumConfiguration(
+				ImmutableList.of(
+					BlockRegistry.ROOTMAN_SIMULACRUM_1.get().defaultBlockState(),
+					BlockRegistry.ROOTMAN_SIMULACRUM_2.get().defaultBlockState(),
+					BlockRegistry.ROOTMAN_SIMULACRUM_3.get().defaultBlockState()),
+				LootTableRegistry.ROOTMAN_SIMULACRUM_OFFERINGS)));
+
 	}
 }

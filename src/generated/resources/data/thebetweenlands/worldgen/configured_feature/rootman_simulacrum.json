@@ -1,0 +1,29 @@
+{
+  "type": "thebetweenlands:rootman_simulacrum",
+  "config": {
+    "loot_table": "thebetweenlands:gameplay/rootman_simulacrum_offerings",
+    "variants": [
+      {
+        "Name": "thebetweenlands:rootman_simulacrum_1",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      },
+      {
+        "Name": "thebetweenlands:rootman_simulacrum_2",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      },
+      {
+        "Name": "thebetweenlands:rootman_simulacrum_3",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "thebetweenlands:lake_cavern_simulacrum",
+  "config": {
+    "loot_table": "thebetweenlands:gameplay/lake_cavern_simulacrum_offerings",
+    "variants": [
+      {
+        "Name": "thebetweenlands:lake_cavern_simulacrum_1",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      },
+      {
+        "Name": "thebetweenlands:lake_cavern_simulacrum_2",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      },
+      {
+        "Name": "thebetweenlands:lake_cavern_simulacrum_3",
+        "Properties": {
+          "facing": "north",
+          "water_type": "none"
+        }
+      }
+    ]
+  }
+}
