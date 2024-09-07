@@ -1,223 +1,265 @@
 package thebetweenlands.common.block.entity;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.*;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.CrabPotFilterRecipe;
-import thebetweenlands.common.items.MobItem;
+import thebetweenlands.common.block.CrabPotFilterBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.inventory.CrabPotFilterMenu;
+import thebetweenlands.common.items.recipe.ItemAndEntityInput;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-import java.util.Optional;
-
 public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
-
-	private static final int EVENT_RESET_FILTERING_PROGRESS = 80;
-
-	protected int maxFilteringTime = 200; // 10 seconds per item for a 64 stack = over 10.6 min IRL
-
-	private int baitProgress = 0;
-	private int filteringProgress = 0;
-	private final int itemsToFilterCount = 3; // logic here means 1 already in the chamber + this
-
-	private int prevFilteringAnimationTicks;
-	private int filteringAnimationTicks;
-
-	private boolean active;
 
 	private static final int BAIT_SLOT = 0;
 	private static final int INPUT_SLOT = 1;
 	private static final int OUTPUT_SLOT = 2;
-	private static  final int[] RESULT_SLOTS = {OUTPUT_SLOT};
-	private static  final int[] SIDE_SLOTS = {BAIT_SLOT, INPUT_SLOT};
+	private static final int[] RESULT_SLOTS = {OUTPUT_SLOT};
+	private static final int[] SIDE_SLOTS = {BAIT_SLOT, INPUT_SLOT};
+	private static final int EVENT_RESET_FILTERING_PROGRESS = 80;
+
+	private int baitTime;
+	private int baitDuration = 800;
+	private int filteringProgress;
+	private int filteringTotalTime;
+
+	private int prevFilteringAnimationTicks;
+	private int filteringAnimationTicks;
+
 	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+	protected final ContainerData data = new ContainerData() {
+		@Override
+		public int get(int index) {
+			return switch (index) {
+				case 0 -> CrabPotFilterBlockEntity.this.baitTime;
+				case 1 -> CrabPotFilterBlockEntity.this.baitDuration;
+				case 2 -> CrabPotFilterBlockEntity.this.filteringProgress;
+				case 3 -> CrabPotFilterBlockEntity.this.filteringTotalTime;
+				default -> 0;
+			};
+		}
+
+		@Override
+		public void set(int index, int value) {
+			switch (index) {
+				case 0 -> CrabPotFilterBlockEntity.this.baitTime = value;
+				case 1 -> CrabPotFilterBlockEntity.this.baitDuration = value;
+				case 2 -> CrabPotFilterBlockEntity.this.filteringProgress = value;
+				case 3 -> CrabPotFilterBlockEntity.this.filteringTotalTime = value;
+			}
+		}
+
+		@Override
+		public int getCount() {
+			return 4;
+		}
+	};
+	private final RecipeManager.CachedCheck<ItemAndEntityInput, CrabPotFilterRecipe> quickCheck = RecipeManager.createCheck(RecipeRegistry.CRAB_POT_FILTER_RECIPE.get());
 
 	public CrabPotFilterBlockEntity(BlockPos pos, BlockState blockState) {
 		super(BlockEntityRegistry.CRAB_POT_FILTER.get(), pos, blockState);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, CrabPotFilterBlockEntity entity) {
+		//only perform logic if waterlogged
+		if (state.getValue(CrabPotFilterBlock.WATER_TYPE) == SwampWaterLoggable.WaterType.NONE) return;
 		if (level.isClientSide()) {
 			entity.prevFilteringAnimationTicks = entity.filteringAnimationTicks;
 
-			if (entity.active && entity.canFilterSlots(level, pos, 1, 2)) {
-				entity.filteringAnimationTicks = Math.min(entity.filteringAnimationTicks + 1, entity.maxFilteringTime);
+			if (entity.isBaited() && entity.getPottedCrab(level, pos) != null) {
+				entity.filteringAnimationTicks = Math.min(entity.filteringAnimationTicks + 1, entity.filteringTotalTime);
 			} else {
 				entity.prevFilteringAnimationTicks = entity.filteringAnimationTicks = 0;
 			}
-
-			return;
-		}
-
-		if (level.getBlockState(pos.above()).is(BlockRegistry.CRAB_POT) && !entity.active && entity.hasCrabInTile(level, pos)) {
-			entity.active = true;
-			level.sendBlockUpdated(pos, state, state, 2);
-		}
-
-		if (level.getBlockState(pos.above()).is(BlockRegistry.CRAB_POT) && entity.hasCrabInTile(level, pos)) {
-			entity.checkForAnimation(level, pos);
-		}
-
-		if (entity.active && (level.getBlockState(pos.above()).is(BlockRegistry.CRAB_POT) || !entity.hasCrabInTile(level, pos))) {
-			entity.active = false;
-			level.sendBlockUpdated(pos, state, state, 2);
-		}
-
-		if (entity.active) {
-			if (entity.hasBait() && entity.canFilterSlots(level, pos, INPUT_SLOT, OUTPUT_SLOT)) {
-				if (entity.getBaitProgress() == 0) {
-					entity.consumeBait(level, pos, state);
-				}
-
-				entity.setBaitProgress(entity.getBaitProgress() + 1);
+		} else {
+			boolean flag = entity.isBaited();
+			boolean flag1 = false;
+			if (entity.isBaited()) {
+				entity.baitTime--;
 			}
 
-			if (entity.canFilterSlots(level, pos, INPUT_SLOT, OUTPUT_SLOT)) {
-				entity.setSlotProgress(entity.getSlotProgress() + 1);
+			ItemStack fuelStack = entity.getItem(1);
+			ItemStack inputStack = entity.getItem(0);
+			boolean flag2 = !inputStack.isEmpty();
+			boolean flag3 = !fuelStack.isEmpty();
+			if (entity.isBaited() || flag3 && flag2) {
+				ItemAndEntityInput input = new ItemAndEntityInput(entity.getPottedCrab(level, pos), inputStack);
+				RecipeHolder<CrabPotFilterRecipe> recipeholder;
+				if (flag2) {
+					recipeholder = entity.quickCheck.getRecipeFor(input, level).orElse(null);
+				} else {
+					recipeholder = null;
+				}
 
-				if (entity.getSlotProgress() >= entity.maxFilteringTime) {
-					entity.filterItem(level, pos, state, INPUT_SLOT, OUTPUT_SLOT);
+				if (!entity.isBaited() && entity.canFilter(level.registryAccess(), input, recipeholder)) {
+					entity.baitTime = 800;
+					if (entity.isBaited()) {
+						flag1 = true;
+						if (fuelStack.hasCraftingRemainingItem())
+							entity.items.set(1, fuelStack.getCraftingRemainingItem());
+						else if (flag3) {
+							fuelStack.shrink(1);
+							if (fuelStack.isEmpty()) {
+								entity.items.set(1, fuelStack.getCraftingRemainingItem());
+							}
+						}
+					}
+				}
+
+				if (entity.isBaited() && entity.canFilter(level.registryAccess(), input, recipeholder)) {
+					entity.filteringProgress++;
+					entity.refreshPotAnimation(level, pos, true);
+					if (entity.filteringProgress == entity.filteringTotalTime) {
+						entity.filteringProgress = 0;
+						entity.filteringTotalTime = entity.getTotalFilterTime(input, level);
+						if (entity.filter(level.registryAccess(), input, recipeholder)) {
+							level.blockEvent(pos, state.getBlock(), EVENT_RESET_FILTERING_PROGRESS, 0);
+						}
+
+						flag1 = true;
+					}
+				} else {
+					entity.filteringProgress = 0;
 					level.blockEvent(pos, state.getBlock(), EVENT_RESET_FILTERING_PROGRESS, 0);
+					entity.refreshPotAnimation(level, pos, false);
 				}
+			} else if (!entity.isBaited() && entity.filteringProgress > 0) {
+				entity.filteringProgress = Mth.clamp(entity.filteringProgress - 2, 0, entity.filteringTotalTime);
+				entity.refreshPotAnimation(level, pos, false);
+			}
 
-				if (entity.getSlotProgress() % 10 == 0) {
-					level.sendBlockUpdated(pos, state, state, 2);
-				}
-			} else {
-				if (entity.getSlotProgress() > 0) {
-					entity.setSlotProgress(0);
-					level.sendBlockUpdated(pos, state, state, 2);
-				}
+			if (flag != entity.isBaited()) {
+				flag1 = true;
+			}
+
+			if (flag1) {
+				entity.setChanged();
 			}
 		}
 	}
 
-	public boolean isActive() {
-		return this.active;
-	}
-
-	private void checkForAnimation(Level level, BlockPos pos) {
-		if (level.getBlockEntity(pos.above()) instanceof CrabPotBlockEntity pot && (pot.hasSiltCrab() || pot.hasBubblerCrab())) {
-			if (canFilterSlots(level, pos, INPUT_SLOT, OUTPUT_SLOT) && !pot.animate) {
-				pot.animate = true;
-				level.sendBlockUpdated(pot.getBlockPos(), pot.getBlockState(), pot.getBlockState(), 2);
-			}
-			if (!this.canFilterSlots(level, pos, INPUT_SLOT, OUTPUT_SLOT) && pot.animate) {
-				pot.animate = false;
-				level.sendBlockUpdated(pot.getBlockPos(), pot.getBlockState(), pot.getBlockState(), 2);
-			}
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
 		}
 	}
 
-	private boolean hasCrabInTile(Level level, BlockPos pos) {
-		return level.getBlockEntity(pos.above()) instanceof CrabPotBlockEntity pot && (pot.hasSiltCrab() || pot.hasBubblerCrab());
-	}
-
-	public ItemStack getRecipeOutput(Level level, BlockPos pos, ItemStack stack, boolean checkAnyIfNoCrabs, boolean checkAny) {
-		SingleRecipeInput input = new SingleRecipeInput(stack);
-		Optional<RecipeHolder<CrabPotFilterRecipe>> recipeHolder = level.getRecipeManager().getRecipeFor(RecipeRegistry.CRAB_POT_FILTER_RECIPE.get(), input, level);
-		if (recipeHolder.isEmpty()) return ItemStack.EMPTY;
-
-		CrabPotBlockEntity pot = (CrabPotBlockEntity) level.getBlockEntity(pos.above());
-		if (checkAny || (checkAnyIfNoCrabs && (pot == null || (!pot.hasSiltCrab() && !pot.hasBubblerCrab())))) {
-			return recipeHolder.get().value().assemble(input, level.registryAccess());
-		} else if (pot != null) {
-			if (pot.getItem(0).getItem() instanceof MobItem mob && mob.isCapturedEntity(pot.getItem(0), recipeHolder.get().value().getRequiredFilteringMob())) {
-				return recipeHolder.get().value().assemble(input, level.registryAccess());
-			}
-		}
-
-		return ItemStack.EMPTY;
-	}
-
-	private void setSlotProgress(int counter) {
-		this.filteringProgress = counter;
-	}
-
-	public int getSlotProgress() {
-		return this.filteringProgress;
-	}
-
-	public void consumeBait(Level level, BlockPos pos, BlockState state) {
-		ItemStack baitStack = this.getItem(BAIT_SLOT);
-		this.setBaitProgress(0);
-		level.sendBlockUpdated(pos, state, state, 2);
-		baitStack.shrink(1);
-	}
-
-	private boolean canFilterSlots(Level level, BlockPos pos, int input, int output) {
-		if (!this.active || !this.hasBait() || this.getItem(input).isEmpty() || (!this.getItem(output).isEmpty() && !ItemStack.isSameItemSameComponents(this.getItem(output), this.getRecipeOutput(level, pos, this.getItem(input), false, false))))
-			return false;
-		else {
-			return !this.getRecipeOutput(level, pos, this.getItem(input), false, false).isEmpty();
-		}
-	}
-
-	public boolean hasBait() {
-		ItemStack baitStack = this.getItem(BAIT_SLOT);
-		if (!baitStack.isEmpty())
+	@Override
+	public boolean triggerEvent(int id, int type) {
+		if (id == EVENT_RESET_FILTERING_PROGRESS) {
+			this.prevFilteringAnimationTicks = this.filteringAnimationTicks = 0;
 			return true;
-		else return this.getBaitProgress() > 0;
+		}
+		return super.triggerEvent(id, type);
 	}
 
-	public void filterItem(Level level, BlockPos pos, BlockState state, int input, int output) {
-		if (this.canFilterSlots(level, pos, input, output)) {
-			ItemStack itemstack = this.getItem(input);
-			ItemStack result = this.getRecipeOutput(level, pos, itemstack, false, false);
-			ItemStack itemstack2 = this.getItem(output);
-			if (!itemstack2.isEmpty() && ItemStack.isSameItemSameComponents(result, itemstack2)) { // better matching needed here, wip
-				itemstack2.grow(1);
-				this.setItem(output, itemstack2);
+	public boolean isBaited() {
+		return this.baitTime > 0;
+	}
+
+	public boolean isProgressing() {
+		return this.filteringProgress > 0;
+	}
+
+	private boolean canFilter(RegistryAccess registryAccess, ItemAndEntityInput input, @Nullable RecipeHolder<CrabPotFilterRecipe> recipe) {
+		if (!this.getItem(0).isEmpty() && recipe != null) {
+			ItemStack itemstack = recipe.value().assemble(input, registryAccess);
+			if (itemstack.isEmpty()) {
+				return false;
+			} else {
+				ItemStack itemstack1 = this.getItem(2);
+				if (itemstack1.isEmpty()) {
+					return true;
+				} else if (!ItemStack.isSameItemSameComponents(itemstack1, itemstack)) {
+					return false;
+				} else {
+					return itemstack1.getCount() + itemstack.getCount() <= this.getMaxStackSize() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize() || itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize();
+				}
 			}
-			if (itemstack2.isEmpty())
-				this.setItem(output, result.copy());
-			this.setSlotProgress(0);
-			level.sendBlockUpdated(pos, state, state, 2);
-			if (this.getBaitProgress() > this.maxFilteringTime * this.itemsToFilterCount) {
-				this.setBaitProgress(0);
-				level.sendBlockUpdated(pos, state, state, 2);
-			}
-			itemstack.shrink(1);
+		} else {
+			return false;
 		}
 	}
 
-	public void setBaitProgress(int duration) {
-		baitProgress = duration;
+	private boolean filter(RegistryAccess registryAccess, ItemAndEntityInput recipeInput, @Nullable RecipeHolder<CrabPotFilterRecipe> recipe) {
+		if (recipe != null && this.canFilter(registryAccess, recipeInput, recipe)) {
+			ItemStack input = this.getItem(0);
+			ItemStack recipeResult = recipe.value().assemble(recipeInput, registryAccess);
+			ItemStack resultSlot = this.getItem(2);
+			if (resultSlot.isEmpty()) {
+				this.setItem(2, recipeResult.copy());
+			} else if (ItemStack.isSameItemSameComponents(resultSlot, recipeResult)) {
+				resultSlot.grow(recipeResult.getCount());
+			}
+
+			input.shrink(1);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public int getBaitProgress() {
-		return baitProgress;
+	private int getTotalFilterTime(ItemAndEntityInput input, Level level) {
+		return this.quickCheck.getRecipeFor(input, level).map(recipe -> recipe.value().filterTime()).orElse(200);
 	}
 
-	public int getBaitProgressScaled(int count) {
-		return this.getBaitProgress() * count / (this.maxFilteringTime * this.itemsToFilterCount);
+	@Nullable
+	public EntityType<?> getPottedCrab(Level level, BlockPos pos) {
+		if (level.getBlockEntity(pos.above()) instanceof CrabPotBlockEntity pot) {
+			if (pot.hasBubblerCrab()) {
+				return EntityRegistry.BUBBLER_CRAB.get();
+			} else if (pot.hasSiltCrab()) {
+				return EntityRegistry.SILT_CRAB.get();
+			}
+		}
+		return null;
 	}
 
-	public int getFilteringProgressScaled(int count) {
-		return this.getSlotProgress() * count / (this.maxFilteringTime);
+	private void refreshPotAnimation(Level level, BlockPos pos, boolean validRecipe) {
+		if(level.getBlockEntity(pos.above()) instanceof CrabPotBlockEntity pot && (pot.hasSiltCrab() || pot.hasBubblerCrab())) {
+			level.blockEvent(pos.above(), pot.getBlockState().getBlock(), 1, validRecipe ? 1 : 0);
+			pot.setChanged();
+		}
 	}
 
 	public float getFilteringAnimationScaled(int count, float partialTicks) {
-		return (this.prevFilteringAnimationTicks + (this.filteringAnimationTicks - this.prevFilteringAnimationTicks) * partialTicks) * count / (this.maxFilteringTime);
+		return (this.prevFilteringAnimationTicks + (this.filteringAnimationTicks - this.prevFilteringAnimationTicks) * partialTicks) * count / 200;
+	}
+
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		ItemStack itemstack = this.items.get(slot);
+		boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, stack);
+		this.items.set(slot, stack);
+		stack.limitSize(this.getMaxStackSize(stack));
+		if (slot == 0 && !flag) {
+			ItemAndEntityInput input = new ItemAndEntityInput(this.getPottedCrab(this.getLevel(), this.getBlockPos()), stack);
+			this.filteringTotalTime = this.getTotalFilterTime(input, this.getLevel());
+			this.filteringProgress = 0;
+			this.setChanged();
+		}
 	}
 
 	@Override
@@ -235,10 +277,9 @@ public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implement
 		this.items = items;
 	}
 
-	//TODO
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new CrabPotFilterMenu(containerId, inventory, this, this.data);
 	}
 
 	@Override
@@ -249,17 +290,20 @@ public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implement
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		tag.putBoolean("active", this.active);
-		tag.putInt("bait_progress", this.baitProgress);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
+		tag.putInt("bait_progress", this.baitTime);
 		tag.putInt("filtering_progress", this.filteringProgress);
+		tag.putInt("filtering_total", this.filteringTotalTime);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.active = tag.getBoolean("active");
-		this.baitProgress = tag.getInt("bait_progress");
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(tag, this.items, registries);
+		this.baitTime = tag.getInt("bait_progress");
 		this.filteringProgress = tag.getInt("filtering_progress");
+		this.filteringTotalTime = tag.getInt("filtering_total");
 	}
 
 	@Nullable
@@ -275,9 +319,13 @@ public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implement
 
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
-		if(slot == BAIT_SLOT && stack.is(ItemRegistry.ANADIA_REMAINS))
+		if (slot == 2) {
+			return false;
+		} else if (slot != 1) {
 			return true;
-		return slot == INPUT_SLOT && !this.getRecipeOutput(this.getLevel(), this.getBlockPos(), stack, true, false).isEmpty();
+		} else {
+			return stack.is(ItemRegistry.ANADIA_REMAINS);
+		}
 	}
 
 	@Override

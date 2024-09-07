@@ -1,14 +1,13 @@
 package thebetweenlands.api.recipes;
 
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import thebetweenlands.common.items.recipe.ItemAndEntityInput;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-public interface CrabPotFilterRecipe extends Recipe<SingleRecipeInput> {
+public interface CrabPotFilterRecipe extends Recipe<ItemAndEntityInput> {
 
-	EntityType<?> getRequiredFilteringMob();
+	int filterTime();
 
 	@Override
 	default boolean canCraftInDimensions(int width, int height) {

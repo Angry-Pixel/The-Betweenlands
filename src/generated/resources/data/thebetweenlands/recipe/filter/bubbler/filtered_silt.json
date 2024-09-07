@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:bubbler_crab_pot_filter",
+  "filter_time": 200,
+  "input": {
+    "item": "thebetweenlands:silt"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:filtered_silt"
+  }
+}

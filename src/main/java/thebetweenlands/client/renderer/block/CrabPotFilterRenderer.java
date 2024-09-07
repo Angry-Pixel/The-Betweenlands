@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -30,23 +31,25 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 
 	@Override
 	public void render(CrabPotFilterBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
+		Direction dir = entity.getBlockState().getValue(CrabPotFilterBlock.FACING);
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
-		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(CrabPotFilterBlock.FACING).toYRot()));
+		stack.mulPose(Axis.YP.rotationDegrees(-dir.toYRot()));
+		stack.pushPose();
 		stack.scale(1.0F, -1.0F, -1.0F);
-		this.filter.render(stack, source.getBuffer(TEXTURE), LightTexture.FULL_BLOCK, overlay);
+		this.filter.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		stack.popPose();
 
 		if (entity.getLevel() != null) {
 			// input rendering
-			if (!entity.getItem(1).isEmpty() && entity.isActive() && entity.hasBait() && entity.getSlotProgress() > 0) {
+			if (!entity.getItem(0).isEmpty() && entity.getPottedCrab(entity.getLevel(), entity.getBlockPos()) != null) {
 				stack.pushPose();
-				stack.translate(0.0D, 1.25D - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.000625D), 0.0D);
+				stack.translate(0.0F, 1.25D - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.000625D), 0.25F);
 				stack.pushPose();
 				stack.scale(0.5F - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.0025F), 0.5F - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.0025F), 0.5F - (entity.getFilteringAnimationScaled(200, partialTicks) * 0.0025F));
 				stack.mulPose(Axis.XP.rotationDegrees((entity.getFilteringAnimationScaled(200, partialTicks) * 2F)));
 				stack.mulPose(Axis.ZP.rotationDegrees((entity.getFilteringAnimationScaled(200, partialTicks) * 2F)));
-				this.itemRenderer.renderStatic(entity.getItem(1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+				this.itemRenderer.renderStatic(entity.getItem(0), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
 				stack.popPose();
 			}
@@ -68,11 +71,12 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 					stack.scale(0.25F, 0.25F, 0.25F);
 					stack.mulPose(Axis.XP.rotationDegrees(90.0F));
 					stack.mulPose(Axis.ZP.rotationDegrees((float) (random.nextDouble() * 360.0F)));
-					this.itemRenderer.renderStatic(entity.getItem(1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+					this.itemRenderer.renderStatic(entity.getItem(2), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					stack.popPose();
 				}
 				stack.popPose();
 			}
 		}
+		stack.popPose();
 	}
 }

@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-06T10:01:41.3140633	Recipes
+// 1.21.1	2024-09-06T13:35:59.3732438	Recipes
 a27668f50f93f9e20446d3fd8e7db973dbfb3ce0 data/thebetweenlands/recipe/animator/angry_pebble.json
 eede61accdf9fa5989c16eb490868442853b348a data/thebetweenlands/recipe/animator/animated_small_spirit_tree_face_mask.json
 5ab65cff3bc11553bfd17e7401139b5a63056f7f data/thebetweenlands/recipe/animator/animated_tar_beast_heart.json
@@ -8,6 +8,19 @@ ed70172d19610bdabb235d6d89c05a96ed74ab32 data/thebetweenlands/recipe/animator/sl
 1528ea63a66b4265b2278946f09dc754259a9626 data/thebetweenlands/recipe/animator/snot_pod.json
 3438946922a28cb3f196e6f3ea5eeba69c31efd0 data/thebetweenlands/recipe/druid_altar/sapling_altar_reversion.json
 3abd0124dd8399e4d9b59b74e46011ff2bed1703 data/thebetweenlands/recipe/druid_altar/swamp_talisman.json
+fe6de9ec4d2eb7ecfe9b0b9c0d6df44b6c0799df data/thebetweenlands/recipe/filter/bubbler/aqua_middle_gem.json
+34dee07e1786295c0b4f39809884127aa243835c data/thebetweenlands/recipe/filter/bubbler/crimson_middle_gem.json
+daec133b75f726d6f99854de424d78ab24470184 data/thebetweenlands/recipe/filter/bubbler/filtered_silt.json
+972e1a48fe5f4c8ead0af2e08c12f9a1ef508151 data/thebetweenlands/recipe/filter/bubbler/green_middle_gem.json
+970e5e7f51b9e3be27213e7ffba9e2ab02d60954 data/thebetweenlands/recipe/filter/bubbler/purified_swamp_dirt.json
+a8d70927eadc985962621eb2aed49abea9fc5d0d data/thebetweenlands/recipe/filter/bubbler/sap_ball.json
+368e46a443e1805b9a1f0a6a01bf134484608b39 data/thebetweenlands/recipe/filter/bubbler/swamp_dirt.json
+357667d7188535537462e8625bac69a06b808825 data/thebetweenlands/recipe/filter/silt/mud.json
+3f4cf7e7cc213cc1291cef21fd737b9d6a239979 data/thebetweenlands/recipe/filter/silt/peat.json
+8aedbf5a9003c55c30f0bc6b6541011220e7b501 data/thebetweenlands/recipe/filter/silt/rotten_bark.json
+4d40bdf4a74915d41a11b35561d196c96bc22f54 data/thebetweenlands/recipe/filter/silt/silt.json
+0c1db110bab84698d657d58991e452223ce69b29 data/thebetweenlands/recipe/filter/silt/sludge_ball.json
+64c9162a4142fe17f169a4a0d20def7463d147af data/thebetweenlands/recipe/filter/silt/sulfur.json
 c7c90d33d0f79750f5ac67b51a99b812f2163f43 data/thebetweenlands/recipe/mortar/aspectrus_fruit.json
 a3eaac26c9f1c0de6e265f7058e6e15c274a4c06 data/thebetweenlands/recipe/mortar/fish_bait.json
 fb9d52a1fab106a7187e847e96741cb4d10c7d8f data/thebetweenlands/recipe/mortar/ground_algae.json

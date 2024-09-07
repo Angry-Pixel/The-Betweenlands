@@ -694,7 +694,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SMOKING_RACK = register("smoking_rack", () -> new SmokingRackBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> FISH_TRIMMING_TABLE = register("fish_trimming_table", () -> new FishTrimmingTableBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> CRAB_POT = register("crab_pot", () -> new CrabPotBlock(BlockBehaviour.Properties.of().strength(0.5F, 5.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> CRAB_POT_FILTER = register("crab_pot_filter", () -> new CrabPotFilterBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> CRAB_POT_FILTER = register("crab_pot_filter", () -> new CrabPotFilterBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SILT_GLASS_JAR = register("silt_glass_jar", () -> new SiltGlassJarBlock(BlockBehaviour.Properties.of().strength(1.0F, 5.0F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> BETWEENSTONE_PEBBLE = register("betweenstone_pebble", () -> new PebblePileBlock(BlockBehaviour.Properties.of().strength(0.5F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> BARNACLE = BLOCKS.register("barnacle", () -> new BarnacleBlock(BlockBehaviour.Properties.of().noCollission().randomTicks().strength(0.2F).sound(SoundType.SLIME_BLOCK)));

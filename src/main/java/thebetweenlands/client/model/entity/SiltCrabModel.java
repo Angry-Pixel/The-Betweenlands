@@ -211,8 +211,8 @@ public class SiltCrabModel extends HierarchicalModel<SiltCrab> {
 	private void playEatingAnimation(float animationTick) {
 		float flap2 = Mth.sin(animationTick * 0.15F) * 0.6F;
 		float flap = Mth.cos(animationTick * 0.15F) * 0.6F;
-		this.rightArm.xRot = flap * 0.5F + 0.4553564018453205F;
-		this.leftArm.xRot = flap2 * 0.5F - 0.4553564018453205F;
+		this.rightArm.xRot = flap * 0.5F - 1.5025539530419183F;
+		this.leftArm.xRot = flap2 * 0.5F - 1.5025539530419183F;
 		this.leftClawTop.zRot = -0.045553093477052F * 5F + flap * 0.5F;
 		this.rightClawTop.zRot = 0.045553093477052F * 5F + flap2 * 0.5F;
 		this.leftClawBase.zRot = 0.40980330836826856F * 4F + flap * 1.5F;

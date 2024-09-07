@@ -34,6 +34,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("itemGroup.thebetweenlands.plants", "The Betweenlands Plants");
 		this.add("itemGroup.thebetweenlands.herblore", "The Betweenlands Herblore");
 
+		this.add("container.thebetweenlands.crab_pot_filter", "Crab Pot Filter");
 		this.add("container.thebetweenlands.fishing_tackle_box", "Fishing Tackle Box");
 		this.add("container.thebetweenlands.fish_trimming_table", "Trimming Table");
 		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
@@ -241,8 +242,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.CONNECTED_AMATE_PAPER_PANE, "Connected Amate Paper Pane");
 		this.addBlock(BlockRegistry.COPPER_IRIS, "Copper Iris");
 		this.addBlock(BlockRegistry.CORRUPT_BETWEENSTONE, "Corrupt Betweenstone");
-		this.addBlock(BlockRegistry.CRAB_POT, "Crab Pot");
-		this.addBlock(BlockRegistry.CRAB_POT_FILTER, "Crab Pot Filter");
+		this.addBlockWithDesc(BlockRegistry.CRAB_POT, "Crab Pot", "Add Anadia Remains to tempt Crabs.\nCan be placed on top of a Crab Pot Filter for more uses.\nOnly functional underwater.");
+		this.addBlockWithDesc(BlockRegistry.CRAB_POT_FILTER, "Crab Pot Filter", "Used with a Crab Pot.\nCrab Pots placed above, containing Silt or Bubbler Crabs, provide extra functions.\nOnly functional underwater.");
+		this.add("block.thebetweenlands.crab_pot_filter.not_underwater", "This block can only be used underwater");
 		this.addBlock(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_SLAB, "Cracked Betweenstone Brick Slab");
 		this.addBlock(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS, "Cracked Betweenstone Brick Stairs");
 		this.addBlock(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_WALL, "Cracked Betweenstone Brick Wall");

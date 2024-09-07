@@ -1,16 +1,21 @@
 package thebetweenlands.common.block;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,8 +33,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.CrabPotBlockEntity;
+import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+
+import java.util.List;
 
 public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
@@ -49,7 +58,13 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+		Level level = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		BlockState state = super.getStateForPlacement(context);
+		if (level.getBlockState(pos.below()).is(BlockRegistry.CRAB_POT_FILTER)) {
+			state = state.setValue(FACING, level.getBlockState(pos.below()).getValue(CrabPotFilterBlock.FACING));
+		}
+		return state.setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 	}
 
 	@Override
@@ -63,12 +78,12 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CrabPotBlockEntity pot) {
-			if (!pot.getItem(0).isEmpty()) {
-				pot.setItem(0, stack.split(1));
+		if (level.getBlockEntity(pos) instanceof CrabPotBlockEntity pot) {
+			if (pot.getTheItem().isEmpty()) {
+				pot.setTheItem(stack.copyWithCount(1));
 				stack.consume(1, player);
 				level.sendBlockUpdated(pos, state, state, 3);
-				return ItemInteractionResult.SUCCESS;
+				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
@@ -76,17 +91,14 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CrabPotBlockEntity pot) {
-			if (!pot.getItem(0).isEmpty()) {
-				ItemStack extracted = pot.getItem(0);
-				if (!extracted.isEmpty()) {
-					ItemEntity item = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
-					item.setDeltaMovement(Vec3.ZERO);
-					level.addFreshEntity(item);
-					pot.setItem(0, ItemStack.EMPTY);
-					level.sendBlockUpdated(pos, state, state, 3);
-					return InteractionResult.SUCCESS;
-				}
+		if (level.getBlockEntity(pos) instanceof CrabPotBlockEntity pot) {
+			if (!pot.getTheItem().isEmpty()) {
+				ItemEntity item = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, pot.getTheItem());
+				item.setDeltaMovement(Vec3.ZERO);
+				level.addFreshEntity(item);
+				pot.setTheItem(ItemStack.EMPTY);
+				level.sendBlockUpdated(pos, state, state, 3);
+				return InteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}
 		return super.useWithoutItem(state, level, pos, player, hitResult);
@@ -102,6 +114,11 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 	}
 
 	@Override
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
+	}
+
+	@Override
 	protected FluidState getFluidState(BlockState state) {
 		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
 	}
@@ -109,7 +126,7 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (level.getBlockEntity(pos) instanceof CrabPotBlockEntity pot) {
-			if (!pot.hasBaitItem() && !pot.getItem(0).isEmpty() && pot.getEntity(level) != null) {
+			if (!pot.hasBaitItem() && !pot.getItem(0).isEmpty() && pot.getEntity() != null) {
 				if (random.nextInt(3) == 0) {
 					level.addParticle(ParticleTypes.BUBBLE, pos.getX() + 0.5D, pos.getY() + 0.5D + (float) pot.fallCounter * 0.03125F, pos.getZ() + 0.5D, 0.0D, 0.3D, 0.0D);
 				}
@@ -120,6 +137,12 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 
 	@Nullable

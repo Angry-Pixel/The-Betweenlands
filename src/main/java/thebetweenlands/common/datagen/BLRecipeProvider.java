@@ -229,5 +229,21 @@ public class BLRecipeProvider extends RecipeProvider {
 		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.SHELL_STOCK_STILL.get(), 1000).requires(ItemRegistry.RAW_SNAIL_FLESH).requires(ItemRegistry.GROUND_CRIMSON_SNAIL_SHELL, 2).save(output);
 		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), 1000).requires(ItemRegistry.RAW_FROG_LEGS, 4).save(output);
 		SteepingPotRecipeBuilder.steeping(FluidRegistry.CLEAN_WATER_STILL.get(), FluidRegistry.WITCH_TEA_STILL.get(), 1000).requires(ItemRegistry.TINY_SLUDGE_WORM).requires(ItemRegistry.CHIROMAW_WING).requires(ItemRegistry.RAW_FROG_LEGS).requires(ItemRegistry.YELLOW_DOTTED_FUNGUS).save(output);
+
+		CrabPotFilterRecipeBuilder.siltCrab(Ingredient.of(BlockRegistry.FILTERED_SILT, BlockRegistry.MUD), BlockRegistry.SILT).save(output);
+		CrabPotFilterRecipeBuilder.siltCrab(BlockRegistry.SWAMP_DIRT, BlockRegistry.MUD).save(output);
+		CrabPotFilterRecipeBuilder.siltCrab(BlockRegistry.MOSS, BlockRegistry.PEAT).save(output);
+		CrabPotFilterRecipeBuilder.siltCrab(BlockRegistry.WEEDWOOD_BARK, BlockRegistry.ROTTEN_BARK).save(output);
+		CrabPotFilterRecipeBuilder.siltCrab(ItemRegistry.SAP_BALL, ItemRegistry.SLUDGE_BALL).save(output);
+		CrabPotFilterRecipeBuilder.siltCrab(ItemRegistry.CREMAINS, ItemRegistry.SULFUR).save(output);
+
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.SILT, BlockRegistry.FILTERED_SILT).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.MUD, BlockRegistry.SWAMP_DIRT).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.SWAMP_DIRT, BlockRegistry.PURIFIED_SWAMP_DIRT).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.AQUA_MIDDLE_GEM_ORE, ItemRegistry.AQUA_MIDDLE_GEM).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.GREEN_MIDDLE_GEM_ORE, ItemRegistry.GREEN_MIDDLE_GEM).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE, ItemRegistry.CRIMSON_MIDDLE_GEM).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(ItemRegistry.SLUDGE_BALL, ItemRegistry.SAP_BALL).save(output);
+		//CrabPotFilterRecipeBuilder.bubblerCrab(ItemRegistry.ROOT_POD, BlockRegistry.ROOT).save(output);
 	}
 }

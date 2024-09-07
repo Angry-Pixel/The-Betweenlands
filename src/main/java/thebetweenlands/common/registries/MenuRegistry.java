@@ -15,6 +15,7 @@ public class MenuRegistry {
 
 	public static final DeferredHolder<MenuType<?>, MenuType<AnimatorMenu>> ANIMATOR = MENUS.register("animator", () -> IMenuTypeExtension.create(AnimatorMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<CenserMenu>> CENSER = MENUS.register("censer", () -> IMenuTypeExtension.create(CenserMenu::new));
+	public static final DeferredHolder<MenuType<?>, MenuType<CrabPotFilterMenu>> CRAB_POT_FILTER = MENUS.register("crab_pot_filter", () -> new MenuType<>(CrabPotFilterMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<DruidAltarMenu>> DRUID_ALTAR = MENUS.register("druid_altar", () -> IMenuTypeExtension.create(DruidAltarMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<FishingTackleBoxMenu>> FISHING_TACKLE_BOX = MENUS.register("fishing_tackle_box", () -> new MenuType<>(FishingTackleBoxMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<FishTrimmingTableMenu>> FISH_TRIMMING_TABLE = MENUS.register("fish_trimming_table", () -> IMenuTypeExtension.create(FishTrimmingTableMenu::new));

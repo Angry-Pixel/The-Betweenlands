@@ -1,33 +1,29 @@
 package thebetweenlands.common.items.recipe;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.recipes.CrabPotFilterRecipe;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-public record SiltCrabPotFilterRecipe(Ingredient input, ItemStack result) implements CrabPotFilterRecipe {
+public record SiltCrabPotFilterRecipe(Ingredient input, ItemStack result, int filterTime) implements CrabPotFilterRecipe {
+
 	@Override
-	public EntityType<?> getRequiredFilteringMob() {
-		return EntityRegistry.SILT_CRAB.get();
+	public boolean matches(ItemAndEntityInput input, Level level) {
+		return this.input().test(input.stack()) && input.type() == EntityRegistry.SILT_CRAB.get();
 	}
 
 	@Override
-	public boolean matches(SingleRecipeInput input, Level level) {
-		return this.input().test(input.item());
-	}
-
-	@Override
-	public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registries) {
+	public ItemStack assemble(ItemAndEntityInput input, HolderLookup.Provider registries) {
 		return this.result().copy();
 	}
 
@@ -45,12 +41,14 @@ public record SiltCrabPotFilterRecipe(Ingredient input, ItemStack result) implem
 
 		public static final MapCodec<SiltCrabPotFilterRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(SiltCrabPotFilterRecipe::input),
-			ItemStack.STRICT_CODEC.fieldOf("result").forGetter(SiltCrabPotFilterRecipe::result)
+			ItemStack.STRICT_CODEC.fieldOf("result").forGetter(SiltCrabPotFilterRecipe::result),
+			Codec.INT.fieldOf("filter_time").forGetter(SiltCrabPotFilterRecipe::filterTime)
 		).apply(instance, SiltCrabPotFilterRecipe::new));
 
 		public static final StreamCodec<RegistryFriendlyByteBuf, SiltCrabPotFilterRecipe> STREAM_CODEC = StreamCodec.composite(
 			Ingredient.CONTENTS_STREAM_CODEC, SiltCrabPotFilterRecipe::input,
 			ItemStack.STREAM_CODEC, SiltCrabPotFilterRecipe::result,
+			ByteBufCodecs.INT, SiltCrabPotFilterRecipe::filterTime,
 			SiltCrabPotFilterRecipe::new);
 
 		@Override
