@@ -33,7 +33,8 @@ public class FeatureRegistry {
 		() -> new CaveThornsFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> DEEPMAN_SIMULACRUM = FEATURES.register("deepman_simulacrum",
 		() -> new DeepmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
-	//Double Plant Cluster
+	public static final DeferredHolder<Feature<?>, Feature<DoublePlantConfiguration>> DOUBLE_PLANT_CLUSTER = FEATURES.register("double_plant_cluster",
+		() -> new DoublePlantClusterFeature(DoublePlantConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<PoolConfiguration>> FLUID_POOL = FEATURES.register("fluid_pool",
 		() -> new FluidPoolFeature(PoolConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> LAKE_CAVERN_SIMULACRUM = FEATURES.register("lake_cavern_simulacrum",
