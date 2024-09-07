@@ -6,11 +6,13 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 
@@ -155,5 +157,19 @@ public class ConfiguredFeatureRegistry {
 					BlockRegistry.ROOTMAN_SIMULACRUM_3.get().defaultBlockState()),
 				LootTableRegistry.ROOTMAN_SIMULACRUM_OFFERINGS)));
 
+		context.register(CAVE_GRASS,
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_GRASS.get(), NoneFeatureConfiguration.NONE));
+		context.register(CAVE_HANGERS,
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_HANGERS.get(), NoneFeatureConfiguration.NONE));
+		context.register(CAVE_MOSS,
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_MOSS.get(), NoneFeatureConfiguration.NONE));
+		context.register(CAVE_POTS,
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_POTS.get(), NoneFeatureConfiguration.NONE));
+		context.register(CAVE_THORNS,
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_MOSS.get(), NoneFeatureConfiguration.NONE));
+		context.register(MOSS_CLUSTER_UNDERGROUND,
+			new ConfiguredFeature<>(FeatureRegistry.MOSS_CLUSTER.get(), new BlockPlaceConfiguration(BlockRegistry.MOSS.get().defaultBlockState(), 4, 80)));
+		context.register(LICHEN_CLUSTER_UNDERGROUND,
+			new ConfiguredFeature<>(FeatureRegistry.MOSS_CLUSTER.get(), new BlockPlaceConfiguration(BlockRegistry.LICHEN.get().defaultBlockState(), 3, 40)));
 	}
 }

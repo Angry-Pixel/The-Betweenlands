@@ -1,0 +1,13 @@
+{
+  "type": "thebetweenlands:moss_cluster",
+  "config": {
+    "attempts": 80,
+    "offset": 4,
+    "state": {
+      "Name": "thebetweenlands:moss",
+      "Properties": {
+        "facing": "north"
+      }
+    }
+  }
+}
