@@ -92,15 +92,13 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		if (blockentity instanceof ShulkerBoxBlockEntity shulkerboxblockentity) {
-			if (!level.isClientSide() && player.isCreative() && !shulkerboxblockentity.isEmpty()) {
+		if (blockentity instanceof FishingTackleBoxBlockEntity box) {
+			if (!level.isClientSide() && player.isCreative() && !box.isEmpty()) {
 				ItemStack itemstack = new ItemStack(this);
 				itemstack.applyComponents(blockentity.collectComponents());
 				ItemEntity itementity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemstack);
 				itementity.setDefaultPickUpDelay();
 				level.addFreshEntity(itementity);
-			} else {
-				shulkerboxblockentity.unpackLootTable(player);
 			}
 		}
 

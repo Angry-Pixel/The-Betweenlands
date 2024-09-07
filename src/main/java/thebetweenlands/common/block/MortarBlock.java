@@ -3,6 +3,7 @@ package thebetweenlands.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -94,6 +95,12 @@ public class MortarBlock extends HorizontalBaseEntityBlock {
 			float f2 = pos.getZ() + 0.5F;
 			level.addParticle(ParticleTypes.HAPPY_VILLAGER, f, f1, f2, 0.0D, 0.0D, 0.0D);
 		}
+	}
+
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 
 	@Nullable

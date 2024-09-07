@@ -64,19 +64,8 @@ public class DruidAltarBlock extends BaseEntityBlock implements SwampWaterLoggab
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-		if (!state.is(newState.getBlock())) {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof DruidAltarBlockEntity altar) {
-				if (level instanceof ServerLevel) {
-					Containers.dropContents(level, pos, altar);
-				}
-
-				super.onRemove(state, level, pos, newState, movedByPiston);
-				level.updateNeighbourForOutputSignal(pos, this);
-			} else {
-				super.onRemove(state, level, pos, newState, movedByPiston);
-			}
-		}
+		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 
 	@Nullable

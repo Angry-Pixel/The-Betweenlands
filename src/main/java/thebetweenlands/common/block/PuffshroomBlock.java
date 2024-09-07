@@ -122,7 +122,10 @@ public class PuffshroomBlock extends BaseEntityBlock {
 
 	@Override
 	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		return level.setBlockAndUpdate(pos, BlockRegistry.CRACKED_MUD_TILES.get().defaultBlockState());
+		if (!player.isCreative()) {
+			return level.setBlockAndUpdate(pos, BlockRegistry.CRACKED_MUD_TILES.get().defaultBlockState());
+		}
+		return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
 	}
 
 	@Nullable

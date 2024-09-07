@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -120,6 +121,12 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 			player.getInventory().add(itemStack.copy());
 			house.setItem(grubs ? MothHouseBlockEntity.SLOT_GRUBS : MothHouseBlockEntity.SLOT_SILK, ItemStack.EMPTY);
 		}
+	}
+
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 
 	@Nullable
