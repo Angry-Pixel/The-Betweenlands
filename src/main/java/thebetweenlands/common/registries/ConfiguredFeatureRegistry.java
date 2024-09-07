@@ -46,6 +46,7 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOTMAN_SIMULACRUM = makeKey("rootman_simulacrum");
 
 	//cave features
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SPELEOTHEM = makeKey("speleothem");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CAVE_GRASS = makeKey("cave_grass");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CAVE_HANGERS = makeKey("cave_hangers");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CAVE_MOSS = makeKey("cave_moss");
@@ -96,6 +97,7 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOTS = makeKey("roots");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SWAMP_KELP_PATCH = makeKey("swamp_kelp_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> WEEDWOOD_BUSH = makeKey("weedwood_bush");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> ROTTEN_LOGS = makeKey("rotten_logs");
 
 	//misc
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ALGAE = makeKey("algae");
@@ -155,16 +157,18 @@ public class ConfiguredFeatureRegistry {
 					BlockRegistry.ROOTMAN_SIMULACRUM_3.get().defaultBlockState()),
 				LootTableRegistry.ROOTMAN_SIMULACRUM_OFFERINGS)));
 
+		context.register(SPELEOTHEM,
+			new ConfiguredFeature<>(FeatureRegistry.SPELEOTHEM.get(), FeatureConfiguration.NONE));
 		context.register(CAVE_GRASS,
-			new ConfiguredFeature<>(FeatureRegistry.CAVE_GRASS.get(), NoneFeatureConfiguration.NONE));
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_GRASS.get(), FeatureConfiguration.NONE));
 		context.register(CAVE_HANGERS,
-			new ConfiguredFeature<>(FeatureRegistry.CAVE_HANGERS.get(), NoneFeatureConfiguration.NONE));
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_HANGERS.get(), FeatureConfiguration.NONE));
 		context.register(CAVE_MOSS,
-			new ConfiguredFeature<>(FeatureRegistry.CAVE_MOSS.get(), NoneFeatureConfiguration.NONE));
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_MOSS.get(), FeatureConfiguration.NONE));
 		context.register(CAVE_POTS,
-			new ConfiguredFeature<>(FeatureRegistry.CAVE_POTS.get(), NoneFeatureConfiguration.NONE));
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_POTS.get(), FeatureConfiguration.NONE));
 		context.register(CAVE_THORNS,
-			new ConfiguredFeature<>(FeatureRegistry.CAVE_MOSS.get(), NoneFeatureConfiguration.NONE));
+			new ConfiguredFeature<>(FeatureRegistry.CAVE_THORNS.get(), FeatureConfiguration.NONE));
 		context.register(MOSS_CLUSTER_UNDERGROUND,
 			new ConfiguredFeature<>(FeatureRegistry.MOSS_CLUSTER.get(), new BlockPlaceConfiguration(BlockRegistry.MOSS.get().defaultBlockState(), 4, 80)));
 		context.register(LICHEN_CLUSTER_UNDERGROUND,
@@ -249,6 +253,8 @@ public class ConfiguredFeatureRegistry {
 			FeatureConfiguration.NONE));
 		context.register(WEEDWOOD_BUSH, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_BUSH.get(),
 			FeatureConfiguration.NONE));
+		context.register(ROTTEN_LOGS, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_LOG.get(),
+			new RottenLogConfiguration(4, 5, 2, 3)));
 
 		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), FeatureConfiguration.NONE));
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));

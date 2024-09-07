@@ -1,0 +1,9 @@
+{
+  "type": "thebetweenlands:rotten_log",
+  "config": {
+    "base_radius": 2,
+    "base_radius_offset": 3,
+    "length": 4,
+    "length_offset": 5
+  }
+}
