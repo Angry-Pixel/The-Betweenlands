@@ -3,12 +3,15 @@ package thebetweenlands.common.datagen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BLItemModelProvider extends ItemModelProvider {
@@ -18,6 +21,13 @@ public class BLItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
+
+		for (DeferredHolder<Item, ?> item : EntityRegistry.SPAWN_EGGS.getEntries()) {
+			if (item.get() instanceof SpawnEggItem) {
+				this.getBuilder(item.getId().getPath()).parent(this.getExistingFile(ResourceLocation.withDefaultNamespace("item/template_spawn_egg")));
+			}
+		}
+
 		this.basicItem(ItemRegistry.CRIMSON_SNAIL_SHELL);
 		this.basicItem(ItemRegistry.OCHRE_SNAIL_SHELL);
 		this.basicItem(ItemRegistry.COMPOST);

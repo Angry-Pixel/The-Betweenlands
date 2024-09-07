@@ -1,14 +1,20 @@
 package thebetweenlands.common.datagen;
 
+import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonObject;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.StringUtils;
 import thebetweenlands.api.aspect.registry.AspectType;
@@ -19,10 +25,22 @@ import thebetweenlands.common.registries.AspectTypeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.LangConversionHelper;
+import thebetweenlands.util.LangFormatSplitter;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class BLLanguageProvider extends LanguageProvider {
+
+	private final PackOutput output;
+	public final Map<String, String> upsideDownEntries = new HashMap<>();
+
 	public BLLanguageProvider(PackOutput output) {
 		super(output, TheBetweenlands.ID, "en_us");
+		this.output = output;
 	}
 
 	@Override
@@ -891,7 +909,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("block.thebetweenlands.clean_water", "Clean Water");
 		this.add("block.thebetweenlands.fish_oil", "Fish Oil");
 
-		this.addEntityType(EntityRegistry.ANADIA, "Anadia");
+		this.addEntityAndEgg(EntityRegistry.ANADIA, "Anadia");
 		this.add("entity.thebetweenlands.anadia.head_0", "Grazer");
 		this.add("entity.thebetweenlands.anadia.head_1", "Thumphead");
 		this.add("entity.thebetweenlands.anadia.head_2", "Prowler");
@@ -901,6 +919,18 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("entity.thebetweenlands.anadia.tail_0", "Cliptail");
 		this.add("entity.thebetweenlands.anadia.tail_1", "Fantail");
 		this.add("entity.thebetweenlands.anadia.tail_2", "Longtail");
+
+		this.addEntityAndEgg(EntityRegistry.BUBBLER_CRAB, "Bubbler Crab");
+		this.addEntityAndEgg(EntityRegistry.GECKO, "Gecko");
+		this.addEntityAndEgg(EntityRegistry.MIRE_SNAIL, "Mire Snail");
+		this.addEntityAndEgg(EntityRegistry.SILT_CRAB, "Silt Crab");
+		this.addEntityAndEgg(EntityRegistry.SWAMP_HAG, "Swamp Hag");
+		this.addEntityAndEgg(EntityRegistry.WIGHT, "Wight");
+
+		this.addEntityType(EntityRegistry.ELIXIR, "Thrown Elixir");
+		this.addEntityType(EntityRegistry.FISH_BAIT, "Fish Bait");
+		this.addEntityType(EntityRegistry.FISH_HOOK, "Fishing Hook");
+		this.addEntityType(EntityRegistry.SEAT, "Seat");
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");
@@ -1393,5 +1423,37 @@ public class BLLanguageProvider extends LanguageProvider {
 	public void addAdvancement(String key, String title, String desc) {
 		this.add("advancement.thebetweenlands." + key, title);
 		this.add("advancement.thebetweenlands." + key + ".desc", desc);
+	}
+
+	public void addEntityAndEgg(DeferredHolder<EntityType<?>, ? extends EntityType<?>> entity, String name) {
+		this.addEntityType(entity, name);
+		this.add("item.thebetweenlands." + entity.getId().getPath() + "_spawn_egg", name + " Spawn Egg");
+	}
+
+	@Override
+	public void add(String key, String value) {
+		super.add(key, value);
+		List<LangFormatSplitter.Component> splitEnglish = LangFormatSplitter.split(value);
+		this.upsideDownEntries.put(key, LangConversionHelper.convertComponents(splitEnglish));
+	}
+
+	@Override
+	public CompletableFuture<?> run(CachedOutput cache) {
+		//generate normal lang file
+		CompletableFuture<?> languageGen = super.run(cache);
+		ImmutableList.Builder<CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
+		futuresBuilder.add(languageGen);
+
+		//generate en_ud file
+		JsonObject upsideDownFile = new JsonObject();
+		this.upsideDownEntries.forEach(upsideDownFile::addProperty);
+		futuresBuilder.add(DataProvider.saveStable(cache, upsideDownFile, this.output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(TheBetweenlands.ID).resolve("lang").resolve("en_ud.json")));
+
+		return CompletableFuture.allOf(futuresBuilder.build().toArray(CompletableFuture[]::new));
+	}
+
+	@Override
+	public String getName() {
+		return "Betweenlands Language Files";
 	}
 }
