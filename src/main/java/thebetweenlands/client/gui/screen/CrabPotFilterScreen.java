@@ -20,10 +20,11 @@ public class CrabPotFilterScreen extends AbstractContainerScreen<CrabPotFilterMe
 		this.imageWidth = 174;
 		this.imageHeight = 182;
 	}
+
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-		super.render(guiGraphics, mouseX, mouseY, partialTick);
-		this.renderTooltip(guiGraphics, mouseX, mouseY);
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		super.render(graphics, mouseX, mouseY, partialTick);
+		this.renderTooltip(graphics, mouseX, mouseY);
 	}
 
 	@Override

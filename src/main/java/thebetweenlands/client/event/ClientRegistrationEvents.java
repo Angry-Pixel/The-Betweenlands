@@ -101,6 +101,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
+		event.register(MenuRegistry.BARREL.get(), BarrelScreen::new);
 		event.register(MenuRegistry.CENSER.get(), CenserScreen::new);
 		event.register(MenuRegistry.CRAB_POT_FILTER.get(), CrabPotFilterScreen::new);
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
@@ -125,6 +126,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.BARREL.get(), BarrelRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT.get(), CrabPotRenderer::new);
@@ -166,6 +168,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ALCOVE, AlcoveModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ALEMBIC, AlembicModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ANIMATOR, AnimatorModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.BARREL, BarrelModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CENSER, CenserModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CRAB_POT, CrabPotModel::makeModel);
@@ -281,6 +284,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(),
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
 			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(), BlockRegistry.STEEPING_POT.asItem(),
+			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

@@ -6,11 +6,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -27,6 +32,9 @@ import thebetweenlands.common.registries.FluidRegistry;
 public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	private final boolean heatResistant;
+	public static final VoxelShape SHAPE = Shapes.or(
+		Block.box(2.0D, 0.0D, 4.0D, 14.0D, 15.0D, 12.0D),
+		Block.box(4.0D, 0.0D, 2.0D, 12.0D, 15.0D, 14.0D));
 
 	public BarrelBlock(boolean heatResistant, Properties properties) {
 		super(properties);
@@ -35,6 +43,11 @@ public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	public boolean isHeatResistant(Level level, BlockPos pos, BlockState state) {
 		return this.heatResistant;
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return SHAPE;
 	}
 
 	@Override
@@ -78,7 +91,7 @@ public class BarrelBlock extends HorizontalBaseEntityBlock {
 			return InteractionResult.SUCCESS;
 		} else {
 			if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-				player.openMenu(barrel);
+				player.openMenu(barrel, pos);
 			}
 			return InteractionResult.CONSUME;
 		}

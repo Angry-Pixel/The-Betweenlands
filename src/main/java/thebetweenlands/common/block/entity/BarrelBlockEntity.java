@@ -2,16 +2,12 @@ package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -20,13 +16,12 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.BarrelBlock;
+import thebetweenlands.common.inventory.BarrelMenu;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider, Nameable, IFluidHandler {
+public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider, IFluidHandler {
 
-	@Nullable
-	private Component name;
-	private final FluidTank fluidTank = new FluidTank(FluidType.BUCKET_VOLUME * 8);
+	public final FluidTank fluidTank = new FluidTank(FluidType.BUCKET_VOLUME * 8);
 
 	public BarrelBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.BARREL.get(), pos, state);
@@ -36,41 +31,23 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		this.fluidTank.writeToNBT(registries, tag);
-		if (this.name != null) {
-			tag.putString("name", Component.Serializer.toJson(this.name, registries));
-		}
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 		this.fluidTank.readFromNBT(registries, tag);
-		if (tag.contains("name", 8)) {
-			this.name = parseCustomNameSafe(tag.getString("name"), registries);
-		}
-	}
-
-	@Override
-	public Component getName() {
-		return this.name != null ? this.name : Component.translatable("container.thebetweenlands.barrel");
 	}
 
 	@Override
 	public Component getDisplayName() {
-		return this.getName();
+		return Component.empty();
 	}
 
-	@Nullable
-	@Override
-	public Component getCustomName() {
-		return this.name;
-	}
-
-	//TODO
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-		return null;
+		return new BarrelMenu(containerId, playerInventory, this);
 	}
 
 	@Override
@@ -132,17 +109,5 @@ public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider
 			this.getLevel().sendBlockUpdated(this.getBlockPos(), stat, stat, 2);
 		}
 		return this.fluidTank.drain(maxDrain, action);
-	}
-
-	@Override
-	protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
-		super.applyImplicitComponents(componentInput);
-		this.name = componentInput.get(DataComponents.CUSTOM_NAME);
-	}
-
-	@Override
-	protected void collectImplicitComponents(DataComponentMap.Builder components) {
-		super.collectImplicitComponents(components);
-		components.set(DataComponents.CUSTOM_NAME, this.name);
 	}
 }

@@ -852,6 +852,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.WEEDWOOD, "Weedwood");
 		this.addBlock(BlockRegistry.WEEDWOOD_BARK, "Weedwood Bark");
 		this.addBlock(BlockRegistry.WEEDWOOD_BARREL, "Weedwood Barrel");
+		this.add("block.thebetweenlands.barrel.fluid", "%s (%sMb)");
 		this.addBlock(BlockRegistry.WEEDWOOD_BUSH, "Weedwood Bush");
 		this.addBlock(BlockRegistry.WEEDWOOD_BUTTON, "Weedwood Button");
 		this.addBlock(BlockRegistry.WEEDWOOD_CRAFTING_TABLE, "Weedwood Crafting Table");

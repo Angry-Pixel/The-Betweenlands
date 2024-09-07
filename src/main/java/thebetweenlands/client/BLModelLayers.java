@@ -13,6 +13,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation ALCOVE = register("alcove");
 	public static final ModelLayerLocation ALEMBIC = register("alembic");
 	public static final ModelLayerLocation ANIMATOR = register("animator");
+	public static final ModelLayerLocation BARREL = register("barrel");
 	public static final ModelLayerLocation CENSER = register("censer");
 	public static final ModelLayerLocation COMPOST_BIN = register("compost_bin");
 	public static final ModelLayerLocation CRAB_POT = register("crab_pot");

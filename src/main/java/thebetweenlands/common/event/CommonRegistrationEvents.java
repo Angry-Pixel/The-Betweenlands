@@ -197,6 +197,7 @@ public class CommonRegistrationEvents {
 	private static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), (tile, context) -> tile.tank);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.BARREL.get(), (tile, context) -> tile.fluidTank);
 	}
 
 	private static void protectFromMagicDamage(LivingIncomingDamageEvent event) {
