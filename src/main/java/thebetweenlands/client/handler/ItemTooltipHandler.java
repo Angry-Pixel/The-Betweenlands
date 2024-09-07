@@ -6,7 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
@@ -88,13 +90,13 @@ public class ItemTooltipHandler {
 					usedInMachines.add(Component.translatable("item.thebetweenlands.animator_recipe").withStyle(ChatFormatting.GRAY));
 				}
 
-//				IFluidHandler fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM, null);
-//				if (AbstractCenserRecipe.getRecipe(stack) != null || (fluidHandler != null && AbstractCenserRecipe.getRecipe(fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE)) != null)) {
-//					usedInMachines.add(Component.translatable("item.thebetweenlands.censer_primary").withStyle(ChatFormatting.GRAY));
-//				}
-//				if (AbstractCenserRecipe.getRecipeWithSecondaryInput(stack) != null) {
-//					usedInMachines.add(Component.translatable("item.thebetweenlands.censer_secondary").withStyle(ChatFormatting.GRAY));
-//				}
+				IFluidHandler fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM, null);
+				if (CenserRecipeRegistry.getRecipe(stack) != null || (fluidHandler != null && CenserRecipeRegistry.getRecipe(fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE)) != null)) {
+					usedInMachines.add(Component.translatable("item.thebetweenlands.censer_primary").withStyle(ChatFormatting.GRAY));
+				}
+				if (CenserRecipeRegistry.getRecipeWithSecondaryInput(stack) != null) {
+					usedInMachines.add(Component.translatable("item.thebetweenlands.censer_secondary").withStyle(ChatFormatting.GRAY));
+				}
 
 				if (!player.level().getRecipeManager().getRecipesFor(RecipeRegistry.PURIFIER_RECIPE.get(), new SingleRecipeInput(stack), player.level()).isEmpty()) {
 					usedInMachines.add(Component.translatable("item.thebetweenlands.purifier_recipe").withStyle(ChatFormatting.GRAY));
