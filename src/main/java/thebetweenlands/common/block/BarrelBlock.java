@@ -29,6 +29,8 @@ import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.FluidRegistry;
 
+import java.util.Optional;
+
 public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	private final boolean heatResistant;
@@ -52,36 +54,14 @@ public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-			if (player.isCrouching()) {
-				return ItemInteractionResult.FAIL;
-			}
+		Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
 
-			if (!stack.isEmpty()) {
-				IFluidHandler handler = stack.getCapability(Capabilities.FluidHandler.ITEM, null);
-				if (handler != null) {
-					IItemHandler playerInventory = player.getCapability(Capabilities.ItemHandler.ENTITY, null);
-					if (playerInventory != null) {
-						FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(stack, barrel, playerInventory, Integer.MAX_VALUE, player, !level.isClientSide());
-
-						if (fluidActionResult.isSuccess()) {
-							if (!level.isClientSide()) {
-								player.setItemInHand(hand, fluidActionResult.getResult());
-							}
-							return ItemInteractionResult.sidedSuccess(level.isClientSide());
-						} else {
-							fluidActionResult = FluidUtil.tryFillContainerAndStow(stack, barrel, playerInventory, Integer.MAX_VALUE, player, !level.isClientSide());
-							if (fluidActionResult.isSuccess()) {
-								if (!level.isClientSide()) {
-									player.setItemInHand(hand, fluidActionResult.getResult());
-								}
-								return ItemInteractionResult.sidedSuccess(level.isClientSide());
-							}
-						}
-					}
-				}
+		if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
+			if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
+				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}
+
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
 

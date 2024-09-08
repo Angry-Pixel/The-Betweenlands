@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "item": "thebetweenlands:dirty_dentrothyst_vial"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:green_dentrothyst_vial"
+  },
+  "water_needed": 250
+}

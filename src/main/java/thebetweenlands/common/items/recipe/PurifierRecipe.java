@@ -1,9 +1,11 @@
 package thebetweenlands.common.items.recipe;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -12,7 +14,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-public record PurifierRecipe(Ingredient input, ItemStack result, FluidStack requiredWater) implements Recipe<SingleRecipeInput> {
+public record PurifierRecipe(Ingredient input, ItemStack result, int purifyingTime, int requiredWater) implements Recipe<SingleRecipeInput> {
 	@Override
 	public boolean matches(SingleRecipeInput input, Level level) {
 		return this.input().test(input.item());
@@ -53,13 +55,15 @@ public record PurifierRecipe(Ingredient input, ItemStack result, FluidStack requ
 		public static final MapCodec<PurifierRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(PurifierRecipe::input),
 			ItemStack.STRICT_CODEC.fieldOf("result").forGetter(PurifierRecipe::result),
-			FluidStack.CODEC.fieldOf("water_needed").forGetter(PurifierRecipe::requiredWater)
+			Codec.INT.fieldOf("purifying_time").forGetter(PurifierRecipe::purifyingTime),
+			Codec.INT.fieldOf("water_needed").forGetter(PurifierRecipe::requiredWater)
 		).apply(instance, PurifierRecipe::new));
 
 		public static final StreamCodec<RegistryFriendlyByteBuf, PurifierRecipe> STREAM_CODEC = StreamCodec.composite(
 			Ingredient.CONTENTS_STREAM_CODEC, PurifierRecipe::input,
 			ItemStack.STREAM_CODEC, PurifierRecipe::result,
-			FluidStack.STREAM_CODEC, PurifierRecipe::requiredWater,
+			ByteBufCodecs.INT, PurifierRecipe::purifyingTime,
+			ByteBufCodecs.INT, PurifierRecipe::requiredWater,
 			PurifierRecipe::new);
 
 		@Override

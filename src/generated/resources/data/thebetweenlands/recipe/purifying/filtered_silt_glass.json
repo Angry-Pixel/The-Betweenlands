@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "tag": "thebetweenlands:filtered_silt_glass"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:filtered_silt_glass"
+  },
+  "water_needed": 250
+}

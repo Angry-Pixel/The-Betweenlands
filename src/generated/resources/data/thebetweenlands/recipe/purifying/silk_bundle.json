@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "item": "thebetweenlands:dirty_silk_bundle"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:silk_bundle"
+  },
+  "water_needed": 250
+}

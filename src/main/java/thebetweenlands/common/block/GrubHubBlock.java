@@ -51,8 +51,9 @@ public class GrubHubBlock extends BaseEntityBlock {
 		Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
 
 		if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
-			FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection());
-			return ItemInteractionResult.sidedSuccess(level.isClientSide());
+			if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
+				return ItemInteractionResult.sidedSuccess(level.isClientSide());
+			}
 		}
 
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);

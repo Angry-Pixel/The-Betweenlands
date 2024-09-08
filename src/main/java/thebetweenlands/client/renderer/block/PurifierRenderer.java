@@ -1,7 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -11,13 +9,18 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.PurifierBlock;
 import thebetweenlands.common.block.entity.PurifierBlockEntity;
+import thebetweenlands.util.RenderUtils;
 
 public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity> {
 
@@ -39,14 +42,15 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(PurifierBlock.FACING).toYRot()));
 		stack.scale(1.0F, -1.0F, -1.0F);
-		stack.pushPose();
 		this.base.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		if (entity.getBlockState().getValue(PurifierBlock.LIT)) {
 			this.fire.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		}
+		stack.popPose();
+
 		int amount = entity.tank.getFluidAmount();
 		int capacity = entity.tank.getCapacity();
-		float size = 1F / capacity * amount;
+		float size = 1.0F / capacity * amount;
 		if (!entity.getItem(2).isEmpty()) {
 			stack.pushPose();
 			stack.translate(0.5D, 0.27D, 0.5D);
@@ -68,21 +72,13 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 		}
 
 		if (amount >= 100) {
+			FluidStack fluidStack = entity.tank.getFluid();
+			TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture());
+
 			stack.pushPose();
-			RenderSystem.enableBlend();
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			RenderSystem.setShaderTexture(0, Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(TheBetweenlands.prefix("textures/fluids/swamp_water_still")).atlasLocation());
 			stack.translate(0.0F, 0.35F + size * 0.5F, 0.0F);
-			BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-			buffer.addVertex(0.1F, 0.0F, 0.1F).setUv(0.0F, 0.0F).setColor(0.2F, 0.6F, 0.4F, 1.0F);
-			buffer.addVertex(0.1F, 0.0F, 0.9F).setUv(0.0F, 1.0F).setColor(0.2F, 0.6F, 0.4F, 1.0F);
-			buffer.addVertex(0.9F, 0.0F, 0.9F).setUv(1.0F, 1.0F).setColor(0.2F, 0.6F, 0.4F, 1.0F);
-			buffer.addVertex(0.9F, 0.0F, 0.1F).setUv(1.0F, 0.0F).setColor(0.2F, 0.6F, 0.4F, 1.0F);
-			BufferUploader.drawWithShader(buffer.buildOrThrow());
-			RenderSystem.disableBlend();
+			RenderUtils.renderTopQuad(stack.last(), source.getBuffer(RenderType.entityTranslucent(sprite.atlasLocation())), light, FastColor.ARGB32.colorFromFloat(1.0F, 0.2F, 0.6F, 0.4F), 0.1F, 0.9F, 0.0F, 0.1F, 0.9F, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
 			stack.popPose();
 		}
-		stack.popPose();
-		stack.popPose();
 	}
 }

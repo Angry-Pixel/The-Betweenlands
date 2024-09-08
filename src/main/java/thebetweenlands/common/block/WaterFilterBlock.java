@@ -42,8 +42,9 @@ public class WaterFilterBlock extends BaseEntityBlock {
 			Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
 
 			if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
-				FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection());
-				return ItemInteractionResult.sidedSuccess(level.isClientSide());
+				if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
+					return ItemInteractionResult.sidedSuccess(level.isClientSide());
+				}
 			} else if (stack.is(ItemRegistry.MOSS_FILTER) || stack.is(ItemRegistry.SILK_FILTER)) {
 				if (filter.getItem(0).isEmpty()) {
 					if (!level.isClientSide()) {

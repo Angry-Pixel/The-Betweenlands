@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "item": "thebetweenlands:crimson_middle_gem_ore"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:crimson_middle_gem"
+  },
+  "water_needed": 250
+}

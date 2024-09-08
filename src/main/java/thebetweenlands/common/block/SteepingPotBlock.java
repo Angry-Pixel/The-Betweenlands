@@ -62,8 +62,9 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 		Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
 
 		if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
-			FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection());
-			return ItemInteractionResult.sidedSuccess(level.isClientSide());
+			if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
+				return ItemInteractionResult.sidedSuccess(level.isClientSide());
+			}
 		}
 
 		if (level.getBlockEntity(pos) instanceof SteepingPotBlockEntity pot) {
@@ -77,7 +78,7 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 						pot.setItem(0, ingredient);
 						pot.setHeatProgress(0);
 						pot.hasCraftResult = false;
-						if (pot.tank.getFluid() != null)
+						if (!pot.tank.getFluid().isEmpty())
 							level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.75F, 2F);
 						level.sendBlockUpdated(pos, state, state, 3);
 						return ItemInteractionResult.sidedSuccess(level.isClientSide());

@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "item": "thebetweenlands:swamp_dirt"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:purified_swamp_dirt"
+  },
+  "water_needed": 250
+}

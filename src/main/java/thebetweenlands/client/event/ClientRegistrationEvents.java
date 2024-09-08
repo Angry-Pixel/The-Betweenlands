@@ -108,6 +108,7 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
 		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
+		event.register(MenuRegistry.PURIFIER.get(), PurifierScreen::new);
 		event.register(MenuRegistry.SILK_BUNDLE.get(), SilkBundleScreen::new);
 		event.register(MenuRegistry.SMOKING_RACK.get(), SmokingRackScreen::new);
 	}

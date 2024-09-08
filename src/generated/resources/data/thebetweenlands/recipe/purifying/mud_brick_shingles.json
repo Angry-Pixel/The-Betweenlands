@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "tag": "thebetweenlands:mud_brick_shingles"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:mud_brick_shingles"
+  },
+  "water_needed": 250
+}

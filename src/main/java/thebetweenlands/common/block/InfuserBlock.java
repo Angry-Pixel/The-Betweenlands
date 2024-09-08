@@ -41,11 +41,14 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser) {
+		if (level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser) {
 
-			final Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, null);
-			if (fluidHandler.isPresent() && FluidUtil.interactWithFluidHandler(player, hand, fluidHandler.get())) {
-				return ItemInteractionResult.SUCCESS;
+			Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
+
+			if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
+				if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
+					return ItemInteractionResult.sidedSuccess(level.isClientSide());
+				}
 			}
 
 			if (!player.isCrouching()) {

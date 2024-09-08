@@ -40,6 +40,8 @@ import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
+import java.util.Optional;
+
 public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFogBlock, AspectFogBlock, SwampWaterLoggable {
 
 	public static final BooleanProperty ENABLED = BooleanProperty.create("enabled");
@@ -60,22 +62,14 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (!player.isCrouching() && level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
-			IFluidHandler handler = stack.getCapability(Capabilities.FluidHandler.ITEM, null);
-			if (handler != null) {
-				IItemHandler playerInventory = player.getCapability(Capabilities.ItemHandler.ENTITY, null);
-				if (playerInventory != null) {
-					FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(stack, censer, playerInventory, Integer.MAX_VALUE, player, !level.isClientSide());
+		Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
 
-					if (fluidActionResult.isSuccess()) {
-						if (!level.isClientSide()) {
-							player.setItemInHand(hand, fluidActionResult.getResult());
-						}
-						return ItemInteractionResult.sidedSuccess(level.isClientSide());
-					}
-				}
+		if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
+			if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
+				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}
+
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
 

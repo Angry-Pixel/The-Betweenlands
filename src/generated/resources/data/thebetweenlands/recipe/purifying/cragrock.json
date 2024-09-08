@@ -1,0 +1,17 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": [
+    {
+      "item": "thebetweenlands:mossy_cragrock_top"
+    },
+    {
+      "item": "thebetweenlands:mossy_cragrock_bottom"
+    }
+  ],
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cragrock"
+  },
+  "water_needed": 250
+}
