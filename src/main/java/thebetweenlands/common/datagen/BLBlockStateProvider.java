@@ -647,6 +647,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.WEEDWOOD_BARREL, this.modLoc("block/weedwood_planks"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.SYRMORITE_BARREL, this.modLoc("block/syrmorite_block"), 0.625F, 0.0F);
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);
+		this.builtinEntityAndItem(BlockRegistry.REPELLER, this.modLoc("block/particle/repeller_particle"), 0.45F, -2.0F);
 		this.builtinEntityAndItem(BlockRegistry.WAYSTONE, this.modLoc("block/smooth_betweenstone"), 0.25F, -3.0F);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_2, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);

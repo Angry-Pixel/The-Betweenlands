@@ -67,7 +67,7 @@ public class BarrelScreen extends AbstractContainerScreen<BarrelMenu> {
 			FluidStack stack = this.getMenu().getTank().getFluid();
 			int barHeight = Mth.ceil(57 * stack.getAmount() / (float) this.getMenu().getTank().getCapacity());
 			TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(stack.getFluid()).getStillTexture());
-			int color = IClientFluidTypeExtensions.of(stack.getFluid()).getTintColor(stack);
+			int color = IClientFluidTypeExtensions.of(stack.getFluid()).getTintColor(stack) | 0xFF000000;
 
 			this.renderTank(graphics, i + 64, j + 71, sprite, 47, 57, barHeight, color);
 			this.renderTank(graphics, i + 140, j + 32, sprite, 16, 16, 16, color);

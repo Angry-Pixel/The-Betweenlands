@@ -151,6 +151,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.OFFERING_TABLE.get(), OfferingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PUFFSHROOM.get(), PuffshroomRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.REPELLER.get(), RepellerRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SILT_GLASS_JAR.get(), SiltGlassJarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
@@ -205,6 +206,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.OFFERING_TABLE, OfferingTableModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PUFFSHROOM, PuffshroomModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PURIFIER, PurifierModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.REPELLER, RepellerModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_1, RootmanSimulacrumModels::makeSimulacrum1);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModels::makeSimulacrum2);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModels::makeSimulacrum3);
@@ -291,7 +293,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
 			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(), BlockRegistry.STEEPING_POT.asItem(),
 			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(), BlockRegistry.MOTH_HOUSE.asItem(),
-			BlockRegistry.INFUSER.asItem(),
+			BlockRegistry.INFUSER.asItem(), BlockRegistry.REPELLER.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

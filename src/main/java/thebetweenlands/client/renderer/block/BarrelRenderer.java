@@ -43,7 +43,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
 		if (!entity.tank.getFluid().isEmpty()) {
 			FluidStack fluid = entity.tank.getFluid();
 			TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture());
-			int color = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid);
+			int color = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid) | 0xFF000000;
 
 			float height = fluid.getAmount() / (float)entity.tank.getCapacity() * 0.8F + 0.13F;
 			RenderUtils.renderTopQuad(stack.last(), source.getBuffer(RenderType.entityTranslucent(sprite.atlasLocation())), light, color, 0.25F, 0.75F, height, 0.25F, 0.75F, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());

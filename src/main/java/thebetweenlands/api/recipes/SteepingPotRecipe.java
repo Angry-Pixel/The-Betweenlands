@@ -15,4 +15,9 @@ public interface SteepingPotRecipe extends Recipe<FluidRecipeInput> {
 	default RecipeType<?> getType() {
 		return RecipeRegistry.STEEPING_POT_RECIPE.get();
 	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
+	}
 }

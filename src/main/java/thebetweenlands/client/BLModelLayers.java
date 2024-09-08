@@ -46,6 +46,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation OFFERING_TABLE = register("offering_table");
 	public static final ModelLayerLocation PUFFSHROOM = register("puffshroom");
 	public static final ModelLayerLocation PURIFIER = register("purifier");
+	public static final ModelLayerLocation REPELLER = register("repeller");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_1 = register("rootman_simulacrum_1");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_2 = register("rootman_simulacrum_2");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_3 = register("rootman_simulacrum_3");
