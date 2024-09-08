@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,16 +16,12 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import thebetweenlands.api.aspect.Aspect;
-import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.api.aspect.registry.AspectType;
-import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
+import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.LifeCrystalItem;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -176,7 +173,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			}
 		}
 		if (!level.isClientSide() && updateBlock) {
-			entity.markForUpdate(level, pos, state);
+			entity.setChanged();
 		}
 		if (level.isClientSide()) {
 			if (entity.isValidCrystalInstalled()) {
@@ -206,44 +203,44 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 		//To keep infusion time on client in sync
 		if (entity.infusionTime > 0 && entity.infusionTime % 20 == 0) {
-			entity.markForUpdate(level, pos, state);
+			entity.setChanged();
 		}
 
 		if (entity.stirProgress < 90) {
 			entity.stirProgress++;
-			entity.markForUpdate(level, pos, state);
+			entity.setChanged();
 		}
 		if (entity.stirProgress == 89) {
 			if (entity.temp == 100 && !entity.hasInfusion) {
 				if (entity.hasIngredients()) {
 					entity.hasInfusion = true;
-					entity.markForUpdate(level, pos, state);
+					entity.setChanged();
 				}
 			}
 			entity.evaporation = 0;
 		}
-		if (entity.isHeatSource(level.getBlockState(pos.below())) && entity.temp < 100 && entity.getWaterAmount() > 0) {
+		if (entity.isHeatSource(level.getBlockState(pos.below())) && entity.temp < 100 && entity.tank.getFluidAmount() > 0) {
 			if (level.getGameTime() % 12 == 0) {
 				entity.temp++;
-				entity.markForUpdate(level, pos, state);
+				entity.setChanged();
 			}
 		}
 		if (!entity.isHeatSource(level.getBlockState(pos.below())) && entity.temp > 0) {
 			if (level.getGameTime() % 6 == 0) {
 				entity.temp--;
-				entity.markForUpdate(level, pos, state);
+				entity.setChanged();
 			}
 		}
 		if (entity.temp == 100) {
 			entity.evaporation++;
-			if (entity.evaporation == 600 && entity.getWaterAmount() >= FluidType.BUCKET_VOLUME) {
-				entity.extractFluids(level, pos, state, new FluidStack(FluidRegistry.SWAMP_WATER_STILL.get(), FluidType.BUCKET_VOLUME));
+			if (entity.evaporation == 600 && entity.tank.getFluidAmount() >= FluidType.BUCKET_VOLUME) {
+				entity.extractFluids(level, pos, new FluidStack(FluidRegistry.SWAMP_WATER_STILL.get(), FluidType.BUCKET_VOLUME));
 			}
-			entity.markForUpdate(level, pos, state);
+			entity.setChanged();
 		}
 		if (entity.temp < 100 && entity.evaporation > 0) {
 			entity.evaporation--;
-			entity.markForUpdate(level, pos, state);
+			entity.setChanged();
 		}
 		if (entity.isValidCrystalInstalled()) {
 			if (entity.temp >= 100 && entity.evaporation >= 400 && entity.stirProgress >= 90 && entity.hasIngredients()) {
@@ -252,12 +249,12 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			}
 			if (!entity.hasCrystal) {
 				entity.hasCrystal = true;
-				entity.markForUpdate(level, pos, state);
+				entity.setChanged();
 			}
 		} else {
 			if (entity.hasCrystal) {
 				entity.hasCrystal = false;
-				entity.markForUpdate(level, pos, state);
+				entity.setChanged();
 			}
 		}
 	}
@@ -267,47 +264,23 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		return state.is(BlockRegistry.SMOULDERING_PEAT) || state.is(BlockTags.FIRE);
 	}
 
-	/**
-	 * Returns the current infusing state:
-	 * 0 = no progress, 1 = in progress, 2 = finished, 3 = failed
-	 */
-	public int getInfusingState() {
-		return this.currentInfusionState;
-	}
-
-	/**
-	 * Returns the infusion color gradient ticks
-	 *
-	 * @return
-	 */
 	public int getInfusionColorGradientTicks() {
 		return this.infusionColorGradientTicks;
 	}
 
-	public void extractFluids(Level level, BlockPos pos, BlockState state, FluidStack fluid) {
+	public void extractFluids(Level level, BlockPos pos, FluidStack fluid) {
 		if (FluidStack.isSameFluidSameComponents(fluid, this.tank.getFluid())) {
 			this.tank.drain(fluid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 		}
-		if (this.getWaterAmount() == 0) {
+		if (this.tank.getFluidAmount() == 0) {
 			if (this.hasInfusion) {
 				for (int i = 0; i <= InfuserBlockEntity.MAX_INGREDIENTS; i++) {
 					ItemStack stack = this.getItem(i);
-					//TODO
-//					if (!stack.isEmpty() && stack.is(ItemRegistry.ASPECT_VIAL)) {
-//						//Return empty vials
-//						ItemStack ret = ItemStack.EMPTY;
-//						switch (stack.getItemDamage()) {
-//							case 0:
-//							default:
-//								ret = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0);
-//								break;
-//							case 1:
-//								ret = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2);
-//								break;
-//						}
-//						ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, ret);
-//						level.addFreshEntity(entity);
-//					}
+					if (!stack.isEmpty() && stack.getItem() instanceof AspectVialItem vial) {
+						//Return empty vials
+						ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, vial.getCraftingRemainingItem(stack));
+						level.addFreshEntity(entity);
+					}
 					this.setItem(i, ItemStack.EMPTY);
 				}
 				if (this.evaporation == 600) {
@@ -326,23 +299,11 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			this.tank.setFluid(new FluidStack(FluidRegistry.SWAMP_WATER_STILL, 0));
 		}
 		this.evaporation = 0;
-		this.markForUpdate(level, pos, state);
-	}
-
-	public void markForUpdate(Level level, BlockPos pos, BlockState state) {
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 	}
 
 	public int getWaterAmount() {
 		return this.tank.getFluidAmount();
-	}
-
-	public int getTanksFullValue() {
-		return this.tank.getCapacity();
-	}
-
-	public int getScaledWaterAmount(int scale) {
-		return !this.tank.getFluid().isEmpty() ? (int) ((float) this.tank.getFluid().getAmount() / (float) this.tank.getCapacity() * scale) : 0;
 	}
 
 	public boolean isValidCrystalInstalled() {
@@ -351,7 +312,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
-		return !hasInfusion() && this.getItem(slot).isEmpty() && ((slot <= MAX_INGREDIENTS && !AspectContainerItem.fromItem(stack, AspectManager.get(level)).getAspects().isEmpty()) || (slot == MAX_INGREDIENTS + 1 && stack.getItem() instanceof LifeCrystalItem));
+		return !hasInfusion() && this.getItem(slot).isEmpty() && ((slot <= MAX_INGREDIENTS && stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().isPresent()) || (slot == MAX_INGREDIENTS + 1 && stack.getItem() instanceof LifeCrystalItem));
 	}
 
 	@Override
@@ -362,8 +323,9 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	@Override
 	public void setChanged() {
 		super.setChanged();
-		BlockState state = this.getLevel().getBlockState(this.getBlockPos());
-		this.getLevel().sendBlockUpdated(this.getBlockPos(), state, state, 2);
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
 	}
 
 	@Override
@@ -388,24 +350,19 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		return false;
 	}
 
-	public List<Holder<AspectType>> getInfusingAspects(Level level) {
+	public List<Holder<AspectType>> getInfusingAspects() {
 		List<Holder<AspectType>> infusingAspects = new ArrayList<>();
 		for (int i = 0; i <= MAX_INGREDIENTS; i++) {
-			if (!this.getItems().get(i).isEmpty()) {
-				AspectContainerItem container = AspectContainerItem.fromItem(this.getItems().get(i), AspectManager.get(level));
-				for (Aspect aspect : container.getAspects()) {
-					infusingAspects.add(aspect.type());
+			if (!this.getItem(i).isEmpty()) {
+				ItemStack stack = this.getItem(i);
+				if (stack.has(DataComponentRegistry.ASPECT_CONTENTS)) {
+					if (stack.get(DataComponentRegistry.ASPECT_CONTENTS).aspect().isPresent()) {
+						infusingAspects.add(stack.get(DataComponentRegistry.ASPECT_CONTENTS).aspect().get());
+					}
 				}
 			}
 		}
 		return infusingAspects;
-	}
-
-	public boolean hasFullIngredients() {
-		for (int i = 0; i <= MAX_INGREDIENTS; i++) {
-			if (this.getItems().get(i).isEmpty()) return false;
-		}
-		return true;
 	}
 
 	public int getInfusionTime() {
@@ -445,10 +402,9 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		return this.infusingRecipe;
 	}
 
-	//TODO
 	public void updateInfusingRecipe() {
 		if (this.getLevel() != null) {
-//			this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects(this.getLevel()));
+			this.infusingRecipe = ElixirRecipe.getFromAspects(this.getInfusingAspects(), this.getLevel().registryAccess());
 		}
 	}
 
@@ -519,7 +475,6 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 			if (action.execute()) {
 				this.setChanged();
-				this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
 			}
 		}
 		return filled;

@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.registries.AspectTypeRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -61,20 +62,54 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 		return null;
 	}
 
+	@Nullable
+	public static Holder<ElixirRecipe> getFromAspects(List<Holder<AspectType>> aspects, HolderLookup.Provider provider) {
+		for (Holder<ElixirRecipe> recipe : provider.lookupOrThrow(BLRegistries.Keys.ELIXIR_RECIPES).listElements().toList()) {
+			boolean matches = true;
+			checkAvailability:
+			for (ResourceKey<AspectType> recipeAspect : recipe.value().aspects()) {
+				for (Holder<AspectType> aspect : aspects) {
+					if (aspect.is(AspectTypeRegistry.BYARIIS)) continue;
+					if (recipe.value().durationAspect().isPresent() && aspect.is(recipe.value().durationAspect().get())) continue;
+					if (recipe.value().strengthAspect().isPresent() && aspect.is(recipe.value().strengthAspect().get())) continue;
+					boolean contains = false;
+					for (ResourceKey<AspectType> a : recipe.value().aspects()) {
+						if (a == aspect) {
+							contains = true;
+							break;
+						}
+					}
+					if (!contains) {
+						matches = false;
+						break checkAvailability;
+					}
+				}
+				if (!aspects.stream().map(Holder::getKey).toList().contains(recipeAspect)) {
+					matches = false;
+					break;
+				}
+			}
+			if (matches) {
+				return recipe;
+			}
+		}
+		return null;
+	}
+
 	public float[] getRGBA(int color) {
-		float a = (float)(color >> 24 & 255) / 255.0F;
-		float r = (float)(color >> 16 & 255) / 255.0F;
-		float g = (float)(color >> 8 & 255) / 255.0F;
-		float b = (float)(color & 255) / 255.0F;
-		return new float[] {r, g, b, a};
+		float a = (float) (color >> 24 & 255) / 255.0F;
+		float r = (float) (color >> 16 & 255) / 255.0F;
+		float g = (float) (color >> 8 & 255) / 255.0F;
+		float b = (float) (color & 255) / 255.0F;
+		return new float[]{r, g, b, a};
 	}
 
 	public static float[] getInfusionColor(@Nullable Holder<ElixirRecipe> holder, int infusionTime) {
-		if(holder != null) {
+		if (holder != null) {
 			ElixirRecipe recipe = holder.value();
-			if(infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
+			if (infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 				return recipe.getRGBA(recipe.infusionFailedColor);
-			} else if(infusionTime > recipe.idealInfusionTime - recipe.infusionTimeVariation
+			} else if (infusionTime > recipe.idealInfusionTime - recipe.infusionTimeVariation
 				&& infusionTime <= recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 				return recipe.getRGBA(recipe.infusionFinishedColor);
 			} else {
@@ -84,7 +119,7 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 				float startA = 0.9F;
 				float[] targetColor = recipe.getRGBA(recipe.infusionGradient);
 				int targetTime = recipe.idealInfusionTime - recipe.infusionTimeVariation;
-				float infusingPercentage = (float)infusionTime / (float)targetTime;
+				float infusingPercentage = (float) infusionTime / (float) targetTime;
 				float interpR = startR + (targetColor[0] - startR) * infusingPercentage;
 				float interpG = startG + (targetColor[1] - startG) * infusingPercentage;
 				float interpB = startB + (targetColor[2] - startB) * infusingPercentage;

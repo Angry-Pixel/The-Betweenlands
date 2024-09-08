@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -34,9 +35,13 @@ import java.util.Optional;
 public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	private final boolean heatResistant;
-	public static final VoxelShape SHAPE = Shapes.or(
+	public static final VoxelShape OUTSIDE_SHAPE = Shapes.or(
 		Block.box(2.0D, 0.0D, 4.0D, 14.0D, 15.0D, 12.0D),
 		Block.box(4.0D, 0.0D, 2.0D, 12.0D, 15.0D, 14.0D));
+	public static final VoxelShape INSIDE_SHAPE = Shapes.or(
+		Block.box(4.0D, 2.0D, 5.0D, 12.0D, 15.0D, 11.0D),
+		Block.box(5.0D, 2.0D, 4.0D, 11.0D, 15.0D, 12.0D));
+	public static final VoxelShape SHAPE = Shapes.join(OUTSIDE_SHAPE, INSIDE_SHAPE, BooleanOp.ONLY_FIRST);
 
 	public BarrelBlock(boolean heatResistant, Properties properties) {
 		super(properties);

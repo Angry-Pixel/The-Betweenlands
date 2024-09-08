@@ -6,13 +6,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
-import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -21,7 +20,6 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.DentrothystVialItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -231,9 +229,10 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	public List<Holder<AspectType>> getInfusionAspects(Level level, List<ItemStack> ingredients) {
 		List<Holder<AspectType>> infusingAspects = new ArrayList<>();
 		for (ItemStack ingredient : ingredients) {
-			AspectContainerItem container = AspectContainerItem.fromItem(ingredient, AspectManager.get(level));
-			for (Aspect aspect : container.getAspects()) {
-				infusingAspects.add(aspect.type());
+			if (ingredient.has(DataComponentRegistry.ASPECT_CONTENTS)) {
+				if (ingredient.get(DataComponentRegistry.ASPECT_CONTENTS).aspect().isPresent()) {
+					infusingAspects.add(ingredient.get(DataComponentRegistry.ASPECT_CONTENTS).aspect().get());
+				}
 			}
 			infusingAspects.addAll(AspectManager.get(level).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
 		}
@@ -243,8 +242,11 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	private List<Aspect> getInfusionItemAspects(Level level, List<ItemStack> ingredients) {
 		List<Aspect> infusingItemAspects = new ArrayList<>();
 		for (ItemStack ingredient : ingredients) {
-			AspectContainerItem container = AspectContainerItem.fromItem(ingredient, AspectManager.get(level));
-			infusingItemAspects.addAll(container.getAspects());
+			if (ingredient.has(DataComponentRegistry.ASPECT_CONTENTS)) {
+				if (ingredient.get(DataComponentRegistry.ASPECT_CONTENTS).aspect().isPresent()) {
+					infusingItemAspects.add(new Aspect(ingredient.get(DataComponentRegistry.ASPECT_CONTENTS).aspect().get(), ingredient.get(DataComponentRegistry.ASPECT_CONTENTS).amount()));
+				}
+			}
 //			infusingItemAspects.addAll(AspectManager.get(level).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
 		}
 		return infusingItemAspects;
@@ -302,9 +304,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 						this.producableItemAspects.add(new Aspect(aspect.type(), removedAmount - Amounts.VIAL));
 						removedAmount = Amounts.VIAL;
 					}
-					aspectVial = new ItemStack(vial);
-					AspectContainerItem aspectContainer = AspectContainerItem.fromItem(aspectVial);
-					aspectContainer.add(aspect.type(), removedAmount);
+					aspectVial = AspectContents.createItemStack(vial, aspect.type(), removedAmount);
 				}
 				if (this.producableItemAspects.isEmpty()) {
 					this.reset(level, pos, state);

@@ -9,9 +9,9 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
+import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.CompostData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
@@ -77,7 +77,7 @@ public class ItemTooltipHandler {
 						usedInMachines.add(Component.translatable("item.thebetweenlands.static_aspects").withStyle(ChatFormatting.GRAY));
 					}
 
-					if (!AspectContainerItem.fromItem(stack, aspectManager).isEmpty()) {
+					if (stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().isPresent()) {
 						usedInMachines.add(Component.translatable("item.thebetweenlands.aspects").withStyle(ChatFormatting.GRAY));
 					}
 				}

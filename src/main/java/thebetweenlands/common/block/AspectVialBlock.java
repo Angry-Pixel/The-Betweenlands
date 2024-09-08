@@ -20,11 +20,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.aspect.Aspect;
-import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.AspectVialBlockEntity;
+import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.DentrothystVialItem;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 import javax.annotation.Nullable;
 
@@ -52,35 +53,36 @@ public class AspectVialBlock extends BaseEntityBlock {
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (level.getBlockEntity(pos) instanceof AspectVialBlockEntity vial) {
 
-			AspectContainerItem container;
-			if (stack.getItem() instanceof AspectVialItem vialItem && (container = AspectContainerItem.fromItem(stack)).getAspects().size() == 1) {
-				Aspect itemAspect = container.getAspects().getFirst();
-				if (!player.isCrouching()) {
-					if (vial.getAspect() == null || vial.getAspect().type() == itemAspect.type()) {
-						if (!level.isClientSide()) {
-							if (vial.getAspect() == null)
-								vial.setAspect(new Aspect(itemAspect.type(), 0));
-							int added = vial.addAmount(Math.min(itemAspect.amount(), 100));
-							if (added > 0) {
-								int leftAmount = itemAspect.amount() - added;
-								container.set(itemAspect.type(), itemAspect.amount() - added);
-								if (leftAmount <= 0) {
-									player.setItemInHand(hand, vialItem.getCraftingRemainingItem(stack));
+			if (stack.getItem() instanceof AspectVialItem vialItem && stack.has(DataComponentRegistry.ASPECT_CONTENTS)) {
+				AspectContents contents = stack.get(DataComponentRegistry.ASPECT_CONTENTS);
+				if (contents.aspect().isPresent()) {
+					if (!player.isCrouching()) {
+						if (vial.getAspect() == null || vial.getAspect().type() == contents.aspect().get()) {
+							if (!level.isClientSide()) {
+								if (vial.getAspect() == null)
+									vial.setAspect(new Aspect(contents.aspect().get(), 0));
+								int added = vial.addAmount(Math.min(contents.amount(), 100));
+								if (added > 0) {
+									int leftAmount = contents.amount() - added;
+									stack.set(DataComponentRegistry.ASPECT_CONTENTS, new AspectContents(contents.aspect().get(), contents.amount() - added));
+									if (leftAmount <= 0) {
+										player.setItemInHand(hand, vialItem.getCraftingRemainingItem(stack));
+									}
 								}
 							}
+							return ItemInteractionResult.sidedSuccess(level.isClientSide());
 						}
-						return ItemInteractionResult.sidedSuccess(level.isClientSide());
-					}
-				} else {
-					if (vial.getAspect() != null && vial.getAspect().type() == itemAspect.type()) {
-						if (!level.isClientSide()) {
-							int toRemove = Math.min(100, Amounts.VIAL - itemAspect.amount());
-							if (toRemove > 0) {
-								int removedAmount = vial.removeAmount(toRemove);
-								container.set(itemAspect.type(), itemAspect.amount() + removedAmount);
+					} else {
+						if (vial.getAspect() != null && vial.getAspect().type() == contents.aspect().get()) {
+							if (!level.isClientSide()) {
+								int toRemove = Math.min(100, Amounts.VIAL - contents.amount());
+								if (toRemove > 0) {
+									int removedAmount = vial.removeAmount(toRemove);
+									stack.set(DataComponentRegistry.ASPECT_CONTENTS, new AspectContents(contents.aspect().get(), contents.amount() + removedAmount));
+								}
 							}
+							return ItemInteractionResult.sidedSuccess(level.isClientSide());
 						}
-						return ItemInteractionResult.sidedSuccess(level.isClientSide());
 					}
 				}
 			} else if (stack.getItem() instanceof DentrothystVialItem vialItem && player.isCrouching() && vial.getAspect() != null) {
@@ -88,15 +90,14 @@ public class AspectVialBlock extends BaseEntityBlock {
 					Aspect aspect = vial.getAspect();
 					int removedAmount = vial.removeAmount(100);
 					if (removedAmount > 0) {
-						container = AspectContainerItem.fromItem(new ItemStack(vialItem.getFullAspectBottle()));
-						container.add(aspect.type(), removedAmount);
+						ItemStack newContents = AspectContents.createItemStack(vialItem.getFullAspectBottle().value(), aspect.type(), removedAmount);
 
 						stack.shrink(1);
 						if (stack.getCount() <= 0)
 							player.setItemInHand(hand, stack);
 
 						//Drop new aspect item
-						ItemEntity itemEntity = player.drop(new ItemStack(vialItem.getFullAspectBottle()), false);
+						ItemEntity itemEntity = player.drop(newContents, false);
 						if (itemEntity != null) itemEntity.setNoPickUpDelay();
 					}
 				}

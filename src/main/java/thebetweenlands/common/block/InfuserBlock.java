@@ -11,22 +11,28 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
-import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.items.LifeCrystalItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.FluidRegistry;
 
@@ -35,8 +41,24 @@ import java.util.Optional;
 
 public class InfuserBlock extends HorizontalBaseEntityBlock {
 
+	public static final VoxelShape OUTSIDE_SHAPE = Shapes.or(
+		Block.box(0.5D, 3.5D, 0.5D, 15.5D, 6.5D, 15.5D),
+		Block.box(1.0D, 6.5D, 3.0D, 15.0D, 14.0D, 13.0D),
+		Block.box(3.0D, 6.5D, 1.0D, 13.0D, 14.0D, 15.0D)
+	);
+	public static final VoxelShape INSIDE_SHAPE = Shapes.or(
+		Block.box(3.0D, 5.0D, 5.0D, 13.0D, 14.0D, 11.0D),
+		Block.box(5.0D, 5.0D, 3.0D, 11.0D, 14.0D, 13.0D)
+	);
+	public static final VoxelShape SHAPE = Shapes.join(OUTSIDE_SHAPE, INSIDE_SHAPE, BooleanOp.ONLY_FIRST);
+
 	public InfuserBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return SHAPE;
 	}
 
 	@Override
@@ -53,12 +75,11 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 
 			if (!player.isCrouching()) {
 				if (!stack.isEmpty() && !infuser.hasInfusion()) {
-					AspectContainerItem aspectContainer = AspectContainerItem.fromItem(stack, AspectManager.get(level));
-					if (aspectContainer.getAspects().size() > 0) {
-						ItemStack ingredient = stack;
+					AspectContents aspectContainer = stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY);
+					if (aspectContainer.aspect().isPresent()) {
 						for (int i = 0; i < InfuserBlockEntity.MAX_INGREDIENTS; i++) {
 							if (infuser.getItem(i).isEmpty()) {
-								ItemStack singleIngredient = ingredient.copy();
+								ItemStack singleIngredient = stack.copy();
 								singleIngredient.setCount(1);
 								infuser.setItem(i, singleIngredient);
 								infuser.updateInfusingRecipe();
@@ -142,9 +163,9 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (player.isCrouching() && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser && infuser.getStirProgress() >= 90) {
+		if (!player.isCrouching() && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser && infuser.getStirProgress() >= 90) {
 			infuser.setStirProgress(0);
-			return InteractionResult.SUCCESS;
+			return InteractionResult.sidedSuccess(level.isClientSide());
 		}
 		return super.useWithoutItem(state, level, pos, player, hitResult);
 	}

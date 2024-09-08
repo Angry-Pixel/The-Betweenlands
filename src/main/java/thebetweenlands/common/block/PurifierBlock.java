@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,12 +42,20 @@ import java.util.Optional;
 public class PurifierBlock extends HorizontalBaseEntityBlock {
 
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
-	public static final VoxelShape SHAPE = Shapes.or(
+	public static final VoxelShape OUTSIDE_SHAPE = Shapes.or(
 		Block.box(0.0D, 0.0D, 0.0D, 3.0D, 4.0D, 3.0D),
 		Block.box(0.0D, 0.0D, 13.0D, 3.0D, 4.0D, 16.0D),
 		Block.box(13.0D, 0.0D, 0.0D, 16.0D, 4.0D, 3.0D),
 		Block.box(13.0D, 0.0D, 13.0D, 16.0D, 4.0D, 16.0D),
-		Block.box(0.0D, 4.0D, 0.0D, 16.0D, 14.0D, 16.0D));
+		Block.box(0.0D, 4.0D, 0.0D, 16.0D, 14.0D, 16.0D),
+		Block.box(1.0D, 14.0D, 3.0D, 15.0D, 16.0D, 13.0D),
+		Block.box(3.0D, 14.0D, 1.0D, 13.0D, 16.0D, 15.0D)
+	);
+	public static final VoxelShape INSIDE_SHAPE = Shapes.or(
+		Block.box(3.0D, 6.0D, 5.0D, 13.0D, 16.0D, 11.0D),
+		Block.box(5.0D, 6.0D, 3.0D, 11.0D, 16.0D, 13.0D)
+	);
+	public static final VoxelShape SHAPE = Shapes.join(OUTSIDE_SHAPE, INSIDE_SHAPE, BooleanOp.ONLY_FIRST);
 
 	public PurifierBlock(Properties properties) {
 		super(properties);

@@ -5,13 +5,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.client.shader.postprocessing.GroundFog;
 import thebetweenlands.common.component.item.AspectContents;
-import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class AspectCenserRecipe extends AbstractCenserRecipe<AspectCenserRecipe.CenserRecipeAspectContext> {

@@ -41,7 +41,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SpikeTrapBlockEntity entity) {
-		if (!level.isClientSide()) {
+		if (!level.isClientSide() && !level.isDebug()) {
 			Direction facing = state.getValue(SpikeTrapBlock.FACING);
 
 			BlockState stateFacing = level.getBlockState(pos.relative(facing, 1));

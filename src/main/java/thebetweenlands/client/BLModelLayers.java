@@ -28,6 +28,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation GECKO_CAGE = register("gecko_cage");
 	public static final ModelLayerLocation GLASS_JAR = register("glass_jar");
 	public static final ModelLayerLocation HANGING_STEEPING_POT = register("hanging_steeping_pot");
+	public static final ModelLayerLocation INFUSER = register("infuser");
 	public static final ModelLayerLocation ITEM_CAGE = register("item_cage");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_1 = register("lake_cavern_simulacrum_1");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_2 = register("lake_cavern_simulacrum_2");
