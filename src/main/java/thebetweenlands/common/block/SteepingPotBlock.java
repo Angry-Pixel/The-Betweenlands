@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -24,6 +25,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +41,28 @@ import java.util.Optional;
 public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 
 	public static final BooleanProperty HANGING = BooleanProperty.create("hanging");
+	public static final VoxelShape OUTSIDE_GROUND_SHAPE = Shapes.or(
+		Block.box(1.0D, 0.0D, 0.0D, 15.0D, 4.5D, 16.0D),
+		Block.box(3.0D, 4.5D, 4.0D, 13.0D, 11.85D, 12.0D),
+		Block.box(4.0D, 4.5D, 3.0D, 12.0D, 11.85D, 13.0D)
+	);
+	public static final VoxelShape INSIDE_GROUND_SHAPE = Shapes.or(
+		Block.box(4.0D, 5.0D, 5.0D, 12.0D, 11.85D, 11.0D),
+		Block.box(5.0D, 5.0D, 4.0D, 11.0D, 11.85D, 12.0D),
+		Block.box(4.0D, 1.0D, 4.0D, 12.0D, 10.85D, 12.0D)
+	);
+
+	public static final VoxelShape OUTSIDE_HANGING_SHAPE = Shapes.or(
+		Block.box(3.0D, 0.15D, 4.0D, 13.0D, 7.85D, 12.0D),
+		Block.box(4.0D, 0.15D, 3.0D, 12.0D, 7.85D, 13.0D)
+	);
+	public static final VoxelShape INSIDE_HANGING_SHAPE = Shapes.or(
+		Block.box(4.0D, 1.0D, 5.0D, 12.0D, 7.85D, 11.0D),
+		Block.box(5.0D, 1.0D, 4.0D, 11.0D, 7.85D, 12.0D),
+		Block.box(4.0D, 1.0D, 4.0D, 12.0D, 6.85D, 12.0D)
+	);
+	public static final VoxelShape GROUND_SHAPE = Shapes.join(OUTSIDE_GROUND_SHAPE, INSIDE_GROUND_SHAPE, BooleanOp.ONLY_FIRST);
+	public static final VoxelShape HANGING_SHAPE = Shapes.join(OUTSIDE_HANGING_SHAPE, INSIDE_HANGING_SHAPE, BooleanOp.ONLY_FIRST);
 
 	public SteepingPotBlock(Properties properties) {
 		super(properties);
@@ -46,6 +73,11 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return super.getStateForPlacement(context).setValue(HANGING, this.canHang(context.getLevel(), context.getClickedPos()));
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return state.getValue(HANGING) ? HANGING_SHAPE : GROUND_SHAPE;
 	}
 
 	@Override
