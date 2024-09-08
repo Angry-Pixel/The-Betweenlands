@@ -18,7 +18,7 @@ import thebetweenlands.common.block.entity.MossBedBlockEntity;
 
 public class MossBedRenderer implements BlockEntityRenderer<MossBedBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/bed/moss_bed.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/bed/moss_bed.png"));
 
 	private final ModelPart bed;
 
@@ -36,7 +36,7 @@ public class MossBedRenderer implements BlockEntityRenderer<MossBedBlockEntity> 
 			} else {
 				stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(BedBlock.FACING).toYRot()));
 			}
-			stack.scale(-1.0F, -1.0F, -1.0F);
+			stack.scale(1.0F, -1.0F, -1.0F);
 			this.bed.render(stack, source.getBuffer(TEXTURE), light, overlay);
 			stack.popPose();
 		}

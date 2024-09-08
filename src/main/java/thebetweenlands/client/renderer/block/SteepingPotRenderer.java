@@ -26,8 +26,8 @@ import thebetweenlands.util.RenderUtils;
 
 public class SteepingPotRenderer implements BlockEntityRenderer<SteepingPotBlockEntity> {
 
-	private static final RenderType GROUND_TEXTURE = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/steeping_pot.png"));
-	private static final RenderType HANGING_TEXTURE = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/steeping_pot_hanging.png"));
+	private static final RenderType GROUND_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/steeping_pot.png"));
+	private static final RenderType HANGING_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/steeping_pot_hanging.png"));
 	private final ModelPart groundPot;
 	private final ModelPart hangingPot;
 
@@ -40,7 +40,7 @@ public class SteepingPotRenderer implements BlockEntityRenderer<SteepingPotBlock
 	public void render(SteepingPotBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SteepingPotBlock.FACING).toYRot() + 180));
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(SteepingPotBlock.FACING).toYRot() + 180));
 		stack.scale(1.0F, -1.0F, -1.0F);
 		if (entity.getBlockState().getValue(SteepingPotBlock.HANGING)) {
 			this.hangingPot.render(stack, source.getBuffer(HANGING_TEXTURE), light, overlay);

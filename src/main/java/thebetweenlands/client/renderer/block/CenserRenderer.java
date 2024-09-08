@@ -193,11 +193,6 @@ public class CenserRenderer implements BlockEntityRenderer<CenserBlockEntity> {
 	}
 
 	@Override
-	public boolean shouldRenderOffScreen(CenserBlockEntity entity) {
-		return false;
-	}
-
-	@Override
 	public int getViewDistance() {
 		return 256;
 	}

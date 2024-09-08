@@ -112,12 +112,12 @@ public class RepellerRenderer implements BlockEntityRenderer<RepellerBlockEntity
 	}
 
 	@Override
-	public AABB getRenderBoundingBox(RepellerBlockEntity entity) {
-		return new AABB(entity.getBlockPos()).expandTowards(0.0D, 1.0D, 0.0D);
+	public int getViewDistance() {
+		return 256;
 	}
 
 	@Override
-	public boolean shouldRenderOffScreen(RepellerBlockEntity blockEntity) {
-		return true;
+	public AABB getRenderBoundingBox(RepellerBlockEntity entity) {
+		return AABB.INFINITE;
 	}
 }

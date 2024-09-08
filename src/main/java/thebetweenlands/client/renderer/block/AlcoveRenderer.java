@@ -17,11 +17,11 @@ import thebetweenlands.common.block.entity.MudBrickAlcoveBlockEntity;
 public class AlcoveRenderer implements BlockEntityRenderer<MudBrickAlcoveBlockEntity> {
 
 	private static final RenderType[] TEXTURES = new RenderType[]{
-		RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_0.png")),
-		RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_1.png")),
-		RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_2.png")),
-		RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_3.png")),
-		RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_4.png"))
+		RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_0.png")),
+		RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_1.png")),
+		RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_2.png")),
+		RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_3.png")),
+		RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/mud_brick_alcove_4.png"))
 	};
 	private static final RenderType[] URN_TEXTURES = new RenderType[]{
 		RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_urn_1.png")),
@@ -52,7 +52,7 @@ public class AlcoveRenderer implements BlockEntityRenderer<MudBrickAlcoveBlockEn
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(MudBrickAlcoveBlock.FACING).toYRot()));
-		stack.scale(-1.0F, -1.0F, -1.0F);
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.alcove.render(stack, consumer, light, overlay);
 
 		if (entity.getLevel() != null) {

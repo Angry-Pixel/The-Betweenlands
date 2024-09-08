@@ -16,7 +16,7 @@ import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 
 public class ItemCageRenderer implements BlockEntityRenderer<ItemCageBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/item_cage.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/item_cage.png"));
 	private static final ResourceLocation POWER_TEXTURE = TheBetweenlands.prefix("textures/entity/block/item_cage_power.png");
 
 	private final ModelPart cage;
@@ -42,7 +42,7 @@ public class ItemCageRenderer implements BlockEntityRenderer<ItemCageBlockEntity
 		}
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
-		stack.scale(-1.0F, -1.0F, -1.0F);
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.cage.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		this.bars.render(stack, source.getBuffer(RenderType.energySwirl(POWER_TEXTURE, ticks * 0.0015F % 1.0F, ticks * 0.0015F % 1.0F)), light, overlay, FastColor.ARGB32.colorFromFloat(1.0F, 0.5F, 0.5F, 0.5F));
 		stack.popPose();
