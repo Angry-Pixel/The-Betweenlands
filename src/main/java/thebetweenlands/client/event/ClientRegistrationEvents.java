@@ -22,7 +22,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,8 +45,8 @@ import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
 import thebetweenlands.client.model.block.simulacrum.*;
 import thebetweenlands.client.model.entity.*;
-import thebetweenlands.client.particle.BetweenlandsParticle;
-import thebetweenlands.client.particle.BetweenlandsPortalParticle;
+import thebetweenlands.client.particle.AnimatorParticle;
+import thebetweenlands.client.particle.BugParticle;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
@@ -77,7 +76,7 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerDimEffects);
 		eventbus.addListener(ClientRegistrationEvents::registerExtensions);
 		eventbus.addListener(ClientRegistrationEvents::registerLayerDefinition);
-		eventbus.addListener(ClientRegistrationEvents::particleStuff);
+		eventbus.addListener(ClientRegistrationEvents::registerParticleSprites);
 		eventbus.addListener(ClientRegistrationEvents::registerBlockColors);
 		eventbus.addListener(ClientRegistrationEvents::registerReloadListeners);
 		eventbus.addListener(ClientRegistrationEvents::registerGeometryLoaders);
@@ -384,9 +383,9 @@ public class ClientRegistrationEvents {
 		}
 	}
 
-	private static void particleStuff(final RegisterParticleProvidersEvent event) {
-		event.registerSpriteSet(ParticleRegistry.SULFUR_GENERIC.get(), BetweenlandsParticle.Helper::new);
-		event.registerSpriteSet(ParticleRegistry.PORTAL_EFFECT.get(), BetweenlandsPortalParticle.Helper::new);
+	private static void registerParticleSprites(final RegisterParticleProvidersEvent event) {
+		event.registerSpriteSet(ParticleRegistry.ANIMATOR.get(), AnimatorParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.FLY.get(), BugParticle.FlyFactory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

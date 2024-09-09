@@ -27,9 +27,12 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 import java.util.ArrayList;
@@ -81,18 +84,18 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator && animator.isRunning()) {
+		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
 			Direction facing = state.getValue(FACING);
 
-			double xOff = facing.getStepX() * (facing.getAxis() == Direction.Axis.X ? 0.5F : -0.14F);
-			double zOff = facing.getStepZ() * (facing.getAxis() == Direction.Axis.X ? 0.14F : -0.5F);
+			double zOff = facing.getStepX() * (facing.getAxis() == Direction.Axis.X ? 0.5F : -0.14F);
+			double xOff = facing.getStepZ() * (facing.getAxis() == Direction.Axis.X ? 0.14F : -0.5F);
 
 			// Runes
 			List<Vec3> points = new ArrayList<>();
 			points.add(new Vec3(pos.getX() + 0.5D + (random.nextFloat() - 0.5F) * 0.3D + xOff, pos.getY() + 0.9, pos.getZ() + 0.5 + (random.nextFloat() - 0.5F) * 0.3D + zOff));
 			points.add(new Vec3(pos.getX() + 0.5D + (random.nextFloat() - 0.5F) * 0.3D + xOff, pos.getY() + 1.36, pos.getZ() + 0.5 + (random.nextFloat() - 0.5F) * 0.3D + zOff));
 			points.add(new Vec3(pos.getX() + 0.5D, pos.getY() + 1.45D, pos.getZ() + 0.5D));
-//			BLParticles.ANIMATOR.spawn(level, pos.getX(), pos.getY() + 0.9, pos.getZ() + 0.65, ParticleArgs.get().withData(points));
+			TheBetweenlands.createParticle(ParticleRegistry.ANIMATOR.get(), level, pos.getX(), pos.getY() + 0.7D, pos.getZ() + 0.65D, ParticleFactory.ParticleArgs.get().withData(points));
 //			BLParticles.SMOKE.spawn(level, pos.getX() + 0.5 + random.nextFloat() * 0.3D - 0.15D, pos.getY() + 0.3, pos.getZ() + 0.5 + random.nextFloat() * 0.3D - 0.15D);
 		}
 	}

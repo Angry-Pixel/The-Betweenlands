@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.chat.Style;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +23,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.event.ClientRegistrationEvents;
+import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.event.CommonRegistrationEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
@@ -110,6 +113,14 @@ public class TheBetweenlands {
 			return server.getLevel(dimension);
 		}
 		return null;
+	}
+
+	public static void createParticle(ParticleOptions options, Level level, double x, double y, double z, @Nullable ParticleFactory.ParticleArgs<?> args) {
+		if (level.isClientSide()) {
+			BetweenlandsClient.createParticle(options, level, x, y, z, args);
+		} else {
+			//TODO send particles to client
+		}
 	}
 }
 

@@ -19,9 +19,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.items.AnadiaMobItem;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.List;
 
@@ -59,7 +62,7 @@ public class FishTrimmingTableBlock extends HorizontalBaseEntityBlock {
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (random.nextInt(5) == 0 && level.getBlockEntity(pos) instanceof FishTrimmingTableBlockEntity table) {
 			if (table.getItem(0).getItem() instanceof AnadiaMobItem mob && mob.isRotten(level, table.getItem(0))) {
-//				BLParticles.FLY.spawn(level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
+				TheBetweenlands.createParticle(ParticleRegistry.FLY.get(), level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, null);
 			}
 		}
 	}
