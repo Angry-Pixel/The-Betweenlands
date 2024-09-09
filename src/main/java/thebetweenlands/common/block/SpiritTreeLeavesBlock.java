@@ -12,8 +12,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.waterlog.SwampLeavesBlock;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class SpiritTreeLeavesBlock extends SwampLeavesBlock {
 
@@ -54,7 +56,7 @@ public class SpiritTreeLeavesBlock extends SwampLeavesBlock {
 			double px = (double) pos.getX() + random.nextDouble() * 0.5D;
 			double py = (double) pos.getY() + random.nextDouble() * 0.5D;
 			double pz = (double) pos.getZ() + random.nextDouble() * 0.5D;
-			//BLParticles.SPIRIT_BUTTERFLY.spawn(level, px, py, pz);
+			TheBetweenlands.createParticle(ParticleRegistry.SPIRIT_BUTTERFLY.get(), level, px, py, pz);
 		}
 	}
 

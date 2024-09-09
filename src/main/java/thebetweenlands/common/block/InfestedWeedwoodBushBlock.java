@@ -13,8 +13,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 
@@ -67,11 +69,11 @@ public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 		double py = pos.getY() + 1.2D;
 		double pz = pos.getZ() + 0.5D;
 		if (random.nextInt(10) == 0) {
-//			switch (this.stage) {
+			switch (this.stage) {
 //				case 0 -> BLParticles.SULFUR_TORCH.spawn(level, px, py, pz, ParticleArgs.get().withColor(0.6f, 0.35f, 0.8f, 0.28f));
-//				case 1 -> BLParticles.SILK_MOTH.spawn(level, px, py, pz);
+				case 1 -> TheBetweenlands.createParticle(ParticleRegistry.SILK_MOTH.get(), level, px, py, pz);
 //				case 2, 3, 4 -> BLParticles.DIRT_DECAY.spawn(level, px, py, pz);
-//			}
+			}
 		}
 	}
 }

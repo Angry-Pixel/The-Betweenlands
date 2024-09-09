@@ -16,10 +16,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BLLanternBlock;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -55,7 +57,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 					double py = (double) pos.getY() + 0.3D;
 					double pz = (double) pos.getZ() + 0.5D;
 
-//					BLParticles.SILK_MOTH.spawn(level, px, py, pz);
+					TheBetweenlands.createParticle(ParticleRegistry.SILK_MOTH.get(), level, px, py, pz);
 				}
 
 				entity.updateEfficiency(level, pos);
@@ -176,7 +178,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 					double py = (double) checkPos.getY() + 0.7D;
 					double pz = (double) checkPos.getZ() + 0.5D;
 
-//					BLParticles.SILK_MOTH.spawn(level, px, py, pz);
+					TheBetweenlands.createParticle(ParticleRegistry.SILK_MOTH.get(), level, px, py, pz);
 				}
 			}
 			// add other boosters?

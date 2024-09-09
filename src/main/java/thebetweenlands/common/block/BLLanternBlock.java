@@ -22,7 +22,9 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.Optional;
 
@@ -90,11 +92,11 @@ public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable {
 		double pz = (double) pos.getZ() + 0.5D;
 
 		if (random.nextInt(20) == 0 && level.canSeeSky(pos)) {
-//			if (random.nextBoolean()) {
-//				BLParticles.MOTH.spawn(level, px, py, pz);
-//			} else {
-//				BLParticles.FLY.spawn(level, px, py, pz);
-//			}
+			if (random.nextBoolean()) {
+				TheBetweenlands.createParticle(ParticleRegistry.MOTH.get(), level, px, py, pz);
+			} else {
+				TheBetweenlands.createParticle(ParticleRegistry.FLY.get(), level, px, py, pz);
+			}
 		}
 	}
 

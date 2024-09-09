@@ -31,15 +31,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.BLRegistries;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.DentrothystVialItem;
-import thebetweenlands.common.registries.AspectTypeRegistry;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -224,7 +223,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 						points.add(new Vec3(centerX, centerY + radius, centerZ));
 						points.add(new Vec3(centerX + rotX, centerY + radius, centerZ + rotZ));
 						points.add(new Vec3(centerX + rotX, pos.getY() + 0.1D, centerZ + rotZ));
-//						BLParticles.ANIMATOR.spawn(level, centerX, centerY, centerZ, ParticleArgs.get().withData(points));
+						TheBetweenlands.createParticle(ParticleRegistry.ANIMATOR.get(), level, centerX, centerY, centerZ, ParticleFactory.ParticleArgs.get().withData(points));
 					}
 				}
 			}

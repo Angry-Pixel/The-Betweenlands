@@ -47,6 +47,8 @@ import thebetweenlands.client.model.block.simulacrum.*;
 import thebetweenlands.client.model.entity.*;
 import thebetweenlands.client.particle.AnimatorParticle;
 import thebetweenlands.client.particle.BugParticle;
+import thebetweenlands.client.particle.MothParticle;
+import thebetweenlands.client.particle.SpiritButterflyParticle;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
@@ -386,6 +388,11 @@ public class ClientRegistrationEvents {
 	private static void registerParticleSprites(final RegisterParticleProvidersEvent event) {
 		event.registerSpriteSet(ParticleRegistry.ANIMATOR.get(), AnimatorParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.FLY.get(), BugParticle.FlyFactory::new);
+		event.registerSpriteSet(ParticleRegistry.MOSQUITO.get(), BugParticle.MosquitoFactory::new);
+		event.registerSpriteSet(ParticleRegistry.MOTH.get(), MothParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.SILK_MOTH.get(), BugParticle.SilkMothFactory::new);
+		event.registerSpriteSet(ParticleRegistry.SPIRIT_BUTTERFLY.get(), SpiritButterflyParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.WATER_BUG.get(), BugParticle.WaterBugFactory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

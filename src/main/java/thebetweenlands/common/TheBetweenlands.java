@@ -115,6 +115,10 @@ public class TheBetweenlands {
 		return null;
 	}
 
+	public static void createParticle(ParticleOptions options, Level level, double x, double y, double z) {
+		createParticle(options, level, x, y, z, null);
+	}
+
 	public static void createParticle(ParticleOptions options, Level level, double x, double y, double z, @Nullable ParticleFactory.ParticleArgs<?> args) {
 		if (level.isClientSide()) {
 			BetweenlandsClient.createParticle(options, level, x, y, z, args);
