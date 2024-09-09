@@ -921,6 +921,430 @@ public class BLSoundDefinitionProvider extends SoundDefinitionsProvider {
 			sound("chirobaby_egg_4"),
 			sound("chirobaby_egg_5")
 		).subtitle("blsubtitles.entity.chiromaw_hatchling.inside_egg"));
+		add(SoundRegistry.STALKER_SCREAM, definition().with(
+			sound("stalker_scream")
+		).subtitle("blsubtitles.entity.stalker.scream"));
+		add(SoundRegistry.STALKER_SCREECH, definition().with(
+			sound("stalker_screech")
+		).subtitle("blsubtitles.entity.stalker.screech"));
+		add(SoundRegistry.STALKER_STEP, definition().with(
+			sound("stalker_step_1"),
+			sound("stalker_step_2"),
+			sound("stalker_step_3"),
+			sound("stalker_step_4"),
+			sound("stalker_step_5"),
+			sound("stalker_step_6"),
+			sound("stalker_step_7"),
+			sound("stalker_step_8"),
+			sound("stalker_step_9"),
+			sound("stalker_step_10")
+		).subtitle("blsubtitles.entity.stalker.step"));
+		add(SoundRegistry.STALKER_LIVING, definition().with(
+			sound("stalker_living_1"),
+			sound("stalker_living_2"),
+			sound("stalker_living_3")
+		).subtitle("blsubtitles.entity.stalker.living"));
+		add(SoundRegistry.STALKER_HURT, definition().with(
+			sound("stalker_hurt_1"),
+			sound("stalker_hurt_2"),
+			sound("stalker_hurt_3")
+		).subtitle("blsubtitles.entity.stalker.hurt"));
+		add(SoundRegistry.STALKER_DEATH, definition().with(
+			sound("stalker_death")
+		).subtitle("blsubtitles.entity.stalker.death"));
+		add(SoundRegistry.BARRISHEE_THEME, definition().with( //TODO move to music category?
+			sound("boss/barrishee_theme").stream()
+		));
+		add(SoundRegistry.SWARM_ATTACK, definition().with(
+			sound("swarm_attack")
+		).subtitle("blsubtitles.entity.swarm.munch"));
+		add(SoundRegistry.SWARM_IDLE, definition().with(
+			sound("swarm_idle")
+		).subtitle("blsubtitles.entity.swarm.living"));
+		add(SoundRegistry.ROCK_SNOT_ATTACH, definition().with(
+			sound("rock_snot_attach")
+		).subtitle("blsubtitles.entity.rock_snot.attach"));
+		add(SoundRegistry.ROCK_SNOT_ATTACK, definition().with(
+			sound("rock_snot_attack")
+		).subtitle("blsubtitles.entity.rock_snot.attack"));
+		add(SoundRegistry.ROCK_SNOT_DIGEST, definition().with(
+			sound("rock_snot_digest")
+		).subtitle("blsubtitles.entity.rock_snot.digest"));
+		add(SoundRegistry.ROCK_SNOT_SPIT, definition().with(
+			sound("rock_snot_spit")
+		).subtitle("blsubtitles.entity.rock_snot.spit"));
+		add(SoundRegistry.ROCK_SNOT_EAT, definition().with(
+			sound("rock_snot_eat_1"),
+			sound("rock_snot_eat_2"),
+			sound("rock_snot_eat_3"),
+			sound("rock_snot_eat_4"),
+			sound("rock_snot_eat_5")
+		).subtitle("blsubtitles.entity.rock_snot.eat"));
+		add(SoundRegistry.BUBBLER_SPIT, definition().with(
+			sound("bubbler_spit_1"),
+			sound("bubbler_spit_2"),
+			sound("bubbler_spit_3")
+		).subtitle("blsubtitles.entity.bubbler.spit"));
+		add(SoundRegistry.BUBBLER_LAND, definition().with(
+			sound("bubbler_land_1"),
+			sound("bubbler_land_2"),
+			sound("bubbler_land_3")
+		).subtitle("blsubtitles.entity.bubbler.land"));
+		add(SoundRegistry.BUBBLER_POP, definition().with(
+			sound("bubbler_pop_1"),
+			sound("bubbler_pop_2"),
+			sound("bubbler_pop_3")
+		).subtitle("blsubtitles.entity.bubbler.pop"));
+		add(SoundRegistry.SLUDGE_ATTACK, definition().with(
+			vanillaSound("mob/slime/attack1"),
+			vanillaSound("mob/slime/attack2")
+		).subtitle("blsubtitles.entity.sludge.attack"));
+		add(SoundRegistry.SLUDGE_JUMP, definition().with(
+			vanillaSound("mob/slime/big1"),
+			vanillaSound("mob/slime/big2"),
+			vanillaSound("mob/slime/big3"),
+			vanillaSound("mob/slime/big4")
+		).subtitle("blsubtitles.entity.sludge.jump"));
+		add(SoundRegistry.LIVING_ROOT_HURT, definition().with(
+			vanillaSound("step/wood1"),
+			vanillaSound("step/wood2"),
+			vanillaSound("step/wood3"),
+			vanillaSound("step/wood4"),
+			vanillaSound("step/wood5"),
+			vanillaSound("step/wood6")
+		).subtitle("blsubtitles.entity.living_root.hurt"));
+		add(SoundRegistry.LIVING_ROOT_DEATH, definition().with(
+			vanillaSound("dig/wood1"),
+			vanillaSound("dig/wood2"),
+			vanillaSound("dig/wood3"),
+			vanillaSound("dig/wood4")
+		).subtitle("blsubtitles.entity.living_root.death"));
+
+		// Generic Mob Sounds
+		add(SoundRegistry.FISH_HURT, definition().with(
+			sound("fish_hurt_1"),
+			sound("fish_hurt_2"),
+			sound("fish_hurt_3")
+		).subtitle("blsubtitles.entity.fish.hurt"));
+		add(SoundRegistry.FISH_DEATH, definition().with(
+			sound("fish_death")
+		).subtitle("blsubtitles.entity.fish.death"));
+		add(SoundRegistry.FISH_FLOP, definition().with(
+			vanillaSound("mob/guardian/flop1"),
+			vanillaSound("mob/guardian/flop2"),
+			vanillaSound("mob/guardian/flop3"),
+			vanillaSound("mob/guardian/flop4")
+		).subtitle("blsubtitles.entity.fish.flop"));
+
+		// Passives
+		add(SoundRegistry.DRAGONFLY, definition().with(
+			sound("dragonfly")
+		).subtitle("blsubtitles.entity.dragonfly.living"));
+		add(SoundRegistry.FROG_DEATH, definition().with(
+			sound("frog_death")
+		).subtitle("blsubtitles.entity.frog.death"));
+		add(SoundRegistry.FROG_HURT, definition().with(
+			sound("frog_hurt_1"),
+			sound("frog_hurt_2"),
+			sound("frog_hurt_3")
+		).subtitle("blsubtitles.entity.frog.hurt"));
+		add(SoundRegistry.FROG_LIVING, definition().with(
+			sound("frog_living_1"),
+			sound("frog_living_2"),
+			sound("frog_living_3"),
+			sound("frog_living_4")
+		).subtitle("blsubtitles.entity.frog.living"));
+		add(SoundRegistry.GECKO_DEATH, definition().with(
+			sound("gecko_death")
+		).subtitle("blsubtitles.entity.gecko.death"));
+		add(SoundRegistry.GECKO_HIDE, definition().with(
+			sound("gecko_hide")
+		).subtitle("blsubtitles.entity.gecko.hide"));
+		add(SoundRegistry.GECKO_HURT, definition().with(
+			sound("gecko_hurt")
+		).subtitle("blsubtitles.entity.gecko.hurt"));
+		add(SoundRegistry.GECKO_LIVING, definition().with(
+			sound("gecko_living_1"),
+			sound("gecko_living_1"),
+			sound("gecko_living_1"),
+			sound("gecko_living_1")
+		).subtitle("blsubtitles.entity.gecko.living"));
+		add(SoundRegistry.GIANT_TOAD_DEATH, definition().with(
+			sound("giant_toad_death")
+		).subtitle("blsubtitles.entity.giant_toad.death"));
+		add(SoundRegistry.GIANT_TOAD_HURT, definition().with(
+			sound("giant_toad_hurt_1"),
+			sound("giant_toad_hurt_2"),
+			sound("giant_toad_hurt_3")
+		).subtitle("blsubtitles.entity.giant_toad.hurt"));
+		add(SoundRegistry.GIANT_TOAD_LIVING, definition().with(
+			sound("giant_toad_living_1"),
+			sound("giant_toad_living_2"),
+			sound("giant_toad_living_3"),
+			sound("giant_toad_living_4")
+		).subtitle("blsubtitles.entity.giant_toad.living"));
+		add(SoundRegistry.LEECH_DEATH, definition().with(
+			sound("snail_death")
+		).subtitle("blsubtitles.entity.leech.death"));
+		add(SoundRegistry.LEECH_HURT, definition().with(
+			sound("snail_hurt")
+		).subtitle("blsubtitles.entity.leech.hurt"));
+		add(SoundRegistry.LEECH_LIVING, definition().with(
+			sound("snail_living_1"),
+			sound("snail_living_2")
+		).subtitle("blsubtitles.entity.leech.living"));
+		add(SoundRegistry.OLM_HURT, definition().with(
+			sound("olm_hurt_1"),
+			sound("olm_hurt_2"),
+			sound("olm_hurt_3")
+		).subtitle("blsubtitles.entity.olm.hurt"));
+		add(SoundRegistry.OLM_DEATH, definition().with(
+			sound("olm_death")
+		).subtitle("blsubtitles.entity.olm.death"));
+		//TODO why are sludge menace sounds in passive?
+		add(SoundRegistry.SLUDGE_MENACE_DEATH, definition().with(
+			sound("sludge_menace_death")
+		).subtitle("blsubtitles.entity.sludge_menace.death"));
+		add(SoundRegistry.SLUDGE_MENACE_HURT, definition().with(
+			sound("sludge_menace_hurt_1"),
+			sound("sludge_menace_hurt_2"),
+			sound("sludge_menace_hurt_3")
+		).subtitle("blsubtitles.entity.sludge_menace.hurt"));
+		add(SoundRegistry.SLUDGE_MENACE_LIVING, definition().with(
+			sound("sludge_menace_living")
+		));
+		add(SoundRegistry.SLUDGE_MENACE_ATTACK, definition().with(
+			sound("sludge_menace_attack_1"),
+			sound("sludge_menace_attack_2"),
+			sound("sludge_menace_attack_3"),
+			sound("sludge_menace_attack_4"),
+			sound("sludge_menace_attack_5")
+		).subtitle("blsubtitles.entity.sludge_menace.attack"));
+		add(SoundRegistry.SLUDGE_MENACE_SPIT, definition().with(
+			sound("sludge_menace_spit_1"),
+			sound("sludge_menace_spit_2"),
+			sound("sludge_menace_spit_3")
+		).subtitle("blsubtitles.entity.sludge_menace.spit"));
+		add(SoundRegistry.SLUDGE_MENACE_SPAWN, definition().with(
+			sound("sludge_menace_spawn")
+		).subtitle("blsubtitles.entity.sludge_menace.spawn"));
+		add(SoundRegistry.SPORELING_DEATH, definition().with(
+			sound("sporeling_death")
+		).subtitle("blsubtitles.entity.sporeling.death"));
+		add(SoundRegistry.SPORELING_HURT, definition().with(
+			sound("sporeling_hurt")
+		).subtitle("blsubtitles.entity.sporeling.hurt"));
+		add(SoundRegistry.SPORELING_LIVING, definition().with(
+			sound("sporeling_living")
+		).subtitle("blsubtitles.entity.sporeling.living"));
+		add(SoundRegistry.TERMITE_LIVING, definition().with(
+			sound("termite_living_1"),
+			sound("termite_living_2")
+		).subtitle("blsubtitles.entity.termite.living"));
+		add(SoundRegistry.ROOT_SPRITE_DEATH, definition().with(
+			sound("root_sprite_death")
+		).subtitle("blsubtitles.entity.root_sprite.death"));
+		add(SoundRegistry.ROOT_SPRITE_LIVING, definition().with(
+			sound("root_sprite_living_1"),
+			sound("root_sprite_living_2"),
+			sound("root_sprite_living_3")
+		).subtitle("blsubtitles.entity.root_sprite.living"));
+		add(SoundRegistry.ROOT_SPRITE_HURT, definition().with(
+			sound("root_sprite_hurt_1"),
+			sound("root_sprite_hurt_2"),
+			sound("root_sprite_hurt_3")
+		).subtitle("blsubtitles.entity.root_sprite.hurt"));
+		add(SoundRegistry.GREEBLING_VANISH, definition().with(
+			sound("greebling_vanish")
+		).subtitle("blsubtitles.entity.greebling.vanish"));
+		add(SoundRegistry.JELLYFISH_HURT, definition().with(
+			sound("jellyfish_hurt_1"),
+			sound("jellyfish_hurt_2"),
+			sound("jellyfish_hurt_3"),
+			sound("jellyfish_hurt_4")
+		).subtitle("blsubtitles.entity.jellyfish.hurt"));
+		add(SoundRegistry.JELLYFISH_DEATH, definition().with(
+			sound("jellyfish_hurt_1"),
+			sound("jellyfish_hurt_2"),
+			sound("jellyfish_hurt_3"),
+			sound("jellyfish_hurt_4")
+		).subtitle("blsubtitles.entity.jellyfish.death"));
+		add(SoundRegistry.JELLYFISH_SWIM, definition().with(
+			sound("jellyfish_swim_1"),
+			sound("jellyfish_swim_2"),
+			sound("jellyfish_swim_3"),
+			sound("jellyfish_swim_4")
+		).subtitle("blsubtitles.entity.jellyfish.swim"));
+		add(SoundRegistry.JELLYFISH_ZAP, definition().with(
+			sound("jellyfish_zap_1"),
+			sound("jellyfish_zap_2"),
+			sound("jellyfish_zap_3")
+		).subtitle("blsubtitles.entity.jellyfish.attack"));
+		add(SoundRegistry.ANADIA_TREASURE_COLLECTED, definition().with(
+			sound("anadia_treasure_collected")
+		));
+		add(SoundRegistry.ANADIA_LOST, definition().with(
+			sound("anadia_won")
+		));
+		add(SoundRegistry.ANADIA_WON, definition().with(
+			sound("anadia_won")
+		));
+		add(SoundRegistry.FISHING_CRAB, definition().with(
+			sound("fishing_crab")
+		));
+
+		// Items
+		add(SoundRegistry.ROWBOAT_ROW_STARBOARD, definition().with(
+			sound("boat_row_1")
+		).subtitle("blsubtitles.misc.rowboat"));
+		add(SoundRegistry.ROWBOAT_ROW_PORT, definition().with(
+			sound("boat_row_2")
+		).subtitle("blsubtitles.misc.rowboat"));
+		add(SoundRegistry.ROWBOAT_ROW_START_STARBOARD, definition().with(
+			sound("boat_row_start_1")
+		).subtitle("blsubtitles.misc.rowboat"));
+		add(SoundRegistry.ROWBOAT_ROW_START_PORT, definition().with(
+			sound("boat_row_start_2")
+		).subtitle("blsubtitles.misc.rowboat"));
+		add(SoundRegistry.VOODOO_DOLL, definition().with(
+			sound("voodoo_doll")
+		).subtitle("blsubtitles.misc.voodoo_doll"));
+		add(SoundRegistry.GEM_SINGER_ECHO, definition().with(
+			sound("gem_singer_echo")
+		).subtitle("blsubtitles.misc.gem_singer_echo"));
+		add(SoundRegistry.ROPE_THROW, definition().with(
+			sound("rope_throw")
+		).subtitle("blsubtitles.misc.rope_throw"));
+		add(SoundRegistry.ROPE_PULL, definition().with(
+			sound("rope_pull")
+		).subtitle("blsubtitles.misc.rope_pull"));
+		add(SoundRegistry.ROPE_SWING, definition().with(
+			sound("rope_swing")
+		).subtitle("blsubtitles.misc.rope_swing"));
+		add(SoundRegistry.ROPE_GRAB, definition().with(
+			sound("rope_grab")
+		).subtitle("blsubtitles.misc.rope_grab"));
+		add(SoundRegistry.LONG_SWING, definition().with(
+			sound("long_swing_1"),
+			sound("long_swing_2"),
+			sound("long_swing_3")
+		));
+		add(SoundRegistry.LONG_SLICE, definition().with(
+			sound("long_slice_1"),
+			sound("long_slice_2"),
+			sound("long_slice_3")
+		));
+		add(SoundRegistry.BL_FISHING_CAST, definition().with(
+			sound("bl_fishing_cast")
+		).subtitle("blsubtitles.misc.bl_fishing_cast"));
+		add(SoundRegistry.BL_FISHING_REEL, definition().with(
+			sound("bl_fishing_reel")
+		).subtitle("blsubtitles.misc.bl_fishing_reel"));
+		add(SoundRegistry.MIST_STAFF_CAST, definition().with(
+			sound("mist_staff_cast")
+		).subtitle("blsubtitles.misc.mist_staff_cast"));
+		add(SoundRegistry.MIST_STAFF_VANISH, definition().with(
+			sound("mist_staff_vanish")
+		).subtitle("blsubtitles.misc.mist_staff_vanish"));
+		add(SoundRegistry.SILKY_PEBBLE_THROW, definition().with(
+			sound("silky_pebble_throw")
+		).subtitle("blsubtitles.misc.silky_pebble"));
+
+		// Blocks
+		add(SoundRegistry.GRIND, definition().with(
+			sound("grind")
+		).subtitle("blsubtitles.misc.grind"));
+		add(SoundRegistry.INFUSER_FINISHED, definition().with(
+			sound("infuser_finished")
+		).subtitle("blsubtitles.misc.infuser_finished"));
+		add(SoundRegistry.PURIFIER, definition().with(
+			sound("purifier")
+		).subtitle("blsubtitles.misc.purifier"));
+		add(SoundRegistry.ANIMATOR, definition().with(
+			sound("animator")
+		).subtitle("blsubtitles.misc.animator"));
+		add(SoundRegistry.PORTAL, definition().with(
+			sound("portal")
+		).subtitle("blsubtitles.misc.portal"));
+		add(SoundRegistry.PORTAL_ACTIVATE, definition().with(
+			sound("portal_activate")
+		).subtitle("blsubtitles.misc.portal_activate"));
+		add(SoundRegistry.PORTAL_TRAVEL, definition().with(
+			sound("portal_travel")
+		).subtitle("blsubtitles.misc.portal_travel"));
+		add(SoundRegistry.PORTAL_TRIGGER, definition().with(
+			sound("portal_trigger")
+		).subtitle("blsubtitles.misc.portal_trigger"));
+		add(SoundRegistry.PUFF_SHROOM, definition().with(
+			sound("puff_shroom")
+		).subtitle("blsubtitles.misc.puff_shroom"));
+		add(SoundRegistry.MUD_DOOR_1, definition().with(
+			sound("mud_door_1")
+		).subtitle("blsubtitles.misc.mud_door_unlock"));
+		add(SoundRegistry.MUD_DOOR_2, definition().with(
+			sound("mud_door_2")
+		));
+		add(SoundRegistry.MUD_DOOR_LOCK, definition().with(
+			sound("mud_door_lock")
+		).subtitle("blsubtitles.misc.mud_door_puzzle"));
+		add(SoundRegistry.MUD_DOOR_TRAP, definition().with(
+			sound("mud_door_trap")
+		).subtitle("blsubtitles.misc.mud_door_trap"));
+		add(SoundRegistry.BEAM_SWITCH, definition().with(
+			sound("beam_switch")
+		).subtitle("blsubtitles.misc.beam_switch"));
+		add(SoundRegistry.RESURRECTION, definition().with(
+			sound("resurrection")
+		));
+		add(SoundRegistry.WORM_THROW, definition().with(
+			sound("worm_throw_1"),
+			sound("worm_throw_2"),
+			sound("worm_throw_3")
+		));
+		add(SoundRegistry.CHIMES_WIND, definition().with(
+			sound("chimes_wind_1"),
+			sound("chimes_wind_2"),
+			sound("chimes_wind_3")
+		).subtitle("blsubtitles.misc.wind"));
+		add(SoundRegistry.CHIMES_AURORAS, definition().with(
+			sound("chimes_auroras")
+		));
+		add(SoundRegistry.CHIMES_BLOOD_SKY, definition().with(
+			sound("chimes_blood_sky")
+		));
+		add(SoundRegistry.CHIMES_DENSE_FOG, definition().with(
+			sound("chimes_dense_fog")
+		));
+		add(SoundRegistry.CHIMES_HEAVY_RAIN, definition().with(
+			sound("chimes_heavy_rain")
+		));
+		add(SoundRegistry.CHIMES_RIFT, definition().with(
+			sound("chimes_rift")
+		));
+		add(SoundRegistry.CHIMES_THUNDERSTORM, definition().with(
+			sound("chimes_thunderstorm")
+		));
+		add(SoundRegistry.CHIMES_SNOWFALL, definition().with(
+			sound("chimes_snowfall")
+		));
+		add(SoundRegistry.FISHING_TACKLE_BOX_OPEN, definition().with(
+			sound("fishing_tackle_box_open")
+		).subtitle("blsubtitles.misc.fishing_tackle_box"));
+		add(SoundRegistry.FISHING_TACKLE_BOX_CLOSE, definition().with(
+			sound("fishing_tackle_box_close")
+		).subtitle("blsubtitles.misc.fishing_tackle_box"));
+		add(SoundRegistry.FISH_CHOP, definition().with(
+			sound("fish_chop")
+		).subtitle("blsubtitles.misc.fish_chop"));
+		add(SoundRegistry.LYESTONE_FIZZ, definition().with(
+			sound("lyestone_fizz")
+		).subtitle("blsubtitles.misc.lyestone_fizzes"));
+		add(SoundRegistry.GRUB_HUB_MIST, definition().with(
+			sound("grub_hub_mist")
+		).subtitle("blsubtitles.entity.grub_hub_mist"));
+		add(SoundRegistry.GRUB_HUB_SUCK, definition().with(
+			sound("grub_hub_suck")
+		).subtitle("blsubtitles.entity.grub_hub_suck"));
 		//TODO rest of sounds
 	}
 

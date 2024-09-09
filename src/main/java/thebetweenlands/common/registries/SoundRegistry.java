@@ -262,12 +262,12 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> STALKER_LIVING = register("stalker_living");
 	public static final DeferredHolder<SoundEvent, SoundEvent> STALKER_HURT = register("stalker_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> STALKER_DEATH = register("stalker_death");
-	public static final DeferredHolder<SoundEvent, SoundEvent> BARRISHEE_THEME = register("barrishee_theme");
+	public static final DeferredHolder<SoundEvent, SoundEvent> BARRISHEE_THEME = register("barrishee_theme"); //TODO move to music category?
 	public static final DeferredHolder<SoundEvent, SoundEvent> SWARM_ATTACK = register("swarm_attack");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SWARM_IDLE = register("swarm_idle");
 	public static final DeferredHolder<SoundEvent, SoundEvent> ROCK_SNOT_ATTACH = register("rock_snot_attach");
 	public static final DeferredHolder<SoundEvent, SoundEvent> ROCK_SNOT_ATTACK = register("rock_snot_attack");
-	public static final DeferredHolder<SoundEvent, SoundEvent> ROCK_SNOT_DIGEST= register("rock_snot_digest");
+	public static final DeferredHolder<SoundEvent, SoundEvent> ROCK_SNOT_DIGEST = register("rock_snot_digest");
 	public static final DeferredHolder<SoundEvent, SoundEvent> ROCK_SNOT_SPIT = register("rock_snot_spit");
 	public static final DeferredHolder<SoundEvent, SoundEvent> ROCK_SNOT_EAT = register("rock_snot_eat");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BUBBLER_SPIT = register("bubbler_spit");
@@ -305,6 +305,7 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> LEECH_LIVING = register("leech_living");
 	public static final DeferredHolder<SoundEvent, SoundEvent> OLM_HURT = register("olm_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> OLM_DEATH = register("olm_death");
+	//TODO why are sludge menace sounds in passive?
 	public static final DeferredHolder<SoundEvent, SoundEvent> SLUDGE_MENACE_DEATH = register("sludge_menace_death");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SLUDGE_MENACE_HURT = register("sludge_menace_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SLUDGE_MENACE_LIVING = register("sludge_menace_living");
