@@ -1065,9 +1065,9 @@ public class BLSoundDefinitionProvider extends SoundDefinitionsProvider {
 		).subtitle("blsubtitles.entity.gecko.hurt"));
 		add(SoundRegistry.GECKO_LIVING, definition().with(
 			sound("gecko_living_1"),
-			sound("gecko_living_1"),
-			sound("gecko_living_1"),
-			sound("gecko_living_1")
+			sound("gecko_living_2"),
+			sound("gecko_living_3"),
+			sound("gecko_living_4")
 		).subtitle("blsubtitles.entity.gecko.living"));
 		add(SoundRegistry.GIANT_TOAD_DEATH, definition().with(
 			sound("giant_toad_death")
