@@ -18,7 +18,7 @@ public class RootedFlowerBlock extends PlantBlock {
 	private final Holder<Block> root;
 
 	public RootedFlowerBlock(Holder<Block> root, Properties properties) {
-		super(properties);
+		super(PlantBlock.GRASS_SHAPE, false, properties);
 		this.root = root;
 	}
 

@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/carpet",
+  "parent": "thebetweenlands:block/thin_block",
   "render_type": "minecraft:cutout",
   "textures": {
-    "wool": "thebetweenlands:block/moss"
+    "texture": "thebetweenlands:block/moss"
   }
 }

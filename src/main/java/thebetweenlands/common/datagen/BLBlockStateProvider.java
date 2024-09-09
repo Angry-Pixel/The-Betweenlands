@@ -120,11 +120,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.WEEDWOOD);
 		this.logBlockWithItem(BlockRegistry.SAP_LOG);
 		this.barkBlockWithItem(BlockRegistry.SAP_BARK, this.modLoc("block/sap_log_side"));
-		this.simpleBlockWithItem(BlockRegistry.WEEDWOOD_LEAVES);
-		this.simpleBlockWithItem(BlockRegistry.SAP_LEAVES);
-		this.simpleBlockWithItem(BlockRegistry.RUBBER_TREE_LEAVES);
-		this.simpleBlockWithItem(BlockRegistry.HEARTHGROVE_LEAVES);
-		this.simpleBlockWithItem(BlockRegistry.NIBBLETWIG_LEAVES);
+		this.leavesBlockWithItem(BlockRegistry.WEEDWOOD_LEAVES);
+		this.leavesBlockWithItem(BlockRegistry.SAP_LEAVES);
+		this.leavesBlockWithItem(BlockRegistry.RUBBER_TREE_LEAVES);
+		this.leavesBlockWithItem(BlockRegistry.HEARTHGROVE_LEAVES);
+		this.leavesBlockWithItem(BlockRegistry.NIBBLETWIG_LEAVES);
 		this.simpleBlock(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/top_spirit_tree_leaves_top")));
 		this.basicItemTex(BlockRegistry.TOP_SPIRIT_TREE_LEAVES, true);
 		this.simpleBlock(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/blank")));
@@ -590,7 +590,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.COMPOST_BIN, this.modLoc("block/particle/compost_bin_particle"), 0.625F, 0.0F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_JUKEBOX.get(), this.models().cubeTop("weedwood_jukebox", this.modLoc("block/weedwood_jukebox_side"), this.modLoc("block/weedwood_jukebox_top")));
 		this.simpleBlockItem(BlockRegistry.WEEDWOOD_JUKEBOX);
-		this.simpleBlockWithItem(BlockRegistry.SLUDGE.get(), this.models().withExistingParent(BlockRegistry.SLUDGE.getId().getPath(), "block/snow_height2").texture("texture", this.modLoc("block/sludge")).texture("particle", this.modLoc("block/sludge")));
+		this.simpleBlockWithItem(BlockRegistry.SLUDGE.get(), this.models().withExistingParent(BlockRegistry.SLUDGE.getId().getPath(), this.modLoc("block/thin_block")).renderType("translucent").texture("texture", this.modLoc("block/sludge")));
 		this.getVariantBuilder(BlockRegistry.SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/sulfur_furnace" + (state.getValue(SulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(SulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
 		this.simpleBlockItem(BlockRegistry.SULFUR_FURNACE);
 		this.getVariantBuilder(BlockRegistry.DUAL_SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/dual_sulfur_furnace" + (state.getValue(DualSulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(DualSulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
@@ -644,6 +644,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.WEEDWOOD_BARREL, this.modLoc("block/weedwood_planks"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.SYRMORITE_BARREL, this.modLoc("block/syrmorite_block"), 0.625F, 0.0F);
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);
+		this.carpetBlockWithItem(BlockRegistry.CHIP_PATH);
 		this.builtinEntityAndItem(BlockRegistry.REPELLER, this.modLoc("block/particle/repeller_particle"), 0.45F, -2.0F);
 		this.builtinEntityAndItem(BlockRegistry.WAYSTONE, this.modLoc("block/smooth_betweenstone"), 0.25F, -3.0F);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
@@ -819,9 +820,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlock(BlockRegistry.CATTAIL.get(), this.models().withExistingParent(BlockRegistry.CATTAIL.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
 			.texture("cross", this.modLoc("block/cattail_tinted"))
 			.texture("cross2", this.modLoc("block/cattail_untinted")));
-		this.itemModels().withExistingParent(BlockRegistry.CATTAIL.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
-			.texture("layer0", this.modLoc("block/cattail_tinted"))
-			.texture("layer1", this.modLoc("block/cattail_untinted"));
+		this.basicItemTex(BlockRegistry.CATTAIL, false);
 		this.crossBlockWithItem(BlockRegistry.CAVE_GRASS);
 		this.crossBlockWithItem(BlockRegistry.COPPER_IRIS);
 		this.crossBlockWithItem(BlockRegistry.MARSH_HIBISCUS);
@@ -862,8 +861,12 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.mossBlockWithItem(BlockRegistry.DEAD_MOSS);
 		this.mossBlockWithItem(BlockRegistry.LICHEN);
 		this.mossBlockWithItem(BlockRegistry.DEAD_LICHEN);
-		this.crossBlockWithItem(BlockRegistry.HANGER);
-		this.crossBlockWithItem(BlockRegistry.SEEDED_HANGER);
+		this.tintedCrossBlockWithItem(BlockRegistry.HANGER);
+		this.basicItemTex(BlockRegistry.HANGER, false);
+		this.simpleBlock(BlockRegistry.SEEDED_HANGER.get(), this.models().withExistingParent(BlockRegistry.SEEDED_HANGER.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
+			.texture("cross", this.modLoc("block/seeded_hanger_tinted"))
+			.texture("cross2", this.modLoc("block/seeded_hanger_untinted")));
+		this.basicItemTex(BlockRegistry.SEEDED_HANGER, false);
 		//more bushes
 		this.simpleBlock(BlockRegistry.FALLEN_LEAVES.get(), this.models().carpet("fallen_leaves", this.modLoc("block/fallen_leaves")));
 		this.basicItemTex(BlockRegistry.FALLEN_LEAVES, false);
@@ -1061,8 +1064,17 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
+	public void leavesBlockWithItem(DeferredBlock<Block> block) {
+		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), this.mcLoc("block/leaves")).texture("all", this.blockTexture(block.get())).renderType("cutout_mipped"));
+		this.simpleBlockItem(block);
+	}
+
 	public void crossBlock(DeferredBlock<? extends Block> block) {
 		this.simpleBlock(block.get(), this.models().cross(block.getId().getPath(), this.blockTexture(block.get())).renderType("cutout"));
+	}
+
+	public void tintedCrossBlock(DeferredBlock<? extends Block> block) {
+		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), this.mcLoc("block/tinted_cross")).texture("cross", this.blockTexture(block.get())).renderType("cutout"));
 	}
 
 	public void crossBlockWithItem(DeferredBlock<Block> block) {
@@ -1080,7 +1092,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void tintedCrossBlockWithItem(DeferredBlock<Block> block) {
-		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), this.mcLoc("block/tinted_cross")).texture("cross", this.blockTexture(block.get())).renderType("cutout"));
+		this.tintedCrossBlock(block);
 		this.basicItemTex(block, true);
 	}
 
@@ -1089,8 +1101,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.texture("particle", this.blockTexture(block.get()))
 			.texture("texture", this.blockTexture(block.get())).ao(false).renderType("cutout")
 			.element().from(0.0F, 0.0F, 0.1F).to(16.0F, 16.0F, 0.1F)
-			.face(Direction.NORTH).texture("#texture").end()
-			.face(Direction.SOUTH).texture("#texture").end().end();
+			.face(Direction.NORTH).texture("#texture").tintindex(0).end()
+			.face(Direction.SOUTH).texture("#texture").tintindex(0).end().end();
 		var builder = this.getMultipartBuilder(block.get());
 		for (Direction dir : Direction.values()) {
 			builder.part().modelFile(file)
@@ -1102,7 +1114,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void mossBlockWithItem(DeferredBlock<Block> block) {
-		ModelFile file = this.models().carpet(block.getId().getPath(), this.modLoc("block/" + block.getId().getPath().replace("dead_", ""))).renderType("cutout");
+		ModelFile file = this.models().withExistingParent(block.getId().getPath(), this.modLoc("block/thin_block")).renderType("cutout").texture("texture", this.modLoc("block/" + block.getId().getPath().replace("dead_", "")));
 		this.getVariantBuilder(block.get()).forAllStates(state -> {
 			Direction dir = state.getValue(BlockStateProperties.FACING);
 			return ConfiguredModel.builder()

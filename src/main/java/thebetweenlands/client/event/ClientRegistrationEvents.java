@@ -15,12 +15,14 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -388,19 +390,31 @@ public class ClientRegistrationEvents {
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-		event.register((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor(),
+		event.register((state, level, pos, tintIndex) -> {
+				if (tintIndex <= 0) {
+					return level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor();
+				}
+				return 0xFFFFFFFF;
+			},
 			BlockRegistry.WEEDWOOD_LEAVES.get(),
-			BlockRegistry.NIBBLETWIG_LEAVES.get(),
 			BlockRegistry.RUBBER_TREE_LEAVES.get(),
 			BlockRegistry.POISON_IVY.get(),
 			BlockRegistry.MOSS.get(),
+			BlockRegistry.DEAD_MOSS.get(),
 			BlockRegistry.HANGER.get(),
 			BlockRegistry.SEEDED_HANGER.get());
 
-		event.register((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.getDefaultColor(),
+		event.register((state, level, pos, tintIndex) -> {
+				if (tintIndex <= 0) {
+					return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.getDefaultColor();
+				}
+				return 0xFFFFFFFF;
+			},
 			BlockRegistry.SWAMP_GRASS.get(),
 			BlockRegistry.SHORT_SWAMP_GRASS.get(),
 			BlockRegistry.TALL_SWAMP_GRASS.get(),
+			BlockRegistry.CATTAIL.get(),
+			BlockRegistry.POISON_IVY.get(),
 			BlockRegistry.SWAMP_REED.get());
 
 		event.register((state, level, pos, tintIndex) -> {
@@ -414,9 +428,9 @@ public class ClientRegistrationEvents {
 			for (int dx = -1; dx <= 1; dx++) {
 				for (int dz = -1; dz <= 1; dz++) {
 					int colorMultiplier = BiomeColors.getAverageWaterColor(level, pos);
-					r += (colorMultiplier & 0xFF0000) >> 16;
-					g += (colorMultiplier & 0x00FF00) >> 8;
-					b += colorMultiplier & 0x0000FF;
+					r += FastColor.ARGB32.red(colorMultiplier);
+					g += FastColor.ARGB32.green(colorMultiplier);
+					b += FastColor.ARGB32.blue(colorMultiplier);
 				}
 			}
 			r /= 9;
@@ -435,7 +449,7 @@ public class ClientRegistrationEvents {
 			r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);
 			g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
 			b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
-			return r << 16 | g << 8 | b;
+			return FastColor.ARGB32.color(FastColor.as8BitChannel(1.0F), r, g, b);
 		}, BlockRegistry.SWAMP_WATER.get());
 
 		event.register((state, level, pos, tintIndex) -> {
@@ -453,10 +467,12 @@ public class ClientRegistrationEvents {
 		BlockColors blockColors = event.getBlockColors();
 
 		event.register((stack, tintIndex) -> stack.getItem() instanceof BlockItem blocc ? blockColors.getColor(blocc.getBlock().defaultBlockState(), null, null, tintIndex) : 0xFFFFFFFF,
-			BlockRegistry.WHITE_PRESENT.get(), BlockRegistry.LIGHT_GRAY_PRESENT.get(), BlockRegistry.GRAY_PRESENT.get(), BlockRegistry.BLACK_PRESENT.get(),
-			BlockRegistry.RED_PRESENT.get(), BlockRegistry.ORANGE_PRESENT.get(), BlockRegistry.YELLOW_PRESENT.get(), BlockRegistry.GREEN_PRESENT.get(),
-			BlockRegistry.LIME_PRESENT.get(), BlockRegistry.BLUE_PRESENT.get(), BlockRegistry.CYAN_PRESENT.get(), BlockRegistry.LIGHT_BLUE_PRESENT.get(),
-			BlockRegistry.PURPLE_PRESENT.get(), BlockRegistry.MAGENTA_PRESENT.get(), BlockRegistry.PINK_PRESENT.get(), BlockRegistry.BROWN_PRESENT.get());
+			BlockRegistry.WHITE_PRESENT, BlockRegistry.LIGHT_GRAY_PRESENT, BlockRegistry.GRAY_PRESENT, BlockRegistry.BLACK_PRESENT,
+			BlockRegistry.RED_PRESENT, BlockRegistry.ORANGE_PRESENT, BlockRegistry.YELLOW_PRESENT, BlockRegistry.GREEN_PRESENT,
+			BlockRegistry.LIME_PRESENT, BlockRegistry.BLUE_PRESENT, BlockRegistry.CYAN_PRESENT, BlockRegistry.LIGHT_BLUE_PRESENT,
+			BlockRegistry.PURPLE_PRESENT, BlockRegistry.MAGENTA_PRESENT, BlockRegistry.PINK_PRESENT, BlockRegistry.BROWN_PRESENT,
+			BlockRegistry.SHORT_SWAMP_GRASS, BlockRegistry.POISON_IVY, BlockRegistry.TALL_SWAMP_GRASS, BlockRegistry.MOSS, BlockRegistry.DEAD_MOSS,
+			BlockRegistry.WEEDWOOD_LEAVES.get(), BlockRegistry.RUBBER_TREE_LEAVES.get());
 
 		event.register((stack, tintIndex) -> {
 			if (stack.get(DataComponents.ENTITY_DATA) != null) {
@@ -470,21 +486,21 @@ public class ClientRegistrationEvents {
 				return AnadiaParts.AnadiaColor.get(stack.get(DataComponents.ENTITY_DATA).copyTag().getByte("fish_color")).getColor();
 			}
 			return AnadiaParts.AnadiaColor.UNKNOWN.getColor();
-		}, ItemRegistry.ANADIA.get());
+		}, ItemRegistry.ANADIA);
 
 		event.register((stack, tintIndex) -> {
 			if (tintIndex != 1) return 0xFFFFFFFF;
 			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().map(aspect -> aspect.value().color()).orElse(0xFFFFFFFF);
-		}, ItemRegistry.ASPECTRUS_FRUIT.get());
+		}, ItemRegistry.ASPECTRUS_FRUIT);
 
 		event.register((stack, tintIndex) -> {
 			if (tintIndex != 0) return 0xFFFFFFFF;
 			return stack.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).getElixirColor();
-		}, ItemRegistry.GREEN_ELIXIR.get(), ItemRegistry.ORANGE_ELIXIR.get());
+		}, ItemRegistry.GREEN_ELIXIR, ItemRegistry.ORANGE_ELIXIR);
 
 		event.register((stack, tintIndex) -> {
 			if (tintIndex != 0) return 0xFFFFFFFF;
 			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).getAspectColor();
-		}, ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get());
+		}, ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.ORANGE_ASPECT_VIAL);
 	}
 }

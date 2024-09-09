@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SludgeDungeonPlantBlock extends PlantBlock {
 	public SludgeDungeonPlantBlock(Properties properties) {
-		super(properties);
+		super(PlantBlock.GRASS_SHAPE, false, properties);
 	}
 
 	@Override

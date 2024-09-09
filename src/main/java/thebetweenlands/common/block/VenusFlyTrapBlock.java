@@ -13,7 +13,7 @@ public class VenusFlyTrapBlock extends PlantBlock {
 	public static final BooleanProperty BLOOMING = BooleanProperty.create("blooming");
 
 	public VenusFlyTrapBlock(Properties properties) {
-		super(properties);
+		super(PlantBlock.GRASS_SHAPE, false, properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(BLOOMING, false));
 	}
 

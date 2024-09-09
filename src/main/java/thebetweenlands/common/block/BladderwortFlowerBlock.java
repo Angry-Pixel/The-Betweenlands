@@ -7,7 +7,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class BladderwortFlowerBlock extends PlantBlock {
 	public BladderwortFlowerBlock(Properties properties) {
-		super(properties);
+		super(PlantBlock.GRASS_SHAPE, false, properties);
 	}
 
 	@Override

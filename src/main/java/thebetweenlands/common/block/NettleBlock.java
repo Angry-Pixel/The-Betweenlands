@@ -13,7 +13,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class NettleBlock extends PlantBlock {
 	public NettleBlock(Properties properties) {
-		super(properties);
+		super(PlantBlock.FLOWER_SHAPE, true, properties);
 	}
 
 	@Override

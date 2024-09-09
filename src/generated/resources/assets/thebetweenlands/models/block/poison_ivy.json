@@ -5,10 +5,12 @@
     {
       "faces": {
         "north": {
-          "texture": "#texture"
+          "texture": "#texture",
+          "tintindex": 0
         },
         "south": {
-          "texture": "#texture"
+          "texture": "#texture",
+          "tintindex": 0
         }
       },
       "from": [

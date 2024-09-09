@@ -55,18 +55,7 @@ public class MossBlock extends DirectionalBlock {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		Direction facing = context.getNearestLookingDirection().getOpposite();
-		BlockState facingState = context.getLevel().getBlockState(context.getClickedPos().relative(facing));
-		if (facingState.isFaceSturdy(context.getLevel(), context.getClickedPos().relative(facing), facing.getOpposite())) {
-			return this.defaultBlockState().setValue(FACING, facing);
-		} else {
-			for (Direction direction : Direction.values()) {
-				if (context.getLevel().getBlockState(context.getClickedPos().relative(direction.getOpposite())).isFaceSturdy(context.getLevel(), context.getClickedPos().relative(direction.getOpposite()), direction)) {
-					return this.defaultBlockState().setValue(FACING, direction);
-				}
-			}
-			return null;
-		}
+		return this.defaultBlockState().setValue(FACING, context.getClickedFace());
 	}
 
 	@Override
@@ -166,5 +155,15 @@ public class MossBlock extends DirectionalBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
+	}
+
+	@Override
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+		return 1.0F;
+	}
+
+	@Override
+	protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
+		return adjacentState.is(this) || super.skipRendering(state, adjacentState, direction);
 	}
 }

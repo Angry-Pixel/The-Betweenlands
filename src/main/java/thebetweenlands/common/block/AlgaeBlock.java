@@ -17,12 +17,7 @@ public class AlgaeBlock extends PlantBlock {
 	protected static final VoxelShape PLANT_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 
 	public AlgaeBlock(Properties properties) {
-		super(properties);
-	}
-
-	@Override
-	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return PLANT_AABB;
+		super(PLANT_AABB, false, properties);
 	}
 
 	@Override

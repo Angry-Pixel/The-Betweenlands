@@ -19,7 +19,7 @@ import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 public class SwampReedBlock extends PlantBlock implements SwampWaterLoggable {
 
 	public SwampReedBlock(Properties properties) {
-		super(properties);
+		super(PlantBlock.GRASS_SHAPE, false, properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(WATER_TYPE, WaterType.NONE));
 	}
 

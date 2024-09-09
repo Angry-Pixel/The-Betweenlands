@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/snow_height2",
+  "parent": "thebetweenlands:block/thin_block",
+  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "thebetweenlands:block/sludge",
     "texture": "thebetweenlands:block/sludge"
   }
 }
