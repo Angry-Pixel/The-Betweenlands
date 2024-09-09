@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "thebetweenlands:block/dead_moss",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "thebetweenlands:block/dead_moss",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/dead_moss",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/dead_moss",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "thebetweenlands:block/dead_moss"
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/dead_moss",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

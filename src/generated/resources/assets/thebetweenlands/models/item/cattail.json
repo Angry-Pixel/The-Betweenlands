@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:block/cattail_tinted",
+    "layer1": "thebetweenlands:block/cattail_untinted"
+  }
+}

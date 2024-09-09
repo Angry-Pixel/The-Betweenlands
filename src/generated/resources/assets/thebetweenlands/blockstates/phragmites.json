@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=east,half=lower": {
+      "model": "thebetweenlands:block/phragmites_bottom"
+    },
+    "facing=east,half=upper": {
+      "model": "thebetweenlands:block/phragmites_top"
+    },
+    "facing=north,half=lower": {
+      "model": "thebetweenlands:block/phragmites_bottom"
+    },
+    "facing=north,half=upper": {
+      "model": "thebetweenlands:block/phragmites_top"
+    },
+    "facing=south,half=lower": {
+      "model": "thebetweenlands:block/phragmites_bottom"
+    },
+    "facing=south,half=upper": {
+      "model": "thebetweenlands:block/phragmites_top"
+    },
+    "facing=west,half=lower": {
+      "model": "thebetweenlands:block/phragmites_bottom"
+    },
+    "facing=west,half=upper": {
+      "model": "thebetweenlands:block/phragmites_top"
+    }
+  }
+}

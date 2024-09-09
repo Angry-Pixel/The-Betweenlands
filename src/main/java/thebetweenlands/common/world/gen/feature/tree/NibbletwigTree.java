@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import thebetweenlands.common.block.PoisonIvyBlock;
@@ -73,7 +74,7 @@ public class NibbletwigTree {
 				for (int yo = 0; yo < ivyLength; yo++) {
 					BlockPos ivyPosY = ivyPos.below(yo);
 					if (accessor.isEmptyBlock(ivyPosY)) {
-						accessor.setBlock(ivyPosY, ivy.setValue(PoisonIvyBlock.getPropertyForFace(offset.getOpposite()), true), 2);
+						accessor.setBlock(ivyPosY, ivy.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(offset.getOpposite()), true), 2);
 					} else {
 						break;
 					}
@@ -125,7 +126,7 @@ public class NibbletwigTree {
 				for (int yo = 0; yo < ivyLength; yo++) {
 					BlockPos ivyPosY = ivyPos.below(yo);
 					if (accessor.isEmptyBlock(ivyPosY)) {
-						accessor.setBlock(ivyPosY, ivy.setValue(PoisonIvyBlock.getPropertyForFace(ivyOffset.getOpposite()), true), 2);
+						accessor.setBlock(ivyPosY, ivy.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(ivyOffset.getOpposite()), true), 2);
 					} else {
 						break;
 					}

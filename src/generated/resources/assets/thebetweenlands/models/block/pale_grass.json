@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "cross": "thebetweenlands:block/pale_grass"
+  }
+}

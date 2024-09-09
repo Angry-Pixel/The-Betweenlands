@@ -5,10 +5,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.block.state.properties.WallSide;
+import net.minecraft.world.level.block.state.properties.*;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -799,8 +796,82 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.PINK_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 		this.simpleBlockWithItem(BlockRegistry.BROWN_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 
+		this.crossBlockWithItem(BlockRegistry.WEEDWOOD_SAPLING);
+		this.crossBlockWithItem(BlockRegistry.SAP_SAPLING);
+		this.crossBlockWithItem(BlockRegistry.RUBBER_SAPLING);
+//		this.crossBlockWithItem(BlockRegistry.HEARTHGROVE_SAPLING);
+		this.crossBlockWithItem(BlockRegistry.NIBBLETWIG_SAPLING);
+//		this.crossBlockWithItem(BlockRegistry.SPIRIT_TREE_SAPLING);
+		//3d model plants
+		this.crossBlockWithItem(BlockRegistry.MIRE_CORAL);
+		this.crossBlockWithItem(BlockRegistry.DEEP_WATER_CORAL);
+		this.crossBlockWithItem(BlockRegistry.WATER_WEEDS);
+		//algae (connected texture)
+		this.multifaceBlockWithItem(BlockRegistry.POISON_IVY);
+		this.crossBlockWithItem(BlockRegistry.ARROW_ARUM);
+		this.crossBlockWithItem(BlockRegistry.BLUE_EYED_GRASS);
+		this.crossBlockWithItem(BlockRegistry.BLUE_IRIS);
+		this.crossBlockWithItem(BlockRegistry.BONESET);
+		this.crossBlockWithItem(BlockRegistry.BOTTLE_BRUSH_GRASS);
+		this.doubleCrossBlockWithItem(BlockRegistry.BROOMSEDGE);
+		this.crossBlockWithItem(BlockRegistry.BUTTON_BUSH);
+		this.doubleCrossBlockWithItem(BlockRegistry.CARDINAL_FLOWER);
+		this.simpleBlock(BlockRegistry.CATTAIL.get(), this.models().withExistingParent(BlockRegistry.CATTAIL.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
+			.texture("cross", this.modLoc("block/cattail_tinted"))
+			.texture("cross2", this.modLoc("block/cattail_untinted")));
+		this.itemModels().withExistingParent(BlockRegistry.CATTAIL.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
+			.texture("layer0", this.modLoc("block/cattail_tinted"))
+			.texture("layer1", this.modLoc("block/cattail_untinted"));
+		this.crossBlockWithItem(BlockRegistry.CAVE_GRASS);
+		this.crossBlockWithItem(BlockRegistry.COPPER_IRIS);
+		this.crossBlockWithItem(BlockRegistry.MARSH_HIBISCUS);
+		this.crossBlockWithItem(BlockRegistry.MARSH_MALLOW);
+		this.crossBlockWithItem(BlockRegistry.BLADDERWORT_FLOWER);
+		this.crossBlockWithItem(BlockRegistry.BLADDERWORT_STALK);
+		this.crossBlockWithItem(BlockRegistry.BOG_BEAN_FLOWER);
+		this.crossBlockWithItem(BlockRegistry.BOG_BEAN_STALK);
+		this.crossBlockWithItem(BlockRegistry.GOLDEN_CLUB_FLOWER);
+		this.crossBlockWithItem(BlockRegistry.GOLDEN_CLUB_STALK);
+		this.crossBlockWithItem(BlockRegistry.MARSH_MARIGOLD_FLOWER);
+		this.crossBlockWithItem(BlockRegistry.MARSH_MARIGOLD_STALK);
+		this.doubleCrossBlockWithItem(BlockRegistry.TALL_SWAMP_GRASS);
+		this.crossBlockWithItem(BlockRegistry.MILKWEED);
+		this.crossBlockWithItem(BlockRegistry.NETTLE);
+		this.crossBlockWithItem(BlockRegistry.FLOWERED_NETTLE);
+		this.crossBlockWithItem(BlockRegistry.PICKERELWEED);
+		this.doubleCrossBlockWithItem(BlockRegistry.PHRAGMITES);
+		this.crossBlockWithItem(BlockRegistry.SHOOTS);
+		this.crossBlockWithItem(BlockRegistry.SLUDGECREEP);
+		this.crossBlockWithItem(BlockRegistry.TALL_SLUDGECREEP);
+		this.crossBlockWithItem(BlockRegistry.SOFT_RUSH);
+		this.multifaceBlockWithItem(BlockRegistry.THORNS);
+		this.doubleCrossBlockWithItem(BlockRegistry.TALL_CATTAIL);
+		this.tintedCrossBlockWithItem(BlockRegistry.SHORT_SWAMP_GRASS);
+		this.crossBlockWithItem(BlockRegistry.DEAD_WEEDWOOD_BUSH);
+		//bushes and nests
+		this.crossBlock(BlockRegistry.CAVE_MOSS_PLANT);
+		this.crossBlockWithItem(BlockRegistry.CAVE_MOSS);
+		this.crossBlock(BlockRegistry.CRYPTWEED_PLANT);
+		this.crossBlockWithItem(BlockRegistry.CRYPTWEED);
+		this.crossBlock(BlockRegistry.STRING_ROOTS_PLANT);
+		this.crossBlockWithItem(BlockRegistry.STRING_ROOTS);
+		this.simpleBlock(BlockRegistry.PALE_GRASS.get(), this.models().cross(BlockRegistry.PALE_GRASS.getId().getPath(), this.blockTexture(BlockRegistry.PALE_GRASS.get())).renderType("translucent"));
+		this.basicItemTex(BlockRegistry.PALE_GRASS, true);
+		this.crossBlockWithItem(BlockRegistry.ROTBULB);
+		this.mossBlockWithItem(BlockRegistry.MOSS);
+		this.mossBlockWithItem(BlockRegistry.DEAD_MOSS);
+		this.mossBlockWithItem(BlockRegistry.LICHEN);
+		this.mossBlockWithItem(BlockRegistry.DEAD_LICHEN);
+		this.crossBlockWithItem(BlockRegistry.HANGER);
+		this.crossBlockWithItem(BlockRegistry.SEEDED_HANGER);
+		//more bushes
 		this.simpleBlock(BlockRegistry.FALLEN_LEAVES.get(), this.models().carpet("fallen_leaves", this.modLoc("block/fallen_leaves")));
 		this.basicItemTex(BlockRegistry.FALLEN_LEAVES, false);
+		this.simpleBlock(BlockRegistry.SWAMP_REED.get(), this.models().withExistingParent(BlockRegistry.SWAMP_REED.getId().getPath(), this.mcLoc("block/tinted_cross")).texture("cross", this.blockTexture(BlockRegistry.SWAMP_REED.get())).renderType("cutout"));
+		this.basicItemTex(BlockRegistry.SWAMP_REED, false);
+		this.crossBlock(BlockRegistry.SWAMP_KELP_PLANT);
+		this.crossBlock(BlockRegistry.SWAMP_KELP);
+		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {
@@ -990,6 +1061,59 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
+	public void crossBlock(DeferredBlock<? extends Block> block) {
+		this.simpleBlock(block.get(), this.models().cross(block.getId().getPath(), this.blockTexture(block.get())).renderType("cutout"));
+	}
+
+	public void crossBlockWithItem(DeferredBlock<Block> block) {
+		this.crossBlock(block);
+		this.basicItemTex(block, true);
+	}
+
+	public void doubleCrossBlockWithItem(DeferredBlock<Block> block) {
+		this.getVariantBuilder(block.get()).forAllStates(state -> {
+			String suffix = state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER ? "_bottom" : "_top";
+			return ConfiguredModel.builder().modelFile(this.models().cross(block.getId().getPath() + suffix, this.blockTexture(block.get()).withSuffix(suffix)).renderType("cutout")).build();
+		});
+		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
+			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "block/" + block.getId().getPath() + "_top"));
+	}
+
+	public void tintedCrossBlockWithItem(DeferredBlock<Block> block) {
+		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), this.mcLoc("block/tinted_cross")).texture("cross", this.blockTexture(block.get())).renderType("cutout"));
+		this.basicItemTex(block, true);
+	}
+
+	public void multifaceBlockWithItem(DeferredBlock<Block> block) {
+		ModelFile file = this.models().withExistingParent(block.getId().getPath(), this.mcLoc("block/block"))
+			.texture("particle", this.blockTexture(block.get()))
+			.texture("texture", this.blockTexture(block.get())).ao(false).renderType("cutout")
+			.element().from(0.0F, 0.0F, 0.1F).to(16.0F, 16.0F, 0.1F)
+			.face(Direction.NORTH).texture("#texture").end()
+			.face(Direction.SOUTH).texture("#texture").end().end();
+		var builder = this.getMultipartBuilder(block.get());
+		for (Direction dir : Direction.values()) {
+			builder.part().modelFile(file)
+				.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isVertical() ? 270 : 0)
+				.rotationY(dir.getAxis().isHorizontal() ? (int) dir.getOpposite().toYRot() : 0).addModel()
+				.condition(PipeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
+		}
+		this.basicItemTex(block, true);
+	}
+
+	public void mossBlockWithItem(DeferredBlock<Block> block) {
+		ModelFile file = this.models().carpet(block.getId().getPath(), this.modLoc("block/" + block.getId().getPath().replace("dead_", ""))).renderType("cutout");
+		this.getVariantBuilder(block.get()).forAllStates(state -> {
+			Direction dir = state.getValue(BlockStateProperties.FACING);
+			return ConfiguredModel.builder()
+				.modelFile(file)
+				.rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
+				.rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360).build();
+		});
+		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
+			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "block/" + block.getId().getPath().replace("dead_", "")));
+	}
+
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {
 		this.simpleBlock(block.get());
 		this.simpleBlockItem(block);
@@ -1000,7 +1124,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
-	public void basicItemTex(DeferredBlock<Block> block, boolean blockFolder) {
+	public void basicItemTex(DeferredBlock<? extends Block> block, boolean blockFolder) {
 		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), (blockFolder ? "block/" : "item/") + block.getId().getPath()));
 	}

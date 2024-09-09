@@ -33,11 +33,6 @@ public class HangingPlantBlock extends GrowingPlantHeadBlock {
 	}
 
 	@Override
-	protected BlockState updateBodyAfterConvertedFromHead(BlockState head, BlockState body) {
-		return head.setValue(HangingPlantBlock.CAN_GROW, body.getValue(HangingPlantBlock.CAN_GROW));
-	}
-
-	@Override
 	protected int getBlocksToGrowWhenBonemealed(RandomSource random) {
 		return 0;
 	}

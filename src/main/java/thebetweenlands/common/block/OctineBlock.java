@@ -7,6 +7,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import thebetweenlands.common.items.OctineIngotItem;
@@ -29,14 +30,7 @@ public class OctineBlock extends Block {
 				if (facing.equals(neighborState.getValue(DirectionalBlock.FACING)))
 					isTouching = false;
 			} else if (neighborState.getBlock() instanceof ThornsBlock) {
-				BooleanProperty side = switch (facing.getOpposite()) {
-					case UP -> ThornsBlock.UP;
-					case NORTH -> ThornsBlock.NORTH;
-					case SOUTH -> ThornsBlock.SOUTH;
-					case WEST -> ThornsBlock.WEST;
-					case EAST -> ThornsBlock.EAST;
-					default -> null;
-				};
+				BooleanProperty side = PipeBlock.PROPERTY_BY_DIRECTION.get(facing.getOpposite());
 				if (side == null || neighborState.getValue(side))
 					isTouching = false;
 			}

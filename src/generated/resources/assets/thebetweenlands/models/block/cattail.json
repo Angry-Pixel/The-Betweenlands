@@ -1,0 +1,8 @@
+{
+  "parent": "thebetweenlands:block/2layercross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "thebetweenlands:block/cattail_tinted",
+    "cross2": "thebetweenlands:block/cattail_untinted"
+  }
+}

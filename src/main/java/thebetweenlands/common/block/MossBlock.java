@@ -24,12 +24,12 @@ import java.util.Map;
 
 public class MossBlock extends DirectionalBlock {
 
-	private static final VoxelShape UP_AABB = Block.box(0.0, 13.0, 0.0, 16.0, 16.0, 16.0);
-	private static final VoxelShape DOWN_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0);
-	private static final VoxelShape WEST_AABB = Block.box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0);
-	private static final VoxelShape EAST_AABB = Block.box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-	private static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0);
-	private static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0);
+	private static final VoxelShape DOWN_AABB = Block.box(0.0, 13.0, 0.0, 16.0, 16.0, 16.0);
+	private static final VoxelShape UP_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0);
+	private static final VoxelShape EAST_AABB = Block.box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0);
+	private static final VoxelShape WEST_AABB = Block.box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+	private static final VoxelShape SOUTH_AABB = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0);
+	private static final VoxelShape NORTH_AABB = Block.box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0);
 	private static final Map<Direction, VoxelShape> SHAPE_BY_DIRECTION = Util.make(Maps.newEnumMap(Direction.class), map -> {
 		map.put(Direction.NORTH, NORTH_AABB);
 		map.put(Direction.EAST, EAST_AABB);

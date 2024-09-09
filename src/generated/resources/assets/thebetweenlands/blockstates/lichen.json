@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "thebetweenlands:block/lichen",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "thebetweenlands:block/lichen",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/lichen",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/lichen",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "thebetweenlands:block/lichen"
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/lichen",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

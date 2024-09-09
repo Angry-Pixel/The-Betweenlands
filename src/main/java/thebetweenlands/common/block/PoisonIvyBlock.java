@@ -1,19 +1,32 @@
 package thebetweenlands.common.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.MultifaceSpreader;
 import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.entities.BLEntity;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
-public class PoisonIvyBlock extends VineBlock {
+public class PoisonIvyBlock extends MultifaceBlock {
 	public PoisonIvyBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends MultifaceBlock> codec() {
+		return null;
+	}
+
+	@Override
+	public MultifaceSpreader getSpreader() {
+		return new MultifaceSpreader(this);
 	}
 
 	@Override
