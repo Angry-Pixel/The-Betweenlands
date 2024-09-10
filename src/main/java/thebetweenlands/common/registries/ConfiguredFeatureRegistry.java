@@ -23,7 +23,8 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RUBBER_TREE = makeKey("rubber_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> NIBBLETWIG_TREE = makeKey("nibbletwig_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> HEARTHGROVE_TREE = makeKey("hearthgrove_tree");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> GIANT_TREE = makeKey("giant_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SPIRIT_TREE = makeKey("spirit_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOT_POD = makeKey("root_pod");
 
 	//ores
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR = makeKey("sulfur");

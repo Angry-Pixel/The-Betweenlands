@@ -411,6 +411,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.HEARTHGROVE_LEAVES, "Hearthgrove Leaves");
 		this.addBlock(BlockRegistry.HEARTHGROVE_LOG, "Hearthgrove Log");
 		this.addBlock(BlockRegistry.HEARTHGROVE_PLANKS, "Hearthgrove Planks");
+		this.addBlock(BlockRegistry.HEARTHGROVE_SAPLING, "Hearthgrove Sapling");
 		this.addBlock(BlockRegistry.HEARTHGROVE_SLAB, "Hearthgrove Slab");
 		this.addBlock(BlockRegistry.HEARTHGROVE_STAIRS, "Hearthgrove Stairs");
 		this.addBlock(BlockRegistry.HEARTHGROVE_TRAPDOOR, "Hearthgrove Trapdoor");
@@ -541,7 +542,6 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
 		this.addBlock(BlockRegistry.ORANGE_DENTROTHYST, "Orange Dentrothyst");
 		this.addBlock(BlockRegistry.ORANGE_PRESENT, "Orange Present");
-
 		this.addBlock(BlockRegistry.PALE_GRASS, "Pale Grass");
 		this.addBlock(BlockRegistry.PAPER_LANTERN_1, "Blank Amate Paper Lantern");
 		this.addBlock(BlockRegistry.PAPER_LANTERN_2, "Checkered Amate Paper Lantern");
@@ -610,6 +610,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.REED_MAT, "Reed Mat");
 		this.addBlock(BlockRegistry.REPELLER, "Repeller");
 		this.addBlock(BlockRegistry.ROOT, "Root");
+		this.addBlock(BlockRegistry.ROOT_POD, "Root Pod");
 		this.addBlock(BlockRegistry.ROOTMAN_SIMULACRUM_1, "Rootman Simulacrum");
 		this.addBlock(BlockRegistry.ROOTMAN_SIMULACRUM_2, "Rootman Simulacrum");
 		this.addBlock(BlockRegistry.ROOTMAN_SIMULACRUM_3, "Rootman Simulacrum");
@@ -734,6 +735,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.SPIKE_TRAP, "Spike Trap");
 		this.addBlock(BlockRegistry.SPIRIT_TREE_BARK, "Spirit Tree Bark");
 		this.addBlock(BlockRegistry.SPIRIT_TREE_LOG, "Spirit Tree Log");
+		this.addBlock(BlockRegistry.SPIRIT_TREE_SAPLING, "Spirit Tree Sapling");
 		this.addBlock(BlockRegistry.SPREADING_ROTTEN_BARK, "Rotten Bark");
 		this.addBlock(BlockRegistry.SPREADING_SLUDGY_DIRT, "Sludgy Dirt");
 		this.addBlock(BlockRegistry.SQUARED_AMATE_PAPER_PANE, "Squared Amate Paper Pane");

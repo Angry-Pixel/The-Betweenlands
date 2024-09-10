@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "ability": "shears_dig",
+                  "condition": "neoforge:can_item_perform_ability"
+                }
+              ],
+              "name": "thebetweenlands:venus_fly_trap"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "ability": "sickle_harvest",
+                  "condition": "neoforge:can_item_perform_ability"
+                },
+                {
+                  "condition": "minecraft:survives_explosion"
+                }
+              ],
+              "name": "thebetweenlands:venus_fly_trap_head"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:blocks/venus_fly_trap"
+}

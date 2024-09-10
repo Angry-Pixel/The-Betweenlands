@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "ability": "shears_dig",
+              "condition": "neoforge:can_item_perform_ability"
+            }
+          ],
+          "name": "thebetweenlands:weeping_blue"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:blocks/weeping_blue"
+}

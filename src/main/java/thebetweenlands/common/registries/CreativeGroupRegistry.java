@@ -971,10 +971,10 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.WEEDWOOD_SAPLING);
 			output.accept(BlockRegistry.SAP_SAPLING);
 			output.accept(BlockRegistry.RUBBER_SAPLING);
-//			output.accept(BlockRegistry.HEARTHGROVE_SAPLING);
+			output.accept(BlockRegistry.HEARTHGROVE_SAPLING);
 			output.accept(BlockRegistry.NIBBLETWIG_SAPLING);
-//			output.accept(BlockRegistry.SPIRIT_TREE_SAPLING);
-//			output.accept(ItemRegistry.ROOT_POD);
+			output.accept(BlockRegistry.SPIRIT_TREE_SAPLING);
+			output.accept(BlockRegistry.ROOT_POD);
 			output.accept(BlockRegistry.EDGE_SHROOM);
 			output.accept(BlockRegistry.EDGE_MOSS);
 			output.accept(BlockRegistry.EDGE_LEAF);

@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "ability": "shears_dig",
+                  "condition": "neoforge:can_item_perform_ability"
+                }
+              ],
+              "name": "thebetweenlands:swamp_plant"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "ability": "sickle_harvest",
+                  "condition": "neoforge:can_item_perform_ability"
+                },
+                {
+                  "condition": "minecraft:survives_explosion"
+                }
+              ],
+              "name": "thebetweenlands:leaf"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:blocks/swamp_plant"
+}

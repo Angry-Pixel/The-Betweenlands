@@ -45,6 +45,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.PEAT);
 		this.simpleBlockWithItem(BlockRegistry.SMOULDERING_PEAT);
 		this.bottomSideTopBlockWithItem(BlockRegistry.SLUDGY_DIRT, this.modLoc("block/sludgy_dirt_side"), this.modLoc("block/sludgy_dirt_top"), this.modLoc("block/swamp_dirt"));
+		this.bottomSideTopBlockWithItem(BlockRegistry.SPREADING_SLUDGY_DIRT, this.modLoc("block/sludgy_dirt_side"), this.modLoc("block/sludgy_dirt_top"), this.modLoc("block/swamp_dirt"));
 		this.simpleBlockWithItem(BlockRegistry.SLIMY_DIRT);
 		this.bottomSideTopBlockWithItem(BlockRegistry.SLIMY_GRASS, this.modLoc("block/slimy_grass_side"), this.modLoc("block/slimy_grass_top"), this.modLoc("block/slimy_dirt"));
 		this.simpleBlockWithItem(BlockRegistry.CRAGROCK);
@@ -800,9 +801,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlockWithItem(BlockRegistry.WEEDWOOD_SAPLING);
 		this.crossBlockWithItem(BlockRegistry.SAP_SAPLING);
 		this.crossBlockWithItem(BlockRegistry.RUBBER_SAPLING);
-//		this.crossBlockWithItem(BlockRegistry.HEARTHGROVE_SAPLING);
+		this.crossBlockWithItem(BlockRegistry.HEARTHGROVE_SAPLING);
 		this.crossBlockWithItem(BlockRegistry.NIBBLETWIG_SAPLING);
-//		this.crossBlockWithItem(BlockRegistry.SPIRIT_TREE_SAPLING);
+		this.crossBlockWithItem(BlockRegistry.SPIRIT_TREE_SAPLING);
+		this.crossBlock(BlockRegistry.ROOT_POD);
+		this.basicItemTex(BlockRegistry.ROOT_POD, false);
 		//3d model plants
 		this.crossBlockWithItem(BlockRegistry.MIRE_CORAL);
 		this.crossBlockWithItem(BlockRegistry.DEEP_WATER_CORAL);

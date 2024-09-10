@@ -17,6 +17,7 @@ public class BLLootProvider extends LootTableProvider {
 
 	public BLLootProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, LootTableRegistry.getAllBuiltInTables(), List.of(
+			new LootTableProvider.SubProviderEntry(BLBlockLootProvider::new, LootContextParamSets.BLOCK),
 			new LootTableProvider.SubProviderEntry(BLEntityLootProvider::new, LootContextParamSets.ENTITY),
 			new LootTableProvider.SubProviderEntry(provider1 -> new BLMiscLootProvider(), LootContextParamSets.EMPTY)
 		), provider);

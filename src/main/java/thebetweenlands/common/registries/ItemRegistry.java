@@ -262,7 +262,8 @@ public class ItemRegistry {
 	//slingshot
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().stacksTo(1).durability(256)));
 	//spears
-	//buckets
+	public static final DeferredItem<Item> WEEDWOOD_BUCKET = ITEMS.register("weedwood_bucket", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SYRMORITE_BUCKET = ITEMS.register("syrmorite_bucket", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ELECTRIC_UPGRADE = ITEMS.register("electric_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GLIDE_UPGRADE = ITEMS.register("glide_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
