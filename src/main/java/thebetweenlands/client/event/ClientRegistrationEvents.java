@@ -39,11 +39,12 @@ import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.client.handler.ClientHandlerEvents;
-import thebetweenlands.client.model.block.InfuserModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
-import thebetweenlands.client.model.block.simulacrum.*;
+import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
+import thebetweenlands.client.model.block.simulacrum.LakeCavernSimulacrumModels;
+import thebetweenlands.client.model.block.simulacrum.RootmanSimulacrumModels;
 import thebetweenlands.client.model.entity.*;
 import thebetweenlands.client.particle.AnimatorParticle;
 import thebetweenlands.client.particle.BugParticle;
@@ -379,6 +380,36 @@ public class ClientRegistrationEvents {
 					if (state.getType() instanceof ColoredFluid dye) {
 						return dye.getColor();
 					}
+					if (state.getFluidType() == FluidTypeRegistry.SWAMP_WATER.get()) {
+						int r = 0;
+						int g = 0;
+						int b = 0;
+						for (int dx = -1; dx <= 1; dx++) {
+							for (int dz = -1; dz <= 1; dz++) {
+								int colorMultiplier = BiomeColors.getAverageWaterColor(getter, pos);
+								r += FastColor.ARGB32.red(colorMultiplier);
+								g += FastColor.ARGB32.green(colorMultiplier);
+								b += FastColor.ARGB32.blue(colorMultiplier);
+							}
+						}
+						r /= 9;
+						g /= 9;
+						b /= 9;
+						float depth;
+						if (pos.getY() > TheBetweenlands.CAVE_START) {
+							depth = 1;
+						} else {
+							if (pos.getY() < TheBetweenlands.CAVE_WATER_HEIGHT) {
+								depth = 0;
+							} else {
+								depth = (pos.getY() - TheBetweenlands.CAVE_WATER_HEIGHT) / (float) (TheBetweenlands.CAVE_START - TheBetweenlands.CAVE_WATER_HEIGHT);
+							}
+						}
+						r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);
+						g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
+						b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
+						return FastColor.ARGB32.color(FastColor.as8BitChannel(1.0F), r, g, b);
+					}
 					return IClientFluidTypeExtensions.super.getTintColor(state, getter, pos);
 				}
 			}, type.get());
@@ -422,41 +453,6 @@ public class ClientRegistrationEvents {
 			BlockRegistry.CATTAIL.get(),
 			BlockRegistry.POISON_IVY.get(),
 			BlockRegistry.SWAMP_REED.get());
-
-		event.register((state, level, pos, tintIndex) -> {
-			if (level == null || pos == null || tintIndex != 0) {
-				return -1;
-			}
-
-			int r = 0;
-			int g = 0;
-			int b = 0;
-			for (int dx = -1; dx <= 1; dx++) {
-				for (int dz = -1; dz <= 1; dz++) {
-					int colorMultiplier = BiomeColors.getAverageWaterColor(level, pos);
-					r += FastColor.ARGB32.red(colorMultiplier);
-					g += FastColor.ARGB32.green(colorMultiplier);
-					b += FastColor.ARGB32.blue(colorMultiplier);
-				}
-			}
-			r /= 9;
-			g /= 9;
-			b /= 9;
-			float depth;
-			if (pos.getY() > TheBetweenlands.CAVE_START) {
-				depth = 1;
-			} else {
-				if (pos.getY() < TheBetweenlands.CAVE_WATER_HEIGHT) {
-					depth = 0;
-				} else {
-					depth = (pos.getY() - TheBetweenlands.CAVE_WATER_HEIGHT) / (float) (TheBetweenlands.CAVE_START - TheBetweenlands.CAVE_WATER_HEIGHT);
-				}
-			}
-			r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);
-			g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
-			b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
-			return FastColor.ARGB32.color(FastColor.as8BitChannel(1.0F), r, g, b);
-		}, BlockRegistry.SWAMP_WATER.get());
 
 		event.register((state, level, pos, tintIndex) -> {
 				if (tintIndex == 0 && state.getBlock() instanceof PresentBlock present) {
