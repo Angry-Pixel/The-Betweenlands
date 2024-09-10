@@ -40,6 +40,7 @@ import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.client.handler.ClientHandlerEvents;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
 import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
@@ -275,6 +276,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);
 	}
 
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {

@@ -8,7 +8,7 @@ import thebetweenlands.util.BLDyeColor;
 
 import javax.annotation.Nullable;
 
-public class StainedFilteredSiltGlassBlock extends TransparentBlock {
+public class StainedFilteredSiltGlassBlock extends FilteredSiltGlassBlock {
 
 	private final BLDyeColor color;
 

@@ -226,7 +226,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SILT_GLASS_PANE = register("silt_glass_pane", () -> new SwampBarsBlock(BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> LATTICE = register("lattice", () -> new SwampBarsBlock(BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> FINE_LATTICE = register("fine_lattice", () -> new SwampBarsBlock(BlockBehaviour.Properties.of().strength(1.5F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> FILTERED_SILT_GLASS = register("filtered_silt_glass", () -> new TransparentBlock(BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> FILTERED_SILT_GLASS = register("filtered_silt_glass", () -> new FilteredSiltGlassBlock(BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(Blocks::never).isRedstoneConductor(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
 	public static final DeferredBlock<Block> FILTERED_SILT_GLASS_PANE = register("filtered_silt_glass_pane", () -> new ThickerGlassPaneBlock(BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> POLISHED_GREEN_DENTROTHYST_PANE = register("polished_green_dentrothyst_pane", () -> new SwampBarsBlock(BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> POLISHED_ORANGE_DENTROTHYST_PANE = register("polished_orange_dentrothyst_pane", () -> new SwampBarsBlock(BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));

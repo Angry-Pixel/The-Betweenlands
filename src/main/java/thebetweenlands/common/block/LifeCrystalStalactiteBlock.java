@@ -23,6 +23,6 @@ public class LifeCrystalStalactiteBlock extends StalactiteBlock {
 	
 	@Override
 	public boolean doesRenderOverlay(BlockAndTintGetter level, BlockPos pos, BlockState state) {
-		return state.getBlock() == this && this.isOre;
+		return state.getBlock() == this ? this.isOre : super.doesRenderOverlay(level, pos, state);
 	}
 }
