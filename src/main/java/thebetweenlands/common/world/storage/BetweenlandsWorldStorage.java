@@ -20,9 +20,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
@@ -166,6 +164,14 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return false;
 	}
 
+	public static BetweenlandsWorldStorage getOrThrow(ServerLevelAccessor level) {
+		BetweenlandsWorldStorage storage = get(level);
+		if (storage == null) {
+			throw new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.getLevel().dimension().location()));
+		}
+		return storage;
+	}
+
 	public static BetweenlandsWorldStorage getOrThrow(Level level) {
 		BetweenlandsWorldStorage storage = get(level);
 		if (storage == null) {
@@ -175,7 +181,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	@Nullable
-	public static BetweenlandsWorldStorage get(Level level) {
+	public static BetweenlandsWorldStorage get(LevelAccessor level) {
 		if (level.getServer() != null && level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
 			return level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY).getData(AttachmentRegistry.WORLD_STORAGE);
 		}
