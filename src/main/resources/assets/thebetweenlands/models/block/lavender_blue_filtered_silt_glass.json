@@ -1,0 +1,143 @@
+{
+    "parent": "minecraft:block/block",
+    "render_type": "minecraft:translucent",
+    "loader": "thebetweenlands:connected_texture",
+    "ambient_occlusion": true,
+    "textures": {
+        "particle": "thebetweenlands:block/lavender_blue_filtered_silt_glass_0"
+    },
+    "connected_texture_faces": [
+        {
+            "cullface": "up",
+            "connected_textures": [
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_0",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_1",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_2",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_3",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_4"
+            ],
+            "indices": [
+                "thebetweenlands:top_north_west_index",
+                "thebetweenlands:top_south_west_index",
+                "thebetweenlands:top_south_east_index",
+                "thebetweenlands:top_north_east_index"
+            ],
+            "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+        },
+        {
+            "cullface": "north",
+            "connected_textures": [
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_0",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_1",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_2",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_3",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_4"
+            ],
+            "indices": [
+                "thebetweenlands:north_up_east_index",
+                "thebetweenlands:north_down_east_index",
+                "thebetweenlands:north_down_west_index",
+                "thebetweenlands:north_up_west_index"
+            ],
+            "vertices": [
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 1.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                { "x": 0.0, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+        },
+        {
+            "cullface": "south",
+            "connected_textures": [
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_0",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_1",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_2",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_3",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_4"
+            ],
+            "indices": [
+                "thebetweenlands:south_up_west_index",
+                "thebetweenlands:south_down_west_index",
+                "thebetweenlands:south_down_east_index",
+                "thebetweenlands:south_up_east_index"
+            ],
+            "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 0.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+            ]
+        },
+        {
+            "cullface": "down",
+            "connected_textures": [
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_0",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_1",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_2",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_3",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_4"
+            ],
+            "indices": [
+                "thebetweenlands:bottom_north_west_index",
+                "thebetweenlands:bottom_north_east_index",
+                "thebetweenlands:bottom_south_east_index",
+                "thebetweenlands:bottom_south_west_index"
+            ],
+            "vertices": [
+                { "x": 0.0, "y": 0.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 1.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 0.0, "y": 0.0, "z": 1.0, "u": 1, "v": 0 }
+            ]
+        },
+        {
+            "cullface": "west",
+            "connected_textures": [
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_0",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_1",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_2",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_3",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_4"
+            ],
+            "indices": [
+                "thebetweenlands:west_up_north_index",
+                "thebetweenlands:west_down_north_index",
+                "thebetweenlands:west_down_south_index",
+                "thebetweenlands:west_up_south_index"
+            ],
+            "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                { "x": 0.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+            ]
+        },
+        {
+            "cullface": "east",
+            "connected_textures": [
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_0",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_1",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_2",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_3",
+                "thebetweenlands:block/lavender_blue_filtered_silt_glass_4"
+            ],
+            "indices": [
+                "thebetweenlands:east_up_south_index",
+                "thebetweenlands:east_down_south_index",
+                "thebetweenlands:east_down_north_index",
+                "thebetweenlands:east_up_north_index"
+            ],
+            "vertices": [
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 0, "v": 0 },
+                { "x": 1.0, "y": 0.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+        }
+    ]
+}

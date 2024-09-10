@@ -232,6 +232,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.paneBlockWithItem(BlockRegistry.SILT_GLASS_PANE, true, "translucent");
 		this.paneBlockWithItem(BlockRegistry.LATTICE, false);
 		this.paneBlockWithItem(BlockRegistry.FINE_LATTICE, false);
+		this.connectedGlassBlockWithItem(BlockRegistry.FILTERED_SILT_GLASS);
 		//filtered glass and pane
 		this.paneBlockWithItem(BlockRegistry.POLISHED_ORANGE_DENTROTHYST_PANE, true, "translucent");
 		this.paneBlockWithItem(BlockRegistry.POLISHED_GREEN_DENTROTHYST_PANE, true, "translucent");
@@ -279,23 +280,22 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.slabBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_SLAB, BlockRegistry.MUD_BRICK_SHINGLES);
 		this.stairBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.MUD_BRICK_SHINGLES);
 		this.wallBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_WALL, BlockRegistry.MUD_BRICK_SHINGLES);
-		//TODO CTM for filtered silt
-//		this.simpleBlockWithItem(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.MAROON_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.SAFFRON_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.VIVID_TANGERINE_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.CHAMPAGNE_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.RAISIN_BLACK_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.SUSHI_GREEN_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.ELM_CYAN_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.CADMIUM_GREEN_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.LAVENDER_BLUE_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.BROWN_RUST_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_FILTERED_SILT_GLASS_BLOCK);
-//		this.simpleBlockWithItem(BlockRegistry.PEWTER_GREY_FILTERED_SILT_GLASS_BLOCK);
+		this.connectedGlassBlockWithItem(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.MAROON_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.SAFFRON_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.VIVID_TANGERINE_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.CHAMPAGNE_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.RAISIN_BLACK_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.SUSHI_GREEN_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.ELM_CYAN_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.CADMIUM_GREEN_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.LAVENDER_BLUE_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.BROWN_RUST_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_FILTERED_SILT_GLASS);
+		this.connectedGlassBlockWithItem(BlockRegistry.PEWTER_GREY_FILTERED_SILT_GLASS);
 		this.simpleBlockWithItem(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLES);
 		this.simpleBlockWithItem(BlockRegistry.MAROON_MUD_BRICK_SHINGLES);
 		this.simpleBlockWithItem(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLES);
@@ -1124,6 +1124,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		});
 		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "block/" + block.getId().getPath().replace("dead_", "")));
+	}
+
+	public void connectedGlassBlockWithItem(DeferredBlock<Block> block) {
+		this.simpleBlock(block.get(), this.models().getExistingFile(this.modLoc("block/" + block.getId().getPath())));
+		this.simpleBlockItem(block.get(), this.models().cubeAll(block.getId().getPath() +"_inventory", this.modLoc("block/" + block.getId().getPath() + "_0")).renderType("translucent"));
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {

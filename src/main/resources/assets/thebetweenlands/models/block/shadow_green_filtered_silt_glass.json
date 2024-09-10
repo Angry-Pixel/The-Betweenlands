@@ -4,17 +4,17 @@
     "loader": "thebetweenlands:connected_texture",
     "ambient_occlusion": true,
     "textures": {
-        "particle": "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0"
+        "particle": "thebetweenlands:block/shadow_green_filtered_silt_glass_0"
     },
     "connected_texture_faces": [
         {
             "cullface": "up",
             "connected_textures": [
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_1",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_2",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_3",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_4"
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_0",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_1",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_2",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_3",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_4"
             ],
             "indices": [
                 "thebetweenlands:top_north_west_index",
@@ -32,11 +32,11 @@
         {
             "cullface": "north",
             "connected_textures": [
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_1",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_2",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_3",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_4"
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_0",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_1",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_2",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_3",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_4"
             ],
             "indices": [
                 "thebetweenlands:north_up_east_index",
@@ -54,11 +54,11 @@
         {
             "cullface": "south",
             "connected_textures": [
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_1",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_2",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_3",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_4"
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_0",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_1",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_2",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_3",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_4"
             ],
             "indices": [
                 "thebetweenlands:south_up_west_index",
@@ -76,11 +76,11 @@
         {
             "cullface": "down",
             "connected_textures": [
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_1",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_2",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_3",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_4"
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_0",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_1",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_2",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_3",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_4"
             ],
             "indices": [
                 "thebetweenlands:bottom_north_west_index",
@@ -98,11 +98,11 @@
         {
             "cullface": "west",
             "connected_textures": [
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_1",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_2",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_3",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_4"
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_0",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_1",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_2",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_3",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_4"
             ],
             "indices": [
                 "thebetweenlands:west_up_north_index",
@@ -120,11 +120,11 @@
         {
             "cullface": "east",
             "connected_textures": [
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_0",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_1",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_2",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_3",
-                "thebetweenlands:block/filtered_silt_glass_stained_dull_lavender_4"
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_0",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_1",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_2",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_3",
+                "thebetweenlands:block/shadow_green_filtered_silt_glass_4"
             ],
             "indices": [
                 "thebetweenlands:east_up_south_index",

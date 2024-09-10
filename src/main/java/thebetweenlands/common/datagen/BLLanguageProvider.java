@@ -178,7 +178,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.BROKEN_MUD_TILES, "Broken Mud Tiles");
 		this.addBlock(BlockRegistry.BROOMSEDGE, "Broomsedge");
 		this.addBlock(BlockRegistry.BROWN_PRESENT, "Brown Present");
-		this.addBlock(BlockRegistry.BROWN_RUST_FILTERED_SILT_GLASS_BLOCK, "Brown Rust Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.BROWN_RUST_FILTERED_SILT_GLASS, "Brown Rust Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_SLAB, "Brown Rust Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_STAIRS, "Brown Rust Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLES, "Brown Rust Mud Brick Shingles");
@@ -189,14 +189,14 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.BULB_CAPPED_MUSHROOM_CAP, "Bulb-Capped Mushroom Cap");
 		this.addBlock(BlockRegistry.BULB_CAPPED_MUSHROOM_STALK, "Bulb-Capped Mushroom Stalk");
 		this.addBlock(BlockRegistry.BUTTON_BUSH, "Button Bush");
-		this.addBlock(BlockRegistry.CADMIUM_GREEN_FILTERED_SILT_GLASS_BLOCK, "Cadmium Green Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.CADMIUM_GREEN_FILTERED_SILT_GLASS, "Cadmium Green Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLE_SLAB, "Cadmium Green Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLE_STAIRS, "Cadmium Green Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLES, "Cadmium Green Mud Brick Shingles");
 		this.addBlock(BlockRegistry.CADMIUM_GREEN_REED_MAT, "Cadmium Green Reed Mat");
 		this.addBlock(BlockRegistry.CADMIUM_GREEN_SAMITE, "Cadmium Green Samite");
 		this.addBlock(BlockRegistry.CADMIUM_GREEN_SAMITE_CANVAS_PANEL, "Cadmium Green Samite Canvas Panel");
-		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS_BLOCK, "Camelot Magenta Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS, "Camelot Magenta Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_SLAB, "Camelot Magenta Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_STAIRS, "Camelot Magenta Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLES, "Camelot Magenta Mud Brick Shingles");
@@ -204,7 +204,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_SAMITE, "Camelot Magenta Samite");
 		this.addBlock(BlockRegistry.CAMELOT_MAGENTA_SAMITE_CANVAS_PANEL, "Camelot Magenta Samite Canvas Panel");
 		this.addBlock(BlockRegistry.CARDINAL_FLOWER, "Cardinal Flower");
-		this.addBlock(BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS_BLOCK, "Caribbean Green Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS, "Caribbean Green Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_SLAB, "Caribbean Green Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_STAIRS, "Caribbean Green Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLES, "Caribbean Green Mud Brick Shingles");
@@ -235,7 +235,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.CAVE_MOSS_PLANT, "Cave Moss Plant");
 		this.addBlock(BlockRegistry.CAVING_ROPE_LIGHT, "Caving Rope Light");
 		this.addBlock(BlockRegistry.CENSER, "Censer");
-		this.addBlock(BlockRegistry.CHAMPAGNE_FILTERED_SILT_GLASS_BLOCK, "Champagne Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.CHAMPAGNE_FILTERED_SILT_GLASS, "Champagne Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_SLAB, "Champagne Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_STAIRS, "Champagne Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLES, "Champagne Mud Brick Shingles");
@@ -319,7 +319,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.DUAL_SULFUR_FURNACE, "Dual Sulfur Furnace");
 		this.addBlock(BlockRegistry.DUG_SWAMP_DIRT, "Dug Swamp Dirt");
 		this.addBlock(BlockRegistry.DUG_SWAMP_GRASS, "Dug Swamp Grass");
-		this.addBlock(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS_BLOCK, "Dull Lavender Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS, "Dull Lavender Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLE_SLAB, "Dull Lavender Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLE_STAIRS, "Dull Lavender Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLES, "Dull Lavender Mud Brick Shingles");
@@ -332,7 +332,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.EDGE_LEAF, "Edge Leaf");
 		this.addBlock(BlockRegistry.EDGE_MOSS, "Edge Moss");
 		this.addBlock(BlockRegistry.EDGE_SHROOM, "Edge Shroom");
-		this.addBlock(BlockRegistry.ELM_CYAN_FILTERED_SILT_GLASS_BLOCK, "Elm Cyan Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.ELM_CYAN_FILTERED_SILT_GLASS, "Elm Cyan Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLE_SLAB, "Elm Cyan Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLE_STAIRS, "Elm Cyan Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLES, "Elm Cyan Mud Brick Shingles");
@@ -424,7 +424,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.LAKE_CAVERN_SIMULACRUM_2, "Lake Cavern Simulacrum");
 		this.addBlock(BlockRegistry.LAKE_CAVERN_SIMULACRUM_3, "Lake Cavern Simulacrum");
 		this.addBlock(BlockRegistry.LATTICE, "Lattice");
-		this.addBlock(BlockRegistry.LAVENDER_BLUE_FILTERED_SILT_GLASS_BLOCK, "Lavender Blue Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.LAVENDER_BLUE_FILTERED_SILT_GLASS, "Lavender Blue Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLE_SLAB, "Lavender Blue Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLE_STAIRS, "Lavender Blue Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLES, "Lavender Blue Mud Brick Shingles");
@@ -457,7 +457,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.LYESTONE, "Lyestone");
 		this.addBlock(BlockRegistry.MAGENTA_BAUBLE, "Magenta Bauble");
 		this.addBlock(BlockRegistry.MAGENTA_PRESENT, "Magenta Present");
-		this.addBlock(BlockRegistry.MAROON_FILTERED_SILT_GLASS_BLOCK, "Maroon Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.MAROON_FILTERED_SILT_GLASS, "Maroon Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.MAROON_MUD_BRICK_SHINGLE_SLAB, "Maroon Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.MAROON_MUD_BRICK_SHINGLE_STAIRS, "Maroon Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.MAROON_MUD_BRICK_SHINGLES, "Maroon Mud Brick Shingles");
@@ -469,7 +469,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.MARSH_MARIGOLD_FLOWER, "Marsh Marigold Flower");
 		this.addBlock(BlockRegistry.MARSH_MARIGOLD_STALK, "Marsh Marigold Stalk");
 		this.addBlock(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES, "Middle Spirit Tree Leaves");
-		this.addBlock(BlockRegistry.MIDNIGHT_PURPLE_FILTERED_SILT_GLASS_BLOCK, "Midnight Purple Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.MIDNIGHT_PURPLE_FILTERED_SILT_GLASS, "Midnight Purple Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_SLAB, "Midnight Purple Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_STAIRS, "Midnight Purple Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES, "Midnight Purple Mud Brick Shingles");
@@ -548,7 +548,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.PAPER_LANTERN_3, "Framed Amate Paper Lantern");
 		this.addBlock(BlockRegistry.PEARL_BLOCK, "Block of Pearls");
 		this.addBlock(BlockRegistry.PEAT, "Peat");
-		this.addBlock(BlockRegistry.PEWTER_GREY_FILTERED_SILT_GLASS_BLOCK, "Pewter Grey Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.PEWTER_GREY_FILTERED_SILT_GLASS, "Pewter Grey Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_SLAB, "Pewter Grey Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_STAIRS, "Pewter Grey Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLES, "Pewter Grey Mud Brick Shingles");
@@ -598,7 +598,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.PURIFIED_SWAMP_DIRT, "Purified Swamp Dirt");
 		this.addBlock(BlockRegistry.PURIFIER, "Purifier");
 		this.addBlock(BlockRegistry.PURPLE_PRESENT, "Purple Present");
-		this.addBlock(BlockRegistry.RAISIN_BLACK_FILTERED_SILT_GLASS_BLOCK, "Raisin Black Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.RAISIN_BLACK_FILTERED_SILT_GLASS, "Raisin Black Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_SLAB, "Raisin Black Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_STAIRS, "Raisin Black Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLES, "Raisin Black Mud Brick Shingles");
@@ -636,7 +636,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.RUBBER_TREE_SLAB, "Rubber Tree Slab");
 		this.addBlock(BlockRegistry.RUBBER_TREE_STAIRS, "Rubber Tree Stairs");
 		this.addBlock(BlockRegistry.RUBBER_TREE_TRAPDOOR, "Rubber Tree Trapdoor");
-		this.addBlock(BlockRegistry.SAFFRON_FILTERED_SILT_GLASS_BLOCK, "Saffron Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.SAFFRON_FILTERED_SILT_GLASS, "Saffron Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLE_SLAB, "Saffron Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLE_STAIRS, "Saffron Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLES, "Saffron Mud Brick Shingles");
@@ -656,7 +656,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.SCABYST_ORE, "Scabyst Ore");
 		this.addBlock(BlockRegistry.SCABYST_TRAPDOOR, "Scabyst Trapdoor");
 		this.addBlock(BlockRegistry.SEEDED_HANGER, "Seeded Hanger");
-		this.addBlock(BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS_BLOCK, "Shadow Green Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS, "Shadow Green Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLE_SLAB, "Shadow Green Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLE_STAIRS, "Shadow Green Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLES, "Shadow Green Mud Brick Shingles");
@@ -748,7 +748,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.SULFUR_ORE, "Sulfur Ore");
 		this.addBlock(BlockRegistry.SULFUR_TORCH, "Sulfur Torch");
 		this.addBlock(BlockRegistry.SUNDEW, "Sundew");
-		this.addBlock(BlockRegistry.SUSHI_GREEN_FILTERED_SILT_GLASS_BLOCK, "Sushi Green Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.SUSHI_GREEN_FILTERED_SILT_GLASS, "Sushi Green Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLE_SLAB, "Sushi Green Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLE_STAIRS, "Sushi Green Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLES, "Sushi Green Mud Brick Shingles");
@@ -834,7 +834,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.VALONITE_BLOCK, "Block of Valonite");
 		this.addBlock(BlockRegistry.VALONITE_ORE, "Valonite Ore");
 		this.addBlock(BlockRegistry.VENUS_FLY_TRAP, "Venus Fly Trap");
-		this.addBlock(BlockRegistry.VIVID_TANGERINE_FILTERED_SILT_GLASS_BLOCK, "Vivid Tangerine Filtered Silt Glass Block");
+		this.addBlock(BlockRegistry.VIVID_TANGERINE_FILTERED_SILT_GLASS, "Vivid Tangerine Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLE_SLAB, "Vivid Tangerine Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLE_STAIRS, "Vivid Tangerine Mud Brick Shingle Stairs");
 		this.addBlock(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLES, "Vivid Tangerine Mud Brick Shingles");
