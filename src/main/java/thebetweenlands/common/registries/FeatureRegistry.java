@@ -8,11 +8,13 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.feature.*;
 import thebetweenlands.common.world.gen.feature.config.*;
+import thebetweenlands.common.world.gen.feature.structure.UnderwaterRuinsFeature;
 
 public class FeatureRegistry {
 
 	public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, TheBetweenlands.ID);
 
+	//Biome Features
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",
 		() -> new BarnacleClusterFeature(BlockPlaceConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BIG_BULB_CAPPED_MUSHROOM = FEATURES.register("big_bulb_capped_mushroom",
@@ -66,4 +68,8 @@ public class FeatureRegistry {
 		() -> new WaterRootsClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_BUSH = FEATURES.register("weedwood_bush",
 		() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
+
+	//Structure Features
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> UNDERWATER_RUINS = FEATURES.register("underwater_ruins",
+		() -> new UnderwaterRuinsFeature(NoneFeatureConfiguration.CODEC));
 }
