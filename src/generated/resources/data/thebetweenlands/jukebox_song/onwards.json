@@ -4,5 +4,5 @@
     "translate": "jukebox_song.thebetweenlands.onwards"
   },
   "length_in_seconds": 210.0,
-  "sound_event": "thebetweenlands:onwards"
+  "sound_event": "thebetweenlands:music_disc.onwards"
 }

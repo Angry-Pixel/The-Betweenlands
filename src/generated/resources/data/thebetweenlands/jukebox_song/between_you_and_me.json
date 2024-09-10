@@ -4,5 +4,5 @@
     "translate": "jukebox_song.thebetweenlands.between_you_and_me"
   },
   "length_in_seconds": 298.0,
-  "sound_event": "thebetweenlands:between_you_and_me"
+  "sound_event": "thebetweenlands:music_disc.between_you_and_me"
 }

@@ -4,5 +4,5 @@
     "translate": "jukebox_song.thebetweenlands.stuck_in_the_mud"
   },
   "length_in_seconds": 277.0,
-  "sound_event": "thebetweenlands:stuck_in_the_mud"
+  "sound_event": "thebetweenlands:music_disc.stuck_in_the_mud"
 }

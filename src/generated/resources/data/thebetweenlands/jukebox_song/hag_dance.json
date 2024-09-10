@@ -4,5 +4,5 @@
     "translate": "jukebox_song.thebetweenlands.hag_dance"
   },
   "length_in_seconds": 280.0,
-  "sound_event": "thebetweenlands:hag_dance"
+  "sound_event": "thebetweenlands:music_disc.hag_dance"
 }

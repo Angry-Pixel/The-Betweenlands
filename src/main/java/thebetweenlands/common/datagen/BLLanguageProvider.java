@@ -37,6 +37,7 @@ public class BLLanguageProvider extends LanguageProvider {
 
 	private final PackOutput output;
 	public final Map<String, String> upsideDownEntries = new HashMap<>();
+	public static final Map<String, String> SUBTITLE_GENERATOR = new HashMap<>();
 
 	public BLLanguageProvider(PackOutput output) {
 		super(output, TheBetweenlands.ID, "en_us");
@@ -1385,6 +1386,9 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		this.add("commands.thebetweenlands.reset_aspects.confirm", "Confirm with '/resetAspects confirm'");
 		this.add("commands.thebetweenlands.reset_aspects.reset", "All aspects have been reset");
+
+		SUBTITLE_GENERATOR.forEach(this::add);
+		this.add("subtitles.thebetweenlands.entity.greebling_music", "Greebling musician plays");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {

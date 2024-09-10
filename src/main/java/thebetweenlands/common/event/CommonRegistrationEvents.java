@@ -117,10 +117,10 @@ public class CommonRegistrationEvents {
 
 		// Assets
 		gen.addProvider(assets, new BLAtlasProvider(output, dataProvider, helper));
-		gen.addProvider(assets, new BLLanguageProvider(output));
 		gen.addProvider(assets, new BLBlockStateProvider(output, helper));
 		gen.addProvider(assets, new BLItemModelProvider(output, helper));
 		gen.addProvider(assets, new BLSoundDefinitionProvider(output, helper));
+		gen.addProvider(assets, new BLLanguageProvider(output));
 	}
 
 	private static void populateVanillaTabs(BuildCreativeModeTabContentsEvent event) {

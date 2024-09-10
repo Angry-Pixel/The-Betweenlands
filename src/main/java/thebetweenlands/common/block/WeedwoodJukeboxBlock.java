@@ -1,6 +1,7 @@
 package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +10,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.JukeboxPlayable;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.JukeboxBlock;
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +43,37 @@ public class WeedwoodJukeboxBlock extends JukeboxBlock {
 			return ItemInteractionResult.sidedSuccess(level.isClientSide());
 		}
 
-		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+		if (state.getValue(HAS_RECORD)) {
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		} else {
+			ItemStack itemstack = player.getItemInHand(hand);
+			ItemInteractionResult iteminteractionresult = this.tryInsertIntoJukebox(level, pos, itemstack, player);
+			return !iteminteractionresult.consumesAction() ? ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION : iteminteractionresult;
+		}
+	}
+
+	public ItemInteractionResult tryInsertIntoJukebox(Level level, BlockPos pos, ItemStack stack, Player player) {
+		JukeboxPlayable jukeboxplayable = stack.get(DataComponents.JUKEBOX_PLAYABLE);
+		if (jukeboxplayable == null) {
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		} else {
+			BlockState blockstate = level.getBlockState(pos);
+			if (blockstate.is(this) && !blockstate.getValue(JukeboxBlock.HAS_RECORD)) {
+				if (!level.isClientSide()) {
+					ItemStack itemstack = stack.consumeAndReturn(1, player);
+					if (level.getBlockEntity(pos) instanceof JukeboxBlockEntity jukeboxblockentity) {
+						jukeboxblockentity.setTheItem(itemstack);
+						level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate));
+					}
+
+					player.awardStat(Stats.PLAY_RECORD);
+				}
+
+				return ItemInteractionResult.sidedSuccess(level.isClientSide());
+			} else {
+				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+			}
+		}
 	}
 
 	@Override

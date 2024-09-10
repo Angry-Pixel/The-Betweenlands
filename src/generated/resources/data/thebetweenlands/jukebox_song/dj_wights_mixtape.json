@@ -4,5 +4,5 @@
     "translate": "jukebox_song.thebetweenlands.dj_wights_mixtape"
   },
   "length_in_seconds": 226.0,
-  "sound_event": "thebetweenlands:dj_wights_mixtape"
+  "sound_event": "thebetweenlands:music_disc.dj_wights_mixtape"
 }

@@ -4,5 +4,5 @@
     "translate": "jukebox_song.thebetweenlands.christmas_on_the_marsh"
   },
   "length_in_seconds": 219.0,
-  "sound_event": "thebetweenlands:christmas_on_the_marsh"
+  "sound_event": "thebetweenlands:music_disc.christmas_on_the_marsh"
 }
