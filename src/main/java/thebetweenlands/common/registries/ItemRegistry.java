@@ -325,21 +325,30 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("music_disc_waterlogged", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WATERLOGGED)));
 	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
 	//amulets
-	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RING_OF_ASCENT = ITEMS.register("ring_of_ascent", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RING_OF_DISPERSION = ITEMS.register("ring_of_dispersion", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RING_OF_GATHERING = ITEMS.register("ring_of_gathering", () -> new Item(new Item.Properties().stacksTo(1)));
-	//scraps
-	//mummy bait
+	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_ASCENT = ITEMS.register("ring_of_ascent", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_DISPERSION = ITEMS.register("ring_of_dispersion", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_GATHERING = ITEMS.register("ring_of_gathering", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> THEM_SCRAP = ITEMS.register("them_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> MUTANTS_SCRAP = ITEMS.register("mutants_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> SHADOWS_SCRAP = ITEMS.register("shadows_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> RUINS_SCRAP = ITEMS.register("ruins_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> HEADS_SCRAP = ITEMS.register("heads_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> TAR_SCRAP = ITEMS.register("tar_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> DUNGEON_SCRAP = ITEMS.register("dungeon_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> PITSTONE_SCRAP = ITEMS.register("pitstone_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> TOWER_SCRAP = ITEMS.register("tower_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> FORT_SCRAP = ITEMS.register("fort_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> MUMMY_BAIT = ITEMS.register("mummy_bait", () -> new MummyBaitItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 
 	public static final DeferredItem<Item> GROUND_LEAF = ITEMS.register("ground_leaf", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GROUND_CATTAIL = ITEMS.register("ground_cattail", () -> new Item(new Item.Properties()));

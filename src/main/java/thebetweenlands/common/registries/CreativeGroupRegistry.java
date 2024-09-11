@@ -968,8 +968,17 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RING_OF_SUMMONING);
 			output.accept(ItemRegistry.RING_OF_DISPERSION);
 			output.accept(ItemRegistry.RING_OF_GATHERING);
-			//lore scraps x10
-			//mummy bait
+			output.accept(ItemRegistry.THEM_SCRAP);
+			output.accept(ItemRegistry.MUTANTS_SCRAP);
+			output.accept(ItemRegistry.SHADOWS_SCRAP);
+			output.accept(ItemRegistry.RUINS_SCRAP);
+			output.accept(ItemRegistry.HEADS_SCRAP);
+			output.accept(ItemRegistry.TAR_SCRAP);
+			output.accept(ItemRegistry.DUNGEON_SCRAP);
+			output.accept(ItemRegistry.PITSTONE_SCRAP);
+			output.accept(ItemRegistry.TOWER_SCRAP);
+			output.accept(ItemRegistry.FORT_SCRAP);
+			output.accept(ItemRegistry.MUMMY_BAIT);
 			output.accept(ItemRegistry.BARK_AMULET);
 			output.accept(ItemRegistry.AMATE_MAP);
 			output.accept(ItemRegistry.BONE_WAYFINDER);

@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.VanillaParticleFactory;
 
 import javax.annotation.Nullable;
 
@@ -46,11 +47,11 @@ public class BetweenlandsClient {
 		ResourceLocation location = BuiltInRegistries.PARTICLE_TYPE.getKey(options.getType());
 		Particle particle;
 		ParticleProvider<T> provider = (ParticleProvider<T>) Minecraft.getInstance().particleEngine.providers.get(location);
-		if (provider instanceof ParticleFactory<?, ?> factory) {
-			particle = factory.create((ClientLevel) level, x, y, z, args);
+		if (provider instanceof ParticleFactory<?, T> factory) {
+			particle = factory.create(options, (ClientLevel) level, x, y, z, args);
 		} else {
-			Vec3 motion = args != null ? new Vec3(args.getMotionX(), args.getMotionY(), args.getMotionZ()) : Vec3.ZERO;
-			particle = provider.createParticle(options, (ClientLevel) level, x, y, z, motion.x(), motion.y(), motion.z());
+			VanillaParticleFactory<T> factory = VanillaParticleFactory.create(provider);
+			particle = factory.create(options, (ClientLevel) level, x, y, z, args);
 		}
 
 		if (particle != null) {

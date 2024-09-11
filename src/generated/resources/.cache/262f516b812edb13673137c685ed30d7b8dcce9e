@@ -1,6 +1,7 @@
-// 1.21.1	2024-08-24T22:16:03.8075183	Tags for minecraft:worldgen/biome mod id thebetweenlands
+// 1.21.1	2024-09-11T08:35:15.4273884	Tags for minecraft:worldgen/biome mod id thebetweenlands
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/corroding_aura.json
 5b1e41881166590b7d1165ad29750d03a2b9f449 data/thebetweenlands/tags/worldgen/biome/disable_corrosion.json
+9fe43a3a4dfff54de22d5dade50eef3015dea75e data/thebetweenlands/tags/worldgen/biome/dreadful_peat_mummy_summonable.json
 51a7256f06b7d7fa3003331089214358c8af862a data/thebetweenlands/tags/worldgen/biome/spawns_green_anadia.json
 47be813c6a65fca3df2d4743324930f710177f41 data/thebetweenlands/tags/worldgen/biome/spawns_purple_anadia.json
 a7187eeb0cafa192eaec70eb057aabbc83e38568 data/thebetweenlands/tags/worldgen/biome/spawns_silver_anadia.json

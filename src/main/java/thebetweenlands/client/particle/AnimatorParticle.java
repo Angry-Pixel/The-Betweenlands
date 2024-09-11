@@ -61,7 +61,7 @@ public class AnimatorParticle extends PathParticle {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public Particle createParticle(ImmutableParticleArgs args) {
+		public AnimatorParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new AnimatorParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, (ArrayList<Vec3>) args.data.getObject(0));
 			particle.pickSprite(this.spriteSet);
 			return particle;

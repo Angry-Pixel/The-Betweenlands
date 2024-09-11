@@ -408,20 +408,25 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		this.defaultArgs = ParticleArgs.create();
 	}
 
-	protected final Particle getParticle(ImmutableParticleArgs args) {
-		Particle particle = this.createParticle(args);
-		particle.setColor(args.r, args.g, args.b);
-		particle.setAlpha(args.a);
-		return particle;
+	@Nullable
+	protected final Particle getParticle(T type, ImmutableParticleArgs args) {
+		Particle particle = this.createParticle(type, args);
+		if (particle != null) {
+			particle.setColor(args.r, args.g, args.b);
+			particle.setAlpha(args.a);
+			return particle;
+		}
+		return null;
 	}
 
 	@Nullable
 	@Override
-	public Particle createParticle(ParticleOptions type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-		return this.createParticle(new ImmutableParticleArgs(level, x, y, z, ParticleArgs.create()));
+	public Particle createParticle(T type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+		return this.createParticle(type, new ImmutableParticleArgs(level, x, y, z, ParticleArgs.create()));
 	}
 
-	protected abstract Particle createParticle(ImmutableParticleArgs args);
+	@Nullable
+	protected abstract Particle createParticle(T type, ImmutableParticleArgs args);
 
 	public static final Object EMPTY_ARG = new Object();
 
@@ -470,7 +475,8 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		return this.baseArgsBuilder;
 	}
 
-	public final Particle create(ClientLevel level, double x, double y, double z, @Nullable ParticleArgs<?> args) {
+	@Nullable
+	public final Particle create(T type, ClientLevel level, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		if (args == null)
 			args = ParticleArgs.get();
 		this.defaultArgs.reset();
@@ -483,6 +489,6 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		} else {
 			args = this.baseArgs.combineArgs(args);
 		}
-		return this.getParticle(new ImmutableParticleArgs(level, x, y, z, args));
+		return this.getParticle(type, new ImmutableParticleArgs(level, x, y, z, args));
 	}
 }

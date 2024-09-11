@@ -1,9 +1,11 @@
 package thebetweenlands.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.particles.SimpleParticleType;
+import org.jetbrains.annotations.Nullable;
 
 public class SpiritButterflyParticle extends BugParticle {
 	public SpiritButterflyParticle(ClientLevel level, double x, double y, double z, double mx, double my, double mz, int maxAge, float speed, float jitter, float scale, SpriteSet set) {
@@ -23,7 +25,7 @@ public class SpiritButterflyParticle extends BugParticle {
 		}
 
 		@Override
-		public BugParticle createParticle(ImmutableParticleArgs args) {
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new SpiritButterflyParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, this.spriteSet);
 			particle.setSprite(this.spriteSet.get(0, 1));
 			return particle;

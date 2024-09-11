@@ -1309,8 +1309,17 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItemWithDesc(ItemRegistry.RING_OF_SUMMONING, "Ring of Summoning", "Grants the ability to summon allies from the depths at the cost of XP");
 		this.addItemWithDesc(ItemRegistry.RING_OF_DISPERSION, "Ring of Dispersion", "Grants the ability to move through walls at the cost of XP");
 		this.addItemWithDesc(ItemRegistry.RING_OF_GATHERING, "Ring of Gathering", "Grants the ability to summon Betweenlands minions or pets lost while wearing this ring at the cost of XP. \nDead minions or pets need to be revived by animating the ring in an Animator.");
-		//lore scraps
-		//mummy bait
+		this.addItem(ItemRegistry.THEM_SCRAP, "Lurking Shadows");
+		this.addItem(ItemRegistry.MUTANTS_SCRAP, "Mutants of Terror");
+		this.addItem(ItemRegistry.SHADOWS_SCRAP, "Note from a Fallen Shadow");
+		this.addItem(ItemRegistry.RUINS_SCRAP, "Explorer's Entries: Marsh Ruins");
+		this.addItem(ItemRegistry.HEADS_SCRAP, "Explorer's Entries: Idol Heads");
+		this.addItem(ItemRegistry.TAR_SCRAP, "Explorer's Entries: Pools of Tar");
+		this.addItem(ItemRegistry.DUNGEON_SCRAP, "Explorer's Entries: Dungeon Shrine");
+		this.addItem(ItemRegistry.PITSTONE_SCRAP, "Explorer's Entries: Underground Ruins");
+		this.addItem(ItemRegistry.TOWER_SCRAP, "Explorer's Entries: The Tower");
+		this.addItem(ItemRegistry.FORT_SCRAP, "Explorer's Entries: The Fortress");
+		this.addItem(ItemRegistry.MUMMY_BAIT, "Mummy Bait");
 		this.addItem(ItemRegistry.BARK_AMULET, "Bark Amulet");
 		this.addItem(ItemRegistry.AMATE_MAP, "Empty Amate Map");
 		this.add("item.thebetweenlands.amate_map.invalid", "Can't create an Amate Map outside of The Betweenlands");

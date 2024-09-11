@@ -27,10 +27,10 @@ public class MothParticle extends BugParticle {
 		}
 
 		@Override
-		public BugParticle createParticle(ImmutableParticleArgs args) {
-			int type = args.data.getInt(3);
-			var particle = new MothParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, this.spriteSet, type);
-			particle.setSprite(this.spriteSet.get(type * 2, type * 2 + 1));
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			int bugType = args.data.getInt(3);
+			var particle = new MothParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, this.spriteSet, bugType);
+			particle.setSprite(this.spriteSet.get(bugType * 2, bugType * 2 + 1));
 			return particle;
 		}
 

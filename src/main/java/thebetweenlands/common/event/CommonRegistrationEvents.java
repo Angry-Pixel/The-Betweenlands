@@ -176,6 +176,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(ClearBlockGuardPacket.TYPE, ClearBlockGuardPacket.STREAM_CODEC, ClearBlockGuardPacket::handle);
 		registrar.playToClient(ChangeBlockGuardSectionPacket.TYPE, ChangeBlockGuardSectionPacket.STREAM_CODEC, ChangeBlockGuardSectionPacket::handle);
 		registrar.playToClient(InfestWeedwoodBushPacket.TYPE, InfestWeedwoodBushPacket.STREAM_CODEC, InfestWeedwoodBushPacket::handle);
+		registrar.playToClient(OpenLoreScrapPacket.TYPE, OpenLoreScrapPacket.STREAM_CODEC, OpenLoreScrapPacket::handle);
 		registrar.playToClient(ShowFoodSicknessPacket.TYPE, ShowFoodSicknessPacket.STREAM_CODEC, ShowFoodSicknessPacket::handle);
 		registrar.playToClient(SyncLocalStorageDataPacket.TYPE, SyncLocalStorageDataPacket.STREAM_CODEC, SyncLocalStorageDataPacket::handle);
 		registrar.playToClient(SyncChunkStoragePacket.TYPE, SyncChunkStoragePacket.STREAM_CODEC, SyncChunkStoragePacket::handle);
@@ -191,7 +192,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
-		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, (payload, context) -> ExtendedReachAttackPacket.handle(payload, context));
+		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {

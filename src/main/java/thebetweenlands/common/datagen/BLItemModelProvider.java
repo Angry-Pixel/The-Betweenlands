@@ -338,8 +338,17 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.RING_OF_SUMMONING);
 		this.basicItem(ItemRegistry.RING_OF_DISPERSION);
 		this.basicItem(ItemRegistry.RING_OF_GATHERING);
-		//lore scraps
-		//mummy bait
+		this.otherTextureItem(ItemRegistry.THEM_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.MUTANTS_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.SHADOWS_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.RUINS_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.HEADS_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.TAR_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.DUNGEON_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.PITSTONE_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.TOWER_SCRAP, this.modLoc("lore_scrap"));
+		this.otherTextureItem(ItemRegistry.FORT_SCRAP, this.modLoc("lore_scrap"));
+		this.basicItem(ItemRegistry.MUMMY_BAIT);
 		this.basicItem(ItemRegistry.BARK_AMULET);
 		this.basicItem(ItemRegistry.AMATE_MAP);
 		this.basicItem(ItemRegistry.FILLED_AMATE_MAP);
@@ -459,20 +468,12 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.STRING_ROOT_FIBERS);
 		this.basicItem(ItemRegistry.CRYPTWEED_BLADES);
 
-		var anadia = this.getBuilder(ItemRegistry.ANADIA.getId().toString())
-			.parent(new ModelFile.UncheckedModelFile("item/generated"))
-			.texture("layer0", TheBetweenlands.prefix("item/anadia_head_1"))
-			.texture("layer0", TheBetweenlands.prefix("item/anadia_body_1"))
-			.texture("layer0", TheBetweenlands.prefix("item/anadia_tail_1"));
+		var anadia = this.multiLayerItem(ItemRegistry.ANADIA.getId().getPath(), TheBetweenlands.prefix("item/anadia_head_1"), TheBetweenlands.prefix("item/anadia_body_1"), TheBetweenlands.prefix("item/anadia_tail_1"));
 
 		for (int head = 0; head < 3; head++) {
 			for (int body = 0; body < 3; body++) {
 				for (int tail = 0; tail < 3; tail++) {
-					var anadiaModel = this.getBuilder(ItemRegistry.ANADIA.getId().toString() + head + body + tail)
-						.parent(new ModelFile.UncheckedModelFile("item/generated"))
-						.texture("layer0", TheBetweenlands.prefix("item/anadia_head_" + (head + 1)))
-						.texture("layer1", TheBetweenlands.prefix("item/anadia_body_" + (body + 1)))
-						.texture("layer2", TheBetweenlands.prefix("item/anadia_tail_" + (tail + 1)));
+					var anadiaModel = this.multiLayerItem(ItemRegistry.ANADIA.getId().toString() + head + body + tail, TheBetweenlands.prefix("item/anadia_head_" + (head + 1)), TheBetweenlands.prefix("item/anadia_body_" + (body + 1)), TheBetweenlands.prefix("item/anadia_tail_" + (tail + 1)));
 					anadia.override()
 						.predicate(TheBetweenlands.prefix("head"), head)
 						.predicate(TheBetweenlands.prefix("body"), body)
@@ -482,36 +483,16 @@ public class BLItemModelProvider extends ItemModelProvider {
 			}
 		}
 
-		this.getBuilder(ItemRegistry.ASPECTRUS_FRUIT.getId().toString())
-			.parent(new ModelFile.UncheckedModelFile("item/generated"))
-			.texture("layer0", TheBetweenlands.prefix("item/aspectrus_fruit"))
-			.texture("layer1", TheBetweenlands.prefix("item/aspectrus_fruit_overlay"));
+		this.multiLayerItem(ItemRegistry.ASPECTRUS_FRUIT.getId().getPath(), TheBetweenlands.prefix("item/aspectrus_fruit"), TheBetweenlands.prefix("item/aspectrus_fruit_overlay"));
 
 		this.basicItem(ItemRegistry.GREEN_DENTROTHYST_VIAL);
 		this.basicItem(ItemRegistry.DIRTY_DENTROTHYST_VIAL);
 		this.basicItem(ItemRegistry.ORANGE_DENTROTHYST_VIAL);
 
-		this.getBuilder(ItemRegistry.GREEN_ELIXIR.getId().toString())
-			.parent(new ModelFile.UncheckedModelFile("item/generated"))
-			.texture("layer0", TheBetweenlands.prefix("item/vial_liquid"))
-			.texture("layer1", TheBetweenlands.prefix("item/green_dentrothyst_vial"))
-			.texture("layer2", TheBetweenlands.prefix("item/vial_liquid_glint"));
-
-		this.getBuilder(ItemRegistry.ORANGE_ELIXIR.getId().toString())
-			.parent(new ModelFile.UncheckedModelFile("item/generated"))
-			.texture("layer0", TheBetweenlands.prefix("item/vial_liquid"))
-			.texture("layer1", TheBetweenlands.prefix("item/orange_dentrothyst_vial"))
-			.texture("layer2", TheBetweenlands.prefix("item/vial_liquid_glint"));
-
-		this.getBuilder(ItemRegistry.GREEN_ASPECT_VIAL.getId().toString())
-			.parent(new ModelFile.UncheckedModelFile("item/generated"))
-			.texture("layer0", TheBetweenlands.prefix("item/aspect_liquid"))
-			.texture("layer1", TheBetweenlands.prefix("item/green_dentrothyst_vial"));
-
-		this.getBuilder(ItemRegistry.ORANGE_ASPECT_VIAL.getId().toString())
-			.parent(new ModelFile.UncheckedModelFile("item/generated"))
-			.texture("layer0", TheBetweenlands.prefix("item/aspect_liquid"))
-			.texture("layer1", TheBetweenlands.prefix("item/orange_dentrothyst_vial"));
+		this.multiLayerItem(ItemRegistry.GREEN_ELIXIR.getId().getPath(), TheBetweenlands.prefix("item/vial_liquid"), TheBetweenlands.prefix("item/green_dentrothyst_vial"), TheBetweenlands.prefix("item/vial_liquid_glint"));
+		this.multiLayerItem(ItemRegistry.ORANGE_ELIXIR.getId().getPath(), TheBetweenlands.prefix("item/vial_liquid"), TheBetweenlands.prefix("item/orange_dentrothyst_vial"), TheBetweenlands.prefix("item/vial_liquid_glint"));
+		this.multiLayerItem(ItemRegistry.GREEN_ASPECT_VIAL.getId().getPath(), TheBetweenlands.prefix("item/aspect_liquid"), TheBetweenlands.prefix("item/green_dentrothyst_vial"));
+		this.multiLayerItem(ItemRegistry.ORANGE_ASPECT_VIAL.getId().getPath(), TheBetweenlands.prefix("item/aspect_liquid"), TheBetweenlands.prefix("item/orange_dentrothyst_vial"));
 	}
 
 	public ItemModelBuilder basicItem(DeferredItem<? extends Item> item) {

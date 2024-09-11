@@ -85,7 +85,7 @@ public class BugParticle extends TextureSheetParticle {
 		}
 
 		@Override
-		public BugParticle createParticle(ImmutableParticleArgs args) {
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3), this.spriteSet, 1);
 			particle.setSprite(this.spriteSet.get(0, 1));
 			return particle;
@@ -110,7 +110,7 @@ public class BugParticle extends TextureSheetParticle {
 		}
 
 		@Override
-		public BugParticle createParticle(ImmutableParticleArgs args) {
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3), this.spriteSet, 1);
 			particle.setSprite(this.spriteSet.get(0, 1));
 			return particle;
@@ -135,7 +135,7 @@ public class BugParticle extends TextureSheetParticle {
 		}
 
 		@Override
-		public BugParticle createParticle(ImmutableParticleArgs args) {
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, false, this.spriteSet, 3);
 			particle.setSprite(this.spriteSet.get(0, 1));
 			return particle;
@@ -160,7 +160,7 @@ public class BugParticle extends TextureSheetParticle {
 		}
 
 		@Override
-		public BugParticle createParticle(ImmutableParticleArgs args) {
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3), this.spriteSet, 3);
 			particle.setSprite(this.spriteSet.get(0, 1));
 			return particle;
