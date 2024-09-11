@@ -1124,6 +1124,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.COOKED_OLM_EGG, "Baked Olm Egg Cluster");
 		this.addItem(ItemRegistry.OLMLETTE, "Olmlette");
 		this.addItem(ItemRegistry.SILK_GRUB, "Silk Grub");
+		//drinkable brews
+		//herblore book
 		this.add("item.thebetweenlands.modifiers.armor", "When on armor:");
 		this.add("item.thebetweenlands.modifiers.tool", "When on tool:");
 		this.addItem(ItemRegistry.CRIMSON_MIDDLE_GEM, "Crimson Middle Gem");
@@ -1135,10 +1137,66 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.AQUA_MIDDLE_GEM, "Aqua Middle Gem");
 		this.add("item.thebetweenlands.aqua_middle_gem.armor", " - Chance to gain defense when attacked");
 		this.add("item.thebetweenlands.aqua_middle_gem.tool", " - Chance to weaken the enemy when attacking");
-
 		this.addItem(ItemRegistry.LIFE_CRYSTAL, "Life Crystal");
 		this.addItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT, "Life Crystal Fragment");
 		this.add("item.thebetweenlands.life_crystal.remaining", "%s%% remaining");
+		this.addItem(ItemRegistry.PYRAD_FLAME, "Pyrad Flame");
+		this.addItem(ItemRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
+		this.addItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
+		this.addItem(ItemRegistry.SHIMMER_STONE, "Shimmerstone");
+		//tarminion
+		this.addItem(ItemRegistry.SLUDGE_BALL, "Sludge Ball");
+		//rope
+		this.addItem(ItemRegistry.ANGRY_PEBBLE, "Angry Pebble");
+		this.addItemWithDesc(ItemRegistry.OCTINE_INGOT, "Octine Ingot", "Hot enough to set moss on fire");
+		//shambler tongue
+		this.addItemWithDesc(ItemRegistry.SAP_SPIT, "Sap Spit", "Keeps decay at bay.");
+		this.addItem(ItemRegistry.RUNE_DOOR_KEY, "Rune Door Key");
+		this.addItemWithDesc(ItemRegistry.LURKER_SKIN_PATCH, "Lurker Skin Patch", "Fixes Draeton leakages");
+		this.addItem(ItemRegistry.DRAETON_BALLOON, "Draeton Balloon");
+		this.addItem(ItemRegistry.DRAETON_BURNER, "Draeton Burner");
+		this.addItem(ItemRegistry.DRAETON, "Draeton");
+		this.addItem(ItemRegistry.DRAETON_FURNACE_UPGRADE, "Draeton Furnace Upgrade");
+		this.addItem(ItemRegistry.DRAETON_ANCHOR_UPGRADE, "Draeton Anchor Upgrade");
+		this.addItem(ItemRegistry.DRAETON_CRAFTING_UPGRADE, "Draeton Crafting Upgrade");
+		this.addItem(ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE, "Weedwood Rowboat Lantern Upgrade");
+		this.addItem(ItemRegistry.AMATE_NAME_TAG, "Amate Name Tag");
+		this.addItem(ItemRegistry.DULL_LAVENDER_DYE, "Dull Lavender Dye");
+		this.addItem(ItemRegistry.MAROON_DYE, "Maroon Dye");
+		this.addItem(ItemRegistry.SHADOW_GREEN_DYE, "Shadow Green Dye");
+		this.addItem(ItemRegistry.CAMELOT_MAGENTA_DYE, "Camelot Magenta Dye");
+		this.addItem(ItemRegistry.SAFFRON_DYE, "Saffron Dye");
+		this.addItem(ItemRegistry.CARIBBEAN_GREEN_DYE, "Caribbean Green Dye");
+		this.addItem(ItemRegistry.VIVID_TANGERINE_DYE, "Vivid Tangerine Dye");
+		this.addItem(ItemRegistry.CHAMPAGNE_DYE, "Champagne Dye");
+		this.addItem(ItemRegistry.RAISIN_BLACK_DYE, "Raisin Black Dye");
+		this.addItem(ItemRegistry.SUSHI_GREEN_DYE, "Sushi Green Dye");
+		this.addItem(ItemRegistry.ELM_CYAN_DYE, "Elm Cyan Dye");
+		this.addItem(ItemRegistry.CADMIUM_GREEN_DYE, "Cadmium Green Dye");
+		this.addItem(ItemRegistry.LAVENDER_BLUE_DYE, "Lavender Blue Dye");
+		this.addItem(ItemRegistry.BROWN_RUST_DYE, "Brown Rust Dye");
+		this.addItem(ItemRegistry.MIDNIGHT_PURPLE_DYE, "Mignight Purple Dye");
+		this.addItem(ItemRegistry.PEWTER_GREY_DYE, "Pewter Grey Dye");
+		this.addItem(ItemRegistry.DULL_LAVENDER_ITEM_FRAME, "Dull Lavender Item Frame");
+		this.addItem(ItemRegistry.MAROON_ITEM_FRAME, "Maroon Item Frame");
+		this.addItem(ItemRegistry.SHADOW_GREEN_ITEM_FRAME, "Shadow Green Item Frame");
+		this.addItem(ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME, "Camelot Magenta Item Frame");
+		this.addItem(ItemRegistry.SAFFRON_ITEM_FRAME, "Saffron Item Frame");
+		this.addItem(ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME, "Caribbean Green Item Frame");
+		this.addItem(ItemRegistry.VIVID_TANGERINE_ITEM_FRAME, "Vivid Tangerine Item Frame");
+		this.addItem(ItemRegistry.CHAMPAGNE_ITEM_FRAME, "Champagne Item Frame");
+		this.addItem(ItemRegistry.RAISIN_BLACK_ITEM_FRAME, "Raisin Black Item Frame");
+		this.addItem(ItemRegistry.SUSHI_GREEN_ITEM_FRAME, "Sushi Green Item Frame");
+		this.addItem(ItemRegistry.ELM_CYAN_ITEM_FRAME, "Elm Cyan Item Frame");
+		this.addItem(ItemRegistry.CADMIUM_GREEN_ITEM_FRAME, "Cadmium Green Item Frame");
+		this.addItem(ItemRegistry.LAVENDER_BLUE_ITEM_FRAME, "Lavender Blue Item Frame");
+		this.addItem(ItemRegistry.BROWN_RUST_ITEM_FRAME, "Brown Rust Item Frame");
+		this.addItem(ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME, "Mignight Purple Item Frame");
+		this.addItem(ItemRegistry.PEWTER_GREY_ITEM_FRAME, "Pewter Grey Item Frame");
+		this.addItem(ItemRegistry.PHEROMONE_THORAX, "Pheromone Thorax");
+		this.addItem(ItemRegistry.SILK_FILTER, "Silk Mesh Strainer");
+		this.addItem(ItemRegistry.MOSS_FILTER, "Moss Mesh Strainer");
+		this.addItem(ItemRegistry.SILKY_PEBBLE, "Silky Pebble");
 
 		this.addItem(ItemRegistry.BONE_HELMET, "Bone Helmet");
 		this.addItem(ItemRegistry.BONE_CHESTPLATE, "Bone Chestplate");
@@ -1161,25 +1219,73 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.ANCIENT_LEGGINGS, "Ancient Leggings");
 		this.addItem(ItemRegistry.ANCIENT_BOOTS, "Ancient Boots");
 		this.add("item.thebetweenlands.ancient_armor.desc", "Reduces Magic Damage.\nUp to half magic damage reduction with a full set equipped.");
+		this.addItem(ItemRegistry.AMPHIBIOUS_HELMET, "Amphibious Helmet");
+		this.addItem(ItemRegistry.AMPHIBIOUS_CHESTPLATE, "Amphibious Chestplate");
+		this.addItem(ItemRegistry.AMPHIBIOUS_LEGGINGS, "Amphibious Leggings");
+		this.addItem(ItemRegistry.AMPHIBIOUS_BOOTS, "Amphibious Boots");
 		this.addItem(ItemRegistry.RUBBER_BOOTS, "Rubber Boots");
 		this.addItem(ItemRegistry.MARSH_RUNNER_BOOTS, "Boots of the Marsh Runner");
-
+		this.addItem(ItemRegistry.WEEDWOOD_SWORD, "Weedwood Sword");
+		this.addItem(ItemRegistry.WEEDWOOD_SHOVEL, "Weedwood Shovel");
+		this.addItem(ItemRegistry.WEEDWOOD_AXE, "Weedwood Axe");
+		this.addItem(ItemRegistry.WEEDWOOD_PICKAXE, "Weedwood Pickaxe");
+		this.addItem(ItemRegistry.BONE_SWORD, "Bone Sword");
+		this.addItem(ItemRegistry.BONE_SHOVEL, "Bone Shovel");
 		this.addItem(ItemRegistry.BONE_AXE, "Bone Axe");
+		this.addItem(ItemRegistry.BONE_PICKAXE, "Bone Pickaxe");
+		this.addItem(ItemRegistry.OCTINE_SWORD, "Octine Sword");
+		this.addItem(ItemRegistry.OCTINE_SHOVEL, "Octine Shovel");
+		this.addItem(ItemRegistry.OCTINE_AXE, "Octine Axe");
+		this.addItem(ItemRegistry.OCTINE_PICKAXE, "Octine Pickaxe");
+		this.addItem(ItemRegistry.VALONITE_SWORD, "Valonite Sword");
+		this.addItem(ItemRegistry.VALONITE_SHOVEL, "Valonite Shovel");
+		this.addItem(ItemRegistry.VALONITE_AXE, "Valonite Axe");
+		this.addItem(ItemRegistry.VALONITE_GREATAXE, "Valonite Greataxe");
+		this.addItem(ItemRegistry.VALONITE_PICKAXE, "Valonite Pickaxe");
+		//shields
+		//shears
+		//sickle
+		//shockwave sword
+		//arrows
+		this.addItem(ItemRegistry.CHIROMAW_BARB, "Chiromaw Barb");
+		//bows
+		//ancient weps
 		this.addItem(ItemRegistry.PESTLE, "Pestle");
 		this.add("item.thebetweenlands.pestle.desc", "Place Pestle in Mortar");
 		this.add("item.thebetweenlands.pestle.remaining", "%d%% Remaining: %d more uses.");
-
+		this.addItem(ItemRegistry.NET, "Net");
+		//pouches
+		//caving rope light
+		//grappling hooks
+		this.addItem(ItemRegistry.VOLARKITE, "Volarkite");
+		//slingshot
 		this.addItem(ItemRegistry.WEEDWOOD_FISHING_ROD, "Weedwood Fishing Rod");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken\nand needs a new line and float.");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.baited", "Has Worm: %s");
-		this.addItem(ItemRegistry.NET, "Net");
-		this.addItem(ItemRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
-		this.addItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
+		//spears
+		//buckets
+		this.addItem(ItemRegistry.ASCENT_UPGRADE, "Ascent Upgrade");
+		this.addItem(ItemRegistry.ELECTRIC_UPGRADE, "Electric Upgrade");
+		this.addItem(ItemRegistry.FISH_VORTEX_UPGRADE, "Fish Vortex Upgrade");
+		this.addItem(ItemRegistry.GLIDE_UPGRADE, "Glide Upgrade");
+		this.addItem(ItemRegistry.URCHIN_SPIKE_UPGRADE, "Urchin Spike Upgrade");
 		this.addItem(ItemRegistry.SILK_BUNDLE, "Silk Bundle");
 		this.add("item.thebetweenlands.silk_bundle.item", "- %s");
 
-		this.addItem(ItemRegistry.AMATE_MAP, "Empty Amate Map");
-		this.addItem(ItemRegistry.FILLED_AMATE_MAP, "Amate Map");
+		//skull mask
+		//explorer hat
+		//tree masks
+		//gallery frames
+		//silk mask
+		this.addItem(ItemRegistry.WIGHTS_BANE, "Wight's Bane");
+		this.addItem(ItemRegistry.SLUDGE_SLICER, "Sludge Slicer");
+		this.addItem(ItemRegistry.CRITTER_CRUNCHER, "Critter Cruncher");
+		this.addItem(ItemRegistry.HAG_HACKER, "Hag Hacker");
+		this.addItem(ItemRegistry.VOODOO_DOLL, "Voodoo Doll");
+		this.addItem(ItemRegistry.SWIFT_PICK, "Swift Pick");
+		//erupters
+		this.addItem(ItemRegistry.MIST_STAFF, "Staff of the Mist Walker");
+		this.addItem(ItemRegistry.SHADOW_STAFF, "Staff of the Shadow Walker");
 		this.addDisc(ItemRegistry.RECORD_ANCIENT, "Temple Disc", "Voog2 - Ancient");
 		this.addDisc(ItemRegistry.RECORD_ASTATOS, "Legendary Disc", "Voog2 - Astatos");
 		this.addDisc(ItemRegistry.RECORD_BENEATH_A_GREEN_SKY, "Music Disc", "Voog2 - Beneath A Green Sky");
@@ -1195,8 +1301,24 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addDisc(ItemRegistry.RECORD_WANDERING_WISPS, "Music Disc", "Voog2 - Wandering Wisps");
 		this.addDisc(ItemRegistry.RECORD_WATERLOGGED, "Music Disc", "Voog2 - Waterlogged");
 		this.addDisc(ItemRegistry.MYSTERIOUS_RECORD, "Mysterious Disc", "...");
-
+		//amulets
+		//amulet slot
+		this.addItemWithDesc(ItemRegistry.RING_OF_POWER, "Ring of Power", "Grants a bonus to attack damage and movement speed at the cost of XP");
+		this.addItemWithDesc(ItemRegistry.RING_OF_ASCENT, "Ring of Ascent", "Grants the gift of levitation at the cost of XP");
+		this.addItemWithDesc(ItemRegistry.RING_OF_RECRUITMENT, "Ring of Recruitment", "Grants the power to recruit and control entities at the cost of XP");
+		this.addItemWithDesc(ItemRegistry.RING_OF_SUMMONING, "Ring of Summoning", "Grants the ability to summon allies from the depths at the cost of XP");
+		this.addItemWithDesc(ItemRegistry.RING_OF_DISPERSION, "Ring of Dispersion", "Grants the ability to move through walls at the cost of XP");
+		this.addItemWithDesc(ItemRegistry.RING_OF_GATHERING, "Ring of Gathering", "Grants the ability to summon Betweenlands minions or pets lost while wearing this ring at the cost of XP. \nDead minions or pets need to be revived by animating the ring in an Animator.");
+		//lore scraps
+		//mummy bait
+		this.addItem(ItemRegistry.BARK_AMULET, "Bark Amulet");
+		this.addItem(ItemRegistry.AMATE_MAP, "Empty Amate Map");
 		this.add("item.thebetweenlands.amate_map.invalid", "Can't create an Amate Map outside of The Betweenlands");
+		this.addItem(ItemRegistry.FILLED_AMATE_MAP, "Amate Map");
+		this.addItemWithDesc(ItemRegistry.BONE_WAYFINDER, "Bone Wayfinder", "Must be linked to a Menhir");
+		this.addItem(ItemRegistry.MAGIC_ITEM_MAGNET, "Magic Item Magnet");
+		this.addItem(ItemRegistry.GEM_SINGER, "Gem Singer");
+		this.addItem(ItemRegistry.SNOT_POD, "Rocksnot Pod");
 
 		this.addItem(ItemRegistry.GROUND_LEAF, "Ground Leaf");
 		this.addItem(ItemRegistry.GROUND_CATTAIL, "Ground Cattail");

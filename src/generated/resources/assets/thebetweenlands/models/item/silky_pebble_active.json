@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:item/silky_pebble",
+    "layer1": "thebetweenlands:item/angry_pebble_overlay"
+  }
+}

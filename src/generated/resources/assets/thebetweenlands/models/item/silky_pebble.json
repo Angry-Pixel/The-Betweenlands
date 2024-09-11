@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/silky_pebble_active",
+      "predicate": {
+        "thebetweenlands:charging": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/silky_pebble"
+  }
+}

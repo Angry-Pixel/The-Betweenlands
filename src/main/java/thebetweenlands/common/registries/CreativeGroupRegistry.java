@@ -6,6 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -785,14 +786,14 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SAP_SPIT);
 			//shambler tongue
 			output.accept(ItemRegistry.RUNE_DOOR_KEY);
-			//lurker skin patch
-			//draeton balloon
-			//draeton burner
+			output.accept(ItemRegistry.LURKER_SKIN_PATCH);
+			output.accept(ItemRegistry.DRAETON_BALLOON);
+			output.accept(ItemRegistry.DRAETON_BURNER);
 			output.accept(ItemRegistry.DRAETON);
-			//draeton furnace
-			//draeton anchor
-			//draeton crafting
-			//weedwood rowboat lantern
+			output.accept(ItemRegistry.DRAETON_FURNACE_UPGRADE);
+			output.accept(ItemRegistry.DRAETON_ANCHOR_UPGRADE);
+			output.accept(ItemRegistry.DRAETON_CRAFTING_UPGRADE);
+			output.accept(ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE);
 			output.accept(ItemRegistry.AMATE_NAME_TAG);
 			output.accept(ItemRegistry.DULL_LAVENDER_DYE);
 			output.accept(ItemRegistry.MAROON_DYE);
@@ -810,11 +811,26 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.BROWN_RUST_DYE);
 			output.accept(ItemRegistry.MIDNIGHT_PURPLE_DYE);
 			output.accept(ItemRegistry.PEWTER_GREY_DYE);
-			//frames
+			output.accept(ItemRegistry.DULL_LAVENDER_ITEM_FRAME);
+			output.accept(ItemRegistry.MAROON_ITEM_FRAME);
+			output.accept(ItemRegistry.SHADOW_GREEN_ITEM_FRAME);
+			output.accept(ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME);
+			output.accept(ItemRegistry.SAFFRON_ITEM_FRAME);
+			output.accept(ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME);
+			output.accept(ItemRegistry.VIVID_TANGERINE_ITEM_FRAME);
+			output.accept(ItemRegistry.CHAMPAGNE_ITEM_FRAME);
+			output.accept(ItemRegistry.RAISIN_BLACK_ITEM_FRAME);
+			output.accept(ItemRegistry.SUSHI_GREEN_ITEM_FRAME);
+			output.accept(ItemRegistry.ELM_CYAN_ITEM_FRAME);
+			output.accept(ItemRegistry.CADMIUM_GREEN_ITEM_FRAME);
+			output.accept(ItemRegistry.LAVENDER_BLUE_ITEM_FRAME);
+			output.accept(ItemRegistry.BROWN_RUST_ITEM_FRAME);
+			output.accept(ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME);
+			output.accept(ItemRegistry.PEWTER_GREY_ITEM_FRAME);
 			output.accept(ItemRegistry.PHEROMONE_THORAX);
 			output.accept(ItemRegistry.SILK_FILTER);
 			output.accept(ItemRegistry.MOSS_FILTER);
-			//silky pebble
+			output.accept(ItemRegistry.SILKY_PEBBLE);
 		})
 		.build());
 
@@ -1043,6 +1059,9 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.GRUB_INFESTED_WEEDWOOD_BUSH);
 			output.accept(BlockRegistry.SILK_COCOONED_WEEDWOOD_BUSH);
 			output.accept(BlockRegistry.DECAY_INFESTED_WEEDWOOD_BUSH);
+			output.accept(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
+			output.accept(ItemRegistry.SPORES);
+			output.accept(ItemRegistry.ASPECTRUS_SEEDS);
 			output.accept(BlockRegistry.FALLEN_LEAVES);
 			output.accept(BlockRegistry.SWAMP_REED);
 			output.accept(BlockRegistry.SWAMP_KELP);

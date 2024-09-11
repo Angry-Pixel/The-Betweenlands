@@ -2,7 +2,6 @@ package thebetweenlands.common.items;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,14 +27,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class OctineIngotItem extends Item {
+public class OctineIngotItem extends HoverTextItem {
 	public OctineIngotItem(Properties properties) {
 		super(properties);
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.octine_ingot.fire"));
 	}
 
 	@Override

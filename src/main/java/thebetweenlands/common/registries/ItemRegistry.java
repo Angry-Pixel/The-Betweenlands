@@ -16,6 +16,7 @@ import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.items.*;
+import thebetweenlands.util.BLDyeColor;
 
 public class ItemRegistry {
 
@@ -171,34 +172,55 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> SLUDGE_BALL = ITEMS.register("sludge_ball", () -> new Item(new Item.Properties()));
 	//rope
-	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
+	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, new Item.Properties()));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
 	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
-	//draeton things
+	public static final DeferredItem<Item> LURKER_SKIN_PATCH = ITEMS.register("lurker_skin_patch", () -> new HoverTextItem(new Item.Properties().stacksTo(16)));
+	public static final DeferredItem<Item> DRAETON_BALLOON = ITEMS.register("draeton_balloon", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> DRAETON_BURNER = ITEMS.register("draeton_burner", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> DRAETON = ITEMS.register("draeton", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> DRAETON_FURNACE_UPGRADE = ITEMS.register("draeton_furnace_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> DRAETON_ANCHOR_UPGRADE = ITEMS.register("draeton_anchor_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> DRAETON_CRAFTING_UPGRADE = ITEMS.register("draeton_crafting_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_ROWBOAT_LANTERN_UPGRADE = ITEMS.register("weedwood_rowboat_lantern_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> DULL_LAVENDER_DYE = ITEMS.register("dull_lavender_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> MAROON_DYE = ITEMS.register("maroon_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SHADOW_GREEN_DYE = ITEMS.register("shadow_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CAMELOT_MAGENTA_DYE = ITEMS.register("camelot_magenta_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SAFFRON_DYE = ITEMS.register("saffron_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CARIBBEAN_GREEN_DYE = ITEMS.register("caribbean_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> VIVID_TANGERINE_DYE = ITEMS.register("vivid_tangerine_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CHAMPAGNE_DYE = ITEMS.register("champagne_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RAISIN_BLACK_DYE = ITEMS.register("raisin_black_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SUSHI_GREEN_DYE = ITEMS.register("sushi_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ELM_CYAN_DYE = ITEMS.register("elm_cyan_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CADMIUM_GREEN_DYE = ITEMS.register("cadmium_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> LAVENDER_BLUE_DYE = ITEMS.register("lavender_blue_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> BROWN_RUST_DYE = ITEMS.register("brown_rust_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> MIDNIGHT_PURPLE_DYE = ITEMS.register("midnight_purple_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> PEWTER_GREY_DYE = ITEMS.register("pewter_grey_dye", () -> new Item(new Item.Properties().stacksTo(1)));
-	//frames
+	public static final DeferredItem<Item> DULL_LAVENDER_DYE = ITEMS.register("dull_lavender_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> MAROON_DYE = ITEMS.register("maroon_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SHADOW_GREEN_DYE = ITEMS.register("shadow_green_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> CAMELOT_MAGENTA_DYE = ITEMS.register("camelot_magenta_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SAFFRON_DYE = ITEMS.register("saffron_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> CARIBBEAN_GREEN_DYE = ITEMS.register("caribbean_green_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> VIVID_TANGERINE_DYE = ITEMS.register("vivid_tangerine_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> CHAMPAGNE_DYE = ITEMS.register("champagne_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> RAISIN_BLACK_DYE = ITEMS.register("raisin_black_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SUSHI_GREEN_DYE = ITEMS.register("sushi_green_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> ELM_CYAN_DYE = ITEMS.register("elm_cyan_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> CADMIUM_GREEN_DYE = ITEMS.register("cadmium_green_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> LAVENDER_BLUE_DYE = ITEMS.register("lavender_blue_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> BROWN_RUST_DYE = ITEMS.register("brown_rust_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> MIDNIGHT_PURPLE_DYE = ITEMS.register("midnight_purple_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> PEWTER_GREY_DYE = ITEMS.register("pewter_grey_dye", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> DULL_LAVENDER_ITEM_FRAME = ITEMS.register("dull_lavender_item_frame", () -> new BLItemFrameItem(BLDyeColor.DULL_LAVENDER, new Item.Properties()));
+	public static final DeferredItem<Item> MAROON_ITEM_FRAME = ITEMS.register("maroon_item_frame", () -> new BLItemFrameItem(BLDyeColor.MAROON, new Item.Properties()));
+	public static final DeferredItem<Item> SHADOW_GREEN_ITEM_FRAME = ITEMS.register("shadow_green_item_frame", () -> new BLItemFrameItem(BLDyeColor.SHADOW_GREEN, new Item.Properties()));
+	public static final DeferredItem<Item> CAMELOT_MAGENTA_ITEM_FRAME = ITEMS.register("camelot_magenta_item_frame", () -> new BLItemFrameItem(BLDyeColor.CAMELOT_MAGENTA, new Item.Properties()));
+	public static final DeferredItem<Item> SAFFRON_ITEM_FRAME = ITEMS.register("saffron_item_frame", () -> new BLItemFrameItem(BLDyeColor.SAFFRON, new Item.Properties()));
+	public static final DeferredItem<Item> CARIBBEAN_GREEN_ITEM_FRAME = ITEMS.register("caribbean_green_item_frame", () -> new BLItemFrameItem(BLDyeColor.CARIBBEAN_GREEN, new Item.Properties()));
+	public static final DeferredItem<Item> VIVID_TANGERINE_ITEM_FRAME = ITEMS.register("vivid_tangerine_item_frame", () -> new BLItemFrameItem(BLDyeColor.VIVID_TANGERINE, new Item.Properties()));
+	public static final DeferredItem<Item> CHAMPAGNE_ITEM_FRAME = ITEMS.register("champagne_item_frame", () -> new BLItemFrameItem(BLDyeColor.CHAMPAGNE, new Item.Properties()));
+	public static final DeferredItem<Item> RAISIN_BLACK_ITEM_FRAME = ITEMS.register("raisin_black_item_frame", () -> new BLItemFrameItem(BLDyeColor.RAISIN_BLACK, new Item.Properties()));
+	public static final DeferredItem<Item> SUSHI_GREEN_ITEM_FRAME = ITEMS.register("sushi_green_item_frame", () -> new BLItemFrameItem(BLDyeColor.SUSHI_GREEN, new Item.Properties()));
+	public static final DeferredItem<Item> ELM_CYAN_ITEM_FRAME = ITEMS.register("elm_cyan_item_frame", () -> new BLItemFrameItem(BLDyeColor.ELM_CYAN, new Item.Properties()));
+	public static final DeferredItem<Item> CADMIUM_GREEN_ITEM_FRAME = ITEMS.register("cadmium_green_item_frame", () -> new BLItemFrameItem(BLDyeColor.CADMIUM_GREEN, new Item.Properties()));
+	public static final DeferredItem<Item> LAVENDER_BLUE_ITEM_FRAME = ITEMS.register("lavender_blue_item_frame", () -> new BLItemFrameItem(BLDyeColor.LAVENDER_BLUE, new Item.Properties()));
+	public static final DeferredItem<Item> BROWN_RUST_ITEM_FRAME = ITEMS.register("brown_rust_item_frame", () -> new BLItemFrameItem(BLDyeColor.BROWN_RUST, new Item.Properties()));
+	public static final DeferredItem<Item> MIDNIGHT_PURPLE_ITEM_FRAME = ITEMS.register("midnight_purple_item_frame", () -> new BLItemFrameItem(BLDyeColor.MIDNIGHT_PURPLE, new Item.Properties()));
+	public static final DeferredItem<Item> PEWTER_GREY_ITEM_FRAME = ITEMS.register("pewter_grey_item_frame", () -> new BLItemFrameItem(BLDyeColor.PEWTER_GREY, new Item.Properties()));
 	public static final DeferredItem<Item> PHEROMONE_THORAX = ITEMS.register("pheromone_thorax", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
-	//silky pebble
+	public static final DeferredItem<Item> SILKY_PEBBLE = ITEMS.register("silky_pebble", () -> new AngryPebbleItem(3.0F, new Item.Properties()));
 
 	//TODO durability/attribute checks on tools and and armors
 	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6)).stacksTo(1)));

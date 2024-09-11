@@ -4,15 +4,19 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+
+import java.util.function.Function;
 
 public class BLItemModelProvider extends ItemModelProvider {
 	public BLItemModelProvider(PackOutput output, ExistingFileHelper helper) {
@@ -153,6 +157,82 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.COOKED_OLM_EGG);
 		this.basicItem(ItemRegistry.OLMLETTE);
 		this.basicItem(ItemRegistry.SILK_GRUB);
+		//brews
+		//herblore book
+		this.basicItem(ItemRegistry.CRIMSON_MIDDLE_GEM);
+		this.basicItem(ItemRegistry.AQUA_MIDDLE_GEM);
+		this.basicItem(ItemRegistry.GREEN_MIDDLE_GEM);
+		this.basicItem(ItemRegistry.LIFE_CRYSTAL)
+			.override().predicate(TheBetweenlands.prefix("remaining"), 1).model(this.basicItem(this.modLoc("life_crystal_1"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 2).model(this.basicItem(this.modLoc("life_crystal_2"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_3"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_4")));
+
+		this.basicItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT)
+			.override().predicate(TheBetweenlands.prefix("remaining"), 1).model(this.basicItem(this.modLoc("life_crystal_fragment_1"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 2).model(this.basicItem(this.modLoc("life_crystal_fragment_2"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_fragment_3"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_fragment_4")));
+		this.basicItem(ItemRegistry.PYRAD_FLAME);
+		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
+		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
+		this.basicItem(ItemRegistry.BUBBLER_CRAB);
+		this.basicItem(ItemRegistry.SILT_CRAB);
+		//critters
+		this.basicItem(ItemRegistry.SHIMMER_STONE);
+		//tarminion
+		this.basicItem(ItemRegistry.SLUDGE_BALL);
+		//rope
+		Function<DeferredItem<?>, ModelFile> pebbleOverlay = item -> this.multiLayerItem(item.getId().getPath() + "_active", this.itemTexture(item), TheBetweenlands.prefix("item/angry_pebble_overlay"));
+		this.basicItem(ItemRegistry.ANGRY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.ANGRY_PEBBLE));
+		this.basicItem(ItemRegistry.OCTINE_INGOT);
+		this.basicItem(ItemRegistry.SAP_SPIT);
+		//shambler tongue
+		this.basicItem(ItemRegistry.RUNE_DOOR_KEY);
+		this.basicItem(ItemRegistry.LURKER_SKIN_PATCH);
+		this.basicItem(ItemRegistry.DRAETON_BALLOON);
+		this.basicItem(ItemRegistry.DRAETON_BURNER);
+		//draeton
+		//draeton upgrades
+		//rowboat lantern
+		this.basicItem(ItemRegistry.AMATE_NAME_TAG);
+		this.basicItem(ItemRegistry.DULL_LAVENDER_DYE);
+		this.basicItem(ItemRegistry.MAROON_DYE);
+		this.basicItem(ItemRegistry.SHADOW_GREEN_DYE);
+		this.basicItem(ItemRegistry.CAMELOT_MAGENTA_DYE);
+		this.basicItem(ItemRegistry.SAFFRON_DYE);
+		this.basicItem(ItemRegistry.CARIBBEAN_GREEN_DYE);
+		this.basicItem(ItemRegistry.VIVID_TANGERINE_DYE);
+		this.basicItem(ItemRegistry.CHAMPAGNE_DYE);
+		this.basicItem(ItemRegistry.RAISIN_BLACK_DYE);
+		this.basicItem(ItemRegistry.SUSHI_GREEN_DYE);
+		this.basicItem(ItemRegistry.ELM_CYAN_DYE);
+		this.basicItem(ItemRegistry.CADMIUM_GREEN_DYE);
+		this.basicItem(ItemRegistry.LAVENDER_BLUE_DYE);
+		this.basicItem(ItemRegistry.BROWN_RUST_DYE);
+		this.basicItem(ItemRegistry.MIDNIGHT_PURPLE_DYE);
+		this.basicItem(ItemRegistry.PEWTER_GREY_DYE);
+		this.itemFrame(ItemRegistry.DULL_LAVENDER_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.MAROON_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.SHADOW_GREEN_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.SAFFRON_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.VIVID_TANGERINE_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.CHAMPAGNE_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.RAISIN_BLACK_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.SUSHI_GREEN_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.ELM_CYAN_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.CADMIUM_GREEN_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.LAVENDER_BLUE_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.BROWN_RUST_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME);
+		this.itemFrame(ItemRegistry.PEWTER_GREY_ITEM_FRAME);
+		this.basicItem(ItemRegistry.PHEROMONE_THORAX);
+		this.basicItem(ItemRegistry.MOSS_FILTER);
+		this.basicItem(ItemRegistry.SILK_FILTER);
+		this.basicItem(ItemRegistry.SILKY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.SILKY_PEBBLE));
+
 
 		this.basicItem(ItemRegistry.BONE_HELMET);
 		this.basicItem(ItemRegistry.BONE_CHESTPLATE);
@@ -174,23 +254,67 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.ANCIENT_CHESTPLATE);
 		this.basicItem(ItemRegistry.ANCIENT_LEGGINGS);
 		this.basicItem(ItemRegistry.ANCIENT_BOOTS);
+		this.basicItem(ItemRegistry.AMPHIBIOUS_HELMET);
+		this.basicItem(ItemRegistry.AMPHIBIOUS_CHESTPLATE);
+		this.basicItem(ItemRegistry.AMPHIBIOUS_LEGGINGS);
+		this.basicItem(ItemRegistry.AMPHIBIOUS_BOOTS);
 		this.basicItem(ItemRegistry.RUBBER_BOOTS);
 		this.otherTextureItem(ItemRegistry.MARSH_RUNNER_BOOTS, this.modLoc("rubber_boots"));
-
-		this.basicItem(ItemRegistry.BUBBLER_CRAB);
-		this.basicItem(ItemRegistry.SILT_CRAB);
-		this.toolItem(ItemRegistry.BONE_AXE);
+		this.basicItem(ItemRegistry.WEEDWOOD_SWORD);
+		this.basicItem(ItemRegistry.WEEDWOOD_SHOVEL);
+		this.basicItem(ItemRegistry.WEEDWOOD_PICKAXE);
+		this.basicItem(ItemRegistry.WEEDWOOD_AXE);
+		this.basicItem(ItemRegistry.BONE_SWORD);
+		this.basicItem(ItemRegistry.BONE_SHOVEL);
+		this.basicItem(ItemRegistry.BONE_PICKAXE);
+		this.basicItem(ItemRegistry.BONE_AXE);
+		this.basicItem(ItemRegistry.OCTINE_SWORD);
+		this.basicItem(ItemRegistry.OCTINE_SHOVEL);
+		this.basicItem(ItemRegistry.OCTINE_PICKAXE);
+		this.basicItem(ItemRegistry.OCTINE_AXE);
+		this.basicItem(ItemRegistry.VALONITE_SWORD);
+		this.basicItem(ItemRegistry.VALONITE_SHOVEL);
+		this.basicItem(ItemRegistry.VALONITE_PICKAXE);
+		this.basicItem(ItemRegistry.VALONITE_GREATAXE);
+		this.basicItem(ItemRegistry.VALONITE_AXE);
+		//shields
+		//shears
+		//sickle
+		//shockwave sword
+		//arrows
+		this.basicItem(ItemRegistry.CHIROMAW_BARB);
+		//bows
+		//ancient weps
+		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
 		this.toolItem(ItemRegistry.NET);
-		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
-		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
+		//pouches
+		//caving rope light
+		//grappling hooks
+		this.basicItem(ItemRegistry.VOLARKITE);
+		//slingshot
+		//spears
+		//buckets
+		this.basicItem(ItemRegistry.ASCENT_UPGRADE);
+		this.basicItem(ItemRegistry.ELECTRIC_UPGRADE);
+		this.basicItem(ItemRegistry.FISH_VORTEX_UPGRADE);
+		this.basicItem(ItemRegistry.GLIDE_UPGRADE);
+		this.basicItem(ItemRegistry.URCHIN_SPIKE_UPGRADE);
+		this.basicItem(ItemRegistry.SILK_BUNDLE);
+
+		//skull mask
+		//explorer hat
+		//tree masks
+		//gallery frames
+		//silk mask
 		this.toolItem(ItemRegistry.WIGHTS_BANE);
 		this.toolItem(ItemRegistry.SLUDGE_SLICER);
 		this.toolItem(ItemRegistry.CRITTER_CRUNCHER);
 		this.toolItem(ItemRegistry.HAG_HACKER);
-		this.toolItem(ItemRegistry.SWIFT_PICK);
 		this.toolItem(ItemRegistry.VOODOO_DOLL);
-		this.basicItem(ItemRegistry.SILK_BUNDLE);
-
+		this.toolItem(ItemRegistry.SWIFT_PICK);
+		//erupters
+		this.toolItem(ItemRegistry.MIST_STAFF);
+		this.toolItem(ItemRegistry.SHADOW_STAFF);
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);
 		this.basicItem(ItemRegistry.RECORD_ASTATOS);
 		this.basicItem(ItemRegistry.RECORD_BENEATH_A_GREEN_SKY);
@@ -206,8 +330,23 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.RECORD_WANDERING_WISPS);
 		this.basicItem(ItemRegistry.RECORD_WATERLOGGED);
 		this.basicItem(ItemRegistry.MYSTERIOUS_RECORD);
+		//amulets
+		//amulet slot
+		this.basicItem(ItemRegistry.RING_OF_POWER);
+		this.basicItem(ItemRegistry.RING_OF_ASCENT);
+		this.basicItem(ItemRegistry.RING_OF_RECRUITMENT);
+		this.basicItem(ItemRegistry.RING_OF_SUMMONING);
+		this.basicItem(ItemRegistry.RING_OF_DISPERSION);
+		this.basicItem(ItemRegistry.RING_OF_GATHERING);
+		//lore scraps
+		//mummy bait
+		this.basicItem(ItemRegistry.BARK_AMULET);
 		this.basicItem(ItemRegistry.AMATE_MAP);
 		this.basicItem(ItemRegistry.FILLED_AMATE_MAP);
+		this.basicItem(ItemRegistry.BONE_WAYFINDER);
+		this.basicItem(ItemRegistry.MAGIC_ITEM_MAGNET);
+		this.basicItem(ItemRegistry.GEM_SINGER);
+		this.basicItem(ItemRegistry.SNOT_POD);
 
 		this.basicItem(ItemRegistry.GROUND_LEAF);
 		this.basicItem(ItemRegistry.GROUND_CATTAIL);
@@ -373,19 +512,6 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.parent(new ModelFile.UncheckedModelFile("item/generated"))
 			.texture("layer0", TheBetweenlands.prefix("item/aspect_liquid"))
 			.texture("layer1", TheBetweenlands.prefix("item/orange_dentrothyst_vial"));
-
-		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
-		this.basicItem(ItemRegistry.LIFE_CRYSTAL)
-			.override().predicate(TheBetweenlands.prefix("remaining"), 1).model(this.basicItem(this.modLoc("life_crystal_1"))).end()
-			.override().predicate(TheBetweenlands.prefix("remaining"), 2).model(this.basicItem(this.modLoc("life_crystal_2"))).end()
-			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_3"))).end()
-			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_4")));
-
-		this.basicItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT)
-			.override().predicate(TheBetweenlands.prefix("remaining"), 1).model(this.basicItem(this.modLoc("life_crystal_fragment_1"))).end()
-			.override().predicate(TheBetweenlands.prefix("remaining"), 2).model(this.basicItem(this.modLoc("life_crystal_fragment_2"))).end()
-			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_fragment_3"))).end()
-			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_fragment_4")));
 	}
 
 	public ItemModelBuilder basicItem(DeferredItem<? extends Item> item) {
@@ -398,9 +524,29 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.getId().getNamespace(), "item/" + item.getId().getPath()));
 	}
 
+	public ItemModelBuilder itemFrame(DeferredItem<? extends Item> item) {
+		return this.getBuilder(item.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/item_frame_bg"))
+			.texture("layer1", TheBetweenlands.prefix("item/item_frame"));
+	}
+
 	public ItemModelBuilder otherTextureItem(DeferredItem<? extends Item> item, ResourceLocation texture) {
 		return this.getBuilder(item.getId().toString())
 			.parent(new ModelFile.UncheckedModelFile("item/generated"))
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(texture.getNamespace(), "item/" + texture.getPath()));
+	}
+
+	public ItemModelBuilder multiLayerItem(String name, ResourceLocation... layers) {
+		ItemModelBuilder builder = this.getBuilder(name).parent(new ModelFile.UncheckedModelFile("item/generated"));
+		for (int i = 0; i < layers.length; i++) {
+			builder = builder.texture("layer" + i, layers[i]);
+		}
+		return builder;
+	}
+
+	public ResourceLocation itemTexture(DeferredItem<?> item) {
+		ResourceLocation name = item.getId();
+		return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), ModelProvider.ITEM_FOLDER + "/" + name.getPath());
 	}
 }

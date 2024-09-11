@@ -57,11 +57,13 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
+import thebetweenlands.common.entities.BLItemFrame;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.ColoredFluid;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
+import thebetweenlands.common.items.BLItemFrameItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.RenderUtils;
 
@@ -84,6 +86,7 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerBlockColors);
 		eventbus.addListener(ClientRegistrationEvents::registerReloadListeners);
 		eventbus.addListener(ClientRegistrationEvents::registerGeometryLoaders);
+		eventbus.addListener(ClientRegistrationEvents::registerSpecialModels);
 		eventbus.addListener(ClientRegistrationEvents::registerPropertyOverrides);
 		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
@@ -91,6 +94,7 @@ public class ClientRegistrationEvents {
 		ClientHandlerEvents.init();
 		NeoForge.EVENT_BUS.addListener(RenderUtils::incrementTickCounter);
 		NeoForge.EVENT_BUS.addListener(RenderUtils::tickFrameCounter);
+		ClientEvents.init();
 	}
 
 	private static void clientSetup(FMLClientSetupEvent event) {
@@ -129,6 +133,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.FISH_HOOK.get(), BLFishHookRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SEAT.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ELIXIR.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ANGRY_PEBBLE.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ITEM_FRAME.get(), BLItemFrameRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -272,11 +278,20 @@ public class ClientRegistrationEvents {
 				return 1;
 			return 0;
 		});
+
+		ItemProperties.register(ItemRegistry.ANGRY_PEBBLE.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.SILKY_PEBBLE.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);
+	}
+
+	private static void registerSpecialModels(ModelEvent.RegisterAdditional event) {
+		event.register(BLItemFrameRenderer.FRAME_MODEL);
+		event.register(BLItemFrameRenderer.FRAME_BG_MODEL);
+		event.register(BLItemFrameRenderer.FRAME_MAP_MODEL);
 	}
 
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
@@ -506,5 +521,13 @@ public class ClientRegistrationEvents {
 			if (tintIndex != 0) return 0xFFFFFFFF;
 			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).getAspectColor();
 		}, ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.ORANGE_ASPECT_VIAL);
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 0) return 0xFFFFFFFF;
+			return stack.getItem() instanceof BLItemFrameItem frame ? frame.getColor() | 0xFF000000 : 0xFFFFFFFF;
+		}, ItemRegistry.DULL_LAVENDER_ITEM_FRAME, ItemRegistry.MAROON_ITEM_FRAME, ItemRegistry.SHADOW_GREEN_ITEM_FRAME, ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME,
+			ItemRegistry.SAFFRON_ITEM_FRAME, ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME, ItemRegistry.VIVID_TANGERINE_ITEM_FRAME, ItemRegistry.CHAMPAGNE_ITEM_FRAME,
+			ItemRegistry.RAISIN_BLACK_ITEM_FRAME, ItemRegistry.SUSHI_GREEN_ITEM_FRAME, ItemRegistry.ELM_CYAN_ITEM_FRAME, ItemRegistry.CADMIUM_GREEN_ITEM_FRAME,
+			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME, ItemRegistry.BROWN_RUST_ITEM_FRAME, ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME, ItemRegistry.PEWTER_GREY_ITEM_FRAME);
 	}
 }

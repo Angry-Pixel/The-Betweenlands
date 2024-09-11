@@ -39,6 +39,16 @@ public record AspectContents(Optional<Holder<AspectType>> aspect, int amount, Op
 		return itemstack;
 	}
 
+	public static AspectContents drainAspect(ItemStack stack, int amount) {
+		if (stack.has(DataComponentRegistry.ASPECT_CONTENTS)) {
+			var contents = stack.get(DataComponentRegistry.ASPECT_CONTENTS);
+			if (contents.amount() > amount) {
+				return new AspectContents(contents.aspect(), contents.amount() - amount, contents.customColor());
+			}
+		}
+		return AspectContents.EMPTY;
+	}
+
 	public int getAspectColor() {
 		if (this.customColor().isPresent()) return this.customColor().get();
 		return this.aspect().map(aspect -> aspect.value().color()).orElse(-13083194);
