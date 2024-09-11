@@ -13,12 +13,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import thebetweenlands.api.client.ConnectedTextureHelper;
+import thebetweenlands.api.client.DefaultConnectedTextureProperties;
 
 public class BakedConnectedTexturesQuad {
 
 	protected final BakedQuad[][] quads;
-
-//	public boolean hasFullyResolvedProperties = false;
 
 	public final int[] indices;
 	public final Direction cullface;
@@ -43,8 +42,10 @@ public class BakedConnectedTexturesQuad {
 		
 		ModelProperty<?>[] indexProperties = new ModelProperty<?>[4];
 		ModelProperty<Boolean> cullfaceProperty = null;
-		if(quad.cullFaceName != null) {
-			cullfaceProperty = ConnectedTextureHelper.getCullfacePropertyNullable(ResourceLocation.tryParse(quad.cullFaceName));
+		if(quad.cullfaceName != null) {
+			cullfaceProperty = ConnectedTextureHelper.getCullfacePropertyNullable(ResourceLocation.tryParse(quad.cullfaceName));
+		} else if(quad.cullface != null) {
+			cullfaceProperty = DefaultConnectedTextureProperties.NATIVE_CULLS[quad.cullface.get3DDataValue()];
 		}
 		for(int i = 0; i < 4; ++i) {
 			String name = quad.indexNames[i];

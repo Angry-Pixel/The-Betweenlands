@@ -30,7 +30,7 @@ public class UnbakedConnectedTexturesQuad {
 	public final int[] indices;
 	public final ConnectedTexturesVertex[] verts;
 	public final Direction cullface;
-	public final String cullFaceName;
+	public final String cullfaceName;
 	public final int tintIndex;
 	public final float minU, minV, maxU, maxV;
 	
@@ -46,7 +46,7 @@ public class UnbakedConnectedTexturesQuad {
 		this.indices = indices;
 		this.verts = verts;
 		this.cullface = cullFace;
-		this.cullFaceName = cullFaceName;
+		this.cullfaceName = cullFaceName;
 		this.tintIndex = tintIndex;
 		this.quads = new BakedQuad[4][this.textures.length];
 		this.minU = minU;

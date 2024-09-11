@@ -344,10 +344,23 @@ public class QuadBuilder {
 	public static final class Quads {
 		public final Map<Direction, ImmutableList<BakedQuad>> culledQuads;
 		public final ImmutableList<BakedQuad> nonCulledQuads;
-
+		private ImmutableList<BakedQuad> allQuads;
+		
 		private Quads(Map<Direction, ImmutableList<BakedQuad>> culledQuads, ImmutableList<BakedQuad> nonCulledQuads) {
 			this.culledQuads = culledQuads;
 			this.nonCulledQuads = nonCulledQuads;
+		}
+		
+		public ImmutableList<BakedQuad> getAllQuads() {
+			if(this.allQuads != null) return this.allQuads;
+			final ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
+			builder.addAll(this.nonCulledQuads);
+			for(Direction direction : Direction.values()) { // Same order each time
+				final ImmutableList<BakedQuad> quads = culledQuads.get(direction);
+				if(quads != null) builder.addAll(quads);
+			}
+			this.allQuads = builder.build();
+			return this.allQuads;
 		}
 	}
 

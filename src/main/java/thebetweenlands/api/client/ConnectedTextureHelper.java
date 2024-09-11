@@ -166,7 +166,7 @@ public class ConnectedTextureHelper {
 	public static IConnectionRules createDefaultConnectionRules(BlockAndTintGetter level, BlockPos pos, BlockState state, Predicate<BlockPos> canConnectTo, boolean connectToSelf) {
 		return new IConnectionRules() {
 			@Override
-			public boolean canConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
+			public boolean canTextureConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
 				return canConnectTo.test(to);
 			}
 
@@ -336,13 +336,13 @@ public class ConnectedTextureHelper {
 						Axis axis = dir.getAxis();
 						if((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
 							MutableBlockPos diagPos = checkPos.set(axis == Axis.X ? (x + dir.getStepX()) : (x + xo), axis == Axis.Y ? (y + dir.getStepY()) : (y + yo), axis == Axis.Z ? (z + dir.getStepZ()) : (z + zo));
-							boolean isDiagConnectable = connectionRules.canConnectTo(world, pos, dir, diagPos);
+							boolean isDiagConnectable = connectionRules.canTextureConnectTo(world, pos, dir, diagPos);
 							if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
 								MutableBlockPos obstructionPos = checkPos.set(axis == Axis.X ? x : (x + xo), axis == Axis.Y ? y : (y + yo), axis == Axis.Z ? z : (z + zo));
 								if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, obstructionPos)) {
 									connectionArray[blockIndex] = true;
 								} else {
-									connectionArray[blockIndex] = connectionRules.canConnectTo(world, pos, dir, checkPos.set(x + xo, y + yo, z + zo));
+									connectionArray[blockIndex] = connectionRules.canTextureConnectTo(world, pos, dir, checkPos.set(x + xo, y + yo, z + zo));
 								}
 							}
 						}

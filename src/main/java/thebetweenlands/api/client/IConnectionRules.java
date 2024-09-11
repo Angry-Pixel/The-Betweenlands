@@ -27,7 +27,7 @@ public interface IConnectionRules {
 	 * @param to The position that it tries to connect to
 	 * @return
 	 */
-	public boolean canConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to);
+	public boolean canTextureConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to);
 
 	/**
 	 * Returns whether the face can connect through the specified block pos.
@@ -51,30 +51,28 @@ public interface IConnectionRules {
 				//Check if offsetFace points to a neighbour of the connected texture block
 				if(Math.abs(planeOffset.getX() + offsetFace.getStepX()) + Math.abs(planeOffset.getY() + offsetFace.getStepY()) + Math.abs(planeOffset.getZ() + offsetFace.getStepZ()) == 1) {
 					//Check if either sides of the diagonal block that point to a direct neighbour of the connected texture block are solid
-					final BlockState toBlockstate = world.getBlockState(to);
-					if(isSideSolid(world, toBlockstate, to, offsetFace)) return false;
+					if(doesOccludeSide(world, pos, face, to, offsetFace)) return false;
 					if(onSamePlane) {
-						if(isSideSolid(world, toBlockstate, to, face)) {
+						if(doesOccludeSide(world, pos, face, to, face)) {
 							return false;
 						}
 					} else {
-						if(isSideSolid(world, toBlockstate, to, face.getOpposite())) {
+						if(doesOccludeSide(world, pos, face, to, face.getOpposite())) {
 							return false;
 						}
 					}
 					
 					directNeighbour.set(to.getX() + offsetFace.getStepX(), to.getY() + offsetFace.getStepY(), to.getZ() + offsetFace.getStepZ());
 					//Check if direct neighbour can be connected to, if not it needs to check if it lets a conncetion through
-					if(!this.canConnectTo(world, pos, face, directNeighbour)) {
+					if(!this.canTextureConnectTo(world, pos, face, directNeighbour)) {
 						//Check if either sides of the direct neighbour block of the connected texture block are solid
-						final BlockState directNeighbourBlockState = world.getBlockState(directNeighbour);
-						if(isSideSolid(world, directNeighbourBlockState, directNeighbour, offsetFace.getOpposite())) return false;
+						if(doesOccludeSide(world, pos, face, directNeighbour, offsetFace.getOpposite())) return false;
 						if(onSamePlane) {
-							if(isSideSolid(world, directNeighbourBlockState, directNeighbour, face)) {
+							if(doesOccludeSide(world, pos, face, directNeighbour, face)) {
 								return false;
 							}
 						} else {
-							if(isSideSolid(world, directNeighbourBlockState, directNeighbour, face.getOpposite())) {
+							if(doesOccludeSide(world, pos, face, directNeighbour, face.getOpposite())) {
 								return false;
 							}
 						}
@@ -93,7 +91,11 @@ public interface IConnectionRules {
 			}
 		}
 	}
-
+	
+	public default boolean doesOccludeSide(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to, Direction toFace) {
+		return isSideSolid(world, to, toFace);
+	}
+	
 	public static boolean isSideSolid(BlockAndTintGetter world, BlockPos pos, Direction face) {
 		return isSideSolid(world, world.getBlockState(pos), pos, face);
 	}

@@ -115,11 +115,13 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 				for(BakedConnectedTexturesQuad tex : connectedTextures) {
 					for(int i = 0; i < 4; i++) {
 						// tex.cullface filtered out in the constructor
-						final ModelProperty<Boolean> cullFaceProperty = tex.cullfaceProperty;
-						if(cullFaceProperty == null || Optional.<Boolean>ofNullable(extraData.get(cullFaceProperty)).orElse(false)) {
+						final ModelProperty<Boolean> cullfaceProperty = tex.cullfaceProperty;
+						if(cullfaceProperty == null || !extraData.has(cullfaceProperty) || extraData.get(cullfaceProperty)) {
 							final ModelProperty<?> indexProperty = tex.indexProperties[i];
 							if(indexProperty != null) {
-								quads.add(tex.quads[i][((Optional<Integer>) Optional.ofNullable(extraData.get(indexProperty))).orElse(0)]);
+								final int index = extraData.has(indexProperty) ? (int) extraData.get(indexProperty) : 0;
+								if(index != -1)
+									quads.add(tex.quads[i][index]);
 							} else {
 								quads.add(tex.quads[i][tex.indices[i]]);
 							}

@@ -33,16 +33,19 @@ public interface IConnectedTextureBlock {
 	 */
 	public default ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
 
-		IConnectionRules connectionRules = this.createConnectionRules(level, pos, state);
+		IConnectionRules connectionRules = this.getConnectionRules(level, pos, state);
 		
 		ModelData.Builder builder = modelData.derive();
 		
 		if(this.isFaceConnectedTexture(level, pos, state, Direction.UP)) {
-			int[] quadrantIndicesUp = ConnectedTextureHelper.getQuadrantIndices(ConnectedTextureHelper.getConnectionArray(level, pos, Direction.UP, connectionRules), false);
+			final int[] quadrantIndicesUp = ConnectedTextureHelper.getQuadrantIndices(ConnectedTextureHelper.getConnectionArray(level, pos, Direction.UP, connectionRules), false);
 			builder.with(DefaultConnectedTextureProperties.TOP_NORTH_WEST_INDEX, quadrantIndicesUp[0]);
 			builder.with(DefaultConnectedTextureProperties.TOP_NORTH_EAST_INDEX, quadrantIndicesUp[1]);
 			builder.with(DefaultConnectedTextureProperties.TOP_SOUTH_WEST_INDEX, quadrantIndicesUp[2]);
 			builder.with(DefaultConnectedTextureProperties.TOP_SOUTH_EAST_INDEX, quadrantIndicesUp[3]);
+			
+			final boolean cullUp = connectionRules.doesOccludeSide(level, pos, Direction.UP, pos.relative(Direction.UP), Direction.DOWN);
+			builder.with(DefaultConnectedTextureProperties.NATIVE_CULL_UP, !cullUp);
 		}
 
 		if(this.isFaceConnectedTexture(level, pos, state, Direction.DOWN)) {
@@ -51,6 +54,9 @@ public interface IConnectedTextureBlock {
 			builder.with(DefaultConnectedTextureProperties.BOTTOM_NORTH_WEST_INDEX, quadrantIndicesDown[1]);
 			builder.with(DefaultConnectedTextureProperties.BOTTOM_SOUTH_EAST_INDEX, quadrantIndicesDown[2]);
 			builder.with(DefaultConnectedTextureProperties.BOTTOM_SOUTH_WEST_INDEX, quadrantIndicesDown[3]);
+
+			final boolean cullDown = connectionRules.doesOccludeSide(level, pos, Direction.DOWN, pos.relative(Direction.DOWN), Direction.UP);
+			builder.with(DefaultConnectedTextureProperties.NATIVE_CULL_DOWN, !cullDown);
 		}
 
 		if(this.isFaceConnectedTexture(level, pos, state, Direction.NORTH)) {
@@ -59,6 +65,9 @@ public interface IConnectedTextureBlock {
 			builder.with(DefaultConnectedTextureProperties.NORTH_UP_EAST_INDEX, quadrantIndicesNorth[1]);
 			builder.with(DefaultConnectedTextureProperties.NORTH_DOWN_WEST_INDEX, quadrantIndicesNorth[2]);
 			builder.with(DefaultConnectedTextureProperties.NORTH_DOWN_EAST_INDEX, quadrantIndicesNorth[3]);
+
+			final boolean cullNorth = connectionRules.doesOccludeSide(level, pos, Direction.NORTH, pos.relative(Direction.NORTH), Direction.SOUTH);
+			builder.with(DefaultConnectedTextureProperties.NATIVE_CULL_NORTH, !cullNorth);
 		}
 
 		if(this.isFaceConnectedTexture(level, pos, state, Direction.SOUTH)) {
@@ -67,6 +76,9 @@ public interface IConnectedTextureBlock {
 			builder.with(DefaultConnectedTextureProperties.SOUTH_DOWN_EAST_INDEX, quadrantIndicesSouth[1]);
 			builder.with(DefaultConnectedTextureProperties.SOUTH_UP_WEST_INDEX, quadrantIndicesSouth[2]);
 			builder.with(DefaultConnectedTextureProperties.SOUTH_UP_EAST_INDEX, quadrantIndicesSouth[3]);
+
+			final boolean cullSouth = connectionRules.doesOccludeSide(level, pos, Direction.SOUTH, pos.relative(Direction.SOUTH), Direction.NORTH);
+			builder.with(DefaultConnectedTextureProperties.NATIVE_CULL_SOUTH, !cullSouth);
 		}
 
 		if(this.isFaceConnectedTexture(level, pos, state, Direction.WEST)) {
@@ -75,6 +87,9 @@ public interface IConnectedTextureBlock {
 			builder.with(DefaultConnectedTextureProperties.WEST_UP_NORTH_INDEX, quadrantIndicesWest[1]);
 			builder.with(DefaultConnectedTextureProperties.WEST_DOWN_SOUTH_INDEX, quadrantIndicesWest[2]);
 			builder.with(DefaultConnectedTextureProperties.WEST_UP_SOUTH_INDEX, quadrantIndicesWest[3]);
+
+			final boolean cullWest = connectionRules.doesOccludeSide(level, pos, Direction.WEST, pos.relative(Direction.WEST), Direction.EAST);
+			builder.with(DefaultConnectedTextureProperties.NATIVE_CULL_WEST, !cullWest);
 		}
 
 		if(this.isFaceConnectedTexture(level, pos, state, Direction.EAST)) {
@@ -83,6 +98,9 @@ public interface IConnectedTextureBlock {
 			builder.with(DefaultConnectedTextureProperties.EAST_DOWN_NORTH_INDEX, quadrantIndicesEast[1]);
 			builder.with(DefaultConnectedTextureProperties.EAST_UP_SOUTH_INDEX, quadrantIndicesEast[2]);
 			builder.with(DefaultConnectedTextureProperties.EAST_DOWN_SOUTH_INDEX, quadrantIndicesEast[3]);
+
+			final boolean cullEast = connectionRules.doesOccludeSide(level, pos, Direction.EAST, pos.relative(Direction.EAST), Direction.WEST);
+			builder.with(DefaultConnectedTextureProperties.NATIVE_CULL_EAST, !cullEast);
 		}
 		
 		return builder.build();
