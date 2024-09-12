@@ -53,12 +53,7 @@ import thebetweenlands.common.handler.HandlerEvents;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.*;
 import thebetweenlands.common.network.clientbound.*;
-import thebetweenlands.common.network.clientbound.attachment.UpdateDecayDataPacket;
-import thebetweenlands.common.network.clientbound.attachment.UpdateDruidAltarProgressPacket;
-import thebetweenlands.common.network.clientbound.attachment.UpdateFoodSicknessPacket;
-import thebetweenlands.common.network.clientbound.attachment.UpdateGemsPacket;
-import thebetweenlands.common.network.clientbound.attachment.UpdateMudWalkerPacket;
-import thebetweenlands.common.network.clientbound.attachment.UpdateRotSmellPacket;
+import thebetweenlands.common.network.clientbound.attachment.*;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
 import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
 import thebetweenlands.common.registries.*;
@@ -190,6 +185,8 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateGemsPacket.TYPE, UpdateGemsPacket.STREAM_CODEC, UpdateGemsPacket::handle);
 		registrar.playToClient(GemProtectionPacket.TYPE, GemProtectionPacket.STREAM_CODEC, GemProtectionPacket::handle);
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
+		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
+		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);

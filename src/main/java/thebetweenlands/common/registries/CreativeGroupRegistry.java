@@ -751,7 +751,17 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.COOKED_OLM_EGG);
 			output.accept(ItemRegistry.OLMLETTE);
 			output.accept(ItemRegistry.SILK_GRUB);
-			//drinkable brews
+			output.accept(ItemRegistry.NETTLE_SOUP);
+			output.accept(ItemRegistry.NETTLE_TEA);
+			output.accept(ItemRegistry.PHEROMONE_EXTRACT);
+			output.accept(ItemRegistry.SWAMP_BROTH);
+			output.accept(ItemRegistry.STURDY_STOCK);
+			output.accept(ItemRegistry.PEAR_CORDIAL);
+			output.accept(ItemRegistry.SHAMANS_BREW);
+			output.accept(ItemRegistry.LAKE_BROTH);
+			output.accept(ItemRegistry.SHELL_STOCK);
+			output.accept(ItemRegistry.FROG_LEG_EXTRACT);
+			output.accept(ItemRegistry.WITCH_TEA);
 			//herblore book
 			output.accept(ItemRegistry.CRIMSON_MIDDLE_GEM);
 			output.accept(ItemRegistry.AQUA_MIDDLE_GEM);
@@ -957,7 +967,6 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RECORD_STUCK_IN_THE_MUD);
 			output.accept(ItemRegistry.RECORD_WANDERING_WISPS);
 			output.accept(ItemRegistry.RECORD_WATERLOGGED);
-			output.accept(ItemRegistry.BARK_AMULET);
 			//aqua amulet
 			//crimson amulet
 			//green amulet

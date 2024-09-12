@@ -1124,7 +1124,17 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.COOKED_OLM_EGG, "Baked Olm Egg Cluster");
 		this.addItem(ItemRegistry.OLMLETTE, "Olmlette");
 		this.addItem(ItemRegistry.SILK_GRUB, "Silk Grub");
-		//drinkable brews
+		this.addItem(ItemRegistry.NETTLE_SOUP, "Nettle Soup");
+		this.addItem(ItemRegistry.NETTLE_TEA, "Nettle Tea");
+		this.addItem(ItemRegistry.PHEROMONE_EXTRACT, "Pheromone Extract");
+		this.addItem(ItemRegistry.SWAMP_BROTH, "Swamp Broth");
+		this.addItem(ItemRegistry.STURDY_STOCK, "Sturdy Stock");
+		this.addItem(ItemRegistry.PEAR_CORDIAL, "Pear Cordial");
+		this.addItem(ItemRegistry.SHAMANS_BREW, "Shaman's Brew");
+		this.addItem(ItemRegistry.LAKE_BROTH, "Lake Broth");
+		this.addItem(ItemRegistry.SHELL_STOCK, "Shell Stock");
+		this.addItem(ItemRegistry.FROG_LEG_EXTRACT, "Frog Leg Extract");
+		this.addItem(ItemRegistry.WITCH_TEA, "Witch Tea");
 		//herblore book
 		this.add("item.thebetweenlands.modifiers.armor", "When on armor:");
 		this.add("item.thebetweenlands.modifiers.tool", "When on tool:");

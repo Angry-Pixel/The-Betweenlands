@@ -153,7 +153,18 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> COOKED_OLM_EGG = ITEMS.register("cooked_olm_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> OLMLETTE = ITEMS.register("olmlette", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> SILK_GRUB = ITEMS.register("silk_grub", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.2F).build())));
-	//drinkable brew
+	public static final DeferredItem<Item> NETTLE_SOUP = ITEMS.register("nettle_soup", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3F).alwaysEdible().build())));
+	public static final DeferredItem<Item> NETTLE_TEA = ITEMS.register("nettle_tea", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
+	public static final DeferredItem<Item> PHEROMONE_EXTRACT = ITEMS.register("pheromone_extract", () -> new InfestationMaskingBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().alwaysEdible().build())));
+	public static final DeferredItem<Item> SWAMP_BROTH = ITEMS.register("swamp_broth", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> ElixirEffectRegistry.EFFECT_RIPENING.get().createEffect(400, 1), 1.0F).alwaysEdible().build())));
+	public static final DeferredItem<Item> STURDY_STOCK = ITEMS.register("sturdy_stock", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(2.0F).alwaysEdible().build())));
+	public static final DeferredItem<Item> PEAR_CORDIAL = ITEMS.register("pear_cordial", () -> new FallDamageReductionBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
+	public static final DeferredItem<Item> SHAMANS_BREW = ITEMS.register("shamans_brew", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> ElixirEffectRegistry.EFFECT_HUNTERSSENSE.get().createEffect(400, 1), 1.0F).effect(() -> ElixirEffectRegistry.EFFECT_CATSEYES.get().createEffect(400, 1), 1.0F).alwaysEdible().build())));
+	public static final DeferredItem<Item> LAKE_BROTH = ITEMS.register("lake_broth", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 400, 1), 1.0F).alwaysEdible().build())));
+	public static final DeferredItem<Item> SHELL_STOCK = ITEMS.register("shell_stock", () -> new MudWalkingBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
+	public static final DeferredItem<Item> FROG_LEG_EXTRACT = ITEMS.register("frog_leg_extract", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> new MobEffectInstance(MobEffects.JUMP, 400, 1), 1.0F).alwaysEdible().build())));
+	public static final DeferredItem<Item> WITCH_TEA = ITEMS.register("witch_tea", () -> new WitchTeaBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
+
 	//herblore book
 	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
@@ -295,10 +306,10 @@ public class ItemRegistry {
 	//stones
 	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(NonNullList.withSize(4, ItemStack.EMPTY))).stacksTo(1)));
 
-	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties()));
+	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties().rarity(Rarity.RARE)));
 	//explorer hat
-	public static final DeferredItem<Item> SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
-	public static final DeferredItem<Item> ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("animated_small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
+	public static final DeferredItem<Item> SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
+	public static final DeferredItem<Item> ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("animated_small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
 	//gallery frames
 	//silk mask
 	public static final DeferredItem<Item> WIGHTS_BANE = ITEMS.register("wights_bane", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.WIGHTS_BANE_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
@@ -343,13 +354,13 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> TOWER_SCRAP = ITEMS.register("tower_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> FORT_SCRAP = ITEMS.register("fort_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> MUMMY_BAIT = ITEMS.register("mummy_bait", () -> new MummyBaitItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
-	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> GROUND_LEAF = ITEMS.register("ground_leaf", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GROUND_CATTAIL = ITEMS.register("ground_cattail", () -> new Item(new Item.Properties()));

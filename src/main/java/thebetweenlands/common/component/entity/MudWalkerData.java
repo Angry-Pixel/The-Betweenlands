@@ -11,7 +11,7 @@ public class MudWalkerData {
 	private long reductionTime;
 
 	public static final Codec<MudWalkerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Codec.LONG.fieldOf("smell_timestamp").forGetter(o -> o.reductionTime)
+		Codec.LONG.fieldOf("reduction_timestamp").forGetter(o -> o.reductionTime)
 	).apply(instance, MudWalkerData::new));
 
 	public MudWalkerData() {

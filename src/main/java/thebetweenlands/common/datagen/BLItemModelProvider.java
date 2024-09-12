@@ -158,7 +158,17 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.COOKED_OLM_EGG);
 		this.basicItem(ItemRegistry.OLMLETTE);
 		this.basicItem(ItemRegistry.SILK_GRUB);
-		//brews
+		this.basicItem(ItemRegistry.NETTLE_SOUP);
+		this.basicItem(ItemRegistry.NETTLE_TEA);
+		this.basicItem(ItemRegistry.PHEROMONE_EXTRACT);
+		this.basicItem(ItemRegistry.SWAMP_BROTH);
+		this.basicItem(ItemRegistry.STURDY_STOCK);
+		this.basicItem(ItemRegistry.PEAR_CORDIAL);
+		this.basicItem(ItemRegistry.SHAMANS_BREW);
+		this.basicItem(ItemRegistry.LAKE_BROTH);
+		this.basicItem(ItemRegistry.SHELL_STOCK);
+		this.basicItem(ItemRegistry.FROG_LEG_EXTRACT);
+		this.basicItem(ItemRegistry.WITCH_TEA);
 		//herblore book
 		this.basicItem(ItemRegistry.CRIMSON_MIDDLE_GEM);
 		this.basicItem(ItemRegistry.AQUA_MIDDLE_GEM);
