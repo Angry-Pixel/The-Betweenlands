@@ -164,7 +164,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SHELL_STOCK = ITEMS.register("shell_stock", () -> new MudWalkingBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
 	public static final DeferredItem<Item> FROG_LEG_EXTRACT = ITEMS.register("frog_leg_extract", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> new MobEffectInstance(MobEffects.JUMP, 400, 1), 1.0F).alwaysEdible().build())));
 	public static final DeferredItem<Item> WITCH_TEA = ITEMS.register("witch_tea", () -> new WitchTeaBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
-
 	//herblore book
 	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
@@ -187,6 +186,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, new Item.Properties()));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
+	public static final DeferredItem<Item> SHAMBLER_TONGUE = ITEMS.register("shambler_tongue", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> LURKER_SKIN_PATCH = ITEMS.register("lurker_skin_patch", () -> new HoverTextItem(new Item.Properties().stacksTo(16)));
 	public static final DeferredItem<Item> DRAETON_BALLOON = ITEMS.register("draeton_balloon", () -> new Item(new Item.Properties()));

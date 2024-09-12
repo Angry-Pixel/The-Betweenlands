@@ -794,7 +794,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.ANGRY_PEBBLE);
 			output.accept(ItemRegistry.OCTINE_INGOT);
 			output.accept(ItemRegistry.SAP_SPIT);
-			//shambler tongue
+			output.accept(ItemRegistry.SHAMBLER_TONGUE);
 			output.accept(ItemRegistry.RUNE_DOOR_KEY);
 			output.accept(ItemRegistry.LURKER_SKIN_PATCH);
 			output.accept(ItemRegistry.DRAETON_BALLOON);

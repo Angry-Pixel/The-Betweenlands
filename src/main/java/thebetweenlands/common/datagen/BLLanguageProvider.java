@@ -1159,7 +1159,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		//rope
 		this.addItem(ItemRegistry.ANGRY_PEBBLE, "Angry Pebble");
 		this.addItemWithDesc(ItemRegistry.OCTINE_INGOT, "Octine Ingot", "Hot enough to set moss on fire");
-		//shambler tongue
+		this.addItem(ItemRegistry.SHAMBLER_TONGUE, "Shambler Tongue");
 		this.addItemWithDesc(ItemRegistry.SAP_SPIT, "Sap Spit", "Keeps decay at bay.");
 		this.addItem(ItemRegistry.RUNE_DOOR_KEY, "Rune Door Key");
 		this.addItemWithDesc(ItemRegistry.LURKER_SKIN_PATCH, "Lurker Skin Patch", "Fixes Draeton leakages");

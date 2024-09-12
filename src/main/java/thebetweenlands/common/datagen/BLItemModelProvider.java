@@ -198,7 +198,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.ANGRY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.ANGRY_PEBBLE));
 		this.basicItem(ItemRegistry.OCTINE_INGOT);
 		this.basicItem(ItemRegistry.SAP_SPIT);
-		//shambler tongue
+		this.basicItem(ItemRegistry.SHAMBLER_TONGUE);
 		this.basicItem(ItemRegistry.RUNE_DOOR_KEY);
 		this.basicItem(ItemRegistry.LURKER_SKIN_PATCH);
 		this.basicItem(ItemRegistry.DRAETON_BALLOON);
