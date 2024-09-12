@@ -1,15 +1,20 @@
 package thebetweenlands.common.items;
 
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.component.item.FishBaitStats;
 import thebetweenlands.common.entities.fishing.FishBait;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 
 import java.util.List;
 
@@ -24,10 +29,10 @@ public class FishBaitItem extends Item {
 		if (stack.has(DataComponentRegistry.FISH_BAIT)) {
 			FishBaitStats stats = stack.get(DataComponentRegistry.FISH_BAIT);
 			//	tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.saturation", stack.getTagCompound().getInteger("saturation")));
-			tooltip.add(Component.translatable("tooltip.bl.fish_bait.sink_speed", stats.sinkSpeed()));
-			tooltip.add(Component.translatable("tooltip.bl.fish_bait.dissolve_time", stats.dissolveTime()));
-			tooltip.add(Component.translatable("tooltip.bl.fish_bait.range", stats.range()));
-			tooltip.add(Component.translatable("tooltip.bl.fish_bait.glowing", stats.glowing()));
+			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.sink_speed", stats.sinkSpeed()));
+			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.dissolve_time", stats.dissolveTime()));
+			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.range", stats.range()));
+			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.glowing", stats.glowing()));
 		}
 	}
 

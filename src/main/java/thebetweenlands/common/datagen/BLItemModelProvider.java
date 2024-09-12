@@ -3,6 +3,7 @@ package thebetweenlands.common.datagen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
@@ -74,7 +75,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.ANCIENT_REMNANT);
 		this.basicItem(ItemRegistry.LOOT_SCRAPS);
 		this.basicItem(ItemRegistry.FABRICATED_SCROLL);
-		//pebble
+		this.basicItem(ItemRegistry.BETWEENSTONE_PEBBLE);
 		this.basicItem(ItemRegistry.ANADIA_SWIM_BLADDER);
 		this.basicItem(ItemRegistry.ANADIA_EYE);
 		this.basicItem(ItemRegistry.ANADIA_GILLS);
@@ -233,7 +234,6 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SILK_FILTER);
 		this.basicItem(ItemRegistry.SILKY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.SILKY_PEBBLE));
 
-
 		this.basicItem(ItemRegistry.BONE_HELMET);
 		this.basicItem(ItemRegistry.BONE_CHESTPLATE);
 		this.basicItem(ItemRegistry.BONE_LEGGINGS);
@@ -291,7 +291,16 @@ public class BLItemModelProvider extends ItemModelProvider {
 		//caving rope light
 		//grappling hooks
 		this.basicItem(ItemRegistry.VOLARKITE);
-		//slingshot
+		this.basicItem(ItemRegistry.SLINGSHOT).transforms()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(5.0F, 180.0F, 35.0F).translation(1.13F, 1.5F, 1.13F).scale(0.55F, 0.55F, 0.55F).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(5.0F, 0.0F, -35.0F).translation(1.13F, 1.5F, 1.13F).scale(0.55F, 0.55F, 0.55F).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0.0F, 180.0F, 45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0.0F, 0.0F, -45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end().end()
+			.override().predicate(TheBetweenlands.prefix("pulling"), 1.0F).model(this.basicItem(this.modLoc("simple_slingshot_equipped")).transforms()
+				.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(5.0F, 180.0F, 35.0F).translation(1.13F, 1.5F, 1.13F).scale(0.55F, 0.55F, 0.55F).end()
+				.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(5.0F, 0.0F, -35.0F).translation(1.13F, 1.5F, 1.13F).scale(0.55F, 0.55F, 0.55F).end()
+				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0.0F, 180.0F, 45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end()
+				.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0.0F, 0.0F, -45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end().end());
 		//spears
 		//buckets
 		this.basicItem(ItemRegistry.ASCENT_UPGRADE);

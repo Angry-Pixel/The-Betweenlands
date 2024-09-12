@@ -1258,7 +1258,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		//caving rope light
 		//grappling hooks
 		this.addItem(ItemRegistry.VOLARKITE, "Volarkite");
-		//slingshot
+		this.addItemWithDesc(ItemRegistry.SLINGSHOT, "Simple Slingshot", "Shoots Betweenstone Pebbles");
 		this.addItem(ItemRegistry.WEEDWOOD_FISHING_ROD, "Weedwood Fishing Rod");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken\nand needs a new line and float.");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.baited", "Has Worm: %s");

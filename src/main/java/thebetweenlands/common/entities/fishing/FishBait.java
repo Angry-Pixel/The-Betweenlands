@@ -3,11 +3,14 @@ package thebetweenlands.common.entities.fishing;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
 import thebetweenlands.common.component.item.FishBaitStats;
 import thebetweenlands.common.entities.fishing.anadia.Anadia;
@@ -72,10 +75,10 @@ public class FishBait extends ItemEntity {
 		List<Anadia> list = this.level().getEntitiesOfClass(Anadia.class, new AABB(this.blockPosition()).inflate(0.125F).inflate(this.getBaitRange() * 0.5D), anadia -> anadia.isInWater() && anadia.hasLineOfSight(this));
 		if (!list.isEmpty()) {
 			Anadia foundFish = list.getFirst();
-//			if (foundFish.aiFindBait != null) {
-//				foundFish.aiFindBait.bait = this;
-//				foundFish.aiFindBait.updateTask();
-//			}
+			if (foundFish.findBaitGoal != null) {
+				foundFish.findBaitGoal.bait = this;
+				foundFish.findBaitGoal.tick();
+			}
 		}
 	}
 
@@ -113,5 +116,32 @@ public class FishBait extends ItemEntity {
 
 	public void setBaitRange(int range) {
 		this.getEntityData().set(RANGE, range);
+	}
+
+	public Vec3 getMovementToShoot(double x, double y, double z, float velocity, float inaccuracy) {
+		return new Vec3(x, y, z).normalize().add(
+				this.getRandom().triangle(0.0D, 0.0172275D * inaccuracy),
+				this.getRandom().triangle(0.0D, 0.0172275D * inaccuracy),
+				this.getRandom().triangle(0.0D, 0.0172275D * inaccuracy)).scale(velocity);
+	}
+
+	public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+		Vec3 vec3 = this.getMovementToShoot(x, y, z, velocity, inaccuracy);
+		this.setDeltaMovement(vec3);
+		this.hasImpulse = true;
+		double d0 = vec3.horizontalDistance();
+		this.setYRot((float)(Mth.atan2(vec3.x, vec3.z) * Mth.RAD_TO_DEG));
+		this.setXRot((float)(Mth.atan2(vec3.y, d0) * Mth.RAD_TO_DEG));
+		this.yRotO = this.getYRot();
+		this.xRotO = this.getXRot();
+	}
+
+	public void shootFromRotation(Entity shooter, float x, float y, float z, float velocity, float inaccuracy) {
+		float f = -Mth.sin(y * Mth.DEG_TO_RAD) * Mth.cos(x * Mth.DEG_TO_RAD);
+		float f1 = -Mth.sin((x + z) * Mth.DEG_TO_RAD);
+		float f2 = Mth.cos(y * Mth.DEG_TO_RAD) * Mth.cos(x * Mth.DEG_TO_RAD);
+		this.shoot(f, f1, f2, velocity, inaccuracy);
+		Vec3 vec3 = shooter.getKnownMovement();
+		this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, shooter.onGround() ? 0.0 : vec3.y, vec3.z));
 	}
 }

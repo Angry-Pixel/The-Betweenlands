@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -19,6 +20,7 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
@@ -135,6 +137,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ELIXIR.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ANGRY_PEBBLE.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ITEM_FRAME.get(), BLItemFrameRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BETWEENSTONE_PEBBLE.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FISH_BAIT.get(), ItemEntityRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -281,6 +285,15 @@ public class ClientRegistrationEvents {
 
 		ItemProperties.register(ItemRegistry.ANGRY_PEBBLE.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 		ItemProperties.register(ItemRegistry.SILKY_PEBBLE.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pull"), (stack, level, entity, seed) -> {
+			if (entity == null) {
+				return 0.0F;
+			} else {
+				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+			}
+		});
+		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {

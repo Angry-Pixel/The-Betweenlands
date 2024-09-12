@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-11T08:35:15.4224236	Item Models: thebetweenlands
+// 1.21.1	2024-09-11T20:13:39.9516224	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -59,6 +59,7 @@ c4ea81227ad9a8bde80868084efcf8657a91c48a assets/thebetweenlands/models/item/apse
 2f9250158d47c91737afa3fecc874ec30a109a4f assets/thebetweenlands/models/item/ascent_upgrade.json
 7f23334a8d0bd09beb963292d9bd2b4d9508a223 assets/thebetweenlands/models/item/bark_amulet.json
 c23d7f1004b43d96e65752479aa2712834407cb7 assets/thebetweenlands/models/item/barnacle.json
+1b283ecf733bda0a6c64a5a4c6a6f1bb01d1a169 assets/thebetweenlands/models/item/betweenstone_pebble.json
 d29f7205657e48772892cf19459988fd63a62ce4 assets/thebetweenlands/models/item/black_hat_mushroom_item.json
 2b292d380946e9fbc379ed3e7e148a82759359a2 assets/thebetweenlands/models/item/bladderwort_flower_drop.json
 193b9d3cc76be58c6bcec3ae105899531f1f50f0 assets/thebetweenlands/models/item/bladderwort_stalk_drop.json
@@ -362,6 +363,8 @@ f7aba0ac778750a3366b31a855f7ec2f5e6786cc assets/thebetweenlands/models/item/silk
 283fecb9655719554890126e06dfc53ae4c6f3f1 assets/thebetweenlands/models/item/silk_thread.json
 85e7e1863806458710fb2fa4e6f19f5cfa36e2c4 assets/thebetweenlands/models/item/silt_crab.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/silt_crab_spawn_egg.json
+2992f85b380ab61938c3cf869ba507d56507298f assets/thebetweenlands/models/item/simple_slingshot.json
+31d0d41667110954c64f5170b525a824fb979c8e assets/thebetweenlands/models/item/simple_slingshot_equipped.json
 2bc536aff18014777891c259f0dfda7aaa377798 assets/thebetweenlands/models/item/slimy_bone.json
 ae28b806d61d22922bbe85fa940981e289a1525c assets/thebetweenlands/models/item/sludgecreep_leaves.json
 cb0080da9a6da9a7e8ebde406ffd6426a3e473ff assets/thebetweenlands/models/item/sludge_ball.json

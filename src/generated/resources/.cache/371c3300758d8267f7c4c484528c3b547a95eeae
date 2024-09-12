@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-01T11:37:09.7028937	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2024-09-11T20:01:20.2612741	Tags for minecraft:item mod id thebetweenlands
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
 6d94a07fd1401c7963d0cbd25416072ff5145982 data/minecraft/tags/item/shovels.json
@@ -8,3 +8,4 @@ d06ec18ea23cf0b2bcd37583a885baeab6942c1f data/minecraft/tags/item/swords.json
 d61022f248e7813226e51b271dc42aec7397b7d7 data/thebetweenlands/tags/item/corrodible/default.json
 ba1aefcc3cb9b53ae9fa889e92a2505d08b2c486 data/thebetweenlands/tags/item/gives_food_sickness.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/item/octine_ignites.json
+0b4fb1710c1ea70138d18db6ea9e27f8d1280827 data/thebetweenlands/tags/item/slingshot_ammo.json

@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:item/generated",
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        5,
+        0,
+        -35
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "translation": [
+        1.13,
+        1.5,
+        1.13
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        5,
+        180,
+        35
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "translation": [
+        1.13,
+        1.5,
+        1.13
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        -45
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "translation": [
+        0,
+        2,
+        1
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        180,
+        45
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "translation": [
+        0,
+        2,
+        1
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/simple_slingshot_equipped",
+      "predicate": {
+        "thebetweenlands:pulling": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/simple_slingshot"
+  }
+}

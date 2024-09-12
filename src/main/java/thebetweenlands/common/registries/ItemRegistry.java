@@ -64,6 +64,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ANCIENT_REMNANT = ITEMS.register("ancient_remnant", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> LOOT_SCRAPS = ITEMS.register("loot_scraps", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> FABRICATED_SCROLL = ITEMS.register("fabricated_scroll", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> BETWEENSTONE_PEBBLE = ITEMS.register("betweenstone_pebble", () -> new BetweenstonePebbleItem(new Item.Properties()));
 	public static final DeferredItem<Item> ANADIA_SWIM_BLADDER = ITEMS.register("anadia_swim_bladder", () -> new HoverTextItem(new Item.Properties()));
 	public static final DeferredItem<Item> ANADIA_EYE = ITEMS.register("anadia_eye", () -> new HoverTextItem(new Item.Properties()));
 	public static final DeferredItem<Item> ANADIA_GILLS = ITEMS.register("anadia_gills", () -> new HoverTextItem(new Item.Properties()));
@@ -281,7 +282,7 @@ public class ItemRegistry {
 	//caving rope
 	//grapples
 	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
-	//slingshot
+	public static final DeferredItem<Item> SLINGSHOT = ITEMS.register("simple_slingshot", () -> new SlingshotItem(new Item.Properties().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().stacksTo(1).durability(256)));
 	//spears
 	public static final DeferredItem<Item> WEEDWOOD_BUCKET = ITEMS.register("weedwood_bucket", () -> new Item(new Item.Properties()));

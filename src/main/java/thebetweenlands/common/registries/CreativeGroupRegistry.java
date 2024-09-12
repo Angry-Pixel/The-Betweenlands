@@ -666,7 +666,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.ANCIENT_REMNANT);
 			output.accept(ItemRegistry.LOOT_SCRAPS);
 			output.accept(ItemRegistry.FABRICATED_SCROLL);
-			output.accept(BlockRegistry.BETWEENSTONE_PEBBLE);
+			output.accept(ItemRegistry.BETWEENSTONE_PEBBLE);
 			output.accept(ItemRegistry.ANADIA_SWIM_BLADDER);
 			output.accept(ItemRegistry.ANADIA_EYE);
 			output.accept(ItemRegistry.ANADIA_GILLS);
@@ -903,7 +903,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.NET);
 			//lurker skin pouches
 			output.accept(ItemRegistry.VOLARKITE);
-			//slingshot
+			output.accept(ItemRegistry.SLINGSHOT);
 			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);
 			//weedwood buckets
 			//syrmorite buckets

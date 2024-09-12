@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.api.item.ICustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BLItemTagProvider extends ItemTagsProvider {
@@ -30,6 +31,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> REED_MATS = tag("reed_mats");
 	public static final TagKey<Item> SAMITE = tag("samite");
 	public static final TagKey<Item> ITEM_FRAMES = tag("item_frames");
+	public static final TagKey<Item> SLINGSHOT_AMMO = tag("slingshot_ammo");
 
 	/**
 	 * Whether an item should be looked at by the corrosion engine
@@ -53,6 +55,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		this.copy(BLBlockTagProvider.OCTINE_IGNITES, OCTINE_IGNITES);
+		this.tag(SLINGSHOT_AMMO).add(ItemRegistry.FISH_BAIT.get(), BlockRegistry.BETWEENSTONE_PEBBLE.asItem());
 
 		// Those two "inherit" from this one
 		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
