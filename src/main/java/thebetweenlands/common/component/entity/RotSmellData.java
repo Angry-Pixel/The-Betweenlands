@@ -2,15 +2,23 @@ package thebetweenlands.common.component.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.common.component.ISimpleAttachment;
+import thebetweenlands.common.component.SimpleAttachmentType;
 import thebetweenlands.common.network.clientbound.attachment.UpdateRotSmellPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateSimpleAttachmentPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
-public class RotSmellData {
+public class RotSmellData implements ISimpleAttachment {
 
 	private long smellyTime;
 	private long immunityTime;
@@ -20,6 +28,17 @@ public class RotSmellData {
 		Codec.LONG.fieldOf("immunity_timestamp").forGetter(o -> o.immunityTime)
 	).apply(instance, RotSmellData::new));
 
+	public static final StreamCodec<RegistryFriendlyByteBuf, RotSmellData> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_LONG, d -> d.smellyTime,
+			ByteBufCodecs.VAR_LONG, d -> d.immunityTime,
+			RotSmellData::new
+		);
+
+	@Override
+	public ResourceKey<SimpleAttachmentType<?>> getResourceKey() {
+		return AttachmentRegistry.ROT_SMELL_AUTOENCODER.getKey();
+	}
+	
 	public RotSmellData() {
 		this(-1, -1);
 	}
@@ -71,7 +90,7 @@ public class RotSmellData {
 
 	private void setChanged(LivingEntity player) {
 		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateRotSmellPacket(player.getId(), this.smellyTime, this.immunityTime));
+			PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateSimpleAttachmentPacket<>(player.getId(), this));
 		}
 	}
 
@@ -84,4 +103,5 @@ public class RotSmellData {
 			}
 		}
 	}
+
 }

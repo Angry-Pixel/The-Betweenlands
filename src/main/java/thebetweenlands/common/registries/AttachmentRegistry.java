@@ -4,13 +4,24 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.component.entity.*;
+import thebetweenlands.common.component.SimpleAttachmentType;
+import thebetweenlands.common.component.entity.BlessingData;
+import thebetweenlands.common.component.entity.CircleGemData;
+import thebetweenlands.common.component.entity.DecayData;
+import thebetweenlands.common.component.entity.FallDamageReductionData;
+import thebetweenlands.common.component.entity.FoodSicknessData;
+import thebetweenlands.common.component.entity.InfestationIgnoreData;
+import thebetweenlands.common.component.entity.LastKilledData;
+import thebetweenlands.common.component.entity.MudWalkerData;
+import thebetweenlands.common.component.entity.RotSmellData;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageSerializer;
 
 public class AttachmentRegistry {
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, TheBetweenlands.ID);
+	public static final DeferredRegister<SimpleAttachmentType<?>> SIMPLE_ATTACHMENT_TYPES = DeferredRegister.create(BLRegistries.Keys.SIMPLE_ATTACHMENT_TYPES, TheBetweenlands.ID);
 
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<BlessingData>> BLESSING = ATTACHMENT_TYPES.register("blessing", () -> AttachmentType.builder(() -> new BlessingData()).serialize(BlessingData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<CircleGemData>> CIRCLE_GEM = ATTACHMENT_TYPES.register("circle_gem", () -> AttachmentType.builder(() -> new CircleGemData()).serialize(CircleGemData.CODEC).build());
@@ -23,5 +34,8 @@ public class AttachmentRegistry {
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<RotSmellData>> ROT_SMELL = ATTACHMENT_TYPES.register("rot_smell", () -> AttachmentType.builder(RotSmellData::new).serialize(RotSmellData.CODEC).build());
 
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<BetweenlandsWorldStorage>> WORLD_STORAGE = ATTACHMENT_TYPES.register("world_storage", () -> AttachmentType.builder(BetweenlandsWorldStorage::new).serialize(new WorldStorageSerializer()).build());
-
+	
+	
+	public static final DeferredHolder<SimpleAttachmentType<?>, SimpleAttachmentType<RotSmellData>> ROT_SMELL_AUTOENCODER = SIMPLE_ATTACHMENT_TYPES.register("rot_smell", () -> new SimpleAttachmentType<RotSmellData>(RotSmellData.class, RotSmellData.STREAM_CODEC, ROT_SMELL.getKey()));
+	
 }

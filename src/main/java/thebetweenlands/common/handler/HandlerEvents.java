@@ -2,10 +2,14 @@ package thebetweenlands.common.handler;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.common.NeoForge;
+import thebetweenlands.common.component.SimpleAttachmentHandler;
+import thebetweenlands.common.component.SimpleAttachmentType;
 
 public class HandlerEvents {
 
 	public static void init(Dist dist) {
+		NeoForge.EVENT_BUS.addListener(SimpleAttachmentHandler::onPlayerJoinWorld);
+		
 		//corrosion
 		NeoForge.EVENT_BUS.addListener(CorrosionHandler::addCorrosionTooltips);
 		NeoForge.EVENT_BUS.addListener(CorrosionHandler::changeItemModifiers);
