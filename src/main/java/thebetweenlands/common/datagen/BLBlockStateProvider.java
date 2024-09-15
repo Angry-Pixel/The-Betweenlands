@@ -1,5 +1,6 @@
 package thebetweenlands.common.datagen;
 
+import com.ibm.icu.impl.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +18,7 @@ import thebetweenlands.common.block.*;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 
+import java.util.List;
 import java.util.Map;
 
 public class BLBlockStateProvider extends BlockStateProvider {
@@ -62,7 +64,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.LIMESTONE);
 		this.simpleBlockWithItem(BlockRegistry.SWAMP_DIRT);
 		this.simpleBlockWithItem(BlockRegistry.COARSE_SWAMP_DIRT);
-		this.bottomSideTopBlockWithItem(BlockRegistry.SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_grass_top"), this.modLoc("block/swamp_dirt"));
+		this.bottomSideTopTuftBlockWithItem(BlockRegistry.SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_grass_top"), this.modLoc("block/swamp_dirt"), List.of(
+			Pair.of(this.models().withExistingParent("block/swamp_grass_tuft_none", this.mcLoc("block/air")).renderType("cutout"), 1),
+			Pair.of(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_0")), 1),
+			Pair.of(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_1")), 1)
+		));
 		this.simpleBlock(BlockRegistry.WISP.get(), this.models().getBuilder("wisp").texture("particle", this.modLoc("block/wisp")));
 		this.basicItemTex(BlockRegistry.WISP, true);
 		this.simpleBlockWithItem(BlockRegistry.OCTINE_ORE);
@@ -916,9 +922,27 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
-	// TODO: add tuft model, or turn into a multimodel blockstate template
-	private void bottomSideTopTuftBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom, ResourceLocation tuft) {
-		this.simpleBlock(block.get(), this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top));
+	private ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> topTuftPart(ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> partBuilder, List<Pair<ModelFile, Integer>> tuftModelWeightPairs) {
+		boolean t = false;
+		for (Pair<ModelFile, Integer> pair : tuftModelWeightPairs) {
+			if (t) partBuilder = partBuilder.nextModel();
+			else t = true;
+			partBuilder = partBuilder
+				.modelFile(pair.first)
+				.weight(pair.second);
+		}
+		return partBuilder;
+	}
+
+	private void bottomSideTopTuftBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom, List<Pair<ModelFile, Integer>> tuftModelWeightPairs) {
+		ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> builder = getMultipartBuilder(block.get()).part();
+
+		builder
+			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top))
+			.addModel();
+
+		builder = this.topTuftPart(builder, tuftModelWeightPairs);
+		builder.addModel().end();
 		this.simpleBlockItem(block);
 	}
 

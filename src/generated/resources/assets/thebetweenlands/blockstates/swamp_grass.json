@@ -1,7 +1,22 @@
 {
-  "variants": {
-    "": {
-      "model": "thebetweenlands:block/swamp_grass"
+  "multipart": [
+    {
+      "apply": {
+        "model": "thebetweenlands:block/swamp_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_none"
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_0"
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_1"
+        }
+      ]
     }
-  }
+  ]
 }

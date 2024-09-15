@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-10T16:12:19.8740604	Block States: thebetweenlands
+// 1.21.1	2024-09-16T05:19:04.8929537	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
 054597b2cc6147a93cbe8522b522e25baafe90fe assets/thebetweenlands/blockstates/angry_betweenstone.json
@@ -542,7 +542,7 @@ a8797b08035966ccb765c363c27d5a3f107af6e5 assets/thebetweenlands/blockstates/sush
 15998618823e351fbab7ecbbfc36814dcdc89594 assets/thebetweenlands/blockstates/sushi_green_samite.json
 180a64d6ee8c430201acf7fc36d2a52b1a8f7a2f assets/thebetweenlands/blockstates/sushi_green_samite_canvas_panel.json
 814706862f128a782e11f78df98a1c4fc255d243 assets/thebetweenlands/blockstates/swamp_dirt.json
-9a924313785c4fc4cffdec7d17f60610a9d5eb57 assets/thebetweenlands/blockstates/swamp_grass.json
+b5faea86ffc5603bc09e168530f4d67e4f41a606 assets/thebetweenlands/blockstates/swamp_grass.json
 de630a600881ebc6eff2230c9c366d6a81c26077 assets/thebetweenlands/blockstates/swamp_kelp.json
 6f305aa1d965179bb45c408834eef1741f54f5f1 assets/thebetweenlands/blockstates/swamp_kelp_plant.json
 c6129c3119e1a93cff1e261807d01f4880a36551 assets/thebetweenlands/blockstates/swamp_reed.json
@@ -1479,6 +1479,7 @@ ddfec1c9e1e56c0875c64d17a53f89da62e28408 assets/thebetweenlands/models/block/sus
 c1df98af7123564d64f9a135d20b20e231f77a90 assets/thebetweenlands/models/block/sushi_green_samite_canvas_panel.json
 705e8dd286f46c470237ef24a8d285dbbe616c2c assets/thebetweenlands/models/block/swamp_dirt.json
 f2a91b88d8fa553bd1de94de6d02290cad433108 assets/thebetweenlands/models/block/swamp_grass.json
+923eb3d0cd720c7f471410b1131391a97c8ce9ba assets/thebetweenlands/models/block/swamp_grass_tuft_none.json
 05d27db15f2b791200241a8ee57eb5e566fece68 assets/thebetweenlands/models/block/swamp_kelp.json
 38a070a483b51b6e3db0b7e775c92349a0ab0b7b assets/thebetweenlands/models/block/swamp_kelp_plant.json
 6d7b435e9579ec7bd28f55b8871c6836cf5d5ac0 assets/thebetweenlands/models/block/swamp_reed.json
