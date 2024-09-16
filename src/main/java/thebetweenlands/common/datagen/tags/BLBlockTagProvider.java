@@ -1,18 +1,20 @@
 package thebetweenlands.common.datagen.tags;
 
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.concurrent.CompletableFuture;
 
 public class BLBlockTagProvider extends BlockTagsProvider {
 
@@ -39,6 +41,11 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 			BlockRegistry.HEARTHGROVE_FENCE_GATE.get(), BlockRegistry.HEARTHGROVE_BARK.get(),
 			BlockRegistry.NIBBLETWIG_LOG.get(), BlockRegistry.NIBBLETWIG_BARK.get(),
 			BlockRegistry.PORTAL_LOG.get(), BlockRegistry.ROTTEN_BARK.get());
+
+		this.tag(Tags.Blocks.RELOCATION_NOT_SUPPORTED).add(
+				BlockRegistry.BEAM_ORIGIN.get(), BlockRegistry.BEAM_RELAY.get(),
+				BlockRegistry.DECAY_PIT_CONTROL.get(), BlockRegistry.DECAY_PIT_GROUND_CHAIN.get(),
+				BlockRegistry.DECAY_PIT_HANGING_CHAIN.get());
 	}
 
 	public static TagKey<Block> tag(String tagName) {
