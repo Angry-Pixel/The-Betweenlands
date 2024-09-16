@@ -4,6 +4,7 @@
     "down": "thebetweenlands:block/weedwood_planks",
     "east": "thebetweenlands:block/weedwood_workbench",
     "north": "thebetweenlands:block/weedwood_workbench_front",
+    "particle": "thebetweenlands:block/weedwood_workbench",
     "south": "thebetweenlands:block/weedwood_workbench",
     "up": "thebetweenlands:block/weedwood_workbench_top",
     "west": "thebetweenlands:block/weedwood_workbench_front"
