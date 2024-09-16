@@ -160,7 +160,7 @@ public class CommonRegistrationEvents {
 		event.register(BLRegistries.ENVIRONMENT_EVENTS);
 		event.register(BLRegistries.SIMULACRUM_EFFECTS);
 		event.register(BLRegistries.WORLD_STORAGE);
-		event.register(BLRegistries.SIMPLE_ATTACHMENT_TYPES);
+		event.register(BLRegistries.SYNCHED_ATTACHMENT_TYPES);
 	}
 
 	private static void registerPackets(RegisterPayloadHandlersEvent event) {
@@ -189,7 +189,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
 		
-		registrar.playToClient(UpdateSimpleAttachmentPacket.TYPE, UpdateSimpleAttachmentPacket.STREAM_CODEC, UpdateSimpleAttachmentPacket::handle);
+		registrar.playToClient(UpdateSynchedAttachmentPacket.TYPE, UpdateSynchedAttachmentPacket.STREAM_CODEC, UpdateSynchedAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);

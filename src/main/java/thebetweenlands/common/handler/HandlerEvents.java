@@ -3,7 +3,6 @@ package thebetweenlands.common.handler;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.common.component.SimpleAttachmentHandler;
-import thebetweenlands.common.component.SimpleAttachmentType;
 
 public class HandlerEvents {
 

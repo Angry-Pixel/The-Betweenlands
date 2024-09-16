@@ -74,7 +74,7 @@ public class TheBetweenlands {
 		ElixirEffectRegistry.ELIXIRS.register(eventbus);
 		ElixirEffectRegistry.EFFECTS.register(eventbus);
 		AttachmentRegistry.ATTACHMENT_TYPES.register(eventbus);
-		AttachmentRegistry.SIMPLE_ATTACHMENT_TYPES.register(eventbus);
+		AttachmentRegistry.SYNCHED_ATTACHMENT_TYPES.register(eventbus);
 		ArmorMaterialRegistry.MATERIALS.register(eventbus);
 		BlockEntityRegistry.BLOCK_ENTITIES.register(eventbus);
 		DataComponentRegistry.COMPONENTS.register(eventbus);
