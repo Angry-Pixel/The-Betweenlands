@@ -5,8 +5,12 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -32,6 +36,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
@@ -57,6 +62,8 @@ import thebetweenlands.common.network.clientbound.attachment.*;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
 import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
 import thebetweenlands.common.registries.*;
+import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
+import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -65,6 +72,7 @@ public class CommonRegistrationEvents {
 	public static void init(IEventBus bus, Dist dist) {
 		bus.addListener(CommonRegistrationEvents::createDatagen);
 		bus.addListener(CommonRegistrationEvents::makeNewRegistries);
+		bus.addListener(CommonRegistrationEvents::extraRegistration);
 		bus.addListener(CommonRegistrationEvents::makeDatapackRegistries);
 		bus.addListener(CommonRegistrationEvents::populateVanillaTabs);
 		bus.addListener(CommonRegistrationEvents::registerAttributes);
@@ -163,6 +171,15 @@ public class CommonRegistrationEvents {
 		event.register(BLRegistries.SIMPLE_ATTACHMENT_TYPES);
 	}
 
+	private static void extraRegistration(RegisterEvent event) {
+		if (event.getRegistryKey().equals(Registries.BIOME_SOURCE)) {
+			Registry.register(BuiltInRegistries.BIOME_SOURCE, TheBetweenlands.prefix("bl_biome_source"), BetweenlandsBiomeSource.BL_CODEC);
+		}
+		if (event.getRegistryKey().equals(Registries.CHUNK_GENERATOR)) {
+			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, TheBetweenlands.prefix("bl_chunk_generator"), BetweenlandsChunkGenerator.BL_CODEC);
+		}
+	}
+
 	private static void registerPackets(RegisterPayloadHandlersEvent event) {
 		PayloadRegistrar registrar = event.registrar(TheBetweenlands.ID).versioned("1.0.0");
 		registrar.playToClient(AmateMapPacket.TYPE, AmateMapPacket.STREAM_CODEC, AmateMapPacket::handle);
@@ -188,7 +205,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
-		
+
 		registrar.playToClient(UpdateSimpleAttachmentPacket.TYPE, UpdateSimpleAttachmentPacket.STREAM_CODEC, UpdateSimpleAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));

@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -11,6 +13,9 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.warp.TerrainPoint;
+
+import java.util.List;
 
 public class BiomeRegistry {
 
@@ -184,5 +189,24 @@ public class BiomeRegistry {
 			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
 			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
 			.build());
+	}
+
+	public static List<Pair<TerrainPoint, Holder<Biome>>> biomeParameters(HolderGetter<Biome> registry) {
+		return List.of(
+			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
+			pairBiome(registry, 25, -0.10F, 0.10F, SWAMPLANDS),
+			pairBiome(registry, 12, -1.20F, 0.05F, DEEP_WATERS),
+			pairBiome(registry, 16, -0.50F, 0.40F, COARSE_ISLANDS),
+			pairBiome(registry, 16, -0.50F, 0.40F, RAISED_ISLES),
+			pairBiome(registry, 5, -0.50F, 0.30F, SLUDGE_PLAINS),
+			pairBiome(registry, 4, -0.10F, 0.11F, ERODED_MARSH),
+			pairBiome(registry, 10, -0.10F, 0.11F, MARSH),
+			pairBiome(registry, 0, -0.20F, 0.10F, SWAMPLANDS_CLEARING),
+			pairBiome(registry, 0, -0.40F, 0.05F, SLUDGE_PLAINS_CLEARING)
+		);
+	}
+
+	private static Pair<TerrainPoint, Holder<Biome>> pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
+		return Pair.of(new TerrainPoint((short)weight, depth, scale), registry.getOrThrow(biome));
 	}
 }
