@@ -193,7 +193,7 @@ public class BiomeRegistry {
 
 	public static List<Pair<TerrainPoint, Holder<Biome>>> biomeParameters(HolderGetter<Biome> registry) {
 		return List.of(
-			pairBiome(registry, 20, -.125F, 0.475F, PATCHY_ISLANDS),
+			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
 			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS),
 			pairBiome(registry, 12, -1.2F, 0.5F, DEEP_WATERS),
 			pairBiome(registry, 16, -0.5F, 0.4F, COARSE_ISLANDS),
