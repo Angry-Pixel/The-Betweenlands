@@ -30,8 +30,7 @@ public class BetweenlandsBiomeLayer implements AreaTransformer0 {
 
 	@Override
 	public int apply(Context context, int x, int z) {
-		return BetweenlandsBiomeSource.getBiomeId(BiomeRegistry.DEEP_WATERS, registry);
-//		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, context.nextRandom(totalWeight)).getKey(), registry);
+		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, context.nextRandom(totalWeight)).getKey(), registry);
 	}
 
 	public Holder<Biome> getRandomItem(List<Pair<TerrainPoint, Holder<Biome>>> list, int weight) {

@@ -193,16 +193,16 @@ public class BiomeRegistry {
 
 	public static List<Pair<TerrainPoint, Holder<Biome>>> biomeParameters(HolderGetter<Biome> registry) {
 		return List.of(
-			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
-			pairBiome(registry, 25, -0.10F, 0.10F, SWAMPLANDS),
-			pairBiome(registry, 12, -1.20F, 0.05F, DEEP_WATERS),
-			pairBiome(registry, 16, -0.50F, 0.40F, COARSE_ISLANDS),
-			pairBiome(registry, 16, -0.50F, 0.40F, RAISED_ISLES),
-			pairBiome(registry, 5, -0.50F, 0.30F, SLUDGE_PLAINS),
-			pairBiome(registry, 4, -0.10F, 0.11F, ERODED_MARSH),
-			pairBiome(registry, 10, -0.10F, 0.11F, MARSH),
-			pairBiome(registry, 0, -0.20F, 0.10F, SWAMPLANDS_CLEARING),
-			pairBiome(registry, 0, -0.40F, 0.05F, SLUDGE_PLAINS_CLEARING)
+			pairBiome(registry, 20, -1.0F, 0.475F, PATCHY_ISLANDS),
+			pairBiome(registry, 25, 1.0F, 0.10F, SWAMPLANDS),
+			pairBiome(registry, 12, -1.0F, 0.05F, DEEP_WATERS),
+			pairBiome(registry, 16, 1.0F, 0.40F, COARSE_ISLANDS),
+			pairBiome(registry, 16, -1.0F, 0.40F, RAISED_ISLES),
+			pairBiome(registry, 5, 1.0F, 0.30F, SLUDGE_PLAINS),
+			pairBiome(registry, 4, -1.0F, 0.11F, ERODED_MARSH),
+			pairBiome(registry, 10, 1.0F, 0.11F, MARSH),
+			pairBiome(registry, 0, -1.0F, 0.10F, SWAMPLANDS_CLEARING),
+			pairBiome(registry, 0, 1.0F, 0.05F, SLUDGE_PLAINS_CLEARING)
 		);
 	}
 

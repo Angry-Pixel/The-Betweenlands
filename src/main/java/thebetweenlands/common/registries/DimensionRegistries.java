@@ -52,7 +52,7 @@ public class DimensionRegistries {
 
 	public static void bootstrapNoise(BootstrapContext<NoiseGeneratorSettings> context) {
 		context.register(NOISE_SETTINGS_KEY, new NoiseGeneratorSettings(
-			NoiseSettings.create(0, 256, 2, 2),
+			NoiseSettings.create(0, 256, 1, 2),
 			BlockRegistry.BETWEENSTONE.get().defaultBlockState(),
 			BlockRegistry.SWAMP_WATER.get().defaultBlockState(),
 			new NoiseRouter(

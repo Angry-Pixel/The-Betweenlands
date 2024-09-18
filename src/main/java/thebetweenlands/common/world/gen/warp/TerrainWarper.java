@@ -41,8 +41,8 @@ public class TerrainWarper {
 		this.bottomSlide = bottomSlide;
 		this.blendedNoise = blend;
 		//Fallbacks will never be met as this will crash to enforce correct source
-		this.dimensionDensityFactor = source instanceof BetweenlandsBiomeSource gsource ? gsource.getBaseFactor() : 1.0F;
-		this.dimensionDensityOffset = source instanceof BetweenlandsBiomeSource gsource ? gsource.getBaseOffset() : 0.0F;
+		this.dimensionDensityFactor = source instanceof BetweenlandsBiomeSource blsource ? blsource.getBaseFactor() : 1.0F;
+		this.dimensionDensityOffset = source instanceof BetweenlandsBiomeSource blsource ? blsource.getBaseOffset() : 0.0F;
 		this.caveNoiseModifier = modifier;
 	}
 
@@ -90,7 +90,6 @@ public class TerrainWarper {
 				totaldensity = this.applySlide(totaldensity, y);
 				adouble[index] = totaldensity;
 			}
-
 		} else {
 			throw new IllegalArgumentException("BiomeSource is not an instance of BetweenlandsBiomeSource");
 		}
