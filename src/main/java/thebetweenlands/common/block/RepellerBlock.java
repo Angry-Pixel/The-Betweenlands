@@ -64,7 +64,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 		if (state.getValue(HALF) == DoubleBlockHalf.UPPER && level.getBlockState(pos.below()).is(this)) {
 			this.useItemOn(stack, level.getBlockState(pos.below()), level, pos.below(), player, hand, hitResult);
 		} else if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
-			if (!player.isCrouching() && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
+			if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
 				if (stack.is(ItemRegistry.SHIMMER_STONE) && !repeller.hasShimmerstone()) {
 					repeller.addShimmerstone();
 					stack.consume(1, player);
@@ -115,14 +115,14 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 		if (state.getValue(HALF) == DoubleBlockHalf.UPPER && level.getBlockState(pos.below()).is(this)) {
 			this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(), player, hitResult);
 		} else if (state.getValue(HALF) == DoubleBlockHalf.LOWER && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
-			if (player.isCrouching() && repeller.hasShimmerstone()) {
+			if (player.isShiftKeyDown() && repeller.hasShimmerstone()) {
 				repeller.removeShimmerstone();
 				ItemStack stack = new ItemStack(ItemRegistry.SHIMMER_STONE.get());
 				if (!player.getInventory().add(stack)) {
 					player.drop(stack, false);
 				}
 				return InteractionResult.sidedSuccess(level.isClientSide());
-			} else if (!player.isCrouching()) {
+			} else if (!player.isShiftKeyDown()) {
 				if (!level.isClientSide()) {
 					repeller.cycleRadiusState();
 				}

@@ -922,8 +922,8 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.ASCENT_UPGRADE);
 			output.accept(ItemRegistry.URCHIN_SPIKE_UPGRADE);
 			output.accept(ItemRegistry.FISH_VORTEX_UPGRADE);
-			//biopathic triggerstone
-			//biopathic linkstone
+			output.accept(ItemRegistry.BIOPATHIC_TRIGGERSTONE);
+			output.accept(ItemRegistry.BIOPATHIC_LINKSTONE);
 			output.accept(ItemRegistry.SILK_BUNDLE);
 		})
 		.build());

@@ -3,6 +3,7 @@ package thebetweenlands.client.handler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -13,10 +14,12 @@ import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.CompostData;
+import thebetweenlands.common.component.item.UpgradeDamage;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.items.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.FoodSickness;
 
@@ -38,11 +41,10 @@ public class ItemTooltipHandler {
 		List<Component> toolTip = event.getToolTip();
 		Player player = event.getEntity();
 
-//		int armorUpgradeDamage = AmphibiousArmorItem.getUpgradeItemStoredDamage(stack);
-//		if (armorUpgradeDamage > 0) {
-//			int maxArmorUpgradeDamage = AmphibiousArmorItem.getUpgradeItemMaxStoredDamage(stack);
-//			toolTip.add(Component.translatable("item.thebetweenlands.damaged_armor_upgrade", Math.max(0, maxArmorUpgradeDamage - armorUpgradeDamage), maxArmorUpgradeDamage));
-//		}
+		UpgradeDamage damage = stack.getOrDefault(DataComponentRegistry.UPGRADE_DAMAGE, UpgradeDamage.EMPTY);
+		if (damage.damage() > 0) {
+			toolTip.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.damaged", Math.max(0, damage.maxDamage() - damage.damage()), damage.maxDamage()));
+		}
 
 		CircleGemType circleGem = stack.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE);
 		if (circleGem != CircleGemType.NONE) {
@@ -105,23 +107,23 @@ public class ItemTooltipHandler {
 
 			List<Component> amphibiousUpgrades = new ArrayList<>();
 
-//			if (AmphibiousArmorUpgrades.getUpgrade(EquipmentSlot.HEAD, stack) != null) {
-//				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.helmet").withStyle(ChatFormatting.GRAY));
-//			}
-//
-//			if (AmphibiousArmorUpgrades.getUpgrade(EquipmentSlot.CHEST, stack) != null) {
-//				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.chestplate").withStyle(ChatFormatting.GRAY));
-//			}
-//
-//			if (AmphibiousArmorUpgrades.getUpgrade(EquipmentSlot.LEGS, stack) != null) {
-//				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.leggings").withStyle(ChatFormatting.GRAY));
-//			}
-//
-//			if (AmphibiousArmorUpgrades.getUpgrade(EquipmentSlot.FEET, stack) != null) {
-//				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.boots").withStyle(ChatFormatting.GRAY));
-//			}
+			if (ArmorEffectHelper.getUpgrade(EquipmentSlot.HEAD, stack) != AmphibiousArmorUpgradeRegistry.NONE) {
+				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.helmet").withStyle(ChatFormatting.GRAY));
+			}
 
-			if (amphibiousUpgrades.size() > 0) {
+			if (ArmorEffectHelper.getUpgrade(EquipmentSlot.CHEST, stack) != AmphibiousArmorUpgradeRegistry.NONE) {
+				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.chestplate").withStyle(ChatFormatting.GRAY));
+			}
+
+			if (ArmorEffectHelper.getUpgrade(EquipmentSlot.LEGS, stack) != AmphibiousArmorUpgradeRegistry.NONE) {
+				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.leggings").withStyle(ChatFormatting.GRAY));
+			}
+
+			if (ArmorEffectHelper.getUpgrade(EquipmentSlot.FEET, stack) != AmphibiousArmorUpgradeRegistry.NONE) {
+				amphibiousUpgrades.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.boots").withStyle(ChatFormatting.GRAY));
+			}
+
+			if (!amphibiousUpgrades.isEmpty()) {
 				usedInMachines.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.format", amphibiousUpgrades.stream().map(Component::getString).collect(Collectors.joining("/"))).withStyle(ChatFormatting.GRAY));
 			}
 

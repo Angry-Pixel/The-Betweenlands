@@ -58,7 +58,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 		TextureAtlasSprite textureBottom = spriteGetter.apply(context.getMaterial("bottom"));
 		TextureAtlasSprite textureOverlay = context.hasMaterial("overlay") ? spriteGetter.apply(context.getMaterial("overlay")) : UnitTextureAtlasSprite.INSTANCE;
 		TextureAtlasSprite textureParticle = context.hasMaterial("particle") ? spriteGetter.apply(context.getMaterial("particle")) : textureTop;
-		
+
 		return new RootDynamicModel(textureTop, textureMiddle, textureBottom, textureOverlay, textureParticle, this.emissiveBase(), this.emissiveOverlay());
 	}
 
@@ -117,14 +117,14 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 				StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
 
 				if (distDown == 0 && !noBottom) {
-					core.bX = 0.5D;
-					core.bZ = 0.5D;
+					core.bX = 0.5F;
+					core.bZ = 0.5F;
 				}
 				if (distUp == 0 && !noTop) {
-					core.tX = 0.5D;
-					core.tZ = 0.5D;
+					core.tX = 0.5F;
+					core.tZ = 0.5F;
 				}
-				
+
 				boolean hasTop = distUp == 0 && !noTop;
 				boolean hasBottom = distDown == 0 && !noBottom;
 
@@ -134,7 +134,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 
 				for(int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
-					
+
 					if(i == 0) {
 						builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
 						if(emissiveBase)
@@ -149,7 +149,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 						else
 							builder.removeLightmap();
 					}
-				
+
 					// front
 					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
@@ -170,10 +170,10 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
 					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-		
+
 					// Do not render overlay on top/bottom faces
 					if(i == 1) continue;
-					
+
 					// top
 					if (distUp == 0) {
 						builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
@@ -181,7 +181,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
 						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
 					}
-		
+
 					// bottom
 					if (distDown == 0) {
 						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
@@ -216,9 +216,9 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 				//TODO pool pos probably
 				MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
 				BlockState mutableBlockState = state;
-				
+
 				hasOverlay = stalactite.doesRenderOverlay(level, mutablePos, mutableBlockState);
-				
+
 				for (distUp = 0; distUp < maxLength; distUp++) {
 					mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY + (1 + distUp)));
 					if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
@@ -235,9 +235,9 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 						noBottom = true;
 					break;
 				}
-				
+
 			}
-			
+
 			return coolAndGoodModelData.derive()
 				.with(POS_X, pos.getX()).with(POS_Y, pos_getY).with(POS_Z, pos.getZ())
 				.with(DIST_UP, distUp).with(DIST_DOWN, distDown)
@@ -250,7 +250,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 		public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data) {
 			return data.get(HAS_OVERLAY) ? ChunkRenderTypeSet.of(RenderType.TRANSLUCENT) : IDynamicBakedModel.super.getRenderTypes(state, rand, data);
 		}
-		
+
 		@Override
 		public boolean useAmbientOcclusion() {
 			return true;
@@ -289,7 +289,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 		public RootGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
 			boolean emissiveBase = jsonObject.has("emissive_base") && jsonObject.get("emissive_base").getAsBoolean();
 			boolean emissiveOverlay = jsonObject.has("emissive_overlay") && jsonObject.get("emissive_overlay").getAsBoolean();
-			
+
 			return new RootGeometry(emissiveBase, emissiveOverlay);
 		}
 	}

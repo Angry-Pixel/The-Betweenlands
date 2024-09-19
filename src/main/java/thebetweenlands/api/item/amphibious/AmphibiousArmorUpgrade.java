@@ -1,13 +1,12 @@
-package thebetweenlands.api.item;
+package thebetweenlands.api.item.amphibious;
 
-import com.google.common.collect.Multimap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 public interface AmphibiousArmorUpgrade extends AmphibiousArmorAttributeUpgrade {
@@ -18,18 +17,16 @@ public interface AmphibiousArmorUpgrade extends AmphibiousArmorAttributeUpgrade 
 		NONE
 	}
 
-	ResourceLocation getId();
-
 	boolean matches(EquipmentSlot armorType, ItemStack stack);
 
 	Set<EquipmentSlot> getArmorTypes();
 
 	@Override
-	default void applyAttributeModifiers(ArmorItem.Type armorType, ItemStack armor, int count, Map<AmphibiousArmorUpgrade, Map<EquipmentSlot, Integer>> counts, Multimap<String, AttributeModifier> modifiers) { }
+	default void applyAttributeModifiers(ArmorItem.Type armorType, ItemStack stack, int count, List<ItemAttributeModifiers.Entry> modifiers) { }
 
 	default void onChanged(EquipmentSlot armorType, ItemStack armor, ItemStack stack) { }
 
-	default boolean isBlacklisted(AmphibiousArmorUpgrade other) {
+	default boolean isBlacklisted(Holder<AmphibiousArmorUpgrade> other) {
 		return false;
 	}
 

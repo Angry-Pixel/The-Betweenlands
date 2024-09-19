@@ -8,9 +8,12 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.*;
@@ -19,6 +22,8 @@ public class DataComponentRegistry {
 
 	public static final DeferredRegister<DataComponentType<?>> COMPONENTS = DeferredRegister.createDataComponents(TheBetweenlands.ID);
 
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> AMPHIBIOUS_ARMOR_FILTERS = COMPONENTS.register("amphibious_armor_filters", () -> DataComponentType.<ItemContainerContents>builder().persistent(ItemContainerContents.CODEC).networkSynchronized(ItemContainerContents.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmphibiousUpgrades>> AMPHIBIOUS_UPGRADES = COMPONENTS.register("amphibious_upgrades", () -> DataComponentType.<AmphibiousUpgrades>builder().persistent(AmphibiousUpgrades.CODEC).networkSynchronized(AmphibiousUpgrades.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectContents>> ASPECT_CONTENTS = COMPONENTS.register("aspect_contents", () -> DataComponentType.<AspectContents>builder().persistent(AspectContents.CODEC).networkSynchronized(AspectContents.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<HerbloreBookData>> BOOK_DATA = COMPONENTS.register("book_data", () -> DataComponentType.<HerbloreBookData>builder().persistent(HerbloreBookData.CODEC).networkSynchronized(HerbloreBookData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompostData>> COMPOST = COMPONENTS.register("compost", () -> DataComponentType.<CompostData>builder().persistent(CompostData.CODEC).networkSynchronized(CompostData.STREAM_CODEC).cacheEncoding().build());
@@ -32,10 +37,12 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemStack>> ROTTEN_FOOD = COMPONENTS.register("rotten_food", () -> DataComponentType.<ItemStack>builder().persistent(ItemStack.CODEC).networkSynchronized(ItemStack.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> SIMULACRUM_EFFECT = COMPONENTS.register("simulacrum_effect", () -> DataComponentType.<ResourceLocation>builder().persistent(ResourceLocation.CODEC).networkSynchronized(ResourceLocation.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> ROT_TIME = COMPONENTS.register("rot_time", () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmphibiousArmorUpgrade>> SELECTED_UPGRADE = COMPONENTS.register("selected_upgrade", () -> DataComponentType.<AmphibiousArmorUpgrade>builder().persistent(BLRegistries.AMPHIBIOUS_ARMOR_UPGRADES.byNameCodec()).networkSynchronized(ByteBufCodecs.registry(BLRegistries.Keys.AMPHIBIOUS_ARMOR_UPGRADES)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<FluidComponent>> STORED_FLUID = COMPONENTS.register("stored_fluid", () -> DataComponentType.<FluidComponent>builder().persistent(FluidComponent.CODEC).networkSynchronized(FluidComponent.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<GlobalPos>> TALISMAN_LINK = COMPONENTS.register("talisman_link", () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> THROWING = COMPONENTS.register("throwing", () -> DataComponentType.<Unit>builder().persistent(Codec.unit(Unit.INSTANCE)).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WALK_TICKS = COMPONENTS.register("walk_ticks", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UpgradeDamage>> UPGRADE_DAMAGE = COMPONENTS.register("upgrade_damage", () -> DataComponentType.<UpgradeDamage>builder().persistent(UpgradeDamage.CODEC).networkSynchronized(UpgradeDamage.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WORMS = COMPONENTS.register("worms", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());

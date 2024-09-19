@@ -90,7 +90,7 @@ public class ElixirCommonHandler {
 					if (entity.getDeltaMovement().y() < 0.0F && (lookVec.y > 0.0F || (entity.zza == 0.0F && entity.xxa == 0.0F))) {
 						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0F, 0.9F - relStrength * 0.5F, 1.0F));
 					}
-					if (entity.isCrouching()) {
+					if (entity.isShiftKeyDown()) {
 						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0F, 0.15F * (1.0F - relStrength), 1.0F));
 					}
 					entity.setDeltaMovement(entity.getDeltaMovement().multiply(relStrength, 1.0F, relStrength));
@@ -98,7 +98,7 @@ public class ElixirCommonHandler {
 				}
 			}
 
-			if (ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().isActive(entity) && !entity.isInWater() && !entity.isCrouching()) {
+			if (ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().isActive(entity) && !entity.isInWater() && !entity.isShiftKeyDown()) {
 				BlockState state = entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getBoundingBox().minY + Math.min(-0.1D, entity.getDeltaMovement().y()), entity.getZ()));
 				if (state.liquid()) {
 					float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().getStrength(entity)) / 4.0F, 1.0F);

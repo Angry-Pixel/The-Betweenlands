@@ -5,6 +5,8 @@ import thebetweenlands.common.TheBetweenlands;
 
 public class BLModelLayers {
 
+	public static final ModelLayerLocation AMPHIBIOUS_ARMOR = register("amphibious_armor");
+
 	public static final ModelLayerLocation ANADIA = register("anadia");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
 	public static final ModelLayerLocation FISH_HOOK = register("fish_hook");

@@ -77,7 +77,7 @@ public class RopeBlock extends Block {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (player.isCrouching()) {
+		if (player.isShiftKeyDown()) {
 			BlockPos offsetPos = pos.below();
 			while (level.getBlockState(offsetPos).is(this)) {
 				offsetPos = offsetPos.below();

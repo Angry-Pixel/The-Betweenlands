@@ -41,7 +41,7 @@ public class MarshRunnerBootsItem extends RubberBootsItem {
 	}
 
 	public static boolean checkPlayerWalkOnWater(Player player) {
-		if (player.isCrouching() || ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.get().isActive(player)) return false;
+		if (player.isShiftKeyDown() || ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.get().isActive(player)) return false;
 		ItemStack boots = player.getInventory().getArmor(0);
 		if (!boots.isEmpty() && boots.getItem() instanceof MarshRunnerBootsItem) {
 			return boots.getOrDefault(DataComponentRegistry.WALK_TICKS, 0) > 1;

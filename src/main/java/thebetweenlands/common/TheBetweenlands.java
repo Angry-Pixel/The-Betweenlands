@@ -91,6 +91,7 @@ public class TheBetweenlands {
 		LootFunctionRegistry.FUNCTIONS.register(eventbus);
 		AspectCalculatorRegistry.CALCULATORS.register(eventbus);
 		CenserRecipeRegistry.RECIPES.register(eventbus);
+		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
 
 		StorageRegistry.preInit();
 	}

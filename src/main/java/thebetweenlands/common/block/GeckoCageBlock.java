@@ -78,7 +78,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (level.getBlockEntity(pos) instanceof GeckoCageBlockEntity cage) {
-			if (player.isCrouching())
+			if (player.isShiftKeyDown())
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
 			if (!stack.isEmpty()) {

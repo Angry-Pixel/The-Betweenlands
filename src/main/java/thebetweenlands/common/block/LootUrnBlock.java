@@ -88,7 +88,7 @@ public class LootUrnBlock extends HorizontalBaseEntityBlock implements SwampWate
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof LootUrnBlockEntity urn) {
 			InvWrapper wrapper = new InvWrapper(urn);
-			if (player.isCrouching()) {
+			if (player.isShiftKeyDown()) {
 				for (int i = 0; i < wrapper.getSlots(); i++) {
 					ItemStack extracted = wrapper.extractItem(i, 1, false);
 					if (!extracted.isEmpty()) {

@@ -16,6 +16,9 @@ import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.items.*;
+import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.items.amphibious.UpgradeToggleItem;
+import thebetweenlands.common.items.amphibious.UpgradeTriggerItem;
 import thebetweenlands.util.BLDyeColor;
 
 public class ItemRegistry {
@@ -303,7 +306,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> URCHIN_SPIKE_UPGRADE = ITEMS.register("urchin_spike_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FISH_VORTEX_UPGRADE = ITEMS.register("fish_vortex_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	//stones
+	public static final DeferredItem<Item> BIOPATHIC_TRIGGERSTONE = ITEMS.register("biopathic_triggerstone", () -> new UpgradeTriggerItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BIOPATHIC_LINKSTONE = ITEMS.register("biopathic_linkstone", () -> new UpgradeToggleItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(NonNullList.withSize(4, ItemStack.EMPTY))).stacksTo(1)));
 
 	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties().rarity(Rarity.RARE)));
@@ -483,6 +487,7 @@ public class ItemRegistry {
 
 	//debug items
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
+	public static final DeferredItem<Item> TEST_CHIMP = ITEMS.register("test_chimp", () -> new TestChimpItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
 
 	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));

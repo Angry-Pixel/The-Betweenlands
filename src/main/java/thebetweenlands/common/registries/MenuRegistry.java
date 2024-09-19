@@ -13,6 +13,7 @@ public class MenuRegistry {
 
 	public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, TheBetweenlands.ID);
 
+	public static final DeferredHolder<MenuType<?>, MenuType<AmphibiousArmorMenu>> AMPHIBIOUS_ARMOR = MENUS.register("amphibious_armor", () -> IMenuTypeExtension.create(AmphibiousArmorMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<AnimatorMenu>> ANIMATOR = MENUS.register("animator", () -> IMenuTypeExtension.create(AnimatorMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<BarrelMenu>> BARREL = MENUS.register("barrel", () ->  IMenuTypeExtension.create(BarrelMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<CenserMenu>> CENSER = MENUS.register("censer", () -> IMenuTypeExtension.create(CenserMenu::new));

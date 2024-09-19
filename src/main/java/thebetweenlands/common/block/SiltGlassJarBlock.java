@@ -99,7 +99,7 @@ public class SiltGlassJarBlock extends BaseEntityBlock {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (level.getBlockEntity(pos) instanceof SiltGlassJarBlockEntity jar) {
-			if(player.isCrouching()) {
+			if(player.isShiftKeyDown()) {
 				for(int i = jar.getContainerSize() - 1; i >= 0; i--) {
 					if(!jar.getItem(i).isEmpty()) {
 						if (!level.isClientSide()) {

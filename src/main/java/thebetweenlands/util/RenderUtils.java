@@ -31,16 +31,22 @@ public class RenderUtils {
 	public static FboMode framebufferType;
 
 	public static void drawGhostItemAtSlot(GuiGraphics graphics, ItemStack stack, Slot slot) {
-		graphics.renderFakeItem(stack, slot.x, slot.y);
+		drawGhostItemAtSlot(graphics, stack, slot.x, slot.y, 16, true);
+	}
+
+	public static void drawGhostItemAtSlot(GuiGraphics graphics, ItemStack stack, int startX, int startY, int size, boolean renderNumber) {
+		graphics.renderFakeItem(stack, startX, startY);
 
 		// draw 50% gray rectangle over the item
 		RenderSystem.disableDepthTest();
 		graphics.pose().pushPose();
 		graphics.pose().translate(0.0D, 0.0D, 200.0D);
-		graphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x9f8b8b8b);
+		graphics.fill(startX, startY, startX + size, startY + size, 0x9f8b8b8b);
 		graphics.pose().popPose();
 		RenderSystem.enableDepthTest();
-		graphics.renderItemDecorations(Minecraft.getInstance().font, stack, slot.x, slot.y);
+		if (renderNumber) {
+			graphics.renderItemDecorations(Minecraft.getInstance().font, stack, startX, startY);
+		}
 	}
 
 	public static int getRenderTickCounter() {

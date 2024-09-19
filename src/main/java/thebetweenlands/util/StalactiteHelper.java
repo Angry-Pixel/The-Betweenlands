@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class StalactiteHelper {
 
-	public double tX, tZ;
-	public double bX, bZ;
+	public float tX, tZ;
+	public float bX, bZ;
 
 	public static StalactiteHelper getValsFor(int x, int y, int z) {
 		int size = 14;
@@ -27,10 +27,10 @@ public class StalactiteHelper {
 		int hZ = here / size + margin;
 
 		StalactiteHelper core = new StalactiteHelper();
-		core.bX = ((double)(hZ + bZ) / 2) / 16;
-		core.bZ = ((double)(hX + bX) / 2) / 16;
-		core.tX = ((double)(hZ + aZ) / 2) / 16;
-		core.tZ = ((double)(hX + aX) / 2) / 16;
+		core.bX = ((hZ + bZ) / 2.0F) / 16.0F;
+		core.bZ = ((hX + bX) / 2.0F) / 16.0F;
+		core.tX = ((hZ + aZ) / 2.0F) / 16.0F;
+		core.tZ = ((hX + aX) / 2.0F) / 16.0F;
 		return core;
 	}
 

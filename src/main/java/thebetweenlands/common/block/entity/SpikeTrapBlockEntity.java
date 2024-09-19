@@ -127,7 +127,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 			for (LivingEntity entity : list) {
 				if (entity != null)
 					if (!(entity instanceof BLEntity))
-						entity.hurt(level.damageSources().generic(), 2);
+						entity.hurt(level.damageSources().cactus(), 2);
 			}
 		}
 	}

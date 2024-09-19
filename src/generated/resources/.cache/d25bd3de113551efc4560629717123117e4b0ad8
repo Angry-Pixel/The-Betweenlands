@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-11T23:24:20.6310021	Item Models: thebetweenlands
+// 1.21.1	2024-09-17T14:49:55.0961456	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -60,6 +60,11 @@ c4ea81227ad9a8bde80868084efcf8657a91c48a assets/thebetweenlands/models/item/apse
 7f23334a8d0bd09beb963292d9bd2b4d9508a223 assets/thebetweenlands/models/item/bark_amulet.json
 c23d7f1004b43d96e65752479aa2712834407cb7 assets/thebetweenlands/models/item/barnacle.json
 1b283ecf733bda0a6c64a5a4c6a6f1bb01d1a169 assets/thebetweenlands/models/item/betweenstone_pebble.json
+6fb0bfd2556c86f3c43484edeadf2749168d9d34 assets/thebetweenlands/models/item/biopathic_linkstone.json
+5f9b1b47c4f2156ee729ab9200a8567ba2d08d6d assets/thebetweenlands/models/item/biopathic_triggerstone.json
+d6df531a6d423dfe5bb39f81bbd41d05fc15782b assets/thebetweenlands/models/item/biopathic_triggerstone_electric.json
+34f10c051cfecb42c2c5532e528aad29b6e2736b assets/thebetweenlands/models/item/biopathic_triggerstone_urchin.json
+43300e995d047452443518f1816b7fb9fd5bf534 assets/thebetweenlands/models/item/biopathic_triggerstone_vortex.json
 d29f7205657e48772892cf19459988fd63a62ce4 assets/thebetweenlands/models/item/black_hat_mushroom_item.json
 2b292d380946e9fbc379ed3e7e148a82759359a2 assets/thebetweenlands/models/item/bladderwort_flower_drop.json
 193b9d3cc76be58c6bcec3ae105899531f1f50f0 assets/thebetweenlands/models/item/bladderwort_stalk_drop.json
@@ -150,6 +155,7 @@ c92c883ce786ce3bd2d10b33be2cfb07142f475f assets/thebetweenlands/models/item/frie
 a976f1f2fed394712cd6570759a24b3c86b78dba assets/thebetweenlands/models/item/gem_singer.json
 d7cc1cba53b460bb8625f2b0751d66694f5108b3 assets/thebetweenlands/models/item/gerts_donut.json
 29e7db437a8b4b886f64f6023504d28c7b8f8ecd assets/thebetweenlands/models/item/glide_upgrade.json
+56be181c2018d26af90298272515abddf0f98f6c assets/thebetweenlands/models/item/glue.json
 f3686d0e78227f9ae84295e06b77bc14e1a474c9 assets/thebetweenlands/models/item/golden_club_flowers.json
 fa5deefa828d8e31514448807dcf3af59d070cba assets/thebetweenlands/models/item/green_aspect_vial.json
 5ee34ddd5291318dc9ad545d3d33552fbe4274b2 assets/thebetweenlands/models/item/green_dentrothyst_shard.json
@@ -418,6 +424,7 @@ c1b472a1de08eb15f4a598a890cbb373de6f3f0e assets/thebetweenlands/models/item/tang
 a78e5e503a099b76a3cc25af3aeb36cc59ef83b6 assets/thebetweenlands/models/item/tar_beast_heart.json
 de9d9ed2d20a5dc4cfe6bc427a3cdf0feeff0c3e assets/thebetweenlands/models/item/tar_drip.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/tar_lore_scrap.json
+5590bf60ec8ab4c0f569897c9c5bbdb7090e5d50 assets/thebetweenlands/models/item/test_chimp.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/them_lore_scrap.json
 011504b75b1e4527b97b6cc62960245df32fd772 assets/thebetweenlands/models/item/thorn_branch.json
 a93261e0ec87f3a9a324571c5754b2dc8dace9e6 assets/thebetweenlands/models/item/tiny_sludge_worm.json

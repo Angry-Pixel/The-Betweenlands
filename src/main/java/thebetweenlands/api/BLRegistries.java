@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.common.TheBetweenlands;
@@ -18,6 +19,7 @@ import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 public class BLRegistries {
+	public static final Registry<AmphibiousArmorUpgrade> AMPHIBIOUS_ARMOR_UPGRADES = new RegistryBuilder<>(Keys.AMPHIBIOUS_ARMOR_UPGRADES).sync(true).create();
 	public static final Registry<MapCodec<? extends AspectCalculatorType>> ASPECT_CALCULATOR_TYPE = new RegistryBuilder<>(Keys.ASPECT_CALCULATOR_TYPE).sync(true).create();
 	public static final Registry<CenserRecipe<?>> CENSER_RECIPES = new RegistryBuilder<>(Keys.CENSER_RECIPES).sync(true).create();
 	public static final Registry<ElixirEffect> ELIXIR_EFFECTS = new RegistryBuilder<>(Keys.ELIXIR_EFFECTS).sync(true).create();
@@ -30,6 +32,7 @@ public class BLRegistries {
 
 		private static final String DATAPACK_PREFIX = "betweenlands";
 
+		public static final ResourceKey<Registry<AmphibiousArmorUpgrade>> AMPHIBIOUS_ARMOR_UPGRADES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("amphibious_armor_upgrades"));
 		public static final ResourceKey<Registry<MapCodec<? extends AspectCalculatorType>>> ASPECT_CALCULATOR_TYPE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("aspect_calculator_type"));
 		public static final ResourceKey<Registry<AspectItem>> ASPECT_ITEMS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "aspect/item"));
 		public static final ResourceKey<Registry<AspectType>> ASPECT_TYPES = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "aspect/type"));

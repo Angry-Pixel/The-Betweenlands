@@ -18,13 +18,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.StringUtils;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.registries.AspectTypeRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.EntityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.*;
 import thebetweenlands.util.LangConversionHelper;
 import thebetweenlands.util.LangFormatSplitter;
 
@@ -931,10 +929,17 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.SWAMP_HAG, "Swamp Hag");
 		this.addEntityAndEgg(EntityRegistry.WIGHT, "Wight");
 
+		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
+		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
+		this.addEntityType(EntityRegistry.ELECTRIC_SHOCK, "Electric Shock");
 		this.addEntityType(EntityRegistry.ELIXIR, "Thrown Elixir");
 		this.addEntityType(EntityRegistry.FISH_BAIT, "Fish Bait");
 		this.addEntityType(EntityRegistry.FISH_HOOK, "Fishing Hook");
+		this.addEntityType(EntityRegistry.FISH_VORTEX, "Fish Vortex");
+		this.addEntityType(EntityRegistry.ITEM_FRAME, "Item Frame");
 		this.addEntityType(EntityRegistry.SEAT, "Seat");
+		this.addEntityType(EntityRegistry.URCHIN_SPIKE, "Urchin Spike");
+
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");
@@ -990,6 +995,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.steeping_pot_recipe", "Steeping Pot");
 		this.add("item.thebetweenlands.silk_bundle_recipe", "Silk Bundle");
 
+		this.add("item.thebetweenlands.amphibious_upgrade.damaged", "Damaged Amphibious Armor Upgrade (%d/%d)");
+		this.add("item.thebetweenlands.amphibious_upgrade.broke", "Armor Upgrade %s broke.");
 		this.add("item.thebetweenlands.amphibious_upgrade.format", "Amphibious %s");
 		this.add("item.thebetweenlands.amphibious_upgrade.helmet", "Helmet");
 		this.add("item.thebetweenlands.amphibious_upgrade.chestplate", "Chestplate");
@@ -1233,6 +1240,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.AMPHIBIOUS_CHESTPLATE, "Amphibious Chestplate");
 		this.addItem(ItemRegistry.AMPHIBIOUS_LEGGINGS, "Amphibious Leggings");
 		this.addItem(ItemRegistry.AMPHIBIOUS_BOOTS, "Amphibious Boots");
+		this.add("item.thebetweenlands.amphibious_armor.upgrade", " - %s x%s");
 		this.addItem(ItemRegistry.RUBBER_BOOTS, "Rubber Boots");
 		this.addItem(ItemRegistry.MARSH_RUNNER_BOOTS, "Boots of the Marsh Runner");
 		this.addItem(ItemRegistry.WEEDWOOD_SWORD, "Weedwood Sword");
@@ -1279,6 +1287,13 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.FISH_VORTEX_UPGRADE, "Fish Vortex Upgrade");
 		this.addItem(ItemRegistry.GLIDE_UPGRADE, "Glide Upgrade");
 		this.addItem(ItemRegistry.URCHIN_SPIKE_UPGRADE, "Urchin Spike Upgrade");
+		this.addItemWithDesc(ItemRegistry.BIOPATHIC_TRIGGERSTONE, "Biopathic Triggerstone", "Activates Amphibious Armor Ability Upgrade");
+		this.add("item.thebetweenlands.biopathic_triggerstone.activate", "Right Click to Activate");
+		this.addItemWithDesc(ItemRegistry.BIOPATHIC_LINKSTONE, "Biopathic Linkstone", "Toggles Amphibious Armor Ability Upgrade");
+		this.add("item.thebetweenlands.biopathic_linkstone.activate", "Right Click to Toggle");
+		this.add("item.thebetweenlands.biopathic_linkstone.toggle", "%s Active: %s");
+		this.add("item.thebetweenlands.stone.select", "Sneak + Right Click to Scroll");
+		this.add("item.thebetweenlands.stone.selected", "Selected Effect: %s");
 		this.addItem(ItemRegistry.SILK_BUNDLE, "Silk Bundle");
 		this.add("item.thebetweenlands.silk_bundle.item", "- %s");
 
@@ -1338,6 +1353,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.MAGIC_ITEM_MAGNET, "Magic Item Magnet");
 		this.addItem(ItemRegistry.GEM_SINGER, "Gem Singer");
 		this.addItem(ItemRegistry.SNOT_POD, "Rocksnot Pod");
+		this.addItem(ItemRegistry.GLUE, "Glue");
+		this.addItem(ItemRegistry.TEST_CHIMP, "Test Chimp");
 
 		this.addItem(ItemRegistry.GROUND_LEAF, "Ground Leaf");
 		this.addItem(ItemRegistry.GROUND_CATTAIL, "Ground Cattail");
@@ -1519,6 +1536,13 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addAspect(AspectTypeRegistry.YIHINREN, "Form", "This effect has influence on the form of things, both physical and psychological. A very rare aspect that is mainly used in the special potions.");
 		this.addAspect(AspectTypeRegistry.YUNUGAZ, "Wind", "Magical property which relates to wind. Any combination with this effect can be related to the element wind.");
 
+		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.NONE, "None");
+		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.ASCENT_BOOST, "Ascent");
+		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.ELECTRIC, "Electric");
+		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.FISH_VORTEX, "Fish Vortex");
+		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.GLIDE, "Glide");
+		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.URCHIN_SPIKE, "Urchin Spikes");
+
 		this.add("commands.thebetweenlands.aspect.empty_hand", "Must be holding an item");
 		this.add("commands.thebetweenlands.aspect.no_book", "There's no Herblore Book to write to");
 		this.add("commands.thebetweenlands.aspect.no_aspects_held", "Item has no more possible aspects to discover");
@@ -1576,6 +1600,10 @@ public class BLLanguageProvider extends LanguageProvider {
 	public void addEntityAndEgg(DeferredHolder<EntityType<?>, ? extends EntityType<?>> entity, String name) {
 		this.addEntityType(entity, name);
 		this.add("item.thebetweenlands." + entity.getId().getPath() + "_spawn_egg", name + " Spawn Egg");
+	}
+
+	public void addAmphibiousUpgrade(DeferredHolder<AmphibiousArmorUpgrade, ? extends AmphibiousArmorUpgrade> upgrade, String name) {
+		this.add(Util.makeDescriptionId("amphibious_upgrade", upgrade.getId()), name);
 	}
 
 	@Override

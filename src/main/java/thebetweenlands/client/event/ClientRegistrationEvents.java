@@ -41,6 +41,7 @@ import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.client.handler.ClientHandlerEvents;
+import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.block.*;
@@ -49,10 +50,7 @@ import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.LakeCavernSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.RootmanSimulacrumModels;
 import thebetweenlands.client.model.entity.*;
-import thebetweenlands.client.particle.AnimatorParticle;
-import thebetweenlands.client.particle.BugParticle;
-import thebetweenlands.client.particle.MothParticle;
-import thebetweenlands.client.particle.SpiritButterflyParticle;
+import thebetweenlands.client.particle.*;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
@@ -66,6 +64,7 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.BLItemFrameItem;
+import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.RenderUtils;
 
@@ -112,6 +111,7 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
+		event.register(MenuRegistry.AMPHIBIOUS_ARMOR.get(), AmphibiousArmorScreen::new);
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
 		event.register(MenuRegistry.BARREL.get(), BarrelScreen::new);
 		event.register(MenuRegistry.CENSER.get(), CenserScreen::new);
@@ -139,6 +139,9 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ITEM_FRAME.get(), BLItemFrameRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BETWEENSTONE_PEBBLE.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FISH_BAIT.get(), ItemEntityRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FISH_VORTEX.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.URCHIN_SPIKE.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ELECTRIC_SHOCK.get(), NoopRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -177,6 +180,8 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
+
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
@@ -294,6 +299,14 @@ public class ClientRegistrationEvents {
 			}
 		});
 		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.BIOPATHIC_TRIGGERSTONE.get(), TheBetweenlands.prefix("effect"), (stack, level, entity, seed) -> {
+			var upgrade = stack.getOrDefault(DataComponentRegistry.SELECTED_UPGRADE, AmphibiousArmorUpgradeRegistry.NONE.get());
+			if (upgrade == AmphibiousArmorUpgradeRegistry.ELECTRIC.get()) return 1.0F;
+			if (upgrade == AmphibiousArmorUpgradeRegistry.URCHIN_SPIKE.get()) return 2.0F;
+			if (upgrade == AmphibiousArmorUpgradeRegistry.FISH_VORTEX.get()) return 3.0F;
+			return 0.0F;
+		});
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -335,6 +348,10 @@ public class ClientRegistrationEvents {
 			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem(),
 			BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.asItem(),
 			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem());
+
+		event.registerItem(AmphibiousArmorItem.ArmorRender.INSTANCE,
+			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
+			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
 
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override
@@ -454,6 +471,11 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.SILK_MOTH.get(), BugParticle.SilkMothFactory::new);
 		event.registerSpriteSet(ParticleRegistry.SPIRIT_BUTTERFLY.get(), SpiritButterflyParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_BUG.get(), BugParticle.WaterBugFactory::new);
+		event.registerSpriteSet(ParticleRegistry.FANCY_BUBBLE.get(), FancyBubbleParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.FANCY_DRIP.get(), FancyDripParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.RAIN.get(), BLRainParticle.Factory::new);
+		event.registerSpecial(ParticleRegistry.URCHIN_SPIKE.get(), new UrchinSpikeParticle.Factory());
+		event.registerSpriteSet(ParticleRegistry.FISH_VORTEX.get(), FishVortexParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

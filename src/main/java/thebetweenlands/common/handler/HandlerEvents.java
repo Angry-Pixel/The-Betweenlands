@@ -4,12 +4,22 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.common.component.SimpleAttachmentHandler;
 import thebetweenlands.common.component.SimpleAttachmentType;
+import thebetweenlands.common.event.SimulacrumEvents;
 
 public class HandlerEvents {
 
 	public static void init(Dist dist) {
 		NeoForge.EVENT_BUS.addListener(SimpleAttachmentHandler::onPlayerJoinWorld);
-		
+
+		//armor
+		NeoForge.EVENT_BUS.addListener(ArmorHandler::ignoreDamageWhenStackingAmphibiousUpgrades);
+		NeoForge.EVENT_BUS.addListener(ArmorHandler::modifyBreakSpeedWithLurkerArmor);
+		NeoForge.EVENT_BUS.addListener(ArmorHandler::reduceFireDamageWithSyrmorite);
+
+		//attacks
+		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleAttacks);
+		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleCircleGemDamageBlock);
+
 		//corrosion
 		NeoForge.EVENT_BUS.addListener(CorrosionHandler::addCorrosionTooltips);
 		NeoForge.EVENT_BUS.addListener(CorrosionHandler::changeItemModifiers);

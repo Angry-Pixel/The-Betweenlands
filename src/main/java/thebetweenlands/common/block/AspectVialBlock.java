@@ -56,7 +56,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 			if (stack.getItem() instanceof AspectVialItem vialItem && stack.has(DataComponentRegistry.ASPECT_CONTENTS)) {
 				AspectContents contents = stack.get(DataComponentRegistry.ASPECT_CONTENTS);
 				if (contents.aspect().isPresent()) {
-					if (!player.isCrouching()) {
+					if (!player.isShiftKeyDown()) {
 						if (vial.getAspect() == null || vial.getAspect().type() == contents.aspect().get()) {
 							if (!level.isClientSide()) {
 								if (vial.getAspect() == null)
@@ -85,7 +85,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 						}
 					}
 				}
-			} else if (stack.getItem() instanceof DentrothystVialItem vialItem && player.isCrouching() && vial.getAspect() != null) {
+			} else if (stack.getItem() instanceof DentrothystVialItem vialItem && player.isShiftKeyDown() && vial.getAspect() != null) {
 				if (!level.isClientSide()) {
 					Aspect aspect = vial.getAspect();
 					int removedAmount = vial.removeAmount(100);
@@ -109,7 +109,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (player.isCrouching()) {
+		if (player.isShiftKeyDown()) {
 			if (!level.isClientSide()) {
 				level.setBlockAndUpdate(pos, state.setValue(RANDOM_POSITION, !state.getValue(RANDOM_POSITION)));
 			}

@@ -66,7 +66,7 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock implements SwampW
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (player.isCreative() && player.isCrouching()) {
+		if (player.isCreative() && player.isShiftKeyDown()) {
 
 			if (!level.isClientSide()) {
 				if (level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {

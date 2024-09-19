@@ -83,7 +83,7 @@ public class DungeonDoorRunesBlock extends HorizontalBaseEntityBlock {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (!state.getValue(INVISIBLE) && !level.isClientSide() && hitResult.getDirection() == state.getValue(FACING)) {
 			if (level.getBlockEntity(pos) instanceof DungeonDoorRunesBlockEntity runes && !runes.is_gate_entrance) {
-				if (player.isCreative() && player.isCrouching()) {
+				if (player.isCreative() && player.isShiftKeyDown()) {
 					runes.enterLockCode(level, pos);
 					player.displayClientMessage(Component.translatable("block.thebetweenlands.dungeon_door_runes.locked"), true);
 				} else {

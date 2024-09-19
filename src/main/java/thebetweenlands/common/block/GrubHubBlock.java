@@ -65,13 +65,13 @@ public class GrubHubBlock extends BaseEntityBlock {
 			if (!hub.getItem(0).isEmpty()) {
 				if (!level.isClientSide()) {
 					ItemStack extracted = hub.getItem(0).copy();
-					if (!player.isCrouching()) {
+					if (!player.isShiftKeyDown()) {
 						extracted.setCount(1);
 					}
 					ItemEntity item = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
 					item.setDeltaMovement(Vec3.ZERO);
 					level.addFreshEntity(item);
-					if (!player.isCrouching()) {
+					if (!player.isShiftKeyDown()) {
 						hub.getItem(0).shrink(1);
 					} else {
 						hub.setItem(0, ItemStack.EMPTY);

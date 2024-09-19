@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
@@ -20,8 +21,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.network.clientbound.attachment.UpdateDecayDataPacket;
+import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.MathUtils;
@@ -176,14 +180,13 @@ public class PlayerDecayHandler {
 	private static int getArmorDecayReduction(LivingEntity entity) {
 		int armorCount = 0;
 
-		// TODO After Amphibious Armour is done (also, maybe make this something an interface or data component can handle)
-//		for (ItemStack armor : entity.getArmorSlots()) {
-//			if (armor.getItem() instanceof ItemAmphibiousArmor) {
-//				if (((ItemAmphibiousArmor) armor.getItem()).getUpgradeCount(armor, AmphibiousArmorUpgrades.DECAY_DECREASE) >= 1) {
-//					armorCount++;
-//				}
-//			}
-//		}
+		for (ItemStack armor : entity.getArmorSlots()) {
+			if (armor.has(DataComponentRegistry.AMPHIBIOUS_UPGRADES)) {
+				if (armor.get(DataComponentRegistry.AMPHIBIOUS_UPGRADES).getAllUniqueUpgradesWithCounts().containsKey(AmphibiousArmorUpgradeRegistry.DECAY_DECREASE)) {
+					armorCount++;
+				}
+			}
+		}
 
 		return armorCount;
 	}

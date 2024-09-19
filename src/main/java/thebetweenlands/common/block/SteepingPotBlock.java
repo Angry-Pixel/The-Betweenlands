@@ -103,7 +103,7 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 			if (pot.getHeatProgress() > 50 && pot.getHeatProgress() < 100 && pot.hasBundle()) {
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 			}
-			if (!player.isCrouching()) {
+			if (!player.isShiftKeyDown()) {
 				if (stack.is(ItemRegistry.SILK_BUNDLE)) {
 					if (pot.getItem(0).isEmpty()) {
 						ItemStack ingredient = stack.consumeAndReturn(1, player);
@@ -125,7 +125,7 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (level.getBlockEntity(pos) instanceof SteepingPotBlockEntity pot) {
-			if (player.isCrouching()) {
+			if (player.isShiftKeyDown()) {
 				if (!pot.getItem(0).isEmpty()) {
 					if (!player.getInventory().add(pot.getItem(0)))
 						player.drop(pot.getItem(0), false);

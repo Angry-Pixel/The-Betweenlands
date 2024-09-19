@@ -82,7 +82,7 @@ public class BLItemFrame extends ItemFrame {
 	public InteractionResult interact(Player player, InteractionHand hand) {
 		ItemStack itemstack = player.getItemInHand(hand);
 
-		if (player.isCrouching()) {
+		if (player.isShiftKeyDown()) {
 			if (itemstack.has(DataComponentRegistry.ASPECT_CONTENTS) && !this.isInvisible()) {
 				var contents = itemstack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY);
 				if (contents.aspect().isPresent() && contents.aspect().get().is(AspectTypeRegistry.FREIWYNN) && contents.amount() > 100) {

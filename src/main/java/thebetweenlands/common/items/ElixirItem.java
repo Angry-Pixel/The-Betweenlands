@@ -33,7 +33,7 @@ public class ElixirItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-		if (player.isCrouching()) {
+		if (player.isShiftKeyDown()) {
 			player.getItemInHand(hand).set(DataComponentRegistry.THROWING, Unit.INSTANCE);
 		}
 		return ItemUtils.startUsingInstantly(level, player, hand);

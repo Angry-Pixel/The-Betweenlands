@@ -318,6 +318,11 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.FISH_VORTEX_UPGRADE);
 		this.basicItem(ItemRegistry.GLIDE_UPGRADE);
 		this.basicItem(ItemRegistry.URCHIN_SPIKE_UPGRADE);
+		this.basicItem(ItemRegistry.BIOPATHIC_TRIGGERSTONE)
+			.override().predicate(TheBetweenlands.prefix("effect"), 1.0F).model(this.basicItem(TheBetweenlands.prefix("biopathic_triggerstone_electric"))).end()
+			.override().predicate(TheBetweenlands.prefix("effect"), 2.0F).model(this.basicItem(TheBetweenlands.prefix("biopathic_triggerstone_urchin"))).end()
+			.override().predicate(TheBetweenlands.prefix("effect"), 3.0F).model(this.basicItem(TheBetweenlands.prefix("biopathic_triggerstone_vortex"))).end();
+		this.basicItem(ItemRegistry.BIOPATHIC_LINKSTONE);
 		this.basicItem(ItemRegistry.SILK_BUNDLE);
 
 		//skull mask
@@ -375,6 +380,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.MAGIC_ITEM_MAGNET);
 		this.basicItem(ItemRegistry.GEM_SINGER);
 		this.basicItem(ItemRegistry.SNOT_POD);
+		this.basicItem(ItemRegistry.GLUE);
+		this.basicItem(ItemRegistry.TEST_CHIMP);
 
 		this.basicItem(ItemRegistry.GROUND_LEAF);
 		this.basicItem(ItemRegistry.GROUND_CATTAIL);

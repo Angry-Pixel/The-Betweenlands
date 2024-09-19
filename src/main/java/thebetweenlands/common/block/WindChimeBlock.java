@@ -68,7 +68,7 @@ public class WindChimeBlock extends BaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (player.isCrouching() && !level.isClientSide()) {
+		if (player.isShiftKeyDown() && !level.isClientSide()) {
 			if (level.getBlockEntity(pos) instanceof WindChimeBlockEntity chime) {
 
 				ResourceLocation newAttunement = chime.cycleAttunedEvent(level);

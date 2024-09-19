@@ -26,6 +26,10 @@ public class ItemContainer implements Container {
 		}
 	}
 
+	public ItemStack getContainerStack() {
+		return this.stack;
+	}
+
 	@Override
 	public int getContainerSize() {
 		return this.contents.size();

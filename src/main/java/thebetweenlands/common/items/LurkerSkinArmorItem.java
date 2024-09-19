@@ -39,7 +39,7 @@ public class LurkerSkinArmorItem extends ArmorItem {
 					boolean fullyInWater = blockState.liquid();
 
 					if (fullyInWater) {
-						if (!player.isCrouching() && player.zza == 0) {
+						if (!player.isShiftKeyDown() && player.zza == 0) {
 							player.setDeltaMovement(player.getDeltaMovement().x(), Math.sin(player.tickCount / 5.0F) * 0.016D, player.getDeltaMovement().z());
 						}
 

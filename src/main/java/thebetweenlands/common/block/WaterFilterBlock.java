@@ -64,7 +64,7 @@ public class WaterFilterBlock extends BaseEntityBlock {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (level.getBlockEntity(pos) instanceof WaterFilterBlockEntity filter) {
 			boolean anyExtracted = false;
-			if (player.isCrouching()) {
+			if (player.isShiftKeyDown()) {
 				for (int i = 0; i < filter.getContainerSize(); i++) {
 					if (!filter.getItem(i).isEmpty()) {
 						anyExtracted = true;

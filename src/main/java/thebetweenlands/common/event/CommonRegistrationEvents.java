@@ -154,6 +154,7 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void makeNewRegistries(NewRegistryEvent event) {
+		event.register(BLRegistries.AMPHIBIOUS_ARMOR_UPGRADES);
 		event.register(BLRegistries.ASPECT_CALCULATOR_TYPE);
 		event.register(BLRegistries.CENSER_RECIPES);
 		event.register(BLRegistries.ELIXIR_EFFECTS);
@@ -188,7 +189,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
-		
+
 		registrar.playToClient(UpdateSimpleAttachmentPacket.TYPE, UpdateSimpleAttachmentPacket.STREAM_CODEC, UpdateSimpleAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));

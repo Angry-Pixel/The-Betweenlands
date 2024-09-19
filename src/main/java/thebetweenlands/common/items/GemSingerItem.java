@@ -72,7 +72,7 @@ public class GemSingerItem extends Item {
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		if(!level.isClientSide()) {
 			ItemStack stack = player.getItemInHand(hand);
-			if(player.isCrouching()) {
+			if(player.isShiftKeyDown()) {
 				this.setTarget(stack, null, null);
 			} else {
 				final int chunkRange = 6;
@@ -146,13 +146,11 @@ public class GemSingerItem extends Item {
 			}
 		}
 
-		if(level.isClientSide() && !player.isCrouching()) {
+		if(level.isClientSide() && !player.isShiftKeyDown()) {
 			level.playSound(player, player.blockPosition(), SoundRegistry.GEM_SINGER.get(), SoundSource.PLAYERS, 2, 1);
 		}
 
-		player.swing(hand);
-
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
+		return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
 	}
 
 	protected void spawnEffect(Player player, BlockPos target, int maxRangeBlocks, int maxDelay) {

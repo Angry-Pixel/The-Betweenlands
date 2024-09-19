@@ -115,7 +115,7 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 		if (level.getBlockEntity(pos) instanceof MothHouseBlockEntity house) {
 			boolean flag = this.extractItems(player, house, false);
 
-			if (player.isCrouching()) {
+			if (player.isShiftKeyDown()) {
 				flag |= this.extractItems(player, house, true);
 			}
 			return flag ? InteractionResult.sidedSuccess(level.isClientSide()) : InteractionResult.PASS;

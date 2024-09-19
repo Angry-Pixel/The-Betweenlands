@@ -39,7 +39,7 @@ public class OfferingTableBlockEntity extends SyncedBlockEntity implements Conta
 			AABB aabb = new AABB(pos).inflate(radius);
 
 			Set<Player> teleportingPlayers = null;
-			for (Player player : level.getEntitiesOfClass(Player.class, aabb, p -> p.isCrouching() && p.distanceToSqr(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f) <= radius * radius)) {
+			for (Player player : level.getEntitiesOfClass(Player.class, aabb, p -> p.isShiftKeyDown() && p.distanceToSqr(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f) <= radius * radius)) {
 				if (teleportingPlayers == null) {
 					teleportingPlayers = new HashSet<>();
 				}

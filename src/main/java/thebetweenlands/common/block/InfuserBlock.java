@@ -73,7 +73,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 				}
 			}
 
-			if (!player.isCrouching()) {
+			if (!player.isShiftKeyDown()) {
 				if (!stack.isEmpty() && !infuser.hasInfusion()) {
 					AspectContents aspectContainer = stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY);
 					if (aspectContainer.aspect().isPresent()) {
@@ -107,7 +107,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 				}
 			}
 
-			if (player.isCrouching() && !infuser.hasInfusion()) {
+			if (player.isShiftKeyDown() && !infuser.hasInfusion()) {
 				for (int i = InfuserBlockEntity.MAX_INGREDIENTS; i >= 0; i--) {
 					if (!infuser.getItem(i).isEmpty()) {
 						ItemEntity itemEntity = player.drop(infuser.getItem(i).copy(), false);
@@ -120,7 +120,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 				}
 			}
 
-			if (player.isCrouching()) {
+			if (player.isShiftKeyDown()) {
 				//TODO data component
 //				if (stack.getItem() instanceof ItemBLBucket && ((ItemBLBucket) stack.getItem()).getFluid(stack) == null && infuser.hasInfusion() && infuser.getWaterAmount() >= FluidType.BUCKET_VOLUME) {
 //					ItemStack infusionBucket = new ItemStack(ItemRegistry.BL_BUCKET_INFUSION, 1, stack.getMetadata());
@@ -163,7 +163,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!player.isCrouching() && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser && infuser.getStirProgress() >= 90) {
+		if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser && infuser.getStirProgress() >= 90) {
 			infuser.setStirProgress(0);
 			return InteractionResult.sidedSuccess(level.isClientSide());
 		}
