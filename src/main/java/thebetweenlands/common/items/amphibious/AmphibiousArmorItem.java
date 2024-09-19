@@ -295,7 +295,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		if (stack.has(DataComponentRegistry.AMPHIBIOUS_UPGRADES)) {
 			for (Object2IntMap.Entry<Item> upgrade : stack.get(DataComponentRegistry.AMPHIBIOUS_UPGRADES).getAllUniqueStacksWithSlotCounts().object2IntEntrySet()) {
-				tooltip.add(Component.translatable("item.thebetweenlands.amphibious_armor.upgrade", upgrade.getKey().getDescription().getString(), upgrade.getIntValue()).withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable("item.thebetweenlands.amphibious_armor.upgrade", upgrade.getKey().getDescription().getString(), String.valueOf(upgrade.getIntValue())).withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}

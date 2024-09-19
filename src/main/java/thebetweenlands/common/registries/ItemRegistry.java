@@ -308,7 +308,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> FISH_VORTEX_UPGRADE = ITEMS.register("fish_vortex_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> BIOPATHIC_TRIGGERSTONE = ITEMS.register("biopathic_triggerstone", () -> new UpgradeTriggerItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> BIOPATHIC_LINKSTONE = ITEMS.register("biopathic_linkstone", () -> new UpgradeToggleItem(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(NonNullList.withSize(4, ItemStack.EMPTY))).stacksTo(1)));
+	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(4))).stacksTo(1)));
 
 	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties().rarity(Rarity.RARE)));
 	//explorer hat

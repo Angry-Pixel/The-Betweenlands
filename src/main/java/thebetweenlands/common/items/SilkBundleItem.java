@@ -39,7 +39,7 @@ public class SilkBundleItem extends Item {
 				public Component getDisplayName() {
 					return SilkBundleItem.this.getName(stack);
 				}
-			});
+			}, buf -> ItemStack.STREAM_CODEC.encode(buf, stack));
 			return InteractionResultHolder.consume(stack);
 		}
 		return InteractionResultHolder.pass(stack);

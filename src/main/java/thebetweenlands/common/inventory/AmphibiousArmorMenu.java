@@ -208,13 +208,6 @@ public class AmphibiousArmorMenu extends AbstractContainerMenu {
 
 	@Override
 	public boolean stillValid(Player player) {
-		//Check if armor is in main inventory
-		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-			if (player.getInventory().getItem(i) == this.container.getContainerStack()) {
-				return true;
-			}
-		}
-
-		return false;
+		return player.getInventory().contains(this.container.getContainerStack());
 	}
 }
