@@ -1,6 +1,5 @@
 package thebetweenlands.common.inventory.container;
 
-import com.google.common.base.MoreObjects;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
@@ -23,6 +22,7 @@ public class AmphibiousArmorContainer implements Container {
 
 	private boolean pauseUpgradeDamageUpdates = false;
 	private boolean useUpgradeFilter = false;
+	private boolean changed = false;
 
 	private final ItemStack stack;
 	private final int slots;
@@ -89,8 +89,7 @@ public class AmphibiousArmorContainer implements Container {
 
 	@Override
 	public void setChanged() {
-		this.stack.set(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.fromEntries(this.contents));
-		ArmorEffectHelper.updateAttributes(this.stack);
+		this.changed = true;
 	}
 
 	@Override
@@ -105,7 +104,10 @@ public class AmphibiousArmorContainer implements Container {
 
 	@Override
 	public void stopOpen(Player player) {
-		this.setChanged();
+		if (this.changed) {
+			this.stack.set(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.fromEntries(this.contents));
+			ArmorEffectHelper.updateAttributes(this.stack);
+		}
 	}
 
 	@Override

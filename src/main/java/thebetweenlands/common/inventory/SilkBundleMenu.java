@@ -73,4 +73,10 @@ public class SilkBundleMenu extends AbstractContainerMenu {
 	public boolean stillValid(Player player) {
 		return player.getInventory().contains(this.bundle.getContainerStack());
 	}
+
+	@Override
+	public void removed(Player player) {
+		this.bundle.stopOpen(player);
+		super.removed(player);
+	}
 }

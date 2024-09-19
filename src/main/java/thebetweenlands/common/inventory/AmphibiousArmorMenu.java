@@ -210,4 +210,10 @@ public class AmphibiousArmorMenu extends AbstractContainerMenu {
 	public boolean stillValid(Player player) {
 		return player.getInventory().contains(this.container.getContainerStack());
 	}
+
+	@Override
+	public void removed(Player player) {
+		this.container.stopOpen(player);
+		super.removed(player);
+	}
 }
