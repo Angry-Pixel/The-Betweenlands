@@ -21,6 +21,7 @@ public class MenuRegistry {
 	public static final DeferredHolder<MenuType<?>, MenuType<DruidAltarMenu>> DRUID_ALTAR = MENUS.register("druid_altar", () -> IMenuTypeExtension.create(DruidAltarMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<FishingTackleBoxMenu>> FISHING_TACKLE_BOX = MENUS.register("fishing_tackle_box", () -> new MenuType<>(FishingTackleBoxMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<FishTrimmingTableMenu>> FISH_TRIMMING_TABLE = MENUS.register("fish_trimming_table", () -> IMenuTypeExtension.create(FishTrimmingTableMenu::new));
+	public static final DeferredHolder<MenuType<?>, MenuType<LurkerSkinPouchMenu>> LURKER_SKIN_POUCH = MENUS.register("lurker_skin_pouch", () -> IMenuTypeExtension.create(LurkerSkinPouchMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<MortarMenu>> MORTAR = MENUS.register("mortar", () -> new MenuType<>(MortarMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<PurifierMenu>> PURIFIER = MENUS.register("purifier", () -> new MenuType<>(PurifierMenu::new, FeatureFlags.REGISTRY.allFlags()));
 	public static final DeferredHolder<MenuType<?>, MenuType<SilkBundleMenu>> SILK_BUNDLE = MENUS.register("silk_bundle", () -> IMenuTypeExtension.create(SilkBundleMenu::new));

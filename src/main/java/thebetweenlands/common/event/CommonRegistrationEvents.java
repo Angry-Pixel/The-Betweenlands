@@ -56,6 +56,7 @@ import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.clientbound.attachment.*;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
 import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
+import thebetweenlands.common.network.serverbound.RenameItemPacket;
 import thebetweenlands.common.registries.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -189,11 +190,13 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
+		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, (packet, context) -> OpenRenameScreenPacket.handle(context));
 
 		registrar.playToClient(UpdateSimpleAttachmentPacket.TYPE, UpdateSimpleAttachmentPacket.STREAM_CODEC, UpdateSimpleAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
+		registrar.playToServer(RenameItemPacket.TYPE, RenameItemPacket.STREAM_CODEC, RenameItemPacket::handle);
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {

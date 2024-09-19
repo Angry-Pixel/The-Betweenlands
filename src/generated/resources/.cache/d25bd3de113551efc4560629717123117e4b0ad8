@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-17T14:49:55.0961456	Item Models: thebetweenlands
+// 1.21.1	2024-09-18T21:19:30.9133113	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -235,6 +235,7 @@ b3d571d7d45fd881166f72cf28d14406694113a5 assets/thebetweenlands/models/item/inan
 42da799eea89b880f32d25cda4e359397e7646b6 assets/thebetweenlands/models/item/kraken_calamari.json
 ef07c9ead87d3cb6e9f560784d2c29f47786caa5 assets/thebetweenlands/models/item/kraken_tentacle.json
 b05945461f2ce9480dc6dbec84821e8d32b4d335 assets/thebetweenlands/models/item/lake_broth.json
+814748dec6173e81a555f3563e001b242c135f5c assets/thebetweenlands/models/item/large_lurker_skin_pouch.json
 30710e59c353551a817ed3ef87b898330efa4a43 assets/thebetweenlands/models/item/lavender_blue_dye.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/lavender_blue_item_frame.json
 9e8b90e485c2dc36b1728edd6196a493d7c293f3 assets/thebetweenlands/models/item/leaf.json
@@ -264,6 +265,7 @@ c847b569cf46cdfb393be2e8930974d4f7b84155 assets/thebetweenlands/models/item/maro
 9bd309c87a38fb74b9a82fe905d431d71e5bd4c0 assets/thebetweenlands/models/item/marsh_mallow_flower.json
 daa6feb5c8e7749e9181ad067488c8e9ed084302 assets/thebetweenlands/models/item/marsh_marigold_flower_drop.json
 09db093c097ff828f6944c8fc6db0fd7820e9d10 assets/thebetweenlands/models/item/marsh_runner_boots.json
+4e4e53f21a225a7695e5f38e249dfe14ff4b7fb5 assets/thebetweenlands/models/item/medium_lurker_skin_pouch.json
 cdd52eae90d7f4053bd78adf7e4b2a3180087ff9 assets/thebetweenlands/models/item/middle_fruit.json
 32be60c2a7980d4434ffbfcde66a16ece01403a4 assets/thebetweenlands/models/item/middle_fruit_jello.json
 a27ee2a7f2491da4bd3361534caeeabc2305178f assets/thebetweenlands/models/item/midnight_purple_dye.json
@@ -385,6 +387,7 @@ ae28b806d61d22922bbe85fa940981e289a1525c assets/thebetweenlands/models/item/slud
 cb0080da9a6da9a7e8ebde406ffd6426a3e473ff assets/thebetweenlands/models/item/sludge_ball.json
 f7a5c0a8a0821d8ede55bb40a57e1ddc7763cd8a assets/thebetweenlands/models/item/sludge_jello.json
 f483f2f9465170ff9c108bc978f53386109fa278 assets/thebetweenlands/models/item/sludge_slicer.json
+6c01386c39b3bc65e3d0df7b350cea54719555b4 assets/thebetweenlands/models/item/small_lurker_skin_pouch.json
 ddf1fa9af951cee3dbd594d5f2582bd6b2533230 assets/thebetweenlands/models/item/smoked_anadia_meat.json
 7640a224429d7d672623ebc0fe633ffdc0fe4fd7 assets/thebetweenlands/models/item/smoked_barnacle.json
 5f435d5dd37aa5b5fb80c6cd6892895bfecf7f72 assets/thebetweenlands/models/item/smoked_crab_stick.json
@@ -463,5 +466,6 @@ d9fddbb56c2eaafc7433f7e3f0ec155bbf9c7270 assets/thebetweenlands/models/item/wigh
 771554cde6b1f209031b231d08ac3acebe591afd assets/thebetweenlands/models/item/wight_heart.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/wight_spawn_egg.json
 58992f803d809ddb24f9823c2dfd521815f46c6a assets/thebetweenlands/models/item/witch_tea.json
+fab7691add50eaf4c620bb1c62f5c6341944abe4 assets/thebetweenlands/models/item/xl_lurker_skin_pouch.json
 98ea7e1dac8f56e1e7d0058f9a8ee7136c689060 assets/thebetweenlands/models/item/yellow_candy.json
 1c60e30d1182d0738130aa1792ecaa5ea0a113d7 assets/thebetweenlands/models/item/yellow_dotted_fungus.json

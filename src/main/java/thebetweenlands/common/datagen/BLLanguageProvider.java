@@ -1272,7 +1272,13 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.pestle.desc", "Place Pestle in Mortar");
 		this.add("item.thebetweenlands.pestle.remaining", "%d%% Remaining: %d more uses.");
 		this.addItem(ItemRegistry.NET, "Net");
-		//pouches
+		this.addItem(ItemRegistry.SMALL_LURKER_SKIN_POUCH, "Lurker Skin Pouch");
+		this.addItem(ItemRegistry.MEDIUM_LURKER_SKIN_POUCH, "Lurker Skin Pouch");
+		this.addItem(ItemRegistry.LARGE_LURKER_SKIN_POUCH, "Lurker Skin Pouch");
+		this.addItem(ItemRegistry.XL_LURKER_SKIN_POUCH, "Lurker Skin Pouch");
+		this.add("item.thebetweenlands.lurker_skin_pouch.size", "%d inventory slots");
+		this.add("item.thebetweenlands.lurker_skin_pouch.upgrade", "Craft surrounded with Lurker Skin to upgrade");
+		this.add("item.thebetweenlands.lurker_skin_pouch.usage", "Press '%s' or right click to open the Pouch");
 		//caving rope light
 		//grappling hooks
 		this.addItem(ItemRegistry.VOLARKITE, "Volarkite");

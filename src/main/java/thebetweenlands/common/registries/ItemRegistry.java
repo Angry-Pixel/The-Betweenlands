@@ -21,6 +21,8 @@ import thebetweenlands.common.items.amphibious.UpgradeToggleItem;
 import thebetweenlands.common.items.amphibious.UpgradeTriggerItem;
 import thebetweenlands.util.BLDyeColor;
 
+import java.util.ArrayList;
+
 public class ItemRegistry {
 
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TheBetweenlands.ID);
@@ -199,7 +201,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> DRAETON_ANCHOR_UPGRADE = ITEMS.register("draeton_anchor_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> DRAETON_CRAFTING_UPGRADE = ITEMS.register("draeton_crafting_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> WEEDWOOD_ROWBOAT_LANTERN_UPGRADE = ITEMS.register("weedwood_rowboat_lantern_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new AmateNameTagItem(new Item.Properties()));
 	public static final DeferredItem<Item> DULL_LAVENDER_DYE = ITEMS.register("dull_lavender_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> MAROON_DYE = ITEMS.register("maroon_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> SHADOW_GREEN_DYE = ITEMS.register("shadow_green_dye", () -> new Item(new Item.Properties()));
@@ -292,7 +294,10 @@ public class ItemRegistry {
 	//ancient weapons
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().stacksTo(1).durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));
-	//pouches
+	public static final DeferredItem<Item> SMALL_LURKER_SKIN_POUCH = ITEMS.register("small_lurker_skin_pouch", () -> new LurkerSkinPouchItem(9, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(9)))));
+	public static final DeferredItem<Item> MEDIUM_LURKER_SKIN_POUCH = ITEMS.register("medium_lurker_skin_pouch", () -> new LurkerSkinPouchItem(18, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(18)))));
+	public static final DeferredItem<Item> LARGE_LURKER_SKIN_POUCH = ITEMS.register("large_lurker_skin_pouch", () -> new LurkerSkinPouchItem(27, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(27)))));
+	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36)))));
 	//caving rope
 	//grapples
 	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));

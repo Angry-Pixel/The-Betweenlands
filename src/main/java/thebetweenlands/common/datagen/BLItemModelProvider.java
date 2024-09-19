@@ -297,7 +297,10 @@ public class BLItemModelProvider extends ItemModelProvider {
 		//ancient weps
 		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
 		this.toolItem(ItemRegistry.NET);
-		//pouches
+		this.pouch(ItemRegistry.SMALL_LURKER_SKIN_POUCH);
+		this.pouch(ItemRegistry.MEDIUM_LURKER_SKIN_POUCH);
+		this.pouch(ItemRegistry.LARGE_LURKER_SKIN_POUCH);
+		this.pouch(ItemRegistry.XL_LURKER_SKIN_POUCH);
 		//caving rope light
 		//grappling hooks
 		this.basicItem(ItemRegistry.VOLARKITE);
@@ -555,5 +558,9 @@ public class BLItemModelProvider extends ItemModelProvider {
 	public ResourceLocation itemTexture(DeferredItem<?> item) {
 		ResourceLocation name = item.getId();
 		return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), ModelProvider.ITEM_FOLDER + "/" + name.getPath());
+	}
+
+	public ItemModelBuilder pouch(DeferredItem<Item> pouch) {
+		return this.multiLayerItem(pouch.getId().getPath(), this.itemTexture(pouch), this.itemTexture(pouch).withSuffix("_cord"));
 	}
 }

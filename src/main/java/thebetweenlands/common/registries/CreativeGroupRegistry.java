@@ -911,7 +911,10 @@ public class CreativeGroupRegistry {
 			//ancient battleaxe
 			output.accept(ItemRegistry.PESTLE);
 			output.accept(ItemRegistry.NET);
-			//lurker skin pouches
+			output.accept(ItemRegistry.SMALL_LURKER_SKIN_POUCH);
+			output.accept(ItemRegistry.MEDIUM_LURKER_SKIN_POUCH);
+			output.accept(ItemRegistry.LARGE_LURKER_SKIN_POUCH);
+			output.accept(ItemRegistry.XL_LURKER_SKIN_POUCH);
 			output.accept(ItemRegistry.VOLARKITE);
 			output.accept(ItemRegistry.SLINGSHOT);
 			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);

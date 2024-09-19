@@ -21,6 +21,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
@@ -66,6 +67,7 @@ import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.BLItemFrameItem;
 import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.registries.*;
+import thebetweenlands.util.BLDyeColor;
 import thebetweenlands.util.RenderUtils;
 
 public class ClientRegistrationEvents {
@@ -78,6 +80,7 @@ public class ClientRegistrationEvents {
 
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientRegistrationEvents::clientSetup);
+		eventbus.addListener(ClientRegistrationEvents::registerKeybinds);
 		eventbus.addListener(ClientRegistrationEvents::registerScreens);
 		eventbus.addListener(ClientRegistrationEvents::registerRenderers);
 		eventbus.addListener(ClientRegistrationEvents::registerDimEffects);
@@ -105,6 +108,14 @@ public class ClientRegistrationEvents {
 		});
 	}
 
+	private static void registerKeybinds(final RegisterKeyMappingsEvent event) {
+		event.register(BetweenlandsKeybinds.CONNECT_CAVING_ROPE);
+		event.register(BetweenlandsKeybinds.OPEN_POUCH);
+		event.register(BetweenlandsKeybinds.RADIAL_MENU);
+		event.register(BetweenlandsKeybinds.USE_RING);
+		event.register(BetweenlandsKeybinds.USE_SECONDARY_RING);
+	}
+
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
 		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
@@ -119,6 +130,7 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
 		event.register(MenuRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
+		event.register(MenuRegistry.LURKER_SKIN_POUCH.get(), LurkerSkinPouchScreen::new);
 		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
 		event.register(MenuRegistry.PURIFIER.get(), PurifierScreen::new);
 		event.register(MenuRegistry.SILK_BUNDLE.get(), SilkBundleScreen::new);
@@ -546,6 +558,11 @@ public class ClientRegistrationEvents {
 			if (tintIndex != 1) return 0xFFFFFFFF;
 			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().map(aspect -> aspect.value().color()).orElse(0xFFFFFFFF);
 		}, ItemRegistry.ASPECTRUS_FRUIT);
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 1) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponents.DYED_COLOR, new DyedItemColor(BLDyeColor.CHAMPAGNE.getColorValue(), false)).rgb() | 0xFF000000;
+		}, ItemRegistry.SMALL_LURKER_SKIN_POUCH, ItemRegistry.MEDIUM_LURKER_SKIN_POUCH, ItemRegistry.LARGE_LURKER_SKIN_POUCH, ItemRegistry.XL_LURKER_SKIN_POUCH);
 
 		event.register((stack, tintIndex) -> {
 			if (tintIndex != 0) return 0xFFFFFFFF;
