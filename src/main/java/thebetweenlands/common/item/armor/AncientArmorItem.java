@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.armor;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
@@ -16,9 +17,9 @@ public class AncientArmorItem extends ArmorItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.ancient_armor.desc"));
+		tooltip.add(Component.translatable("item.thebetweenlands.ancient_armor.desc").withStyle(ChatFormatting.GRAY));
 		if (stack.getDamageValue() == stack.getMaxDamage()) {
-			tooltip.add(Component.translatable("item.thebetweenlands.broken", stack.getDisplayName()));
+			tooltip.add(Component.translatable("item.thebetweenlands.broken", stack.getDisplayName()).withStyle(ChatFormatting.GRAY));
 		}
 	}
 

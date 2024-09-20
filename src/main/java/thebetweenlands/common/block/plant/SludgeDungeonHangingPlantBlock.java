@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.plant;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -37,6 +38,6 @@ public class SludgeDungeonHangingPlantBlock extends HangingPlantBlock {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("block.thebetweenlands.mist"));
+		tooltip.add(Component.translatable("block.thebetweenlands.mist").withStyle(ChatFormatting.GRAY));
 	}
 }

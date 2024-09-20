@@ -32,6 +32,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -150,6 +151,14 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ELECTRIC_SHOCK.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SAP_SPIT.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.LURKER_SKIN_RAFT.get(), LurkerSkinRaftRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ANGLER_TOOTH_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/angler_tooth_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.POISON_ANGLER_TOOTH_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/poisoned_angler_tooth_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.BASILISK_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/basilisk_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.SHOCK_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/shock_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_BARB.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/chiromaw_barb.png")));
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_SHOCK_BARB.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/chiromaw_barb.png")));
+		event.registerEntityRenderer(EntityRegistry.OCTINE_ARROW.get(), OctineArrowRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_ARROW.get(), SludgeWormArrowRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -205,6 +214,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
+		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_ARROW, SludgeWormArrowModel::create);
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
 
 		event.registerLayerDefinition(BLModelLayers.ALCOVE, AlcoveModel::makeModel);

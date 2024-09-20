@@ -169,6 +169,10 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.VALONITE_SHOVEL.get()
 		);
 
+		this.tag(ItemTags.ARROWS).add(ItemRegistry.ANGLER_TOOTH_ARROW.get(), ItemRegistry.POISONED_ANGLER_TOOTH_ARROW.get(),
+			ItemRegistry.OCTINE_ARROW.get(), ItemRegistry.BASILISK_ARROW.get(), ItemRegistry.SLUDGE_WORM_ARROW.get(),
+			ItemRegistry.SHOCK_ARROW.get(), ItemRegistry.CHIROMAW_BARB.get());
+
 	}
 
 	public static TagKey<Item> tag(String tagName) {

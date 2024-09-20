@@ -905,7 +905,12 @@ public class CreativeGroupRegistry {
 			//shears
 			//sickle
 			//shockwave sword
-			//arrows x6
+			output.accept(ItemRegistry.ANGLER_TOOTH_ARROW);
+			output.accept(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
+			output.accept(ItemRegistry.OCTINE_ARROW);
+			output.accept(ItemRegistry.BASILISK_ARROW);
+			output.accept(ItemRegistry.SLUDGE_WORM_ARROW);
+			output.accept(ItemRegistry.SHOCK_ARROW);
 			output.accept(ItemRegistry.CHIROMAW_BARB);
 			//weedwood bow
 			//predator bow

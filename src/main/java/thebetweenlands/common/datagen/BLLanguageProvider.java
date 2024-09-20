@@ -1275,7 +1275,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		//shears
 		//sickle
 		//shockwave sword
-		//arrows
+		this.addItem(ItemRegistry.ANGLER_TOOTH_ARROW, "Angler Tooth Arrow");
+		this.addItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, "Poisoned Angler Tooth Arrow");
+		this.addItemWithDesc(ItemRegistry.OCTINE_ARROW, "Octine Arrow", "Use with caution!");
+		this.addItemWithDesc(ItemRegistry.BASILISK_ARROW, "Basilisk Arrow", "Causes paralysis");
+		this.addItem(ItemRegistry.SLUDGE_WORM_ARROW, "Sludge Worm Arrow");
+		this.addItem(ItemRegistry.SHOCK_ARROW, "Shock Arrow");
 		this.addItem(ItemRegistry.CHIROMAW_BARB, "Chiromaw Barb");
 		//bows
 		//ancient weps

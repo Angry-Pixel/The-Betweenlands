@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.tool;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +15,7 @@ public class PestleItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.pestle.desc"));
-		tooltip.add(Component.translatable("item.thebetweenlands.pestle.remaining", Math.round(100F - 100F / stack.getMaxDamage() * stack.getDamageValue()), (stack.getMaxDamage() - stack.getDamageValue())));
+		tooltip.add(Component.translatable("item.thebetweenlands.pestle.desc").withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("item.thebetweenlands.pestle.remaining", Math.round(100F - 100F / stack.getMaxDamage() * stack.getDamageValue()), (stack.getMaxDamage() - stack.getDamageValue())).withStyle(ChatFormatting.GRAY));
 	}
 }

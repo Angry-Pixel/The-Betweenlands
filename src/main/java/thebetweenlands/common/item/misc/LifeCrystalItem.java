@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +22,7 @@ public class LifeCrystalItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.life_crystal.remaining", Math.round(100.0F - 100.0F / stack.getMaxDamage() * this.getDamage(stack))));
+		tooltip.add(Component.translatable("item.thebetweenlands.life_crystal.remaining", Math.round(100.0F - 100.0F / stack.getMaxDamage() * this.getDamage(stack))).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override

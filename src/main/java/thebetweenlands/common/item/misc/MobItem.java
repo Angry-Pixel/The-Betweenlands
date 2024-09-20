@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.misc;
 
 import net.jodah.typetools.TypeResolver;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -86,7 +87,7 @@ public class MobItem extends Item {
 			Level level = context.level();
 			Entity entity = this.createCapturedEntity(level, 0, 0, 0, stack, false);
 			if (entity instanceof LivingEntity living) {
-				tooltip.add(Component.translatable("item.thebetweenlands.mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)));
+				tooltip.add(Component.translatable("item.thebetweenlands.mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)).withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}

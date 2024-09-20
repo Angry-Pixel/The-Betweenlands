@@ -289,7 +289,12 @@ public class BLItemModelProvider extends ItemModelProvider {
 		//shears
 		//sickle
 		//shockwave sword
-		//arrows
+		this.basicItem(ItemRegistry.ANGLER_TOOTH_ARROW);
+		this.basicItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
+		this.basicItem(ItemRegistry.OCTINE_ARROW);
+		this.basicItem(ItemRegistry.BASILISK_ARROW);
+		this.basicItem(ItemRegistry.SLUDGE_WORM_ARROW);
+		this.basicItem(ItemRegistry.SHOCK_ARROW);
 		this.basicItem(ItemRegistry.CHIROMAW_BARB);
 		//bows
 		//ancient weps
