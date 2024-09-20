@@ -1,6 +1,9 @@
 {
   "parent": "builtin/entity",
   "gui_light": "front",
+  "textures": {
+    "particle": "thebetweenlands:item/particle/polished_green_dentrothyst_shield_particle"
+  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [45, 135, 0],

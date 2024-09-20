@@ -1,6 +1,9 @@
 {
   "parent": "builtin/entity",
   "gui_light": "front",
+  "textures": {
+    "particle": "thebetweenlands:item/particle/weedwood_shield_particle"
+  },
   "overrides": [
     {
       "predicate": {
