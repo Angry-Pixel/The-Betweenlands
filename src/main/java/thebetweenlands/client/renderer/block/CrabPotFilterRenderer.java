@@ -3,7 +3,6 @@ package thebetweenlands.client.renderer.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -15,7 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CrabPotFilterBlock;
+import thebetweenlands.common.block.container.CrabPotFilterBlock;
 import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 
 public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterBlockEntity> {

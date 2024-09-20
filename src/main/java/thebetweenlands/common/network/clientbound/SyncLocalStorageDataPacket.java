@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -23,7 +23,7 @@ public class SyncLocalStorageDataPacket implements CustomPacketPayload {
 
 	private final ResourceLocation type;
 	private final CompoundTag idNbt;
-	private final List<IGenericDataAccessorAccess.IDataEntry<?>> dataManagerEntries;
+	private final List<GenericDataAccessorAccess.IDataEntry<?>> dataManagerEntries;
 
 	public static final Type<SyncLocalStorageDataPacket> TYPE = new Type<>(TheBetweenlands.prefix("sync_local_storage_data"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, SyncLocalStorageDataPacket> STREAM_CODEC = CustomPacketPayload.codec(SyncLocalStorageDataPacket::write, SyncLocalStorageDataPacket::new);
@@ -31,7 +31,7 @@ public class SyncLocalStorageDataPacket implements CustomPacketPayload {
 	public SyncLocalStorageDataPacket(ILocalStorage localStorage, boolean sendAll) {
 		this.type = StorageRegistry.getStorageId(localStorage.getClass());
 		localStorage.getID().writeToNBT(this.idNbt = new CompoundTag());
-		IGenericDataAccessorAccess dataManager = localStorage.getDataManager();
+		GenericDataAccessorAccess dataManager = localStorage.getDataManager();
 		if (sendAll) {
 			this.dataManagerEntries = dataManager.getAll();
 			dataManager.setClean();
@@ -69,7 +69,7 @@ public class SyncLocalStorageDataPacket implements CustomPacketPayload {
 				ILocalStorage storage = storageHandler.getLocalStorage(id);
 
 				if (storage != null && storage.getClass() == StorageRegistry.getStorageType(packet.type)) {
-					IGenericDataAccessorAccess dataManager = storage.getDataManager();
+					GenericDataAccessorAccess dataManager = storage.getDataManager();
 					if (dataManager != null) {
 						dataManager.setValuesFromPacket(packet.dataManagerEntries);
 					}

@@ -3,7 +3,7 @@ package thebetweenlands.common.registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.SimulacrumEffect;
+import thebetweenlands.api.block.SimulacrumEffect;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.simulacrum.*;
 

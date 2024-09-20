@@ -6,7 +6,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import thebetweenlands.common.items.recipe.MultiStackInput;
+import thebetweenlands.common.item.recipe.MultiStackInput;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 

@@ -33,13 +33,13 @@ public class UnbakedConnectedTexturesQuad {
 	public final String cullfaceName;
 	public final int tintIndex;
 	public final float minU, minV, maxU, maxV;
-	
+
 	protected boolean hasBaked = false;
 	protected final BakedQuad[][] quads;
 
 //	protected ModelProperty<?>[] indexProperties;
 //	protected ModelProperty<?> cullFaceProperty;
-	
+
 	public UnbakedConnectedTexturesQuad(ResourceLocation[] textures, String[] indexNames, int[] indices, ConnectedTexturesVertex[] verts, @Nullable Direction cullFace, @Nullable String cullFaceName, int tintIndex, float minU, float minV, float maxU, float maxV) {
 		this.textures = textures;
 		this.indexNames = indexNames;
@@ -58,11 +58,11 @@ public class UnbakedConnectedTexturesQuad {
 	public boolean getHasBaked() {
 		return this.hasBaked;
 	}
-	
+
 	public BakedQuad[][] getBakedQuads() {
 		return this.quads;
 	}
-	
+
 	public void bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
 		Optional<Transformation> rootTransform = context.getRootTransform().isIdentity() ? Optional.empty() : Optional.of(context.getRootTransform());
 		this.bake(location -> spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, location)), rootTransform, context.getTransforms(), DefaultVertexFormat.BLOCK);
@@ -123,17 +123,15 @@ public class UnbakedConnectedTexturesQuad {
 	protected BakedQuad[] bakeTextureVariants(VertexFormat format, Optional<Transformation> transformation,
 			TextureAtlasSprite[] sprites, ConnectedTexturesVertex[] verts) {
 		QuadBuilder builder = new QuadBuilder(4 * this.textures.length, format);
-		if(transformation.isPresent()) {
-			builder.setTransformation(transformation.get());
-		}
-		for(int i = 0; i < sprites.length; i++) {
-			builder.setSprite(sprites[i]);
+		transformation.ifPresent(builder::setTransformation);
+		for (TextureAtlasSprite sprite : sprites) {
+			builder.setSprite(sprite);
 			builder.addVertex(verts[0].pos(), verts[0].uv().x * 16.0F, verts[0].uv().y * 16.0F);
 			builder.addVertex(verts[1].pos(), verts[1].uv().x * 16.0F, verts[1].uv().y * 16.0F);
 			builder.addVertex(verts[2].pos(), verts[2].uv().x * 16.0F, verts[2].uv().y * 16.0F);
 			builder.addVertex(verts[3].pos(), verts[3].uv().x * 16.0F, verts[3].uv().y * 16.0F);
 		}
-		
+
 		return builder.build(b -> b.setTintIndex(this.tintIndex)).nonCulledQuads.toArray(new BakedQuad[0]);
 	}
 

@@ -34,8 +34,8 @@ public class AttachmentRegistry {
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<RotSmellData>> ROT_SMELL = ATTACHMENT_TYPES.register("rot_smell", () -> AttachmentType.builder(RotSmellData::new).serialize(RotSmellData.CODEC).build());
 
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<BetweenlandsWorldStorage>> WORLD_STORAGE = ATTACHMENT_TYPES.register("world_storage", () -> AttachmentType.builder(BetweenlandsWorldStorage::new).serialize(new WorldStorageSerializer()).build());
-	
-	
-	public static final DeferredHolder<SimpleAttachmentType<?>, SimpleAttachmentType<RotSmellData>> ROT_SMELL_AUTOENCODER = SIMPLE_ATTACHMENT_TYPES.register("rot_smell", () -> new SimpleAttachmentType<RotSmellData>(RotSmellData.class, RotSmellData.STREAM_CODEC, ROT_SMELL.getKey()));
-	
+
+
+	public static final DeferredHolder<SimpleAttachmentType<?>, SimpleAttachmentType<RotSmellData>> ROT_SMELL_AUTOENCODER = SIMPLE_ATTACHMENT_TYPES.register("rot_smell", () -> new SimpleAttachmentType<>(RotSmellData.class, RotSmellData.STREAM_CODEC, ROT_SMELL.getKey()));
+
 }

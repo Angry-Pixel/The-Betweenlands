@@ -23,10 +23,9 @@ import thebetweenlands.client.model.entity.SiltCrabModel;
 import thebetweenlands.client.renderer.entity.BubblerCrabRenderer;
 import thebetweenlands.client.renderer.entity.SiltCrabRenderer;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.AlembicBlock;
-import thebetweenlands.common.block.CrabPotBlock;
+import thebetweenlands.common.block.container.CrabPotBlock;
 import thebetweenlands.common.block.entity.CrabPotBlockEntity;
-import thebetweenlands.common.items.MobItem;
+import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.EntityRegistry;
 
 public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> {

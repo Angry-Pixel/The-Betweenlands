@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
-import thebetweenlands.common.block.TreePortalBlock;
+import thebetweenlands.common.block.structure.TreePortalBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;

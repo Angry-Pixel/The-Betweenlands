@@ -5,7 +5,6 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.level.material.FluidState;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.common.TheBetweenlands;

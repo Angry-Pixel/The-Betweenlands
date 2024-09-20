@@ -112,7 +112,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 	 * @return
 	 */
 	public EffectBuilder<T> create(RenderTarget dst) {
-		return new EffectBuilder<T>(this, dst);
+		return new EffectBuilder<>(this, dst);
 	}
 
 	public static final class EffectBuilder<T extends PostProcessingEffect<?>> {
@@ -570,7 +570,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		}
 	}
 
-	private final void setFloats(FloatBuffer buffer, float[] values) {
+	private void setFloats(FloatBuffer buffer, float[] values) {
 		buffer.position(0);
 		for (float value : values) {
 			buffer.put(value);
@@ -607,7 +607,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		}
 	}
 
-	private final void setInts(IntBuffer buffer, int[] values) {
+	private void setInts(IntBuffer buffer, int[] values) {
 		buffer.position(0);
 		for (int value : values) {
 			buffer.put(value);

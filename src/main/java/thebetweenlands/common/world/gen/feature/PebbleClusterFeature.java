@@ -7,7 +7,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import thebetweenlands.common.block.PebblePileBlock;
+import thebetweenlands.common.block.terrain.PebblePileBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.util.WorldGenUtil;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;

@@ -8,14 +8,28 @@ import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.items.MobItem;
-import thebetweenlands.common.items.SlingshotItem;
-import thebetweenlands.common.items.shield.SwatShieldItem;
+import thebetweenlands.client.handler.ElixirClientHandler;
+import thebetweenlands.client.handler.ItemTooltipHandler;
+import thebetweenlands.client.handler.MainMenuHandler;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.handler.FoodSicknessHandler;
+import thebetweenlands.common.item.misc.MobItem;
+import thebetweenlands.common.item.tool.SlingshotItem;
+import thebetweenlands.common.item.shield.SwatShieldItem;
+import thebetweenlands.util.RenderUtils;
 
 public class ClientEvents {
 
 	public static void init() {
+		ElixirClientHandler.init();
+		ItemTooltipHandler.init();
+		MainMenuHandler.init();
+
+		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
+
+		NeoForge.EVENT_BUS.addListener(RenderUtils::incrementTickCounter);
+		NeoForge.EVENT_BUS.addListener(RenderUtils::tickFrameCounter);
+
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderMobsOnFrame);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::changeFOV);
 	}

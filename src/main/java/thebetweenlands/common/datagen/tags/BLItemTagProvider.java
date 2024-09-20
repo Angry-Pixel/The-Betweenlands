@@ -11,7 +11,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import thebetweenlands.api.item.ICustomCorrodible;
+import thebetweenlands.api.item.CustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -49,7 +49,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
 
 	/**
-	 * Whether an item has custom corrosion information. The item should implement {@link ICustomCorrodible}; this tag will be ignored if it doesn't.
+	 * Whether an item has custom corrosion information. The item should implement {@link CustomCorrodible}; this tag will be ignored if it doesn't.
 	 */
 	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
 

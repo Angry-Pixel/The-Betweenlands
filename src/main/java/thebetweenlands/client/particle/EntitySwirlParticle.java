@@ -8,7 +8,7 @@ import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 
 public class EntitySwirlParticle extends SwirlParticle {
 
-	protected Entity entityTarget;
+	protected final Entity entityTarget;
 	private final Vec3 targetOffset;
 	private final SpriteSet spriteSet;
 	private final int frames;

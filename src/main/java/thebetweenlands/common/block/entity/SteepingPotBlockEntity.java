@@ -22,14 +22,14 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.recipes.SteepingPotRecipe;
-import thebetweenlands.common.items.recipe.FluidRecipeInput;
+import thebetweenlands.common.item.recipe.FluidRecipeInput;
 import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
 
 public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
 
-	public FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME);
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME);
 	public int tempFluidColour;
 	public boolean hasCraftResult = false;
 	private int heatProgress = 0;

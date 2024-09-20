@@ -8,13 +8,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.shield.BaseShieldItem;
+import thebetweenlands.common.item.shield.BaseShieldItem;
 
 public class ShieldHandler {
 
-	static void applyShieldLogic(LivingIncomingDamageEvent event) {
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(ShieldHandler::applyShieldLogic);
+	}
+
+	private static void applyShieldLogic(LivingIncomingDamageEvent event) {
 		LivingEntity attacked = event.getEntity();
 		DamageSource source = event.getSource();
 		for(InteractionHand hand : InteractionHand.values()) {

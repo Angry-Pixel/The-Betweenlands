@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.renderer.entity.layers.GenericEyesLayer;
 import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.SwampHag;
+import thebetweenlands.common.entity.monster.SwampHag;
 
 public class SwampHagRenderer<T extends SwampHag> extends MobRenderer<T, SwampHagModel<T>> {
 

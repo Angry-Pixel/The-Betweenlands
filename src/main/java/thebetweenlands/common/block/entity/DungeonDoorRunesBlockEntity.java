@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.entity.ScreenShaker;
-import thebetweenlands.common.block.DungeonDoorRunesBlock;
+import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

@@ -10,15 +10,14 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.component.item.AmphibiousUpgrades;
 import thebetweenlands.common.component.item.UpgradeDamage;
-import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.items.amphibious.ArmorEffectHelper;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class AmphibiousArmorContainer implements Container {
 
 	private final ArmorItem.Type armorType;
-	private final AmphibiousArmorItem item;
 
 	private boolean pauseUpgradeDamageUpdates = false;
 	private boolean useUpgradeFilter = false;
@@ -40,8 +39,8 @@ public class AmphibiousArmorContainer implements Container {
 				this.contents.set(i, AmphibiousUpgrades.UpgradeEntry.EMPTY);
 			}
 		}
-		this.item = (AmphibiousArmorItem) stack.getItem();
-		this.armorType = this.item.getType();
+		AmphibiousArmorItem item = (AmphibiousArmorItem) stack.getItem();
+		this.armorType = item.getType();
 	}
 
 	public ItemStack getContainerStack() {

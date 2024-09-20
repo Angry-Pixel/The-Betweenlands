@@ -25,7 +25,7 @@ public class AuroraRenderer {
 	private final double y;
 	private final double z;
 	private final Vector2d direction;
-	private int tiles;
+	private final int tiles;
 
 	private final List<Vector4f> colorGradients;
 

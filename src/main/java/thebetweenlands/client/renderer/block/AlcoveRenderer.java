@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.RandomSource;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.MudBrickAlcoveBlock;
+import thebetweenlands.common.block.container.MudBrickAlcoveBlock;
 import thebetweenlands.common.block.entity.MudBrickAlcoveBlockEntity;
 
 public class AlcoveRenderer implements BlockEntityRenderer<MudBrickAlcoveBlockEntity> {

@@ -5,26 +5,26 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entities.Gecko;
+import thebetweenlands.common.entity.creature.Gecko;
 
 public class GeckoModel<T extends Gecko> extends MowzieModelBase<T> implements HeadedModel {
 
-	public ModelPart root;
-	public ModelPart body;
-	public ModelPart head;
-	public ModelPart legleft_f1;
-	public ModelPart legright_f1;
-	public ModelPart legleft_b1;
-	public ModelPart legright_b1;
-	public ModelPart tail1;
-	public ModelPart tail2;
-	public ModelPart tail3;
-	public ModelPart crane;
-	public ModelPart tongue;
-	public ModelPart legleft_f2;
-	public ModelPart legright_f2;
-	public ModelPart legleft_b2;
-	public ModelPart legright_b2;
+	public final ModelPart root;
+	public final ModelPart body;
+	public final ModelPart head;
+	public final ModelPart legleft_f1;
+	public final ModelPart legright_f1;
+	public final ModelPart legleft_b1;
+	public final ModelPart legright_b1;
+	public final ModelPart tail1;
+	public final ModelPart tail2;
+	public final ModelPart tail3;
+	public final ModelPart crane;
+	public final ModelPart tongue;
+	public final ModelPart legleft_f2;
+	public final ModelPart legright_f2;
+	public final ModelPart legleft_b2;
+	public final ModelPart legright_b2;
 	private final ModelPart[] tail;
 
 	public GeckoModel(ModelPart root) {

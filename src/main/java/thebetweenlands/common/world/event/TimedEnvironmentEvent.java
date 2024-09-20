@@ -7,7 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import thebetweenlands.api.environment.IPredictableEnvironmentEvent;
+import thebetweenlands.api.environment.PredictableEnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implements IPredictableEnvironmentEvent {
+public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implements PredictableEnvironmentEvent {
 	public static class ActiveStateEstimator {
 		private final TimedEnvironmentEvent event;
 		private final List<Supplier<ActiveStateEstimator>> dependencies = new ArrayList<>();
@@ -118,7 +118,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 	protected static final EntityDataAccessor<Integer> START_TICKS = GenericDataAccessor.defineId(TimedEnvironmentEvent.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> NEXT_DURATION = GenericDataAccessor.defineId(TimedEnvironmentEvent.class, EntityDataSerializers.INT);
 
-	protected ActiveStateEstimator activeStateEstimator = new ActiveStateEstimator(this);
+	protected final ActiveStateEstimator activeStateEstimator = new ActiveStateEstimator(this);
 
 	@Override
 	protected void initDataParameters() {

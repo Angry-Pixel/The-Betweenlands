@@ -51,14 +51,10 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 	private int renderPosUniformID = -1;
 	private int viewPosUniformID = -1;
 	private int fogVolumeAmountUniformIDs = -1;
-	private int fogModeUniformID = -1;
-
-	private int depthBufferTexture = -1;
 
 	private List<GroundFogVolume> volumes = Collections.emptyList();
 
 	public GroundFog setDepthBufferTexture(int id) {
-		this.depthBufferTexture = id;
 		return this;
 	}
 
@@ -81,7 +77,7 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 		this.worldTimeUniformID = this.getUniform("u_worldTime");
 		this.viewPosUniformID = this.getUniform("u_viewPos");
 		this.renderPosUniformID = this.getUniform("u_renderPos");
-		this.fogModeUniformID = this.getUniform("u_fogMode");
+		int fogModeUniformID = this.getUniform("u_fogMode");
 
 		for(int i = 0; i < MAX_FOG_VOLUMES; i++) {
 			this.fogVolumePositionUniformIDs[i] = this.getUniform("u_fogVolumes[" + i + "].position");

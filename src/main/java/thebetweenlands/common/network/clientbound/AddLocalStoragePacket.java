@@ -11,7 +11,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -29,7 +29,7 @@ public class AddLocalStoragePacket implements CustomPacketPayload {
 	@Nullable
 	private final CompoundTag tag;
 	@Nullable
-	private List<IGenericDataAccessorAccess.IDataEntry<?>> dataManagerEntries;
+	private List<GenericDataAccessorAccess.IDataEntry<?>> dataManagerEntries;
 
 
 	public static final Type<AddLocalStoragePacket> TYPE = new Type<>(TheBetweenlands.prefix("add_local_storage"));
@@ -39,7 +39,7 @@ public class AddLocalStoragePacket implements CustomPacketPayload {
 	public AddLocalStoragePacket(ILocalStorage localStorage) {
 		this.type = StorageRegistry.getStorageId(localStorage.getClass());
 		localStorage.getID().writeToNBT(this.idTag = new CompoundTag());
-		IGenericDataAccessorAccess dataManager = localStorage.getDataManager();
+		GenericDataAccessorAccess dataManager = localStorage.getDataManager();
 		if (dataManager != null) {
 			this.dataManagerEntries = dataManager.getAll();
 		}
@@ -93,7 +93,7 @@ public class AddLocalStoragePacket implements CustomPacketPayload {
 				newStorage.readInitialPacket(packet.tag);
 
 				if (packet.dataManagerEntries != null) {
-					IGenericDataAccessorAccess dataManager = newStorage.getDataManager();
+					GenericDataAccessorAccess dataManager = newStorage.getDataManager();
 					if (dataManager != null) {
 						dataManager.setValuesFromPacket(packet.dataManagerEntries);
 					}

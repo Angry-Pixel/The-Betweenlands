@@ -12,16 +12,14 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.api.capability.IDecayData;
+import thebetweenlands.api.attachment.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.network.clientbound.attachment.UpdateDecayDataPacket;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -33,7 +31,13 @@ import thebetweenlands.util.MathUtils;
 public class PlayerDecayHandler {
 	public static final ResourceLocation DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID = TheBetweenlands.prefix("decay_health_modifier");
 
-	static void tickDecay(PlayerTickEvent.Post event) {
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::accelerateDecayOnDamage);
+		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::tickDecay);
+		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::syncDecayOnJoin);
+	}
+
+	private static void tickDecay(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
 
 		if (!player.level().isClientSide()) {
@@ -90,7 +94,7 @@ public class PlayerDecayHandler {
 		}
 	}
 
-	static void accelerateDecayOnDamage(LivingDamageEvent.Pre event) {
+	private static void accelerateDecayOnDamage(LivingDamageEvent.Pre event) {
 		LivingEntity entity = event.getEntity();
 		if (!entity.level().isClientSide() && entity instanceof Player player) {
 
@@ -161,7 +165,7 @@ public class PlayerDecayHandler {
 		};
 	}
 
-	static void syncDecayOnJoin(EntityJoinLevelEvent event) {
+	private static void syncDecayOnJoin(EntityJoinLevelEvent event) {
 		ServerPlayer player = event.getEntity() instanceof ServerPlayer p ? p : null;
 		if(player != null && !player.level().isClientSide()) { // should always be true
 			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);

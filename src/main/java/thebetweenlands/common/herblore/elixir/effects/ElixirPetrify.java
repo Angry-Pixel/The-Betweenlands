@@ -33,8 +33,4 @@ public class ElixirPetrify extends ElixirEffect {
 		entity.setYHeadRot(nbt.getFloat("thebetweenlands.petrify.yawHead"));
 	}
 
-	@Override
-	protected boolean isReady(int ticks, int strength) {
-		return true;
-	}
 }

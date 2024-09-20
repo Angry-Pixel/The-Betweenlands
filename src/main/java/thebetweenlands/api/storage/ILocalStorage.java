@@ -6,7 +6,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.network.GenericDataAccessorAccess;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -259,5 +259,5 @@ public interface ILocalStorage {
 	 * @return
 	 */
 	@Nullable
-	IGenericDataAccessorAccess getDataManager();
+	GenericDataAccessorAccess getDataManager();
 }

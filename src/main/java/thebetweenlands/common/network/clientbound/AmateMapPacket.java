@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundMapItemDataPacket;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.AmateMapItem;
+import thebetweenlands.common.item.misc.AmateMapItem;
 import thebetweenlands.common.world.storage.AmateMapData;
 
 public record AmateMapPacket(ClientboundMapItemDataPacket inner) implements CustomPacketPayload {

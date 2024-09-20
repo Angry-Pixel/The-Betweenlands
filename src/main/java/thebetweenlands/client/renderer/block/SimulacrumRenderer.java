@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.SimulacrumBlock;
+import thebetweenlands.common.block.terrain.SimulacrumBlock;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 

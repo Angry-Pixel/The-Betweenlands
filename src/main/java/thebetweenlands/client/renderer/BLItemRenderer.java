@@ -30,8 +30,8 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.item.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.ShieldSpitData;
-import thebetweenlands.common.items.shield.BaseShieldItem;
-import thebetweenlands.common.items.shield.LivingWeedwoodShieldItem;
+import thebetweenlands.common.item.shield.BaseShieldItem;
+import thebetweenlands.common.item.shield.LivingWeedwoodShieldItem;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 

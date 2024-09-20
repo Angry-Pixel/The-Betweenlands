@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.GeckoCageBlock;
+import thebetweenlands.common.block.container.GeckoCageBlock;
 import thebetweenlands.common.block.entity.GeckoCageBlockEntity;
 
 public class GeckoCageRenderer implements BlockEntityRenderer<GeckoCageBlockEntity> {

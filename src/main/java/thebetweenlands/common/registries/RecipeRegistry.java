@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.recipes.*;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.recipe.*;
+import thebetweenlands.common.item.recipe.*;
 
 import javax.annotation.Nullable;
 

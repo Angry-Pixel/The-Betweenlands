@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
 import java.util.*;
@@ -57,18 +58,16 @@ public class ElixirClientHandler {
 	private static class TrailPos {
 		private final Vec3 pos;
 		private Vec3 nextPos;
-		private final Entity entity;
 		private final int index;
 
 		private TrailPos(Vec3 pos, int index, Entity entity) {
 			this.pos = pos;
 			this.index = index;
-			this.entity = entity;
 		}
 	}
 
 	private static Vec3 playerPos;
-	private static final Comparator<TrailPos> dstSorter = new Comparator<TrailPos>() {
+	private static final Comparator<TrailPos> dstSorter = new Comparator<>() {
 		@Override
 		public int compare(TrailPos v1, TrailPos v2) {
 			double d1 = v1.pos.distanceTo(playerPos);
@@ -77,8 +76,18 @@ public class ElixirClientHandler {
 		}
 	};
 
+	public static void init() {
+		//elixirs
+		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::changePlayerRotation);
+		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::onClientTick);
+		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::updateFOVHack);
+//		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::setArmSwing);
+//		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::setPredictionRotation);
+//		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::renderArrowPrediction);
+	}
+
 	//TODO this is a custom event apparently
-//	static void setArmSwing(ArmSwingSpeedEvent event) {
+//	private static void setArmSwing(ArmSwingSpeedEvent event) {
 //		EntityLivingBase living = event.getEntityLiving();
 //		if(ElixirEffectRegistry.EFFECT_SLUGARM.isActive(living)) {
 //			int strength = ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(living);
@@ -86,7 +95,7 @@ public class ElixirClientHandler {
 //		}
 //	}
 
-	static void onClientTick(ClientTickEvent.Post event) {
+	private static void onClientTick(ClientTickEvent.Post event) {
 		Player player = Minecraft.getInstance().player;
 
 		if (player != null && player.level().isClientSide() && player == Minecraft.getInstance().player) {
@@ -179,7 +188,7 @@ public class ElixirClientHandler {
 		}
 	}
 
-	static void changePlayerRotation(RenderPlayerEvent.Pre event) {
+	private static void changePlayerRotation(RenderPlayerEvent.Pre event) {
 		Player player = event.getEntity();
 		if (player != null) {
 			CompoundTag nbt = player.getPersistentData();
@@ -193,7 +202,7 @@ public class ElixirClientHandler {
 	}
 
 	//TODO good god the prediction renderer sucks, im not doing this right now
-//	static void setPredictionRotation(ArrowLooseEvent event) {
+//	private static void setPredictionRotation(ArrowLooseEvent event) {
 //		if (event.getEntity() == Minecraft.getInstance().player) {
 //			ArrowPredictionRenderer.setRandomYawPitch();
 //		}
@@ -222,7 +231,7 @@ public class ElixirClientHandler {
 		}
 	}
 
-	static void updateFOVHack(ViewportEvent.ComputeFov event) {
+	private static void updateFOVHack(ViewportEvent.ComputeFov event) {
 		Player entity = Minecraft.getInstance().player;
 		CompoundTag nbt = entity.getPersistentData();
 

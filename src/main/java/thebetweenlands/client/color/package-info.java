@@ -1,6 +1,0 @@
-@MethodsReturnNonnullByDefault
-@FieldsAreNonnullByDefault
-package thebetweenlands.client.color;
-
-import net.minecraft.FieldsAreNonnullByDefault;
-import net.minecraft.MethodsReturnNonnullByDefault;

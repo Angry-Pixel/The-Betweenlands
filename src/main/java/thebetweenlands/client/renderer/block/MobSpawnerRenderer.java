@@ -15,7 +15,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 
 public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEntity> {
@@ -31,9 +30,8 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 	public void render(MobSpawnerBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		float interpolatedCounter = -(entity.lastCounter + (entity.counter - entity.lastCounter) * partialTicks);
 
-		float counter1 = interpolatedCounter;
 		stack.pushPose();
-		stack.translate(0.475F, 0.38F + (float) Math.sin(counter1) / 5.0F,  0.475F);
+		stack.translate(0.475F, 0.38F + (float) Math.sin(interpolatedCounter) / 5.0F,  0.475F);
 		stack.scale(0.3F, 0.3F, 0.3F);
 		if (entity.getLevel() != null) {
 			renderSpawnerMob(entity, partialTicks, stack, source);
@@ -41,12 +39,12 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 		stack.popPose();
 
 		stack.pushPose();
-		stack.translate(0.45F, 1.8F + (float) Math.sin(counter1) / 5.0F, 0.45F);
+		stack.translate(0.45F, 1.8F + (float) Math.sin(interpolatedCounter) / 5.0F, 0.45F);
 		stack.translate(0.025F, -0.5F, 0.025F);
 		stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-		stack.mulPose(Axis.YP.rotationDegrees(counter1 * 180));
+		stack.mulPose(Axis.YP.rotationDegrees(interpolatedCounter * 180));
 		stack.scale(2.5F, 2.5F, 2.5F);
-		this.renderCrystal(stack, source, overlay, this.calculateColor(counter1, true));
+		this.renderCrystal(stack, source, overlay, this.calculateColor(interpolatedCounter, true));
 		stack.popPose();
 
 		float counter2 = interpolatedCounter / 1.5F;
@@ -66,7 +64,7 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 		stack.translate(0.475F, 1.5F - (float) Math.cos(counter3 * 3) / 2.0F, 0.475F);
 		stack.translate(0.025F, -0.5F, 0.025F);
 		stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-		stack.mulPose(Axis.YP.rotationDegrees(counter1 * 720));
+		stack.mulPose(Axis.YP.rotationDegrees(interpolatedCounter * 720));
 		stack.translate(0, 0, 0.5F);
 		stack.scale(2.25F, 2.25F, 2.25F);
 		stack.scale(0.2F + (float) Math.sin(counter3) * (float) Math.sin(counter3) / 2, 0.2F + (float) Math.sin(counter3) * (float) Math.sin(counter3) / 2, 0.2F + (float) Math.sin(counter3) * (float) Math.sin(counter3) / 2);
@@ -78,7 +76,7 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 		stack.translate(0.475F, 1.5F + (float) Math.cos(counter4 * 3) / 2.0F - 0.5F, 0.475F);
 		stack.translate(0.025F, -0.5F, 0.025F);
 		stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-		stack.mulPose(Axis.YP.rotationDegrees(counter1 * 720));
+		stack.mulPose(Axis.YP.rotationDegrees(interpolatedCounter * 720));
 		stack.translate(0.5F, 0, 0.5F);
 		stack.scale(2.25F, 2.25F, 2.25F);
 		stack.scale(0.2F + (float) Math.sin(counter4) * (float) Math.sin(counter4) / 2, 0.2F + (float) Math.sin(counter4) * (float) Math.sin(counter4) / 2, 0.2F + (float) Math.sin(counter4) * (float) Math.sin(counter4) / 2);
@@ -90,7 +88,7 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 		stack.translate(0.475F, 1.5F + (float) Math.cos(counter5 * 3) / 2.0F - 0.5F, 0.475F);
 		stack.translate(0.025F, -0.5F, 0.025F);
 		stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-		stack.mulPose(Axis.YP.rotationDegrees(counter1 * 720));
+		stack.mulPose(Axis.YP.rotationDegrees(interpolatedCounter * 720));
 		stack.translate(0F, 0, -0.5F);
 		stack.scale(2.25F, 2.25F, 2.25F);
 		stack.scale(0.2F + (float) Math.sin(counter5) * (float) Math.sin(counter5) / 2, 0.2F + (float) Math.sin(counter5) * (float) Math.sin(counter5) / 2, 0.2F + (float) Math.sin(counter5) * (float) Math.sin(counter5) / 2);

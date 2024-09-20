@@ -35,7 +35,7 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.textures.UnitTextureAtlasSprite;
-import thebetweenlands.common.block.StalactiteBlock;
+import thebetweenlands.common.block.terrain.StalactiteBlock;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 import thebetweenlands.util.StalactiteHelper.IStalactite;

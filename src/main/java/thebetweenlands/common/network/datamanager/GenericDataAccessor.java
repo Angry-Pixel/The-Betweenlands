@@ -29,10 +29,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
-public class GenericDataAccessor implements IGenericDataAccessorAccess {
+public class GenericDataAccessor implements GenericDataAccessorAccess {
 	public interface Serializer<T> {
 		void serialize(FriendlyByteBuf buf, T value) throws IOException;
 	}
@@ -55,7 +55,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 			@Override
 			public Object copy(Object value) {
-				return new CustomSerializer<T>(this.serializer, this.deserializer);
+				return new CustomSerializer<>(this.serializer, this.deserializer);
 			}
 		}
 
@@ -182,7 +182,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 	@SuppressWarnings("unchecked")
 	private <T> void setEntry(EntityDataAccessor<T> key, T value) {
-		GenericDataAccessor.DataEntry<T> entry = new GenericDataAccessor.DataEntry<T>(this, key, value);
+		GenericDataAccessor.DataEntry<T> entry = new GenericDataAccessor.DataEntry<>(this, key, value);
 
 		EntityDataSerializer<T> serializer = entry.getKey().serializer();
 		if(serializer instanceof CustomSerializer) {
@@ -603,7 +603,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 		@Override
 		public GenericDataAccessor.DataEntry<T> copy() {
-			return new GenericDataAccessor.DataEntry<T>(this.dataManager, this.key, this.key.serializer().copy(this.value), this.trackingTime);
+			return new GenericDataAccessor.DataEntry<>(this.dataManager, this.key, this.key.serializer().copy(this.value), this.trackingTime);
 		}
 	}
 }

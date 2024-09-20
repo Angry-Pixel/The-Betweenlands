@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -164,7 +163,7 @@ public class AmphibiousUpgrades {
 	public Object2IntMap<Holder<AmphibiousArmorUpgrade>> getAllUniqueUpgradesWithCounts() {
 		Object2IntOpenHashMap<Holder<AmphibiousArmorUpgrade>> upgrades = new Object2IntOpenHashMap<>();
 		for (UpgradeEntry entry : this.upgrades) {
-			if (entry.upgrade() != AmphibiousArmorUpgradeRegistry.NONE.get()) {
+			if (entry.upgrade() != AmphibiousArmorUpgradeRegistry.NONE) {
 				upgrades.merge(entry.upgrade(), 1, Integer::sum);
 			}
 		}
@@ -182,7 +181,7 @@ public class AmphibiousUpgrades {
 	}
 
 	public record UpgradeEntry(Holder<AmphibiousArmorUpgrade> upgrade, ItemStack stack) {
-		public static UpgradeEntry EMPTY = new UpgradeEntry(AmphibiousArmorUpgradeRegistry.NONE, ItemStack.EMPTY);
+		public static final UpgradeEntry EMPTY = new UpgradeEntry(AmphibiousArmorUpgradeRegistry.NONE, ItemStack.EMPTY);
 
 		public static final Codec<UpgradeEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				BLRegistries.AMPHIBIOUS_ARMOR_UPGRADES.holderByNameCodec().fieldOf("upgrade").forGetter(UpgradeEntry::upgrade),

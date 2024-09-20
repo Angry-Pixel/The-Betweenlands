@@ -30,7 +30,7 @@ import java.util.List;
 public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
 
 	public boolean showFluidAnimation;
-	public FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
 	private NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
 
 	public WaterFilterBlockEntity(BlockPos pos, BlockState state) {

@@ -1,6 +1,5 @@
 package thebetweenlands.util;
 
-import com.mojang.datafixers.util.Function6;
 import com.mojang.datafixers.util.Function7;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -41,7 +40,7 @@ public class ExtraCodecs {
 		final Function<C, T7> getter7,
 		final Function7<T1, T2, T3, T4, T5, T6, T7, C> factory
 	) {
-		return new StreamCodec<B, C>() {
+		return new StreamCodec<>() {
 			@Override
 			public C decode(B p_330310_) {
 				T1 t1 = codec1.decode(p_330310_);

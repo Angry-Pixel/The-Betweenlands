@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.block.WispBlock;
+import thebetweenlands.common.block.terrain.WispBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -324,7 +324,7 @@ public class LocationCragrockTower extends LocationGuarded {
 						if(!this.inactiveWisps.isEmpty()) {
 							BlockPos src = player.blockPosition();
 
-							BlockPos closest = this.inactiveWisps.get(0);
+							BlockPos closest = this.inactiveWisps.getFirst();
 							for(BlockPos pos : this.inactiveWisps) {
 								if(pos.distSqr(src) < closest.distSqr(src)) {
 									closest = pos;
@@ -428,8 +428,8 @@ public class LocationCragrockTower extends LocationGuarded {
 	protected void readBlockList(CompoundTag nbt, String name, List<BlockPos> blocks) {
 		blocks.clear();
 		ListTag blockList = nbt.getList(name, Tag.TAG_LONG);
-		for(int i = 0; i < blockList.size(); i++) {
-			LongTag posNbt = (LongTag) blockList.get(i);
+		for (Tag tag : blockList) {
+			LongTag posNbt = (LongTag) tag;
 			blocks.add(BlockPos.of(posNbt.getAsLong()));
 		}
 	}
@@ -494,7 +494,7 @@ public class LocationCragrockTower extends LocationGuarded {
 					}
 				}
 
-				Player closest = players.get(0);
+				Player closest = players.getFirst();
 				for(Player player : players) {
 					if(player.distanceToSqr(Vec3.atCenterOf(this.structurePos)) < closest.distanceToSqr(Vec3.atCenterOf(this.structurePos))) {
 						closest = player;

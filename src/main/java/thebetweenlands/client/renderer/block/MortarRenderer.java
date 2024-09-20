@@ -12,7 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.MortarBlock;
+import thebetweenlands.common.block.container.MortarBlock;
 import thebetweenlands.common.block.entity.MortarBlockEntity;
 
 public class MortarRenderer implements BlockEntityRenderer<MortarBlockEntity> {

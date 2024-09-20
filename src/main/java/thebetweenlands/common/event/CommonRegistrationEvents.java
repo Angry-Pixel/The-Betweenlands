@@ -7,25 +7,19 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.VanillaHopperItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -45,13 +39,11 @@ import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BLLootProvider;
 import thebetweenlands.common.datagen.tags.*;
-import thebetweenlands.common.entities.MireSnail;
-import thebetweenlands.common.entities.fishing.BubblerCrab;
-import thebetweenlands.common.entities.fishing.SiltCrab;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.handler.HandlerEvents;
+import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.fishing.BubblerCrab;
+import thebetweenlands.common.entity.fishing.SiltCrab;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
-import thebetweenlands.common.network.*;
 import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.clientbound.attachment.*;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
@@ -63,7 +55,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class CommonRegistrationEvents {
 
-	public static void init(IEventBus bus, Dist dist) {
+	public static void init(IEventBus bus) {
 		bus.addListener(CommonRegistrationEvents::createDatagen);
 		bus.addListener(CommonRegistrationEvents::makeNewRegistries);
 		bus.addListener(CommonRegistrationEvents::makeDatapackRegistries);
@@ -75,10 +67,8 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerCapabilities);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
-		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::protectFromMagicDamage);
 
-		SimulacrumEvents.init();
-		HandlerEvents.init(dist);
+		CommonEvents.init();
 	}
 
 	private static void createDatagen(GatherDataEvent event) {
@@ -233,29 +223,5 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new InvWrapper(tile));
-	}
-
-	private static void protectFromMagicDamage(LivingIncomingDamageEvent event) {
-		if(event.getSource().is(Tags.DamageTypes.IS_MAGIC)) {
-			float damageMultiplier = 1.0F;
-
-			LivingEntity entityHit = event.getEntity();
-
-			ItemStack boots = entityHit.getItemBySlot(EquipmentSlot.FEET);
-			ItemStack legs = entityHit.getItemBySlot(EquipmentSlot.LEGS);
-			ItemStack chest = entityHit.getItemBySlot(EquipmentSlot.CHEST);
-			ItemStack helm = entityHit.getItemBySlot(EquipmentSlot.HEAD);
-
-			if (!boots.isEmpty() && boots.is(ItemRegistry.ANCIENT_BOOTS) && boots.getDamageValue() < boots.getMaxDamage())
-				damageMultiplier -= 0.125F;
-			if (!legs.isEmpty()  && legs.is(ItemRegistry.ANCIENT_LEGGINGS) && legs.getDamageValue() < legs.getMaxDamage())
-				damageMultiplier -= 0.125F;
-			if (!chest.isEmpty() && chest.is(ItemRegistry.ANCIENT_CHESTPLATE) && chest.getDamageValue() < chest.getMaxDamage())
-				damageMultiplier -= 0.125F;
-			if (!helm.isEmpty() && helm.is(ItemRegistry.ANCIENT_HELMET) && helm.getDamageValue() < helm.getMaxDamage())
-				damageMultiplier -= 0.125F;
-
-			event.setAmount(event.getAmount() * damageMultiplier);
-		}
 	}
 }

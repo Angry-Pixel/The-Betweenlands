@@ -21,7 +21,7 @@ import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.gui.ModListScreen;
 import net.neoforged.neoforge.internal.BrandingControl;
-import thebetweenlands.client.event.MainMenuEvents;
+import thebetweenlands.client.handler.MainMenuHandler;
 import thebetweenlands.common.TheBetweenlands;
 
 public class BLTitleScreen extends TitleScreen {
@@ -87,7 +87,7 @@ public class BLTitleScreen extends TitleScreen {
 			this.fadeWidgets(f);
 		}
 
-		MainMenuEvents.background.render(graphics, partialTicks, this.bgFade);
+		MainMenuHandler.background.render(graphics, partialTicks, this.bgFade);
 		int i = Mth.ceil(f * 255.0F) << 24;
 		if ((i & -67108864) != 0) {
 			for (Renderable renderable : this.renderables) {

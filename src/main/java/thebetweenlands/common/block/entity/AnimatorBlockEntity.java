@@ -5,7 +5,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -32,7 +31,7 @@ import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
 import thebetweenlands.common.inventory.AnimatorMenu;
-import thebetweenlands.common.items.LifeCrystalItem;
+import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;

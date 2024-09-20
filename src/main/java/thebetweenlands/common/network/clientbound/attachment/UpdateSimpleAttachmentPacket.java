@@ -22,38 +22,38 @@ public record UpdateSimpleAttachmentPacket<T>(int entityID, T attachment) implem
 	public static final Type<UpdateSimpleAttachmentPacket<?>> TYPE = new Type<>(TheBetweenlands.prefix("update_simple_attachment"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, UpdateSimpleAttachmentPacket<?>> STREAM_CODEC = StreamCodec.of(UpdateSimpleAttachmentPacket::encode, UpdateSimpleAttachmentPacket::decode);
 
-	public static final <T> void encode(RegistryFriendlyByteBuf buffer, UpdateSimpleAttachmentPacket<T> packet) {
+	public static <T> void encode(RegistryFriendlyByteBuf buffer, UpdateSimpleAttachmentPacket<T> packet) {
 		if(!(packet.attachment() instanceof ISimpleAttachment simpleAttachment)) throw new IllegalArgumentException();
-		
+
 		buffer.writeVarInt(packet.entityID());
-		
+
 		T attachment = packet.attachment();
 
 		ResourceKey<SimpleAttachmentType<?>> resourceKey = simpleAttachment.getResourceKey();
 		SimpleAttachmentType<?> genericAttachmentType = BLRegistries.SIMPLE_ATTACHMENT_TYPES.get(resourceKey);
-		
+
 		Preconditions.checkArgument(genericAttachmentType.canSerialize(attachment));
-		
+
 		// I love java generics :))))))
 		@SuppressWarnings("unchecked")
 		SimpleAttachmentType<T> attachmentType = (SimpleAttachmentType<T>)genericAttachmentType;
-		
+
 		buffer.writeResourceKey(resourceKey);
 		attachmentType.serialize(buffer, attachment);
 	}
 
-	public static final UpdateSimpleAttachmentPacket<?> decode(RegistryFriendlyByteBuf buffer) {
+	public static UpdateSimpleAttachmentPacket<?> decode(RegistryFriendlyByteBuf buffer) {
 		final int entityID = buffer.readVarInt();
-		
+
 		ResourceKey<SimpleAttachmentType<?>> resourceKey = buffer.readResourceKey(BLRegistries.Keys.SIMPLE_ATTACHMENT_TYPES);
-		
+
 		SimpleAttachmentType<?> attachmentType = BLRegistries.SIMPLE_ATTACHMENT_TYPES.get(resourceKey);
 		Preconditions.checkNotNull(attachmentType);
 		Preconditions.checkArgument(attachmentType.canDeserialize());
-		
+
 		return new UpdateSimpleAttachmentPacket<>(entityID, attachmentType.deserialize(buffer));
 	}
-	
+
 	@Override
 	public Type<? extends CustomPacketPayload> type() {
 		return TYPE;

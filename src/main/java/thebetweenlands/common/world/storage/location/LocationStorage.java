@@ -18,7 +18,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import javax.annotation.Nullable;
-import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -43,7 +43,7 @@ public class LocationStorage extends LocalStorageImpl {
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
-	protected GenericDataAccessor dataManager;
+	protected final GenericDataAccessor dataManager;
 
 	private final Object2IntMap<Entity> titleDisplayCooldowns = new Object2IntArrayMap<>();
 
@@ -76,7 +76,7 @@ public class LocationStorage extends LocalStorageImpl {
 	}
 
 	@Override
-	public IGenericDataAccessorAccess getDataManager() {
+	public GenericDataAccessorAccess getDataManager() {
 		return this.dataManager;
 	}
 
@@ -124,9 +124,9 @@ public class LocationStorage extends LocalStorageImpl {
 		if (this.boundingBoxes.isEmpty()) {
 			this.enclosingBoundingBox = null;
 		} else if (this.boundingBoxes.size() == 1) {
-			this.enclosingBoundingBox = this.boundingBoxes.get(0);
+			this.enclosingBoundingBox = this.boundingBoxes.getFirst();
 		} else {
-			AABB union = this.boundingBoxes.get(0);
+			AABB union = this.boundingBoxes.getFirst();
 			for (AABB box : this.boundingBoxes) {
 				union = union.minmax(box);
 			}
@@ -561,17 +561,15 @@ public class LocationStorage extends LocalStorageImpl {
 		List<LocationStorage> locations = LocationStorage.getLocations(level, position);
 		if (locations.isEmpty())
 			return null;
-		Collections.sort(locations, LAYER_SORTER);
+		locations.sort(LAYER_SORTER);
 		LocationStorage highestLocation = null;
-		for (int i = 0; i < locations.size(); i++) {
-			LocationStorage storage = locations.get(i);
+		for (LocationStorage storage : locations) {
 			if (storage.hasAmbience() || storage.inheritAmbience)
 				highestLocation = storage;
 		}
 		if (highestLocation != null) {
 			if (highestLocation.ambience == null && highestLocation.inheritAmbience) {
-				for (int i = 0; i < locations.size(); i++) {
-					LocationStorage storage = locations.get(i);
+				for (LocationStorage storage : locations) {
 					if (storage.hasAmbience())
 						return storage.ambience;
 				}
@@ -592,17 +590,15 @@ public class LocationStorage extends LocalStorageImpl {
 		List<LocationStorage> locations = getLocations(entity);
 		if (locations.isEmpty())
 			return null;
-		Collections.sort(locations, LAYER_SORTER);
+		locations.sort(LAYER_SORTER);
 		LocationStorage highestLocation = null;
-		for (int i = 0; i < locations.size(); i++) {
-			LocationStorage storage = locations.get(i);
+		for (LocationStorage storage : locations) {
 			if (storage.hasAmbience() || storage.inheritAmbience)
 				highestLocation = storage;
 		}
 		if (highestLocation != null) {
 			if (highestLocation.ambience == null && highestLocation.inheritAmbience) {
-				for (int i = 0; i < locations.size(); i++) {
-					LocationStorage storage = locations.get(i);
+				for (LocationStorage storage : locations) {
 					if (storage.hasAmbience())
 						return storage.ambience;
 				}

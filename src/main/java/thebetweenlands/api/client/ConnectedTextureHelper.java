@@ -23,18 +23,18 @@ public class ConnectedTextureHelper {
 
 
 	@FunctionalInterface
-	public static interface ConnectedTexturesPropertyProvider {
+	public interface ConnectedTexturesPropertyProvider {
 		/**
 		 * Takes the supplied {@link ModelData} and applies any custom cullface or face index properties and applies them to the builder
 		 */
-		public void applyModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData initialModelData, ModelData.Builder builder);
+		void applyModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData initialModelData, ModelData.Builder builder);
 	}
-	
-	public static final Map<ResourceLocation, ModelProperty<Integer>> INDEX_REGISTRY = new HashMap<ResourceLocation, ModelProperty<Integer>>();
-	public static final Map<ResourceLocation, ModelProperty<Boolean>> CULLFACE_REGISTRY = new HashMap<ResourceLocation, ModelProperty<Boolean>>();
 
-	protected static final Map<ResourceLocation, ConnectedTexturesPropertyProvider> PROPERTY_PROVIDERS = new Object2ObjectArrayMap<ResourceLocation, ConnectedTextureHelper.ConnectedTexturesPropertyProvider>();
-	
+	public static final Map<ResourceLocation, ModelProperty<Integer>> INDEX_REGISTRY = new HashMap<>();
+	public static final Map<ResourceLocation, ModelProperty<Boolean>> CULLFACE_REGISTRY = new HashMap<>();
+
+	protected static final Map<ResourceLocation, ConnectedTexturesPropertyProvider> PROPERTY_PROVIDERS = new Object2ObjectArrayMap<>();
+
 	static {
 		INDEX_REGISTRY.put(TheBetweenlands.prefix("top_north_west_index"), DefaultConnectedTextureProperties.TOP_NORTH_WEST_INDEX);
 		INDEX_REGISTRY.put(TheBetweenlands.prefix("top_north_east_index"), DefaultConnectedTextureProperties.TOP_NORTH_EAST_INDEX);
@@ -90,11 +90,11 @@ public class ConnectedTextureHelper {
 	public static ConnectedTexturesPropertyProvider getPropertyProvider(ResourceLocation name) {
 		return PROPERTY_PROVIDERS.get(name);
 	}
-	
+
 	public static boolean hasPropertyProvider(ResourceLocation name) {
 		return PROPERTY_PROVIDERS.containsKey(name);
 	}
-	
+
 	/**
 	 * Register a {@link ModelProperty} as an index that can be used in connected texture models
 	 * @param name
@@ -116,7 +116,7 @@ public class ConnectedTextureHelper {
 			TheBetweenlands.LOGGER.warn("Cullface property {} is being overwritten", name);
 		CULLFACE_REGISTRY.put(name, property);
 	}
-	
+
 	@Nullable
 	public static ModelProperty<Integer> getIndexPropertyNullable(ResourceLocation name) {
 		return INDEX_REGISTRY.getOrDefault(name, null);
@@ -135,7 +135,7 @@ public class ConnectedTextureHelper {
 		}
 		return property;
 	}
-	
+
 	@Nonnull
 	public static ModelProperty<Boolean> getCullfacePropertyOrThrow(ResourceLocation name) {
 		ModelProperty<Boolean> property = getCullfacePropertyNullable(name);
@@ -144,27 +144,27 @@ public class ConnectedTextureHelper {
 		}
 		return property;
 	}
-	
+
 	public static ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
-		if(state.getBlock() instanceof IConnectedTextureBlock ctblock) {
+		if(state.getBlock() instanceof ConnectedTextureBlock ctblock) {
 			modelData = ctblock.getModelData(level, pos, state, modelData);
 		}
-		
+
 		if(PROPERTY_PROVIDERS.isEmpty()) return modelData;
-		
+
 		ModelData.Builder builder = modelData.derive();
 		for(ConnectedTexturesPropertyProvider provider : PROPERTY_PROVIDERS.values()) {
 			provider.applyModelData(level, pos, state, modelData, builder);
 		}
-		
+
 		return builder.build();
 	}
-	
-	
-	
 
-	public static IConnectionRules createDefaultConnectionRules(BlockAndTintGetter level, BlockPos pos, BlockState state, Predicate<BlockPos> canConnectTo, boolean connectToSelf) {
-		return new IConnectionRules() {
+
+
+
+	public static ConnectionRules createDefaultConnectionRules(BlockAndTintGetter level, BlockPos pos, BlockState state, Predicate<BlockPos> canConnectTo, boolean connectToSelf) {
+		return new ConnectionRules() {
 			@Override
 			public boolean canTextureConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
 				return canConnectTo.test(to);
@@ -173,20 +173,17 @@ public class ConnectedTextureHelper {
 			@Override
 			public boolean canConnectThrough(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
 				if(connectToSelf) {
-					return IConnectionRules.super.canConnectThrough(world, pos, face, to);
+					return ConnectionRules.super.canConnectThrough(world, pos, face, to);
 				}
 				Axis axis = face.getAxis();
-				if((axis == Axis.X && to.getX() - pos.getX() != 0) || (axis == Axis.Y && to.getY() - pos.getY() != 0) || (axis == Axis.Z && to.getZ() - pos.getZ() != 0)) {
-					//Tries to connect through the block that is next to the connected texture face. This should always be true
-					//if the block can't connect to its own faces because otherwise it wouldn't be able to connect to anything
-					return true;
-				}
-				return false;
+				//Tries to connect through the block that is next to the connected texture face. This should always be true
+				//if the block can't connect to its own faces because otherwise it wouldn't be able to connect to anything
+				return (axis == Axis.X && to.getX() - pos.getX() != 0) || (axis == Axis.Y && to.getY() - pos.getY() != 0) || (axis == Axis.Z && to.getZ() - pos.getZ() != 0);
 			}
 		};
 	}
-	
-	
+
+
 
 	/**
 	 * Returns the quadrant indices<p>
@@ -202,7 +199,7 @@ public class ConnectedTextureHelper {
 	 * @param flipXZ Flips the X and Z axis, used for EAST, WEST and DOWN face
 	 * @return <p>Returned index positions:
 	 * <pre>
-	 *  -------> 
+	 *  ------->
 	 * | 0-----1
 	 * | |     |
 	 * | |     |
@@ -292,7 +289,7 @@ public class ConnectedTextureHelper {
 	 * @param canConnectThrough Returns whether this block can connect through the specified block pos;
 	 * @return Connection array
 	 */
-	public static boolean[] getConnectionArray(BlockAndTintGetter world, BlockPos pos, Direction dir, IConnectionRules connectionRules) {
+	public static boolean[] getConnectionArray(BlockAndTintGetter world, BlockPos pos, Direction dir, ConnectionRules connectionRules) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -350,7 +347,7 @@ public class ConnectedTextureHelper {
 				}
 			}
 		}
-		
+
 		return connectionArray;
 	}
 
@@ -365,6 +362,6 @@ public class ConnectedTextureHelper {
 	public static int getIndex(int x, int y, int width) {
 		return x % width + y * width;
 	}
-	
-	
+
+
 }

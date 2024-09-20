@@ -18,7 +18,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.PurifierBlock;
+import thebetweenlands.common.block.container.PurifierBlock;
 import thebetweenlands.common.block.entity.PurifierBlockEntity;
 import thebetweenlands.util.RenderUtils;
 

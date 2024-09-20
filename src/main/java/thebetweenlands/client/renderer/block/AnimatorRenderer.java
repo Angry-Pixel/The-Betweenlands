@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.AnimatorBlock;
+import thebetweenlands.common.block.container.AnimatorBlock;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.util.EntityCache;
 

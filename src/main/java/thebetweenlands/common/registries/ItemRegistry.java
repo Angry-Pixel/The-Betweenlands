@@ -1,7 +1,6 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -15,11 +14,22 @@ import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.items.*;
-import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.items.amphibious.UpgradeToggleItem;
-import thebetweenlands.common.items.amphibious.UpgradeTriggerItem;
-import thebetweenlands.common.items.shield.*;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.armor.amphibious.UpgradeToggleItem;
+import thebetweenlands.common.item.armor.amphibious.UpgradeTriggerItem;
+import thebetweenlands.common.item.armor.AncientArmorItem;
+import thebetweenlands.common.item.armor.LurkerSkinArmorItem;
+import thebetweenlands.common.item.armor.MarshRunnerBootsItem;
+import thebetweenlands.common.item.armor.RubberBootsItem;
+import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
+import thebetweenlands.common.item.food.*;
+import thebetweenlands.common.item.herblore.AspectVialItem;
+import thebetweenlands.common.item.herblore.AspectrusFruitItem;
+import thebetweenlands.common.item.herblore.DentrothystVialItem;
+import thebetweenlands.common.item.herblore.ElixirItem;
+import thebetweenlands.common.item.misc.*;
+import thebetweenlands.common.item.shield.*;
+import thebetweenlands.common.item.tool.*;
 import thebetweenlands.util.BLDyeColor;
 
 import java.util.ArrayList;

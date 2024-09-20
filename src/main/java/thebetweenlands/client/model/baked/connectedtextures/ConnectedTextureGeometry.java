@@ -2,7 +2,6 @@ package thebetweenlands.client.model.baked.connectedtextures;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +47,7 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 
 	protected final BlockModel baseModel;
 	protected final List<UnbakedConnectedTexturesQuad> connectedTextureQuads;
-	
+
 	public ConnectedTextureGeometry(BlockModel baseModel, List<UnbakedConnectedTexturesQuad> quads) {
 		this.baseModel = baseModel;
 		this.connectedTextureQuads = ImmutableList.copyOf(quads);
@@ -60,13 +59,13 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 		BakedModel bakedBase = new ElementsModel(this.baseModel.getElements()).bake(context, baker, spriteGetter, modelState, overrides);
 		if(this.connectedTextureQuads.isEmpty())
 			return bakedBase;
-		
+
 		BakedConnectedTexturesQuad[] bakedQuads = new BakedConnectedTexturesQuad[connectedTextureQuads.size()];
 		for(int i = 0; i < connectedTextureQuads.size(); ++i) {
 			final UnbakedConnectedTexturesQuad unbakedQuad = connectedTextureQuads.get(i);
 			bakedQuads[i] = BakedConnectedTexturesQuad.bakeFrom(unbakedQuad, context, baker, spriteGetter, modelState, overrides);
 		}
-		
+
 		return new ConnectedTexturesDynamicModel(bakedBase, bakedQuads);
 	}
 
@@ -75,20 +74,20 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 		IUnbakedGeometry.super.resolveParents(modelGetter, context);
 		this.baseModel.resolveParents(modelGetter);
 	}
-	
+
 	public static class ConnectedTexturesDynamicModel implements IDynamicBakedModel {
 
 		protected final BakedModel bakedBase;
 		protected final BakedConnectedTexturesQuad[] bakedQuads;
 		/// Sided version of bakedQuads
 		protected final BakedConnectedTexturesQuad[][] connectedTextures;
-		
+
 		public ConnectedTexturesDynamicModel(BakedModel bakedBase, BakedConnectedTexturesQuad[] bakedQuads) {
 			this.bakedBase = bakedBase;
 			this.bakedQuads = bakedQuads;
 
 			this.connectedTextures = new BakedConnectedTexturesQuad[Direction.values().length + 1][];
-			
+
 			final List<BakedConnectedTexturesQuad> connectedTextureQuads = new ArrayList<>();
 			for(int i = 0; i < connectedTextures.length; ++i) {
 				Direction face = i == 0 ? null : Direction.values()[i - 1];
@@ -101,51 +100,48 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 				this.connectedTextures[i == 0 ? 0 : face.get3DDataValue() + 1] = connectedTextureQuads.toArray(new BakedConnectedTexturesQuad[0]);
 			}
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
-			final List<BakedQuad> quads = new ArrayList<>();
-			quads.addAll(this.bakedBase.getQuads(state, side, rand, extraData, renderType));
-			
+			final List<BakedQuad> quads = new ArrayList<>(this.bakedBase.getQuads(state, side, rand, extraData, renderType));
+
 			final int faceIndex = side == null ? 0 : side.get3DDataValue() + 1;
 			final BakedConnectedTexturesQuad[] connectedTextures = this.connectedTextures[faceIndex];
 
-			if(connectedTextures.length > 0) {
-				for(BakedConnectedTexturesQuad tex : connectedTextures) {
-					for(int i = 0; i < 4; i++) {
-						// tex.cullface filtered out in the constructor
-						final ModelProperty<Boolean> cullfaceProperty = tex.cullfaceProperty;
-						if(cullfaceProperty == null || !extraData.has(cullfaceProperty) || extraData.get(cullfaceProperty)) {
-							final ModelProperty<?> indexProperty = tex.indexProperties[i];
-							if(indexProperty != null) {
-								final int index = extraData.has(indexProperty) ? (int) extraData.get(indexProperty) : 0;
-								if(index != -1)
-									quads.add(tex.quads[i][index]);
-							} else {
-								quads.add(tex.quads[i][tex.indices[i]]);
-							}
+			for (BakedConnectedTexturesQuad tex : connectedTextures) {
+				for (int i = 0; i < 4; i++) {
+					// tex.cullface filtered out in the constructor
+					final ModelProperty<Boolean> cullfaceProperty = tex.cullfaceProperty;
+					if (cullfaceProperty == null || !extraData.has(cullfaceProperty) || extraData.get(cullfaceProperty)) {
+						final ModelProperty<?> indexProperty = tex.indexProperties[i];
+						if (indexProperty != null) {
+							final int index = extraData.has(indexProperty) ? (int) extraData.get(indexProperty) : 0;
+							if (index != -1)
+								quads.add(tex.quads[i][index]);
+						} else {
+							quads.add(tex.quads[i][tex.indices[i]]);
 						}
 					}
 				}
 			}
-			
+
 			return quads;
 		}
-		
+
 		@Override
 		public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
 			ModelData data = IDynamicBakedModel.super.getModelData(level, pos, state, modelData);
 			data = this.bakedBase.getModelData(level, pos, state, data);
 			return ConnectedTextureHelper.getModelData(level, pos, state, data);
 		}
-		
+
 		@Override
 		public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data) {
 //			return ChunkRenderTypeSet.union(IDynamicBakedModel.super.getRenderTypes(state, rand, data), this.bakedBase.getRenderTypes(state, rand, data));
 			return this.bakedBase.getRenderTypes(state, rand, data);
 		}
-		
+
 		@Override
 		public boolean useAmbientOcclusion() {
 			return bakedBase.useAmbientOcclusion();
@@ -176,9 +172,9 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 		public ItemOverrides getOverrides() {
 			return bakedBase.getOverrides();
 		}
-		
+
 	}
-	
+
 	public static class ConnectedTextureGeometryLoader implements IGeometryLoader<ConnectedTextureGeometry> {
 	    public static final ConnectedTextureGeometryLoader INSTANCE = new ConnectedTextureGeometryLoader();
 
@@ -186,35 +182,35 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 		public ConnectedTextureGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
 			// Child block model
 			BlockModel base;
-			
+
 			{
 				// Trick it into parsing a normal model as well
 				JsonObject copy = jsonObject.deepCopy();
 				copy.remove("loader");
 				base = deserializationContext.deserialize(copy, BlockModel.class);
 			}
-			
-	        List<UnbakedConnectedTexturesQuad> quads = new ArrayList<UnbakedConnectedTexturesQuad>();
+
+	        List<UnbakedConnectedTexturesQuad> quads = new ArrayList<>();
 	        if(jsonObject.has("connected_texture_faces")) {
 //	        	TheBetweenlands.LOGGER.info("Loading block model with connected texture loader");
-	        	
+
 	        	// Does type checks for us
 	        	JsonArray facesArray = jsonObject.getAsJsonArray("connected_texture_faces");
 				Preconditions.checkState(facesArray != null, "Connected texture model must provide a connected_texture_faces array");
-	        	
+
 	        	for(JsonElement element : facesArray) {
 					/// I will not be changing the effects on the format of the final JSON
 					JsonObject faceObject = element.getAsJsonObject();
 
 					Preconditions.checkState(faceObject.has("indices") && faceObject.get("indices").isJsonArray() && faceObject.getAsJsonArray("indices").size() == 4, "Connected texture face must provide 4 indices");
-					
+
 					// Indices:
 					// 		Number to always use that texture on a vertex
 					// 		String to dynamically check what texture to use
-					
+
 					String[] indexNames = new String[4];
 					int[] indices = new int[4];
-					
+
 					{
 						JsonArray indicesArray = faceObject.getAsJsonArray("indices");
 						for(int i = 0; i < 4; i++) {
@@ -226,25 +222,25 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 							}
 						}
 					}
-					
+
 					// Vertices: X, Y, Z and U, V coords. Goes from xyz 0.0, 0.0, 0.0 -> xyz 1.0, 1.0, 1.0
-					
+
 					Preconditions.checkState(faceObject.has("vertices") && faceObject.get("vertices").isJsonArray() && faceObject.getAsJsonArray("vertices").size() == 4, "Connected texture face must provide 4 vertices");
 					ConnectedTexturesVertex[] vertices = new ConnectedTexturesVertex[4];
-					
+
 					{
 						JsonArray verticesArray = faceObject.getAsJsonArray("vertices");
 						for(int i = 0; i < 4; i++) {
 							vertices[i] = ConnectedTexturesVertex.deserialize(verticesArray.get(i).getAsJsonObject());
 						}
 					}
-					
+
 					// Connected Textures: List of 5 textures.
 					// 		Texture 0 is the default
 					//		Texture 1 & 2 are for when there are no sides/top connected
 					//		Texture 3 is for when no sides or top are connected
 					//		Texture 4 is for when there are only corners connected
-					
+
 					Preconditions.checkState(faceObject.has("connected_textures") && faceObject.get("connected_textures").isJsonArray() && faceObject.getAsJsonArray("connected_textures").size() == 5, "Connected texture face must provide 5 textures");
 					ResourceLocation[] textures = new ResourceLocation[5];
 					{
@@ -255,7 +251,7 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 							textures[i] = location;
 						}
 					}
-					
+
 					// Tint index for the textures
 					int tintIndex = faceObject.has("tintindex") ? faceObject.get("tintindex").getAsInt() : -1;
 
@@ -269,8 +265,8 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 							cullFaceProperty = cullFaceName;
 						}
 					}
-					
-					
+
+
 					float minU = 0, minV = 0, maxU = 1, maxV = 1;
 					if(faceObject.has("minU")) {
 						minU = faceObject.get("minU").getAsFloat();
@@ -284,16 +280,16 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 					if(faceObject.has("maxV")) {
 						maxV = faceObject.get("maxV").getAsFloat();
 					}
-					
+
 					quads.add(new UnbakedConnectedTexturesQuad(textures, indexNames, indices, vertices, cullFace, cullFaceProperty, tintIndex, minU, minV, maxU, maxV));
 	        	}
 	        } else {
 	        	TheBetweenlands.LOGGER.warn("Block model specifies connected texture loader, but is missing a \"connected_texture_faces\" key");
 	        }
-	        
+
 			return new ConnectedTextureGeometry(base, quads);
 		}
-		
+
 	}
-	
+
 }

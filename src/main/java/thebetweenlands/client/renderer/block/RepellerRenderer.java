@@ -19,7 +19,7 @@ import org.joml.Vector3f;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.RepellerBlock;
+import thebetweenlands.common.block.container.RepellerBlock;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
 
 public class RepellerRenderer implements BlockEntityRenderer<RepellerBlockEntity> {

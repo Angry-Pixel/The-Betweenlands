@@ -54,7 +54,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public void readAndLoadChunk(ChunkAccess chunk, CompoundTag nbt) {
 		if (this.storageMap.containsKey(chunk.getPos())) {
-			if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.warn(String.format("Reading chunk storage at %s, but chunk storage is already loaded!", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"));
+			if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.warn("Reading chunk storage at {}, but chunk storage is already loaded!", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]");
 		} else {
 			try {
 				ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
@@ -74,7 +74,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public void unloadChunk(ChunkAccess chunk) {
 		if (!this.storageMap.containsKey(chunk.getPos())) {
-			if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.warn(String.format("Unloading chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"));
+			if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.warn("Unloading chunk storage at {}, but chunk storage is not loaded!", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]");
 		} else {
 			ChunkStorageImpl storage = this.storageMap.remove(chunk.getPos());
 			if (storage != null) {
@@ -87,7 +87,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public CompoundTag saveChunk(ChunkAccess chunk) {
 		if (!this.storageMap.containsKey(chunk.getPos())) {
-			if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.warn(String.format("Saving chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"));
+			if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.warn("Saving chunk storage at {}, but chunk storage is not loaded!", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]");
 		} else {
 			try {
 				ChunkStorageImpl storage = this.storageMap.get(chunk.getPos());

@@ -5,8 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.common.block.DecayableCropBlock;
-import thebetweenlands.common.block.DugSoilBlock;
+import thebetweenlands.common.block.farming.DecayableCropBlock;
+import thebetweenlands.common.block.farming.DugSoilBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class DugSoilBlockEntity extends SyncedBlockEntity {

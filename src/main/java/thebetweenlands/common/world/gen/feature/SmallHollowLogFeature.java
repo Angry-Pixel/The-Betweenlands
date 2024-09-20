@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import thebetweenlands.common.block.HollowLogBlock;
+import thebetweenlands.common.block.terrain.HollowLogBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class SmallHollowLogFeature extends Feature<NoneFeatureConfiguration> {

@@ -14,7 +14,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.component.ISimpleAttachment;
 import thebetweenlands.common.component.SimpleAttachmentType;
-import thebetweenlands.common.network.clientbound.attachment.UpdateRotSmellPacket;
 import thebetweenlands.common.network.clientbound.attachment.UpdateSimpleAttachmentPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
@@ -38,7 +37,7 @@ public class RotSmellData implements ISimpleAttachment {
 	public ResourceKey<SimpleAttachmentType<?>> getResourceKey() {
 		return AttachmentRegistry.ROT_SMELL_AUTOENCODER.getKey();
 	}
-	
+
 	public RotSmellData() {
 		this(-1, -1);
 	}

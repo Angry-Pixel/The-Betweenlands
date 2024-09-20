@@ -5,20 +5,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.alchemy.Potion;
 
 public class ElixirEffect {
 	public static final int VIAL_INFUSION_MAX_POTENCY = 5;

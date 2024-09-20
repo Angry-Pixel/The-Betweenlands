@@ -17,7 +17,7 @@ import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.items.DentrothystVialItem;
+import thebetweenlands.common.item.herblore.DentrothystVialItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 

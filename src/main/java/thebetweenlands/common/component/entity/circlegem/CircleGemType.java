@@ -19,8 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.component.item.AmphibiousUpgrades;
-import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.items.GemSingerItem;
+import thebetweenlands.common.item.tool.GemSingerItem;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
@@ -220,7 +219,7 @@ public enum CircleGemType implements StringRepresentable {
 
 	public final Consumer<ItemStack> getAmphibiousArmorOnChangedHandler() {
 		return armor -> {
-			if (this.getAmphibiousArmorUpgrade() != null && armor.getOrDefault(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.EMPTY).getAllUniqueUpgradesWithCounts().containsKey(this.getAmphibiousArmorUpgrade().value())) {
+			if (this.getAmphibiousArmorUpgrade() != null && armor.getOrDefault(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.EMPTY).getAllUniqueUpgradesWithCounts().containsKey(this.getAmphibiousArmorUpgrade())) {
 				armor.set(DataComponentRegistry.CIRCLE_GEM, this);
 			} else {
 				armor.remove(DataComponentRegistry.CIRCLE_GEM);

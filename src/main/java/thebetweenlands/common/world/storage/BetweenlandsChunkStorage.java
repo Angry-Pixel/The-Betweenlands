@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.GemSingerItem;
+import thebetweenlands.common.item.tool.GemSingerItem;
 
 
 public class BetweenlandsChunkStorage extends ChunkStorageImpl {
@@ -145,7 +145,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	}
 
 	/**
-	 * Encodes a position into an index that might be contained in {@link #findGems(thebetweenlands.common.items.GemSingerItem.GemSingerTarget)}
+	 * Encodes a position into an index that might be contained in {@link #findGems(GemSingerItem.GemSingerTarget)}
 	 *
 	 * @param x X
 	 * @param y Y
@@ -157,7 +157,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	}
 
 	/**
-	 * Decodes a position index retrieved from {@link #findGems(thebetweenlands.common.items.GemSingerItem.GemSingerTarget)}
+	 * Decodes a position index retrieved from {@link #findGems(GemSingerItem.GemSingerTarget)}
 	 * into a block position <b>relative to the chunk it was retrieved from</b>
 	 *
 	 * @param index index to decode
@@ -254,7 +254,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param pos    World coordinate
 	 * @param target Gem target type
 	 * @return
-	 * @see #markGem(int, int, int, thebetweenlands.common.items.GemSingerItem.GemSingerTarget)
+	 * @see #markGem(int, int, int, GemSingerItem.GemSingerTarget)
 	 */
 	public static boolean markGem(Level level, BlockPos pos, GemSingerItem.GemSingerTarget target) {
 		BetweenlandsChunkStorage storage = forChunk(level, level.getChunk(pos));
@@ -269,7 +269,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param pos    World coordinate
 	 * @param target Gem target type
 	 * @return
-	 * @see #unmarkGem(int, int, int, thebetweenlands.common.items.GemSingerItem.GemSingerTarget)
+	 * @see #unmarkGem(int, int, int, GemSingerItem.GemSingerTarget)
 	 */
 	public static boolean unmarkGem(Level level, BlockPos pos, GemSingerItem.GemSingerTarget target) {
 		BetweenlandsChunkStorage storage = forChunk(level, level.getChunk(pos));

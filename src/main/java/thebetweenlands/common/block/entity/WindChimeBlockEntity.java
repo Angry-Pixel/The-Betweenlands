@@ -15,8 +15,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.environment.IEnvironmentEvent;
-import thebetweenlands.api.environment.IPredictableEnvironmentEvent;
+import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.PredictableEnvironmentEvent;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -42,7 +42,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 	private int fadeOutTimer = 0;
 
 	@Nullable
-	private IPredictableEnvironmentEvent predictedEvent;
+	private PredictableEnvironmentEvent predictedEvent;
 	private int predictedTimeUntilActivation;
 	@Nullable
 	private ResourceLocation predictedEventVision;
@@ -76,16 +76,16 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 			int maxPredictionTime = entity.getMaxPredictionTime();
 
 			int nextPrediction = Integer.MAX_VALUE;
-			IPredictableEnvironmentEvent nextEvent = null;
+			PredictableEnvironmentEvent nextEvent = null;
 			ResourceLocation[] nextEventVisions = null;
 
-			for (IEnvironmentEvent event : registry.getEvents().values()) {
-				if (event instanceof IPredictableEnvironmentEvent predictable && (entity.attunedEvent == null || entity.attunedEvent.equals(BLRegistries.ENVIRONMENT_EVENTS.getKey(event)))) {
+			for (EnvironmentEvent event : registry.getEvents().values()) {
+				if (event instanceof PredictableEnvironmentEvent predictable && (entity.attunedEvent == null || entity.attunedEvent.equals(BLRegistries.ENVIRONMENT_EVENTS.getKey(event)))) {
 
 					ResourceLocation[] visions = predictable.getVisionTextures();
 
 					if (visions != null) {
-						int prediction = predictable.estimateTimeUntil(level, IPredictableEnvironmentEvent.State.ACTIVE);
+						int prediction = predictable.estimateTimeUntil(level, PredictableEnvironmentEvent.State.ACTIVE);
 
 						if (prediction > 0 && prediction < nextPrediction && prediction < maxPredictionTime) {
 							nextPrediction = prediction;
@@ -132,7 +132,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
-	private void updateParticles(Level level, BlockPos pos, int maxPredictionTime, int nextPrediction, @Nullable IPredictableEnvironmentEvent nextEvent, ResourceLocation@Nullable[] nextEventVisions) {
+	private void updateParticles(Level level, BlockPos pos, int maxPredictionTime, int nextPrediction, @Nullable PredictableEnvironmentEvent nextEvent, ResourceLocation@Nullable[] nextEventVisions) {
 		if (this.predictedEvent != null && this.predictedEvent != nextEvent && this.fadeOutTimer < 20) {
 			this.fadeOutTimer++;
 
@@ -219,7 +219,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 //		}
 	}
 
-	private void playChimes(Level level, BlockPos pos, IPredictableEnvironmentEvent event) {
+	private void playChimes(Level level, BlockPos pos, PredictableEnvironmentEvent event) {
 		this.ticksUntilChimes = 15;
 
 		SoundEvent chimes = event.getChimesSound();
@@ -253,14 +253,14 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 		if (BetweenlandsWorldStorage.get(level) != null) {
 			BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry();
 
-			List<IPredictableEnvironmentEvent> choices = new ArrayList<>();
+			List<PredictableEnvironmentEvent> choices = new ArrayList<>();
 
 			int currentAttunedIndex = -1;
 
 			int i = 0;
-			for (Map.Entry<ResourceLocation, IEnvironmentEvent> entry : registry.getEvents().entrySet()) {
-				if (entry.getValue() instanceof IPredictableEnvironmentEvent) {
-					choices.add((IPredictableEnvironmentEvent) entry.getValue());
+			for (Map.Entry<ResourceLocation, EnvironmentEvent> entry : registry.getEvents().entrySet()) {
+				if (entry.getValue() instanceof PredictableEnvironmentEvent) {
+					choices.add((PredictableEnvironmentEvent) entry.getValue());
 
 					if (this.attunedEvent != null && this.attunedEvent.equals(entry.getKey())) {
 						currentAttunedIndex = i;
@@ -297,7 +297,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 //	}
 
 	@Nullable
-	public IPredictableEnvironmentEvent getPredictedEvent() {
+	public PredictableEnvironmentEvent getPredictedEvent() {
 		return this.predictedEvent;
 	}
 

@@ -8,7 +8,7 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
-import thebetweenlands.common.items.amphibious.upgrades.*;
+import thebetweenlands.common.item.armor.amphibious.upgrades.*;
 
 public class AmphibiousArmorUpgradeRegistry {
 

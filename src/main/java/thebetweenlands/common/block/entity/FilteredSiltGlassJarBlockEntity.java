@@ -15,7 +15,7 @@ import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class FilteredSiltGlassJarBlockEntity extends SyncedBlockEntity implements IFluidHandler {
 
-	public FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
 
 	public FilteredSiltGlassJarBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), pos, state);

@@ -12,7 +12,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.client.BetweenlandsClient;
-import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.sky.RiftVariant;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.RiftSoundPacket;

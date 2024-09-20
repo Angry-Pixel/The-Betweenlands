@@ -16,7 +16,7 @@ import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.Wight;
+import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.world.event.WinterEvent;
 
 public class RenderWight<T extends Wight> extends MobRenderer<T, ModelWight<T>> {

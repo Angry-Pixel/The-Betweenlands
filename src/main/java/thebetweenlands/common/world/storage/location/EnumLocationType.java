@@ -15,7 +15,7 @@ public enum EnumLocationType {
 	FLOATING_ISLAND("floating_island"),
 	CHIROMAW_MATRIARCH_NEST("chiromaw_matriarch_nest");
 
-	public static EnumLocationType[] TYPES = EnumLocationType.values();
+	public static final EnumLocationType[] TYPES = EnumLocationType.values();
 
 	public final String name;
 

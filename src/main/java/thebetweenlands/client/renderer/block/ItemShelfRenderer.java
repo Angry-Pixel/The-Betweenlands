@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.common.block.ItemShelfBlock;
+import thebetweenlands.common.block.container.ItemShelfBlock;
 import thebetweenlands.common.block.entity.ItemShelfBlockEntity;
 
 public class ItemShelfRenderer implements BlockEntityRenderer<ItemShelfBlockEntity> {

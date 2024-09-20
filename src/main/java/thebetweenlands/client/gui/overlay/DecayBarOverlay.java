@@ -8,7 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import thebetweenlands.api.capability.IDecayData;
+import thebetweenlands.api.attachment.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AttachmentRegistry;
 

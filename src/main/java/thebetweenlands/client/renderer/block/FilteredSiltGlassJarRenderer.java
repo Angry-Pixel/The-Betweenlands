@@ -1,6 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -9,14 +8,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.FilteredSiltGlassJarBlockEntity;
-import thebetweenlands.common.block.entity.SiltGlassJarBlockEntity;
 import thebetweenlands.util.RenderUtils;
 
 public class FilteredSiltGlassJarRenderer implements BlockEntityRenderer<FilteredSiltGlassJarBlockEntity> {

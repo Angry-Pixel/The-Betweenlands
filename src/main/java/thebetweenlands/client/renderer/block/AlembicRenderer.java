@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.FastColor;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.AlembicBlock;
+import thebetweenlands.common.block.container.AlembicBlock;
 import thebetweenlands.common.block.entity.AlembicBlockEntity;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 

@@ -14,7 +14,17 @@ import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.*;
+import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
+import thebetweenlands.common.block.container.SulfurFurnaceBlock;
+import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
+import thebetweenlands.common.block.misc.GlowingGoopBlock;
+import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
+import thebetweenlands.common.block.misc.SamiteCanvasPanelBlock;
+import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
+import thebetweenlands.common.block.plant.ShelfFungusBlock;
+import thebetweenlands.common.block.structure.*;
+import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
+import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 

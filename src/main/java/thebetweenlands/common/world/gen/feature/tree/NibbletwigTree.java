@@ -7,7 +7,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import thebetweenlands.common.block.PoisonIvyBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class NibbletwigTree {

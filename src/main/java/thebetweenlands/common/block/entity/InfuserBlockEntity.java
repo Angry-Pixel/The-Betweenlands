@@ -19,8 +19,8 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
-import thebetweenlands.common.items.AspectVialItem;
-import thebetweenlands.common.items.LifeCrystalItem;
+import thebetweenlands.common.item.herblore.AspectVialItem;
+import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
@@ -74,10 +74,8 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			} else {
 				if (entity.prevInfusionState != entity.currentInfusionState) {
 					entity.prevInfusionColor = entity.currentInfusionColor;
-					entity.currentInfusionColor = ElixirRecipe.getInfusionColor(entity.infusingRecipe, entity.infusionTime);
-				} else {
-					entity.currentInfusionColor = ElixirRecipe.getInfusionColor(entity.infusingRecipe, entity.infusionTime);
 				}
+				entity.currentInfusionColor = ElixirRecipe.getInfusionColor(entity.infusingRecipe, entity.infusionTime);
 			}
 			if (entity.prevInfusionState != entity.currentInfusionState && entity.currentInfusionState == 2) {
 				level.playSound(null, pos, SoundRegistry.INFUSER_FINISHED.get(), SoundSource.BLOCKS, 1, 1);

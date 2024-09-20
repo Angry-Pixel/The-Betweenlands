@@ -5,10 +5,7 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.chat.Style;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +55,7 @@ public class TheBetweenlands {
 		if (dist.isClient()) {
 			ClientRegistrationEvents.initClient(eventbus);
 		}
-		CommonRegistrationEvents.init(eventbus, dist);
+		CommonRegistrationEvents.init(eventbus);
 
 		SoundRegistry.SOUNDS.register(eventbus);
 		ParticleRegistry.PARTICLES.register(eventbus);

@@ -7,15 +7,14 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import thebetweenlands.client.particle.options.SwirlParticleOptions;
 
 public class SwirlParticle extends TextureSheetParticle {
 
 	protected float progress;
-	protected float startRotation;
-	protected float endRadius;
+	protected final float startRotation;
+	protected final float endRadius;
 	protected Vec3 drag = Vec3.ZERO;
 
 	protected Vec3 offset;

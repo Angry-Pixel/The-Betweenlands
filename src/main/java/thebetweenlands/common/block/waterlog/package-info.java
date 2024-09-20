@@ -1,0 +1,9 @@
+@MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
+@ParametersAreNonnullByDefault
+package thebetweenlands.common.block.waterlog;
+
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -20,9 +20,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
-import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
-import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.api.entity.spawning.BiomeSpawnEntriesData;
+import thebetweenlands.api.entity.spawning.CustomSpawnEntriesProvider;
+import thebetweenlands.api.entity.spawning.CustomSpawnEntry;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.util.WeightedList;
@@ -114,7 +114,7 @@ public abstract class AreaMobSpawner {
 	 * @param provider
 	 * @return
 	 */
-	public List<ICustomSpawnEntry> getSpawnEntries(Level level, BlockPos pos, @Nullable ICustomSpawnEntriesProvider provider) {
+	public List<CustomSpawnEntry> getSpawnEntries(Level level, BlockPos pos, @Nullable CustomSpawnEntriesProvider provider) {
 		return provider != null ? provider.getCustomSpawnEntries() : Collections.emptyList();
 	}
 
@@ -126,14 +126,14 @@ public abstract class AreaMobSpawner {
 	 * @return
 	 */
 	@Nullable
-	public IBiomeSpawnEntriesData getSpawnEntriesData(Level level, BlockPos pos, @Nullable ICustomSpawnEntriesProvider provider) {
+	public BiomeSpawnEntriesData getSpawnEntriesData(Level level, BlockPos pos, @Nullable CustomSpawnEntriesProvider provider) {
 		return null;
 	}
 
 	/**
 	 * Default spawning weight is 100
 	 */
-	public static class BLSpawnEntry implements ICustomSpawnEntry {
+	public static class BLSpawnEntry implements CustomSpawnEntry {
 		private final Class<? extends Mob> entityType;
 		private final Function<Level, ? extends Mob> entityCtor;
 		private final short baseWeight;
@@ -419,11 +419,11 @@ public abstract class AreaMobSpawner {
 				int totalWeight = 0;
 
 				//Get possible spawn entries and update weights
-				List<ICustomSpawnEntry> possibleSpawns = new ArrayList<>(this.getSpawnEntries(level, spawnPos, biome instanceof ICustomSpawnEntriesProvider ? (ICustomSpawnEntriesProvider) biome : null));
+				List<CustomSpawnEntry> possibleSpawns = new ArrayList<>(this.getSpawnEntries(level, spawnPos, biome instanceof CustomSpawnEntriesProvider ? (CustomSpawnEntriesProvider) biome : null));
 
-				Iterator<ICustomSpawnEntry> spawnEntriesIT = possibleSpawns.iterator();
+				Iterator<CustomSpawnEntry> spawnEntriesIT = possibleSpawns.iterator();
 				while(spawnEntriesIT.hasNext()) {
-					ICustomSpawnEntry spawnEntry = spawnEntriesIT.next();
+					CustomSpawnEntry spawnEntry = spawnEntriesIT.next();
 
 					if((spawnEntry.isHostile() && !spawnHostiles) || (!spawnEntry.isHostile() && !spawnAnimals)) {
 						spawnEntriesIT.remove();
@@ -439,11 +439,11 @@ public abstract class AreaMobSpawner {
 					continue;
 				}
 
-				WeightedList<ICustomSpawnEntry> weightedPossibleSpawns = new WeightedList<>();
+				WeightedList<CustomSpawnEntry> weightedPossibleSpawns = new WeightedList<>();
 				weightedPossibleSpawns.addAll(possibleSpawns);
 				weightedPossibleSpawns.recalculateWeight();
 
-				ICustomSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(level.getRandom());
+				CustomSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(level.getRandom());
 				if(spawnEntry == null) {
 					continue;
 				}
@@ -493,7 +493,7 @@ public abstract class AreaMobSpawner {
 					int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 					int maxGroupSpawnAttempts = attemptsPerGroup + desiredGroupSize * 2;
 
-					IBiomeSpawnEntriesData spawnEntriesData = this.getSpawnEntriesData(level, spawnPos, biome instanceof ICustomSpawnEntriesProvider ? (ICustomSpawnEntriesProvider) biome : null);
+					BiomeSpawnEntriesData spawnEntriesData = this.getSpawnEntriesData(level, spawnPos, biome instanceof CustomSpawnEntriesProvider ? (CustomSpawnEntriesProvider) biome : null);
 					long lastSpawn = spawnEntriesData != null ? spawnEntriesData.getLastSpawn(spawnEntry) : -1;
 
 					if(!ignoreRestrictions && lastSpawn >= 0) {

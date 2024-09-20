@@ -24,7 +24,7 @@ import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.DecayPitGearsSoundInstance;
-import thebetweenlands.common.entities.BLEntity;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

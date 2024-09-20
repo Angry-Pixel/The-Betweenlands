@@ -5,7 +5,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.ParticleRegistry;
 
 public class FancyBubbleParticle extends BLBubbleParticle {
 

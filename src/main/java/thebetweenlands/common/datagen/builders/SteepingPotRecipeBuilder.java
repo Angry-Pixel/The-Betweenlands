@@ -8,7 +8,6 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -16,7 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.recipe.FluidSteepingPotRecipe;
+import thebetweenlands.common.item.recipe.FluidSteepingPotRecipe;
 
 public class SteepingPotRecipeBuilder implements RecipeBuilder {
 

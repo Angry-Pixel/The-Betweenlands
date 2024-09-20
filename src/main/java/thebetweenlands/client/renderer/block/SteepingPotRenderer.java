@@ -18,9 +18,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.SteepingPotBlock;
+import thebetweenlands.common.block.container.SteepingPotBlock;
 import thebetweenlands.common.block.entity.SteepingPotBlockEntity;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.util.RenderUtils;
 

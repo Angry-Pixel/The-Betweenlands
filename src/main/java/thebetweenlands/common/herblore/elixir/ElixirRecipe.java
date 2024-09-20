@@ -74,7 +74,7 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 					if (recipe.value().strengthAspect().isPresent() && aspect.is(recipe.value().strengthAspect().get())) continue;
 					boolean contains = false;
 					for (ResourceKey<AspectType> a : recipe.value().aspects()) {
-						if (a == aspect) {
+						if (a == aspect.getKey()) {
 							contains = true;
 							break;
 						}

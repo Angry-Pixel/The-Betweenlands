@@ -17,7 +17,7 @@ public class GeometryBuffer extends AbstractTexture {
 	private RenderTarget geometryBuffer;
 	@Nullable
 	private DepthBuffer geometryDepthBuffer;
-	private boolean depthBuffer;
+	private final boolean depthBuffer;
 
 	protected final TextureManager textureManager;
 	@Nullable

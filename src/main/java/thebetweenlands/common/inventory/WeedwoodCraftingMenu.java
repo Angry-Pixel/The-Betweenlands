@@ -41,8 +41,7 @@ public class WeedwoodCraftingMenu extends CraftingMenu {
 
 		for(int x = 0; x < 3; ++x) {
 			for(int y = 0; y < 3; ++y) {
-				int index = i++;
-				this.slots.set(index, new Slot(this.craftSlots, y + x * 3, 30 + y * 18, 17 + x * 18)).index = index;
+				this.slots.set(i++, new Slot(this.craftSlots, y + x * 3, 30 + y * 18, 17 + x * 18)).index = i++;
 			}
 		}
 

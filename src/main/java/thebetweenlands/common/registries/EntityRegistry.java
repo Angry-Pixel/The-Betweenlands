@@ -9,12 +9,17 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.*;
-import thebetweenlands.common.entities.fishing.BLFishHook;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.entities.fishing.BubblerCrab;
-import thebetweenlands.common.entities.fishing.FishBait;
-import thebetweenlands.common.entities.fishing.SiltCrab;
+import thebetweenlands.common.entity.*;
+import thebetweenlands.common.entity.creature.Gecko;
+import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.fishing.BLFishHook;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.BubblerCrab;
+import thebetweenlands.common.entity.fishing.FishBait;
+import thebetweenlands.common.entity.fishing.SiltCrab;
+import thebetweenlands.common.entity.monster.SwampHag;
+import thebetweenlands.common.entity.monster.Wight;
+import thebetweenlands.common.entity.projectile.*;
 
 public class EntityRegistry {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TheBetweenlands.ID);

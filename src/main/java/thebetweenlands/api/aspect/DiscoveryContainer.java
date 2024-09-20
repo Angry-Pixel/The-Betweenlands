@@ -139,10 +139,7 @@ public class DiscoveryContainer<T> {
 	 * @param discovered
 	 */
 	public void addDiscovery(AspectItem item, Holder<AspectType> discovered, HolderLookup.Provider registries) {
-		List<Holder<AspectType>> discoveredAspects = this.discoveredStaticAspects.get(item);
-		if(discoveredAspects == null) {
-			this.discoveredStaticAspects.put(item, discoveredAspects = new ArrayList<>());
-		}
+		List<Holder<AspectType>> discoveredAspects = this.discoveredStaticAspects.computeIfAbsent(item, k -> new ArrayList<>());
 		if(!discoveredAspects.contains(discovered))
 			discoveredAspects.add(discovered);
 		this.saveContainer(registries);

@@ -8,8 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.component.item.UpgradeDamage;
 import thebetweenlands.common.inventory.container.AmphibiousArmorContainer;
-import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.items.amphibious.ArmorEffectHelper;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 

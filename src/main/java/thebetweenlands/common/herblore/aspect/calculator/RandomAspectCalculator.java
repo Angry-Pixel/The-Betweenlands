@@ -10,7 +10,6 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.registry.AspectCalculatorType;
-import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectTier;
 import thebetweenlands.api.aspect.registry.AspectType;
 

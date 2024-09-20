@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Matrix4f;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.fishing.BLFishHook;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.BLFishHook;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
 
 public class FishStaminaBarOverlay {
 

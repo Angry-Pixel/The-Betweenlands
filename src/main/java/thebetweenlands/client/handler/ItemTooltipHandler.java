@@ -8,8 +8,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
@@ -19,7 +21,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.items.amphibious.ArmorEffectHelper;
+import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.FoodSickness;
 
@@ -36,10 +38,18 @@ public class ItemTooltipHandler {
 		COMPOST_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
 	}
 
-	static void addTooltips(ItemTooltipEvent event) {
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(ItemTooltipHandler::addTooltips);
+	}
+
+	private static void addTooltips(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
 		List<Component> toolTip = event.getToolTip();
 		Player player = event.getEntity();
+
+		if (CorrosionHelper.isCorrodible(stack)) {
+			CorrosionHelper.addCorrosionTooltips(stack, event.getToolTip(), event.getFlags(), event.getContext());
+		}
 
 		UpgradeDamage damage = stack.getOrDefault(DataComponentRegistry.UPGRADE_DAMAGE, UpgradeDamage.EMPTY);
 		if (damage.damage() > 0) {

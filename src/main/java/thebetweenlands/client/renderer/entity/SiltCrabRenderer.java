@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.SiltCrabModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.fishing.SiltCrab;
+import thebetweenlands.common.entity.fishing.SiltCrab;
 
 public class SiltCrabRenderer extends MobRenderer<SiltCrab, SiltCrabModel> {
 

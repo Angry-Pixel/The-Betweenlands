@@ -34,12 +34,11 @@ public class SpikeRenderer {
 	public void build(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, int color) {
 		for(int y = 0; y < this.length; y++) {
 			int distUp = this.length - 1 - y;
-			int distDown = y;
 			boolean noTop = true;
 			boolean noBottom = false;
 			float height = 1.0F;
 
-			int totalHeight = 1 + distDown + distUp;
+			int totalHeight = 1 + y + distUp;
 			float distToMidBottom, distToMidTop;
 
 			double squareAmount = 1.2D;
@@ -66,7 +65,7 @@ public class SpikeRenderer {
 
 			StalactiteHelper core = StalactiteHelper.getValsFor(this.bx, this.by + y, this.bz);
 
-			if(distDown == 0 && !noBottom) {
+			if(y == 0 && !noBottom) {
 				core.bX = 0.5F;
 				core.bZ = 0.5F;
 			}
@@ -111,7 +110,7 @@ public class SpikeRenderer {
 			}
 
 			// bottom
-			if(distDown == 0) {
+			if(y == 0) {
 				consumer.addVertex(pose, core.bX - halfSize, this.y + y, core.bZ + halfSize).setUv(umin + halfSizeTexW * 2, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, 1.0F, 0.0F);
 				consumer.addVertex(pose, core.bX - halfSize, this.y + y, core.bZ - halfSize).setUv(umin, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, 1.0F, 0.0F);
 				consumer.addVertex(pose, core.bX + halfSize, this.y + y, core.bZ - halfSize).setUv(umin, vmin + halfSizeTexW * 2).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, 1.0F, 0.0F);

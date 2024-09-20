@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.recipe.BasicTrimmingTableRecipe;
+import thebetweenlands.common.item.recipe.BasicTrimmingTableRecipe;
 
 import java.util.Optional;
 

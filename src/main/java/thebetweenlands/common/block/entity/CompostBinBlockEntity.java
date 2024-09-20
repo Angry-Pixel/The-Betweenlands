@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.common.block.CompostBinBlock;
+import thebetweenlands.common.block.container.CompostBinBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {

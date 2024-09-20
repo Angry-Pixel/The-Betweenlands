@@ -21,12 +21,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.ticks.ContainerSingleItem;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CrabPotBlock;
-import thebetweenlands.common.block.CrabPotFilterBlock;
+import thebetweenlands.common.block.container.CrabPotBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
-import thebetweenlands.common.entities.fishing.BubblerCrab;
-import thebetweenlands.common.entities.fishing.SiltCrab;
-import thebetweenlands.common.items.MobItem;
+import thebetweenlands.common.entity.fishing.BubblerCrab;
+import thebetweenlands.common.entity.fishing.SiltCrab;
+import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.storage.location.TokenBucket;
 

@@ -32,7 +32,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -40,7 +39,6 @@ import thebetweenlands.client.*;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
-import thebetweenlands.client.handler.ClientHandlerEvents;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
@@ -56,20 +54,19 @@ import thebetweenlands.client.renderer.BLItemRenderer;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.PresentBlock;
+import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
-import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.ColoredFluid;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.items.AnadiaMobItem;
-import thebetweenlands.common.items.BLItemFrameItem;
-import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.items.shield.SwatShieldItem;
+import thebetweenlands.common.item.misc.AnadiaMobItem;
+import thebetweenlands.common.item.misc.BLItemFrameItem;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.BLDyeColor;
-import thebetweenlands.util.RenderUtils;
 
 public class ClientRegistrationEvents {
 
@@ -95,10 +92,6 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerPropertyOverrides);
 		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
-		MainMenuEvents.init();
-		ClientHandlerEvents.init();
-		NeoForge.EVENT_BUS.addListener(RenderUtils::incrementTickCounter);
-		NeoForge.EVENT_BUS.addListener(RenderUtils::tickFrameCounter);
 		ClientEvents.init();
 	}
 

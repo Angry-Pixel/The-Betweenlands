@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BigBulbCappedMushroomFeature extends Feature<NoneFeatureConfiguration> {
@@ -45,7 +46,7 @@ public class BigBulbCappedMushroomFeature extends Feature<NoneFeatureConfigurati
 
 		for (int yy = y; yy < y + height; yy++) {
 			if (yy == y) {
-				level.setBlock(pos.offset(x, yy, z), STALK, 2); //TODO: Ground state
+				level.setBlock(pos.offset(x, yy, z), STALK.setValue(BulbCappedMushroomStemBlock.GROUND, true), 2);
 			} else {
 				level.setBlock(pos.offset(x, yy, z), STALK, 2);
 			}

@@ -2,7 +2,7 @@ package thebetweenlands.api.recipes;
 
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import thebetweenlands.common.items.recipe.ItemAndEntityInput;
+import thebetweenlands.common.item.recipe.ItemAndEntityInput;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 public interface CrabPotFilterRecipe extends Recipe<ItemAndEntityInput> {

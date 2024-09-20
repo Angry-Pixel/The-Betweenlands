@@ -11,9 +11,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.block.SludgeBlock;
-import thebetweenlands.common.block.SpikeTrapBlock;
-import thebetweenlands.common.entities.BLEntity;
+import thebetweenlands.common.block.terrain.SludgeBlock;
+import thebetweenlands.common.block.structure.SpikeTrapBlock;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -25,7 +25,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	public int prevAnimationTicks;
 	public int animationTicks;
 	public boolean stabbing;
-	public boolean canSpook;
+	public final boolean canSpook;
 
 	public int prevSpoopAnimationTicks;
 	public int spoopAnimationTicks;

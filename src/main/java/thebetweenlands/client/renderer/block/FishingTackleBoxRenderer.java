@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.FishingTackleBoxBlock;
+import thebetweenlands.common.block.container.FishingTackleBoxBlock;
 import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
 
 public class FishingTackleBoxRenderer implements BlockEntityRenderer<FishingTackleBoxBlockEntity> {

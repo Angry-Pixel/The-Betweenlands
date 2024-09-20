@@ -8,8 +8,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
 

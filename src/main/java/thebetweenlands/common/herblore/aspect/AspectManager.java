@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.RandomSource;
@@ -26,7 +25,6 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.*;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
-import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class AspectManager {

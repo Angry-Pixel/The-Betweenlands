@@ -23,10 +23,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
-import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
-import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
-import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.entity.spawning.CustomSpawnEntriesProvider;
+import thebetweenlands.api.entity.spawning.CustomSpawnEntry;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -39,7 +38,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private final BLEnvironmentEventRegistry environmentEventRegistry = new BLEnvironmentEventRegistry();
 	private final AspectManager aspectManager = new AspectManager();
 
-	private final Map<ICustomSpawnEntriesProvider, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
+	private final Map<CustomSpawnEntriesProvider, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
 	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
 	protected int ambienceTicks;
@@ -63,7 +62,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	@Override
 	protected void init(Level level) {
 		if (!level.isClientSide()) {
-			for (IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for (EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.setDefaults(level);
 				event.setLoaded(level);
 			}
@@ -81,7 +80,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return this.aspectManager;
 	}
 
-	public Map<ICustomSpawnEntriesProvider, BiomeSpawnEntriesData> getBiomeSpawnEntriesData() {
+	public Map<CustomSpawnEntriesProvider, BiomeSpawnEntriesData> getBiomeSpawnEntriesData() {
 		return this.biomeSpawnEntriesData;
 	}
 
@@ -188,7 +187,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return null;
 	}
 
-	public static boolean isEventActive(Level level, Holder<IEnvironmentEvent> event) {
+	public static boolean isEventActive(Level level, Holder<EnvironmentEvent> event) {
 		return BetweenlandsWorldStorage.get(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getActiveEvents().contains(event.value());
 	}
 
@@ -196,33 +195,33 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return this.spiritTreeKillTokens;
 	}
 
-	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {
-		public final ICustomSpawnEntriesProvider biome;
+	public static class BiomeSpawnEntriesData implements thebetweenlands.api.entity.spawning.BiomeSpawnEntriesData {
+		public final CustomSpawnEntriesProvider biome;
 
 		private final Object2LongMap<ResourceLocation> lastSpawnMap = new Object2LongOpenHashMap<>();
 
-		protected BiomeSpawnEntriesData(ICustomSpawnEntriesProvider biome) {
+		protected BiomeSpawnEntriesData(CustomSpawnEntriesProvider biome) {
 			this.biome = biome;
 		}
 
 		@Override
-		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
+		public long getLastSpawn(CustomSpawnEntry spawnEntry) {
 			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.getLong(spawnEntry.getID()) : -1;
 		}
 
 		@Override
-		public void setLastSpawn(ICustomSpawnEntry spawnEntry, long lastSpawn) {
+		public void setLastSpawn(CustomSpawnEntry spawnEntry, long lastSpawn) {
 			this.lastSpawnMap.put(spawnEntry.getID(), lastSpawn);
 		}
 
 		@Override
-		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
+		public long removeLastSpawn(CustomSpawnEntry spawnEntry) {
 			return this.lastSpawnMap.removeLong(spawnEntry.getID());
 		}
 
 		public void readFromNbt(CompoundTag tag) {
 			this.lastSpawnMap.clear();
-			for (ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
+			for (CustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
 				if (spawnEntry.isSaved()) {
 					if (tag.contains(spawnEntry.getID().toString(), Tag.TAG_LONG)) {
 						this.lastSpawnMap.put(spawnEntry.getID(), tag.getLong(spawnEntry.getID().toString()));
@@ -232,7 +231,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 
 		public void writeToNbt(CompoundTag tag) {
-			for (ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
+			for (CustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
 				if (spawnEntry.isSaved()) {
 					if (this.lastSpawnMap.containsKey(spawnEntry.getID())) {
 						tag.putLong(spawnEntry.getID().toString(), this.lastSpawnMap.getLong(spawnEntry.getID()));

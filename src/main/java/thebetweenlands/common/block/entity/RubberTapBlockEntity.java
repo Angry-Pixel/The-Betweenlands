@@ -9,7 +9,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import thebetweenlands.common.block.RubberTapBlock;
+import thebetweenlands.common.block.container.RubberTapBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 

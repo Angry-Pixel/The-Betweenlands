@@ -13,8 +13,8 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
-import thebetweenlands.common.items.recipe.DruidAltarAssemblyRecipe;
-import thebetweenlands.common.items.recipe.DruidAltarReversionRecipe;
+import thebetweenlands.common.item.recipe.DruidAltarAssemblyRecipe;
+import thebetweenlands.common.item.recipe.DruidAltarReversionRecipe;
 
 public class DruidAltarRecipeBuilder implements RecipeBuilder {
 

@@ -2,7 +2,6 @@ package thebetweenlands.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -16,7 +15,6 @@ import org.joml.Matrix4f;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.AmphibiousArmorMenu;
 import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.util.RenderUtils;
 
 public class AmphibiousArmorScreen extends AbstractContainerScreen<AmphibiousArmorMenu> {
 

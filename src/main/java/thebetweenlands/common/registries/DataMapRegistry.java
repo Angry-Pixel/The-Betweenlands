@@ -4,8 +4,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.datamaps.DecayFood;
-import thebetweenlands.common.items.datamaps.FluxMultiplier;
+import thebetweenlands.common.item.datamaps.DecayFood;
+import thebetweenlands.common.item.datamaps.FluxMultiplier;
 
 public class DataMapRegistry {
 

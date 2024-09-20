@@ -7,10 +7,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
-import thebetweenlands.common.entities.BLEntity;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
@@ -18,7 +19,12 @@ public class AttackDamageHandler {
 
 	public static final float DAMAGE_REDUCTION = 0.3F;
 
-	static void weakenKnockback(LivingKnockBackEvent event) {
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleAttacks);
+		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleCircleGemDamageBlock);
+	}
+
+	private static void weakenKnockback(LivingKnockBackEvent event) {
 		LivingEntity attackedEntity = event.getEntity();
 		LivingEntity attacker = attackedEntity.getLastHurtByMob();
 
@@ -31,7 +37,7 @@ public class AttackDamageHandler {
 		}
 	}
 
-	static void handleCircleGemDamageBlock(LivingIncomingDamageEvent event) {
+	private static void handleCircleGemDamageBlock(LivingIncomingDamageEvent event) {
 		LivingEntity attackedEntity = event.getEntity();
 		DamageSource source = event.getSource();
 
@@ -58,7 +64,7 @@ public class AttackDamageHandler {
 		return false;
 	}
 
-	static void handleAttacks(LivingDamageEvent.Pre event) {
+	private static void handleAttacks(LivingDamageEvent.Pre event) {
 		LivingEntity attackedEntity = event.getEntity();
 		DamageSource source = event.getSource();
 		float damage = event.getOriginalDamage();

@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.shield.LivingWeedwoodShieldItem;
+import thebetweenlands.common.item.shield.LivingWeedwoodShieldItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public record LivingWeedwoodShieldSpitPacket(int entityID, boolean mainHand, int ticks) implements CustomPacketPayload {

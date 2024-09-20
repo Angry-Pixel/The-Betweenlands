@@ -21,7 +21,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.joml.Matrix4f;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.InfuserBlock;
+import thebetweenlands.common.block.container.InfuserBlock;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;

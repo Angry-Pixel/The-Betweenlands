@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.LurkerSkinRaft;
+import thebetweenlands.common.entity.LurkerSkinRaft;
 
 public class LurkerSkinRaftRenderer extends EntityRenderer<LurkerSkinRaft> {
 

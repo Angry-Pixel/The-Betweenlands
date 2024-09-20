@@ -16,11 +16,6 @@ public class ElixirShocked extends ElixirEffect {
 	}
 
 	@Override
-	protected boolean isReady(int ticks, int strength) {
-		return true;
-	}
-
-	@Override
 	public void performEffect(LivingEntity entity, int amplifier) {
 		if(!entity.level().isClientSide() && entity.level().getRandom().nextInt(20) == 0) {
 			PacketDistributor.sendToPlayersTrackingEntity(entity, new ShockParticlePacket(entity.getId()));

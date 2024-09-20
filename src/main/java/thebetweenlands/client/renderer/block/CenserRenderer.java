@@ -19,7 +19,7 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.client.shader.postprocessing.GroundFog;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
+import thebetweenlands.common.block.container.CenserBlock;
 import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.util.RenderUtils;
 

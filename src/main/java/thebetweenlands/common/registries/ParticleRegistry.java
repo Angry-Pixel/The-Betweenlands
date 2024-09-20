@@ -1,11 +1,9 @@
 package thebetweenlands.common.registries;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -38,7 +36,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> FISH_VORTEX = register("fish_vortex", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimitter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
-		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimitter) {
+		return PARTICLES.register(name, () -> new ParticleType<>(overrideLimitter) {
 			@Override
 			public MapCodec<T> codec() {
 				return codecGetter.apply(this);

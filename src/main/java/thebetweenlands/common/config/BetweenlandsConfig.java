@@ -9,10 +9,10 @@ import java.util.List;
 //TODO cached config values are stored here, make actual config file to allow changing them
 public class BetweenlandsConfig {
 
-	public static boolean debug = false;
-	public static ResourceKey<Level> returnDimension = Level.OVERWORLD;
-	public static boolean seasonalEvents = true;
-	public static int portalMaxLinkDist = 1500;
+	public static final boolean debug = false;
+	public static final ResourceKey<Level> returnDimension = Level.OVERWORLD;
+	public static final boolean seasonalEvents = true;
+	public static final int portalMaxLinkDist = 1500;
 
 	public static boolean activateRiftOnFirstJoin = true;
 	public static int minRiftOnFirstJoinDuration = 1800;
@@ -22,22 +22,22 @@ public class BetweenlandsConfig {
 	public static int portalBiomeSearchRange = 256;
 
 	public static int wispQuality = 50;
-	public static boolean fullbrightBlocks = true;
+	public static final boolean fullbrightBlocks = true;
 	public static boolean useShader = true;
 	public static int shaderPriority = 0;
-	public static boolean dimensionShaderOnly = false;
-	public static int skyResolution = 1024;
-	public static boolean skyRiftClouds = true;
+	public static final boolean dimensionShaderOnly = false;
+	public static final int skyResolution = 1024;
+	public static final boolean skyRiftClouds = true;
 
-	public static boolean blMainMenu = true;
+	public static final boolean blMainMenu = true;
 	public static boolean rowboatView = true;
-	public static boolean useFoodSicknessInBetweenlands = true;
-	public static boolean useFoodSicknessOutsideBetweenlands = false;
+	public static final boolean useFoodSicknessInBetweenlands = true;
+	public static final boolean useFoodSicknessOutsideBetweenlands = false;
 	public static boolean reverseRottenFood = true;
 	public static boolean useRottenFood = true;
-	public static boolean useDecay = true;
-	public static List<ResourceKey<Level>> decayDimensionList = new ArrayList<>();
-	public static boolean useCorrosion = true;
+	public static final boolean useDecay = true;
+	public static final List<ResourceKey<Level>> decayDimensionList = new ArrayList<>();
+	public static final boolean useCorrosion = true;
 	public static boolean useToolWeakness = true;
 	public static boolean cavingRopeIndicator = true;
 
@@ -53,14 +53,14 @@ public class BetweenlandsConfig {
 	public static int decayBarZone = 0;
 	public static int decayBarOffsetX = 0;
 	public static int decayBarOffsetY = 0;
-	public static boolean decayPercentual = false;
-	public static float decayMinHealth = 6.0f;
-	public static float decayMinHealthPercentage = 0.15f;
-	public static boolean itemUsageTooltip = true;
+	public static final boolean decayPercentual = false;
+	public static final float decayMinHealth = 6.0f;
+	public static final float decayMinHealthPercentage = 0.15f;
+	public static final boolean itemUsageTooltip = true;
 	public static boolean onlineGallery = true;
 
 	public static int maxEntitiesPerLoadedArea = 250;
-	public static int hardEntityLimit = 600;
+	public static final int hardEntityLimit = 600;
 	public static boolean showNonBLFluids = true;
 	public static boolean showNonBLGemRecipes = true;
 	public static boolean onlineEnvironmentEventOverrides = false;

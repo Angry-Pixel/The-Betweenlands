@@ -38,7 +38,6 @@ public class AnimationMathHelper {
 
 		float f1 = e + (b - e);
 		float f2 = d + (c - d);
-		float f3 = (float) ((Math.sin(f1) + 0.5F) * f2 * max);
-		return f3;
+		return (float) ((Math.sin(f1) + 0.5F) * f2 * max);
 	}
 }

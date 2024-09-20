@@ -1,0 +1,6 @@
+@MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
+package thebetweenlands.common.entity.fishing.anadia;
+
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
