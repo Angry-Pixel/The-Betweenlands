@@ -20,7 +20,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
@@ -51,14 +50,15 @@ import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.LakeCavernSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.RootmanSimulacrumModels;
 import thebetweenlands.client.model.entity.*;
+import thebetweenlands.client.model.item.*;
 import thebetweenlands.client.particle.*;
+import thebetweenlands.client.renderer.BLItemRenderer;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
-import thebetweenlands.common.entities.BLItemFrame;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.ColoredFluid;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -66,6 +66,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.BLItemFrameItem;
 import thebetweenlands.common.items.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.items.shield.SwatShieldItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.BLDyeColor;
 import thebetweenlands.util.RenderUtils;
@@ -154,6 +155,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.FISH_VORTEX.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.URCHIN_SPIKE.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ELECTRIC_SHOCK.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SAP_SPIT.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.LURKER_SKIN_RAFT.get(), LurkerSkinRaftRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -194,6 +197,14 @@ public class ClientRegistrationEvents {
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
 
+		event.registerLayerDefinition(BLModelLayers.BONE_SHIELD, BoneShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.DENTROTHYST_SHIELD, DentrothystShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.LURKER_SKIN_SHIELD, LurkerSkinShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.OCTINE_SHIELD, OctineShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.SYRMORITE_SHIELD, SyrmoriteShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.VALONITE_SHIELD, ValoniteShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_SHIELD, WeedwoodShieldModel::create);
+
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
@@ -201,6 +212,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
+		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
 
 		event.registerLayerDefinition(BLModelLayers.ALCOVE, AlcoveModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ALEMBIC, AlembicModel::makeModel);
@@ -319,6 +331,21 @@ public class ClientRegistrationEvents {
 			if (upgrade == AmphibiousArmorUpgradeRegistry.FISH_VORTEX.get()) return 3.0F;
 			return 0.0F;
 		});
+
+		ItemProperties.register(ItemRegistry.BONE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.LURKER_SKIN_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.OCTINE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.SYRMORITE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.VALONITE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.WEEDWOOD_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.LIVING_WEEDWOOD_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem().is(stack.getItem()) ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.SYRMORITE_SHIELD.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && (SwatShieldItem.getRemainingChargeTicks(stack, entity) > 0 || SwatShieldItem.isPreparingCharge(stack, entity)) ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.VALONITE_SHIELD.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && (SwatShieldItem.getRemainingChargeTicks(stack, entity) > 0 || SwatShieldItem.isPreparingCharge(stack, entity)) ? 1.0F : 0.0F);
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -335,6 +362,7 @@ public class ClientRegistrationEvents {
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
 		event.registerReloadListener(new CircleGemTextureManager());
+		event.registerReloadListener(BLItemRenderer.INSTANCE.get());
 		event.registerReloadListener(new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
 	}
 
@@ -359,7 +387,10 @@ public class ClientRegistrationEvents {
 			BlockRegistry.LOOT_URN_1.asItem(), BlockRegistry.LOOT_URN_2.asItem(), BlockRegistry.LOOT_URN_3.asItem(),
 			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem(),
 			BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.asItem(),
-			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem());
+			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem(),
+			ItemRegistry.OCTINE_SHIELD.get(), ItemRegistry.VALONITE_SHIELD.get(), ItemRegistry.WEEDWOOD_SHIELD.get(), ItemRegistry.LIVING_WEEDWOOD_SHIELD.get(),
+			ItemRegistry.SYRMORITE_SHIELD.get(), ItemRegistry.BONE_SHIELD.get(), ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD.get(),
+			ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD.get(), ItemRegistry.LURKER_SKIN_SHIELD.get());
 
 		event.registerItem(AmphibiousArmorItem.ArmorRender.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),

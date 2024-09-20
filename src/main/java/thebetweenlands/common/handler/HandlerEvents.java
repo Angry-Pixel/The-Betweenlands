@@ -48,5 +48,8 @@ public class HandlerEvents {
 		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::changeItemUsageTime);
 		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::changeMaskingTarget);
 		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::tickEffects);
+
+		//shields
+		NeoForge.EVENT_BUS.addListener(ShieldHandler::applyShieldLogic);
 	}
 }

@@ -892,14 +892,17 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.VALONITE_AXE);
 			output.accept(ItemRegistry.VALONITE_GREATAXE);
 			output.accept(ItemRegistry.VALONITE_PICKAXE);
-			//octine shield
-			//valonite shield
-			//weedwood shield
-			//living weedwood shield
-			//syrmorite shield
-			//bone shield
-			//green and orange dentrothyst shields
-			//lurker skin shield
+			output.accept(ItemRegistry.OCTINE_SHIELD);
+			output.accept(ItemRegistry.VALONITE_SHIELD);
+			output.accept(ItemRegistry.WEEDWOOD_SHIELD);
+			output.accept(ItemRegistry.LIVING_WEEDWOOD_SHIELD);
+			output.accept(ItemRegistry.SYRMORITE_SHIELD);
+			output.accept(ItemRegistry.BONE_SHIELD);
+			output.accept(ItemRegistry.GREEN_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.ORANGE_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.LURKER_SKIN_SHIELD);
 			//shears
 			//sickle
 			//shockwave sword

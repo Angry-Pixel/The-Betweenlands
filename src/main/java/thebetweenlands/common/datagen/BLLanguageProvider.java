@@ -1260,7 +1260,18 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.VALONITE_AXE, "Valonite Axe");
 		this.addItem(ItemRegistry.VALONITE_GREATAXE, "Valonite Greataxe");
 		this.addItem(ItemRegistry.VALONITE_PICKAXE, "Valonite Pickaxe");
-		//shields
+		this.addItemWithDesc(ItemRegistry.OCTINE_SHIELD, "Octine Shield", "Sets enemies on fire");
+		this.addItemWithDesc(ItemRegistry.VALONITE_SHIELD, "Valonite Shield", "Hold '%1$s' + '%2$s' to charge up and then let go of '%1$s' to charge at enemies.\nReflects projectiles");
+		this.addItem(ItemRegistry.WEEDWOOD_SHIELD, "Weedwood Shield");
+		this.addItem(ItemRegistry.LIVING_WEEDWOOD_SHIELD, "Living Weedwood Shield");
+		this.addItemWithDesc(ItemRegistry.SYRMORITE_SHIELD, "Syrmorite Shield", "Hold '%1$s' + '%2$s' to charge up and then let go of '%1$s' to charge at enemies");
+		this.addItem(ItemRegistry.BONE_SHIELD, "Bone Shield");
+		this.addItem(ItemRegistry.GREEN_DENTROTHYST_SHIELD, "Green Dentrothyst Shield");
+		this.addItem(ItemRegistry.ORANGE_DENTROTHYST_SHIELD, "Orange Dentrothyst Shield");
+		this.addItem(ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD, "Green Dentrothyst Shield");
+		this.addItem(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD, "Polished Orange Dentrothyst Shield");
+		this.add("item.thebetweenlands.dentrothyst_shield.desc", "Blocks splash potion effects");
+		this.addItemWithDesc(ItemRegistry.LURKER_SKIN_SHIELD, "Lurker Skin Shield", "Can also be used as a raft");
 		//shears
 		//sickle
 		//shockwave sword

@@ -7,10 +7,19 @@ public class BLModelLayers {
 
 	public static final ModelLayerLocation AMPHIBIOUS_ARMOR = register("amphibious_armor");
 
+	public static final ModelLayerLocation BONE_SHIELD = register("bone_shield");
+	public static final ModelLayerLocation DENTROTHYST_SHIELD = register("dentrothyst_shield");
+	public static final ModelLayerLocation LURKER_SKIN_SHIELD = register("lurker_skin_shield");
+	public static final ModelLayerLocation OCTINE_SHIELD = register("octine_shield");
+	public static final ModelLayerLocation SYRMORITE_SHIELD = register("syrmorite_shield");
+	public static final ModelLayerLocation VALONITE_SHIELD = register("valonite_shield");
+	public static final ModelLayerLocation WEEDWOOD_SHIELD = register("weedwood_shield");
+
 	public static final ModelLayerLocation ANADIA = register("anadia");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
 	public static final ModelLayerLocation FISH_HOOK = register("fish_hook");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
+	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_2 = register("small_spirit_tree_face_2");
 
 	public static final ModelLayerLocation ALCOVE = register("alcove");
 	public static final ModelLayerLocation ALEMBIC = register("alembic");

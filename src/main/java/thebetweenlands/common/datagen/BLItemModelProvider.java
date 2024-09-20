@@ -287,7 +287,6 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.VALONITE_PICKAXE);
 		this.basicItem(ItemRegistry.VALONITE_GREATAXE);
 		this.basicItem(ItemRegistry.VALONITE_AXE);
-		//shields
 		//shears
 		//sickle
 		//shockwave sword

@@ -191,6 +191,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
 		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, (packet, context) -> OpenRenameScreenPacket.handle(context));
+		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
 
 		registrar.playToClient(UpdateSimpleAttachmentPacket.TYPE, UpdateSimpleAttachmentPacket.STREAM_CODEC, UpdateSimpleAttachmentPacket::handle);
 
