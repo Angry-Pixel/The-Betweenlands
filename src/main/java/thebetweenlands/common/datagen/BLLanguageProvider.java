@@ -1272,8 +1272,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD, "Polished Orange Dentrothyst Shield");
 		this.add("item.thebetweenlands.dentrothyst_shield.desc", "Blocks splash potion effects");
 		this.addItemWithDesc(ItemRegistry.LURKER_SKIN_SHIELD, "Lurker Skin Shield", "Can also be used as a raft");
-		//shears
-		//sickle
+		this.addItem(ItemRegistry.SYRMORITE_SHEARS, "Syrmorite Shears");
+		this.addItem(ItemRegistry.SICKLE, "Sickle");
 		//shockwave sword
 		this.addItem(ItemRegistry.ANGLER_TOOTH_ARROW, "Angler Tooth Arrow");
 		this.addItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, "Poisoned Angler Tooth Arrow");

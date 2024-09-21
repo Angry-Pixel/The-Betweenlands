@@ -168,6 +168,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.OCTINE_SHOVEL.get(),
 			ItemRegistry.VALONITE_SHOVEL.get(),
 
+			ItemRegistry.SICKLE.get(),
 			ItemRegistry.SLINGSHOT.get(),
 			ItemRegistry.WEEDWOOD_BOW.get(),
 			ItemRegistry.PREDATOR_BOW.get()

@@ -269,25 +269,25 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.AMPHIBIOUS_BOOTS);
 		this.basicItem(ItemRegistry.RUBBER_BOOTS);
 		this.otherTextureItem(ItemRegistry.MARSH_RUNNER_BOOTS, this.modLoc("rubber_boots"));
-		this.basicItem(ItemRegistry.WEEDWOOD_SWORD);
-		this.basicItem(ItemRegistry.WEEDWOOD_SHOVEL);
-		this.basicItem(ItemRegistry.WEEDWOOD_PICKAXE);
-		this.basicItem(ItemRegistry.WEEDWOOD_AXE);
-		this.basicItem(ItemRegistry.BONE_SWORD);
-		this.basicItem(ItemRegistry.BONE_SHOVEL);
-		this.basicItem(ItemRegistry.BONE_PICKAXE);
-		this.basicItem(ItemRegistry.BONE_AXE);
-		this.basicItem(ItemRegistry.OCTINE_SWORD);
-		this.basicItem(ItemRegistry.OCTINE_SHOVEL);
-		this.basicItem(ItemRegistry.OCTINE_PICKAXE);
-		this.basicItem(ItemRegistry.OCTINE_AXE);
-		this.basicItem(ItemRegistry.VALONITE_SWORD);
-		this.basicItem(ItemRegistry.VALONITE_SHOVEL);
-		this.basicItem(ItemRegistry.VALONITE_PICKAXE);
-		this.basicItem(ItemRegistry.VALONITE_GREATAXE);
-		this.basicItem(ItemRegistry.VALONITE_AXE);
-		//shears
-		//sickle
+		this.toolItem(ItemRegistry.WEEDWOOD_SWORD);
+		this.toolItem(ItemRegistry.WEEDWOOD_SHOVEL);
+		this.toolItem(ItemRegistry.WEEDWOOD_PICKAXE);
+		this.toolItem(ItemRegistry.WEEDWOOD_AXE);
+		this.toolItem(ItemRegistry.BONE_SWORD);
+		this.toolItem(ItemRegistry.BONE_SHOVEL);
+		this.toolItem(ItemRegistry.BONE_PICKAXE);
+		this.toolItem(ItemRegistry.BONE_AXE);
+		this.toolItem(ItemRegistry.OCTINE_SWORD);
+		this.toolItem(ItemRegistry.OCTINE_SHOVEL);
+		this.toolItem(ItemRegistry.OCTINE_PICKAXE);
+		this.toolItem(ItemRegistry.OCTINE_AXE);
+		this.toolItem(ItemRegistry.VALONITE_SWORD);
+		this.toolItem(ItemRegistry.VALONITE_SHOVEL);
+		this.toolItem(ItemRegistry.VALONITE_PICKAXE);
+		this.toolItem(ItemRegistry.VALONITE_GREATAXE);
+		this.toolItem(ItemRegistry.VALONITE_AXE);
+		this.basicItem(ItemRegistry.SYRMORITE_SHEARS);
+		this.basicItem(ItemRegistry.SICKLE);
 		//shockwave sword
 		this.basicItem(ItemRegistry.ANGLER_TOOTH_ARROW);
 		this.basicItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);

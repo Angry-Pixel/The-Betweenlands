@@ -902,8 +902,8 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.ORANGE_DENTROTHYST_SHIELD);
 			output.accept(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD);
 			output.accept(ItemRegistry.LURKER_SKIN_SHIELD);
-			//shears
-			//sickle
+			output.accept(ItemRegistry.SYRMORITE_SHEARS);
+			output.accept(ItemRegistry.SICKLE);
 			//shockwave sword
 			output.accept(ItemRegistry.ANGLER_TOOTH_ARROW);
 			output.accept(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
