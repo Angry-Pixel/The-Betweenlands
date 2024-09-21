@@ -2,11 +2,19 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.BLRegistries;
@@ -16,6 +24,7 @@ import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.item.misc.bucket.BLBucketItem;
 
 //TODO since we have full control of tab placement consider reorganizing the contents. Theyre currently the same as they were in 1.12
 public class CreativeGroupRegistry {
@@ -925,8 +934,10 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.VOLARKITE);
 			output.accept(ItemRegistry.SLINGSHOT);
 			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);
-			//weedwood buckets
-			//syrmorite buckets
+			output.accept(ItemRegistry.WEEDWOOD_BUCKET);
+			output.accept(ItemRegistry.SYRMORITE_BUCKET);
+			createBuckets(output, ItemRegistry.WEEDWOOD_BUCKET, true);
+			createBuckets(output, ItemRegistry.SYRMORITE_BUCKET, false);
 			output.accept(ItemRegistry.ELECTRIC_UPGRADE);
 			output.accept(ItemRegistry.GLIDE_UPGRADE);
 			output.accept(ItemRegistry.ASCENT_UPGRADE);
@@ -1242,5 +1253,13 @@ public class CreativeGroupRegistry {
 			output.accept(AspectContents.createItemStack(ItemRegistry.GREEN_ASPECT_VIAL.get(), holder, 2000));
 			output.accept(AspectContents.createItemStack(ItemRegistry.ORANGE_ASPECT_VIAL.get(), holder, 2000));
 		});
+	}
+
+	private static void createBuckets(CreativeModeTab.Output output, Holder<Item> bucket, boolean accountHotFluids) {
+		for (Fluid fluid : BuiltInRegistries.FLUID.stream().filter(fluid -> fluid.isSource(fluid.defaultFluidState())).toList()) {
+			FluidStack stack = new FluidStack(fluid, FluidType.BUCKET_VOLUME);
+			if (accountHotFluids && BLBucketItem.isFluidHot(stack)) continue;
+			output.accept(new ItemStack(bucket, 1, DataComponentPatch.builder().set(DataComponentRegistry.STORED_FLUID.get(), SimpleFluidContent.copyOf(stack)).build()));
+		}
 	}
 }

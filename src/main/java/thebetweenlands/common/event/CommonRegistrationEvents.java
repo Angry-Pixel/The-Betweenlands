@@ -20,6 +20,8 @@ import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.neoforged.neoforge.items.VanillaHopperItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -223,5 +225,7 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new InvWrapper(tile));
+
+		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
 	}
 }

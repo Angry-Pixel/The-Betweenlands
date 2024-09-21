@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.particles.ParticleOptions;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,6 +57,7 @@ public class TheBetweenlands {
 			ClientRegistrationEvents.initClient(eventbus);
 		}
 		CommonRegistrationEvents.init(eventbus);
+		NeoForgeMod.enableMilkFluid();
 
 		SoundRegistry.SOUNDS.register(eventbus);
 		ParticleRegistry.PARTICLES.register(eventbus);

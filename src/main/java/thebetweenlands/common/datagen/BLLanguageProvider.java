@@ -906,8 +906,33 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		this.add("block.thebetweenlands.fog", "Fog");
 		this.add("block.thebetweenlands.shallowbreath", "Shallowbreath");
-		this.add("block.thebetweenlands.dye", "Dye");
-		this.add("block.thebetweenlands.brew", "Drinkable Brew");
+		this.add("block.thebetweenlands.dull_lavender_dye", "Dull Lavender Dye");
+		this.add("block.thebetweenlands.maroon_dye", "Maroon Dye");
+		this.add("block.thebetweenlands.shadow_green_dye", "Shadow Green Dye");
+		this.add("block.thebetweenlands.camelot_magenta_dye", "Camelot Magenta Dye");
+		this.add("block.thebetweenlands.saffron_dye", "Saffron Dye");
+		this.add("block.thebetweenlands.caribbean_green_dye", "Caribbean Green Dye");
+		this.add("block.thebetweenlands.vivid_tangerine_dye", "Vivid Tangerine Dye");
+		this.add("block.thebetweenlands.champagne_dye", "Champagne Dye");
+		this.add("block.thebetweenlands.raisin_black_dye", "Raisin Black Dye");
+		this.add("block.thebetweenlands.sushi_green_dye", "Sushi Green Dye");
+		this.add("block.thebetweenlands.elm_cyan_dye", "Elm Cyan Dye");
+		this.add("block.thebetweenlands.cadmium_green_dye", "Cadmium Green Dye");
+		this.add("block.thebetweenlands.lavender_blue_dye", "Lavender Blue Dye");
+		this.add("block.thebetweenlands.brown_rust_dye", "Brown Rust Dye");
+		this.add("block.thebetweenlands.midnight_purple_dye", "Mignight Purple Dye");
+		this.add("block.thebetweenlands.pewter_grey_dye", "Pewter Grey Dye");
+		this.add("block.thebetweenlands.nettle_soup", "Nettle Soup");
+		this.add("block.thebetweenlands.nettle_tea", "Nettle Tea");
+		this.add("block.thebetweenlands.pheromone_extract", "Pheromone Extract");
+		this.add("block.thebetweenlands.swamp_broth", "Swamp Broth");
+		this.add("block.thebetweenlands.sturdy_stock", "Sturdy Stock");
+		this.add("block.thebetweenlands.pear_cordial", "Pear Cordial");
+		this.add("block.thebetweenlands.shamans_brew", "Shaman's Brew");
+		this.add("block.thebetweenlands.lake_broth", "Lake Broth");
+		this.add("block.thebetweenlands.shell_stock", "Shell Stock");
+		this.add("block.thebetweenlands.frog_leg_extract", "Frog Leg Extract");
+		this.add("block.thebetweenlands.witch_tea", "Witch Tea");
 		this.add("block.thebetweenlands.clean_water", "Clean Water");
 		this.add("block.thebetweenlands.fish_oil", "Fish Oil");
 
@@ -1304,7 +1329,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken\nand needs a new line and float.");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.baited", "Has Worm: %s");
 		//spears
-		//buckets
+		this.addItem(ItemRegistry.WEEDWOOD_BUCKET, "Weedwood Bucket");
+		this.add(ItemRegistry.WEEDWOOD_BUCKET.get().getDescriptionId() + ".fluid", "Weedwood Bucket (%s)");
+		this.addItem(ItemRegistry.SYRMORITE_BUCKET, "Syrmorite Bucket");
+		this.add(ItemRegistry.SYRMORITE_BUCKET.get().getDescriptionId() + ".fluid", "Syrmorite Bucket (%s)");
 		this.addItem(ItemRegistry.ASCENT_UPGRADE, "Ascent Upgrade");
 		this.addItem(ItemRegistry.ELECTRIC_UPGRADE, "Electric Upgrade");
 		this.addItem(ItemRegistry.FISH_VORTEX_UPGRADE, "Fish Vortex Upgrade");

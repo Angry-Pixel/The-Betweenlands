@@ -23,10 +23,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.FilteredSiltGlassJarBlockEntity;
-import thebetweenlands.common.component.item.FluidComponent;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 import java.util.List;
@@ -66,8 +66,8 @@ public class FilteredSiltGlassJarBlock extends BaseEntityBlock {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		if (!stack.getOrDefault(DataComponentRegistry.STORED_FLUID, FluidComponent.EMPTY).isEmpty()) {
-			FluidStack fluid = stack.getOrDefault(DataComponentRegistry.STORED_FLUID, FluidComponent.EMPTY).makeFluidStack();
+		if (!stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).isEmpty()) {
+			FluidStack fluid = stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).copy();
 			tooltip.add(Component.translatable("block.thebetweenlands.filtered_silt_glass_jar.fluid", fluid.getHoverName()).withStyle(ChatFormatting.GREEN));
 			tooltip.add(Component.translatable("block.thebetweenlands.filtered_silt_glass_jar.amount", fluid.getAmount()).withStyle(ChatFormatting.BLUE));
 		} else {

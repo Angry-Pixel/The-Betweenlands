@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-20T18:39:02.5120524	Item Models: thebetweenlands
+// 1.21.1	2024-09-20T20:31:55.8032135	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -444,6 +444,7 @@ c790a0ef75236ad7f57df8a785b01e65517998ae assets/thebetweenlands/models/item/swam
 24caece1380ca7919ebb64056690c7aa3cb1404e assets/thebetweenlands/models/item/swamp_talisman_piece_4.json
 e9049b581669caaee9ac4945850d90649a323fce assets/thebetweenlands/models/item/swift_pick.json
 badf28d53c9543d26e76442d1376fbf91e05b0ef assets/thebetweenlands/models/item/syrmorite_boots.json
+21ea75316c33ab7e557a49a4f2cca3f06796343f assets/thebetweenlands/models/item/syrmorite_bucket.json
 3f4f73bd8513b833590ff555ffcfa9b9d4cac349 assets/thebetweenlands/models/item/syrmorite_chestplate.json
 b6f20f21e8fe8f3e27653af61d764e9c09b1333e assets/thebetweenlands/models/item/syrmorite_helmet.json
 1004a6f9809ec3b51a7af5d18bb1d73a24925c40 assets/thebetweenlands/models/item/syrmorite_ingot.json
@@ -502,6 +503,7 @@ ab394b8a34c523897ece6d3e7bc101cda2567353 assets/thebetweenlands/models/item/weed
 05e29c5d57981289b349e87ce41b5a84008ad285 assets/thebetweenlands/models/item/weedwood_bow_shock_0.json
 0f2861ea8ae80ddba0d5a953d186ae309bc4f5e4 assets/thebetweenlands/models/item/weedwood_bow_shock_1.json
 8ada2a41d054d3a9f3b20a7e43e4dc5efb49de4a assets/thebetweenlands/models/item/weedwood_bow_shock_2.json
+c112b0f4684b7000194c5cda40ac651953daa368 assets/thebetweenlands/models/item/weedwood_bucket.json
 4b92b2830cb60ec8566b3df7d4e49f64a97ddb85 assets/thebetweenlands/models/item/weedwood_pickaxe.json
 3d3c8c911df9abee79400defe0d0aa4bf657eca7 assets/thebetweenlands/models/item/weedwood_shovel.json
 c99b17456fac3048397ad4e67ca148b93091ee4a assets/thebetweenlands/models/item/weedwood_stick.json

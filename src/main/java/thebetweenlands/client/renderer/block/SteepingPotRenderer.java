@@ -62,8 +62,8 @@ public class SteepingPotRenderer implements BlockEntityRenderer<SteepingPotBlock
 				FluidStack fluidStack = entity.tank.getFluid();
 				height = (0.375F / entity.tank.getCapacity()) * entity.tank.getFluidAmount();
 				TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture());
-				if(entity.getHeatProgress() > 0  && entity.tank.getFluid().is(FluidTypeRegistry.DYE.get()) || entity.tank.getFluid().is(FluidTypeRegistry.BREW.get()))
-					sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getFlowingTexture());
+//				if(entity.getHeatProgress() > 0 && entity.tank.getFluid().is(FluidTypeRegistry.DYE.get()) || entity.tank.getFluid().is(FluidTypeRegistry.BREW.get()))
+//					sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getFlowingTexture());
 				int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
 				int fluidColorTemp = entity.tempFluidColour;
 				float fade = entity.getHeatProgress() > 50 && entity.hasBundle() ? (-50 + entity.getHeatProgress()) * 0.025F: 0F;

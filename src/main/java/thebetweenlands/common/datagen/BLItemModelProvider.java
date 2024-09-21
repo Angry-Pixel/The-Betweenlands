@@ -5,11 +5,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
@@ -319,7 +324,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0.0F, 180.0F, 45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end()
 				.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0.0F, 0.0F, -45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end().end());
 		//spears
-		//buckets
+		this.bucket(ItemRegistry.WEEDWOOD_BUCKET);
+		this.bucket(ItemRegistry.SYRMORITE_BUCKET);
 		this.basicItem(ItemRegistry.ASCENT_UPGRADE);
 		this.basicItem(ItemRegistry.ELECTRIC_UPGRADE);
 		this.basicItem(ItemRegistry.FISH_VORTEX_UPGRADE);
@@ -589,5 +595,13 @@ public class BLItemModelProvider extends ItemModelProvider {
 			}
 		}
 		return builder;
+	}
+
+	public ItemModelBuilder bucket(DeferredItem<? extends Item> item) {
+		return this.getBuilder(item.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("neoforge:item/default"))
+			.customLoader(DynamicFluidContainerModelBuilder::begin).fluid(Fluids.EMPTY).end()
+			.texture("base", this.itemTexture(item))
+			.texture("fluid", TheBetweenlands.prefix("item/bl_bucket_fluid"));
 	}
 }

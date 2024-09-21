@@ -13,19 +13,15 @@ import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
@@ -33,9 +29,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.common.conditions.ICondition;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
@@ -60,7 +54,9 @@ import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
-import thebetweenlands.common.fluid.ColoredFluid;
+import thebetweenlands.common.fluid.BasicFluidType;
+import thebetweenlands.common.fluid.ColoredFluidType;
+import thebetweenlands.common.fluid.SwampWaterFluidType;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
@@ -70,12 +66,9 @@ import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.WeedwoodBowItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.BLDyeColor;
+import thebetweenlands.util.DrinkableBrew;
 
 public class ClientRegistrationEvents {
-
-	private static final int DEEP_COLOR_R = 19;
-	private static final int DEEP_COLOR_G = 24;
-	private static final int DEEP_COLOR_B = 68;
 
 	public static RiftVariantReloadListener riftVariantListener;
 
@@ -472,65 +465,43 @@ public class ClientRegistrationEvents {
 			}, potEffect);
 		}
 
-		for (DeferredHolder<FluidType, ? extends FluidType> type : FluidTypeRegistry.FLUID_TYPES.getEntries()) {
-			event.registerFluidType(new IClientFluidTypeExtensions() {
-				@Override
-				public ResourceLocation getStillTexture() {
-					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_still");
-				}
+		event.registerFluidType(new SwampWaterFluidType(), FluidTypeRegistry.SWAMP_WATER.get());
+		event.registerFluidType(new BasicFluidType("stagnant_water"), FluidTypeRegistry.STAGNANT_WATER.get());
+		event.registerFluidType(new BasicFluidType("tar"), FluidTypeRegistry.TAR.get());
+		event.registerFluidType(new BasicFluidType("rubber"), FluidTypeRegistry.RUBBER.get());
+		event.registerFluidType(new BasicFluidType("fog"), FluidTypeRegistry.FOG.get());
+		event.registerFluidType(new BasicFluidType("shallowbreath"), FluidTypeRegistry.SHALLOWBREATH.get());
+		event.registerFluidType(new BasicFluidType("clean_water"), FluidTypeRegistry.CLEAN_WATER.get());
+		event.registerFluidType(new BasicFluidType("fish_oil"), FluidTypeRegistry.FISH_OIL.get());
 
-				@Override
-				public ResourceLocation getFlowingTexture() {
-					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_flowing");
-				}
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.DULL_LAVENDER.getColorValue(), "dye"), FluidTypeRegistry.DULL_LAVENDER_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.MAROON.getColorValue(), "dye"), FluidTypeRegistry.MAROON_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.SHADOW_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SHADOW_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CAMELOT_MAGENTA.getColorValue(), "dye"), FluidTypeRegistry.CAMELOT_MAGENTA_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.SAFFRON.getColorValue(), "dye"), FluidTypeRegistry.SAFFRON_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CARIBBEAN_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CARIBBEAN_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.VIVID_TANGERINE.getColorValue(), "dye"), FluidTypeRegistry.VIVID_TANGERINE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CHAMPAGNE.getColorValue(), "dye"), FluidTypeRegistry.CHAMPAGNE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.RAISIN_BLACK.getColorValue(), "dye"), FluidTypeRegistry.RAISIN_BLACK_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.SUSHI_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SUSHI_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.ELM_CYAN.getColorValue(), "dye"), FluidTypeRegistry.ELM_CYAN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CADMIUM_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CADMIUM_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.LAVENDER_BLUE.getColorValue(), "dye"), FluidTypeRegistry.LAVENDER_BLUE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.BROWN_RUST.getColorValue(), "dye"), FluidTypeRegistry.BROWN_RUST_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.MIDNIGHT_PURPLE.getColorValue(), "dye"), FluidTypeRegistry.MIDNIGHT_PURPLE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.PEWTER_GREY.getColorValue(), "dye"), FluidTypeRegistry.PEWTER_GREY_DYE.get());
 
-				@Override
-				public int getTintColor(FluidStack stack) {
-					if (stack.getFluid() instanceof ColoredFluid dye) {
-						return dye.getColor();
-					}
-					return IClientFluidTypeExtensions.super.getTintColor(stack);
-				}
-
-				@Override
-				public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-					if (state.getType() instanceof ColoredFluid dye) {
-						return dye.getColor();
-					}
-					if (state.getFluidType() == FluidTypeRegistry.SWAMP_WATER.get()) {
-						int r = 0;
-						int g = 0;
-						int b = 0;
-						for (int dx = -1; dx <= 1; dx++) {
-							for (int dz = -1; dz <= 1; dz++) {
-								int colorMultiplier = BiomeColors.getAverageWaterColor(getter, pos);
-								r += FastColor.ARGB32.red(colorMultiplier);
-								g += FastColor.ARGB32.green(colorMultiplier);
-								b += FastColor.ARGB32.blue(colorMultiplier);
-							}
-						}
-						r /= 9;
-						g /= 9;
-						b /= 9;
-						float depth;
-						if (pos.getY() > TheBetweenlands.CAVE_START) {
-							depth = 1;
-						} else {
-							if (pos.getY() < TheBetweenlands.CAVE_WATER_HEIGHT) {
-								depth = 0;
-							} else {
-								depth = (pos.getY() - TheBetweenlands.CAVE_WATER_HEIGHT) / (float) (TheBetweenlands.CAVE_START - TheBetweenlands.CAVE_WATER_HEIGHT);
-							}
-						}
-						r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);
-						g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
-						b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
-						return FastColor.ARGB32.color(FastColor.as8BitChannel(1.0F), r, g, b);
-					}
-					return IClientFluidTypeExtensions.super.getTintColor(state, getter, pos);
-				}
-			}, type.get());
-		}
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.NETTLE_SOUP.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_SOUP.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.NETTLE_TEA.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_TEA.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.PHEROMONE_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.PHEROMONE_EXTRACT.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SWAMP_BROTH.getColorValue(), "brew"), FluidTypeRegistry.SWAMP_BROTH.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.STURDY_STOCK.getColorValue(), "brew"), FluidTypeRegistry.STURDY_STOCK.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.PEAR_CORDIAL.getColorValue(), "brew"), FluidTypeRegistry.PEAR_CORDIAL.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SHAMANS_BREW.getColorValue(), "brew"), FluidTypeRegistry.SHAMANS_BREW.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.LAKE_BROTH.getColorValue(), "brew"), FluidTypeRegistry.LAKE_BROTH.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SHELL_STOCK.getColorValue(), "brew"), FluidTypeRegistry.SHELL_STOCK.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.FROG_LEG_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.FROG_LEG_EXTRACT.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.WITCH_TEA.getColorValue(), "brew"), FluidTypeRegistry.WITCH_TEA.get());
 	}
 
 	private static void registerParticleSprites(final RegisterParticleProvidersEvent event) {
@@ -639,5 +610,10 @@ public class ClientRegistrationEvents {
 			ItemRegistry.SAFFRON_ITEM_FRAME, ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME, ItemRegistry.VIVID_TANGERINE_ITEM_FRAME, ItemRegistry.CHAMPAGNE_ITEM_FRAME,
 			ItemRegistry.RAISIN_BLACK_ITEM_FRAME, ItemRegistry.SUSHI_GREEN_ITEM_FRAME, ItemRegistry.ELM_CYAN_ITEM_FRAME, ItemRegistry.CADMIUM_GREEN_ITEM_FRAME,
 			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME, ItemRegistry.BROWN_RUST_ITEM_FRAME, ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME, ItemRegistry.PEWTER_GREY_ITEM_FRAME);
+
+		event.register((stack, tint) -> {
+			var fluid = stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).copy();
+			return tint == 1 ? IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid) : -1;
+		}, ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
 	}
 }
