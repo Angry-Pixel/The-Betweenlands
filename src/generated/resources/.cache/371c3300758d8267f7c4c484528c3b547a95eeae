@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-20T14:07:42.2997937	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2024-09-20T18:25:17.9927224	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
@@ -6,7 +6,7 @@ c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 d06ec18ea23cf0b2bcd37583a885baeab6942c1f data/minecraft/tags/item/swords.json
 64e73efc633e013c26a0476e03cdd737fd89a3b2 data/thebetweenlands/tags/item/corrodible.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/item/corrodible/custom.json
-d61022f248e7813226e51b271dc42aec7397b7d7 data/thebetweenlands/tags/item/corrodible/default.json
+404ae39f84378db977d81e16b1ec00b86edec40a data/thebetweenlands/tags/item/corrodible/default.json
 ba1aefcc3cb9b53ae9fa889e92a2505d08b2c486 data/thebetweenlands/tags/item/gives_food_sickness.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/item/octine_ignites.json
 026303e26c0aabdd2a479bb655cf86e6857a7421 data/thebetweenlands/tags/item/repairs_bone_tools.json

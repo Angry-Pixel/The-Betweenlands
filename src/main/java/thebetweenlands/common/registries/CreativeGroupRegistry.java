@@ -912,8 +912,8 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SLUDGE_WORM_ARROW);
 			output.accept(ItemRegistry.SHOCK_ARROW);
 			output.accept(ItemRegistry.CHIROMAW_BARB);
-			//weedwood bow
-			//predator bow
+			output.accept(ItemRegistry.WEEDWOOD_BOW);
+			output.accept(ItemRegistry.PREDATOR_BOW);
 			//ancient greatsword
 			//ancient battleaxe
 			output.accept(ItemRegistry.PESTLE);

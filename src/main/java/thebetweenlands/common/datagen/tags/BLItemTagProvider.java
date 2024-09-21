@@ -166,7 +166,11 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.WEEDWOOD_SHOVEL.get(),
 			ItemRegistry.BONE_SHOVEL.get(),
 			ItemRegistry.OCTINE_SHOVEL.get(),
-			ItemRegistry.VALONITE_SHOVEL.get()
+			ItemRegistry.VALONITE_SHOVEL.get(),
+
+			ItemRegistry.SLINGSHOT.get(),
+			ItemRegistry.WEEDWOOD_BOW.get(),
+			ItemRegistry.PREDATOR_BOW.get()
 		);
 
 		this.tag(ItemTags.ARROWS).add(ItemRegistry.ANGLER_TOOTH_ARROW.get(), ItemRegistry.POISONED_ANGLER_TOOTH_ARROW.get(),

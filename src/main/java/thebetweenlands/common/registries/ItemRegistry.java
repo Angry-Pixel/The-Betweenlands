@@ -317,7 +317,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SLUDGE_WORM_ARROW = ITEMS.register("sludge_worm_arrow", () -> new SludgeWormArrowItem(new Item.Properties()));
 	public static final DeferredItem<Item> SHOCK_ARROW = ITEMS.register("shock_arrow", () -> new ShockArrowItem(new Item.Properties()));
 	public static final DeferredItem<Item> CHIROMAW_BARB = ITEMS.register("chiromaw_barb", () -> new ChiromawBarbItem(new Item.Properties()));
-	//bows
+	public static final DeferredItem<Item> WEEDWOOD_BOW = ITEMS.register("weedwood_bow", () -> new WeedwoodBowItem(new Item.Properties().stacksTo(1).durability(600)));
+	public static final DeferredItem<Item> PREDATOR_BOW = ITEMS.register("predator_bow", () -> new PredatorBowItem(new Item.Properties().stacksTo(1).durability(600).rarity(Rarity.RARE)));
 	//ancient weapons
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().stacksTo(1).durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));

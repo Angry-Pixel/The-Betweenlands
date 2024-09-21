@@ -1282,7 +1282,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.SLUDGE_WORM_ARROW, "Sludge Worm Arrow");
 		this.addItem(ItemRegistry.SHOCK_ARROW, "Shock Arrow");
 		this.addItem(ItemRegistry.CHIROMAW_BARB, "Chiromaw Barb");
-		//bows
+		this.addItem(ItemRegistry.WEEDWOOD_BOW, "Weedwood Bow");
+		this.addItem(ItemRegistry.PREDATOR_BOW, "Predator Bow");
 		//ancient weps
 		this.addItem(ItemRegistry.PESTLE, "Pestle");
 		this.add("item.thebetweenlands.pestle.desc", "Place Pestle in Mortar");

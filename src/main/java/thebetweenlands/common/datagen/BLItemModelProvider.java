@@ -296,7 +296,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SLUDGE_WORM_ARROW);
 		this.basicItem(ItemRegistry.SHOCK_ARROW);
 		this.basicItem(ItemRegistry.CHIROMAW_BARB);
-		//bows
+		this.bow(ItemRegistry.WEEDWOOD_BOW);
+		this.bow(ItemRegistry.PREDATOR_BOW);
 		//ancient weps
 		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
 		this.toolItem(ItemRegistry.NET);
@@ -565,5 +566,28 @@ public class BLItemModelProvider extends ItemModelProvider {
 
 	public ItemModelBuilder pouch(DeferredItem<Item> pouch) {
 		return this.multiLayerItem(pouch.getId().getPath(), this.itemTexture(pouch), this.itemTexture(pouch).withSuffix("_cord"));
+	}
+
+	private static final String[] TYPES = {"", "_poison", "_octine", "_basilisk", "_shock", "_barb"};
+	private static final float[] PULLS = {0.0F, 0.65F, 0.9F};
+
+	public ItemModelBuilder bow(DeferredItem<Item> bow) {
+		var builder = this.getBuilder(bow.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/bow"))
+			.texture("layer0", this.itemTexture(bow));
+
+		for (int type = 0; type < TYPES.length; type++) {
+			for (int i = 0; i <= 2; i++) {
+				var model = this.getBuilder(bow.getId() + TYPES[type] + "_" + i)
+					.parent(new ModelFile.UncheckedModelFile("item/bow"))
+					.texture("layer0", this.itemTexture(bow).withSuffix(TYPES[type] + "_" + i));
+				builder.override()
+					.predicate(TheBetweenlands.prefix("pull"), PULLS[i])
+					.predicate(TheBetweenlands.prefix("pulling"), 1)
+					.predicate(TheBetweenlands.prefix("type"), type)
+					.model(model).end();
+			}
+		}
+		return builder;
 	}
 }

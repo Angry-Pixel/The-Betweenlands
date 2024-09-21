@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -66,6 +67,7 @@ import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
+import thebetweenlands.common.item.tool.WeedwoodBowItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.BLDyeColor;
 
@@ -159,6 +161,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.CHIROMAW_SHOCK_BARB.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/chiromaw_barb.png")));
 		event.registerEntityRenderer(EntityRegistry.OCTINE_ARROW.get(), OctineArrowRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_ARROW.get(), SludgeWormArrowRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PREDATOR_ARROW_GUIDE.get(), PredatorArrowGuideRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -349,6 +352,27 @@ public class ClientRegistrationEvents {
 
 		ItemProperties.register(ItemRegistry.SYRMORITE_SHIELD.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && (SwatShieldItem.getRemainingChargeTicks(stack, entity) > 0 || SwatShieldItem.isPreparingCharge(stack, entity)) ? 1.0F : 0.0F);
 		ItemProperties.register(ItemRegistry.VALONITE_SHIELD.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && (SwatShieldItem.getRemainingChargeTicks(stack, entity) > 0 || SwatShieldItem.isPreparingCharge(stack, entity)) ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("pull"), (stack, level, entity, seed) -> {
+			if (entity == null) {
+				return 0.0F;
+			} else {
+				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+			}
+		});
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed)  -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
+
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pull"), (stack, level, entity, seed) -> {
+			if (entity == null) {
+				return 0.0F;
+			} else {
+				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+			}
+		});
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed)  -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
+
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
