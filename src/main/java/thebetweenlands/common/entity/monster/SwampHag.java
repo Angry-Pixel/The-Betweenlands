@@ -47,7 +47,7 @@ public class SwampHag extends Monster {
 		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
 	}
 
-	public static AttributeSupplier.Builder makeAttributes() {
+	public static AttributeSupplier.Builder registerAttributes() {
 		return Monster.createMonsterAttributes()
 			.add(Attributes.MAX_HEALTH, 40.0D)
 			.add(Attributes.MOVEMENT_SPEED, 0.2D)

@@ -2,12 +2,16 @@ package thebetweenlands.common.component.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import thebetweenlands.api.aspect.registry.AspectItem;
+import thebetweenlands.api.aspect.registry.AspectType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public record HerbloreBookData(List<String> discoveredPages, CurrentPage page) {
 

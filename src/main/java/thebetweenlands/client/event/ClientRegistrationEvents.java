@@ -62,6 +62,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.WeedwoodBowItem;
 import thebetweenlands.common.registries.*;
@@ -517,6 +518,10 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.RAIN.get(), BLRainParticle.Factory::new);
 		event.registerSpecial(ParticleRegistry.URCHIN_SPIKE.get(), new UrchinSpikeParticle.Factory());
 		event.registerSpriteSet(ParticleRegistry.FISH_VORTEX.get(), FishVortexParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.INFUSER_BUBBLE.get(), sprites -> new BLBubbleParticle.InfuserFactory());
+		event.registerSpriteSet(ParticleRegistry.PURIFIER_BUBBLE.get(), sprites -> new BLBubbleParticle.PurifierFactory());
+		event.registerSpriteSet(ParticleRegistry.TAR_BUBBLE.get(), sprites -> new BLBubbleParticle.TarFactory());
+		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), sprites -> new BLBubbleParticle.Factory());
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -615,5 +620,7 @@ public class ClientRegistrationEvents {
 			var fluid = stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).copy();
 			return tint == 1 ? IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid) : -1;
 		}, ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
+
+		event.register((stack, tint) -> tint == 1 ? InfusionBucketItem.getColor(stack) : -1, ItemRegistry.WEEDWOOD_INFUSION_BUCKET, ItemRegistry.SYRMORITE_INFUSION_BUCKET);
 	}
 }

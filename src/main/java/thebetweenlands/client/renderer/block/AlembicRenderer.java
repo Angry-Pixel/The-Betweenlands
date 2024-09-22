@@ -41,6 +41,7 @@ public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> 
 			float progress = entity.getProgress();
 			if (1.0F - progress > 0.0F) {
 				stack.pushPose();
+				stack.translate(0.0F,(1.0F - progress) * 0.28F - 0.25F, 0.0F);
 				stack.scale(1, 1.0F - progress, 1);
 				this.alembicLiquid.render(stack, source.getBuffer(LIQUID), light, overlay, FastColor.ARGB32.colorFromFloat(0.8F, colors[0], colors[1], colors[2]));
 				stack.popPose();
@@ -48,6 +49,7 @@ public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> 
 
 			if (progress != 0.0F) {
 				stack.pushPose();
+				stack.translate(0.0F, progress * 0.1F - 0.05F, 0.0F);
 				stack.scale(1, progress, 1);
 				this.jarLiquid.render(stack, source.getBuffer(LIQUID), light, overlay, FastColor.ARGB32.colorFromFloat(0.8F, colors[0], colors[1], colors[2]));
 				stack.popPose();

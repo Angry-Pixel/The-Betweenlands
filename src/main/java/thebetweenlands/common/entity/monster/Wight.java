@@ -69,7 +69,7 @@ public class Wight extends Monster {
 
 	}
 
-	public static AttributeSupplier.Builder makeAttributes() {
+	public static AttributeSupplier.Builder registerAttributes() {
 		return Monster.createMonsterAttributes()
 			.add(Attributes.MAX_HEALTH, 76.0D)
 			.add(Attributes.MOVEMENT_SPEED, 0.33D)

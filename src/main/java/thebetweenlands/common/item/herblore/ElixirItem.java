@@ -71,7 +71,6 @@ public class ElixirItem extends Item {
 					} else {
 						entity.addEffect(effect);
 					}
-
 				}
 			}
 

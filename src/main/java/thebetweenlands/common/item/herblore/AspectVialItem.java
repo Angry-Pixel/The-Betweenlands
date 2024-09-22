@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.registries.AspectTypeRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -22,7 +23,7 @@ public class AspectVialItem extends Item {
 		if (stack.has(DataComponentRegistry.ASPECT_CONTENTS)) {
 			AspectContents contents = stack.get(DataComponentRegistry.ASPECT_CONTENTS);
 			if (contents.aspect().isPresent()) {
-				return Component.translatable("item.thebetweenlands.aspect_vial.aspect", Component.translatable(Util.makeDescriptionId("aspect", contents.aspect().get().getKey().location())), contents.amount() / 1000);
+				return Component.translatable("item.thebetweenlands.aspect_vial.aspect", Component.translatable(Util.makeDescriptionId("aspect", contents.aspect().get().getKey().location())), Aspect.ASPECT_AMOUNT_FORMAT.format(contents.amount() / 1000.0D));
 			}
 		}
 		return super.getName(stack);

@@ -2,10 +2,11 @@ package thebetweenlands.common.block.container;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -28,10 +29,11 @@ import thebetweenlands.common.block.entity.AlembicBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.item.herblore.DentrothystVialItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class AlembicBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
-	private static final VoxelShape SHAPE = Block.box(0.01D, 0.0D, 0.01D, 15.99D, 15.0D, 15.9D);
+	private static final VoxelShape SHAPE = Block.box(0.01D, 0.0D, 0.01D, 15.99D, 15.0D, 15.99D);
 
 	public AlembicBlock(Properties properties) {
 		super(properties);
@@ -45,23 +47,28 @@ public class AlembicBlock extends HorizontalBaseEntityBlock implements SwampWate
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic) {
+		if (level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic) {
 			if (player.isShiftKeyDown())
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
 			if (!stack.isEmpty()) {
-				/*if (stack.is(ItemRegistry.BL_BUCKET_INFUSION)) {
+				if (stack.has(DataComponentRegistry.INFUSION_BUCKET_DATA)) {
 					if (!alembic.isFull()) {
 						alembic.addInfusion(level, stack);
 						if (!player.isCreative()) {
-							player.setItemInHand(hand, ItemBucketInfusion.getEmptyBucket(stack));
+							player.setItemInHand(hand, stack.getCraftingRemainingItem());
 						}
+						return ItemInteractionResult.sidedSuccess(level.isClientSide());
 					}
-				} else*/ if (stack.getItem() instanceof DentrothystVialItem vial && alembic.hasFinished()) {
+				} else if (stack.getItem() instanceof DentrothystVialItem vial && alembic.hasFinished()) {
 					ItemStack result = alembic.getElixir(level, pos, state, vial);
-					ItemEntity itemEntity = player.drop(result, false);
-					if (itemEntity != null) itemEntity.setNoPickUpDelay();
-					stack.consume(1, player);
+					if (result != null) {
+						if (!player.getInventory().add(result)) {
+							player.drop(result, false);
+						}
+						stack.consume(1, player);
+						return ItemInteractionResult.sidedSuccess(level.isClientSide());
+					}
 				}
 			}
 		}
@@ -77,13 +84,13 @@ public class AlembicBlock extends HorizontalBaseEntityBlock implements SwampWate
 				float zz = (float) pos.getZ() + 0.5F;
 				float fixedOffset = 0.25F;
 				float randomOffset = random.nextFloat() * 0.6F - 0.3F;
-//				BLParticles.STEAM_PURIFIER.spawn(level, (double) (xx - fixedOffset), (double) yy + 0.250D, (double) (zz + randomOffset));
-//				BLParticles.STEAM_PURIFIER.spawn(level, (double) (xx + fixedOffset), (double) yy + 0.250D, (double) (zz + randomOffset));
-//				BLParticles.STEAM_PURIFIER.spawn(level, (double) (xx + randomOffset), (double) yy + 0.250D, (double) (zz - fixedOffset));
-//				BLParticles.STEAM_PURIFIER.spawn(level, (double) (xx + randomOffset), (double) yy + 0.250D, (double) (zz + fixedOffset));
-				float xOffs = state.getValue(FACING).getAxis() == Direction.Axis.X ? 0.375F : 0.6F;
-				float zOffs = state.getValue(FACING).getAxisDirection() == Direction.AxisDirection.NEGATIVE ? 0.375F : 0.6F;
-//				BLParticles.FLAME.spawn(level, pos.getX() + xOffs + (random.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + zOffs + (random.nextFloat() - 0.5F) * 0.1F, ParticleFactory.ParticleArgs.get().withMotion((random.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F));
+				level.addParticle(ParticleTypes.WHITE_SMOKE, xx - fixedOffset, yy + 0.250D, zz + randomOffset, 0.0D, 0.0D, 0.0D);
+				level.addParticle(ParticleTypes.WHITE_SMOKE, xx + fixedOffset, yy + 0.250D, zz + randomOffset, 0.0D, 0.0D, 0.0D);
+				level.addParticle(ParticleTypes.WHITE_SMOKE, xx + randomOffset, yy + 0.250D, zz - fixedOffset, 0.0D, 0.0D, 0.0D);
+				level.addParticle(ParticleTypes.WHITE_SMOKE, xx + randomOffset, yy + 0.250D, zz + fixedOffset, 0.0D, 0.0D, 0.0D);
+				float xOffs = state.getValue(FACING).getAxisDirection() == Direction.AxisDirection.NEGATIVE ? 0.6F : 0.375F;
+				float zOffs = state.getValue(FACING) == Direction.NORTH || state.getValue(FACING) == Direction.EAST ? 0.6F : 0.375F;
+				level.addParticle(ParticleTypes.FLAME, pos.getX() + xOffs + (random.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + zOffs + (random.nextFloat() - 0.5F) * 0.1F, (random.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F);
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Interaction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
@@ -35,9 +36,12 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.container.RubberTapBlock;
+import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.block.terrain.RubberLogBlock;
+import thebetweenlands.common.component.item.InfusionBucketData;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.Optional;
@@ -127,23 +131,42 @@ public class BLBucketItem extends Item {
 	}
 
 	@Override
-	public InteractionResult useOn(UseOnContext context) {
-		if(context.getItemInHand().getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).isEmpty() && context.getClickedFace().getAxis() != Direction.Axis.Y) {
-			BlockPos pos = context.getClickedPos();
+	public int getMaxStackSize(ItemStack stack) {
+		return stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).isEmpty() ? 16 : 1;
+	}
 
-			if(context.getPlayer().mayUseItemAt(pos, context.getClickedFace(), context.getItemInHand())) {
-				BlockState blockState = context.getLevel().getBlockState(pos);
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		Level level = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		ItemStack stack = context.getItemInHand();
+		Player player = context.getPlayer();
+
+		if (level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser) {
+			if (context.getItemInHand().getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).isEmpty() && infuser.hasInfusion() && infuser.getWaterAmount() >= FluidType.BUCKET_VOLUME) {
+				ItemStack infusionBucket = stack.is(ItemRegistry.WEEDWOOD_BUCKET) ? new ItemStack(ItemRegistry.WEEDWOOD_INFUSION_BUCKET.get()) : new ItemStack(ItemRegistry.SYRMORITE_INFUSION_BUCKET.get());
+				infusionBucket.set(DataComponentRegistry.INFUSION_BUCKET_DATA, new InfusionBucketData(infuser.getItems().subList(0, InfuserBlockEntity.MAX_INGREDIENTS), infuser.getInfusionTime()));
+				infuser.extractFluids(level, pos, new FluidStack(FluidRegistry.SWAMP_WATER_STILL, FluidType.BUCKET_VOLUME));
+				ItemStack result = ItemUtils.createFilledResult(stack, player, infusionBucket);
+				player.setItemInHand(context.getHand(), result);
+				return InteractionResult.SUCCESS;
+			}
+		}
+
+		if(stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).isEmpty() && context.getClickedFace().getAxis() != Direction.Axis.Y) {
+			if(player.mayUseItemAt(pos, context.getClickedFace(), context.getItemInHand())) {
+				BlockState blockState = level.getBlockState(pos);
 
 				if(blockState.is(BlockRegistry.RUBBER_LOG) && blockState.getValue(RubberLogBlock.NATURAL)) {
 					BlockPos offset = pos.relative(context.getClickedFace());
 					BlockState tap = this.tap.defaultBlockState().setValue(RubberTapBlock.FACING, context.getClickedFace());
-					if(context.getLevel().getBlockState(offset).canBeReplaced() && tap.canSurvive(context.getLevel(), offset)) {
-						context.getLevel().setBlockAndUpdate(offset, tap);
-						context.getItemInHand().consume(1, context.getPlayer());
+					if(level.getBlockState(offset).canBeReplaced() && tap.canSurvive(level, offset)) {
+						level.setBlockAndUpdate(offset, tap);
+						stack.consume(1, player);
 
-						context.getLevel().playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.PLAYERS, 1, 1);
+						level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.PLAYERS, 1, 1);
 
-						return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
+						return InteractionResult.sidedSuccess(level.isClientSide());
 					}
 				}
 			}

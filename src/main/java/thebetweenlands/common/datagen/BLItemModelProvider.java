@@ -173,7 +173,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SHELL_STOCK);
 		this.basicItem(ItemRegistry.FROG_LEG_EXTRACT);
 		this.basicItem(ItemRegistry.WITCH_TEA);
-		//herblore book
+		this.basicItem(ItemRegistry.HERBLORE_BOOK);
 		this.basicItem(ItemRegistry.CRIMSON_MIDDLE_GEM);
 		this.basicItem(ItemRegistry.AQUA_MIDDLE_GEM);
 		this.basicItem(ItemRegistry.GREEN_MIDDLE_GEM);
@@ -189,6 +189,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_fragment_3"))).end()
 			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_fragment_4")));
 		this.basicItem(ItemRegistry.PYRAD_FLAME);
+		this.basicItem(ItemRegistry.GECKO);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);
@@ -326,6 +327,9 @@ public class BLItemModelProvider extends ItemModelProvider {
 		//spears
 		this.bucket(ItemRegistry.WEEDWOOD_BUCKET);
 		this.bucket(ItemRegistry.SYRMORITE_BUCKET);
+		this.multiLayerItem(ItemRegistry.WEEDWOOD_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/weedwood_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
+		this.multiLayerItem(ItemRegistry.SYRMORITE_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/syrmorite_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
+		this.basicItem(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET);
 		this.basicItem(ItemRegistry.ASCENT_UPGRADE);
 		this.basicItem(ItemRegistry.ELECTRIC_UPGRADE);
 		this.basicItem(ItemRegistry.FISH_VORTEX_UPGRADE);

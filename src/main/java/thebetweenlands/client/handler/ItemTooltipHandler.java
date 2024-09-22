@@ -85,7 +85,7 @@ public class ItemTooltipHandler {
 				AspectManager aspectManager = AspectManager.get(player.level());
 
 				if (aspectManager != null) {
-					if (!aspectManager.getStaticAspects(stack).isEmpty()) {
+					if (!aspectManager.getStaticAspects(stack, player.registryAccess()).isEmpty()) {
 						usedInMachines.add(Component.translatable("item.thebetweenlands.static_aspects").withStyle(ChatFormatting.GRAY));
 					}
 

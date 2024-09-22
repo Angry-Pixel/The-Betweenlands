@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -23,9 +24,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.registry.AspectItem;
-import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.GeckoCageBlockEntity;
+import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.entity.creature.Gecko;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.item.misc.MobItem;
@@ -36,6 +37,9 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static thebetweenlands.common.component.item.DiscoveryContainerData.AspectDiscovery;
+import static thebetweenlands.common.component.item.DiscoveryContainerData.AspectDiscovery.DiscoveryResult;
 
 public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 
@@ -105,28 +109,28 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				} else if (cage.getAspectType() == null) {
 					if (cage.hasGecko()) {
-						if (DiscoveryContainer.hasDiscoveryProvider(player)) {
+						if (DiscoveryContainerData.hasDiscoveryProvider(player)) {
 							if (!level.isClientSide()) {
 								AspectManager manager = AspectManager.get(level);
 								if (manager != null) {
-									AspectItem aspectItem = AspectManager.getAspectItem(stack);
+									ResourceKey<AspectItem> aspectItem = AspectManager.getAspectItem(stack, level.registryAccess());
 									List<Aspect> aspects = manager.getStaticAspects(aspectItem);
 									if (!aspects.isEmpty()) {
-										DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
-										DiscoveryContainer.AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem, player.registryAccess());
+										DiscoveryContainerData mergedKnowledge = DiscoveryContainerData.getMergedDiscoveryContainer(player);
+										AspectDiscovery discovery = mergedKnowledge.discover(player, manager, aspectItem);
 										switch (discovery.result) {
 											case NEW:
 											case LAST:
-												DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type());
+												DiscoveryContainerData.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type());
 												cage.setAspectType(level, pos, state, discovery.discovered.type(), 600);
 												if (player instanceof ServerPlayer sp) {
 													AdvancementCriteriaRegistry.GECKO.get().trigger(sp, true, false);
-													if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST && DiscoveryContainer.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
+													if (discovery.result == DiscoveryResult.LAST && DiscoveryContainerData.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
 														AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(sp);
 													}
 												}
 												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.discover_" + discovery.discovered.type().getKey().location().getPath().toLowerCase()), false);
-												if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST) {
+												if (discovery.result == DiscoveryResult.LAST) {
 													player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.last_aspect"), true);
 													player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.last_aspect"), false);
 												} else {

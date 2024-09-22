@@ -1,5 +1,6 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -24,12 +26,11 @@ import thebetweenlands.common.item.armor.MarshRunnerBootsItem;
 import thebetweenlands.common.item.armor.RubberBootsItem;
 import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
 import thebetweenlands.common.item.food.*;
-import thebetweenlands.common.item.herblore.AspectVialItem;
-import thebetweenlands.common.item.herblore.AspectrusFruitItem;
-import thebetweenlands.common.item.herblore.DentrothystVialItem;
-import thebetweenlands.common.item.herblore.ElixirItem;
+import thebetweenlands.common.item.herblore.*;
 import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.misc.bucket.BLBucketItem;
+import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
+import thebetweenlands.common.item.misc.bucket.RubberBucketItem;
 import thebetweenlands.common.item.shield.*;
 import thebetweenlands.common.item.tool.*;
 import thebetweenlands.common.item.tool.arrow.*;
@@ -183,7 +184,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SHELL_STOCK = ITEMS.register("shell_stock", () -> new MudWalkingBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
 	public static final DeferredItem<Item> FROG_LEG_EXTRACT = ITEMS.register("frog_leg_extract", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> new MobEffectInstance(MobEffects.JUMP, 400, 1), 1.0F).alwaysEdible().build())));
 	public static final DeferredItem<Item> WITCH_TEA = ITEMS.register("witch_tea", () -> new WitchTeaBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
-	//herblore book
+	public static final DeferredItem<Item> HERBLORE_BOOK = ITEMS.register("herblore_book", () -> new HerbloreBookItem(new Item.Properties().component(DataComponentRegistry.DISCOVERY_DATA, DiscoveryContainerData.EMPTY)));
 	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
@@ -191,6 +192,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> LIFE_CRYSTAL_FRAGMENT = ITEMS.register("life_crystal_fragment", () -> new LifeCrystalItem(false, new Item.Properties().setNoRepair().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> PYRAD_FLAME = ITEMS.register("pyrad_flame", () -> new Item(new Item.Properties()));
 	//critters :)
+	public static final DeferredItem<MobItem> GECKO = ITEMS.register("gecko", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.GECKO.get(), null));
 	public static final DeferredItem<Item> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
@@ -335,6 +337,9 @@ public class ItemRegistry {
 	//spears
 	public static final DeferredItem<Item> WEEDWOOD_BUCKET = ITEMS.register("weedwood_bucket", () -> new BLBucketItem(false, BlockRegistry.WEEDWOOD_RUBBER_TAP.get(), new Item.Properties().component(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY)));
 	public static final DeferredItem<Item> SYRMORITE_BUCKET = ITEMS.register("syrmorite_bucket", () -> new BLBucketItem(true, BlockRegistry.SYRMORITE_RUBBER_TAP.get(), new Item.Properties().component(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY)));
+	public static final DeferredItem<Item> WEEDWOOD_INFUSION_BUCKET = ITEMS.register("weedwood_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(WEEDWOOD_BUCKET.get())));
+	public static final DeferredItem<Item> SYRMORITE_INFUSION_BUCKET = ITEMS.register("syrmorite_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(SYRMORITE_BUCKET.get())));
+	public static final DeferredItem<Item> SOLID_RUBBER_SYRMORITE_BUCKET = ITEMS.register("solid_rubber_syrmorite_bucket", () -> new RubberBucketItem(new Item.Properties().stacksTo(1).craftRemainder(SYRMORITE_BUCKET.get())));
 	public static final DeferredItem<Item> ELECTRIC_UPGRADE = ITEMS.register("electric_upgrade", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GLIDE_UPGRADE = ITEMS.register("glide_upgrade", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties()));
@@ -516,7 +521,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.ORANGE_ELIXIR, new Item.Properties()));
 	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
 	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
-	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
+	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(DIRTY_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 	public static final DeferredItem<Item> ORANGE_ELIXIR = ITEMS.register("orange_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 
 	//debug items

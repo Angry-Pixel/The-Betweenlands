@@ -3,14 +3,20 @@ package thebetweenlands.common.component.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public record AspectContents(Optional<Holder<AspectType>> aspect, int amount, Optional<Integer> customColor) {
@@ -52,5 +58,39 @@ public record AspectContents(Optional<Holder<AspectType>> aspect, int amount, Op
 	public int getAspectColor() {
 		if (this.customColor().isPresent()) return this.customColor().get();
 		return this.aspect().map(aspect -> aspect.value().color()).orElse(-13083194);
+	}
+
+	public static List<Aspect> getAllAspectsForItem(ItemStack stack, HolderLookup.Provider registries, @Nullable AspectManager manager) {
+		List<Aspect> aspects = new ArrayList<>();
+		stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, EMPTY).aspect().ifPresent(aspect -> aspects.add(new Aspect(aspect, stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, EMPTY).amount())));
+		if (manager != null) {
+			aspects.addAll(manager.getStaticAspects(stack, registries));
+		}
+		return aspects;
+	}
+
+	public static List<Aspect> getAspectsFromContainer(ItemStack stack, HolderLookup.Provider registries, @Nullable AspectManager manager, @Nullable DiscoveryContainerData discoveries) {
+		List<Aspect> discoveredAspects = null;
+		if (discoveries != null && manager != null)
+			discoveredAspects = discoveries.getDiscoveredStaticAspects(manager, AspectManager.getAspectItem(stack, registries));
+		List<Aspect> aspects = new ArrayList<>();
+		stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, EMPTY).aspect().ifPresent(aspect -> aspects.add(new Aspect(aspect, stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, EMPTY).amount())));
+		if (manager != null) {
+			for (Aspect aspect : manager.getStaticAspects(stack, registries)) {
+				boolean hasDiscovered = false;
+				if (discoveredAspects != null) {
+					for (Aspect discovered : discoveredAspects) {
+						if (discovered.type() == aspect.type()) {
+							hasDiscovered = true;
+							break;
+						}
+					}
+				}
+				if (discoveredAspects == null || hasDiscovered) {
+					aspects.add(aspect);
+				}
+			}
+		}
+		return aspects;
 	}
 }

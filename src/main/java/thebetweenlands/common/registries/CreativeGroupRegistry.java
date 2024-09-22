@@ -770,7 +770,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SHELL_STOCK);
 			output.accept(ItemRegistry.FROG_LEG_EXTRACT);
 			output.accept(ItemRegistry.WITCH_TEA);
-			//herblore book
+			output.accept(ItemRegistry.HERBLORE_BOOK);
 			output.accept(ItemRegistry.CRIMSON_MIDDLE_GEM);
 			output.accept(ItemRegistry.AQUA_MIDDLE_GEM);
 			output.accept(ItemRegistry.GREEN_MIDDLE_GEM);
@@ -780,7 +780,7 @@ public class CreativeGroupRegistry {
 			//dragonfly
 			//firefly
 			//olm
-			//gecko
+			output.accept(ItemRegistry.GECKO);
 			//cave fish
 			//mire snail
 			//sludge worm egg sac
@@ -938,6 +938,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SYRMORITE_BUCKET);
 			createBuckets(output, ItemRegistry.WEEDWOOD_BUCKET, true);
 			createBuckets(output, ItemRegistry.SYRMORITE_BUCKET, false);
+			output.accept(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET);
 			output.accept(ItemRegistry.ELECTRIC_UPGRADE);
 			output.accept(ItemRegistry.GLIDE_UPGRADE);
 			output.accept(ItemRegistry.ASCENT_UPGRADE);

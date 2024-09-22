@@ -45,7 +45,7 @@ public class Gecko extends Animal implements BLEntity {
 		this.setPathfindingMalus(PathType.WATER, 0.0F);
 	}
 
-	public static AttributeSupplier.Builder makeAttributes() {
+	public static AttributeSupplier.Builder registerAttributes() {
 		return Gecko.createMobAttributes()
 			.add(Attributes.MAX_HEALTH, 12.0D)
 			.add(Attributes.MOVEMENT_SPEED, 0.5D);

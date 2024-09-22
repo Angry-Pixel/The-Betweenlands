@@ -11,6 +11,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -27,17 +28,22 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.InfusionBucketData;
+import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.common.registries.DimensionRegistries;
-import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.item.misc.bucket.BLBucketItem;
+import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
 
 public class InfuserBlock extends HorizontalBaseEntityBlock {
@@ -76,8 +82,8 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 
 			if (!player.isShiftKeyDown()) {
 				if (!stack.isEmpty() && !infuser.hasInfusion()) {
-					AspectContents aspectContainer = stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY);
-					if (aspectContainer.aspect().isPresent()) {
+					List<Aspect> aspectContainer = AspectContents.getAllAspectsForItem(stack, level.registryAccess(), AspectManager.get(level));
+					if (!aspectContainer.isEmpty()) {
 						for (int i = 0; i < InfuserBlockEntity.MAX_INGREDIENTS; i++) {
 							if (infuser.getItem(i).isEmpty()) {
 								ItemStack singleIngredient = stack.copy();
@@ -120,53 +126,28 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 					}
 				}
 			}
-
-			if (player.isShiftKeyDown()) {
-				//TODO data component
-//				if (stack.getItem() instanceof ItemBLBucket && ((ItemBLBucket) stack.getItem()).getFluid(stack) == null && infuser.hasInfusion() && infuser.getWaterAmount() >= FluidType.BUCKET_VOLUME) {
-//					ItemStack infusionBucket = new ItemStack(ItemRegistry.BL_BUCKET_INFUSION, 1, stack.getMetadata());
-//					NBTTagCompound nbtCompound = new NBTTagCompound();
-//					infusionBucket.setTagCompound(nbtCompound);
-//					nbtCompound.setString("infused", "Infused");
-//					NBTTagList nbtList = new NBTTagList();
-//					for (int i = 0; i < infuser.getSizeInventory() - 1; i++) {
-//						ItemStack stackInSlot = infuser.getStackInSlot(i);
-//						if (!stackInSlot.isEmpty()) {
-//							nbtList.appendTag(stackInSlot.writeToNBT(new NBTTagCompound()));
-//						}
-//					}
-//					nbtCompound.setTag("ingredients", nbtList);
-//					nbtCompound.setInteger("infusionTime", infuser.getInfusionTime());
-//					infuser.extractFluids(level, pos, state, new FluidStack(FluidRegistry.SWAMP_WATER_STILL, FluidType.BUCKET_VOLUME));
-//					if (stack.getCount() == 1) {
-//						player.setItemInHand(hand, infusionBucket.copy());
-//						return ItemInteractionResult.SUCCESS;
-//					} else {
-//						if (!player.getInventory().add(infusionBucket.copy()))
-//							player.drop(infusionBucket.copy(), false);
-//						stack.shrink(1);
-//						return ItemInteractionResult.SUCCESS;
-//					}
-//				}
-
-				if (!infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).isEmpty()) {
-					ItemEntity itemEntity = player.drop(infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).copy(), false);
-					if (itemEntity != null) itemEntity.setPickUpDelay(0);
-					infuser.setItem(InfuserBlockEntity.MAX_INGREDIENTS + 1, ItemStack.EMPTY);
-					infuser.updateInfusingRecipe();
-					level.sendBlockUpdated(pos, state, state, 2);
-					return ItemInteractionResult.SUCCESS;
-				}
-			}
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser && infuser.getStirProgress() >= 90) {
-			infuser.setStirProgress(0);
-			return InteractionResult.sidedSuccess(level.isClientSide());
+		if (level.getBlockEntity(pos) instanceof InfuserBlockEntity infuser) {
+			if (!player.isShiftKeyDown() && infuser.getStirProgress() >= 90) {
+				infuser.setStirProgress(0);
+				return InteractionResult.sidedSuccess(level.isClientSide());
+			}
+
+			if (player.isShiftKeyDown()) {
+				if (!infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).isEmpty()) {
+					ItemEntity itemEntity = player.drop(infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).copy(), false);
+					if (itemEntity != null) itemEntity.setPickUpDelay(0);
+					infuser.setItem(InfuserBlockEntity.MAX_INGREDIENTS + 1, ItemStack.EMPTY);
+					infuser.updateInfusingRecipe();
+					level.sendBlockUpdated(pos, state, state, 2);
+					return InteractionResult.SUCCESS;
+				}
+			}
 		}
 		return super.useWithoutItem(state, level, pos, player, hitResult);
 	}
@@ -194,7 +175,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 				float randomOffset = random.nextFloat() * 0.6F - 0.3F;
 				if (random.nextInt((101 - infuser.getTemperature())) / 4 == 0) {
 					float[] colors = infuser.currentInfusionColor;
-//					BLParticles.BUBBLE_INFUSION.spawn(level, xx + 0.3F - random.nextFloat() * 0.6F, yy, zz + 0.3F - random.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(colors[0], colors[1], colors[2], 1));
+					TheBetweenlands.createParticle(ParticleRegistry.INFUSER_BUBBLE.get(), level, xx + 0.3F - random.nextFloat() * 0.6F, yy, zz + 0.3F - random.nextFloat() * 0.6F, ParticleFactory.ParticleArgs.get().withScale(0.3F).withColor(colors[0], colors[1], colors[2], 1));
 					if (random.nextInt(10) == 0 && infuser.getTemperature() > 70)
 						level.playSound(null, xx, yy, zz, SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS, 1.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.5F);
 				}

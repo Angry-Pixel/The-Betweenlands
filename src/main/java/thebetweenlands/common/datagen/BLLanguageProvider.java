@@ -1167,7 +1167,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.SHELL_STOCK, "Shell Stock");
 		this.addItem(ItemRegistry.FROG_LEG_EXTRACT, "Frog Leg Extract");
 		this.addItem(ItemRegistry.WITCH_TEA, "Witch Tea");
-		//herblore book
+		this.addItem(ItemRegistry.HERBLORE_BOOK, "Herblore Book");
 		this.add("item.thebetweenlands.modifiers.armor", "When on armor:");
 		this.add("item.thebetweenlands.modifiers.tool", "When on tool:");
 		this.addItem(ItemRegistry.CRIMSON_MIDDLE_GEM, "Crimson Middle Gem");
@@ -1333,6 +1333,14 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add(ItemRegistry.WEEDWOOD_BUCKET.get().getDescriptionId() + ".fluid", "Weedwood Bucket (%s)");
 		this.addItem(ItemRegistry.SYRMORITE_BUCKET, "Syrmorite Bucket");
 		this.add(ItemRegistry.SYRMORITE_BUCKET.get().getDescriptionId() + ".fluid", "Syrmorite Bucket (%s)");
+		this.addItem(ItemRegistry.WEEDWOOD_INFUSION_BUCKET, "Weedwood Infusion Bucket");
+		this.addItem(ItemRegistry.SYRMORITE_INFUSION_BUCKET, "Syrmorite Infusion Bucket");
+		this.add("item.thebetweenlands.infusion_bucket.empty", "Empty");
+		this.add("item.thebetweenlands.infusion_bucket.time", "Infusion time:§r %s");
+		this.add("item.thebetweenlands.infusion_bucket.ingredients", "Ingredients:");
+		this.add("item.thebetweenlands.infusion_bucket.ingredient_amount", "%sx %s");
+		this.add("item.thebetweenlands.infusion_bucket.aspect", " - %s (%s)");
+		this.addItemWithDesc(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET, "Syrmorite Bucket with Solid Rubber", "Right click to extract the rubber from the bucket");
 		this.addItem(ItemRegistry.ASCENT_UPGRADE, "Ascent Upgrade");
 		this.addItem(ItemRegistry.ELECTRIC_UPGRADE, "Electric Upgrade");
 		this.addItem(ItemRegistry.FISH_VORTEX_UPGRADE, "Fish Vortex Upgrade");
@@ -1527,7 +1535,7 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
 		this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
-		this.add("item.thebetweenlands.aspect_vial.aspect", "%s (%s)");
+		this.add("item.thebetweenlands.aspect_vial.aspect", "%s (%d)");
 		this.add("item.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
 		this.add("item.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");
 

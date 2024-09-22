@@ -327,7 +327,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	@Override
-	protected NonNullList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return this.items;
 	}
 
@@ -466,9 +466,9 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		int filled = this.tank.fill(resource, FluidAction.SIMULATE);
 		if (filled == resource.getAmount() && action.execute()) {
 			this.tank.fill(resource, FluidAction.EXECUTE);
-			if (temp >= 3) {
-				temp = temp - temp / 3;
-				evaporation = 0;
+			if (this.temp >= 3) {
+				this.temp = this.temp - this.temp / 3;
+				this.evaporation = 0;
 			}
 
 			if (action.execute()) {

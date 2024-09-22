@@ -2,6 +2,7 @@ package thebetweenlands.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BubbleParticle;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 
 public class BLBubbleParticle extends BubbleParticle {
@@ -32,6 +33,53 @@ public class BLBubbleParticle extends BubbleParticle {
 			this.xd *= 0.85F;
 			this.yd *= 0.85F;
 			this.zd *= 0.85F;
+		}
+	}
+
+	public static final class Factory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
+
+		@Override
+		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+		}
+	}
+
+	public static final class InfuserFactory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
+
+		@Override
+		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+		}
+
+		@Override
+		protected void setDefaultArguments(ClientLevel level, double x, double y, double z, ParticleArgs<?> args) {
+			args.withColor(0.5F, 0F, 0.125F, 1.0F);
+		}
+	}
+
+	public static final class PurifierFactory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
+
+		@Override
+		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+		}
+
+		@Override
+		protected void setDefaultArguments(ClientLevel level, double x, double y, double z, ParticleArgs<?> args) {
+			args.withColor(0.306F, 0.576F, 0.192F, 1.0F);
+		}
+	}
+
+	public static final class TarFactory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
+
+		@Override
+		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+		}
+
+		@Override
+		protected void setDefaultArguments(ClientLevel level, double x, double y, double z, ParticleArgs<?> args) {
+			args.withColor(0, 0, 0, 1.0F);
 		}
 	}
 }

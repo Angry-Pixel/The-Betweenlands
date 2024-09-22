@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-20T20:31:55.8032135	Item Models: thebetweenlands
+// 1.21.1	2024-09-21T12:58:14.1746944	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -153,6 +153,7 @@ d0a1c08222716a5a4bc3e5963ab0a529a096d0e0 assets/thebetweenlands/models/item/forb
 c92c883ce786ce3bd2d10b33be2cfb07142f475f assets/thebetweenlands/models/item/fried_swamp_kelp.json
 2efea65889a85fe506d144b4bd03a762d7b7d53d assets/thebetweenlands/models/item/frog_leg_extract.json
 2b20b46981aff750cd199fdee8c2b84f8e47d30c assets/thebetweenlands/models/item/fumigant.json
+a48a2e9f16148b4c2deb265816bbdca01aae272b assets/thebetweenlands/models/item/gecko.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/gecko_spawn_egg.json
 a976f1f2fed394712cd6570759a24b3c86b78dba assets/thebetweenlands/models/item/gem_singer.json
 d7cc1cba53b460bb8625f2b0751d66694f5108b3 assets/thebetweenlands/models/item/gerts_donut.json
@@ -230,6 +231,7 @@ ebf65590a84939ce38b5a949ba37e446146b7ef0 assets/thebetweenlands/models/item/grou
 ae66563f9144f39b744476deccdf7c337ce4237d assets/thebetweenlands/models/item/hag_hacker.json
 84d208f1a741a895f21651bf7d63356c35ba35fd assets/thebetweenlands/models/item/hanger_drop.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/heads_lore_scrap.json
+870e8ceef0a62a889a6db5ceb8c2dbd2a57456db assets/thebetweenlands/models/item/herblore_book.json
 b3d571d7d45fd881166f72cf28d14406694113a5 assets/thebetweenlands/models/item/inanimate_angry_pebble.json
 1804017058d5e2152ad233f6553e6014d377520e assets/thebetweenlands/models/item/inanimate_tarminion.json
 873598eebe30890f94351b9b7c4a72db0309895a assets/thebetweenlands/models/item/item_scroll.json
@@ -425,6 +427,7 @@ f034d2128b3f6fa4c34f94771b76f9b1477a646d assets/thebetweenlands/models/item/snap
 190e3be840fbe69ebeb9645887a7bd07d3909422 assets/thebetweenlands/models/item/snot.json
 584c2fee1a7f3c1212d3a99de52540ce55017424 assets/thebetweenlands/models/item/snot_pod.json
 56293f37a2cd352176a8d53c49a6199563696b61 assets/thebetweenlands/models/item/soft_rush_leaves.json
+e695bdc4aa17794a2297697d1a9947bac25813be assets/thebetweenlands/models/item/solid_rubber_syrmorite_bucket.json
 9bb0524b5354bc37535d473bdf8a8eb6b026e04c assets/thebetweenlands/models/item/spirit_fruit.json
 085054838f05d0046c435366c7c7d4366a5612ad assets/thebetweenlands/models/item/stalker_eye.json
 0030dd9217f5c454c1181097208d49a8d904ffe1 assets/thebetweenlands/models/item/string_root_fibers.json
@@ -447,6 +450,7 @@ badf28d53c9543d26e76442d1376fbf91e05b0ef assets/thebetweenlands/models/item/syrm
 21ea75316c33ab7e557a49a4f2cca3f06796343f assets/thebetweenlands/models/item/syrmorite_bucket.json
 3f4f73bd8513b833590ff555ffcfa9b9d4cac349 assets/thebetweenlands/models/item/syrmorite_chestplate.json
 b6f20f21e8fe8f3e27653af61d764e9c09b1333e assets/thebetweenlands/models/item/syrmorite_helmet.json
+f930ed1d850d4c560a61a3ed49c152eadf60d0dc assets/thebetweenlands/models/item/syrmorite_infusion_bucket.json
 1004a6f9809ec3b51a7af5d18bb1d73a24925c40 assets/thebetweenlands/models/item/syrmorite_ingot.json
 715484c64acdb7187d88dccc59e217cca8237934 assets/thebetweenlands/models/item/syrmorite_leggings.json
 6326cf747404f49c75f02dbaca0c0c4e46f429f3 assets/thebetweenlands/models/item/syrmorite_nugget.json
@@ -504,6 +508,7 @@ ab394b8a34c523897ece6d3e7bc101cda2567353 assets/thebetweenlands/models/item/weed
 0f2861ea8ae80ddba0d5a953d186ae309bc4f5e4 assets/thebetweenlands/models/item/weedwood_bow_shock_1.json
 8ada2a41d054d3a9f3b20a7e43e4dc5efb49de4a assets/thebetweenlands/models/item/weedwood_bow_shock_2.json
 c112b0f4684b7000194c5cda40ac651953daa368 assets/thebetweenlands/models/item/weedwood_bucket.json
+41b3e90b5896792a737a484b7f11495731a24c2f assets/thebetweenlands/models/item/weedwood_infusion_bucket.json
 4b92b2830cb60ec8566b3df7d4e49f64a97ddb85 assets/thebetweenlands/models/item/weedwood_pickaxe.json
 3d3c8c911df9abee79400defe0d0aa4bf657eca7 assets/thebetweenlands/models/item/weedwood_shovel.json
 c99b17456fac3048397ad4e67ca148b93091ee4a assets/thebetweenlands/models/item/weedwood_stick.json
