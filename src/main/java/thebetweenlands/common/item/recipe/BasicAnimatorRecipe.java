@@ -130,12 +130,13 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 		public static final StreamCodec<RegistryFriendlyByteBuf, BasicAnimatorRecipe> STREAM_CODEC = new StreamCodec<>() {
 			@Override
 			public BasicAnimatorRecipe decode(RegistryFriendlyByteBuf buf) {
+				// Stop removing the generics, they're there to prevent errors in certain IDEs
 				Ingredient input = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
 				Optional<ItemStack> outputStack = ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).decode(buf);
-				Optional<EntityType<?>> resultEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).decode(buf);
+				Optional<EntityType<?>> resultEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).decode(buf);
 				int fuel = ByteBufCodecs.INT.decode(buf);
 				int life = ByteBufCodecs.INT.decode(buf);
-				Optional<EntityType<?>> renderEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).decode(buf);
+				Optional<EntityType<?>> renderEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).decode(buf);
 				Optional<ResourceKey<LootTable>> lootTable = ResourceKey.streamCodec(Registries.LOOT_TABLE).apply(ByteBufCodecs::optional).decode(buf);
 				boolean close = ByteBufCodecs.BOOL.decode(buf);
 				return new BasicAnimatorRecipe(input, outputStack, resultEntity, fuel, life, renderEntity, lootTable, close);
@@ -143,12 +144,13 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 
 			@Override
 			public void encode(RegistryFriendlyByteBuf buf, BasicAnimatorRecipe recipe) {
+				// Stop removing the generics, they're there to prevent errors in certain IDEs
 				Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input());
 				ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).encode(buf, recipe.resultStack());
-				ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).encode(buf, recipe.resultEntity());
+				ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).encode(buf, recipe.resultEntity());
 				ByteBufCodecs.INT.encode(buf, recipe.requiredFuel());
 				ByteBufCodecs.INT.encode(buf, recipe.requiredLife());
-				ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).encode(buf, recipe.renderEntity());
+				ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).encode(buf, recipe.renderEntity());
 				ResourceKey.streamCodec(Registries.LOOT_TABLE).apply(ByteBufCodecs::optional).encode(buf, recipe.lootTable());
 				ByteBufCodecs.BOOL.encode(buf, recipe.closeOnFinish());
 			}
