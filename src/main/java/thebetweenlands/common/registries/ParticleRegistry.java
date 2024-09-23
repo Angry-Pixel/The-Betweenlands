@@ -40,7 +40,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_BUBBLE = PARTICLES.register("water_bubble", () -> new SimpleParticleType(false));
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimitter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
-		return PARTICLES.register(name, () -> new ParticleType<>(overrideLimitter) {
+		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimitter) {
 			@Override
 			public MapCodec<T> codec() {
 				return codecGetter.apply(this);
