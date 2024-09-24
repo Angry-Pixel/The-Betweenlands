@@ -14,7 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.api.capability.IDecayData;
+import thebetweenlands.api.attachment.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -52,8 +52,8 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			return ((ICustomCorrodible) stack.getItem()).getMaxCorrosion(stack);
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
+			return ((CustomCorrodible) stack.getItem()).getMaxCorrosion(stack);
 		} else {
 			return MAX_CORROSION;
 		}
@@ -69,8 +69,8 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			return ((ICustomCorrodible) stack.getItem()).getCorrosion(stack);
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
+			return ((CustomCorrodible) stack.getItem()).getCorrosion(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {
 			return stack.get(DataComponentRegistry.CORROSION).corrosion();
 		} else {
@@ -88,8 +88,8 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			return ((ICustomCorrodible) stack.getItem()).getMaxCoating(stack);
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
+			return ((CustomCorrodible) stack.getItem()).getMaxCoating(stack);
 		} else {
 			return MAX_COATING;
 		}
@@ -105,8 +105,8 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			return ((ICustomCorrodible) stack.getItem()).getCoating(stack);
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
+			return ((CustomCorrodible) stack.getItem()).getCoating(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {
 			return stack.get(DataComponentRegistry.CORROSION).coating();
 		} else {
@@ -125,8 +125,8 @@ public class CorrosionHelper {
 			return;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			((ICustomCorrodible) stack.getItem()).setCorrosion(stack, corrosion);
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
+			((CustomCorrodible) stack.getItem()).setCorrosion(stack, corrosion);
 		} else {
 			stack.set(DataComponentRegistry.CORROSION, stack.getOrDefault(DataComponentRegistry.CORROSION, new CorrosionData(0, 0)).withCorrosion(corrosion));
 		}
@@ -142,8 +142,8 @@ public class CorrosionHelper {
 			return;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			((ICustomCorrodible) stack.getItem()).setCoating(stack, coating);
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
+			((CustomCorrodible) stack.getItem()).setCoating(stack, coating);
 		} else {
 			stack.set(DataComponentRegistry.CORROSION, stack.getOrDefault(DataComponentRegistry.CORROSION, new CorrosionData(0, 0)).withCoating(coating));
 		}
@@ -160,7 +160,7 @@ public class CorrosionHelper {
 		}
 
 		int corrosion, maxCorrosion;
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible corrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible corrodible) {
 			corrosion = corrodible.getCorrosion(stack);
 			maxCorrosion = corrodible.getMaxCorrosion(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {

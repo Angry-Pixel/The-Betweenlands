@@ -3,11 +3,13 @@ package thebetweenlands.api.recipes;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.registries.RecipeRegistry;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public interface MortarRecipe extends Recipe<SingleRecipeInput> {
 
@@ -58,5 +60,19 @@ public interface MortarRecipe extends Recipe<SingleRecipeInput> {
 	@Override
 	default RecipeType<?> getType() {
 		return RecipeRegistry.MORTAR_RECIPE.get();
+	}
+
+	static List<Ingredient> getInputs(Level level, ItemStack output) {
+		for (RecipeHolder<MortarRecipe> recipe : level.getRecipeManager().getAllRecipesFor(RecipeRegistry.MORTAR_RECIPE.get())) {
+			if (ItemStack.isSameItem(output, recipe.value().getResultItem(level.registryAccess()))) {
+				return recipe.value().getIngredients().stream().filter(ingredient -> !ingredient.hasNoItems()).toList();
+			}
+		}
+		return List.of();
+	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
 	}
 }

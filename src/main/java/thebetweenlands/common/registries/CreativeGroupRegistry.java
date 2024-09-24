@@ -2,12 +2,19 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.BLRegistries;
@@ -17,6 +24,7 @@ import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.item.misc.bucket.BLBucketItem;
 
 //TODO since we have full control of tab placement consider reorganizing the contents. Theyre currently the same as they were in 1.12
 public class CreativeGroupRegistry {
@@ -762,7 +770,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SHELL_STOCK);
 			output.accept(ItemRegistry.FROG_LEG_EXTRACT);
 			output.accept(ItemRegistry.WITCH_TEA);
-			//herblore book
+			output.accept(ItemRegistry.HERBLORE_BOOK);
 			output.accept(ItemRegistry.CRIMSON_MIDDLE_GEM);
 			output.accept(ItemRegistry.AQUA_MIDDLE_GEM);
 			output.accept(ItemRegistry.GREEN_MIDDLE_GEM);
@@ -772,7 +780,7 @@ public class CreativeGroupRegistry {
 			//dragonfly
 			//firefly
 			//olm
-			//gecko
+			output.accept(ItemRegistry.GECKO);
 			//cave fish
 			//mire snail
 			//sludge worm egg sac
@@ -892,38 +900,52 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.VALONITE_AXE);
 			output.accept(ItemRegistry.VALONITE_GREATAXE);
 			output.accept(ItemRegistry.VALONITE_PICKAXE);
-			//octine shield
-			//valonite shield
-			//weedwood shield
-			//living weedwood shield
-			//syrmorite shield
-			//bone shield
-			//green and orange dentrothyst shields
-			//lurker skin shield
-			//shears
-			//sickle
+			output.accept(ItemRegistry.OCTINE_SHIELD);
+			output.accept(ItemRegistry.VALONITE_SHIELD);
+			output.accept(ItemRegistry.WEEDWOOD_SHIELD);
+			output.accept(ItemRegistry.LIVING_WEEDWOOD_SHIELD);
+			output.accept(ItemRegistry.SYRMORITE_SHIELD);
+			output.accept(ItemRegistry.BONE_SHIELD);
+			output.accept(ItemRegistry.GREEN_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.ORANGE_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD);
+			output.accept(ItemRegistry.LURKER_SKIN_SHIELD);
+			output.accept(ItemRegistry.SYRMORITE_SHEARS);
+			output.accept(ItemRegistry.SICKLE);
 			//shockwave sword
-			//arrows x6
+			output.accept(ItemRegistry.ANGLER_TOOTH_ARROW);
+			output.accept(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
+			output.accept(ItemRegistry.OCTINE_ARROW);
+			output.accept(ItemRegistry.BASILISK_ARROW);
+			output.accept(ItemRegistry.SLUDGE_WORM_ARROW);
+			output.accept(ItemRegistry.SHOCK_ARROW);
 			output.accept(ItemRegistry.CHIROMAW_BARB);
-			//weedwood bow
-			//predator bow
+			output.accept(ItemRegistry.WEEDWOOD_BOW);
+			output.accept(ItemRegistry.PREDATOR_BOW);
 			//ancient greatsword
 			//ancient battleaxe
 			output.accept(ItemRegistry.PESTLE);
 			output.accept(ItemRegistry.NET);
-			//lurker skin pouches
+			output.accept(ItemRegistry.SMALL_LURKER_SKIN_POUCH);
+			output.accept(ItemRegistry.MEDIUM_LURKER_SKIN_POUCH);
+			output.accept(ItemRegistry.LARGE_LURKER_SKIN_POUCH);
+			output.accept(ItemRegistry.XL_LURKER_SKIN_POUCH);
 			output.accept(ItemRegistry.VOLARKITE);
 			output.accept(ItemRegistry.SLINGSHOT);
 			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);
-			//weedwood buckets
-			//syrmorite buckets
+			output.accept(ItemRegistry.WEEDWOOD_BUCKET);
+			output.accept(ItemRegistry.SYRMORITE_BUCKET);
+			createBuckets(output, ItemRegistry.WEEDWOOD_BUCKET, true);
+			createBuckets(output, ItemRegistry.SYRMORITE_BUCKET, false);
+			output.accept(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET);
 			output.accept(ItemRegistry.ELECTRIC_UPGRADE);
 			output.accept(ItemRegistry.GLIDE_UPGRADE);
 			output.accept(ItemRegistry.ASCENT_UPGRADE);
 			output.accept(ItemRegistry.URCHIN_SPIKE_UPGRADE);
 			output.accept(ItemRegistry.FISH_VORTEX_UPGRADE);
-			//biopathic triggerstone
-			//biopathic linkstone
+			output.accept(ItemRegistry.BIOPATHIC_TRIGGERSTONE);
+			output.accept(ItemRegistry.BIOPATHIC_LINKSTONE);
 			output.accept(ItemRegistry.SILK_BUNDLE);
 		})
 		.build());
@@ -1232,5 +1254,13 @@ public class CreativeGroupRegistry {
 			output.accept(AspectContents.createItemStack(ItemRegistry.GREEN_ASPECT_VIAL.get(), holder, 2000));
 			output.accept(AspectContents.createItemStack(ItemRegistry.ORANGE_ASPECT_VIAL.get(), holder, 2000));
 		});
+	}
+
+	private static void createBuckets(CreativeModeTab.Output output, Holder<Item> bucket, boolean accountHotFluids) {
+		for (Fluid fluid : BuiltInRegistries.FLUID.stream().filter(fluid -> fluid.isSource(fluid.defaultFluidState())).toList()) {
+			FluidStack stack = new FluidStack(fluid, FluidType.BUCKET_VOLUME);
+			if (accountHotFluids && BLBucketItem.isFluidHot(stack)) continue;
+			output.accept(new ItemStack(bucket, 1, DataComponentPatch.builder().set(DataComponentRegistry.STORED_FLUID.get(), SimpleFluidContent.copyOf(stack)).build()));
+		}
 	}
 }

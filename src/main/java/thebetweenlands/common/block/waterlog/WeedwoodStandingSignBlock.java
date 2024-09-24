@@ -61,12 +61,12 @@ public class WeedwoodStandingSignBlock extends WeedwoodSignBlock {
 
 	@Override
 	protected BlockState rotate(BlockState state, Rotation rot) {
-		return state.setValue(ROTATION, Integer.valueOf(rot.rotate(state.getValue(ROTATION), 16)));
+		return state.setValue(ROTATION, rot.rotate(state.getValue(ROTATION), 16));
 	}
 
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
-		return state.setValue(ROTATION, Integer.valueOf(mirror.mirror(state.getValue(ROTATION), 16)));
+		return state.setValue(ROTATION, mirror.mirror(state.getValue(ROTATION), 16));
 	}
 
 	@Override

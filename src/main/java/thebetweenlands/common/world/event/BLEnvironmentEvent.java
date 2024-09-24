@@ -8,14 +8,14 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
-import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.environment.RemotelyControllableEnvironmentEvent;
+import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 
-public abstract class BLEnvironmentEvent implements IRemotelyControllableEnvironmentEvent, IGenericDataAccessorAccess.IDataManagedObject {
+public abstract class BLEnvironmentEvent implements RemotelyControllableEnvironmentEvent, GenericDataAccessorAccess.IDataManagedObject {
 	private boolean loaded = false;
 
 	protected static final EntityDataAccessor<Boolean> ACTIVE = GenericDataAccessor.defineId(BLEnvironmentEvent.class, EntityDataSerializers.BOOLEAN);

@@ -78,9 +78,7 @@ public class CatmullRomSpline implements ISpline {
 		double Cy = B1y * CMul1 + B2y * CMul2;
 		double Cz = B1z * CMul1 + B2z * CMul2;
 
-		Vec3 C = new Vec3(Cx, Cy, Cz);
-
-		return C;
+		return new Vec3(Cx, Cy, Cz);
 	}
 
 	@Override
@@ -175,9 +173,7 @@ public class CatmullRomSpline implements ISpline {
 		double dCy = (B2y - B1y) * dCMul1 + dB1y * dCMul2 + dB2y * dCMul3;
 		double dCz = (B2z - B1z) * dCMul1 + dB1z * dCMul2 + dB2z * dCMul3;
 
-		Vec3 dC = new Vec3(dCx, dCy, dCz);
-
-		return dC;
+		return new Vec3(dCx, dCy, dCz);
 	}
 
 	@Override

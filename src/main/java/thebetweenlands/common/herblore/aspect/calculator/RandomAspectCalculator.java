@@ -10,7 +10,6 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.registry.AspectCalculatorType;
-import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectTier;
 import thebetweenlands.api.aspect.registry.AspectType;
 
@@ -45,7 +44,7 @@ public record RandomAspectCalculator(float amountMultiplier, float amountVariati
 		for (Holder<AspectType> type : availableAspects) {
 			if (!this.setAspectList().isEmpty() && this.setAspectList().contains(type.getKey())) {
 				possibleAspects.add(type);
-			} else if (type.value().rollAsCommonAspect() && type.value().tier() == this.tier()) {
+			} else if (this.setAspectList().isEmpty() && type.value().rollAsCommonAspect() && type.value().tier() == this.tier()) {
 				possibleAspects.add(type);
 			}
 		}

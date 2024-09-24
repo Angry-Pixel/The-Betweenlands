@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,20 +26,21 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.*;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
-import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.client.ClientAspectManager;
+import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class AspectManager {
 
-	private static final Map<Item, List<AspectItem>> ITEM_TO_ASPECT_ITEMS = new HashMap<>();
-	private final Map<AspectItem, List<Aspect>> matchedAspects = new LinkedHashMap<>();
+	private static final Map<Item, List<ResourceKey<AspectItem>>> ITEM_TO_ASPECT_ITEMS = new HashMap<>();
+	private final Map<ResourceKey<AspectItem>, List<Aspect>> matchedAspects = new LinkedHashMap<>();
 
 	/**
 	 * Returns a list of all generated and matched aspects
 	 *
 	 * @return
 	 */
-	public Map<AspectItem, List<Aspect>> getMatchedAspects() {
+	public Map<ResourceKey<AspectItem>, List<Aspect>> getMatchedAspects() {
 		return Collections.unmodifiableMap(this.matchedAspects);
 	}
 
@@ -66,6 +67,8 @@ public class AspectManager {
 		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
 		if (storage != null) {
 			return storage.getAspectManager();
+		} else if (level.isClientSide()) {
+			return ClientAspectManager.INSTANCE;
 		}
 		return null;
 	}
@@ -95,7 +98,7 @@ public class AspectManager {
 		}
 	}
 
-	private void updateMatchedAspects(AspectItem item, List<Aspect> aspects) {
+	private void updateMatchedAspects(ResourceKey<AspectItem> item, List<Aspect> aspects) {
 		Collections.sort(aspects);
 		this.matchedAspects.put(item, aspects);
 	}
@@ -112,7 +115,7 @@ public class AspectManager {
 		for (int i = 0; i < entryList.size(); i++) {
 			CompoundTag entryCompound = entryList.getCompound(i);
 			//System.out.println("Getting aspect item: " + entryCompound);
-			AspectItem itemEntry = readAspectItemFromNBT(entryCompound, provider);
+			ResourceKey<AspectItem> itemEntry = readAspectItemFromNBT(entryCompound, provider);
 			if (itemEntry == null) {
 				//System.out.println("Failed getting aspect item");
 				continue;
@@ -140,8 +143,8 @@ public class AspectManager {
 	 */
 	public void saveStaticAspects(CompoundTag nbt, HolderLookup.Provider provider) {
 		ListTag entryList = new ListTag();
-		for (Entry<AspectItem, List<Aspect>> entry : this.matchedAspects.entrySet()) {
-			AspectItem itemEntry = entry.getKey();
+		for (Entry<ResourceKey<AspectItem>, List<Aspect>> entry : this.matchedAspects.entrySet()) {
+			ResourceKey<AspectItem> itemEntry = entry.getKey();
 			List<Aspect> itemAspects = entry.getValue();
 			CompoundTag entryCompound = new CompoundTag();
 			writeAspectItemToNbt(itemEntry, entryCompound, provider);
@@ -162,8 +165,8 @@ public class AspectManager {
 	 * @param tag
 	 * @return
 	 */
-	public static CompoundTag writeAspectItemToNbt(AspectItem aspectItem, CompoundTag tag, HolderLookup.Provider provider) {
-		tag.put("item", aspectItem.item().getDefaultInstance().save(provider));
+	public static CompoundTag writeAspectItemToNbt(ResourceKey<AspectItem> aspectItem, CompoundTag tag, HolderLookup.Provider provider) {
+		tag.put("item", provider.holderOrThrow(aspectItem).value().item().getDefaultInstance().save(provider));
 		return tag;
 	}
 
@@ -174,11 +177,11 @@ public class AspectManager {
 	 * @return
 	 */
 	@Nullable
-	public static AspectItem readAspectItemFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
+	public static ResourceKey<AspectItem> readAspectItemFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
 		ItemStack item = tag.contains("item") ? ItemStack.parseOptional(provider, tag.getCompound("item")) : null;
 		if (item == null)
 			return null;
-		return AspectManager.getAspectItem(item);
+		return AspectManager.getAspectItem(item, provider);
 	}
 
 	/**
@@ -192,14 +195,29 @@ public class AspectManager {
 
 	private void generateStaticAspects(HolderLookup.Provider provider, long seed) {
 		this.matchedAspects.clear();
+		ITEM_TO_ASPECT_ITEMS.clear();
 		this.updateAspects(provider, seed);
 	}
 
 	private void updateAspects(HolderLookup.Provider provider, long seed) {
 		LegacyRandomSource random = (LegacyRandomSource) RandomSource.create(seed);
 
-		for (AspectItem entry : provider.lookupOrThrow(BLRegistries.Keys.ASPECT_ITEMS).listElements().map(Holder::value).toList()) {
-			this.matchedAspects.computeIfAbsent(entry, aspectItem -> aspectItem.calculator().getAspects(provider, random));
+		for (ResourceKey<AspectItem> key : provider.lookupOrThrow(BLRegistries.Keys.ASPECT_ITEMS).listElements().map(Holder::getKey).toList()) {
+			AspectItem entry = provider.holderOrThrow(key).value();
+			List<ResourceKey<AspectItem>> aspectItems = ITEM_TO_ASPECT_ITEMS.get(entry.item());
+			if (aspectItems != null) {
+				for (ResourceKey<AspectItem> aspectItem : aspectItems) {
+					if (provider.holderOrThrow(aspectItem).value().item() == entry.item()) {
+						List<ResourceKey<AspectItem>> newAspects = new ArrayList<>(aspectItems);
+						newAspects.add(key);
+						ITEM_TO_ASPECT_ITEMS.put(entry.item(), newAspects);
+					}
+				}
+			} else {
+				ITEM_TO_ASPECT_ITEMS.put(entry.item(), List.of(key));
+			}
+
+			this.matchedAspects.computeIfAbsent(key, resourceKey -> provider.holderOrThrow(resourceKey).value().calculator().getAspects(provider, random));
 		}
 	}
 
@@ -209,8 +227,8 @@ public class AspectManager {
 	 * @return
 	 */
 	@Nonnull
-	public List<Aspect> getStaticAspects(ItemStack stack) {
-		AspectItem item = getAspectItem(stack);
+	public List<Aspect> getStaticAspects(ItemStack stack, HolderLookup.Provider registries) {
+		ResourceKey<AspectItem> item = getAspectItem(stack, registries);
 		if (item != null)
 			return this.getStaticAspects(item);
 		return new ArrayList<>();
@@ -223,7 +241,7 @@ public class AspectManager {
 	 * @return
 	 */
 	@Nonnull
-	public List<Aspect> getStaticAspects(AspectItem item) {
+	public List<Aspect> getStaticAspects(@Nullable ResourceKey<AspectItem> item) {
 		List<Aspect> aspects = this.matchedAspects.get(item);
 		if (aspects == null)
 			aspects = new ArrayList<>();
@@ -237,11 +255,11 @@ public class AspectManager {
 	 * @return
 	 */
 	@Nullable
-	public static AspectItem getAspectItem(ItemStack stack) {
-		List<AspectItem> potentialMatches = ITEM_TO_ASPECT_ITEMS.get(stack.getItem());
+	public static ResourceKey<AspectItem> getAspectItem(ItemStack stack, HolderLookup.Provider registries) {
+		List<ResourceKey<AspectItem>> potentialMatches = ITEM_TO_ASPECT_ITEMS.get(stack.getItem());
 		if (potentialMatches != null) {
-			for (AspectItem aspectItem : potentialMatches) {
-				if (stack.is(aspectItem.item()))
+			for (ResourceKey<AspectItem> aspectItem : potentialMatches) {
+				if (stack.is(registries.holderOrThrow(aspectItem).value().item()))
 					return aspectItem;
 			}
 		}
@@ -256,7 +274,7 @@ public class AspectManager {
 	 * @param item
 	 * @return
 	 */
-	public List<Aspect> getDiscoveredStaticAspects(AspectItem item, @Nullable DiscoveryContainer<?> discoveryContainer) {
+	public List<Aspect> getDiscoveredStaticAspects(ResourceKey<AspectItem> item, @Nullable DiscoveryContainerData discoveryContainer) {
 		List<Aspect> aspects = new ArrayList<>();
 		if (discoveryContainer == null) {
 			aspects.addAll(this.getStaticAspects(item));
@@ -274,7 +292,7 @@ public class AspectManager {
 	 * @param item
 	 * @return
 	 */
-	public List<Holder<AspectType>> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
+	public List<Holder<AspectType>> getDiscoveredAspectTypes(ResourceKey<AspectItem> item, DiscoveryContainerData discoveryContainer) {
 		List<Holder<AspectType>> aspects = new ArrayList<>();
 		for (Aspect aspect : this.getDiscoveredStaticAspects(item, discoveryContainer)) {
 			aspects.add(aspect.type());

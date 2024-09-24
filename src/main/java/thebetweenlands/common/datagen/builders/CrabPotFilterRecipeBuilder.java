@@ -10,8 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.recipe.BubblerCrabPotFilterRecipe;
-import thebetweenlands.common.items.recipe.SiltCrabPotFilterRecipe;
+import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
+import thebetweenlands.common.item.recipe.SiltCrabPotFilterRecipe;
 
 public class CrabPotFilterRecipeBuilder implements RecipeBuilder {
 	private final boolean siltCrab;

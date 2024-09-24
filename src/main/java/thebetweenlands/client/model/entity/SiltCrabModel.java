@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
-import thebetweenlands.common.entities.fishing.SiltCrab;
+import thebetweenlands.common.entity.fishing.SiltCrab;
 
 public class SiltCrabModel extends HierarchicalModel<SiltCrab> {
 

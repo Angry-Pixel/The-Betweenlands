@@ -10,24 +10,21 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.neoforged.neoforge.items.VanillaHopperItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -48,16 +45,20 @@ import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BLLootProvider;
 import thebetweenlands.common.datagen.tags.*;
-import thebetweenlands.common.entities.MireSnail;
-import thebetweenlands.common.entities.fishing.BubblerCrab;
-import thebetweenlands.common.entities.fishing.SiltCrab;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.handler.HandlerEvents;
+import thebetweenlands.common.entity.creature.Gecko;
+import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.fishing.BubblerCrab;
+import thebetweenlands.common.entity.fishing.SiltCrab;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.SwampHag;
+import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.clientbound.attachment.*;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
 import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
+import thebetweenlands.common.network.serverbound.RenameItemPacket;
+import thebetweenlands.common.network.serverbound.SetLastPageDataPacket;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
@@ -66,7 +67,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class CommonRegistrationEvents {
 
-	public static void init(IEventBus bus, Dist dist) {
+	public static void init(IEventBus bus) {
 		bus.addListener(CommonRegistrationEvents::createDatagen);
 		bus.addListener(CommonRegistrationEvents::makeNewRegistries);
 		bus.addListener(CommonRegistrationEvents::extraRegistration);
@@ -79,10 +80,8 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerCapabilities);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
-		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::protectFromMagicDamage);
 
-		SimulacrumEvents.init();
-		HandlerEvents.init(dist);
+		CommonEvents.init();
 	}
 
 	private static void createDatagen(GatherDataEvent event) {
@@ -134,6 +133,9 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.SILT_CRAB.get(), SiltCrab.registerAttributes().build());
 		event.put(EntityRegistry.ANADIA.get(), Anadia.registerAttributes().build());
 		event.put(EntityRegistry.MIRE_SNAIL.get(), MireSnail.registerAttributes().build());
+		event.put(EntityRegistry.WIGHT.get(), Wight.registerAttributes().build());
+		event.put(EntityRegistry.SWAMP_HAG.get(), SwampHag.registerAttributes().build());
+		event.put(EntityRegistry.GECKO.get(), Gecko.registerAttributes().build());
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {
@@ -159,13 +161,14 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void makeNewRegistries(NewRegistryEvent event) {
+		event.register(BLRegistries.AMPHIBIOUS_ARMOR_UPGRADES);
 		event.register(BLRegistries.ASPECT_CALCULATOR_TYPE);
 		event.register(BLRegistries.CENSER_RECIPES);
 		event.register(BLRegistries.ELIXIR_EFFECTS);
 		event.register(BLRegistries.ENVIRONMENT_EVENTS);
 		event.register(BLRegistries.SIMULACRUM_EFFECTS);
 		event.register(BLRegistries.WORLD_STORAGE);
-		event.register(BLRegistries.SIMPLE_ATTACHMENT_TYPES);
+		event.register(BLRegistries.SYNCHED_ATTACHMENT_TYPES);
 	}
 
 	private static void extraRegistration(RegisterEvent event) {
@@ -202,11 +205,17 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
-
-		registrar.playToClient(UpdateSimpleAttachmentPacket.TYPE, UpdateSimpleAttachmentPacket.STREAM_CODEC, UpdateSimpleAttachmentPacket::handle);
+		registrar.playToClient(OpenHerbloreBookPacket.TYPE, OpenHerbloreBookPacket.STREAM_CODEC, OpenHerbloreBookPacket::handle);
+		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, (packet, context) -> OpenRenameScreenPacket.handle(context));
+		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
+		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
+		
+		registrar.playToClient(UpdateSynchedAttachmentPacket.TYPE, UpdateSynchedAttachmentPacket.STREAM_CODEC, UpdateSynchedAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
+		registrar.playToServer(RenameItemPacket.TYPE, RenameItemPacket.STREAM_CODEC, RenameItemPacket::handle);
+		registrar.playToServer(SetLastPageDataPacket.TYPE, SetLastPageDataPacket.STREAM_CODEC, SetLastPageDataPacket::handle);
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {
@@ -215,15 +224,15 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void registerCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.BARREL.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.CENSER.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.GRUB_HUB.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.INFUSER.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.RUBBER_TAP.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> tile.tank);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> tile.tank);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.BARREL.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.CENSER.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.GRUB_HUB.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.INFUSER.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.RUBBER_TAP.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> tile);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> tile);
 
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ANIMATOR.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SULFUR_FURNACE.get(), (tile, context) -> new InvWrapper(tile));
@@ -242,29 +251,7 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new InvWrapper(tile));
-	}
 
-	private static void protectFromMagicDamage(LivingIncomingDamageEvent event) {
-		if(event.getSource().is(Tags.DamageTypes.IS_MAGIC)) {
-			float damageMultiplier = 1.0F;
-
-			LivingEntity entityHit = event.getEntity();
-
-			ItemStack boots = entityHit.getItemBySlot(EquipmentSlot.FEET);
-			ItemStack legs = entityHit.getItemBySlot(EquipmentSlot.LEGS);
-			ItemStack chest = entityHit.getItemBySlot(EquipmentSlot.CHEST);
-			ItemStack helm = entityHit.getItemBySlot(EquipmentSlot.HEAD);
-
-			if (!boots.isEmpty() && boots.is(ItemRegistry.ANCIENT_BOOTS) && boots.getDamageValue() < boots.getMaxDamage())
-				damageMultiplier -= 0.125F;
-			if (!legs.isEmpty()  && legs.is(ItemRegistry.ANCIENT_LEGGINGS) && legs.getDamageValue() < legs.getMaxDamage())
-				damageMultiplier -= 0.125F;
-			if (!chest.isEmpty() && chest.is(ItemRegistry.ANCIENT_CHESTPLATE) && chest.getDamageValue() < chest.getMaxDamage())
-				damageMultiplier -= 0.125F;
-			if (!helm.isEmpty() && helm.is(ItemRegistry.ANCIENT_HELMET) && helm.getDamageValue() < helm.getMaxDamage())
-				damageMultiplier -= 0.125F;
-
-			event.setAmount(event.getAmount() * damageMultiplier);
-		}
+		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
 	}
 }

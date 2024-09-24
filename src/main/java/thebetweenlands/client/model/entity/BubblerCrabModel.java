@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import thebetweenlands.common.entities.fishing.BubblerCrab;
+import thebetweenlands.common.entity.fishing.BubblerCrab;
 
 public class BubblerCrabModel extends HierarchicalModel<BubblerCrab> {
 

@@ -1,0 +1,9 @@
+{
+  "parent": "neoforge:item/default",
+  "fluid": "minecraft:empty",
+  "loader": "neoforge:fluid_container",
+  "textures": {
+    "base": "thebetweenlands:item/weedwood_bucket",
+    "fluid": "thebetweenlands:item/bl_bucket_fluid"
+  }
+}

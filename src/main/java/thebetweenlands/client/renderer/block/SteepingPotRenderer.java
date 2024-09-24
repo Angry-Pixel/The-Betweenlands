@@ -18,9 +18,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.SteepingPotBlock;
+import thebetweenlands.common.block.container.SteepingPotBlock;
 import thebetweenlands.common.block.entity.SteepingPotBlockEntity;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.util.RenderUtils;
 
@@ -63,8 +62,8 @@ public class SteepingPotRenderer implements BlockEntityRenderer<SteepingPotBlock
 				FluidStack fluidStack = entity.tank.getFluid();
 				height = (0.375F / entity.tank.getCapacity()) * entity.tank.getFluidAmount();
 				TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture());
-				if(entity.getHeatProgress() > 0  && entity.tank.getFluid().is(FluidTypeRegistry.DYE.get()) || entity.tank.getFluid().is(FluidTypeRegistry.BREW.get()))
-					sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getFlowingTexture());
+//				if(entity.getHeatProgress() > 0 && entity.tank.getFluid().is(FluidTypeRegistry.DYE.get()) || entity.tank.getFluid().is(FluidTypeRegistry.BREW.get()))
+//					sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getFlowingTexture());
 				int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
 				int fluidColorTemp = entity.tempFluidColour;
 				float fade = entity.getHeatProgress() > 50 && entity.hasBundle() ? (-50 + entity.getHeatProgress()) * 0.025F: 0F;

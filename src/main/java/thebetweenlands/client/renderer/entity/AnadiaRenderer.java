@@ -20,8 +20,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.AnadiaModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 
 import javax.annotation.Nullable;
 

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:item/syrmorite_bucket",
+    "layer1": "thebetweenlands:item/infusion_liquid"
+  }
+}

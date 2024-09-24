@@ -10,8 +10,8 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.phys.Vec2;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 
 public class AnadiaModel extends MowzieModelBase<Anadia> {
 

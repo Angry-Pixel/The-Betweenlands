@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.MortarRecipe;
 import thebetweenlands.common.inventory.MortarMenu;
-import thebetweenlands.common.items.LifeCrystalItem;
+import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;

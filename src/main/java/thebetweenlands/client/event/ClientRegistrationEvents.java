@@ -13,18 +13,15 @@ import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
@@ -32,15 +29,14 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
+import thebetweenlands.client.gui.book.HerbloreEntryCategory;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
-import thebetweenlands.client.handler.ClientHandlerEvents;
+import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.block.*;
@@ -49,36 +45,39 @@ import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.LakeCavernSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.RootmanSimulacrumModels;
 import thebetweenlands.client.model.entity.*;
-import thebetweenlands.client.particle.AnimatorParticle;
-import thebetweenlands.client.particle.BugParticle;
-import thebetweenlands.client.particle.MothParticle;
-import thebetweenlands.client.particle.SpiritButterflyParticle;
+import thebetweenlands.client.model.item.*;
+import thebetweenlands.client.particle.*;
+import thebetweenlands.client.renderer.BLItemRenderer;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.PresentBlock;
+import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
-import thebetweenlands.common.entities.BLItemFrame;
-import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
-import thebetweenlands.common.fluid.ColoredFluid;
+import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.fluid.BasicFluidType;
+import thebetweenlands.common.fluid.ColoredFluidType;
+import thebetweenlands.common.fluid.SwampWaterFluidType;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.items.AnadiaMobItem;
-import thebetweenlands.common.items.BLItemFrameItem;
+import thebetweenlands.common.item.misc.AnadiaMobItem;
+import thebetweenlands.common.item.misc.BLItemFrameItem;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
+import thebetweenlands.common.item.shield.SwatShieldItem;
+import thebetweenlands.common.item.tool.WeedwoodBowItem;
 import thebetweenlands.common.registries.*;
-import thebetweenlands.util.RenderUtils;
+import thebetweenlands.util.BLDyeColor;
+import thebetweenlands.util.DrinkableBrew;
 
 public class ClientRegistrationEvents {
 
-	private static final int DEEP_COLOR_R = 19;
-	private static final int DEEP_COLOR_G = 24;
-	private static final int DEEP_COLOR_B = 68;
-
 	public static RiftVariantReloadListener riftVariantListener;
+	public static AspectIconTextureManager aspectIcons;
 
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientRegistrationEvents::clientSetup);
+		eventbus.addListener(ClientRegistrationEvents::registerKeybinds);
 		eventbus.addListener(ClientRegistrationEvents::registerScreens);
 		eventbus.addListener(ClientRegistrationEvents::registerRenderers);
 		eventbus.addListener(ClientRegistrationEvents::registerDimEffects);
@@ -92,10 +91,6 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerPropertyOverrides);
 		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
-		MainMenuEvents.init();
-		ClientHandlerEvents.init();
-		NeoForge.EVENT_BUS.addListener(RenderUtils::incrementTickCounter);
-		NeoForge.EVENT_BUS.addListener(RenderUtils::tickFrameCounter);
 		ClientEvents.init();
 	}
 
@@ -106,12 +101,21 @@ public class ClientRegistrationEvents {
 		});
 	}
 
+	private static void registerKeybinds(final RegisterKeyMappingsEvent event) {
+		event.register(BetweenlandsKeybinds.CONNECT_CAVING_ROPE);
+		event.register(BetweenlandsKeybinds.OPEN_POUCH);
+		event.register(BetweenlandsKeybinds.RADIAL_MENU);
+		event.register(BetweenlandsKeybinds.USE_RING);
+		event.register(BetweenlandsKeybinds.USE_SECONDARY_RING);
+	}
+
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
 		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 	}
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
+		event.register(MenuRegistry.AMPHIBIOUS_ARMOR.get(), AmphibiousArmorScreen::new);
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
 		event.register(MenuRegistry.BARREL.get(), BarrelScreen::new);
 		event.register(MenuRegistry.CENSER.get(), CenserScreen::new);
@@ -119,6 +123,7 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
 		event.register(MenuRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
+		event.register(MenuRegistry.LURKER_SKIN_POUCH.get(), LurkerSkinPouchScreen::new);
 		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
 		event.register(MenuRegistry.PURIFIER.get(), PurifierScreen::new);
 		event.register(MenuRegistry.SILK_BUNDLE.get(), SilkBundleScreen::new);
@@ -139,6 +144,20 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ITEM_FRAME.get(), BLItemFrameRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BETWEENSTONE_PEBBLE.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FISH_BAIT.get(), ItemEntityRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FISH_VORTEX.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.URCHIN_SPIKE.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ELECTRIC_SHOCK.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SAP_SPIT.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.LURKER_SKIN_RAFT.get(), LurkerSkinRaftRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ANGLER_TOOTH_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/angler_tooth_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.POISON_ANGLER_TOOTH_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/poisoned_angler_tooth_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.BASILISK_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/basilisk_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.SHOCK_ARROW.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/shock_arrow.png")));
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_BARB.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/chiromaw_barb.png")));
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_SHOCK_BARB.get(), context -> new CustomArrowRenderer(context, TheBetweenlands.prefix("textures/entity/arrow/chiromaw_barb.png")));
+		event.registerEntityRenderer(EntityRegistry.OCTINE_ARROW.get(), OctineArrowRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_ARROW.get(), SludgeWormArrowRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PREDATOR_ARROW_GUIDE.get(), PredatorArrowGuideRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -173,10 +192,21 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.STEEPING_POT.get(), SteepingPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WAYSTONE.get(), WaystoneRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), WeedwoodCraftingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
+
+		event.registerLayerDefinition(BLModelLayers.BONE_SHIELD, BoneShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.DENTROTHYST_SHIELD, DentrothystShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.LURKER_SKIN_SHIELD, LurkerSkinShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.OCTINE_SHIELD, OctineShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.SYRMORITE_SHIELD, SyrmoriteShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.VALONITE_SHIELD, ValoniteShieldModel::create);
+		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_SHIELD, WeedwoodShieldModel::create);
+
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
@@ -184,6 +214,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
+		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_ARROW, SludgeWormArrowModel::create);
+		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
 
 		event.registerLayerDefinition(BLModelLayers.ALCOVE, AlcoveModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ALEMBIC, AlembicModel::makeModel);
@@ -294,6 +326,50 @@ public class ClientRegistrationEvents {
 			}
 		});
 		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.BIOPATHIC_TRIGGERSTONE.get(), TheBetweenlands.prefix("effect"), (stack, level, entity, seed) -> {
+			var upgrade = stack.getOrDefault(DataComponentRegistry.SELECTED_UPGRADE, AmphibiousArmorUpgradeRegistry.NONE.get());
+			if (upgrade == AmphibiousArmorUpgradeRegistry.ELECTRIC.get()) return 1.0F;
+			if (upgrade == AmphibiousArmorUpgradeRegistry.URCHIN_SPIKE.get()) return 2.0F;
+			if (upgrade == AmphibiousArmorUpgradeRegistry.FISH_VORTEX.get()) return 3.0F;
+			return 0.0F;
+		});
+
+		ItemProperties.register(ItemRegistry.BONE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.LURKER_SKIN_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.OCTINE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.SYRMORITE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.VALONITE_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.WEEDWOOD_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.LIVING_WEEDWOOD_SHIELD.get(), ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem().is(stack.getItem()) ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.SYRMORITE_SHIELD.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && (SwatShieldItem.getRemainingChargeTicks(stack, entity) > 0 || SwatShieldItem.isPreparingCharge(stack, entity)) ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.VALONITE_SHIELD.get(), TheBetweenlands.prefix("charging"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && (SwatShieldItem.getRemainingChargeTicks(stack, entity) > 0 || SwatShieldItem.isPreparingCharge(stack, entity)) ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("pull"), (stack, level, entity, seed) -> {
+			if (entity == null) {
+				return 0.0F;
+			} else {
+				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+			}
+		});
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed)  -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
+
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pull"), (stack, level, entity, seed) -> {
+			if (entity == null) {
+				return 0.0F;
+			} else {
+				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+			}
+		});
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed)  -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
+
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -310,7 +386,8 @@ public class ClientRegistrationEvents {
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
 		event.registerReloadListener(new CircleGemTextureManager());
-		event.registerReloadListener(new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
+		event.registerReloadListener(BLItemRenderer.INSTANCE.get());
+		event.registerReloadListener(aspectIcons = new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
@@ -334,7 +411,14 @@ public class ClientRegistrationEvents {
 			BlockRegistry.LOOT_URN_1.asItem(), BlockRegistry.LOOT_URN_2.asItem(), BlockRegistry.LOOT_URN_3.asItem(),
 			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem(),
 			BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.asItem(),
-			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem());
+			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem(),
+			ItemRegistry.OCTINE_SHIELD.get(), ItemRegistry.VALONITE_SHIELD.get(), ItemRegistry.WEEDWOOD_SHIELD.get(), ItemRegistry.LIVING_WEEDWOOD_SHIELD.get(),
+			ItemRegistry.SYRMORITE_SHIELD.get(), ItemRegistry.BONE_SHIELD.get(), ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD.get(),
+			ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD.get(), ItemRegistry.LURKER_SKIN_SHIELD.get());
+
+		event.registerItem(AmphibiousArmorItem.ArmorRender.INSTANCE,
+			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
+			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
 
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override
@@ -385,65 +469,43 @@ public class ClientRegistrationEvents {
 			}, potEffect);
 		}
 
-		for (DeferredHolder<FluidType, ? extends FluidType> type : FluidTypeRegistry.FLUID_TYPES.getEntries()) {
-			event.registerFluidType(new IClientFluidTypeExtensions() {
-				@Override
-				public ResourceLocation getStillTexture() {
-					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_still");
-				}
+		event.registerFluidType(new SwampWaterFluidType(), FluidTypeRegistry.SWAMP_WATER.get());
+		event.registerFluidType(new BasicFluidType("stagnant_water"), FluidTypeRegistry.STAGNANT_WATER.get());
+		event.registerFluidType(new BasicFluidType("tar"), FluidTypeRegistry.TAR.get());
+		event.registerFluidType(new BasicFluidType("rubber"), FluidTypeRegistry.RUBBER.get());
+		event.registerFluidType(new BasicFluidType("fog"), FluidTypeRegistry.FOG.get());
+		event.registerFluidType(new BasicFluidType("shallowbreath"), FluidTypeRegistry.SHALLOWBREATH.get());
+		event.registerFluidType(new BasicFluidType("clean_water"), FluidTypeRegistry.CLEAN_WATER.get());
+		event.registerFluidType(new BasicFluidType("fish_oil"), FluidTypeRegistry.FISH_OIL.get());
 
-				@Override
-				public ResourceLocation getFlowingTexture() {
-					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_flowing");
-				}
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.DULL_LAVENDER.getColorValue(), "dye"), FluidTypeRegistry.DULL_LAVENDER_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.MAROON.getColorValue(), "dye"), FluidTypeRegistry.MAROON_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.SHADOW_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SHADOW_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CAMELOT_MAGENTA.getColorValue(), "dye"), FluidTypeRegistry.CAMELOT_MAGENTA_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.SAFFRON.getColorValue(), "dye"), FluidTypeRegistry.SAFFRON_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CARIBBEAN_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CARIBBEAN_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.VIVID_TANGERINE.getColorValue(), "dye"), FluidTypeRegistry.VIVID_TANGERINE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CHAMPAGNE.getColorValue(), "dye"), FluidTypeRegistry.CHAMPAGNE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.RAISIN_BLACK.getColorValue(), "dye"), FluidTypeRegistry.RAISIN_BLACK_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.SUSHI_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SUSHI_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.ELM_CYAN.getColorValue(), "dye"), FluidTypeRegistry.ELM_CYAN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.CADMIUM_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CADMIUM_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.LAVENDER_BLUE.getColorValue(), "dye"), FluidTypeRegistry.LAVENDER_BLUE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.BROWN_RUST.getColorValue(), "dye"), FluidTypeRegistry.BROWN_RUST_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.MIDNIGHT_PURPLE.getColorValue(), "dye"), FluidTypeRegistry.MIDNIGHT_PURPLE_DYE.get());
+		event.registerFluidType(new ColoredFluidType(BLDyeColor.PEWTER_GREY.getColorValue(), "dye"), FluidTypeRegistry.PEWTER_GREY_DYE.get());
 
-				@Override
-				public int getTintColor(FluidStack stack) {
-					if (stack.getFluid() instanceof ColoredFluid dye) {
-						return dye.getColor();
-					}
-					return IClientFluidTypeExtensions.super.getTintColor(stack);
-				}
-
-				@Override
-				public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-					if (state.getType() instanceof ColoredFluid dye) {
-						return dye.getColor();
-					}
-					if (state.getFluidType() == FluidTypeRegistry.SWAMP_WATER.get()) {
-						int r = 0;
-						int g = 0;
-						int b = 0;
-						for (int dx = -1; dx <= 1; dx++) {
-							for (int dz = -1; dz <= 1; dz++) {
-								int colorMultiplier = BiomeColors.getAverageWaterColor(getter, pos);
-								r += FastColor.ARGB32.red(colorMultiplier);
-								g += FastColor.ARGB32.green(colorMultiplier);
-								b += FastColor.ARGB32.blue(colorMultiplier);
-							}
-						}
-						r /= 9;
-						g /= 9;
-						b /= 9;
-						float depth;
-						if (pos.getY() > TheBetweenlands.CAVE_START) {
-							depth = 1;
-						} else {
-							if (pos.getY() < TheBetweenlands.CAVE_WATER_HEIGHT) {
-								depth = 0;
-							} else {
-								depth = (pos.getY() - TheBetweenlands.CAVE_WATER_HEIGHT) / (float) (TheBetweenlands.CAVE_START - TheBetweenlands.CAVE_WATER_HEIGHT);
-							}
-						}
-						r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);
-						g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
-						b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
-						return FastColor.ARGB32.color(FastColor.as8BitChannel(1.0F), r, g, b);
-					}
-					return IClientFluidTypeExtensions.super.getTintColor(state, getter, pos);
-				}
-			}, type.get());
-		}
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.NETTLE_SOUP.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_SOUP.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.NETTLE_TEA.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_TEA.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.PHEROMONE_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.PHEROMONE_EXTRACT.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SWAMP_BROTH.getColorValue(), "brew"), FluidTypeRegistry.SWAMP_BROTH.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.STURDY_STOCK.getColorValue(), "brew"), FluidTypeRegistry.STURDY_STOCK.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.PEAR_CORDIAL.getColorValue(), "brew"), FluidTypeRegistry.PEAR_CORDIAL.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SHAMANS_BREW.getColorValue(), "brew"), FluidTypeRegistry.SHAMANS_BREW.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.LAKE_BROTH.getColorValue(), "brew"), FluidTypeRegistry.LAKE_BROTH.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SHELL_STOCK.getColorValue(), "brew"), FluidTypeRegistry.SHELL_STOCK.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.FROG_LEG_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.FROG_LEG_EXTRACT.get());
+		event.registerFluidType(new ColoredFluidType(DrinkableBrew.WITCH_TEA.getColorValue(), "brew"), FluidTypeRegistry.WITCH_TEA.get());
 	}
 
 	private static void registerParticleSprites(final RegisterParticleProvidersEvent event) {
@@ -454,6 +516,15 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.SILK_MOTH.get(), BugParticle.SilkMothFactory::new);
 		event.registerSpriteSet(ParticleRegistry.SPIRIT_BUTTERFLY.get(), SpiritButterflyParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_BUG.get(), BugParticle.WaterBugFactory::new);
+		event.registerSpriteSet(ParticleRegistry.FANCY_BUBBLE.get(), FancyBubbleParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.FANCY_DRIP.get(), FancyDripParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.RAIN.get(), BLRainParticle.Factory::new);
+		event.registerSpecial(ParticleRegistry.URCHIN_SPIKE.get(), new UrchinSpikeParticle.Factory());
+		event.registerSpriteSet(ParticleRegistry.FISH_VORTEX.get(), FishVortexParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.INFUSER_BUBBLE.get(), sprites -> new BLBubbleParticle.InfuserFactory());
+		event.registerSpriteSet(ParticleRegistry.PURIFIER_BUBBLE.get(), sprites -> new BLBubbleParticle.PurifierFactory());
+		event.registerSpriteSet(ParticleRegistry.TAR_BUBBLE.get(), sprites -> new BLBubbleParticle.TarFactory());
+		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), sprites -> new BLBubbleParticle.Factory());
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -526,6 +597,11 @@ public class ClientRegistrationEvents {
 		}, ItemRegistry.ASPECTRUS_FRUIT);
 
 		event.register((stack, tintIndex) -> {
+			if (tintIndex != 1) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponents.DYED_COLOR, new DyedItemColor(BLDyeColor.CHAMPAGNE.getColorValue(), false)).rgb() | 0xFF000000;
+		}, ItemRegistry.SMALL_LURKER_SKIN_POUCH, ItemRegistry.MEDIUM_LURKER_SKIN_POUCH, ItemRegistry.LARGE_LURKER_SKIN_POUCH, ItemRegistry.XL_LURKER_SKIN_POUCH);
+
+		event.register((stack, tintIndex) -> {
 			if (tintIndex != 0) return 0xFFFFFFFF;
 			return stack.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).getElixirColor();
 		}, ItemRegistry.GREEN_ELIXIR, ItemRegistry.ORANGE_ELIXIR);
@@ -542,5 +618,12 @@ public class ClientRegistrationEvents {
 			ItemRegistry.SAFFRON_ITEM_FRAME, ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME, ItemRegistry.VIVID_TANGERINE_ITEM_FRAME, ItemRegistry.CHAMPAGNE_ITEM_FRAME,
 			ItemRegistry.RAISIN_BLACK_ITEM_FRAME, ItemRegistry.SUSHI_GREEN_ITEM_FRAME, ItemRegistry.ELM_CYAN_ITEM_FRAME, ItemRegistry.CADMIUM_GREEN_ITEM_FRAME,
 			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME, ItemRegistry.BROWN_RUST_ITEM_FRAME, ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME, ItemRegistry.PEWTER_GREY_ITEM_FRAME);
+
+		event.register((stack, tint) -> {
+			var fluid = stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).copy();
+			return tint == 1 ? IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid) : -1;
+		}, ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
+
+		event.register((stack, tint) -> tint == 1 ? InfusionBucketItem.getColor(stack) : -1, ItemRegistry.WEEDWOOD_INFUSION_BUCKET, ItemRegistry.SYRMORITE_INFUSION_BUCKET);
 	}
 }

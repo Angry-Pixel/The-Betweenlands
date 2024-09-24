@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.client.BetweenlandsClient;
@@ -16,7 +17,7 @@ import thebetweenlands.common.component.entity.DecayData;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
-import thebetweenlands.common.items.datamaps.DecayFood;
+import thebetweenlands.common.item.datamaps.DecayFood;
 import thebetweenlands.common.network.clientbound.ShowFoodSicknessPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
@@ -27,6 +28,11 @@ public class FoodSicknessHandler {
 	private static final InteractionHand lastHand = InteractionHand.MAIN_HAND;
 	private static ItemStack lastUsedItem = ItemStack.EMPTY;
 	private static FoodSickness lastSickness = null;
+
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::modifyEatingSpeed);
+		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::modifyEatingStart);
+	}
 
 	public static boolean isFoodSicknessEnabled(Level level) {
 		if (level.getGameRules().getBoolean(TheBetweenlands.FOOD_SICKNESS_GAMERULE)) {
@@ -56,7 +62,7 @@ public class FoodSicknessHandler {
 		lastSickness = sickness;
 	}
 
-	static void modifyEatingStart(LivingEntityUseItemEvent.Start event) {
+	private static void modifyEatingStart(LivingEntityUseItemEvent.Start event) {
 		Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
@@ -69,7 +75,7 @@ public class FoodSicknessHandler {
 		}
 	}
 
-	static void modifyEatingSpeed(LivingEntityUseItemEvent.Tick event) {
+	private static void modifyEatingSpeed(LivingEntityUseItemEvent.Tick event) {
 		//Check if item will be consumed this tick
 		if (!event.getEntity().level().isClientSide() && event.getDuration() <= 1) {
 			Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;

@@ -15,7 +15,6 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -25,7 +24,7 @@ import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.BLItemFrame;
+import thebetweenlands.common.entity.BLItemFrame;
 
 public class BLItemFrameRenderer extends ItemFrameRenderer<BLItemFrame> {
 

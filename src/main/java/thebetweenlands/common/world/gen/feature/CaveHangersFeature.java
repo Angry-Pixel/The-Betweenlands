@@ -7,7 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import thebetweenlands.common.block.HangerBlock;
+import thebetweenlands.common.block.plant.HangerBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.CubicBezier;
 

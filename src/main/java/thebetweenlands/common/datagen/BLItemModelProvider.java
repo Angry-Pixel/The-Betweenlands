@@ -5,12 +5,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
@@ -169,7 +173,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SHELL_STOCK);
 		this.basicItem(ItemRegistry.FROG_LEG_EXTRACT);
 		this.basicItem(ItemRegistry.WITCH_TEA);
-		//herblore book
+		this.basicItem(ItemRegistry.HERBLORE_BOOK);
 		this.basicItem(ItemRegistry.CRIMSON_MIDDLE_GEM);
 		this.basicItem(ItemRegistry.AQUA_MIDDLE_GEM);
 		this.basicItem(ItemRegistry.GREEN_MIDDLE_GEM);
@@ -185,6 +189,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_fragment_3"))).end()
 			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_fragment_4")));
 		this.basicItem(ItemRegistry.PYRAD_FLAME);
+		this.basicItem(ItemRegistry.GECKO);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);
@@ -270,34 +275,42 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.AMPHIBIOUS_BOOTS);
 		this.basicItem(ItemRegistry.RUBBER_BOOTS);
 		this.otherTextureItem(ItemRegistry.MARSH_RUNNER_BOOTS, this.modLoc("rubber_boots"));
-		this.basicItem(ItemRegistry.WEEDWOOD_SWORD);
-		this.basicItem(ItemRegistry.WEEDWOOD_SHOVEL);
-		this.basicItem(ItemRegistry.WEEDWOOD_PICKAXE);
-		this.basicItem(ItemRegistry.WEEDWOOD_AXE);
-		this.basicItem(ItemRegistry.BONE_SWORD);
-		this.basicItem(ItemRegistry.BONE_SHOVEL);
-		this.basicItem(ItemRegistry.BONE_PICKAXE);
-		this.basicItem(ItemRegistry.BONE_AXE);
-		this.basicItem(ItemRegistry.OCTINE_SWORD);
-		this.basicItem(ItemRegistry.OCTINE_SHOVEL);
-		this.basicItem(ItemRegistry.OCTINE_PICKAXE);
-		this.basicItem(ItemRegistry.OCTINE_AXE);
-		this.basicItem(ItemRegistry.VALONITE_SWORD);
-		this.basicItem(ItemRegistry.VALONITE_SHOVEL);
-		this.basicItem(ItemRegistry.VALONITE_PICKAXE);
-		this.basicItem(ItemRegistry.VALONITE_GREATAXE);
-		this.basicItem(ItemRegistry.VALONITE_AXE);
-		//shields
-		//shears
-		//sickle
+		this.toolItem(ItemRegistry.WEEDWOOD_SWORD);
+		this.toolItem(ItemRegistry.WEEDWOOD_SHOVEL);
+		this.toolItem(ItemRegistry.WEEDWOOD_PICKAXE);
+		this.toolItem(ItemRegistry.WEEDWOOD_AXE);
+		this.toolItem(ItemRegistry.BONE_SWORD);
+		this.toolItem(ItemRegistry.BONE_SHOVEL);
+		this.toolItem(ItemRegistry.BONE_PICKAXE);
+		this.toolItem(ItemRegistry.BONE_AXE);
+		this.toolItem(ItemRegistry.OCTINE_SWORD);
+		this.toolItem(ItemRegistry.OCTINE_SHOVEL);
+		this.toolItem(ItemRegistry.OCTINE_PICKAXE);
+		this.toolItem(ItemRegistry.OCTINE_AXE);
+		this.toolItem(ItemRegistry.VALONITE_SWORD);
+		this.toolItem(ItemRegistry.VALONITE_SHOVEL);
+		this.toolItem(ItemRegistry.VALONITE_PICKAXE);
+		this.toolItem(ItemRegistry.VALONITE_GREATAXE);
+		this.toolItem(ItemRegistry.VALONITE_AXE);
+		this.basicItem(ItemRegistry.SYRMORITE_SHEARS);
+		this.basicItem(ItemRegistry.SICKLE);
 		//shockwave sword
-		//arrows
+		this.basicItem(ItemRegistry.ANGLER_TOOTH_ARROW);
+		this.basicItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
+		this.basicItem(ItemRegistry.OCTINE_ARROW);
+		this.basicItem(ItemRegistry.BASILISK_ARROW);
+		this.basicItem(ItemRegistry.SLUDGE_WORM_ARROW);
+		this.basicItem(ItemRegistry.SHOCK_ARROW);
 		this.basicItem(ItemRegistry.CHIROMAW_BARB);
-		//bows
+		this.bow(ItemRegistry.WEEDWOOD_BOW);
+		this.bow(ItemRegistry.PREDATOR_BOW);
 		//ancient weps
 		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
 		this.toolItem(ItemRegistry.NET);
-		//pouches
+		this.pouch(ItemRegistry.SMALL_LURKER_SKIN_POUCH);
+		this.pouch(ItemRegistry.MEDIUM_LURKER_SKIN_POUCH);
+		this.pouch(ItemRegistry.LARGE_LURKER_SKIN_POUCH);
+		this.pouch(ItemRegistry.XL_LURKER_SKIN_POUCH);
 		//caving rope light
 		//grappling hooks
 		this.basicItem(ItemRegistry.VOLARKITE);
@@ -312,12 +325,21 @@ public class BLItemModelProvider extends ItemModelProvider {
 				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0.0F, 180.0F, 45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end()
 				.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0.0F, 0.0F, -45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end().end());
 		//spears
-		//buckets
+		this.bucket(ItemRegistry.WEEDWOOD_BUCKET);
+		this.bucket(ItemRegistry.SYRMORITE_BUCKET);
+		this.multiLayerItem(ItemRegistry.WEEDWOOD_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/weedwood_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
+		this.multiLayerItem(ItemRegistry.SYRMORITE_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/syrmorite_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
+		this.basicItem(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET);
 		this.basicItem(ItemRegistry.ASCENT_UPGRADE);
 		this.basicItem(ItemRegistry.ELECTRIC_UPGRADE);
 		this.basicItem(ItemRegistry.FISH_VORTEX_UPGRADE);
 		this.basicItem(ItemRegistry.GLIDE_UPGRADE);
 		this.basicItem(ItemRegistry.URCHIN_SPIKE_UPGRADE);
+		this.basicItem(ItemRegistry.BIOPATHIC_TRIGGERSTONE)
+			.override().predicate(TheBetweenlands.prefix("effect"), 1.0F).model(this.basicItem(TheBetweenlands.prefix("biopathic_triggerstone_electric"))).end()
+			.override().predicate(TheBetweenlands.prefix("effect"), 2.0F).model(this.basicItem(TheBetweenlands.prefix("biopathic_triggerstone_urchin"))).end()
+			.override().predicate(TheBetweenlands.prefix("effect"), 3.0F).model(this.basicItem(TheBetweenlands.prefix("biopathic_triggerstone_vortex"))).end();
+		this.basicItem(ItemRegistry.BIOPATHIC_LINKSTONE);
 		this.basicItem(ItemRegistry.SILK_BUNDLE);
 
 		//skull mask
@@ -375,6 +397,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.MAGIC_ITEM_MAGNET);
 		this.basicItem(ItemRegistry.GEM_SINGER);
 		this.basicItem(ItemRegistry.SNOT_POD);
+		this.basicItem(ItemRegistry.GLUE);
+		this.basicItem(ItemRegistry.TEST_CHIMP);
 
 		this.basicItem(ItemRegistry.GROUND_LEAF);
 		this.basicItem(ItemRegistry.GROUND_CATTAIL);
@@ -548,5 +572,40 @@ public class BLItemModelProvider extends ItemModelProvider {
 	public ResourceLocation itemTexture(DeferredItem<?> item) {
 		ResourceLocation name = item.getId();
 		return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), ModelProvider.ITEM_FOLDER + "/" + name.getPath());
+	}
+
+	public ItemModelBuilder pouch(DeferredItem<Item> pouch) {
+		return this.multiLayerItem(pouch.getId().getPath(), this.itemTexture(pouch), this.itemTexture(pouch).withSuffix("_cord"));
+	}
+
+	private static final String[] TYPES = {"", "_poison", "_octine", "_basilisk", "_shock", "_barb"};
+	private static final float[] PULLS = {0.0F, 0.65F, 0.9F};
+
+	public ItemModelBuilder bow(DeferredItem<Item> bow) {
+		var builder = this.getBuilder(bow.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/bow"))
+			.texture("layer0", this.itemTexture(bow));
+
+		for (int type = 0; type < TYPES.length; type++) {
+			for (int i = 0; i <= 2; i++) {
+				var model = this.getBuilder(bow.getId() + TYPES[type] + "_" + i)
+					.parent(new ModelFile.UncheckedModelFile("item/bow"))
+					.texture("layer0", this.itemTexture(bow).withSuffix(TYPES[type] + "_" + i));
+				builder.override()
+					.predicate(TheBetweenlands.prefix("pull"), PULLS[i])
+					.predicate(TheBetweenlands.prefix("pulling"), 1)
+					.predicate(TheBetweenlands.prefix("type"), type)
+					.model(model).end();
+			}
+		}
+		return builder;
+	}
+
+	public ItemModelBuilder bucket(DeferredItem<? extends Item> item) {
+		return this.getBuilder(item.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("neoforge:item/default"))
+			.customLoader(DynamicFluidContainerModelBuilder::begin).fluid(Fluids.EMPTY).end()
+			.texture("base", this.itemTexture(item))
+			.texture("fluid", TheBetweenlands.prefix("item/bl_bucket_fluid"));
 	}
 }

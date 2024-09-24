@@ -17,12 +17,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.FishTrimmingTableBlock;
+import thebetweenlands.common.block.container.FishTrimmingTableBlock;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
-import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
-import thebetweenlands.common.items.AnadiaMobItem;
-import thebetweenlands.common.items.MobItem;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.item.misc.AnadiaMobItem;
+import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;

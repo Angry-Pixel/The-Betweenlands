@@ -13,7 +13,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.registries.LootFunctionRegistry;
 
 import java.util.List;

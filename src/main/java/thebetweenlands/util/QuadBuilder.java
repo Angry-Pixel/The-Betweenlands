@@ -79,7 +79,7 @@ public class QuadBuilder {
 	}
 
 	public QuadBuilder(int vertices, VertexFormat format) {
-		this.vertices = new ArrayList<Vertex>(vertices);
+		this.vertices = new ArrayList<>(vertices);
 		this.format = format;
 		this.hasLightmapElement = format.contains(VertexFormatElement.UV1);
 	}
@@ -345,12 +345,12 @@ public class QuadBuilder {
 		public final Map<Direction, ImmutableList<BakedQuad>> culledQuads;
 		public final ImmutableList<BakedQuad> nonCulledQuads;
 		private ImmutableList<BakedQuad> allQuads;
-		
+
 		private Quads(Map<Direction, ImmutableList<BakedQuad>> culledQuads, ImmutableList<BakedQuad> nonCulledQuads) {
 			this.culledQuads = culledQuads;
 			this.nonCulledQuads = nonCulledQuads;
 		}
-		
+
 		public ImmutableList<BakedQuad> getAllQuads() {
 			if(this.allQuads != null) return this.allQuads;
 			final ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
@@ -479,77 +479,76 @@ public class QuadBuilder {
 		boolean hasTransform = vert.transformation != null && !vert.transformation.equals(Transformation.identity());
 		builder.beginVertex();
 		List<VertexFormatElement> elements = format.getElements();
-		for (int e = 0; e < elements.size(); e++) {
-			VertexFormatElement element = elements.get(e);
+		for (VertexFormatElement element : elements) {
 			switch (element.usage()) {
-			case POSITION:
-				float[] positionData = new float[]{ (float) vert.pos.x, (float) vert.pos.y, (float) vert.pos.z, 1f };
-				
-				if(hasTransform) {
-					Vector4f vec = new Vector4f(positionData);
-					vert.transformation.getMatrix().transform(vec);
-					vec.get(FloatBuffer.wrap(positionData));
-				}
+				case POSITION:
+					float[] positionData = new float[]{(float) vert.pos.x, (float) vert.pos.y, (float) vert.pos.z, 1f};
 
-				builder.setPosition(positionData[0], positionData[1], positionData[2]);
-				break;
-			case COLOR:
-				builder.setColor(vert.color[0], vert.color[1], vert.color[2], vert.color[3]);
-				break;
-			case NORMAL:
-				float[] normalData;
-				if(vert.normal != null) {
-					normalData = new float[]{ (float) vert.normal.x, (float) vert.normal.y, (float) vert.normal.z, 0f };
-				} else {
-					normalData = new float[]{ (float) quadNormal.x, (float) quadNormal.y, (float) quadNormal.z, 0f };
-				}
-				if(hasTransform) {
-					Vector4f vec = new Vector4f(normalData);
-					Matrix4f matrix = vert.transformation.getMatrix();
-					matrix.invert();
-					matrix.transpose();
-					matrix.transform(vec);
-					vec.get(FloatBuffer.wrap(normalData));
-				}
-				float dx = normalData[0];
-				float dy = normalData[1];
-				float dz = normalData[2];
-				float len = (float) Math.sqrt(dx*dx+dy*dy+dz*dz);
-				normalData[0] = dx / len;
-				normalData[1] = dy / len;
-				normalData[2] = dz / len;
-				normalData[3] = 0f;
-				
-				builder.setNormal(normalData[0], normalData[1], normalData[2]);
-				break;
-			case UV:
-				if (element.index() == 0) { // is UV0?
-					float u = vert.u / 16f;
-					float v = vert.v / 16f;
-					if(vert.sprite != null) { // We're not allowed to switch the UVs without a sprite, it seems
-						float pu = u;
-						float pv = v;
-						u = vert.sprite.getU(vert.switchUV ? pv : pu);
-						v = vert.sprite.getV(vert.switchUV ? pu : pv);
+					if (hasTransform) {
+						Vector4f vec = new Vector4f(positionData);
+						vert.transformation.getMatrix().transform(vec);
+						vec.get(FloatBuffer.wrap(positionData));
 					}
-					// 1.12 code
-					// builder.put(e, u, v, vert.switchUV ? 1f : 0f, vert.switchUV ? 0f : 1f);
-					builder.setUv(u, v);
+
+					builder.setPosition(positionData[0], positionData[1], positionData[2]);
 					break;
-				} else if (vert.blockLight >= 0 && vert.skyLight >= 0 && element.index() == 2) { // is UV2?
-					// Note: the 1.12 code checks for if the element index is 1 (UV1 in this version); however, I have reason to believe that UV2 is correct here for packed light (see VertexConsumer::setLight)
-					
-					final int u = vert.blockLight << 4;
-					final int v = vert.skyLight << 4;
-					
-					builder.setUv2(u, v);
-					
+				case COLOR:
+					builder.setColor(vert.color[0], vert.color[1], vert.color[2], vert.color[3]);
 					break;
-				}
-			default:
+				case NORMAL:
+					float[] normalData;
+					if (vert.normal != null) {
+						normalData = new float[]{(float) vert.normal.x, (float) vert.normal.y, (float) vert.normal.z, 0f};
+					} else {
+						normalData = new float[]{(float) quadNormal.x, (float) quadNormal.y, (float) quadNormal.z, 0f};
+					}
+					if (hasTransform) {
+						Vector4f vec = new Vector4f(normalData);
+						Matrix4f matrix = vert.transformation.getMatrix();
+						matrix.invert();
+						matrix.transpose();
+						matrix.transform(vec);
+						vec.get(FloatBuffer.wrap(normalData));
+					}
+					float dx = normalData[0];
+					float dy = normalData[1];
+					float dz = normalData[2];
+					float len = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+					normalData[0] = dx / len;
+					normalData[1] = dy / len;
+					normalData[2] = dz / len;
+					normalData[3] = 0f;
+
+					builder.setNormal(normalData[0], normalData[1], normalData[2]);
+					break;
+				case UV:
+					if (element.index() == 0) { // is UV0?
+						float u = vert.u / 16f;
+						float v = vert.v / 16f;
+						if (vert.sprite != null) { // We're not allowed to switch the UVs without a sprite, it seems
+							float pu = u;
+							float pv = v;
+							u = vert.sprite.getU(vert.switchUV ? pv : pu);
+							v = vert.sprite.getV(vert.switchUV ? pu : pv);
+						}
+						// 1.12 code
+						// builder.put(e, u, v, vert.switchUV ? 1f : 0f, vert.switchUV ? 0f : 1f);
+						builder.setUv(u, v);
+						break;
+					} else if (vert.blockLight >= 0 && vert.skyLight >= 0 && element.index() == 2) { // is UV2?
+						// Note: the 1.12 code checks for if the element index is 1 (UV1 in this version); however, I have reason to believe that UV2 is correct here for packed light (see VertexConsumer::setLight)
+
+						final int u = vert.blockLight << 4;
+						final int v = vert.skyLight << 4;
+
+						builder.setUv2(u, v);
+
+						break;
+					}
+				default:
 //				builder.put(e);
 //				builder.misc(element, new int[element.byteSize() / Integer.BYTES]);
-				break;
+					break;
 			}
 		}
 	}
@@ -573,9 +572,9 @@ public class QuadBuilder {
 				quadNormal = new Vec3(0, 0, 0);
 			}
 		}
-		
+
 		CustomQuadVertexConsumer builder = new CustomQuadVertexConsumer(format);
-		
+
 		builder.setTintIndex(vert4.tintIndex);
 		if(vert4.orientation != null) {
 			builder.setDirection(vert4.orientation);
@@ -586,12 +585,12 @@ public class QuadBuilder {
 		// TODO setApplyDiffuseLighting
 //		builder.setApplyDiffuseLighting(vert4.diffuse);
 		builder.setSprite(vert4.sprite); // Sprite might've changed
-		
+
 		putVertex(format, builder, quadNormal, vert1);
 		putVertex(format, builder, quadNormal, vert2);
 		putVertex(format, builder, quadNormal, vert3);
 		putVertex(format, builder, quadNormal, vert4);
-		
+
 		if(builderConsumer != null) {
 			builderConsumer.accept(builder);
 		}

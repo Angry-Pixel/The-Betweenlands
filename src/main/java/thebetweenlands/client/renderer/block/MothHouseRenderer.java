@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.MothHouseBlock;
+import thebetweenlands.common.block.container.MothHouseBlock;
 import thebetweenlands.common.block.entity.MothHouseBlockEntity;
 
 import java.util.List;

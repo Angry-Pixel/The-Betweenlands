@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.AlembicBlock;
+import thebetweenlands.common.block.container.AlembicBlock;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 

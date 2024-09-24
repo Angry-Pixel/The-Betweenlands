@@ -1,12 +1,12 @@
 package thebetweenlands.util;
 
 import net.minecraft.util.RandomSource;
-import thebetweenlands.api.entity.spawning.IWeightProvider;
+import thebetweenlands.api.entity.spawning.WeightProvider;
 
 import java.io.Serial;
 import java.util.ArrayList;
 
-public class WeightedList<T extends IWeightProvider> extends ArrayList<T> {
+public class WeightedList<T extends WeightProvider> extends ArrayList<T> {
 
 	@Serial
 	private static final long serialVersionUID = 9036828805904893875L;

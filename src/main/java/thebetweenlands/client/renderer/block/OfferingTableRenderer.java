@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.OfferingTableBlock;
+import thebetweenlands.common.block.container.OfferingTableBlock;
 import thebetweenlands.common.block.entity.OfferingTableBlockEntity;
 
 public class OfferingTableRenderer implements BlockEntityRenderer<OfferingTableBlockEntity> {

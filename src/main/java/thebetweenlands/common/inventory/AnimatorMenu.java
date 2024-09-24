@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.inventory.slot.FilteredSlot;
 import thebetweenlands.common.inventory.slot.SingleItemSlot;
-import thebetweenlands.common.items.LifeCrystalItem;
+import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
 

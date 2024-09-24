@@ -1,6 +1,0 @@
-@MethodsReturnNonnullByDefault
-@FieldsAreNonnullByDefault
-package thebetweenlands.common.items.datamaps;
-
-import net.minecraft.FieldsAreNonnullByDefault;
-import net.minecraft.MethodsReturnNonnullByDefault;

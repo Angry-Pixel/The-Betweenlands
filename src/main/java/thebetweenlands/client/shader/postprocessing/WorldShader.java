@@ -79,7 +79,6 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private int gasParticlesDiffuseUniformID = -1;
 	private int gasParticlesDepthUniformID = -1;
 	private int invMVPUniformID = -1;
-	private int fogModeUniformID = -1;
 	private final int[] lightSourcePositionUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
 	private final int[] lightSourceColorUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
 	private final int[] lightSourceRadiusUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
@@ -171,7 +170,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.gasParticlesDiffuseUniformID = this.getUniform("s_gasParticles");
 		this.gasParticlesDepthUniformID = this.getUniform("s_gasParticles_depth");
 		this.invMVPUniformID = this.getUniform("u_INVMVP");
-		this.fogModeUniformID = this.getUniform("u_fogMode");
+		int fogModeUniformID = this.getUniform("u_fogMode");
 		this.msTimeUniformID = this.getUniform("u_msTime");
 		this.worldTimeUniformID = this.getUniform("u_worldTime");
 		this.viewPosUniformID = this.getUniform("u_viewPos");

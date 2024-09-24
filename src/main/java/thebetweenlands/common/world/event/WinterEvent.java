@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.client.BetweenlandsClient;
-import thebetweenlands.common.block.BLSnowLayerBlock;
+import thebetweenlands.common.block.terrain.BLSnowLayerBlock;
 import thebetweenlands.common.block.entity.PresentBlockEntity;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.BlockRegistry;

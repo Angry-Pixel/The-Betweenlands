@@ -16,7 +16,7 @@ public class LoreScrapScreen extends Screen {
 
 	protected int xStart;
 	protected int yStart;
-	protected ResourceLocation pageTexture;
+	protected final ResourceLocation pageTexture;
 
 	public LoreScrapScreen(ResourceLocation itemName) {
 		super(Component.empty());

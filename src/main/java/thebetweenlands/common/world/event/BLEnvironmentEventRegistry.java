@@ -2,37 +2,37 @@ package thebetweenlands.common.world.event;
 
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.environment.EnvironmentEvent;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class BLEnvironmentEventRegistry {
 
-	private final Map<ResourceLocation, IEnvironmentEvent> registeredEvents = new HashMap<>();
+	private final Map<ResourceLocation, EnvironmentEvent> registeredEvents = new HashMap<>();
 	private boolean disabled = false;
 
 	public BLEnvironmentEventRegistry() {
-		for (IEnvironmentEvent event : BLRegistries.ENVIRONMENT_EVENTS) {
+		for (EnvironmentEvent event : BLRegistries.ENVIRONMENT_EVENTS) {
 			this.registeredEvents.put(BLRegistries.ENVIRONMENT_EVENTS.getKey(event), event);
 		}
 	}
 
-	public Map<ResourceLocation, IEnvironmentEvent> getEvents() {
+	public Map<ResourceLocation, EnvironmentEvent> getEvents() {
 		return Collections.unmodifiableMap(this.registeredEvents);
 	}
 
-	public IEnvironmentEvent forName(ResourceLocation eventName) {
+	public EnvironmentEvent forName(ResourceLocation eventName) {
 		return this.registeredEvents.get(eventName);
 	}
 
-	public List<IEnvironmentEvent> getActiveEvents() {
+	public List<EnvironmentEvent> getActiveEvents() {
 		return this.getEventsOfState(true);
 	}
 
-	public List<IEnvironmentEvent> getEventsOfState(boolean isActive) {
-		List<IEnvironmentEvent> list = new ArrayList<>();
-		for (IEnvironmentEvent event : this.registeredEvents.values()) {
+	public List<EnvironmentEvent> getEventsOfState(boolean isActive) {
+		List<EnvironmentEvent> list = new ArrayList<>();
+		for (EnvironmentEvent event : this.registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				list.add(event);
 			}
@@ -40,9 +40,9 @@ public class BLEnvironmentEventRegistry {
 		return list;
 	}
 
-	public List<IEnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
-		List<IEnvironmentEvent> list = new ArrayList<>();
-		for (IEnvironmentEvent event : this.getEvents().values()) {
+	public List<EnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
+		List<EnvironmentEvent> list = new ArrayList<>();
+		for (EnvironmentEvent event : this.getEvents().values()) {
 			if (event.isActiveAt(x, y, z) == active) {
 				list.add(event);
 			}
@@ -52,7 +52,7 @@ public class BLEnvironmentEventRegistry {
 
 	public List<ResourceLocation> getEventNames() {
 		List<ResourceLocation> eventNames = new ArrayList<>();
-		for (Map.Entry<ResourceLocation, IEnvironmentEvent> event : this.registeredEvents.entrySet()) {
+		for (Map.Entry<ResourceLocation, EnvironmentEvent> event : this.registeredEvents.entrySet()) {
 			eventNames.add(event.getKey());
 		}
 		return eventNames;
@@ -60,7 +60,7 @@ public class BLEnvironmentEventRegistry {
 
 	public List<ResourceLocation> getEventNamesOfState(boolean isActive) {
 		List<ResourceLocation> eventNames = new ArrayList<>();
-		for (Map.Entry<ResourceLocation, IEnvironmentEvent> event : this.registeredEvents.entrySet()) {
+		for (Map.Entry<ResourceLocation, EnvironmentEvent> event : this.registeredEvents.entrySet()) {
 			if (event.getValue().isActive() == isActive) {
 				eventNames.add(event.getKey());
 			}
@@ -71,7 +71,7 @@ public class BLEnvironmentEventRegistry {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public String getGrammaticalActiveEventNameList() {
 		StringBuilder list = new StringBuilder();
-		Map.Entry<ResourceLocation, IEnvironmentEvent>[] events = this.registeredEvents.entrySet().toArray(new Map.Entry[0]);
+		Map.Entry<ResourceLocation, EnvironmentEvent>[] events = this.registeredEvents.entrySet().toArray(new Map.Entry[0]);
 		for (int i = 0; i < events.length; i++) {
 			ResourceLocation eventName = events[i].getKey();
 			if (i > 0) {
@@ -110,17 +110,17 @@ public class BLEnvironmentEventRegistry {
 	}
 
 	@Nullable
-	public IEnvironmentEvent getEvent(ResourceLocation eventId) {
+	public EnvironmentEvent getEvent(ResourceLocation eventId) {
 		return this.registeredEvents.get(eventId);
 	}
 
 	public boolean isEventActive(ResourceLocation eventId) {
-		IEnvironmentEvent event = this.getEvent(eventId);
+		EnvironmentEvent event = this.getEvent(eventId);
 		return event != null && event.isActive();
 	}
 
 	public boolean isEventActiveAt(double x, double y, double z, ResourceLocation eventId) {
-		IEnvironmentEvent event = this.getEvent(eventId);
+		EnvironmentEvent event = this.getEvent(eventId);
 		return event != null && event.isActiveAt(x, y, z);
 	}
 }

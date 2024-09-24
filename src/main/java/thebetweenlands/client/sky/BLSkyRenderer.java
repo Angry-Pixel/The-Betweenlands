@@ -19,7 +19,7 @@ import org.joml.Vector2d;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
-import thebetweenlands.api.sky.IBetweenlandsSky;
+import thebetweenlands.api.sky.BetweenlandsSky;
 import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.client.shader.GeometryBuffer;
 import thebetweenlands.client.shader.ShaderHelper;
@@ -37,12 +37,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class BLSkyRenderer implements IBetweenlandsSky {
+public class BLSkyRenderer implements BetweenlandsSky {
 	public static final ResourceLocation SKY_TEXTURE = TheBetweenlands.prefix("textures/sky/sky_texture.png");
 	public static final ResourceLocation SKY_SPOOPY_TEXTURE = TheBetweenlands.prefix("textures/sky/spoopy.png");
 	public static final ResourceLocation FOG_TEXTURE = TheBetweenlands.prefix("textures/sky/fog_texture.png");
 
-	protected List<AuroraRenderer> auroras = new ArrayList<>();
+	protected final List<AuroraRenderer> auroras = new ArrayList<>();
 
 	private static int skyDomeDispList = -1;
 

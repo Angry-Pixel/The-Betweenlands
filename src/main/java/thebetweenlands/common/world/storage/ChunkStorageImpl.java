@@ -85,8 +85,8 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 	public CompoundTag readLocalStorageReferences(CompoundTag nbt) {
 		this.localStorageReferences.clear();
 		ListTag localReferenceList = nbt.getList("LocalStorageReferences", Tag.TAG_COMPOUND);
-		for(int i = 0; i < localReferenceList.size(); i++) {
-			this.localStorageReferences.add(LocalStorageReference.readFromNBT((CompoundTag)localReferenceList.get(i)));
+		for (Tag tag : localReferenceList) {
+			this.localStorageReferences.add(LocalStorageReference.readFromNBT((CompoundTag) tag));
 		}
 
 		Iterator<LocalStorageReference> refIT = this.localStorageReferences.iterator();

@@ -9,7 +9,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.api.aspect.DiscoveryContainer;
+import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 
@@ -39,7 +39,7 @@ public class AspectCommand {
 		AspectManager manager = AspectManager.get(source.getLevel());
 		ServerPlayer player = source.getPlayerOrException();
 
-		if (!DiscoveryContainer.hasDiscoveryProvider(player)) {
+		if (!DiscoveryContainerData.hasDiscoveryProvider(player)) {
 			throw NO_BOOK.create();
 		}
 
@@ -47,10 +47,10 @@ public class AspectCommand {
 			ItemStack stack = player.getMainHandItem();
 			if (stack.isEmpty()) throw EMPTY_HAND.create();
 
-			DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(source.getPlayerOrException());
-			DiscoveryContainer.AspectDiscovery discovery = mergedKnowledge.discover(manager, AspectManager.getAspectItem(stack), source.registryAccess());
+			DiscoveryContainerData mergedKnowledge = DiscoveryContainerData.getMergedDiscoveryContainer(source.getPlayerOrException());
+			DiscoveryContainerData.AspectDiscovery discovery = mergedKnowledge.discover(player, manager, AspectManager.getAspectItem(stack, source.registryAccess()));
 			if (discovery.discovered != null) {
-				DiscoveryContainer.addDiscoveryToContainers(player, AspectManager.getAspectItem(source.getPlayerOrException().getMainHandItem()), discovery.discovered.type());
+				DiscoveryContainerData.addDiscoveryToContainers(player, AspectManager.getAspectItem(source.getPlayerOrException().getMainHandItem(), source.registryAccess()), discovery.discovered.type());
 				source.sendSuccess(() -> Component.translatable("commands.thebetweenlands.aspect.discover_held", Component.literal(discovery.result.toString()), Component.literal(discovery.discovered.type().getRegisteredName())), false);
 				return Command.SINGLE_SUCCESS;
 			} else {
@@ -58,9 +58,9 @@ public class AspectCommand {
 				return 0;
 			}
 		} else {
-			List<DiscoveryContainer<?>> discoveryContainers = DiscoveryContainer.getWritableDiscoveryContainers(player);
-			for (DiscoveryContainer<?> container : discoveryContainers)
-				container.discoverAll(manager, source.registryAccess());
+			List<ItemStack> discoveryContainers = DiscoveryContainerData.getWritableDiscoveryContainers(player);
+			for (ItemStack container : discoveryContainers)
+				DiscoveryContainerData.executeDiscoveryAction(container, data -> data.discoverAll(manager));
 			AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(player);
 			source.sendSuccess(() -> Component.translatable("commands.thebetweenlands.aspect.discover_all"), false);
 			return Command.SINGLE_SUCCESS;
@@ -69,20 +69,20 @@ public class AspectCommand {
 
 	private static int resetAspects(CommandSourceStack source, boolean checkHand) throws CommandSyntaxException {
 		ServerPlayer player = source.getPlayerOrException();
-		if (!DiscoveryContainer.hasDiscoveryProvider(player)) {
+		if (!DiscoveryContainerData.hasDiscoveryProvider(player)) {
 			throw NO_BOOK.create();
 		}
-		List<DiscoveryContainer<?>> discoveryContainers = DiscoveryContainer.getWritableDiscoveryContainers(player);
+		List<ItemStack> discoveryContainers = DiscoveryContainerData.getWritableDiscoveryContainers(player);
 		if (checkHand) {
 			ItemStack stack = player.getMainHandItem();
 			if (stack.isEmpty()) throw EMPTY_HAND.create();
 
-			for (DiscoveryContainer<?> container : discoveryContainers)
-				container.resetDiscovery(AspectManager.getAspectItem(stack), source.registryAccess());
+			for (ItemStack container : discoveryContainers)
+				DiscoveryContainerData.executeDiscoveryAction(container, data -> data.resetDiscovery(AspectManager.getAspectItem(stack, source.registryAccess())));
 			source.sendSuccess(() -> Component.translatable("commands.thebetweenlands.aspect.reset_held"), false);
 		} else {
-			for (DiscoveryContainer<?> container : discoveryContainers)
-				container.resetAllDiscovery(source.registryAccess());
+			for (ItemStack container : discoveryContainers)
+				DiscoveryContainerData.executeDiscoveryAction(container, DiscoveryContainerData::resetAllDiscoveries);
 			source.sendSuccess(() -> Component.translatable("commands.thebetweenlands.aspect.reset_all"), false);
 		}
 		return Command.SINGLE_SUCCESS;

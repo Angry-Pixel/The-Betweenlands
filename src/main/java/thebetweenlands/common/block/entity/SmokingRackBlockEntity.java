@@ -22,9 +22,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.SmokingRackRecipe;
-import thebetweenlands.common.block.SmokingRackBlock;
+import thebetweenlands.common.block.container.SmokingRackBlock;
 import thebetweenlands.common.inventory.SmokingRackMenu;
-import thebetweenlands.common.items.MobItem;
+import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 

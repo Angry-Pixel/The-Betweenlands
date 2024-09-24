@@ -23,7 +23,7 @@ import org.joml.Vector3f;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.renderer.BLRenderTypes;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.DruidAltarBlock;
+import thebetweenlands.common.block.container.DruidAltarBlock;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
 
 public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEntity> {

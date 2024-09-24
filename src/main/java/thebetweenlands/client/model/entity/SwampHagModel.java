@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entities.SwampHag;
+import thebetweenlands.common.entity.monster.SwampHag;
 
 public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implements HeadedModel {
 

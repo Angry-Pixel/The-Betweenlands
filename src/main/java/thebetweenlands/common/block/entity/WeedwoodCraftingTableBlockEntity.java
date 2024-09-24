@@ -22,7 +22,7 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class WeedwoodCraftingTableBlockEntity extends SyncedBlockEntity implements MenuProvider {
 
-	public NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
+	public final NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
 	public byte rotation = 0;
 
 	public WeedwoodCraftingTableBlockEntity(BlockPos pos, BlockState state) {

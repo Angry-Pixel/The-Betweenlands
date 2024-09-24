@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.recipe.MortarGrindRecipe;
+import thebetweenlands.common.item.recipe.MortarGrindRecipe;
 
 public class MortarRecipeBuilder implements RecipeBuilder {
 

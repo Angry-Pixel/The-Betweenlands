@@ -147,8 +147,8 @@ public class BlockLocationGuard implements ILocationGuard {
 
 		public void updateBlockRefCount() {
 			this.blockRefCount = 0;
-			for(int i = 0; i < this.data.length; i++) {
-				this.blockRefCount += Integer.bitCount(this.data[i] & 0xFF);
+			for (byte datum : this.data) {
+				this.blockRefCount += Integer.bitCount(datum & 0xFF);
 			}
 		}
 

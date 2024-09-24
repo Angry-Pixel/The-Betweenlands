@@ -197,7 +197,7 @@ public class SwampWallBlock extends Block implements SwampWaterLoggable {
 	private BlockState updateShape(LevelReader level, BlockState state, BlockPos pos, BlockState neighbour, boolean northConnection, boolean eastConnection, boolean southConnection, boolean westConnection) {
 		VoxelShape voxelshape = neighbour.getCollisionShape(level, pos).getFaceShape(Direction.DOWN);
 		BlockState blockstate = this.updateSides(state, northConnection, eastConnection, southConnection, westConnection, voxelshape);
-		return blockstate.setValue(UP, Boolean.valueOf(this.shouldRaisePost(blockstate, neighbour, voxelshape)));
+		return blockstate.setValue(UP, this.shouldRaisePost(blockstate, neighbour, voxelshape));
 	}
 
 	private boolean shouldRaisePost(BlockState state, BlockState neighbour, VoxelShape shape) {

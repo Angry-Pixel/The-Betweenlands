@@ -7,15 +7,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import thebetweenlands.common.component.item.FluidComponent;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class FilteredSiltGlassJarBlockEntity extends SyncedBlockEntity implements IFluidHandler {
 
-	public FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
 
 	public FilteredSiltGlassJarBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), pos, state);
@@ -71,14 +71,14 @@ public class FilteredSiltGlassJarBlockEntity extends SyncedBlockEntity implement
 	@Override
 	protected void applyImplicitComponents(DataComponentInput input) {
 		super.applyImplicitComponents(input);
-		this.tank.setFluid(input.getOrDefault(DataComponentRegistry.STORED_FLUID, FluidComponent.EMPTY).makeFluidStack());
+		this.tank.setFluid(input.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).copy());
 	}
 
 	@Override
 	protected void collectImplicitComponents(DataComponentMap.Builder components) {
 		super.collectImplicitComponents(components);
 		if (!this.tank.getFluid().isEmpty()) {
-			components.set(DataComponentRegistry.STORED_FLUID, FluidComponent.fromFluidStack(this.tank.getFluid()));
+			components.set(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.copyOf(this.tank.getFluid()));
 		}
 	}
 

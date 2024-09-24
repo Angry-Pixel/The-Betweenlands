@@ -9,13 +9,12 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.Entity;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entities.Wight;
+import thebetweenlands.common.entity.monster.Wight;
 
 public class ModelWight<T extends Entity> extends MowzieModelBase<T> implements HeadedModel {
 
 	public boolean renderHeadOnly = false;
 
-	private final ModelPart body_base;
 	private final ModelPart neck;
 	private final ModelPart armright;
 	private final ModelPart armleft;
@@ -30,13 +29,13 @@ public class ModelWight<T extends Entity> extends MowzieModelBase<T> implements 
 	public ModelWight(ModelPart root) {
 		super(location -> RenderType.entityTranslucent(location, true));
 		this.root = root;
-		this.body_base = root.getChild("body_base");
-		this.neck = this.body_base.getChild("neck");
+		ModelPart body_base = root.getChild("body_base");
+		this.neck = body_base.getChild("neck");
 
-		this.armleft = this.body_base.getChild("armleft");
-		this.legright = this.body_base.getChild("legright");
-		this.legleft = this.body_base.getChild("legleft");
-		this.armright = this.body_base.getChild("armright");
+		this.armleft = body_base.getChild("armleft");
+		this.legright = body_base.getChild("legright");
+		this.legleft = body_base.getChild("legleft");
+		this.armright = body_base.getChild("armright");
 
 		head1 = neck.getChild("head1");
 		head2 = neck.getChild("head2");

@@ -36,9 +36,8 @@ public class CaveGrassFeature extends CaveFeature {
 		Stack<BlockPos> search = new Stack<>();
 		List<BlockPos> check = new ArrayList<>();
 		List<BlockPos> location = new ArrayList<>();
-		BlockPos start = pos;
-		search.push(start);
-		check.add(start);
+		search.push(pos);
+		check.add(pos);
 
 		while (!search.isEmpty()) {
 			BlockPos position = search.pop();
@@ -61,10 +60,9 @@ public class CaveGrassFeature extends CaveFeature {
 						check.add(p);
 					}
 				} else if (canPlaceGrass(level, offset)) {
-					BlockPos p = offset;
-					if (!check.contains(p)) {
-						search.push(p);
-						check.add(p);
+					if (!check.contains(offset)) {
+						search.push(offset);
+						check.add(offset);
 					}
 				} else if (canPlaceGrass(level, offset.below())) {
 					BlockPos p = offset.below();

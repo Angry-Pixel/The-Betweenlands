@@ -5,7 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.SimulacrumEffect;
+import thebetweenlands.api.block.SimulacrumEffect;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 
 public class RandomSimulacrumEffect implements SimulacrumEffect {

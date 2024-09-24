@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
-import thebetweenlands.common.entities.Wight;
+import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import java.util.List;

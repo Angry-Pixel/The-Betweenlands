@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.Gecko;
+import thebetweenlands.common.entity.creature.Gecko;
 
 public class GeckoRenderer<T extends Gecko> extends MobRenderer<T, GeckoModel<T>> {
 

@@ -1,22 +1,42 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.items.*;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.armor.amphibious.UpgradeToggleItem;
+import thebetweenlands.common.item.armor.amphibious.UpgradeTriggerItem;
+import thebetweenlands.common.item.armor.AncientArmorItem;
+import thebetweenlands.common.item.armor.LurkerSkinArmorItem;
+import thebetweenlands.common.item.armor.MarshRunnerBootsItem;
+import thebetweenlands.common.item.armor.RubberBootsItem;
+import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
+import thebetweenlands.common.item.food.*;
+import thebetweenlands.common.item.herblore.*;
+import thebetweenlands.common.item.misc.*;
+import thebetweenlands.common.item.misc.bucket.BLBucketItem;
+import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
+import thebetweenlands.common.item.misc.bucket.RubberBucketItem;
+import thebetweenlands.common.item.shield.*;
+import thebetweenlands.common.item.tool.*;
+import thebetweenlands.common.item.tool.arrow.*;
 import thebetweenlands.util.BLDyeColor;
+
+import java.util.ArrayList;
 
 public class ItemRegistry {
 
@@ -112,7 +132,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CHRISTMAS_PUDDING = ITEMS.register("christmas_pudding", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.95F).build())));
 	public static final DeferredItem<Item> CANDY_CANE = ITEMS.register("candy_cane", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.85F).build())));
 	public static final DeferredItem<Item> WEEPING_BLUE_PETAL = ITEMS.register("weeping_blue_petal", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(1.0F).effect(() -> ElixirEffectRegistry.EFFECT_RIPENING.get().createEffect(600, 2), 1.0F).build())));
-	public static final DeferredItem<Item> WIGHT_HEART = ITEMS.register("wight_heart", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().build())));
+	public static final DeferredItem<Item> WIGHT_HEART = ITEMS.register("wight_heart", () -> new WightHeartItem(new Item.Properties().food(new FoodProperties.Builder().build())));
 	public static final DeferredItem<Item> YELLOW_DOTTED_FUNGUS = ITEMS.register("yellow_dotted_fungus", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> SILT_CRAB_CLAW = ITEMS.register("crab_claw", () -> new ShearsItem(new Item.Properties().component(DataComponents.TOOL, ShearsItem.createToolProperties()).food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> CRAB_STICK = ITEMS.register("crab_stick", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.9F).build())));
@@ -164,7 +184,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SHELL_STOCK = ITEMS.register("shell_stock", () -> new MudWalkingBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
 	public static final DeferredItem<Item> FROG_LEG_EXTRACT = ITEMS.register("frog_leg_extract", () -> new Item(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).effect(() -> new MobEffectInstance(MobEffects.JUMP, 400, 1), 1.0F).alwaysEdible().build())));
 	public static final DeferredItem<Item> WITCH_TEA = ITEMS.register("witch_tea", () -> new WitchTeaBrewItem(new Item.Properties().craftRemainder(ItemRegistry.WEEDWOOD_BOWL.get()).food(new FoodProperties.Builder().saturationModifier(0.2F).alwaysEdible().build())));
-	//herblore book
+	public static final DeferredItem<Item> HERBLORE_BOOK = ITEMS.register("herblore_book", () -> new HerbloreBookItem(new Item.Properties().component(DataComponentRegistry.DISCOVERY_DATA, DiscoveryContainerData.EMPTY)));
 	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
@@ -172,6 +192,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> LIFE_CRYSTAL_FRAGMENT = ITEMS.register("life_crystal_fragment", () -> new LifeCrystalItem(false, new Item.Properties().setNoRepair().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> PYRAD_FLAME = ITEMS.register("pyrad_flame", () -> new Item(new Item.Properties()));
 	//critters :)
+	public static final DeferredItem<MobItem> GECKO = ITEMS.register("gecko", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.GECKO.get(), null));
 	public static final DeferredItem<Item> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
@@ -185,7 +206,7 @@ public class ItemRegistry {
 	//rope
 	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, new Item.Properties()));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
-	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
+	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new HoverTextItem(new Item.Properties()));
 	public static final DeferredItem<Item> SHAMBLER_TONGUE = ITEMS.register("shambler_tongue", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> LURKER_SKIN_PATCH = ITEMS.register("lurker_skin_patch", () -> new HoverTextItem(new Item.Properties().stacksTo(16)));
@@ -196,7 +217,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> DRAETON_ANCHOR_UPGRADE = ITEMS.register("draeton_anchor_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> DRAETON_CRAFTING_UPGRADE = ITEMS.register("draeton_crafting_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> WEEDWOOD_ROWBOAT_LANTERN_UPGRADE = ITEMS.register("weedwood_rowboat_lantern_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new AmateNameTagItem(new Item.Properties()));
 	public static final DeferredItem<Item> DULL_LAVENDER_DYE = ITEMS.register("dull_lavender_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> MAROON_DYE = ITEMS.register("maroon_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> SHADOW_GREEN_DYE = ITEMS.register("shadow_green_dye", () -> new Item(new Item.Properties()));
@@ -278,33 +299,55 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> VALONITE_AXE = ITEMS.register("valonite_axe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new ValoniteGreataxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(AxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.0F)).stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_SHOVEL = ITEMS.register("valonite_shovel", () -> new ShovelItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
-	//shields
-	//shears
-	//sickle
+	public static final DeferredItem<Item> OCTINE_SHIELD = ITEMS.register("octine_shield", () -> new OctineShieldItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_SHIELD = ITEMS.register("valonite_shield", () -> new ValoniteShieldItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_SHIELD = ITEMS.register("weedwood_shield", () -> new WeedwoodShieldItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> LIVING_WEEDWOOD_SHIELD = ITEMS.register("living_weedwood_shield", () -> new LivingWeedwoodShieldItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SYRMORITE_SHIELD = ITEMS.register("syrmorite_shield", () -> new SyrmoriteShieldItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_SHIELD = ITEMS.register("bone_shield", () -> new BaseShieldItem(ToolMaterialRegistry.BONE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> GREEN_DENTROTHYST_SHIELD = ITEMS.register("green_dentrothyst_shield", () -> new DentrothystShieldItem(ToolMaterialRegistry.GREEN_DENTROTHYST, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> POLISHED_GREEN_DENTROTHYST_SHIELD = ITEMS.register("polished_green_dentrothyst_shield", () -> new DentrothystShieldItem(ToolMaterialRegistry.GREEN_DENTROTHYST, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ORANGE_DENTROTHYST_SHIELD = ITEMS.register("orange_dentrothyst_shield", () -> new DentrothystShieldItem(ToolMaterialRegistry.ORANGE_DENTROTHYST, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> POLISHED_ORANGE_DENTROTHYST_SHIELD = ITEMS.register("polished_orange_dentrothyst_shield", () -> new DentrothystShieldItem(ToolMaterialRegistry.ORANGE_DENTROTHYST, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> LURKER_SKIN_SHIELD = ITEMS.register("lurker_skin_shield", () -> new LurkerSkinShieldItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SYRMORITE_SHEARS = ITEMS.register("syrmorite_shears", () -> new ShearsItem(new Item.Properties().durability(238).component(DataComponents.TOOL, ShearsItem.createToolProperties())));
+	public static final DeferredItem<Item> SICKLE = ITEMS.register("sickle", () -> new SickleItem(new Item.Properties().durability(2500)));
 	//shockwave sword
-	//arrows
-	public static final DeferredItem<Item> SLUDGE_WORM_ARROW = ITEMS.register("sludge_worm_arrow", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CHIROMAW_BARB = ITEMS.register("chiromaw_barb", () -> new Item(new Item.Properties()));
-	//bows
+	public static final DeferredItem<Item> ANGLER_TOOTH_ARROW = ITEMS.register("angler_tooth_arrow", () -> new AnglerToothArrowItem(new Item.Properties()));
+	public static final DeferredItem<Item> POISONED_ANGLER_TOOTH_ARROW = ITEMS.register("poisoned_angler_tooth_arrow", () -> new PoisonAnglerToothArrowItem(new Item.Properties()));
+	public static final DeferredItem<Item> OCTINE_ARROW = ITEMS.register("octine_arrow", () -> new OctineArrowItem(new Item.Properties()));
+	public static final DeferredItem<Item> BASILISK_ARROW = ITEMS.register("basilisk_arrow", () -> new BasiliskArrowItem(new Item.Properties()));
+	public static final DeferredItem<Item> SLUDGE_WORM_ARROW = ITEMS.register("sludge_worm_arrow", () -> new SludgeWormArrowItem(new Item.Properties()));
+	public static final DeferredItem<Item> SHOCK_ARROW = ITEMS.register("shock_arrow", () -> new ShockArrowItem(new Item.Properties()));
+	public static final DeferredItem<Item> CHIROMAW_BARB = ITEMS.register("chiromaw_barb", () -> new ChiromawBarbItem(new Item.Properties()));
+	public static final DeferredItem<Item> WEEDWOOD_BOW = ITEMS.register("weedwood_bow", () -> new WeedwoodBowItem(new Item.Properties().stacksTo(1).durability(600)));
+	public static final DeferredItem<Item> PREDATOR_BOW = ITEMS.register("predator_bow", () -> new PredatorBowItem(new Item.Properties().stacksTo(1).durability(600).rarity(Rarity.RARE)));
 	//ancient weapons
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().stacksTo(1).durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));
-	//pouches
+	public static final DeferredItem<Item> SMALL_LURKER_SKIN_POUCH = ITEMS.register("small_lurker_skin_pouch", () -> new LurkerSkinPouchItem(9, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(9)))));
+	public static final DeferredItem<Item> MEDIUM_LURKER_SKIN_POUCH = ITEMS.register("medium_lurker_skin_pouch", () -> new LurkerSkinPouchItem(18, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(18)))));
+	public static final DeferredItem<Item> LARGE_LURKER_SKIN_POUCH = ITEMS.register("large_lurker_skin_pouch", () -> new LurkerSkinPouchItem(27, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(27)))));
+	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36)))));
 	//caving rope
 	//grapples
 	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SLINGSHOT = ITEMS.register("simple_slingshot", () -> new SlingshotItem(new Item.Properties().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().stacksTo(1).durability(256)));
 	//spears
-	public static final DeferredItem<Item> WEEDWOOD_BUCKET = ITEMS.register("weedwood_bucket", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> SYRMORITE_BUCKET = ITEMS.register("syrmorite_bucket", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ELECTRIC_UPGRADE = ITEMS.register("electric_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> GLIDE_UPGRADE = ITEMS.register("glide_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> URCHIN_SPIKE_UPGRADE = ITEMS.register("urchin_spike_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> FISH_VORTEX_UPGRADE = ITEMS.register("fish_vortex_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	//stones
-	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(NonNullList.withSize(4, ItemStack.EMPTY))).stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_BUCKET = ITEMS.register("weedwood_bucket", () -> new BLBucketItem(false, BlockRegistry.WEEDWOOD_RUBBER_TAP.get(), new Item.Properties().component(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY)));
+	public static final DeferredItem<Item> SYRMORITE_BUCKET = ITEMS.register("syrmorite_bucket", () -> new BLBucketItem(true, BlockRegistry.SYRMORITE_RUBBER_TAP.get(), new Item.Properties().component(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY)));
+	public static final DeferredItem<Item> WEEDWOOD_INFUSION_BUCKET = ITEMS.register("weedwood_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(WEEDWOOD_BUCKET.get())));
+	public static final DeferredItem<Item> SYRMORITE_INFUSION_BUCKET = ITEMS.register("syrmorite_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(SYRMORITE_BUCKET.get())));
+	public static final DeferredItem<Item> SOLID_RUBBER_SYRMORITE_BUCKET = ITEMS.register("solid_rubber_syrmorite_bucket", () -> new RubberBucketItem(new Item.Properties().stacksTo(1).craftRemainder(SYRMORITE_BUCKET.get())));
+	public static final DeferredItem<Item> ELECTRIC_UPGRADE = ITEMS.register("electric_upgrade", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> GLIDE_UPGRADE = ITEMS.register("glide_upgrade", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> URCHIN_SPIKE_UPGRADE = ITEMS.register("urchin_spike_upgrade", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> FISH_VORTEX_UPGRADE = ITEMS.register("fish_vortex_upgrade", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> BIOPATHIC_TRIGGERSTONE = ITEMS.register("biopathic_triggerstone", () -> new UpgradeTriggerItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BIOPATHIC_LINKSTONE = ITEMS.register("biopathic_linkstone", () -> new UpgradeToggleItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new SilkBundleItem(new Item.Properties().component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(4))).stacksTo(1)));
 
 	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties().rarity(Rarity.RARE)));
 	//explorer hat
@@ -478,11 +521,12 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.ORANGE_ELIXIR, new Item.Properties()));
 	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
 	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
-	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
+	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(DIRTY_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 	public static final DeferredItem<Item> ORANGE_ELIXIR = ITEMS.register("orange_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 
 	//debug items
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
+	public static final DeferredItem<Item> TEST_CHIMP = ITEMS.register("test_chimp", () -> new TestChimpItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
 
 	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));

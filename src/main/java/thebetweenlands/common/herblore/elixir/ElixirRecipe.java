@@ -11,17 +11,18 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectTypeRegistry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime,
 						   int infusionTimeVariation, int baseDuration, int durationModifier, int negativeBaseDuration, int negativeDurationModifier,
-						   ElixirEffect positiveElixir, ElixirEffect negativeElixir, Optional<ResourceKey<AspectType>> strengthAspect, Optional<ResourceKey<AspectType>> durationAspect, List<ResourceKey<AspectType>> aspects) {
+						   Holder<ElixirEffect> positiveElixir, Holder<ElixirEffect> negativeElixir, Optional<ResourceKey<AspectType>> strengthAspect, Optional<ResourceKey<AspectType>> durationAspect, List<ResourceKey<AspectType>> aspects) {
 
 	public ElixirRecipe(int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime,
 						int infusionTimeVariation, int baseDuration, int durationModifier, int negativeBaseDuration, int negativeDurationModifier,
-						ElixirEffect positiveElixir, ElixirEffect negativeElixir, List<ResourceKey<AspectType>> aspects) {
+						Holder<ElixirEffect> positiveElixir, Holder<ElixirEffect> negativeElixir, List<ResourceKey<AspectType>> aspects) {
 		this(infusionGradient, infusionFinishedColor, infusionFailedColor, idealInfusionTime,
 			infusionTimeVariation, baseDuration, durationModifier, negativeBaseDuration, negativeDurationModifier,
 			positiveElixir, negativeElixir, Optional.empty(), Optional.empty(), aspects);
@@ -29,10 +30,10 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 
 	public ElixirRecipe(int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime,
 						int infusionTimeVariation, int baseDuration, int durationModifier, int negativeBaseDuration, int negativeDurationModifier,
-						Supplier<ElixirEffect> positiveElixir, Supplier<ElixirEffect> negativeElixir, ResourceKey<AspectType> strengthAspect, ResourceKey<AspectType> durationAspect, List<ResourceKey<AspectType>> aspects) {
+						Holder<ElixirEffect> positiveElixir, Holder<ElixirEffect> negativeElixir, ResourceKey<AspectType> strengthAspect, ResourceKey<AspectType> durationAspect, List<ResourceKey<AspectType>> aspects) {
 		this(infusionGradient, infusionFinishedColor, infusionFailedColor, idealInfusionTime,
 			infusionTimeVariation, baseDuration, durationModifier, negativeBaseDuration, negativeDurationModifier,
-			positiveElixir.get(), negativeElixir.get(), Optional.of(strengthAspect), Optional.of(durationAspect), aspects);
+			positiveElixir, negativeElixir, Optional.of(strengthAspect), Optional.of(durationAspect), aspects);
 	}
 
 	public static final Codec<ElixirRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -45,8 +46,8 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 		Codec.INT.fieldOf("duration_modifier").forGetter(ElixirRecipe::durationModifier),
 		Codec.INT.fieldOf("negative_base_duration").forGetter(ElixirRecipe::negativeBaseDuration),
 		Codec.INT.fieldOf("negative_duration_modifier").forGetter(ElixirRecipe::negativeDurationModifier),
-		BLRegistries.ELIXIR_EFFECTS.byNameCodec().fieldOf("positive_elixir").forGetter(ElixirRecipe::positiveElixir),
-		BLRegistries.ELIXIR_EFFECTS.byNameCodec().fieldOf("negative_elixir").forGetter(ElixirRecipe::negativeElixir),
+		BLRegistries.ELIXIR_EFFECTS.holderByNameCodec().fieldOf("positive_elixir").forGetter(ElixirRecipe::positiveElixir),
+		BLRegistries.ELIXIR_EFFECTS.holderByNameCodec().fieldOf("negative_elixir").forGetter(ElixirRecipe::negativeElixir),
 		ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).optionalFieldOf("strength_aspect").forGetter(ElixirRecipe::strengthAspect),
 		ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).optionalFieldOf("duration_aspect").forGetter(ElixirRecipe::durationAspect),
 		ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).listOf().fieldOf("aspects").forGetter(ElixirRecipe::aspects)
@@ -55,7 +56,7 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 	@Nullable
 	public static Holder<ElixirRecipe> getRecipeFor(Holder<ElixirEffect> effect, HolderLookup.Provider provider) {
 		for (Holder<ElixirRecipe> recipe : provider.lookupOrThrow(BLRegistries.Keys.ELIXIR_RECIPES).listElements().toList()) {
-			if (effect.value() == recipe.value().negativeElixir() || effect.value() == recipe.value().positiveElixir()) {
+			if (effect == recipe.value().negativeElixir() || effect == recipe.value().positiveElixir()) {
 				return recipe;
 			}
 		}
@@ -74,7 +75,7 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 					if (recipe.value().strengthAspect().isPresent() && aspect.is(recipe.value().strengthAspect().get())) continue;
 					boolean contains = false;
 					for (ResourceKey<AspectType> a : recipe.value().aspects()) {
-						if (a == aspect) {
+						if (a == aspect.getKey()) {
 							contains = true;
 							break;
 						}
@@ -94,6 +95,17 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 			}
 		}
 		return null;
+	}
+
+	public static List<Holder<ElixirRecipe>> getFromAspect(Holder<AspectType> aspectType, HolderLookup.Provider provider) {
+		List<Holder<ElixirRecipe>> recipes = new ArrayList<>();
+		for (Holder<ElixirRecipe> recipe : provider.lookupOrThrow(BLRegistries.Keys.ELIXIR_RECIPES).listElements().toList()) {
+			for (ResourceKey<AspectType> recipeAspect : recipe.value().aspects()) {
+				if (aspectType.is(recipeAspect))
+					recipes.add(recipe);
+			}
+		}
+		return recipes;
 	}
 
 	public float[] getRGBA(int color) {

@@ -15,8 +15,7 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.WaystoneBlock;
-import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
+import thebetweenlands.common.block.terrain.WaystoneBlock;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
 
 public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity> {

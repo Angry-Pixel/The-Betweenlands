@@ -1,0 +1,152 @@
+{
+  "parent": "minecraft:item/bow",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/weedwood_bow_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_poison_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_poison_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_poison_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_octine_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_octine_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_octine_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_basilisk_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 3.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_basilisk_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 3.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_basilisk_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 3.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_shock_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 4.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_shock_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 4.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_shock_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 4.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_barb_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 5.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_barb_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 5.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_barb_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 5.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/weedwood_bow"
+  }
+}

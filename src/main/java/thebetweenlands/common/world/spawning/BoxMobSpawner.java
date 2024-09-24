@@ -13,33 +13,33 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
-import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
-import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.api.entity.spawning.BiomeSpawnEntriesData;
+import thebetweenlands.api.entity.spawning.CustomSpawnEntriesProvider;
+import thebetweenlands.api.entity.spawning.CustomSpawnEntry;
 
 public class BoxMobSpawner extends AreaMobSpawner {
-	private static class SimpleSpawnEntriesData implements IBiomeSpawnEntriesData {
-		private final Object2LongMap<ResourceLocation> lastSpawnMap = new Object2LongOpenHashMap<ResourceLocation>();
+	private static class SimpleSpawnEntriesData implements BiomeSpawnEntriesData {
+		private final Object2LongMap<ResourceLocation> lastSpawnMap = new Object2LongOpenHashMap<>();
 
 		@Override
-		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
+		public long getLastSpawn(CustomSpawnEntry spawnEntry) {
 			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.getLong(spawnEntry.getID()) : -1;
 		}
 
 		@Override
-		public void setLastSpawn(ICustomSpawnEntry spawnEntry, long lastSpawn) {
+		public void setLastSpawn(CustomSpawnEntry spawnEntry, long lastSpawn) {
 			this.lastSpawnMap.put(spawnEntry.getID(), lastSpawn);
 		}
 
 		@Override
-		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
+		public long removeLastSpawn(CustomSpawnEntry spawnEntry) {
 			return this.lastSpawnMap.removeLong(spawnEntry.getID());
 		}
 	}
 
-	private final IBiomeSpawnEntriesData spawnEntriesData = new SimpleSpawnEntriesData();
+	private final BiomeSpawnEntriesData spawnEntriesData = new SimpleSpawnEntriesData();
 	private final List<AABB> areas = new ArrayList<>();
-	private final List<ICustomSpawnEntry> spawnEntries = new ArrayList<>();
+	private final List<CustomSpawnEntry> spawnEntries = new ArrayList<>();
 	private int maxEntities;
 
 	public void addArea(AABB area) {
@@ -54,7 +54,7 @@ public class BoxMobSpawner extends AreaMobSpawner {
 		this.maxEntities = maxEntities;
 	}
 
-	public void addSpawnEntry(ICustomSpawnEntry entry) {
+	public void addSpawnEntry(CustomSpawnEntry entry) {
 		this.spawnEntries.add(entry);
 	}
 
@@ -68,7 +68,7 @@ public class BoxMobSpawner extends AreaMobSpawner {
 	}
 
 	@Override
-	public List<ICustomSpawnEntry> getSpawnEntries(Level level, BlockPos pos, ICustomSpawnEntriesProvider provider) {
+	public List<CustomSpawnEntry> getSpawnEntries(Level level, BlockPos pos, CustomSpawnEntriesProvider provider) {
 		return this.spawnEntries;
 	}
 
@@ -81,7 +81,7 @@ public class BoxMobSpawner extends AreaMobSpawner {
 	}
 
 	@Override
-	public IBiomeSpawnEntriesData getSpawnEntriesData(Level level, BlockPos pos, ICustomSpawnEntriesProvider provider) {
+	public BiomeSpawnEntriesData getSpawnEntriesData(Level level, BlockPos pos, CustomSpawnEntriesProvider provider) {
 		return this.spawnEntriesData;
 	}
 

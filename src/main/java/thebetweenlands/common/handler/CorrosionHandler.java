@@ -6,19 +6,19 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
-import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.api.item.CorrosionHelper;
-import thebetweenlands.common.TheBetweenlands;
 
 public class CorrosionHandler {
 
-	static void changeItemModifiers(ItemAttributeModifierEvent event) {
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(CorrosionHandler::changeItemModifiers);
+		NeoForge.EVENT_BUS.addListener(CorrosionHandler::updateCorrosionInPlayerInventory);
+	}
+
+	private static void changeItemModifiers(ItemAttributeModifierEvent event) {
 		ItemStack stack = event.getItemStack();
 		ItemAttributeModifiers modifiers = event.build();
 
@@ -43,14 +43,7 @@ public class CorrosionHandler {
 		}
 	}
 
-	static void addCorrosionTooltips(ItemTooltipEvent event) {
-		ItemStack stack = event.getItemStack();
-		if (CorrosionHelper.isCorrodible(stack)) {
-			CorrosionHelper.addCorrosionTooltips(stack, event.getToolTip(), event.getFlags(), event.getContext());
-		}
-	}
-
-	static void updateCorrosionInPlayerInventory(PlayerTickEvent.Post event) {
+	private static void updateCorrosionInPlayerInventory(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
 
 		if (!player.isDeadOrDying()) {

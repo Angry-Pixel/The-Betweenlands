@@ -8,7 +8,6 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ElixirRecipeRegistry {
 

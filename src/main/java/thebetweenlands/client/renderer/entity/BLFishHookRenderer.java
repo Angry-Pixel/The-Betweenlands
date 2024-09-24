@@ -22,7 +22,7 @@ import org.joml.Matrix4f;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.BLFishHookModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.fishing.BLFishHook;
+import thebetweenlands.common.entity.fishing.BLFishHook;
 
 public class BLFishHookRenderer extends EntityRenderer<BLFishHook> {
 

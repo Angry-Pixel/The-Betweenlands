@@ -214,14 +214,13 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 				this.data = NO_DATA;
 			} else {
 				this.data = new Object[args.data.length];
-				for (int i = 0; i < this.data.length; i++)
-					this.data[i] = args.data[i];
+				System.arraycopy(args.data, 0, this.data, 0, this.data.length);
 			}
 			this.dataSet = args.dataSet;
 		}
 
 		public static <F extends ParticleArgs<?>> ParticleArgs<F> copy(ParticleArgs<?> args) {
-			return new ParticleArgs<F>(args);
+			return new ParticleArgs<>(args);
 		}
 
 		public final void reset() {
@@ -307,7 +306,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 
 		@SuppressWarnings("unchecked")
 		public final ArgumentDataBuilder<T> withDataBuilder() {
-			return new ArgumentDataBuilder<T>((T) this);
+			return new ArgumentDataBuilder<>((T) this);
 		}
 
 		public final double getMotionX() {
@@ -445,11 +444,11 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		private static <F extends ParticleFactory<?, ?>, B extends ParticleArgs<?>, C extends ParticleOptions> BaseArgsBuilder<F, B, C> create(ParticleFactory<?, ?> factory) {
-			return new BaseArgsBuilder<F, B, C>(factory);
+			return new BaseArgsBuilder<>(factory);
 		}
 
 		@SuppressWarnings("unchecked")
-		public final F buildBaseArgs() {
+		public F buildBaseArgs() {
 			ParticleArgs<?> container = ParticleArgs.create();
 			//Fill with arguments from the builder
 			container = this.combineArgs(container);

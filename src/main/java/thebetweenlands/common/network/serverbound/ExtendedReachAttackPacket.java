@@ -9,34 +9,34 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import thebetweenlands.api.item.IExtendedReach;
+import thebetweenlands.api.item.ExtendedReach;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.EntityIdentifierList;
 
 public class ExtendedReachAttackPacket implements CustomPacketPayload {
-	
+
 	public static final Type<ExtendedReachAttackPacket> TYPE = new Type<>(TheBetweenlands.prefix("extended_reach_attack"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, ExtendedReachAttackPacket> STREAM_CODEC = StreamCodec.composite(
 			EntityIdentifierList.STREAM_CODEC, ExtendedReachAttackPacket::getEntities,
 			ExtendedReachAttackPacket::new
 		);
-	
+
 	// ---- for the codec ----
-	protected EntityIdentifierList entityList;
+	protected final EntityIdentifierList entityList;
 
 	protected ExtendedReachAttackPacket(EntityIdentifierList entityIdList) {
 		this.entityList = entityIdList;
 	}
-	
+
 	protected EntityIdentifierList getEntities() {
 		return this.entityList;
 	}
-	
+
 	// ---- exposed methods ----
 	public ExtendedReachAttackPacket(List<Entity> entities) {
 		this.entityList = new EntityIdentifierList(entities);
 	}
-	
+
 	@Override
 	public Type<? extends CustomPacketPayload> type() {
 		return TYPE;
@@ -45,15 +45,15 @@ public class ExtendedReachAttackPacket implements CustomPacketPayload {
 
 	public static void handle(ExtendedReachAttackPacket message, IPayloadContext ctx) {
 		if (ctx.flow().isServerbound()) {
-			
+
 			ctx.enqueueWork(() -> {
 				Player player = ctx.player();
-				
+
 				ItemStack heldItem = player.getWeaponItem();
-				
-				if(!heldItem.isEmpty() && heldItem.getItem() instanceof IExtendedReach extendedReach) {
+
+				if(!heldItem.isEmpty() && heldItem.getItem() instanceof ExtendedReach extendedReach) {
 					List<Entity> entities = message.entityList.getEntities();
-					
+
 					if(!extendedReach.onSwing(player, heldItem, entities)) return;
 
 					for(Entity entity : entities) {
@@ -67,8 +67,8 @@ public class ExtendedReachAttackPacket implements CustomPacketPayload {
 					}
 				}
 			});
-			
+
 		}
 	}
-	
+
 }

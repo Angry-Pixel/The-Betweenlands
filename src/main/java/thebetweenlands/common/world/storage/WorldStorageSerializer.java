@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
@@ -20,7 +20,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 	@Override
 	public @Nullable CompoundTag write(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
 		CompoundTag tag = new CompoundTag();
-		for (IEnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
+		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
 			event.writeToNBT(tag, registries);
 		}
 		tag.putBoolean("eventsDisabled", storage.getEnvironmentEventRegistry().isDisabled());
@@ -47,7 +47,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 	@Override
 	public BetweenlandsWorldStorage read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
 		BetweenlandsWorldStorage storage = new BetweenlandsWorldStorage();
-		for (IEnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
+		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
 			event.readFromNBT(tag, registries);
 		}
 		storage.getEnvironmentEventRegistry().setDisabled(tag.getBoolean("eventsDisabled"));

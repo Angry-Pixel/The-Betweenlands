@@ -14,6 +14,7 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
@@ -29,13 +30,22 @@ import java.util.List;
 
 public class ElixirCommonHandler {
 
-	static void changeMaskingTarget(LivingChangeTargetEvent event) {
+	public static void init() {
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectArrowStrength);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectBreakSpeed);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectJumpingPower);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::changeItemUsageTime);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::changeMaskingTarget);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::tickEffects);
+	}
+
+	private static void changeMaskingTarget(LivingChangeTargetEvent event) {
 		if (event.getNewAboutToBeSetTarget() != null && !((ElixirMasking)ElixirEffectRegistry.EFFECT_MASKING.get()).canEntityBeSeenBy(event.getNewAboutToBeSetTarget(), event.getEntity())) {
 			event.setNewAboutToBeSetTarget(null);
 		}
 	}
 
-	static void affectBreakSpeed(PlayerEvent.BreakSpeed event) {
+	private static void affectBreakSpeed(PlayerEvent.BreakSpeed event) {
 		Player player = event.getEntity();
 		if (ElixirEffectRegistry.EFFECT_SWIFTARM.get().isActive(player) && ElixirEffectRegistry.EFFECT_SWIFTARM.get().getStrength(player) >= 0) {
 			event.setNewSpeed(event.getNewSpeed() * (1.0F + (ElixirEffectRegistry.EFFECT_SWIFTARM.get().getStrength(player) + 1) * 0.3F));
@@ -45,7 +55,7 @@ public class ElixirCommonHandler {
 		}
 	}
 
-	static void changeItemUsageTime(LivingEntityUseItemEvent.Start event) {
+	private static void changeItemUsageTime(LivingEntityUseItemEvent.Start event) {
 		LivingEntity entity = event.getEntity();
 		if (ElixirEffectRegistry.EFFECT_SWIFTARM.get().isActive(entity) && ElixirEffectRegistry.EFFECT_SWIFTARM.get().getStrength(entity) >= 0) {
 			float newDuration = event.getDuration();
@@ -61,7 +71,7 @@ public class ElixirCommonHandler {
 		}
 	}
 
-	static void affectArrowStrength(ArrowLooseEvent event) {
+	private static void affectArrowStrength(ArrowLooseEvent event) {
 		if (ElixirEffectRegistry.EFFECT_WEAKBOW.get().isActive(event.getEntity())) {
 			event.setCharge(Math.min(event.getCharge(), 10));
 			event.setCharge((int) (event.getCharge() * (1.0F - (ElixirEffectRegistry.EFFECT_WEAKBOW.get().getStrength(event.getEntity()) + 1) / 4.0F * 0.75F)));
@@ -70,7 +80,7 @@ public class ElixirCommonHandler {
 
 	private static final AttributeModifier FOLLOW_RANGE_MODIFIER = new AttributeModifier(TheBetweenlands.prefix("stenching_follow_range"), 10, AttributeModifier.Operation.ADD_VALUE);
 
-	static void tickEffects(EntityTickEvent.Pre event) {
+	private static void tickEffects(EntityTickEvent.Pre event) {
 		if (event.getEntity() instanceof LivingEntity entity) {
 			if (ElixirEffectRegistry.EFFECT_SPIDERBREED.get().isActive(entity)) {
 				int strength = ElixirEffectRegistry.EFFECT_SPIDERBREED.get().getStrength(entity);
@@ -90,7 +100,7 @@ public class ElixirCommonHandler {
 					if (entity.getDeltaMovement().y() < 0.0F && (lookVec.y > 0.0F || (entity.zza == 0.0F && entity.xxa == 0.0F))) {
 						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0F, 0.9F - relStrength * 0.5F, 1.0F));
 					}
-					if (entity.isCrouching()) {
+					if (entity.isShiftKeyDown()) {
 						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0F, 0.15F * (1.0F - relStrength), 1.0F));
 					}
 					entity.setDeltaMovement(entity.getDeltaMovement().multiply(relStrength, 1.0F, relStrength));
@@ -98,7 +108,7 @@ public class ElixirCommonHandler {
 				}
 			}
 
-			if (ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().isActive(entity) && !entity.isInWater() && !entity.isCrouching()) {
+			if (ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().isActive(entity) && !entity.isInWater() && !entity.isShiftKeyDown()) {
 				BlockState state = entity.level().getBlockState(BlockPos.containing(entity.getX(), entity.getBoundingBox().minY + Math.min(-0.1D, entity.getDeltaMovement().y()), entity.getZ()));
 				if (state.liquid()) {
 					float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().getStrength(entity)) / 4.0F, 1.0F);
@@ -233,7 +243,7 @@ public class ElixirCommonHandler {
 		return false;
 	}
 
-	static void affectJumpingPower(LivingEvent.LivingJumpEvent event) {
+	private static void affectJumpingPower(LivingEvent.LivingJumpEvent event) {
 		LivingEntity entity = event.getEntity();
 
 		if (ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.get().isActive(entity)) {

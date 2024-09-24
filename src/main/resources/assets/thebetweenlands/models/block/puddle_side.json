@@ -9,8 +9,9 @@
     {
       "from": [ 0, 0.2, -3 ],
       "to": [ 16, 0.2, 0 ],
+      "shade": false,
       "faces": {
-        "up":    { "uv": [ 0,  13, 16, 16 ], "texture": "#water", "tintindex": 0 }
+        "up":    { "uv": [ 0,  13, 16, 16 ], "texture": "#water", "cullface": "north", "tintindex": 0 }
       }
     }
   ]

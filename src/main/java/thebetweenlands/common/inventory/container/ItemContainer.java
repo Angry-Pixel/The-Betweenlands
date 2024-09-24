@@ -12,6 +12,7 @@ public class ItemContainer implements Container {
 
 	private final ItemStack stack;
 	private final NonNullList<ItemStack> contents;
+	private boolean changed = false;
 
 	public ItemContainer(ItemStack stack, int slots) {
 		this.stack = stack;
@@ -24,6 +25,10 @@ public class ItemContainer implements Container {
 				this.contents.set(i, ItemStack.EMPTY);
 			}
 		}
+	}
+
+	public ItemStack getContainerStack() {
+		return this.stack;
 	}
 
 	@Override
@@ -71,7 +76,7 @@ public class ItemContainer implements Container {
 
 	@Override
 	public void setChanged() {
-		this.stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(this.contents));
+		this.changed = true;
 	}
 
 	@Override
@@ -86,6 +91,8 @@ public class ItemContainer implements Container {
 
 	@Override
 	public void stopOpen(Player player) {
-		this.setChanged();
+		if (this.changed) {
+			this.stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(this.contents));
+		}
 	}
 }

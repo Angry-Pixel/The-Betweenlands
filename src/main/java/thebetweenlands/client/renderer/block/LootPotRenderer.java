@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.LootPotBlock;
+import thebetweenlands.common.block.container.LootPotBlock;
 import thebetweenlands.common.block.entity.LootPotBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 

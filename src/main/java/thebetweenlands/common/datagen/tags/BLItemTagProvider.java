@@ -11,7 +11,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import thebetweenlands.api.item.ICustomCorrodible;
+import thebetweenlands.api.item.CustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -24,6 +24,11 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> REPAIRS_BONE_TOOLS = tag("repairs_bone_tools");
 	public static final TagKey<Item> REPAIRS_OCTINE_TOOLS = tag("repairs_octine_tools");
 	public static final TagKey<Item> REPAIRS_VALONITE_TOOLS = tag("repairs_valonite_tools");
+
+	public static final TagKey<Item> REPAIRS_GREEN_DENTROTHYST_SHIELD = tag("repairs_green_dentrothyst_shield");
+	public static final TagKey<Item> REPAIRS_ORANGE_DENTROTHYST_SHIELD = tag("repairs_orange_dentrothyst_shield");
+	public static final TagKey<Item> REPAIRS_SYRMORITE_SHIELD = tag("repairs_syrmorite_shield");
+	public static final TagKey<Item> REPAIRS_LURKER_SKIN_SHIELD = tag("repairs_lurker_skin_shield");
 
 	public static final TagKey<Item> BL_LOGS = tag("betweenlands_logs");
 	public static final TagKey<Item> FILTERED_SILT_GLASS = tag("filtered_silt_glass");
@@ -44,7 +49,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
 
 	/**
-	 * Whether an item has custom corrosion information. The item should implement {@link ICustomCorrodible}; this tag will be ignored if it doesn't.
+	 * Whether an item has custom corrosion information. The item should implement {@link CustomCorrodible}; this tag will be ignored if it doesn't.
 	 */
 	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
 
@@ -56,6 +61,15 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	protected void addTags(HolderLookup.Provider provider) {
 		this.copy(BLBlockTagProvider.OCTINE_IGNITES, OCTINE_IGNITES);
 		this.tag(SLINGSHOT_AMMO).add(ItemRegistry.FISH_BAIT.get(), BlockRegistry.BETWEENSTONE_PEBBLE.asItem());
+		this.tag(REPAIRS_BONE_TOOLS).add(ItemRegistry.SLIMY_BONE.get());
+		this.tag(REPAIRS_OCTINE_TOOLS).add(ItemRegistry.OCTINE_INGOT.get());
+		this.tag(REPAIRS_WEEDWOOD_TOOLS).add(BlockRegistry.WEEDWOOD_PLANKS.asItem());
+		this.tag(REPAIRS_VALONITE_TOOLS).add(ItemRegistry.VALONITE_SHARD.get());
+
+		this.tag(REPAIRS_GREEN_DENTROTHYST_SHIELD).add(ItemRegistry.GREEN_DENTROTHYST_SHARD.get());
+		this.tag(REPAIRS_ORANGE_DENTROTHYST_SHIELD).add(ItemRegistry.ORANGE_DENTROTHYST_SHARD.get());
+		this.tag(REPAIRS_SYRMORITE_SHIELD).add(ItemRegistry.SYRMORITE_INGOT.get());
+		this.tag(REPAIRS_LURKER_SKIN_SHIELD).add(ItemRegistry.LURKER_SKIN.get());
 
 		// Those two "inherit" from this one
 		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
@@ -152,8 +166,17 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.WEEDWOOD_SHOVEL.get(),
 			ItemRegistry.BONE_SHOVEL.get(),
 			ItemRegistry.OCTINE_SHOVEL.get(),
-			ItemRegistry.VALONITE_SHOVEL.get()
+			ItemRegistry.VALONITE_SHOVEL.get(),
+
+			ItemRegistry.SICKLE.get(),
+			ItemRegistry.SLINGSHOT.get(),
+			ItemRegistry.WEEDWOOD_BOW.get(),
+			ItemRegistry.PREDATOR_BOW.get()
 		);
+
+		this.tag(ItemTags.ARROWS).add(ItemRegistry.ANGLER_TOOTH_ARROW.get(), ItemRegistry.POISONED_ANGLER_TOOTH_ARROW.get(),
+			ItemRegistry.OCTINE_ARROW.get(), ItemRegistry.BASILISK_ARROW.get(), ItemRegistry.SLUDGE_WORM_ARROW.get(),
+			ItemRegistry.SHOCK_ARROW.get(), ItemRegistry.CHIROMAW_BARB.get());
 
 	}
 

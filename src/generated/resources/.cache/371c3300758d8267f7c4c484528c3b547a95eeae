@@ -1,11 +1,20 @@
-// 1.21.1	2024-09-11T20:01:20.2612741	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2024-09-20T18:36:39.838983	Tags for minecraft:item mod id thebetweenlands
+c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
 6d94a07fd1401c7963d0cbd25416072ff5145982 data/minecraft/tags/item/shovels.json
 d06ec18ea23cf0b2bcd37583a885baeab6942c1f data/minecraft/tags/item/swords.json
 64e73efc633e013c26a0476e03cdd737fd89a3b2 data/thebetweenlands/tags/item/corrodible.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/item/corrodible/custom.json
-d61022f248e7813226e51b271dc42aec7397b7d7 data/thebetweenlands/tags/item/corrodible/default.json
+2c1c14f6b8be0569d1e36c9e929fc0fe5488ef9c data/thebetweenlands/tags/item/corrodible/default.json
 ba1aefcc3cb9b53ae9fa889e92a2505d08b2c486 data/thebetweenlands/tags/item/gives_food_sickness.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/item/octine_ignites.json
+026303e26c0aabdd2a479bb655cf86e6857a7421 data/thebetweenlands/tags/item/repairs_bone_tools.json
+d6f1d1333804eee9525718a07f541cfb0a1aed5d data/thebetweenlands/tags/item/repairs_green_dentrothyst_shield.json
+570d7f3c9be64dde7e570e73e41f9834b09b03b5 data/thebetweenlands/tags/item/repairs_lurker_skin_shield.json
+3b2c7a1c1ed1b1e158f5bb9900bc77bcc69e0244 data/thebetweenlands/tags/item/repairs_octine_tools.json
+2a025b524f5b2d9fff33192e4632f69c5e1deedc data/thebetweenlands/tags/item/repairs_orange_dentrothyst_shield.json
+acfa9371b1f86fc431faf8337cd533e716c06649 data/thebetweenlands/tags/item/repairs_syrmorite_shield.json
+2d7c01937dc8842885395c073b6a0c26a006ba8f data/thebetweenlands/tags/item/repairs_valonite_tools.json
+1b800d5d4c92f2bd3368adb321e38640ff076ce6 data/thebetweenlands/tags/item/repairs_weedwood_tools.json
 0b4fb1710c1ea70138d18db6ea9e27f8d1280827 data/thebetweenlands/tags/item/slingshot_ammo.json

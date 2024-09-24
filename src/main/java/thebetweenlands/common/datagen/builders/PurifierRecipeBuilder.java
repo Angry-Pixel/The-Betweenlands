@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.recipe.PurifierRecipe;
+import thebetweenlands.common.item.recipe.PurifierRecipe;
 
 public class PurifierRecipeBuilder implements RecipeBuilder {
 

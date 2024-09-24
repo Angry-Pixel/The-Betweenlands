@@ -5,14 +5,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.VanillaParticleFactory;
@@ -37,6 +34,10 @@ public class BetweenlandsClient {
 
 	public static RiftVariantReloadListener getRiftVariantLoader() {
 		return ClientRegistrationEvents.riftVariantListener;
+	}
+
+	public static AspectIconTextureManager getAspectIconManager() {
+		return ClientRegistrationEvents.aspectIcons;
 	}
 
 	/**

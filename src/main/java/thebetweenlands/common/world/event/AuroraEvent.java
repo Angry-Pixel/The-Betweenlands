@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -75,7 +75,7 @@ public class AuroraEvent extends TimedEnvironmentEvent {
 
 	protected boolean canBeActive(Level level) {
 		if (BetweenlandsWorldStorage.get(level) != null) {
-			for (IEnvironmentEvent event : BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getEventsOfState(true)) {
+			for (EnvironmentEvent event : BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getEventsOfState(true)) {
 				if (event != this && event.getClass() != WinterEvent.class && event.getClass() != SnowfallEvent.class &&
 					event.getClass() != RiftEvent.class) {
 					return false;

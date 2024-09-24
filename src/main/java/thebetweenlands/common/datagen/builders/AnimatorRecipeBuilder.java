@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.items.recipe.BasicAnimatorRecipe;
+import thebetweenlands.common.item.recipe.BasicAnimatorRecipe;
 
 import java.util.Optional;
 

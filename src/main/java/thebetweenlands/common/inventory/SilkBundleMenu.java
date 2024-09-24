@@ -1,25 +1,27 @@
 package thebetweenlands.common.inventory;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import thebetweenlands.common.inventory.container.ItemContainer;
 import thebetweenlands.common.inventory.slot.SilkBundleSlot;
-import thebetweenlands.common.inventory.slot.SingleItemSlot;
 import thebetweenlands.common.registries.MenuRegistry;
 
 public class SilkBundleMenu extends AbstractContainerMenu {
 
-	public SilkBundleMenu(int containerId, Inventory playerInventory) {
-		this(containerId, playerInventory, new SimpleContainer(4));
+	private final ItemContainer bundle;
+
+	public SilkBundleMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
+		this(containerId, playerInventory, new ItemContainer(ItemStack.STREAM_CODEC.decode(buf), 4));
 	}
 
-	public SilkBundleMenu(int containerId, Inventory playerInventory, Container bundle) {
+	public SilkBundleMenu(int containerId, Inventory playerInventory, ItemContainer bundle) {
 		super(MenuRegistry.SILK_BUNDLE.get(), containerId);
 		checkContainerSize(bundle, 4);
+		this.bundle = bundle;
 
 		this.addSlot(new SilkBundleSlot(bundle, 0, 78, 15));
 		this.addSlot(new SilkBundleSlot(bundle, 1, 42, 33));
@@ -69,6 +71,12 @@ public class SilkBundleMenu extends AbstractContainerMenu {
 
 	@Override
 	public boolean stillValid(Player player) {
-		return true;
+		return player.getInventory().contains(this.bundle.getContainerStack());
+	}
+
+	@Override
+	public void removed(Player player) {
+		this.bundle.stopOpen(player);
+		super.removed(player);
 	}
 }

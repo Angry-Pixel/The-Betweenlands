@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import thebetweenlands.api.SimulacrumEffect;
+import thebetweenlands.api.block.SimulacrumEffect;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 import java.lang.invoke.MethodHandle;

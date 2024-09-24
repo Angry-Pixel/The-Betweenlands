@@ -22,8 +22,4 @@ public class ElixirSwiftarm extends ElixirEffect {
 		}
 	}
 
-	@Override
-	protected boolean isReady(int ticks, int strength) {
-		return true;
-	}
 }

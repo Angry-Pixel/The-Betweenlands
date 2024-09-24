@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.SimulacrumEffect;
+import thebetweenlands.api.block.SimulacrumEffect;
 import thebetweenlands.common.block.entity.OfferingTableBlockEntity;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
 import thebetweenlands.common.block.entity.spawner.BetweenlandsBaseSpawner;
