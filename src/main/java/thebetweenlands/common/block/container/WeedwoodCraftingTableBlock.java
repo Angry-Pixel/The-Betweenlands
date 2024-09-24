@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -26,6 +27,11 @@ public class WeedwoodCraftingTableBlock extends BaseEntityBlock {
 		super(properties);
 	}
 
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+    
     @Override
     public MapCodec<? extends WeedwoodCraftingTableBlock> codec() {
         return CODEC;
@@ -52,7 +58,12 @@ public class WeedwoodCraftingTableBlock extends BaseEntityBlock {
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		if (!state.is(newState.getBlock())) {
+            if (level.getBlockEntity(pos) instanceof WeedwoodCraftingTableBlockEntity container) {
+                Containers.dropContents(level, pos, container.items);
+                level.updateNeighbourForOutputSignal(pos, state.getBlock());
+            }
+        }
 		super.onRemove(state, level, pos, newState, moving);
 	}
 

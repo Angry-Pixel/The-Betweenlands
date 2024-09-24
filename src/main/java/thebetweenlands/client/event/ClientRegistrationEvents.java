@@ -192,6 +192,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.STEEPING_POT.get(), SteepingPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WAYSTONE.get(), WaystoneRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), WeedwoodCraftingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
 	}
 
