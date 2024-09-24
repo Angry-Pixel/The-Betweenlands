@@ -21,7 +21,7 @@ public class AnadiaTrimmingRecipe implements TrimmingTableRecipe {
 	public NonNullList<ItemStack> assembleRecipe(SingleRecipeInput input, Level level) {
 		NonNullList<ItemStack> results = NonNullList.withSize(3, ItemStack.EMPTY);
 		ItemStack stack = input.item();
-		if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+		if (stack.getItem() instanceof AnadiaMobItem mob && !mob.getEntityData(stack).isEmpty()) {
 			results.set(0, mob.getItemFromEntity(Anadia.HEAD_KEY, stack, level));
 			results.set(1, mob.getItemFromEntity(Anadia.BODY_KEY, stack, level));
 			results.set(2, mob.getItemFromEntity(Anadia.TAIL_KEY, stack, level));

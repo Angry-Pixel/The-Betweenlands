@@ -1183,6 +1183,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT, "Life Crystal Fragment");
 		this.add("item.thebetweenlands.life_crystal.remaining", "%s%% remaining");
 		this.addItem(ItemRegistry.PYRAD_FLAME, "Pyrad Flame");
+		this.add("item.thebetweenlands.mob.health", "Health: %s/%s");
 		this.addItem(ItemRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
 		this.addItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
 		this.addItem(ItemRegistry.SHIMMER_STONE, "Shimmerstone");

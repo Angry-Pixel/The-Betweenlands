@@ -32,7 +32,6 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
-import thebetweenlands.client.gui.book.HerbloreEntryCategory;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
@@ -40,6 +39,7 @@ import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.block.*;
+import thebetweenlands.client.model.block.cage.CagedGeckoModel;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
 import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
 import thebetweenlands.client.model.block.simulacrum.LakeCavernSimulacrumModels;
@@ -208,7 +208,6 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_SHIELD, WeedwoodShieldModel::create);
 
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
-		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
 		event.registerLayerDefinition(BLModelLayers.BUBBLER_CRAB, BubblerCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
@@ -216,6 +215,10 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_ARROW, SludgeWormArrowModel::create);
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
+
+		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
+		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
+		event.registerLayerDefinition(BLModelLayers.MUTATED_GECKO, CagedGeckoModel::createMutatedGecko);
 
 		event.registerLayerDefinition(BLModelLayers.ALCOVE, AlcoveModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ALEMBIC, AlembicModel::makeModel);
@@ -267,21 +270,21 @@ public class ClientRegistrationEvents {
 
 	private static void registerPropertyOverrides(ModelEvent.ModifyBakingResult event) {
 		ItemProperties.register(ItemRegistry.ANADIA.get(), TheBetweenlands.prefix("head"), (stack, level, entity, idk) -> {
-			if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+			if (stack.getItem() instanceof AnadiaMobItem mob && !mob.getEntityData(stack).isEmpty()) {
 				return mob.getEntityData(stack).getByte("head_type");
 			}
 			return 0;
 		});
 
 		ItemProperties.register(ItemRegistry.ANADIA.get(), TheBetweenlands.prefix("body"), (stack, level, entity, idk) -> {
-			if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+			if (stack.getItem() instanceof AnadiaMobItem mob && !mob.getEntityData(stack).isEmpty()) {
 				return mob.getEntityData(stack).getByte("body_type");
 			}
 			return 0;
 		});
 
 		ItemProperties.register(ItemRegistry.ANADIA.get(), TheBetweenlands.prefix("tail"), (stack, level, entity, idk) -> {
-			if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+			if (stack.getItem() instanceof AnadiaMobItem mob && !mob.getEntityData(stack).isEmpty()) {
 				return mob.getEntityData(stack).getByte("tail_type");
 			}
 			return 0;

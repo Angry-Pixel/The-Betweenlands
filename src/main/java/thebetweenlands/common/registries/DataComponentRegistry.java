@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,7 @@ import thebetweenlands.common.component.item.*;
 
 public class DataComponentRegistry {
 
-	public static final DeferredRegister<DataComponentType<?>> COMPONENTS = DeferredRegister.createDataComponents(TheBetweenlands.ID);
+	public static final DeferredRegister<DataComponentType<?>> COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, TheBetweenlands.ID);
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> AMPHIBIOUS_ARMOR_FILTERS = COMPONENTS.register("amphibious_armor_filters", () -> DataComponentType.<ItemContainerContents>builder().persistent(ItemContainerContents.CODEC).networkSynchronized(ItemContainerContents.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmphibiousUpgrades>> AMPHIBIOUS_UPGRADES = COMPONENTS.register("amphibious_upgrades", () -> DataComponentType.<AmphibiousUpgrades>builder().persistent(AmphibiousUpgrades.CODEC).networkSynchronized(AmphibiousUpgrades.STREAM_CODEC).build());

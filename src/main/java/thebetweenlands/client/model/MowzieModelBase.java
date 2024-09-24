@@ -2,14 +2,13 @@ package thebetweenlands.client.model;
 
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 import java.util.function.Function;
 
-// This ported nicely*!
 public abstract class MowzieModelBase<T extends Entity> extends HierarchicalModel<T> {
 
 	public MowzieModelBase() {
@@ -35,8 +34,8 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 * @param f4 is the rotationPitch of the LivingEntity.
 	 */
 	public void faceTarget(ModelPart box, float f, float f3, float f4) {
-		box.yRot = (f3 / (180f / (float) Math.PI)) / f;
-		box.xRot = (f4 / (180f / (float) Math.PI)) / f;
+		box.yRot += (f3 / Mth.RAD_TO_DEG) / f;
+		box.xRot += (f4 / Mth.RAD_TO_DEG) / f;
 	}
 
 	/**
@@ -54,8 +53,8 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 * @param f1     is the walk speed.
 	 */
 	public float rotateBox(float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
-		if (invert) return (float) (-Math.cos(f * speed + offset) * degree * f1 + weight * f1);
-		else return (float) (Math.cos(f * speed + offset) * degree * f1 + weight * f1);
+		if (invert) return -Mth.cos(f * speed + offset) * degree * f1 + weight * f1;
+		else return Mth.cos(f * speed + offset) * degree * f1 + weight * f1;
 	}
 
 	/**
@@ -70,8 +69,8 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 * @param f1     is the walk speed.
 	 */
 	public float moveBox(float speed, float degree, boolean bounce, float f, float f1) {
-		if (bounce) return (float) -Math.abs((Math.sin(f * speed) * f1 * degree));
-		else return (float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
+		if (bounce) return -Mth.abs(Mth.sin(f * speed) * f1 * degree);
+		else return Mth.sin(f * speed) * f1 * degree - f1 * degree;
 	}
 
 	/**
@@ -92,7 +91,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	public void walk(ModelPart box, float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
 		int inverted = 1;
 		if (invert) inverted = -1;
-		box.xRot += (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
+		box.xRot += Mth.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
 	}
 
 	/**
@@ -113,7 +112,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	public void swing(ModelPart box, float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
 		int inverted = 1;
 		if (invert) inverted = -1;
-		box.yRot += (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
+		box.yRot += Mth.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
 	}
 
 	/**
@@ -134,7 +133,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	public void flap(ModelPart box, float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
 		int inverted = 1;
 		if (invert) inverted = -1;
-		box.zRot += (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
+		box.zRot += Mth.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
 	}
 
 	/**
@@ -149,11 +148,10 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 * @param f      is the walked distance;
 	 * @param f1     is the walk speed.
 	 */
-	// UNTESTED!!! may cause floating parts or some other weirdness
 	public void bob(ModelPart box, float speed, float degree, boolean bounce, float f, float f1) {
-		float bob = (float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
-		if (bounce) bob = (float) -Math.abs((Math.sin(f * speed) * f1 * degree));
-		box.loadPose(PartPose.offsetAndRotation(box.x, bob, box.z, box.xRot, box.yRot, box.zRot));
+		float bob = Mth.sin(f * speed) * f1 * degree - f1 * degree;
+		if (bounce) bob = -Mth.abs((Mth.sin(f * speed) * f1 * degree));
+		box.y += bob;
 	}
 
 	/**
@@ -171,9 +169,9 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 */
 	public void chainSwing(ModelPart[] boxes, float speed, float degree, double rootOffset, float f, float f1) {
 		int numberOfSegments = boxes.length;
-		float offset = (float) ((rootOffset * Math.PI) / (2 * numberOfSegments));
+		float offset = (float) ((rootOffset * Mth.PI) / (2 * numberOfSegments));
 		for (int i = 0; i < numberOfSegments; i++)
-			boxes[i].yRot = (float) Math.cos(f * speed + offset * i) * f1 * degree;
+			boxes[i].yRot += Mth.cos(f * speed + offset * i) * f1 * degree;
 	}
 
 	/**
@@ -191,9 +189,9 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 */
 	public void chainWave(ModelPart[] boxes, float speed, float degree, double rootOffset, float f, float f1) {
 		int numberOfSegments = boxes.length;
-		float offset = (float) ((rootOffset * Math.PI) / (2 * numberOfSegments));
+		float offset = (float) ((rootOffset * Mth.PI) / (2 * numberOfSegments));
 		for (int i = 0; i < numberOfSegments; i++)
-			boxes[i].xRot = (float) Math.cos(f * speed + offset * i) * f1 * degree;
+			boxes[i].xRot += Mth.cos(f * speed + offset * i) * f1 * degree;
 	}
 
 	/**
@@ -211,8 +209,8 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 */
 	public void chainFlap(ModelPart[] boxes, float speed, float degree, double rootOffset, float f, float f1) {
 		int numberOfSegments = boxes.length;
-		float offset = (float) ((rootOffset * Math.PI) / (2 * numberOfSegments));
+		float offset = (float) ((rootOffset * Mth.PI) / (2 * numberOfSegments));
 		for (int i = 0; i < numberOfSegments; i++)
-			boxes[i].zRot = (float) Math.cos(f * speed + offset * i) * f1 * degree;
+			boxes[i].zRot += Mth.cos(f * speed + offset * i) * f1 * degree;
 	}
 }

@@ -162,7 +162,7 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 					}
 
 					if (crab != null) {
-						MobItem itemMob = crab.getCrabPotItem();
+						MobItem<?> itemMob = crab.getCrabPotItem();
 
 						if (itemMob != null) {
 							ItemStack stack = itemMob.capture(crab);
@@ -280,7 +280,7 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 	@Nullable
 	public EntityType<?> getEntity() {
 		ItemStack stack = this.getItem(0);
-		if (!stack.isEmpty() && stack.getItem() instanceof MobItem mob && mob.hasEntityData(stack)) {
+		if (!stack.isEmpty() && stack.getItem() instanceof MobItem<?> mob && !mob.getEntityData(stack).isEmpty()) {
 			return BuiltInRegistries.ENTITY_TYPE.get(mob.getCapturedEntityId(stack));
 		}
 		return null;

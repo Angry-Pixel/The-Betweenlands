@@ -82,7 +82,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 	}
 
 	public boolean shouldRenderAsEntity(FishTrimmingTableBlockEntity entity, int slot) {
-		if(entity.getItem(slot).is(ItemRegistry.ANADIA) && ((MobItem) entity.getItem(slot).getItem()).hasEntityData(entity.getItem(slot)))
+		if(entity.getItem(slot).is(ItemRegistry.ANADIA) && !((MobItem<?>) entity.getItem(slot).getItem()).getEntityData(entity.getItem(slot)).isEmpty())
 			return true;
 		return entity.getItem(slot).is(ItemRegistry.SILT_CRAB) || entity.getItem(slot).is(ItemRegistry.BUBBLER_CRAB);
 	}

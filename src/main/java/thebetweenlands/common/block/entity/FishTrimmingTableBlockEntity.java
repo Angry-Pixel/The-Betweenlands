@@ -82,7 +82,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 	@Nullable
 	public Entity getInputEntity(Level level) {
 		ItemStack stack = this.getItems().getFirst();
-		if(!stack.isEmpty() && stack.getItem() instanceof MobItem mob) {
+		if(!stack.isEmpty() && stack.getItem() instanceof MobItem<?> mob) {
 			return mob.createCapturedEntity(level, 0, 0, 0, stack, false);
 		}
 		return null;

@@ -35,7 +35,7 @@ public class ClientEvents {
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {
-		if (!event.isCanceled() && event.getItemStack().getItem() instanceof MobItem mob) {
+		if (!event.isCanceled() && event.getItemStack().getItem() instanceof MobItem<?> mob) {
 			Entity entity = mob.createCapturedEntity(event.getItemFrameEntity().level(), 0, 0, 0, event.getItemStack(), false);
 
 			event.getPoseStack().scale(-0.5F, 0.5F, 0.5F);

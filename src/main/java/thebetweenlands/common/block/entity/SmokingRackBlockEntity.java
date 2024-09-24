@@ -173,7 +173,7 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 	@Nullable
 	public Entity getRenderEntity(Level level, int slot) {
 		ItemStack stack = this.getItems().get(slot);
-		if(!stack.isEmpty() && stack.getItem() instanceof MobItem mob && mob.hasEntityData(stack)) {
+		if(!stack.isEmpty() && stack.getItem() instanceof MobItem<?> mob && !mob.getEntityData(stack).isEmpty()) {
 			return mob.createCapturedEntity(level, 0, 0, 0, stack, false);
 		}
 		return null;

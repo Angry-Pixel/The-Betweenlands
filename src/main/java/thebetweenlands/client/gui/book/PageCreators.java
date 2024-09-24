@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked") // used for widget list cloning
 public class PageCreators {
 
 	public static final Function<String, Component> ENTRY_DESCRIPTION = s -> Component.translatable("manual.thebetweenlands.herblore." + s + ".desc");

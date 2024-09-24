@@ -107,6 +107,7 @@ public class TextContainer {
 			return this.properties;
 		}
 
+		@SuppressWarnings("unchecked")
 		public <T> List<T> getProperties(Class<T> type) {
 			List<T> lst = new ArrayList<>();
 			for (Object obj : this.properties) {
@@ -240,6 +241,7 @@ public class TextContainer {
 			return this.textAreas;
 		}
 
+		@SuppressWarnings("unchecked")
 		public <T extends TextArea> List<T> getTextAreas(Class<T> type) {
 			List<T> lst = new ArrayList<>();
 			for (TextArea area : this.textAreas) {
@@ -425,6 +427,7 @@ public class TextContainer {
 			throw new RuntimeException("Unclosed tag in text: " + this.unparsedText);
 		}
 		final String strippedText = strippedTextBuilder.toString();
+		//noinspection unchecked
 		final List<ParsedTag>[] tagsArray = new ArrayList[strippedText.length() + 1];
 		for (ParsedTag tag : tagList) {
 			if (tagsArray[tag.index] == null) {

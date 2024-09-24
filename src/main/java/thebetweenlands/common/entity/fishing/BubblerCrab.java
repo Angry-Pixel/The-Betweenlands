@@ -20,7 +20,7 @@ public class BubblerCrab extends SiltCrab {
 	}
 
 	@Override
-	public MobItem getCrabPotItem() {
+	public MobItem<?> getCrabPotItem() {
 		return ItemRegistry.BUBBLER_CRAB.get();
 	}
 }

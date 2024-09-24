@@ -149,7 +149,7 @@ public class SiltCrab extends PathfinderMob implements BLEntity {
 	}
 
 	@Nullable
-	public MobItem getCrabPotItem() {
+	public MobItem<?> getCrabPotItem() {
 		return ItemRegistry.SILT_CRAB.get();
 	}
 }

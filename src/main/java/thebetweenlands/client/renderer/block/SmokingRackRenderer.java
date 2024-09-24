@@ -79,7 +79,7 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 	}
 
 	private boolean shouldRenderAsEntity(SmokingRackBlockEntity entity, int slot) {
-		return entity.getItem(slot).is(ItemRegistry.ANADIA) && ((MobItem) entity.getItem(slot).getItem()).hasEntityData(entity.getItem(slot));
+		return entity.getItem(slot).is(ItemRegistry.ANADIA) && !((MobItem<?>) entity.getItem(slot).getItem()).getEntityData(entity.getItem(slot)).isEmpty();
 	}
 
 	public void renderAnadiaInSlot(PoseStack stack, MultiBufferSource source, ItemStack item, @Nullable Entity renderEntity, Vec3 offset, int light) {

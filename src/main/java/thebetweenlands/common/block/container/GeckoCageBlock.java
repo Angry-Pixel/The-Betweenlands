@@ -61,9 +61,9 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
-	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		if (!level.isClientSide()) {
-			if (blockEntity instanceof GeckoCageBlockEntity cage) {
+			if (level.getBlockEntity(pos) instanceof GeckoCageBlockEntity cage) {
 				if (cage.hasGecko()) {
 					Gecko gecko = new Gecko(EntityRegistry.GECKO.get(), level);
 					gecko.setHealth(cage.getGeckoUsages());
@@ -78,6 +78,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 				}
 			}
 		}
+		return super.playerWillDestroy(level, pos, state, player);
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
 			if (!stack.isEmpty()) {
-				if (stack.getItem() instanceof MobItem mob) {
+				if (stack.getItem() instanceof MobItem<?> mob) {
 					if (!cage.hasGecko() && !level.isClientSide()) {
 						if (mob.getCapturedEntityId(stack) == EntityRegistry.GECKO.getId()) {
 							cage.addGecko(level, pos, state, Mth.floor(mob.getMobHealth(stack)), stack.getOrDefault(DataComponents.CUSTOM_NAME, Component.empty()).getString());
@@ -160,7 +161,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 						} else {
 							//no herblore book
 							if (!level.isClientSide())
-								player.displayClientMessage(Component.translatable("cblock.thebetweenlands.gecko_cage.no_book"), true);
+								player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.no_book"), true);
 							return ItemInteractionResult.SUCCESS;
 						}
 					} else {

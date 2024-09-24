@@ -1442,6 +1442,7 @@
   "item.thebetweenlands.mire_snail_egg": "Mire Snail Egg",
   "item.thebetweenlands.mire_snail_spawn_egg": "Mire Snail Spawn Egg",
   "item.thebetweenlands.mist_staff": "Staff of the Mist Walker",
+  "item.thebetweenlands.mob.health": "Health: %s/%s",
   "item.thebetweenlands.modifiers.armor": "When on armor:",
   "item.thebetweenlands.modifiers.tool": "When on tool:",
   "item.thebetweenlands.mortar_recipe": "Mortar",
