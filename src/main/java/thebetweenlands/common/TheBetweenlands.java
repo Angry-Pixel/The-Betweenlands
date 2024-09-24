@@ -26,7 +26,6 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.common.config.BetweenlandsConfigSetup;
 import thebetweenlands.common.event.CommonRegistrationEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
@@ -95,7 +94,7 @@ public class TheBetweenlands {
 		AspectCalculatorRegistry.CALCULATORS.register(eventbus);
 		CenserRecipeRegistry.RECIPES.register(eventbus);
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
-		
+
 		StorageRegistry.preInit();
 	}
 
