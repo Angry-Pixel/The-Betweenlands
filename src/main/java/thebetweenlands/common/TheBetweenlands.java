@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.Style;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.config.BetweenlandsConfigSetup;
 import thebetweenlands.common.event.CommonRegistrationEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
@@ -75,7 +77,7 @@ public class TheBetweenlands {
 		ElixirEffectRegistry.ELIXIRS.register(eventbus);
 		ElixirEffectRegistry.EFFECTS.register(eventbus);
 		AttachmentRegistry.ATTACHMENT_TYPES.register(eventbus);
-		AttachmentRegistry.SIMPLE_ATTACHMENT_TYPES.register(eventbus);
+		AttachmentRegistry.SYNCHED_ATTACHMENT_TYPES.register(eventbus);
 		ArmorMaterialRegistry.MATERIALS.register(eventbus);
 		BlockEntityRegistry.BLOCK_ENTITIES.register(eventbus);
 		DataComponentRegistry.COMPONENTS.register(eventbus);
@@ -93,7 +95,7 @@ public class TheBetweenlands {
 		AspectCalculatorRegistry.CALCULATORS.register(eventbus);
 		CenserRecipeRegistry.RECIPES.register(eventbus);
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
-
+		
 		StorageRegistry.preInit();
 	}
 

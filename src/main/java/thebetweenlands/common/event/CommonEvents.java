@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.component.SimpleAttachmentHandler;
+import thebetweenlands.common.component.SynchedAttachmentHandler;
 import thebetweenlands.common.handler.*;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
@@ -22,7 +22,7 @@ public class CommonEvents {
 		ShieldHandler.init();
 		SimulacrumHandler.init();
 
-		NeoForge.EVENT_BUS.addListener(SimpleAttachmentHandler::onPlayerJoinWorld);
+		NeoForge.EVENT_BUS.addListener(SynchedAttachmentHandler::onPlayerJoinWorld);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 	}
 

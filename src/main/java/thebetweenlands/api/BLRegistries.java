@@ -2,10 +2,13 @@ package thebetweenlands.api;
 
 import com.google.common.collect.BiMap;
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.RegistryBuilder;
+import thebetweenlands.api.aspect.registry.AspectCalculatorType;
+import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.block.SimulacrumEffect;
 import thebetweenlands.api.environment.EnvironmentEvent;
@@ -13,9 +16,7 @@ import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.component.SimpleAttachmentType;
-import thebetweenlands.api.aspect.registry.AspectItem;
-import thebetweenlands.api.aspect.registry.AspectCalculatorType;
+import thebetweenlands.common.component.SynchedAttachmentType;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
@@ -27,7 +28,7 @@ public class BLRegistries {
 	public static final Registry<EnvironmentEvent> ENVIRONMENT_EVENTS = new RegistryBuilder<>(Keys.ENVIRONMENT_EVENTS).sync(true).create();
 	public static final Registry<SimulacrumEffect> SIMULACRUM_EFFECTS = new RegistryBuilder<>(Keys.SIMULACRUM_EFFECTS).sync(true).create();
 	public static final Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>> WORLD_STORAGE = new RegistryBuilder<>(Keys.WORLD_STORAGE).sync(true).create();
-	public static final Registry<SimpleAttachmentType<?>> SIMPLE_ATTACHMENT_TYPES = new RegistryBuilder<>(Keys.SIMPLE_ATTACHMENT_TYPES).sync(true).create();
+	public static final Registry<SynchedAttachmentType<?>> SYNCHED_ATTACHMENT_TYPES = new RegistryBuilder<>(Keys.SYNCHED_ATTACHMENT_TYPES).sync(true).create();
 
 	public static final class Keys {
 
@@ -43,6 +44,6 @@ public class BLRegistries {
 		public static final ResourceKey<Registry<EnvironmentEvent>> ENVIRONMENT_EVENTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("environment_event"));
 		public static final ResourceKey<Registry<SimulacrumEffect>> SIMULACRUM_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("simulacrum_effect"));
 		public static final ResourceKey<Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>>> WORLD_STORAGE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("world_storage"));
-		public static final ResourceKey<Registry<SimpleAttachmentType<?>>> SIMPLE_ATTACHMENT_TYPES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("simple_attachment_types"));
+		public static final ResourceKey<Registry<SynchedAttachmentType<?>>> SYNCHED_ATTACHMENT_TYPES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("synched_attachment_types"));
 	}
 }
