@@ -55,7 +55,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			this.cellHeight = noise.getCellHeight();
 			NoiseSlider topSlide = new NoiseSlider(-10.0D, 3, 0);
 			NoiseSlider bottomSlide = new NoiseSlider(15.0D, 3, 0);
-			BlendedNoise blend = new BetweenlandsBlendedNoise(new WorldgenRandom(new LegacyRandomSource(0L)));
+			BlendedNoise blend = BlendedNoise.createUnseeded(1.0F, 1.0F, 80.0F, 160.0F, 0.0D); //todo
 			this.warper = new TerrainWarper(this.cellWidth, this.cellHeight, noise.height() / this.cellHeight, biomeSource, noise, topSlide, bottomSlide, blend, NoiseModifier.PASS);
 		} else {
 			this.defaultBlock = BlockRegistry.BETWEENSTONE.get().defaultBlockState();
