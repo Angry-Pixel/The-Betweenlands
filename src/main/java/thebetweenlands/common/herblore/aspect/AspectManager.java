@@ -26,6 +26,7 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.*;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.client.ClientAspectManager;
 import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -66,6 +67,8 @@ public class AspectManager {
 		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
 		if (storage != null) {
 			return storage.getAspectManager();
+		} else if (level.isClientSide()) {
+			return ClientAspectManager.INSTANCE;
 		}
 		return null;
 	}

@@ -2,8 +2,11 @@ package thebetweenlands.api.aspect.registry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
@@ -28,4 +31,12 @@ public record AspectType(int color, AspectTier tier, boolean rollAsCommonAspect,
 
 	public static final Codec<Holder<AspectType>> CODEC = RegistryFileCodec.create(BLRegistries.Keys.ASPECT_TYPES, DIRECT_CODEC);
 	public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AspectType>> STREAM_CODEC = ByteBufCodecs.holder(BLRegistries.Keys.ASPECT_TYPES, DIRECT_STREAM_CODEC);
+
+	public static MutableComponent getAspectName(Holder<AspectType> type) {
+		return Component.translatable(Util.makeDescriptionId("aspect", type.getKey().location()));
+	}
+
+	public static MutableComponent getAspectType(Holder<AspectType> type) {
+		return Component.translatable(Util.makeDescriptionId("aspect", type.getKey().location()) + ".type");
+	}
 }

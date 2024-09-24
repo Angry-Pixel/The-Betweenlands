@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.chat.Style;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -35,6 +36,7 @@ public class TheBetweenlands {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final ItemAbility SICKLE_HARVEST = ItemAbility.get("sickle_harvest");
+	public static final Style HERBLORE_FONT = Style.EMPTY.withFont(prefix("herblore"));
 
 	public static final GameRules.Key<GameRules.BooleanValue> FOOD_SICKNESS_GAMERULE = GameRules.register("blFoodSickness", GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));
 	public static final GameRules.Key<GameRules.BooleanValue> ROTTEN_FOOD_GAMERULE = GameRules.register("blRottenFood", GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));

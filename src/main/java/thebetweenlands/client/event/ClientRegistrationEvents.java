@@ -32,6 +32,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
+import thebetweenlands.client.gui.book.HerbloreEntryCategory;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.*;
@@ -72,6 +73,7 @@ import thebetweenlands.util.DrinkableBrew;
 public class ClientRegistrationEvents {
 
 	public static RiftVariantReloadListener riftVariantListener;
+	public static AspectIconTextureManager aspectIcons;
 
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientRegistrationEvents::clientSetup);
@@ -384,7 +386,7 @@ public class ClientRegistrationEvents {
 		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
 		event.registerReloadListener(new CircleGemTextureManager());
 		event.registerReloadListener(BLItemRenderer.INSTANCE.get());
-		event.registerReloadListener(new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
+		event.registerReloadListener(aspectIcons = new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {

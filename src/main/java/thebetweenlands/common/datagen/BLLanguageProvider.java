@@ -1415,67 +1415,68 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.GLUE, "Glue");
 		this.addItem(ItemRegistry.TEST_CHIMP, "Test Chimp");
 
-		this.addItem(ItemRegistry.GROUND_LEAF, "Ground Leaf");
-		this.addItem(ItemRegistry.GROUND_CATTAIL, "Ground Cattail");
-		this.addItem(ItemRegistry.GROUND_SWAMP_GRASS, "Ground Swamp Grass");
-		this.addItem(ItemRegistry.GROUND_SHOOTS, "Ground Shoots");
-		this.addItem(ItemRegistry.GROUND_ARROW_ARUM, "Ground Arrow Arum");
-		this.addItem(ItemRegistry.GROUND_BUTTON_BUSH, "Ground Button Bush");
-		this.addItem(ItemRegistry.GROUND_MARSH_HIBUSCUS, "Ground Marsh Hibiscus");
-		this.addItem(ItemRegistry.GROUND_PICKERELWEED, "Ground Pickerelweed");
-		this.addItem(ItemRegistry.GROUND_SOFT_RUSH, "Ground Soft Rush");
-		this.addItem(ItemRegistry.GROUND_MARSH_MALLOW, "Ground Marsh Mallow");
-		this.addItem(ItemRegistry.GROUND_MILKWEED, "Ground Milkweed");
-		this.addItem(ItemRegistry.GROUND_BLUE_IRIS, "Ground Blue Iris");
-		this.addItem(ItemRegistry.GROUND_COPPER_IRIS, "Ground Copper Iris");
-		this.addItem(ItemRegistry.GROUND_BLUE_EYED_GRASS, "Ground Blue Eyed Grass");
-		this.addItem(ItemRegistry.GROUND_BONESET, "Ground Boneset");
-		this.addItem(ItemRegistry.GROUND_BOTTLE_BRUSH_GRASS, "Ground Bottle Brush Grass");
-		this.addItem(ItemRegistry.GROUND_WEEDWOOD_BARK, "Ground Weedwood Bark");
-		this.addItem(ItemRegistry.GROUND_DRIED_SWAMP_REED, "Ground Dried Swamp Reed");
-		this.addItem(ItemRegistry.GROUND_ALGAE, "Ground Algae");
-		this.addItem(ItemRegistry.GROUND_ANGLER_TOOTH, "Ground Angler Tooth");
-		this.addItem(ItemRegistry.GROUND_BLACKHAT_MUSHROOM, "Ground Blackhat Mushroom");
-		this.addItem(ItemRegistry.GROUND_CRIMSON_SNAIL_SHELL, "Ground Crimson Snail Shell");
-		this.addItem(ItemRegistry.GROUND_BOG_BEAN, "Ground Bog Bean");
-		this.addItem(ItemRegistry.GROUND_BROOMSEDGE, "Ground Broomsedge");
-		this.addItem(ItemRegistry.GROUND_BULB_CAPPED_MUSHROOM, "Ground Bulb-Capped Mushroom");
-		this.addItem(ItemRegistry.GROUND_CARDINAL_FLOWER, "Ground Cardinal Flower");
-		this.addItem(ItemRegistry.GROUND_CAVE_GRASS, "Ground Cave Grass");
-		this.addItem(ItemRegistry.GROUND_CAVE_MOSS, "Ground Cave Moss");
-		this.addItem(ItemRegistry.GROUND_CRIMSON_MIDDLE_GEM, "Ground Crimson Middle Gem");
-		this.addItem(ItemRegistry.GROUND_DEEP_WATER_CORAL, "Ground Deep Water Coral");
-		this.addItem(ItemRegistry.GROUND_FLATHEAD_MUSHROOM, "Ground Flathead Mushroom");
-		this.addItem(ItemRegistry.GROUND_GOLDEN_CLUB, "Ground Golden Club");
-		this.addItem(ItemRegistry.GROUND_GREEN_MIDDLE_GEM, "Ground Green Middle Gem");
-		this.addItem(ItemRegistry.GROUND_HANGER, "Ground Hanger");
-		this.addItem(ItemRegistry.GROUND_LICHEN, "Ground Lichen");
-		this.addItem(ItemRegistry.GROUND_MARSH_MARIGOLD, "Ground Marsh Marigold");
-		this.addItem(ItemRegistry.GROUND_MIRE_CORAL, "Ground Mire Coral");
-		this.addItem(ItemRegistry.GROUND_OCHRE_SNAIL_SHELL, "Ground Ochre Snail Shell");
-		this.addItem(ItemRegistry.GROUND_MOSS, "Ground Moss");
-		this.addItem(ItemRegistry.GROUND_NETTLE, "Ground Nettle");
-		this.addItem(ItemRegistry.GROUND_PHRAGMITES, "Ground Phragmites");
-		this.addItem(ItemRegistry.GROUND_SLUDGECREEP, "Ground Sludgecreep");
-		this.addItem(ItemRegistry.GROUND_SUNDEW, "Ground Sundew");
-		this.addItem(ItemRegistry.GROUND_SWAMP_KELP, "Ground Swamp Kelp");
-		this.addItem(ItemRegistry.GROUND_ROOTS, "Ground Roots");
-		this.addItem(ItemRegistry.GROUND_AQUA_MIDDLE_GEM, "Ground Aqua Middle Gem");
-		this.addItem(ItemRegistry.GROUND_PITCHER_PLANT, "Ground Pitcher Plant");
-		this.addItem(ItemRegistry.GROUND_WATER_WEEDS, "Ground Water Weeds");
-		this.addItem(ItemRegistry.GROUND_VENUS_FLY_TRAP, "Ground Venus Fly Trap");
-		this.addItem(ItemRegistry.GROUND_VOLARPAD, "Ground Volarpad");
-		this.addItem(ItemRegistry.GROUND_THORNS, "Ground Thorns");
-		this.addItem(ItemRegistry.GROUND_POISON_IVY, "Ground Poison Ivy");
-		this.addItem(ItemRegistry.GROUND_BLADDERWORT_FLOWER, "Ground Bladderwort Flower");
-		this.addItem(ItemRegistry.GROUND_BLADDERWORT_STALK, "Ground Bladderwort Stalk");
-		this.addItem(ItemRegistry.GROUND_EDGE_SHROOM, "Ground Edge Shroom");
-		this.addItem(ItemRegistry.GROUND_EDGE_MOSS, "Ground Edge Moss");
-		this.addItem(ItemRegistry.GROUND_EDGE_LEAF, "Ground Edge Leaf");
-		this.addItem(ItemRegistry.GROUND_ROTBULB, "Ground Rotbulb");
-		this.addItem(ItemRegistry.GROUND_PALE_GRASS, "Ground Pale Grass");
-		this.addItem(ItemRegistry.GROUND_STRING_ROOTS, "Ground String Roots");
-		this.addItem(ItemRegistry.GROUND_CRYPTWEED, "Ground Cryptweed");
+		this.addAspectItem(ItemRegistry.GROUND_LEAF, "Ground Leaf", "Leaves are dropped by the small leafy Swamp Plants that grow in Swamplands biomes, as well as from the Fallen Leaves that gather under trees there.");
+		this.addAspectItem(ItemRegistry.GROUND_CATTAIL, "Ground Cattail", "Cattails are very common plants that grow in Swamplands, Patchy Islands, and Coarse Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_SWAMP_GRASS, "Ground Swamp Grass", "Swamp Grass is a common plant found in Swamplands, Patchy Islands, Coarse Islands, and Marsh biomes, and in Underground Oases.");
+		this.addAspectItem(ItemRegistry.GROUND_SHOOTS, "Ground Shoots", "Shoots are small young plants found growing in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_ARROW_ARUM, "Ground Arrow Arum", "Arrow Arum is a leafy plant that grows in the wet Marsh biomes of The Betweenlands.");
+		this.addAspectItem(ItemRegistry.GROUND_BUTTON_BUSH, "Ground Button Bush", "Button Bushes are small plants that grow in Marsh biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_MARSH_HIBUSCUS, "Ground Marsh Hibiscus", "The Marsh Hibiscus is a pretty looking flower that grows in the Marsh biome.");
+		this.addAspectItem(ItemRegistry.GROUND_PICKERELWEED, "Ground Pickerelweed", "Pickerelweed is a flower that can be found in Marsh biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_SOFT_RUSH, "Ground Soft Rush", "Soft Rush is a small plant that grows in the Marsh biome.");
+		this.addAspectItem(ItemRegistry.GROUND_MARSH_MALLOW, "Ground Marsh Mallow", "Marsh Mallows are small pink and white flowers that can be found in Marsh biomes. Quite contrary to their name, they don't taste particularly nice.");
+		this.addAspectItem(ItemRegistry.GROUND_MILKWEED, "Ground Milkweed", "Milkweed is a bright pink flower that grows in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_BLUE_IRIS, "Ground Blue Iris", "Blue Iris is one of the two iris plants found growing in the Coarse Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_COPPER_IRIS, "Ground Copper Iris", "Copper Iris is one of the two iris plants found growing in the Coarse Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_BLUE_EYED_GRASS, "Ground Blue Eyed Grass", "Blue Eyed Grass is a plant with tiny blue flowers that can be found in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_BONESET, "Ground Boneset", "Boneset is a flower that grows in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_BOTTLE_BRUSH_GRASS, "Ground Bottle Brush Grass", "Bottlebrush Grass is a small plant that grows in Marsh biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_WEEDWOOD_BARK, "Ground Weedwood Bark", "<scale:0.9>Weedwood Bark grows around the soft wood inside Weedwood Trees. It can also be derived from the Hollow Logs found scattered about Swamplands, Marsh, and Sludge Plains biomes.</scale>");
+		this.addAspectItem(ItemRegistry.GROUND_DRIED_SWAMP_REED, "Ground Dried Swamp Reed", "Swamp Reeds grow in the water in Patchy Islands and Coarse Islands biomes, and on land in Swamplands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_ALGAE, "Ground Algae", "Large patches of Algae can be found quite commonly in any biome on the surface of the water.");
+		this.addAspectItem(ItemRegistry.GROUND_ANGLER_TOOTH, "Ground Angler Tooth", "Angler Teeth are dropped by Anglers, which can be found lurking in the murky waters of The Betweenlands.");
+		this.addAspectItem(ItemRegistry.GROUND_BLACKHAT_MUSHROOM, "Ground Blackhat Mushroom", "Blackhat Mushrooms can be found scattered about everywhere in Swamplands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_CRIMSON_SNAIL_SHELL, "Ground Crimson Snail Shell", "Crimson Snail Shells are dropped by Blood Snails, which are found in Swamplands and Patchy Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_BOG_BEAN, "Ground Bog Bean", "Found in the Patchy Islands biome, Bog Bean grows on Mud in shallow water.");
+		this.addAspectItem(ItemRegistry.GROUND_BROOMSEDGE, "Ground Broomsedge", "Broomsedges are tall plants that can be found in Marsh biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_BULB_CAPPED_MUSHROOM, "Ground Bulb-Capped Mushroom", "<scale:0.8>Bulb-Capped Mushrooms are luminous bright blue mushrooms that can be found growing around Giant Bulb-Capped Mushrooms in Patchy Islands biomes, and in Underground Oases. They have been known to cause minor trips.</scale>");
+		this.addAspectItem(ItemRegistry.GROUND_CARDINAL_FLOWER, "Ground Cardinal Flower", "Cardinal Flowers are tall bright red plants that grow in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_CAVE_GRASS, "Ground Cave Grass", "Cave Grass grows deep underground in the Pitstone layer, away from the light.");
+		this.addAspectItem(ItemRegistry.GROUND_CAVE_MOSS, "Ground Cave Moss", "Cave Moss can be found growing down underground in caves.");
+		this.addAspectItem(ItemRegistry.GROUND_CRIMSON_MIDDLE_GEM, "Ground Crimson Middle Gem", "Crimson Middle Gems are one of three Middle Gem types that can be found stuck in Mud.");
+		this.addAspectItem(ItemRegistry.GROUND_DEEP_WATER_CORAL, "Ground Deep Water Coral", "Deep Water Coral is a blue luminous aquatic plant that grows in Mud in Deep Waters biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_FLATHEAD_MUSHROOM, "Ground Flathead Mushroom", "Flathead Mushrooms grow very commonly in the Swamplands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_GOLDEN_CLUB, "Ground Golden Club", "Golden Clubs are strange orange flowers that grow in water in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_GREEN_MIDDLE_GEM, "Ground Green Middle Gem", "Green Middle Gems are one of three Middle Gem types that can be found stuck in Mud.");
+		this.addAspectItem(ItemRegistry.GROUND_HANGER, "Ground Hanger", "Hangers are vine-like plants that grow off of Giant Weedwood and Hearthgrove Trees, Giant Roots, and down from caves.");
+		this.addAspectItem(ItemRegistry.GROUND_LICHEN, "Ground Lichen", "<scale:0.9>Lichen is a plant can be found growing on Cragrock Spires in the Deep Waters biome, and also sometimes underground or on stone based structures.</scale>");
+		this.addAspectItem(ItemRegistry.GROUND_MARSH_MARIGOLD, "Ground Marsh Marigold", "Marsh Marigolds are yellow flowers that grow in water in the Patchy Islands biome.");
+		this.addAspectItem(ItemRegistry.GROUND_MIRE_CORAL, "Ground Mire Coral", "Mire Coral is an orange luminous aquatic plant that grows in Mud in Deep Waters, Patchy Islands, and Coarse Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_OCHRE_SNAIL_SHELL, "Ground Ochre Snail Shell", "Ochre Snail Shells are dropped by Mire Snails, which are found in Swamplands and Patchy Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_MOSS, "Ground Moss", "Moss is a plant that grows and spreads around almost anywhere.");
+		this.addAspectItem(ItemRegistry.GROUND_NETTLE, "Ground Nettle", "Nettles can be found in Coarse Islands, Marsh and Swamplands biomes. They will sting you if you touch them, so be careful.");
+		this.addAspectItem(ItemRegistry.GROUND_PHRAGMITES, "Ground Phragmites", "Phragmites are tall plants that grow everywhere in Marsh biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_SLUDGECREEP, "Ground Sludgecreep", "Sludgecreep is a slime-feeding plant found in the Sludge Plains biome, including in the Sludgeon vaults.");
+		this.addAspectItem(ItemRegistry.GROUND_SUNDEW, "Ground Sundew", "Sundews are large plants that grow in Marsh biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_SWAMP_KELP, "Ground Swamp Kelp", "Swamp Kelp is an aquatic plant that grows commonly in Deep Waters and Coarse Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_ROOTS, "Ground Roots", "<scale:0.8>Roots grow in Coarse Islands and Sludge Plains biomes, in both regular and Giant forms. They can also be derived from Pyrads, nature spirits found around Giant Weedwood Trees.</scale>");
+		this.addAspectItem(ItemRegistry.GROUND_AQUA_MIDDLE_GEM, "Ground Aqua Middle Gem", "Aqua Middle Gems are one of three Middle Gem types that can be found stuck in Mud.");
+		this.addAspectItem(ItemRegistry.GROUND_PITCHER_PLANT, "Ground Pitcher Plant", "Pitchers are large plants that grow in Swamplands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_WATER_WEEDS, "Ground Water Weeds", "Water Weeds can be found growing in Mud at the bottom of the water in Deep Waters biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_VENUS_FLY_TRAP, "Ground Venus Fly Trap", "Venus Fly Traps are small plants that grow in Swamplands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_VOLARPAD, "Ground Volarpad", "Volarpads are very large plants that grow commonly in Coarse Islands biomes and sometimes in Swamplands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_THORNS, "Ground Thorns", "Thorns are dangerous hanging plants that grow deep down underground in caves.");
+		this.addAspectItem(ItemRegistry.GROUND_POISON_IVY, "Ground Poison Ivy", "Poison Ivy is a poisonous hanging plant that grows commonly on small Weedwood and Nibbletwig Trees.");
+		this.addAspectItem(ItemRegistry.GROUND_BLADDERWORT_FLOWER, "Ground Bladderwort Flower", "Bladderworts are tall underwater plants that grow in Deep Waters biomes and more rarely in Coarse Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_BLADDERWORT_STALK, "Ground Bladderwort Stalk", "The stalk of the Bladderwort plant that grows in Deep Waters and Coarse Islands biomes.");
+		this.addAspectItem(ItemRegistry.GROUND_EDGE_SHROOM, "Ground Edge Shroom", "Edge Shrooms are fungi that grow on edges in the Sludgeon vaults. They contain strange properties.");
+		this.addAspectItem(ItemRegistry.GROUND_EDGE_MOSS, "Ground Edge Moss", "Edge Moss is a plant that grows on edges in the Sludgeon vaults. It contains strange properties.");
+		this.addAspectItem(ItemRegistry.GROUND_EDGE_LEAF, "Ground Edge Leaf", "Edge Leaves are small plants that grow on edges in the Sludgeon vaults. They contain strange properties.");
+		this.addAspectItem(ItemRegistry.GROUND_ROTBULB, "Ground Rotbulb", "Rotbulbs are disgusting growths found in the Sludgeon vaults. They contain strange properties.");
+		this.addAspectItem(ItemRegistry.GROUND_PALE_GRASS, "Ground Pale Grass", "Pale Grass is a transparent, ghostly grass found in the Sludgeon vaults. It contains strange properties.");
+		this.addAspectItem(ItemRegistry.GROUND_STRING_ROOTS, "Ground String Roots", "String Roots hang from the ceiling of the Sludgeon vaults. They contain strange properties.");
+		this.addAspectItem(ItemRegistry.GROUND_CRYPTWEED, "Ground Cryptweed", "Cryptweed is a mysterious hanging plant that grows in the Sludgeon vaults. It contains strange properties.");
+		this.add("manual.thebetweenlands.herblore.thebetweenlands.sap_spit.desc", "Sap Spit is a tacky secretion produced by Spirit Trees. It seems to have regenerative properties.");
 		this.addItem(ItemRegistry.GROUND_BETWEENSTONE_PEBBLE, "Ground Betweenstone Pebble");
 		this.addItem(ItemRegistry.LEAF, "Leaf");
 		this.addItem(ItemRegistry.ALGAE_CLUMP, "Algae Clump");
@@ -1543,57 +1544,57 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.ORANGE_ELIXIR, "Orange Elixir Vial");
 		this.add("item.thebetweenlands.elixir.potency", "Potency: %s");
 		this.add("item.thebetweenlands.elixir.duration", "Duration: %s (%s)");
-		this.addElixir(ElixirEffectRegistry.EFFECT_STRENGTH, "Elixir of Strength", "Increases raw physical strength, causing one to deal more damage when they attack.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_NIMBLEFEET, "Nimblefeet Elixir", "Enhances muscle swiftness and nimbleness, increasing one's movement speed.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_HEALING, "Elixir of Healing", "Accelerates natural regeneration, healing one's wounds over time.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_RIPENING, "Elixir of Ripening", "Reverses the effects of the decaying aura of the Betweenlands, restoring one's physical and psychological health over time.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_TOUGHSKIN, "Toughskin Elixir", "Increases skin toughness, protecting one from harmful plants found throughout the Betweenlands.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_FEASTING, "Elixir of Feasting", "Gives the stomach something tough to feed on, satisfying one's hunger over time.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_HUNTERSSENSE, "Hunter's Sense Brew", "Enhances the senses, allowing one to see and smell the scent trails of creatures in order to track them down.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_MASKING, "Masking Brew", "Masks natural odors like a perfume, making it harder for one to be detected by predators.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_SWIFTARM, "Swiftarm Brew", "Enables arm muscles to work to their fullest, increasing one's arm swinging speed and thus allowing them to mine faster, pull back bows more rapidly, and strike foes more easily.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_CATSEYES, "Brew of the Cat's Eye", "Makes the eyes extremely sensitive to light, allowing one to see very well in the dark.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_SAGITTARIUS, "Draught of Sagittarius", "Contains the power of Sagittarius, allowing one to see exactly what path their arrow will take when fired from a bow.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_SPIDERBREED, "Spiderbreed Draught", "Changes the workings of the skin and muscle, allowing one to climb up and down any obstacle as if they were an insect.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT, "Lightweight Draught", "Causes a strange sensation of weightlessness, allowing one to walk slowly over water as if it were solid ground.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_UNCLOUDED, "Draught of the Unclouded", "Clears a foggy mind, allowing one to see through dense fog as if it evaporated in front of their eyes.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_STRENGTH, "Elixir of Strength", "Increases raw physical strength, causing one to deal more damage when they attack.", "<scale:0.8>The Elixir of Strength increases raw physical strength, causing one to deal more damage when they attack. <nl>A combination of Azuwynn and Ordaniis aspects is required to make this elixir. <nl>The more Azuwynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Weakness, which reduces one's damage output.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_NIMBLEFEET, "Nimblefeet Elixir", "Enhances muscle swiftness and nimbleness, increasing one's movement speed.", "<scale:0.85>The Nimblefeet Elixir enhances muscle swiftness and nimbleness, increasing one's movement speed. <nl>A combination of Azuwynn, Ordaniis, and Yunugaz aspects is required to make this elixir. <nl>The more Yunugaz is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Lumbering Elixir, which slows one's movement.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HEALING, "Elixir of Healing", "Accelerates natural regeneration, healing one's wounds over time.", "<scale:0.85>The Elixir of Healing accelerates natural regeneration, healing one's wounds over time. <nl>A combination of Yeowynn and Ordaniis aspects is required to make this elixir. <nl>The more Yeowynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Draining, which drains one's health over time.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_RIPENING, "Elixir of Ripening", "Reverses the effects of the decaying aura of the Betweenlands, restoring one's physical and psychological health over time.", "<scale:0.75>The Elixir of Ripening reverses the effects of the decaying aura of the Betweenlands, restoring one's physical and psychological health over time. <nl>A combination of Yeowynn, Ordaniis, and Dayuniis aspects is required to make this elixir. <nl>The more Dayuniis is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Decay, which accelerates one's vulnerability to the decaying aura’s effects.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_TOUGHSKIN, "Toughskin Elixir", "Increases skin toughness, protecting one from harmful plants found throughout the Betweenlands.", "<scale:0.8>The Toughskin Elixir increases skin toughness, protecting one from harmful plants found throughout the Betweenlands. <nl>A combination of Azuwynn, Yeowynn, and Celawynn aspects is required to make this elixir. <nl>The more Yeowynn is used, the stronger are the elixir’s effects. The more Celawynn is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Poisonsting Elixir, which poisons one instantly.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_FEASTING, "Elixir of Feasting", "Gives the stomach something tough to feed on, satisfying one's hunger over time.", "<scale:0.8>The Elixir of Feasting gives the stomach something tough to feed on, satisfying one's hunger over time. <nl>A combination of Yeowynn, Ordaniis, and Celawynn aspects is required to make this elixir. <nl>The more Celawynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Starvation, which causes one to go hungry more quickly.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HUNTERSSENSE, "Hunter's Sense Brew", "Enhances the senses, allowing one to see and smell the scent trails of creatures in order to track them down.", "<scale:0.8>The Hunter’s Sense Brew enhances the senses, allowing one to see and smell the scent trails of creatures in order to track them down. <nl>A combination of Freiwynn, Dayuniis, Ordaniis, and Firnalaz aspects is required to make this brew. <nl>The more Freiwynn is used, the stronger are the brew’s effects. The more Dayuniis is used, the longer the brew lasts. <nl>Adding Byariis will corrupt the nature of the brew, turning it into the Drunkard’s Brew, which causes one to experience heavy nausea.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_MASKING, "Masking Brew", "Masks natural odors like a perfume, making it harder for one to be detected by predators.", "<scale:0.8>The Masking Brew masks natural odors like a perfume, making it harder for one to be detected by predators. <nl>A combination of Dayuniis, Armaniis, and Byariis aspects is required to make this brew. <nl>The more Armaniis is used, the stronger are the brew’s effects. The more Dayuniis is used, the longer the brew lasts. <nl>Leaving out Byariis will reveal the true nature of the brew, turning it into the Stenching Brew, which makes it easier for one to be detected by predators.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SWIFTARM, "Swiftarm Brew", "Enables arm muscles to work to their fullest, increasing one's arm swinging speed and thus allowing them to mine faster, pull back bows more rapidly, and strike foes more easily.", "<scale:0.75>The Swiftarm Brew enables arm muscles to work to their fullest, increasing one's arm swinging speed and thus allowing them to mine faster, pull back bows more rapidly, and strike foes more easily. <nl>A combination of Azuwynn, Dayuniis, Yunugaz, and Ordaniis aspects is required to make this brew. <nl>The more Azuwynn is used, the stronger are the brew’s effects. The more Ordaniis is used, the longer the brew lasts. <nl>Adding Byariis will corrupt the nature of the brew, turning it into the Slugarm Brew, which decreases one's arm swinging speed.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_CATSEYES, "Brew of the Cat's Eye", "Makes the eyes extremely sensitive to light, allowing one to see very well in the dark.", "<scale:0.8>The Brew of the Cat's Eye makes the eyes extremely sensitive to light, allowing one to see very well in the dark. <nl>A combination of Freiwynn, Dayuniis, Ordaniis, and Geoliirgaz aspects is required to make this brew. <nl>The more Freiwynn is used, the stronger are the brew's effects. The more Dayuniis is used, the longer the brew lasts. <nl>Adding Byariis will corrupt the nature of the brew, turning it into the Blindman's Brew, which causes one to be blinded.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SAGITTARIUS, "Draught of Sagittarius", "Contains the power of Sagittarius, allowing one to see exactly what path their arrow will take when fired from a bow.", "<scale:0.75>The Draught of Sagittarius contains the power of Sagittarius, allowing one to see exactly what path their arrow will take when fired from a bow. <nl>A combination of Freiwynn, Dayuniis, Byariis, Ordaniis, and Armaniis aspects is required to make this draught. <nl>The more Freiwynn is used, the stronger are the draught's effects. The more Dayuniis is used, the longer the draught lasts. <nl>Leaving out Byariis will reveal the true nature of the draught, turning it into the Weakbow Draught, which reduces one's bow shooting range.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SPIDERBREED, "Spiderbreed Draught", "Changes the workings of the skin and muscle, allowing one to climb up and down any obstacle as if they were an insect.", "<scale:0.75>The Spiderbreed Draught changes the workings of the skin and muscle, allowing one to climb up and down any obstacle as if they were an insect. <nl>A combination of Azuwynn, Fergalaz, Dayuniis, Yihinren, and Yunugaz aspects is required to make this draught. <nl>The more Azuwynn is used, the stronger are the draught’s effects. The more Yihinren is used, the longer the draught lasts. <nl>Adding Byariis will corrupt the nature of the draught, turning it into the Basilisk Draught, which causes one to experience paralysis.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT, "Lightweight Draught", "Causes a strange sensation of weightlessness, allowing one to walk slowly over water as if it were solid ground.", "<scale:0.75>The Lightweight Draught causes a strange sensation of weightlessness, allowing one to walk slowly over water as if it were solid ground. <nl>A combination of Azuwynn, Byrginaz, Yunugaz, Yihinren, and Geoliirgaz aspects is required to make this draught. <nl>The more Yunugaz is used, the stronger are the draught’s effects. The more Yihinren is used, the longer the draught lasts. <nl>Adding Byariis will corrupt the nature of the draught, turning it into the Heavyweight Draught, which hinders one's swimming ability and causes them to sink in Mud no matter what they are wearing to counteract it.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_UNCLOUDED, "Draught of the Unclouded", "Clears a foggy mind, allowing one to see through dense fog as if it evaporated in front of their eyes.", "<scale:0.75>The Draught of the Unclouded clears a foggy mind, allowing one to see through dense fog as if it evaporated in front of their eyes. <nl>A combination of Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, and Yunugaz aspects is required to make this draught. <nl>The more Geoliirgaz is used, the stronger are the draught's effects. The more Dayuniis is used, the longer the draught lasts. <nl>Adding Byariis will corrupt the nature of the draught, turning it into the Draught of the Fogged Mind, which causes one to hallucinate a very dense fog around them.</scale>");
 		this.addElixir(ElixirEffectRegistry.EFFECT_GILLSGROWTH, "Shapeshifter's draught of Gillsgrowth");
 		this.addElixir(ElixirEffectRegistry.EFFECT_WINGS, "Shapeshifter's draught of Wings");
 		this.addElixir(ElixirEffectRegistry.EFFECT_HUNTERSSENSEMASTER, "Hunter's Sense Masterbrew");
-		this.addElixir(ElixirEffectRegistry.EFFECT_WEAKNESS, "Elixir of Weakness", "Weakens the muscles, reducing one's damage output when they attack.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_LUMBERING, "Lumbering Elixir", "Makes the muscles lethargic, reducing one's movement speed.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_DRAINING, "Elixir of Draining", "Drains one's health over time.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_DECAY, "Elixir of Decay", "Increases vulnerability to the decaying aura of the Betweenlands, causing one to experience a quicker decline in physical and psychological health.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_POISONSTING, "Poisonsting Elixir", "Contains the wrath of the sinister plants found in the Betweenlands, poisoning one instantly.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_STARVATION, "Elixir of Starvation", "Makes the stomach digest food faster and less efficiently, causing one to go hungry more quickly.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_DRUNKARD, "Drunkard's Brew", "Causes one to experience a heavy bout of nausea.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_STENCHING, "Stenching Brew", "Causes the emission of a very potent odor that is desired by monsters, making it easier for one to be detected by predators.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_SLUGARM, "Slugarm Brew", "Makes the arms feel numb, decreasing one's arm swinging speed and thus causing them to mine slower and strike foes less easily.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_BLINDMAN, "Blindman's Brew", "Severely limits the function of the eye, causing one to only be able to see a small distance in front of them and be unable to sprint.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_WEAKBOW, "Weakbow Draught", "Reduces archery skill, greatly limiting one's bow shooting range.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_BASILISK, "Basilisk Draught", "Petrifies the motor cortex of the brain, causing one to be frozen in place.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_HEAVYWEIGHT, "Heavyweight Draught", "Gives a strange sense of heaviness, causing one to find swimming more difficult and causing them to sink in Mud despite whatever they may be wearing to protect them from it.");
-		this.addElixir(ElixirEffectRegistry.EFFECT_FOGGEDMIND, "Draught of the Fogged Mind", "Clouds the mind with worrisome thoughts, causing one to see the illusion of a thick fog surrounding them.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_WEAKNESS, "Elixir of Weakness", "Weakens the muscles, reducing one's damage output when they attack.", "<scale:0.8>The Elixir of Weakness weakens the muscles, reducing one's damage output when they attack. <nl>A combination of Azuwynn, Ordaniis, and Byariis aspects is required to make this elixir. <nl>The more Azuwynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Leaving out Byariis will reveal the true nature of the elixir, turning it into the Elixir of Strength, which increases one's damage output.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_LUMBERING, "Lumbering Elixir", "Makes the muscles lethargic, reducing one's movement speed.", "<scale:0.85>The Lumbering Elixir makes the muscles lethargic, reducing one's movement speed. <nl>A combination of Azuwynn, Ordaniis, Yunugaz, and Byariis aspects is required to make this elixir. <nl>The more Yunugaz is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Leaving out Byariis will reveal the true nature of the elixir, turning it into the Nimblefeet Elixir, which speeds one's movement.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DRAINING, "Elixir of Draining", "Drains one's health over time.", "<scale:0.85>The Elixir of Draining eats away at the body, draining one's health over time. <nl>A combination of Yeowynn, Ordaniis, and Byariis aspects is required to make this elixir. <nl>The more Yeowynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Leaving out Byariis will reveal the true nature of the elixir, turning it into the Elixir of Healing, which restores one's health over time.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DECAY, "Elixir of Decay", "Increases vulnerability to the decaying aura of the Betweenlands, causing one to experience a quicker decline in physical and psychological health.", "<scale:0.75>The Elixir of Decay increases vulnerability to the decaying aura of the Betweenlands, causing one to experience a quicker decline in physical and psychological health. <nl>A combination of Yeowynn, Ordaniis, Dayuniis, and Byariis aspects is required to make this elixir. <nl>The more Dayuniis is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Leaving out Byariis will reveal the true nature of the elixir, turning it into the Elixir of Ripening, which reverses one's responses to the decaying aura.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_POISONSTING, "Poisonsting Elixir", "Contains the wrath of the sinister plants found in the Betweenlands, poisoning one instantly.", "<scale:0.8>The Poisonsting Elixir contains the wrath of the sinister plants found in the Betweenlands, poisoning one instantly. <nl>A combination of Azuwynn, Yeowynn, Celawynn, and Byariis aspects is required to make this elixir. <nl>The more Yeowynn is used, the stronger are the elixir’s effects. The more Celawynn is used, the longer the elixir lasts. <nl>Leaving out Byariis will reveal the true nature of the elixir, turning it into the Toughskin Elixir, which protects one from harmful plants.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_STARVATION, "Elixir of Starvation", "Makes the stomach digest food faster and less efficiently, causing one to go hungry more quickly.", "<scale:0.8>The Elixir of Starvation makes the stomach digest food faster and less efficiently, causing one to go hungry more quickly. <nl>A combination of Yeowynn, Ordaniis, Celawynn, and Byariis aspects is required to make this elixir. <nl>The more Celawynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Leaving out Byariis will reveal the true nature of the elixir, turning it into the Elixir of Feasting, which fills one's stomach.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DRUNKARD, "Drunkard's Brew", "Causes one to experience a heavy bout of nausea.", "<scale:0.75>The Drunkard’s Brew is highly intoxicating, causing one to experience a heavy bout of nausea. <nl>A combination of Freiwynn, Dayuniis, Ordaniis, Firnalaz, and Byariis aspects is required to make this brew. <nl>The more Freiwynn is used, the stronger are the brew’s effects. The more Dayuniis is used, the longer the brew lasts. <nl>Leaving out Byariis will reveal the true nature of the brew, turning it into the Hunter’s Sense Brew, which allows one to detect the scent trails of creatures.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_STENCHING, "Stenching Brew", "Causes the emission of a very potent odor that is desired by monsters, making it easier for one to be detected by predators.", "<scale:0.8>The Stenching Brew has a very potent odor that is desired by monsters, making it easier for one to be detected by predators. <nl>A combination of Dayuniis and Armaniis aspects is required to make this brew. <nl>The more Armaniis is used, the stronger are the brew’s effects. The more Dayuniis is used, the longer the brew lasts. <nl>Adding Byariis will corrupt the nature of the brew, turning it into the Masking Brew, which makes it harder for one to be detected by predators.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SLUGARM, "Slugarm Brew", "Makes the arms feel numb, decreasing one's arm swinging speed and thus causing them to mine slower and strike foes less easily.", "<scale:0.75>The Slugarm Brew makes the arms feel numb, decreasing one's arm swinging speed and thus causing them to mine slower and strike foes less easily. <nl>A combination of Azuwynn, Dayuniis, Yunugaz, Ordaniis, and Byariis aspects is required to make this brew. <nl>The more Azuwynn is used, the stronger are the brew’s effects. The more Ordaniis is used, the longer the brew lasts. <nl>Leaving out Byariis will reveal the true nature of the brew, turning it into the Swiftarm Brew, which increases one's arm swinging speed.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_BLINDMAN, "Blindman's Brew", "Severely limits the function of the eye, causing one to only be able to see a small distance in front of them and be unable to sprint.", "<scale:0.75>The Blindman’s Brew severely limits the functions of the eye, causing one to only be able to see a small distance in front of them and be unable to sprint. <nl>A combination of Freiwynn, Dayuniis, Ordaniis, Geoliirgaz, and Byariis aspects is required to make this brew. <nl>The more Freiwynn is used, the stronger are the brew's effects. The more Dayuniis is used, the longer the brew lasts. <nl>Leaving out Byariis will reveal the true nature of the brew, turning it into the Brew of the Cat’s Eye, which allows one to see better in the dark.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_WEAKBOW, "Weakbow Draught", "Reduces archery skill, greatly limiting one's bow shooting range.", "<scale:0.8>The Weakbow Draught reduces archery skill, greatly limiting one's bow shooting range. <nl>A combination of Freiwynn, Dayuniis, Ordaniis, and Armaniis aspects is required to make this draught. <nl>The more Freiwynn is used, the stronger are the draught's effects. The more Dayuniis is used, the longer the draught lasts. <nl>Adding Byariis will corrupt the nature of the draught, turning it into the Draught of Sagittarius, which allows one to see the path of an arrow fired from a bow.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_BASILISK, "Basilisk Draught", "Petrifies the motor cortex of the brain, causing one to be frozen in place.", "<scale:0.75>The Basilisk Draught petrifies the motor cortex of the brain, causing one to be frozen in place. <nl>A combination of Azuwynn, Fergalaz, Dayuniis, Yihinren, Yunugaz, and Byariis aspects is required to make this draught. <nl>The more Azuwynn is used, the stronger are the draught’s effects. The more Yihinren is used, the longer the draught lasts. <nl>Leaving out Byariis will reveal the true nature of the draught, turning it into the Spiderbreed Draught, which allows one to climb on obstacles.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HEAVYWEIGHT, "Heavyweight Draught", "Gives a strange sense of heaviness, causing one to find swimming more difficult and causing them to sink in Mud despite whatever they may be wearing to protect them from it.", "<scale:0.75>The Heavyweight Draught gives a strange sense of heaviness, causing one to find swimming more difficult and causing them to sink in Mud despite whatever they may be wearing to protect them from it. <nl>A combination of Azuwynn, Byrginaz, Yunugaz, Yihinren, Geoliirgaz, and Byariis aspects is required to make this draught. <nl>The more Yunugaz is used, the stronger are the draught’s effects. The more Yihinren is used, the longer the draught lasts. <nl>Leaving out Byariis will reveal the true nature of the draught, turning it into the Lightweight Draught, which allows one to walk over water.</scale>");
+		this.addElixir(ElixirEffectRegistry.EFFECT_FOGGEDMIND, "Draught of the Fogged Mind", "Clouds the mind with worrisome thoughts, causing one to see the illusion of a thick fog surrounding them.", "<scale:0.75>The Draught of the Fogged Mind clouds the mind with worrisome thoughts, causing one to see the illusion of a thick fog surrounding them. <nl>A combination of Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, Yunugaz, and Byariis aspects is required to make this draught. <nl>The more Geoliirgaz is used, the stronger are the draught's effects. The more Dayuniis is used, the longer the draught lasts. <nl>Leaving out Byariis will reveal the true nature of the draught, turning it into the Draught of the Unclouded, which causes any fog to be cleared from one's vision.</scale>");
 		this.addElixir(ElixirEffectRegistry.EFFECT_DEFORMED, "Shapeshifter's draught of the Deformed");
 		this.addElixir(ElixirEffectRegistry.EFFECT_LIMBLESS, "Shapeshifter's draught of the Limbless");
 		this.addElixir(ElixirEffectRegistry.EFFECT_ISOLATEDSENSES, "Masterbrew of Isolated Senses");
 
-		this.addAspect(AspectTypeRegistry.ARMANIIS, "Desire", "Has effect on the desires of a mob or the player. Could be useful for food, but also things like trading or corrupting the desire.");
-		this.addAspect(AspectTypeRegistry.AZUWYNN, "Muscle", "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.");
-		this.addAspect(AspectTypeRegistry.BYARIIS, "Corruption", "This effect can corrupt other effects, but even corrupt effects. So it could turn negative into positive, and positive into negative. so for example, if this effect gets combined with health it will do something negative to your health, but if this effect gets combined twice with health, it will corrupt itself and thus do something positive.");
-		this.addAspect(AspectTypeRegistry.BYRGINAZ, "Water", "Magical property which relates to water. Any combination with this effect can be related to water.");
-		this.addAspect(AspectTypeRegistry.CELAWYNN, "Stomach", "Has effect on the stomach. So this could have effect on the hunger bar for example.");
-		this.addAspect(AspectTypeRegistry.DAYUNIIS, "Mind", "Has effect on the player's mind and on how senses work. Could be positive, or negative (think nausea/schizophrenia).");
-		this.addAspect(AspectTypeRegistry.FERGALAZ, "Earth", "Magical property which relates to earth. Any combination with this effect can be related to the element earth.");
-		this.addAspect(AspectTypeRegistry.FIRNALAZ, "Fire", "Magical property which relates to fire. Any combination with this effect can be related to fire.");
-		this.addAspect(AspectTypeRegistry.FREIWYNN, "Vision", "Alters the player's vision. (In combination with other properties. So for example when you combine health with vision, you would be able to spot mobs their health.)");
-		this.addAspect(AspectTypeRegistry.GEOLIIRGAZ, "Void", "Magical property which relates to the void or ether. Any combination with this effect can be related to void or darkness.");
-		this.addAspect(AspectTypeRegistry.ORDANIIS, "Enchance", "Needs new description");
-		this.addAspect(AspectTypeRegistry.UDURIIS, "Chaos", "The aspect that correlates to the natural orderless state of the universe.");
-		this.addAspect(AspectTypeRegistry.WODREN, "Soul", "The aspect that affects the spiritual state and life force of a being.");
-		this.addAspect(AspectTypeRegistry.YEOWYNN, "Health", "Has effect on the health bar, could be both negative or positive, depending on the combination.");
-		this.addAspect(AspectTypeRegistry.YIHINREN, "Form", "This effect has influence on the form of things, both physical and psychological. A very rare aspect that is mainly used in the special potions.");
-		this.addAspect(AspectTypeRegistry.YUNUGAZ, "Wind", "Magical property which relates to wind. Any combination with this effect can be related to the element wind.");
+		this.addAspect(AspectTypeRegistry.ARMANIIS, "Desire", "The aspect that influences the desire of a being or a thought.<nl>Tier II aspect.");
+		this.addAspect(AspectTypeRegistry.AZUWYNN, "Muscle", "The aspect that has effect on the muscles.<nl>Tier I aspect.");
+		this.addAspect(AspectTypeRegistry.BYARIIS, "Corruption", "The aspect that changes the nature of anything to its opposite.<nl>Tier I special aspect.");
+		this.addAspect(AspectTypeRegistry.BYRGINAZ, "Water", "The aspect that correlates to the element of water.<nl>Tier II aspect.");
+		this.addAspect(AspectTypeRegistry.CELAWYNN, "Stomach", "The aspect that influences the digestive organs and immune system.<nl>Tier I aspect.");
+		this.addAspect(AspectTypeRegistry.DAYUNIIS, "Mind", "The aspect that has effect on the mind and the border between reality and imagination.<nl>Tier II aspect.");
+		this.addAspect(AspectTypeRegistry.FERGALAZ, "Earth", "The aspect that correlates to the element of earth.<nl>Tier II aspect.");
+		this.addAspect(AspectTypeRegistry.FIRNALAZ, "Fire", "The aspect that correlates to the element of fire.<nl>Tier II aspect.");
+		this.addAspect(AspectTypeRegistry.FREIWYNN, "Vision", "The aspect that has effect on the perception of light.<nl>Tier II aspect.");
+		this.addAspect(AspectTypeRegistry.GEOLIIRGAZ, "Void", "The aspect that correlates to the formless element of void or ether.<nl>Tier III aspect.");
+		this.addAspect(AspectTypeRegistry.ORDANIIS, "Enchance", "The aspect that activates other aspects or enhances power in any form.<nl>Tier I aspect.");
+		this.addAspect(AspectTypeRegistry.UDURIIS, "Chaos", "The aspect that correlates to the natural orderless state of the universe.<nl>Tier III aspect.");
+		this.addAspect(AspectTypeRegistry.WODREN, "Soul", "The aspect that affects the spiritual state and life force of a being.<nl>Tier III aspect.");
+		this.addAspect(AspectTypeRegistry.YEOWYNN, "Health", "The aspect that influences physical health and recovery.<nl>Tier I aspect.");
+		this.addAspect(AspectTypeRegistry.YIHINREN, "Form", "The aspect that affects both physical and psychological form.<nl>Tier III aspect.");
+		this.addAspect(AspectTypeRegistry.YUNUGAZ, "Wind", "The aspect that correlates to the element of wind.<nl>Tier II aspect.");
 
 		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.NONE, "None");
 		this.addAmphibiousUpgrade(AmphibiousArmorUpgradeRegistry.ASCENT_BOOST, "Ascent");
@@ -1615,6 +1616,14 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		SUBTITLE_GENERATOR.forEach(this::add);
 		this.add("subtitles.thebetweenlands.entity.greebling_music", "Greebling musician plays");
+
+		this.add("manual.thebetweenlands.herblore.found_in", "This aspect is found in:");
+		this.add("manual.thebetweenlands.herblore.used_in", "This aspect is used in:");
+		this.add("manual.thebetweenlands.herblore.has_aspects", "This item has the following aspects:");
+		this.add("manual.thebetweenlands.herblore.open_entry", "Open guide book entry");
+
+		this.add("manual.thebetweenlands.herblore.aspect_info.title", "Aspect Info");
+		this.add("manual.thebetweenlands.herblore.ingredient_info.title", "Ingredient Info");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {
@@ -1636,7 +1645,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		String base = Util.makeDescriptionId("aspect", aspect.location());
 		this.add(base, StringUtils.capitalize(aspect.location().getPath()));
 		this.add(base + ".type", manualType);
-		this.add(base + ".desc", desc);
+		this.add("manual.thebetweenlands.herblore." + aspect.location().toString().replace(':', '.') + ".desc", desc);
+	}
+
+	private void addAspectItem(DeferredItem<Item> aspect, String name, String desc) {
+		this.addItem(aspect, name);
+		this.add("manual.thebetweenlands.herblore." + aspect.getKey().location().toString().replace(':', '.') + ".desc", desc);
 	}
 
 	private void addElixir(Holder<ElixirEffect> elixir, String name) {
@@ -1644,11 +1658,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("effect.thebetweenlands." + elixir.getKey().location().getPath(), name);
 	}
 
-	private void addElixir(Holder<ElixirEffect> elixir, String name, String desc) {
+	private void addElixir(Holder<ElixirEffect> elixir, String name, String desc, String manualEntry) {
 		String base = "item.thebetweenlands.elixir." + elixir.getKey().location().getPath();
 		this.add(base, name);
 		this.add("effect.thebetweenlands." + elixir.getKey().location().getPath(), name);
 		this.add(base + "_effect", desc);
+		this.add("manual.thebetweenlands.herblore." + elixir.getKey().location().toString().replace(':', '.') + ".desc", manualEntry);
 	}
 
 	public void addAdvancement(String key, String title, String desc) {

@@ -18,25 +18,28 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
-public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceKey<AspectType>>> discoveredAspects) {
+public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceKey<AspectType>>> discoveredAspects, Optional<CurrentPage> page) {
 
-	public static final DiscoveryContainerData EMPTY = new DiscoveryContainerData(Map.of());
+	public static final DiscoveryContainerData EMPTY = new DiscoveryContainerData(Map.of(), Optional.empty());
 
 	public static final Codec<DiscoveryContainerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Codec.unboundedMap(ResourceKey.codec(BLRegistries.Keys.ASPECT_ITEMS), ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).listOf()).fieldOf("discovered_aspects").forGetter(DiscoveryContainerData::discoveredAspects)
+		Codec.unboundedMap(ResourceKey.codec(BLRegistries.Keys.ASPECT_ITEMS), ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).listOf()).fieldOf("discovered_aspects").forGetter(DiscoveryContainerData::discoveredAspects),
+		CurrentPage.CODEC.optionalFieldOf("current_page").forGetter(DiscoveryContainerData::page)
 	).apply(instance, DiscoveryContainerData::new));
 
 	public static final StreamCodec<RegistryFriendlyByteBuf, DiscoveryContainerData> STREAM_CODEC = StreamCodec.composite(
 		ByteBufCodecs.map(HashMap::new, ResourceKey.streamCodec(BLRegistries.Keys.ASPECT_ITEMS), ResourceKey.streamCodec(BLRegistries.Keys.ASPECT_TYPES).apply(ByteBufCodecs.list())),
 		DiscoveryContainerData::discoveredAspects,
+		CurrentPage.STREAM_CODEC.apply(ByteBufCodecs::optional), DiscoveryContainerData::page,
 		DiscoveryContainerData::new
 	);
+
+	public DiscoveryContainerData setCurrentPage(String category, int number) {
+		return new DiscoveryContainerData(this.discoveredAspects(), Optional.of(new CurrentPage(category, number)));
+	}
 
 	private int getDiscoveryCount(ResourceKey<AspectItem> item) {
 		return !this.discoveredAspects.containsKey(item) ? 0 : this.discoveredAspects.get(item).size();
@@ -70,18 +73,24 @@ public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceK
 	}
 
 	public DiscoveryContainerData discoverAll(AspectManager manager) {
-		DiscoveryContainerData data = this;
+		var mapCopy = new HashMap<>(this.discoveredAspects);
 		for (Map.Entry<ResourceKey<AspectItem>, List<Aspect>> e : manager.getMatchedAspects().entrySet()) {
-			for (Aspect a : e.getValue())
-				data = this.addDiscovery(e.getKey(), a.type());
+			if (!mapCopy.containsKey(e.getKey())) {
+				List<ResourceKey<AspectType>> discoveredAspects = mapCopy.computeIfAbsent(e.getKey(), k -> new ArrayList<>());
+				for (Aspect aspect : e.getValue()) {
+					if (!discoveredAspects.contains(aspect.type().getKey())) {
+						discoveredAspects.add(aspect.type().getKey());
+					}
+				}
+			}
 		}
-		return data;
+		return new DiscoveryContainerData(mapCopy, this.page());
 	}
 
 	public DiscoveryContainerData resetDiscovery(@Nullable ResourceKey<AspectItem> item) {
 		var mapCopy = new HashMap<>(this.discoveredAspects);
 		mapCopy.remove(item);
-		return new DiscoveryContainerData(mapCopy);
+		return new DiscoveryContainerData(mapCopy, this.page());
 	}
 
 	public DiscoveryContainerData resetAllDiscoveries() {
@@ -93,7 +102,7 @@ public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceK
 		List<ResourceKey<AspectType>> discoveredAspects = mapCopy.computeIfAbsent(item, k -> new ArrayList<>());
 		if (!discoveredAspects.contains(discovered.getKey()))
 			discoveredAspects.add(discovered.getKey());
-		return new DiscoveryContainerData(mapCopy);
+		return new DiscoveryContainerData(mapCopy, this.page());
 	}
 
 	@Nullable
@@ -124,17 +133,19 @@ public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceK
 				}
 			}
 		}
-		return new DiscoveryContainerData(mapCopy);
+		return new DiscoveryContainerData(mapCopy, this.page());
 	}
 
 	public List<Aspect> getDiscoveredStaticAspects(AspectManager manager, @Nullable ResourceKey<AspectItem> item) {
 		List<Aspect> discoveredStaticAspects = new ArrayList<>();
-		if (this.discoveredAspects.containsKey(item)) {
-			List<ResourceKey<AspectType>> discoveredAspects = this.discoveredAspects.get(item);
-			List<Aspect> staticAspects = manager.getStaticAspects(item);
-			for (Aspect a : staticAspects) {
-				if (discoveredAspects.contains(a.type().getKey()))
-					discoveredStaticAspects.add(a);
+		if (!this.discoveredAspects.isEmpty()) {
+			if (this.discoveredAspects.containsKey(item)) {
+				List<ResourceKey<AspectType>> discoveredAspects = this.discoveredAspects.get(item);
+				List<Aspect> staticAspects = manager.getStaticAspects(item);
+				for (Aspect a : staticAspects) {
+					if (discoveredAspects.contains(a.type().getKey()))
+						discoveredStaticAspects.add(a);
+				}
 			}
 		}
 		return discoveredStaticAspects;
@@ -185,6 +196,15 @@ public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceK
 		stack.set(DataComponentRegistry.DISCOVERY_DATA, action.apply(data));
 	}
 
+	public int getPageNumber() {
+		return this.page.map(CurrentPage::number).orElse(-1);
+	}
+
+	@Nullable
+	public String getCategory() {
+		return this.page.map(CurrentPage::category).orElse(null);
+	}
+
 	public static class AspectDiscovery {
 		public final AspectDiscovery.DiscoveryResult result;
 		public final boolean successful;
@@ -200,5 +220,18 @@ public record DiscoveryContainerData(Map<ResourceKey<AspectItem>, List<ResourceK
 		public enum DiscoveryResult {
 			NONE, NEW, LAST, END
 		}
+	}
+
+	public record CurrentPage(String category, int number) {
+		public static final Codec<CurrentPage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.STRING.fieldOf("category").forGetter(CurrentPage::category),
+			Codec.INT.fieldOf("number").forGetter(CurrentPage::number)
+		).apply(instance, CurrentPage::new));
+
+		public static final StreamCodec<RegistryFriendlyByteBuf, CurrentPage> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.STRING_UTF8, CurrentPage::category,
+			ByteBufCodecs.INT, CurrentPage::number,
+			CurrentPage::new
+		);
 	}
 }

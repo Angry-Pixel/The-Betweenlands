@@ -44,7 +44,7 @@ public record RandomAspectCalculator(float amountMultiplier, float amountVariati
 		for (Holder<AspectType> type : availableAspects) {
 			if (!this.setAspectList().isEmpty() && this.setAspectList().contains(type.getKey())) {
 				possibleAspects.add(type);
-			} else if (type.value().rollAsCommonAspect() && type.value().tier() == this.tier()) {
+			} else if (this.setAspectList().isEmpty() && type.value().rollAsCommonAspect() && type.value().tier() == this.tier()) {
 				possibleAspects.add(type);
 			}
 		}

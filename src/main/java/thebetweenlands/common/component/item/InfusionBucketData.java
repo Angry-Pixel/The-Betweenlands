@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
@@ -64,7 +65,7 @@ public record InfusionBucketData(List<ItemStack> ingredients, int infusionTime) 
 				if (!ingredientAspects.isEmpty()) {
 					if (flag.hasShiftDown()) {
 						for (Aspect aspect : ingredientAspects) {
-							tooltip.add(Component.translatable("item.thebetweenlands.infusion_bucket.aspect", Component.translatable(Util.makeDescriptionId("aspect", aspect.type().getKey().location())), Aspect.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount() * count)).withStyle(ChatFormatting.GRAY));
+							tooltip.add(Component.translatable("item.thebetweenlands.infusion_bucket.aspect", AspectType.getAspectName(aspect.type()), Aspect.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount() * count)).withStyle(ChatFormatting.GRAY));
 						}
 					}
 				}

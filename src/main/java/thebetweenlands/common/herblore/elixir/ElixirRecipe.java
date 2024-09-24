@@ -11,6 +11,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectTypeRegistry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -55,7 +56,7 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 	@Nullable
 	public static Holder<ElixirRecipe> getRecipeFor(Holder<ElixirEffect> effect, HolderLookup.Provider provider) {
 		for (Holder<ElixirRecipe> recipe : provider.lookupOrThrow(BLRegistries.Keys.ELIXIR_RECIPES).listElements().toList()) {
-			if (effect.value() == recipe.value().negativeElixir() || effect.value() == recipe.value().positiveElixir()) {
+			if (effect == recipe.value().negativeElixir() || effect == recipe.value().positiveElixir()) {
 				return recipe;
 			}
 		}
@@ -94,6 +95,17 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 			}
 		}
 		return null;
+	}
+
+	public static List<Holder<ElixirRecipe>> getFromAspect(Holder<AspectType> aspectType, HolderLookup.Provider provider) {
+		List<Holder<ElixirRecipe>> recipes = new ArrayList<>();
+		for (Holder<ElixirRecipe> recipe : provider.lookupOrThrow(BLRegistries.Keys.ELIXIR_RECIPES).listElements().toList()) {
+			for (ResourceKey<AspectType> recipeAspect : recipe.value().aspects()) {
+				if (aspectType.is(recipeAspect))
+					recipes.add(recipe);
+			}
+		}
+		return recipes;
 	}
 
 	public float[] getRGBA(int color) {

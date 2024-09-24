@@ -3,6 +3,7 @@ package thebetweenlands.common.item.recipe;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +27,11 @@ public record MortarGrindRecipe(Ingredient input, ItemStack result) implements M
 	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return this.result();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, this.input());
 	}
 
 	@Override

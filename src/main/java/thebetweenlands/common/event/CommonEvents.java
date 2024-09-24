@@ -1,8 +1,14 @@
 package thebetweenlands.common.event;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.component.SimpleAttachmentHandler;
 import thebetweenlands.common.handler.*;
+import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
 
 public class CommonEvents {
 
@@ -17,5 +23,14 @@ public class CommonEvents {
 		SimulacrumHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(SimpleAttachmentHandler::onPlayerJoinWorld);
+		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
+	}
+
+	static void syncAspects(EntityJoinLevelEvent event) {
+		if (event.getEntity() instanceof ServerPlayer sp) {
+			CompoundTag tag = new CompoundTag();
+			AspectManager.get(event.getLevel()).saveStaticAspects(tag, event.getLevel().registryAccess());
+			PacketDistributor.sendToPlayer(sp, new SyncStaticAspectsPacket(tag));
+		}
 	}
 }

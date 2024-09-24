@@ -36,6 +36,10 @@ public class BetweenlandsClient {
 		return ClientRegistrationEvents.riftVariantListener;
 	}
 
+	public static AspectIconTextureManager getAspectIconManager() {
+		return ClientRegistrationEvents.aspectIcons;
+	}
+
 	/**
 	 * DO NOT USE DIRECTLY. Call via TheBetweenlands.createParticle as that will send particles to the client if called on the server
 	 */
