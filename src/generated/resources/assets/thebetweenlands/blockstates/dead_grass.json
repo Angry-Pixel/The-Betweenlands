@@ -1,7 +1,62 @@
 {
-  "variants": {
-    "": {
-      "model": "thebetweenlands:block/dead_grass"
+  "multipart": [
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/dead_grass",
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass"
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_none",
+          "weight": 8,
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_0",
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_0",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_0",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_0"
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_1",
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_1",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_1",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/dead_grass_tuft_1"
+        }
+      ]
     }
-  }
+  ]
 }

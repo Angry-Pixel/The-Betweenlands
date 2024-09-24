@@ -1,17 +1,57 @@
 {
   "multipart": [
     {
-      "apply": {
-        "model": "thebetweenlands:block/swamp_grass"
-      }
+      "apply": [
+        {
+          "model": "thebetweenlands:block/swamp_grass",
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass"
+        }
+      ]
     },
     {
       "apply": [
         {
-          "model": "thebetweenlands:block/swamp_grass_tuft_none"
+          "model": "thebetweenlands:block/swamp_grass_tuft_none",
+          "weight": 4,
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_0",
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_0",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_0",
+          "y": 90
         },
         {
           "model": "thebetweenlands:block/swamp_grass_tuft_0"
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_1",
+          "y": 270
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_1",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/swamp_grass_tuft_1",
+          "y": 90
         },
         {
           "model": "thebetweenlands:block/swamp_grass_tuft_1"

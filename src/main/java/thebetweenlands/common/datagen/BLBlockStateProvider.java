@@ -1,6 +1,5 @@
 package thebetweenlands.common.datagen;
 
-import com.ibm.icu.impl.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -75,10 +74,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.SWAMP_DIRT);
 		this.simpleBlockWithItem(BlockRegistry.COARSE_SWAMP_DIRT);
 		this.bottomSideTopTuftBlockWithItem(BlockRegistry.SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_grass_top"), this.modLoc("block/swamp_dirt"), List.of(
-			Pair.of(this.models().withExistingParent("block/swamp_grass_tuft_none", this.mcLoc("block/air")).renderType("cutout"), 1),
-			Pair.of(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_0")), 1),
-			Pair.of(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_1")), 1)
-		));
+			new TuftPart(this.models().withExistingParent("block/swamp_grass_tuft_none", this.mcLoc("block/air")).renderType("cutout"), 4, false),
+			new TuftPart(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_0")), 1, true),
+			new TuftPart(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_1")), 1, true)
+		), true);
 		this.simpleBlock(BlockRegistry.WISP.get(), this.models().getBuilder("wisp").texture("particle", this.modLoc("block/wisp")));
 		this.basicItemTex(BlockRegistry.WISP, true);
 		this.simpleBlockWithItem(BlockRegistry.OCTINE_ORE);
@@ -98,7 +97,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE, false);
 		this.simpleBlockWithItem(BlockRegistry.SILT);
 		this.simpleBlockWithItem(BlockRegistry.FILTERED_SILT);
-		this.bottomSideTopBlockWithItem(BlockRegistry.DEAD_GRASS, this.modLoc("block/dead_grass_side"), this.modLoc("block/dead_grass_top"), this.modLoc("block/swamp_dirt"));
+		this.bottomSideTopTuftBlockWithItem(BlockRegistry.DEAD_GRASS, this.modLoc("block/dead_grass_side"), this.modLoc("block/dead_grass_top"), this.modLoc("block/swamp_dirt"), List.of(
+			new TuftPart(this.models().withExistingParent("block/dead_grass_tuft_none", this.mcLoc("block/air")).renderType("cutout"), 8, false),
+			new TuftPart(this.models().getExistingFile(this.modLoc("block/dead_grass_tuft_0")), 1, true),
+			new TuftPart(this.models().getExistingFile(this.modLoc("block/dead_grass_tuft_1")), 1, true)
+		), true);
 		this.simpleBlockWithItem(BlockRegistry.SOLID_TAR);
 		var builder = this.getMultipartBuilder(BlockRegistry.PUDDLE.get()).part().modelFile(this.models().getExistingFile(this.modLoc("block/puddle"))).addModel().end();
 		PuddleBlock.PROPERTY_BY_DIRECTION.forEach((dir, value) -> {
@@ -932,26 +935,38 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
-	private ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> topTuftPart(ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> partBuilder, List<Pair<ModelFile, Integer>> tuftModelWeightPairs) {
-		boolean t = false;
-		for (Pair<ModelFile, Integer> pair : tuftModelWeightPairs) {
-			if (t) partBuilder = partBuilder.nextModel();
-			else t = true;
-			partBuilder = partBuilder
-				.modelFile(pair.first)
-				.weight(pair.second);
+	private static class TuftPart {
+		ModelFile model;
+		int weight;
+		boolean variate;
+
+		public TuftPart(ModelFile model, int weight, boolean variate) {
+			this.model = model;
+			this.weight = weight;
+			this.variate = variate;
 		}
-		return partBuilder;
 	}
 
-	private void bottomSideTopTuftBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom, List<Pair<ModelFile, Integer>> tuftModelWeightPairs) {
+	private void bottomSideTopTuftBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom, List<TuftPart> tuftParts, boolean doVariate) {
 		ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> builder = getMultipartBuilder(block.get()).part();
-
-		builder
-			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top))
-			.addModel();
-
-		builder = this.topTuftPart(builder, tuftModelWeightPairs);
+		if (doVariate) builder
+			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).rotationY(270).nextModel()
+			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).rotationY(180).nextModel()
+			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).rotationY(90).nextModel()
+			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).addModel();
+		else builder
+			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).addModel();
+		boolean t = false;
+		for (TuftPart part : tuftParts) {
+			if (t) builder = builder.nextModel();
+			else t = true;
+			if (part.variate) builder = builder
+				.modelFile(part.model).weight(part.weight).rotationY(270).nextModel()
+				.modelFile(part.model).weight(part.weight).rotationY(180).nextModel()
+				.modelFile(part.model).weight(part.weight).rotationY(90).nextModel();
+			builder = builder
+				.modelFile(part.model).weight(part.weight);
+		}
 		builder.addModel().end();
 		this.simpleBlockItem(block);
 	}
