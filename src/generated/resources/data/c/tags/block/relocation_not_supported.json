@@ -1,0 +1,9 @@
+{
+  "values": [
+    "thebetweenlands:beam_origin",
+    "thebetweenlands:beam_relay",
+    "thebetweenlands:decay_pit_control",
+    "thebetweenlands:decay_pit_ground_chain",
+    "thebetweenlands:decay_pit_hanging_chain"
+  ]
+}
