@@ -1,10 +1,94 @@
 {
   "type": "thebetweenlands:the_betweenlands",
   "generator": {
-    "type": "minecraft:noise",
+    "type": "thebetweenlands:bl_chunk_generator",
     "biome_source": {
-      "type": "minecraft:fixed",
-      "biome": "thebetweenlands:swamplands"
+      "type": "thebetweenlands:bl_biome_source",
+      "base_factor": 1.0,
+      "base_offset": 0.412,
+      "biome_size": 4,
+      "biomes": [
+        {
+          "biome": "thebetweenlands:patchy_islands",
+          "parameters": {
+            "depth": -0.125,
+            "scale": 0.475,
+            "weight": 20
+          }
+        },
+        {
+          "biome": "thebetweenlands:swamplands",
+          "parameters": {
+            "depth": -0.2,
+            "scale": 0.1,
+            "weight": 25
+          }
+        },
+        {
+          "biome": "thebetweenlands:deep_waters",
+          "parameters": {
+            "depth": -1.2,
+            "scale": 0.5,
+            "weight": 12
+          }
+        },
+        {
+          "biome": "thebetweenlands:coarse_islands",
+          "parameters": {
+            "depth": -0.5,
+            "scale": 0.4,
+            "weight": 16
+          }
+        },
+        {
+          "biome": "thebetweenlands:raised_isles",
+          "parameters": {
+            "depth": -0.5,
+            "scale": 0.4,
+            "weight": 16
+          }
+        },
+        {
+          "biome": "thebetweenlands:sludge_plains",
+          "parameters": {
+            "depth": -0.5,
+            "scale": 0.3,
+            "weight": 5
+          }
+        },
+        {
+          "biome": "thebetweenlands:eroded_marsh",
+          "parameters": {
+            "depth": -0.1,
+            "scale": 0.11,
+            "weight": 4
+          }
+        },
+        {
+          "biome": "thebetweenlands:marsh",
+          "parameters": {
+            "depth": -0.1,
+            "scale": 0.11,
+            "weight": 10
+          }
+        },
+        {
+          "biome": "thebetweenlands:swamplands_clearing",
+          "parameters": {
+            "depth": 0.2,
+            "scale": 0.1,
+            "weight": 0
+          }
+        },
+        {
+          "biome": "thebetweenlands:sludge_plains_clearing",
+          "parameters": {
+            "depth": 0.4,
+            "scale": 0.05,
+            "weight": 0
+          }
+        }
+      ]
     },
     "settings": "thebetweenlands:the_betweenlands"
   }

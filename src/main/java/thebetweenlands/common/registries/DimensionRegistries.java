@@ -8,13 +8,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.FixedBiomeSource;
+import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
+import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
+import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -50,7 +52,7 @@ public class DimensionRegistries {
 
 	public static void bootstrapNoise(BootstrapContext<NoiseGeneratorSettings> context) {
 		context.register(NOISE_SETTINGS_KEY, new NoiseGeneratorSettings(
-			NoiseSettings.create(0, 256, 2, 2),
+			NoiseSettings.create(0, 256, 1, 2),
 			BlockRegistry.BETWEENSTONE.get().defaultBlockState(),
 			BlockRegistry.SWAMP_WATER.get().defaultBlockState(),
 			new NoiseRouter(
@@ -84,6 +86,16 @@ public class DimensionRegistries {
 		HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
 		HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 		HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
-		context.register(LEVEL_STEM_KEY, new LevelStem(dimTypes.getOrThrow(DIMENSION_TYPE_KEY), new NoiseBasedChunkGenerator(new FixedBiomeSource(biome.getOrThrow(BiomeRegistry.SWAMPLANDS)), noiseGenSettings.getOrThrow(NOISE_SETTINGS_KEY))));
+
+		BiomeSource biomeSource = new BetweenlandsBiomeSource(
+			BiomeRegistry.biomeParameters(biome),
+			0.412F, //affects the base height of all biomes
+			1.0F,
+			4,
+			biome);
+
+		context.register(LEVEL_STEM_KEY, new LevelStem(
+			dimTypes.getOrThrow(DIMENSION_TYPE_KEY),
+			new BetweenlandsChunkGenerator(biomeSource, noiseGenSettings.getOrThrow(NOISE_SETTINGS_KEY))));
 	}
 }
