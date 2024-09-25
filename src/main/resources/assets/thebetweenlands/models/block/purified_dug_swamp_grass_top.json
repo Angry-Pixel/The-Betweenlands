@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "thebetweenlands:connected_texture",
+    "ambient_occlusion": true,
+    "textures": {
+        "particle": "thebetweenlands:block/purified_swamp_dirt"
+    },
+    "connected_texture_faces": [
+        {
+            "cullface": "up",
+            "connected_textures": [
+                "thebetweenlands:block/dug_swamp_grass_0",
+                "thebetweenlands:block/dug_swamp_grass_1",
+                "thebetweenlands:block/dug_swamp_grass_2",
+                "thebetweenlands:block/dug_swamp_grass_3",
+                "thebetweenlands:block/dug_swamp_grass_4"
+            ],
+            "indices": [
+                "thebetweenlands:top_north_west_index",
+                "thebetweenlands:top_south_west_index",
+                "thebetweenlands:top_south_east_index",
+                "thebetweenlands:top_north_east_index"
+            ],
+            "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+        }
+    ]
+}

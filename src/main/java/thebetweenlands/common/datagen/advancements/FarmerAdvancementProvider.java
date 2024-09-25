@@ -160,7 +160,7 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 				Component.translatable("advancement.thebetweenlands.farmer.grubhub_inc"),
 				Component.translatable("advancement.thebetweenlands.farmer.grubhub_inc.desc"),
 				null, AdvancementType.GOAL, true, true, false)
-			.addCriterion("hub", ItemUsedOnLocationTrigger.TriggerInstance.itemUsedOnBlock(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(BlockRegistry.GRUB_HUB.get())), ItemPredicate.Builder.item().of(ItemRegistry.PHEROMONE_EXTREACT_BUCKET)))
+			.addCriterion("hub", ItemUsedOnLocationTrigger.TriggerInstance.itemUsedOnBlock(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(BlockRegistry.GRUB_HUB.get())), ItemPredicate.Builder.item().of(ItemRegistry.PHEROMONE_EXTRACT_BUCKET)))
 			.save(consumer, "thebetweenlands:farmer/grubhub_inc");
 	}
 }

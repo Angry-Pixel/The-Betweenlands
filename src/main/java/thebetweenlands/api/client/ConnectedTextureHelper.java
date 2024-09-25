@@ -173,7 +173,7 @@ public class ConnectedTextureHelper {
 			@Override
 			public boolean canConnectThrough(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
 				if(connectToSelf) {
-					return ConnectionRules.super.canConnectThrough(world, pos, face, to);
+				//	return ConnectionRules.super.canConnectThrough(world, pos, face, to);
 				}
 				Axis axis = face.getAxis();
 				//Tries to connect through the block that is next to the connected texture face. This should always be true

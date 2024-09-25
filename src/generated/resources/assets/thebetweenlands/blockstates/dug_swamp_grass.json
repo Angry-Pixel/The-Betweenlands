@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "thebetweenlands:block/dug_swamp_grass"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/dug_swamp_grass_top"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "neoforge:item/default",
+  "fluid": "thebetweenlands:nettle_tea",
+  "loader": "neoforge:fluid_container",
+  "textures": {
+    "base": "minecraft:item/bucket",
+    "fluid": "neoforge:item/mask/bucket_fluid"
+  }
+}

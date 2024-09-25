@@ -10,8 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -29,9 +28,7 @@ import net.neoforged.neoforge.items.VanillaHopperItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import net.neoforged.neoforge.registries.DataPackRegistryEvent;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
-import net.neoforged.neoforge.registries.RegisterEvent;
+import net.neoforged.neoforge.registries.*;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
@@ -124,6 +121,11 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void populateVanillaTabs(BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+			for (DeferredHolder<Item, ? extends Item> bucket : ItemRegistry.ITEMS.getEntries().stream().filter(item -> item.get() instanceof BucketItem).toList()) {
+				event.accept(new ItemStack(bucket.get()));
+			}
+		}
 		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
 			EntityRegistry.SPAWN_EGGS.getEntries().forEach(item -> event.accept(new ItemStack(item)));
 		}

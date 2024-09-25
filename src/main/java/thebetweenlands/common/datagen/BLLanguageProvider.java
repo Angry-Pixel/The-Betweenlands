@@ -1028,6 +1028,45 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.amphibious_upgrade.leggings", "Leggings");
 		this.add("item.thebetweenlands.amphibious_upgrade.boots", "Boots");
 
+		this.addItem(ItemRegistry.SWAMP_WATER_BUCKET, "Swamp Water Bucket");
+		this.addItem(ItemRegistry.STAGNANT_WATER_BUCKET, "Stagnant Water Bucket");
+		this.addItem(ItemRegistry.TAR_BUCKET, "Tar Bucket");
+		this.addItem(ItemRegistry.RUBBER_BUCKET, "Rubber Bucket");
+		this.addItem(ItemRegistry.CLEAN_WATER_BUCKET, "Clean Water Bucket");
+		this.addItem(ItemRegistry.FISH_OIL_BUCKET, "Fish Oil Bucket");
+		this.addItem(ItemRegistry.DULL_LAVENDER_DYE_BUCKET, "Dull Lavender Dye Bucket");
+		this.addItem(ItemRegistry.MAROON_DYE_BUCKET, "Maroon Dye Bucket");
+		this.addItem(ItemRegistry.SHADOW_GREEN_DYE_BUCKET, "Shadow Green Dye Bucket");
+		this.addItem(ItemRegistry.CAMELOT_MAGENTA_DYE_BUCKET, "Camelot Magenta Dye Bucket");
+		this.addItem(ItemRegistry.SAFFRON_DYE_BUCKET, "Saffron Dye Bucket");
+		this.addItem(ItemRegistry.CARIBBEAN_GREEN_DYE_BUCKET, "Caribbean Green Dye Bucket");
+		this.addItem(ItemRegistry.VIVID_TANGERINE_DYE_BUCKET, "Vivid Tangerine Dye Bucket");
+		this.addItem(ItemRegistry.CHAMPAGNE_DYE_BUCKET, "Champagne Dye Bucket");
+		this.addItem(ItemRegistry.RAISIN_BLACK_DYE_BUCKET, "Raisin Black Dye Bucket");
+		this.addItem(ItemRegistry.SUSHI_GREEN_DYE_BUCKET, "Sushi Green Dye Bucket");
+		this.addItem(ItemRegistry.ELM_CYAN_DYE_BUCKET, "Elm Cyan Dye Bucket");
+		this.addItem(ItemRegistry.CADMIUM_GREEN_DYE_BUCKET, "Cadmium Green Dye Bucket");
+		this.addItem(ItemRegistry.LAVENDER_BLUE_DYE_BUCKET, "Lavender Blue Dye Bucket");
+		this.addItem(ItemRegistry.BROWN_RUST_DYE_BUCKET, "Brown Rust Dye Bucket");
+		this.addItem(ItemRegistry.MIDNIGHT_PURPLE_DYE_BUCKET, "Mignight Purple Dye Bucket");
+		this.addItem(ItemRegistry.PEWTER_GREY_DYE_BUCKET, "Pewter Grey Dye Bucket");
+		this.addItem(ItemRegistry.NETTLE_SOUP_BUCKET, "Nettle Soup Bucket");
+		this.addItem(ItemRegistry.NETTLE_TEA_BUCKET, "Nettle Tea Bucket");
+		this.addItem(ItemRegistry.PHEROMONE_EXTRACT_BUCKET, "Pheromone Extract Bucket");
+		this.addItem(ItemRegistry.SWAMP_BROTH_BUCKET, "Swamp Broth Bucket");
+		this.addItem(ItemRegistry.STURDY_STOCK_BUCKET, "Sturdy Stock Bucket");
+		this.addItem(ItemRegistry.PEAR_CORDIAL_BUCKET, "Pear Cordial Bucket");
+		this.addItem(ItemRegistry.SHAMANS_BREW_BUCKET, "Shaman's Brew Bucket");
+		this.addItem(ItemRegistry.LAKE_BROTH_BUCKET, "Lake Broth Bucket");
+		this.addItem(ItemRegistry.SHELL_STOCK_BUCKET, "Shell Stock Bucket");
+		this.addItem(ItemRegistry.FROG_LEG_EXTRACT_BUCKET, "Frog Leg Extract Bucket");
+		this.addItem(ItemRegistry.WITCH_TEA_BUCKET, "Witch Tea Bucket");
+
+		this.addItem(ItemRegistry.ROTTEN_FOOD, "Rotten Food");
+		this.add(ItemRegistry.ROTTEN_FOOD.get().getDescriptionId() + ".food", "Rotten Food (%s)");
+		this.addItem(ItemRegistry.TAINTED_POTION, "Tainted Potion");
+		this.add(ItemRegistry.TAINTED_POTION.get().getDescriptionId() + ".potion", "Tainted Potion (%s)");
+
 		this.addItem(ItemRegistry.CRIMSON_SNAIL_SHELL, "Crimson Snail Shell");
 		this.addItem(ItemRegistry.OCHRE_SNAIL_SHELL, "Ochre Snail Shell");
 		this.addItem(ItemRegistry.COMPOST, "Compost");

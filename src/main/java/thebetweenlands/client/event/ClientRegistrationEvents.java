@@ -19,6 +19,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
@@ -29,6 +30,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
@@ -629,6 +632,17 @@ public class ClientRegistrationEvents {
 			var fluid = stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).copy();
 			return tint == 1 ? IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid) : -1;
 		}, ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
+
+		event.register((stack, tint) -> {
+				var fluid = ((BucketItem)stack.getItem()).content;
+				return tint == 1 ? IClientFluidTypeExtensions.of(fluid).getTintColor(new FluidStack(fluid, FluidType.BUCKET_VOLUME)) : -1;
+		}, ItemRegistry.DULL_LAVENDER_DYE_BUCKET, ItemRegistry.MAROON_DYE_BUCKET, ItemRegistry.SHADOW_GREEN_DYE_BUCKET, ItemRegistry.CAMELOT_MAGENTA_DYE_BUCKET,
+			ItemRegistry.SAFFRON_DYE_BUCKET, ItemRegistry.CARIBBEAN_GREEN_DYE_BUCKET, ItemRegistry.VIVID_TANGERINE_DYE_BUCKET, ItemRegistry.CHAMPAGNE_DYE_BUCKET,
+			ItemRegistry.RAISIN_BLACK_DYE_BUCKET, ItemRegistry.SUSHI_GREEN_DYE_BUCKET, ItemRegistry.ELM_CYAN_DYE_BUCKET, ItemRegistry.CADMIUM_GREEN_DYE_BUCKET,
+			ItemRegistry.LAVENDER_BLUE_DYE_BUCKET, ItemRegistry.BROWN_RUST_DYE_BUCKET, ItemRegistry.MIDNIGHT_PURPLE_DYE_BUCKET, ItemRegistry.PEWTER_GREY_DYE_BUCKET,
+			ItemRegistry.NETTLE_SOUP_BUCKET, ItemRegistry.NETTLE_TEA_BUCKET, ItemRegistry.PHEROMONE_EXTRACT_BUCKET, ItemRegistry.SWAMP_BROTH_BUCKET,
+			ItemRegistry.STURDY_STOCK_BUCKET, ItemRegistry.PEAR_CORDIAL_BUCKET, ItemRegistry.SHAMANS_BREW_BUCKET, ItemRegistry.LAKE_BROTH_BUCKET,
+			ItemRegistry.SHELL_STOCK_BUCKET, ItemRegistry.FROG_LEG_EXTRACT_BUCKET, ItemRegistry.WITCH_TEA_BUCKET, ItemRegistry.SWAMP_BROTH_BUCKET.get());
 
 		event.register((stack, tint) -> tint == 1 ? InfusionBucketItem.getColor(stack) : -1, ItemRegistry.WEEDWOOD_INFUSION_BUCKET, ItemRegistry.SYRMORITE_INFUSION_BUCKET);
 	}

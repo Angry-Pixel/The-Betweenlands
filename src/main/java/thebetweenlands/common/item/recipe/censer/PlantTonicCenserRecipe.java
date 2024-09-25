@@ -6,20 +6,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
+import thebetweenlands.common.item.misc.bucket.PlantTonicBucketItem;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class PlantTonicCenserRecipe extends AbstractCenserRecipe<Void> {
 
 	@Override
 	public boolean matchesInput(ItemStack stack) {
-		return stack.is(ItemRegistry.PLANT_TONIC_BUCKET);
+		return stack.getItem() instanceof PlantTonicBucketItem;
 	}
 
 	@Override
 	public ItemStack consumeInput(ItemStack stack) {
-		return null;//new ItemStack(ItemRegistry.BL_BUCKET);
+		return stack.getCraftingRemainingItem();
 	}
 
 	@Override

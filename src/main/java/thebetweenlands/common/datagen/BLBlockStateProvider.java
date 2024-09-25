@@ -498,6 +498,14 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_1, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_2, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_3, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
+		this.builtinEntity(BlockRegistry.DUNGEON_DOOR_RUNES, this.modLoc("block/mud_bricks"));
+		this.basicItemTex(BlockRegistry.DUNGEON_DOOR_RUNES, false);
+		this.builtinEntity(BlockRegistry.MIMIC_DUNGEON_DOOR_RUNES, this.modLoc("block/mud_bricks"));
+		this.basicItemTex(BlockRegistry.MIMIC_DUNGEON_DOOR_RUNES, false);
+		this.builtinEntity(BlockRegistry.CRAWLER_DUNGEON_DOOR_RUNES, this.modLoc("block/mud_bricks"));
+		this.basicItemTex(BlockRegistry.CRAWLER_DUNGEON_DOOR_RUNES, false);
+		this.horizontalBlock(BlockRegistry.DUNGEON_DOOR_COMBINATION.get(), this.models().orientable(BlockRegistry.DUNGEON_DOOR_COMBINATION.getId().getPath(), this.modLoc("block/mud_bricks"), this.modLoc("block/dungeon_door_combination_front"), this.modLoc("block/mud_bricks")));
+		this.simpleBlockItem(BlockRegistry.DUNGEON_DOOR_COMBINATION);
 		this.horizontalBlock(BlockRegistry.CLIMBABLE_MUD_BRICKS.get(), this.models().getExistingFile(this.modLoc("block/climbable_mud_bricks")));
 		this.simpleBlockItem(BlockRegistry.CLIMBABLE_MUD_BRICKS);
 		this.horizontalBlock(BlockRegistry.BROKEN_MUD_TILES.get(), this.models().getExistingFile(this.modLoc("block/broken_mud_tiles")));
@@ -572,7 +580,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.modelFile(log3).rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build());
 		this.simpleBlockItem(BlockRegistry.HOLLOW_LOG.get(), this.models().getExistingFile(this.modLoc("block/hollow_log_1")));
 		this.simpleBlockWithItem(BlockRegistry.PURIFIED_SWAMP_DIRT);
-		//dug dirt and grass
+		this.dugDirt(BlockRegistry.DUG_SWAMP_DIRT, this.modLoc("block/swamp_dirt"), this.modLoc("block/swamp_dirt"));
+		this.dugDirt(BlockRegistry.DUG_SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_dirt"));
+		this.dugDirt(BlockRegistry.PURIFIED_DUG_SWAMP_DIRT, this.modLoc("block/purified_swamp_dirt"), this.modLoc("block/purified_swamp_dirt"));
+		this.dugDirt(BlockRegistry.PURIFIED_DUG_SWAMP_GRASS, this.modLoc("block/purified_swamp_grass_side"), this.modLoc("block/purified_swamp_dirt"));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.BLACK_ICE, "translucent");
 		this.getVariantBuilder(BlockRegistry.SNOW.get()).forAllStates(state -> {
 			if (state.getValue(SnowLayerBlock.LAYERS) == 8) {
@@ -839,7 +850,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlockWithItem(BlockRegistry.MIRE_CORAL);
 		this.crossBlockWithItem(BlockRegistry.DEEP_WATER_CORAL);
 		this.crossBlockWithItem(BlockRegistry.WATER_WEEDS);
-		//algae (connected texture)
+		this.simpleBlock(BlockRegistry.ALGAE.get(), this.models().getExistingFile(this.modLoc("block/algae")));
+		this.itemModels().withExistingParent(BlockRegistry.ALGAE.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation()).texture("layer0", this.modLoc("block/algae_0"));
 		this.multifaceBlockWithItem(BlockRegistry.POISON_IVY);
 		this.crossBlockWithItem(BlockRegistry.ARROW_ARUM);
 		this.crossBlockWithItem(BlockRegistry.BLUE_EYED_GRASS);
@@ -1228,6 +1240,12 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transform(ItemDisplayContext.FIXED).scale(itemScale).end()
 			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(itemScale / 2.0F).rotation(75, 315, 0).translation(0, 2.5F, 0).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(itemScale / 1.5F).rotation(0, 315, 0).end();
+	}
+
+	public void dugDirt(DeferredBlock<Block> dugBlock, ResourceLocation side, ResourceLocation bottom) {
+		this.getMultipartBuilder(dugBlock.get()).part().modelFile(this.models().withExistingParent(dugBlock.getId().toString(), this.modLoc("block/dug_soil_base")).texture("bottom", bottom).texture("side", side)).addModel().end().part().modelFile(this.models().getExistingFile(this.modLoc("block/" + dugBlock.getId().getPath() + "_top"))).addModel().end();
+		var model = this.models().cubeBottomTop(dugBlock.getId().withSuffix("_inventory").toString(), side, bottom, this.modLoc("block/" + dugBlock.getId().getPath().replace("purified_", "") + "_0"));
+		this.itemModels().getBuilder(dugBlock.getId().getPath()).parent(model);
 	}
 
 	public void nibbletwigLogs() {

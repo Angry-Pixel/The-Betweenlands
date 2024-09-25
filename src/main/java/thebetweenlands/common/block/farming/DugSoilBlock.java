@@ -13,10 +13,12 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -25,12 +27,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.api.block.DungeonFogBlock;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.api.client.ConnectedTextureBlock;
+import thebetweenlands.api.client.ConnectedTextureHelper;
+import thebetweenlands.api.client.ConnectionRules;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 
-public abstract class DugSoilBlock extends BaseEntityBlock {
+public abstract class DugSoilBlock extends BaseEntityBlock implements ConnectedTextureBlock {
 
 	public static final BooleanProperty FOGGED = BooleanProperty.create("fogged");
 	public static final BooleanProperty DECAYED = BooleanProperty.create("decayed");
@@ -41,6 +46,34 @@ public abstract class DugSoilBlock extends BaseEntityBlock {
 	protected DugSoilBlock(boolean purified, Properties properties) {
 		super(properties);
 		this.purified = purified;
+	}
+
+	@Override
+	protected RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
+	}
+
+	@Override
+	public boolean isFaceConnectedTexture(BlockAndTintGetter level, BlockPos pos, BlockState builder, Direction face) {
+		return face == Direction.UP;
+	}
+
+	@Override
+	public ConnectionRules createConnectionRules(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+		return new ConnectionRules() {
+			@Override
+			public boolean canTextureConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
+				return world.getBlockState(to).getBlock() instanceof DugSoilBlock;
+			}
+
+			@Override
+			public boolean canConnectThrough(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
+				Direction.Axis axis = face.getAxis();
+				//Tries to connect through the block that is next to the connected texture face. This should always be true
+				//if the block can't connect to its own faces because otherwise it wouldn't be able to connect to anything
+				return (axis == Direction.Axis.X && to.getX() - pos.getX() != 0) || (axis == Direction.Axis.Y && to.getY() - pos.getY() != 0) || (axis == Direction.Axis.Z && to.getZ() - pos.getZ() != 0);
+			}
+		};
 	}
 
 	public static boolean copy(Level level, BlockPos pos, DugSoilBlockEntity from) {

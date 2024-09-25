@@ -2,6 +2,7 @@ package thebetweenlands.common.datagen;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.SpawnEggItem;
@@ -36,6 +37,44 @@ public class BLItemModelProvider extends ItemModelProvider {
 				this.getBuilder(item.getId().getPath()).parent(this.getExistingFile(ResourceLocation.withDefaultNamespace("item/template_spawn_egg")));
 			}
 		}
+		this.vanillaBucket(ItemRegistry.SWAMP_WATER_BUCKET);
+		this.vanillaBucket(ItemRegistry.STAGNANT_WATER_BUCKET);
+		this.vanillaBucket(ItemRegistry.TAR_BUCKET);
+		this.vanillaBucket(ItemRegistry.RUBBER_BUCKET);
+		this.vanillaBucket(ItemRegistry.CLEAN_WATER_BUCKET);
+		this.vanillaBucket(ItemRegistry.FISH_OIL_BUCKET);
+
+		this.vanillaBucket(ItemRegistry.DULL_LAVENDER_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.MAROON_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.SHADOW_GREEN_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.CAMELOT_MAGENTA_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.SAFFRON_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.CARIBBEAN_GREEN_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.VIVID_TANGERINE_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.CHAMPAGNE_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.RAISIN_BLACK_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.SUSHI_GREEN_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.ELM_CYAN_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.CADMIUM_GREEN_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.LAVENDER_BLUE_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.BROWN_RUST_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.MIDNIGHT_PURPLE_DYE_BUCKET);
+		this.vanillaBucket(ItemRegistry.PEWTER_GREY_DYE_BUCKET);
+
+		this.vanillaBucket(ItemRegistry.NETTLE_SOUP_BUCKET);
+		this.vanillaBucket(ItemRegistry.NETTLE_TEA_BUCKET);
+		this.vanillaBucket(ItemRegistry.PHEROMONE_EXTRACT_BUCKET);
+		this.vanillaBucket(ItemRegistry.SWAMP_BROTH_BUCKET);
+		this.vanillaBucket(ItemRegistry.STURDY_STOCK_BUCKET);
+		this.vanillaBucket(ItemRegistry.PEAR_CORDIAL_BUCKET);
+		this.vanillaBucket(ItemRegistry.SHAMANS_BREW_BUCKET);
+		this.vanillaBucket(ItemRegistry.LAKE_BROTH_BUCKET);
+		this.vanillaBucket(ItemRegistry.SHELL_STOCK_BUCKET);
+		this.vanillaBucket(ItemRegistry.FROG_LEG_EXTRACT_BUCKET);
+		this.vanillaBucket(ItemRegistry.WITCH_TEA_BUCKET);
+
+		this.basicItem(ItemRegistry.ROTTEN_FOOD);
+		this.basicItem(ItemRegistry.TAINTED_POTION);
 
 		this.basicItem(ItemRegistry.CRIMSON_SNAIL_SHELL);
 		this.basicItem(ItemRegistry.OCHRE_SNAIL_SHELL);
@@ -607,5 +646,13 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.customLoader(DynamicFluidContainerModelBuilder::begin).fluid(Fluids.EMPTY).end()
 			.texture("base", this.itemTexture(item))
 			.texture("fluid", TheBetweenlands.prefix("item/bl_bucket_fluid"));
+	}
+
+	public ItemModelBuilder vanillaBucket(DeferredItem<? extends BucketItem> item) {
+		return this.getBuilder(item.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("neoforge:item/default"))
+			.customLoader(DynamicFluidContainerModelBuilder::begin).fluid(item.get().content).end()
+			.texture("base", this.mcLoc("item/bucket"))
+			.texture("fluid", ResourceLocation.fromNamespaceAndPath(NeoForgeVersion.MOD_ID, "item/mask/bucket_fluid"));
 	}
 }

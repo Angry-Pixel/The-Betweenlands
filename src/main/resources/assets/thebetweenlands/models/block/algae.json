@@ -1,0 +1,55 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:connected_texture",
+  "render_type": "cutout",
+  "ambient_occlusion": true,
+  "textures": {
+      "particle": "thebetweenlands:block/algae_0"
+  },
+  "connected_texture_faces": [
+    {
+      "cullface": "up",
+      "connected_textures": [
+        "thebetweenlands:block/algae_0",
+        "thebetweenlands:block/algae_1",
+        "thebetweenlands:block/algae_2",
+        "thebetweenlands:block/algae_3",
+        "thebetweenlands:block/algae_4"
+      ],
+      "indices": [
+        "top_north_west_index",
+        "top_south_west_index",
+        "top_south_east_index",
+        "top_north_east_index"
+      ],
+      "vertices": [
+        { "x": 0.0, "y": -0.05, "z": 0.0, "u": 0, "v": 0 },
+        { "x": 0.0, "y": -0.05, "z": 1.0, "u": 0, "v": 1 },
+        { "x": 1.0, "y": -0.05, "z": 1.0, "u": 1, "v": 1 },
+        { "x": 1.0, "y": -0.05, "z": 0.0, "u": 1, "v": 0 }
+      ]
+    },
+    {
+      "cullface": "up",
+      "connected_textures": [
+        "thebetweenlands:block/algae_0",
+        "thebetweenlands:block/algae_1",
+        "thebetweenlands:block/algae_2",
+        "thebetweenlands:block/algae_3",
+        "thebetweenlands:block/algae_4"
+      ],
+      "indices": [
+        "top_south_west_index",
+        "top_north_west_index",
+        "top_north_east_index",
+        "top_south_east_index"
+      ],
+      "vertices": [
+        { "x": 0.0, "y": -0.05, "z": 1.0, "u": 0, "v": 0 },
+        { "x": 0.0, "y": -0.05, "z": 0.0, "u": 0, "v": 1 },
+        { "x": 1.0, "y": -0.05, "z": 0.0, "u": 1, "v": 1 },
+        { "x": 1.0, "y": -0.05, "z": 1.0, "u": 1, "v": 0 }
+      ]
+    }
+  ]
+}

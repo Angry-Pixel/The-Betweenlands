@@ -27,9 +27,6 @@ public class TaintedPotionItem extends Item {
 		super(properties);
 	}
 
-    /**
-     * Called when the player finishes using this Item (E.g. finishes eating.). Not called when the player stops using the Item before the action is complete.
-     */
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
         Player player = entityLiving instanceof Player ? (Player)entityLiving : null;
@@ -60,23 +57,17 @@ public class TaintedPotionItem extends Item {
         entityLiving.gameEvent(GameEvent.DRINK);
         return stack;
     }
-    
+
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32;
     }
 
-    /**
-     * Returns the action that specifies what animation to play when the item is being used.
-     */
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.DRINK;
     }
-    
-	/**
-	 * Called to trigger the item's "innate" right click behavior. To handle when this item is used on a Block, see {@link #onItemUse}.
-	 */
+
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 	    return ItemUtils.startUsingInstantly(level, player, hand);
@@ -85,7 +76,7 @@ public class TaintedPotionItem extends Item {
 	@Override
 	public Component getName(ItemStack stack) {
 		if(stack.has(DataComponentRegistry.ROTTEN_FOOD))
-			return Component.translatable(stack.get(DataComponentRegistry.ROTTEN_FOOD).originalStack().getDescriptionId());
+			return Component.translatable(this.getDescriptionId(stack) + ".potion", stack.get(DataComponentRegistry.ROTTEN_FOOD).originalStack().getHoverName());
 		else
 			return super.getName(stack);
 	}

@@ -6,8 +6,6 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.util.BLDyeColor;
-import thebetweenlands.util.DrinkableBrew;
 
 public class FluidRegistry {
 
@@ -114,7 +112,7 @@ public class FluidRegistry {
 
 	public static final BaseFlowingFluid.Properties NETTLE_SOUP_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.NETTLE_SOUP, NETTLE_SOUP_STILL, NETTLE_SOUP_FLOW).bucket(ItemRegistry.NETTLE_SOUP_BUCKET);
 	public static final BaseFlowingFluid.Properties NETTLE_TEA_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.NETTLE_TEA, NETTLE_TEA_STILL, NETTLE_TEA_FLOW).bucket(ItemRegistry.NETTLE_TEA_BUCKET);
-	public static final BaseFlowingFluid.Properties PHEROMONE_EXTRACT_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.PHEROMONE_EXTRACT, PHEROMONE_EXTRACT_STILL, PHEROMONE_EXTRACT_FLOW).bucket(ItemRegistry.PHEROMONE_EXTREACT_BUCKET);
+	public static final BaseFlowingFluid.Properties PHEROMONE_EXTRACT_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.PHEROMONE_EXTRACT, PHEROMONE_EXTRACT_STILL, PHEROMONE_EXTRACT_FLOW).bucket(ItemRegistry.PHEROMONE_EXTRACT_BUCKET);
 	public static final BaseFlowingFluid.Properties SWAMP_BROTH_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.SWAMP_BROTH, SWAMP_BROTH_STILL, SWAMP_BROTH_FLOW).bucket(ItemRegistry.SWAMP_BROTH_BUCKET);
 	public static final BaseFlowingFluid.Properties STURDY_STOCK_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.STURDY_STOCK, STURDY_STOCK_STILL, STURDY_STOCK_FLOW).bucket(ItemRegistry.STURDY_STOCK_BUCKET);
 	public static final BaseFlowingFluid.Properties PEAR_CORDIAL_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.PEAR_CORDIAL, PEAR_CORDIAL_STILL, PEAR_CORDIAL_FLOW).bucket(ItemRegistry.PEAR_CORDIAL_BUCKET);

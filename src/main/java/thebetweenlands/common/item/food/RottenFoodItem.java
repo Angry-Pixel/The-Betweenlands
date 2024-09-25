@@ -13,7 +13,7 @@ public class RottenFoodItem extends Item {
 	@Override
 	public Component getName(ItemStack stack) {
 		if(stack.has(DataComponentRegistry.ROTTEN_FOOD))
-			return Component.translatable(stack.get(DataComponentRegistry.ROTTEN_FOOD).originalStack().getDescriptionId());
+			return Component.translatable(this.getDescriptionId(stack) + ".food", stack.get(DataComponentRegistry.ROTTEN_FOOD).originalStack().getHoverName());
 		else
 			return super.getName(stack);
 	}

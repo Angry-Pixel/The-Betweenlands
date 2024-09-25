@@ -1,0 +1,7 @@
+{
+  "parent": "thebetweenlands:block/dug_soil_base",
+  "textures": {
+    "bottom": "thebetweenlands:block/purified_swamp_dirt",
+    "side": "thebetweenlands:block/purified_swamp_dirt"
+  }
+}
