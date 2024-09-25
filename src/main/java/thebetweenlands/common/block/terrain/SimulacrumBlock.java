@@ -26,7 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.block.SimulacrumEffect;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;

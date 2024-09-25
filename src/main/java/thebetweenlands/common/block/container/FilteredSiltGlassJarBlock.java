@@ -25,7 +25,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.block.entity.FilteredSiltGlassJarBlockEntity;
 import thebetweenlands.common.registries.DataComponentRegistry;
 

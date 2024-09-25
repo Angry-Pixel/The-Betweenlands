@@ -11,7 +11,7 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
 
 import java.util.List;

@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.entity.fishing.BLFishHook;
 
 import java.util.Collections;

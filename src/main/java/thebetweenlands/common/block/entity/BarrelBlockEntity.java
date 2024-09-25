@@ -14,7 +14,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.block.container.BarrelBlock;
 import thebetweenlands.common.inventory.BarrelMenu;
 import thebetweenlands.common.registries.BlockEntityRegistry;

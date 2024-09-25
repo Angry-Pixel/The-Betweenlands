@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.block.entity.spawner.BetweenlandsBaseSpawner;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;

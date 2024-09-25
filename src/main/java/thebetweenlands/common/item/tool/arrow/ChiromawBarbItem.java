@@ -8,7 +8,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.entity.projectile.arrow.ChiromawBarb;
 
 public class ChiromawBarbItem extends ArrowItem {

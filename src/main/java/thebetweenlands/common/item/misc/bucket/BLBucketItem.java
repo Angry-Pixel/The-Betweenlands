@@ -34,7 +34,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.fluids.*;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.block.container.RubberTapBlock;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.block.terrain.RubberLogBlock;

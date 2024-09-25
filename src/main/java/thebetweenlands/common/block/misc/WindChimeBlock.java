@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.block.entity.WindChimeBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;

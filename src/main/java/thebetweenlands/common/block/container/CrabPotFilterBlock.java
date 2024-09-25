@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;

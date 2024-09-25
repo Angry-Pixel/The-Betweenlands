@@ -14,7 +14,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.EventHooks;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.entity.projectile.BetweenstonePebble;

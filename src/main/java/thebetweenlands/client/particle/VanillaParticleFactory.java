@@ -3,7 +3,7 @@ package thebetweenlands.client.particle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.particles.ParticleOptions;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class VanillaParticleFactory<T extends ParticleOptions> extends ParticleFactory<VanillaParticleFactory<T>, T> {
 	private final ParticleProvider<T> factory;

@@ -2,7 +2,7 @@ package thebetweenlands.common.entity.ai.goals;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.entity.monster.SwampHag;
 import thebetweenlands.common.registries.SoundRegistry;
 

@@ -30,7 +30,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.entity.BLEntity;
