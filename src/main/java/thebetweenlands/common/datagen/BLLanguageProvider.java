@@ -1612,6 +1612,21 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("commands.thebetweenlands.aspect.reset_held", "Removed discovered aspects");
 		this.add("commands.thebetweenlands.aspect.reset_all", "Removed discovered aspects from all items");
 
+		this.add("commands.thebetweenlands.event.not_in_bl", "You must be in the Betweenlands to toggle events");
+		this.add("commands.thebetweenlands.event.invalid_event", "Unknown event '%s'");
+		this.add("commands.thebetweenlands.event.already_on", "The event '%s' is already on");
+		this.add("commands.thebetweenlands.event.already_off", "The event '%s' is already off");
+		this.add("commands.thebetweenlands.event.already_enabled", "Events are already enabled");
+		this.add("commands.thebetweenlands.event.already_disabled", "Events are already disabled");
+		this.add("commands.thebetweenlands.event.fail_on", "The event '%s' could not be turned on");
+		this.add("commands.thebetweenlands.event.fail_off", "The event '%s' could not be turned off");
+
+		this.add("commands.thebetweenlands.event.on", "The event '%s' is now taking place");
+		this.add("commands.thebetweenlands.event.off", "The event '%s' is no longer taking place");
+		this.add("commands.thebetweenlands.event.all_off", "All events are no longer taking place");
+		this.add("commands.thebetweenlands.event.enable", "Events are enabled");
+		this.add("commands.thebetweenlands.event.disable", "Events are disabled");
+
 		this.add("commands.thebetweenlands.reset_aspects.confirm", "Confirm with '/resetAspects confirm'");
 		this.add("commands.thebetweenlands.reset_aspects.reset", "All aspects have been reset");
 

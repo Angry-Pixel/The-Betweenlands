@@ -40,6 +40,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.command.AspectCommand;
+import thebetweenlands.common.command.EventCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
 import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
@@ -143,6 +144,7 @@ public class CommonRegistrationEvents {
 			.then(Commands.literal("debug")
 				.then(GenerateAnadiaCommand.register()))
 			.then(AspectCommand.register())
+			.then(EventCommand.register())
 			.then(ResetAspectsCommand.register());
 		LiteralCommandNode<CommandSourceStack> node = event.getDispatcher().register(builder);
 		event.getDispatcher().register(Commands.literal("bl").redirect(node));
@@ -209,7 +211,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, (packet, context) -> OpenRenameScreenPacket.handle(context));
 		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
 		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
-		
+
 		registrar.playToClient(UpdateSynchedAttachmentPacket.TYPE, UpdateSynchedAttachmentPacket.STREAM_CODEC, UpdateSynchedAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
