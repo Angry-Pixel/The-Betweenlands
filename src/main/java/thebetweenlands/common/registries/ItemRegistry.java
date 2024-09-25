@@ -116,6 +116,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> FUMIGANT = ITEMS.register("fumigant", () -> new FumigantItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 	public static final DeferredItem<Item> ROTTEN_FOOD = ITEMS.register("rotten_food", () -> new RottenFoodItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(-1).saturationModifier(-1.0F).effect(() -> new MobEffectInstance(MobEffects.HUNGER, 200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.POISON, 200, 1), 1.0F).build())));
+	public static final DeferredItem<Item> TAINTED_POTION = ITEMS.register("tainted_potion", () -> new TaintedPotionItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new ItemNameBlockItem(BlockRegistry.ASPECTRUS_CROP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new ItemNameBlockItem(BlockRegistry.FUNGUS_CROP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIDDLE_FRUIT_BUSH_SEEDS = ITEMS.register("middle_fruit_bush_seeds", () -> new ItemNameBlockItem(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), new Item.Properties()));

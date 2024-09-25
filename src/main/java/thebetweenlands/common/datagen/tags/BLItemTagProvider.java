@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.api.item.CustomCorrodible;
@@ -39,6 +40,11 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> SLINGSHOT_AMMO = tag("slingshot_ammo");
 
 	/**
+	 * Whether an item ignores the weakness on non-betweenlands tools
+	 */
+	public static final TagKey<Item> IGNORES_TOOL_WEAKNESS = tag("ignores_tool_weakness");
+	
+	/**
 	 * Whether an item should be looked at by the corrosion engine
 	 */
 	public static final TagKey<Item> CORRODIBLE = tag("corrodible");
@@ -52,6 +58,8 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	 * Whether an item has custom corrosion information. The item should implement {@link CustomCorrodible}; this tag will be ignored if it doesn't.
 	 */
 	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
+
+	public static final TagKey<Item> DOES_NOT_ROT = tag("does_not_rot");
 
 	public BLItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, ExistingFileHelper helper) {
 		super(output, lookupProvider, blockTags, TheBetweenlands.ID, helper);
@@ -178,6 +186,9 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.OCTINE_ARROW.get(), ItemRegistry.BASILISK_ARROW.get(), ItemRegistry.SLUDGE_WORM_ARROW.get(),
 			ItemRegistry.SHOCK_ARROW.get(), ItemRegistry.CHIROMAW_BARB.get());
 
+		this.tag(DOES_NOT_ROT).add(Items.ROTTEN_FLESH); // TODO: add BL food items here
+		
+		this.tag(IGNORES_TOOL_WEAKNESS).addTag(CORRODIBLE);
 	}
 
 	public static TagKey<Item> tag(String tagName) {

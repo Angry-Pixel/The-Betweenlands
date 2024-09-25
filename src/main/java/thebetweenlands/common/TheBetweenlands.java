@@ -26,6 +26,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.config.BetweenlandsConfigSetup;
 import thebetweenlands.common.event.CommonRegistrationEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
@@ -95,6 +96,8 @@ public class TheBetweenlands {
 		CenserRecipeRegistry.RECIPES.register(eventbus);
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
 
+		BetweenlandsConfigSetup.init(eventbus, dist);
+		
 		StorageRegistry.preInit();
 	}
 
@@ -118,6 +121,18 @@ public class TheBetweenlands {
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if (server != null) {
 			return server.getLevel(dimension);
+		}
+		return null;
+	}
+
+
+	@Nullable
+	public static HolderLookup.Provider tryGetRegistryAccess() {
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if (server != null) {
+			return server.registryAccess();
+		} else if (FMLEnvironment.dist.isClient() && BetweenlandsClient.getClientLevel() instanceof Level level) {
+			return level.registryAccess();
 		}
 		return null;
 	}

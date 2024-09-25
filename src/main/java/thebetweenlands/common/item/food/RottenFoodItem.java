@@ -12,11 +12,14 @@ public class RottenFoodItem extends Item {
 
 	@Override
 	public Component getName(ItemStack stack) {
-		return Component.translatable(stack.getOrDefault(DataComponentRegistry.ROTTEN_FOOD, stack).getDescriptionId());
+		if(stack.has(DataComponentRegistry.ROTTEN_FOOD))
+			return Component.translatable(stack.get(DataComponentRegistry.ROTTEN_FOOD).originalStack().getDescriptionId());
+		else
+			return super.getName(stack);
 	}
 
 	@Override
 	public int getMaxStackSize(ItemStack stack) {
-		return stack.getOrDefault(DataComponentRegistry.ROTTEN_FOOD, stack).getMaxStackSize();
+		return stack.has(DataComponentRegistry.ROTTEN_FOOD) ? stack.get(DataComponentRegistry.ROTTEN_FOOD).originalStack().getMaxStackSize() : super.getMaxStackSize(stack);
 	}
 }
