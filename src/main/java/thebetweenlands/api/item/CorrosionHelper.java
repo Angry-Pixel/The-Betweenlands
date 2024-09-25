@@ -303,7 +303,7 @@ public class CorrosionHelper {
 
 		int coating = getCoating(stack);
 		if(coating > 0 || advancedItemTooltips) {
-			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.coated." + getCorrosionStage(stack)).getContents());
+			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.coated." + getCoatingStage(stack)).getContents());
 			if (advancedItemTooltips) {
 				String corrosionInfo = " (" +
 					coating +
