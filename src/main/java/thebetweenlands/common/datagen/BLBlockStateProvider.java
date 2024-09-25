@@ -73,7 +73,12 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.LIMESTONE);
 		this.simpleBlockWithItem(BlockRegistry.SWAMP_DIRT);
 		this.simpleBlockWithItem(BlockRegistry.COARSE_SWAMP_DIRT);
-		this.bottomSideTopTuftBlockWithItem(BlockRegistry.SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_grass_top"), this.modLoc("block/swamp_dirt"), List.of(
+		this.tuftBlockWithItem(BlockRegistry.SWAMP_GRASS, this.models().withExistingParent("swamp_grass", this.mcLoc("block/grass_block")).
+			texture("overlay", this.modLoc("block/swamp_grass_side_overlay")).
+			texture("side", this.modLoc("block/swamp_grass_side")).
+			texture("top", this.modLoc("block/swamp_grass_top_gs")).
+			texture("bottom", this.modLoc("block/swamp_dirt")).
+			texture("particle", this.modLoc("block/swamp_dirt")).renderType("cutout"), List.of(
 			new TuftPart(this.models().withExistingParent("block/swamp_grass_tuft_none", this.mcLoc("block/air")).renderType("cutout"), 4, false),
 			new TuftPart(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_0")), 1, true),
 			new TuftPart(this.models().getExistingFile(this.modLoc("block/swamp_grass_tuft_1")), 1, true)
@@ -97,7 +102,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE, false);
 		this.simpleBlockWithItem(BlockRegistry.SILT);
 		this.simpleBlockWithItem(BlockRegistry.FILTERED_SILT);
-		this.bottomSideTopTuftBlockWithItem(BlockRegistry.DEAD_GRASS, this.modLoc("block/dead_grass_side"), this.modLoc("block/dead_grass_top"), this.modLoc("block/swamp_dirt"), List.of(
+		this.tuftBlockWithItem(BlockRegistry.DEAD_GRASS, this.models().withExistingParent("block/dead_grass", this.mcLoc("cube_bottom_top")).
+			texture("side", this.modLoc("block/dead_grass_side")).
+			texture("top", this.modLoc("block/dead_grass_top")).
+			texture("bottom", this.modLoc("block/swamp_dirt")), List.of(
 			new TuftPart(this.models().withExistingParent("block/dead_grass_tuft_none", this.mcLoc("block/air")).renderType("cutout"), 8, false),
 			new TuftPart(this.models().getExistingFile(this.modLoc("block/dead_grass_tuft_0")), 1, true),
 			new TuftPart(this.models().getExistingFile(this.modLoc("block/dead_grass_tuft_1")), 1, true)
@@ -892,7 +900,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.texture("cross2", this.modLoc("block/seeded_hanger_untinted")));
 		this.basicItemTex(BlockRegistry.SEEDED_HANGER, false);
 		//more bushes
-		this.simpleBlock(BlockRegistry.FALLEN_LEAVES.get(), this.models().carpet("fallen_leaves", this.modLoc("block/fallen_leaves")));
+		this.simpleBlock(BlockRegistry.FALLEN_LEAVES.get(), this.models().carpet("fallen_leaves", this.modLoc("block/fallen_leaves")).renderType("cutout"));
 		this.basicItemTex(BlockRegistry.FALLEN_LEAVES, false);
 		this.simpleBlock(BlockRegistry.SWAMP_REED.get(), this.models().withExistingParent(BlockRegistry.SWAMP_REED.getId().getPath(), this.mcLoc("block/tinted_cross")).texture("cross", this.blockTexture(BlockRegistry.SWAMP_REED.get())).renderType("cutout"));
 		this.basicItemTex(BlockRegistry.SWAMP_REED, false);
@@ -949,15 +957,15 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		}
 	}
 
-	private void bottomSideTopTuftBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom, List<TuftPart> tuftParts, boolean doVariate) {
+	private void tuftBlockWithItem(DeferredBlock<Block> block, ModelFile coreModel, List<TuftPart> tuftParts, boolean doVariate) {
 		ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> builder = getMultipartBuilder(block.get()).part();
 		if (doVariate) builder
-			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).rotationY(270).nextModel()
-			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).rotationY(180).nextModel()
-			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).rotationY(90).nextModel()
-			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).addModel();
+			.modelFile(coreModel).rotationY(270).nextModel()
+			.modelFile(coreModel).rotationY(180).nextModel()
+			.modelFile(coreModel).rotationY(90).nextModel()
+			.modelFile(coreModel).addModel();
 		else builder
-			.modelFile(this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top)).addModel();
+			.modelFile(coreModel).addModel();
 		boolean t = false;
 		for (TuftPart part : tuftParts) {
 			if (t) builder = builder.nextModel();

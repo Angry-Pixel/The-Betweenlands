@@ -581,7 +581,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.LIME_PRESENT, BlockRegistry.BLUE_PRESENT, BlockRegistry.CYAN_PRESENT, BlockRegistry.LIGHT_BLUE_PRESENT,
 			BlockRegistry.PURPLE_PRESENT, BlockRegistry.MAGENTA_PRESENT, BlockRegistry.PINK_PRESENT, BlockRegistry.BROWN_PRESENT,
 			BlockRegistry.SHORT_SWAMP_GRASS, BlockRegistry.POISON_IVY, BlockRegistry.TALL_SWAMP_GRASS, BlockRegistry.MOSS, BlockRegistry.DEAD_MOSS,
-			BlockRegistry.WEEDWOOD_LEAVES.get(), BlockRegistry.RUBBER_TREE_LEAVES.get());
+			BlockRegistry.WEEDWOOD_LEAVES.get(), BlockRegistry.RUBBER_TREE_LEAVES.get(), BlockRegistry.SWAMP_GRASS);
 
 		event.register((stack, tintIndex) -> {
 			if (stack.get(DataComponents.ENTITY_DATA) != null) {

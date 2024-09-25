@@ -1,8 +1,11 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/grass_block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "thebetweenlands:block/swamp_dirt",
+    "overlay": "thebetweenlands:block/swamp_grass_side_overlay",
+    "particle": "thebetweenlands:block/swamp_dirt",
     "side": "thebetweenlands:block/swamp_grass_side",
-    "top": "thebetweenlands:block/swamp_grass_top"
+    "top": "thebetweenlands:block/swamp_grass_top_gs"
   }
 }
