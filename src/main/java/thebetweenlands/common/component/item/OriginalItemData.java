@@ -20,4 +20,6 @@ public record OriginalItemData(@Nonnull ItemStack originalStack) {
 		OriginalItemData::new
 	);
 	
+	public static final OriginalItemData EMPTY = new OriginalItemData(ItemStack.EMPTY);
+	
 }

@@ -486,14 +486,9 @@ public class OverworldItemHandler {
 		containerStack.set(DataComponentRegistry.ROTTEN_FOOD, new OriginalItemData(originalStack.copyWithCount(1)));
 	}
 
+	// "Don't pay for what you don't use" - There is a @Notnull annotation on OriginalItemData's originalStack
 	public static ItemStack getOriginalStack(ItemStack containerStack) {
-		final DataComponentType<OriginalItemData> ROTTEN_FOOD_COMPONENT = DataComponentRegistry.ROTTEN_FOOD.get();
-		if(!containerStack.has(ROTTEN_FOOD_COMPONENT)) {
-			return ItemStack.EMPTY;
-		}
-		final OriginalItemData data = containerStack.get(ROTTEN_FOOD_COMPONENT);
-		final ItemStack stack = data.originalStack();
-		return stack == null || stack.isEmpty() ? ItemStack.EMPTY : stack;
+		return containerStack.getOrDefault(DataComponentRegistry.ROTTEN_FOOD, OriginalItemData.EMPTY).originalStack();
 	}
 
 	public static ItemStack getOriginalStackScaled(ItemStack containerStack) {
@@ -549,13 +544,12 @@ public class OverworldItemHandler {
 	 * @param container
 	 */
 	private static void revertInventoryContents(Container container) {
-		// Optimize by using final (there are some very large containers we could be iterating over)
 		final DataComponentType<OriginalItemData> ROTTEN_FOOD_COMPONENT = DataComponentRegistry.ROTTEN_FOOD.get();
 		final int containerSize = container.getContainerSize();
 		for(int slot = 0; slot < containerSize; ++slot) {
 			final ItemStack stack = container.getItem(slot);
 			if(stack != null && !stack.isEmpty() && stack.has(ROTTEN_FOOD_COMPONENT)) {
-				container.setItem(slot, stack.get(ROTTEN_FOOD_COMPONENT).originalStack().copyWithCount(stack.getCount()));
+				container.setItem(slot, getOriginalStackScaled(stack));
 			}
 		}
 	}
