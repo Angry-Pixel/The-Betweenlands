@@ -289,7 +289,7 @@ public class CorrosionHelper {
 
 		boolean advancedItemTooltips = tooltipFlags.isAdvanced();
 
-		List<Component> components = new ArrayList<Component>(2);
+		int tooltipIndex = 1;
 		if(isCorrosionEnabled()) {
 			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.corrosion." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
@@ -298,7 +298,7 @@ public class CorrosionHelper {
 					"/" + getMaximumCorrosion(stack) + ")";
 				mutableComponent.append(corrosionInfo);
 			}
-			components.add(mutableComponent.withStyle(ChatFormatting.GRAY));
+			lines.add(tooltipIndex++, mutableComponent.withStyle(ChatFormatting.GRAY));
 		}
 
 		int coating = getCoating(stack);
@@ -310,9 +310,8 @@ public class CorrosionHelper {
 					"/" + getMaximumCoating(stack) + ")";
 				mutableComponent.append(corrosionInfo);
 			}
-			components.add(mutableComponent.withStyle(ChatFormatting.GRAY));
+			lines.add(tooltipIndex, mutableComponent.withStyle(ChatFormatting.GRAY));
 		}
-		lines.addAll(1, components);
 	}
 
 	/**
