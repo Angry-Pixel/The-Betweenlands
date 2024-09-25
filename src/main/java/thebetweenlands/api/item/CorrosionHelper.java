@@ -1,5 +1,6 @@
 package thebetweenlands.api.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
@@ -288,6 +289,7 @@ public class CorrosionHelper {
 
 		boolean advancedItemTooltips = tooltipFlags.isAdvanced();
 
+		List<Component> components = new ArrayList<Component>(2);
 		if(isCorrosionEnabled()) {
 			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.corrosion." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
@@ -296,7 +298,7 @@ public class CorrosionHelper {
 					"/" + getMaximumCorrosion(stack) + ")";
 				mutableComponent.append(corrosionInfo);
 			}
-			lines.add(1, mutableComponent.withStyle(ChatFormatting.GRAY));
+			components.add(mutableComponent.withStyle(ChatFormatting.GRAY));
 		}
 
 		int coating = getCoating(stack);
@@ -308,8 +310,9 @@ public class CorrosionHelper {
 					"/" + getMaximumCoating(stack) + ")";
 				mutableComponent.append(corrosionInfo);
 			}
-			lines.add(2, mutableComponent.withStyle(ChatFormatting.GRAY));
+			components.add(mutableComponent.withStyle(ChatFormatting.GRAY));
 		}
+		lines.addAll(1, components);
 	}
 
 	/**

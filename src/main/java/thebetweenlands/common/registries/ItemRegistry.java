@@ -299,7 +299,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> OCTINE_PICKAXE = ITEMS.register("octine_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> OCTINE_AXE = ITEMS.register("octine_axe", () -> new AxeItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> OCTINE_SHOVEL = ITEMS.register("octine_shovel", () -> new ShovelItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> VALONITE_SWORD = ITEMS.register("valonite_sword", () -> new SwordItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_SWORD = ITEMS.register("valonite_sword", () -> new SwordItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1).attributes(SwordItem.createAttributes(ToolMaterialRegistry.VALONITE, 3, -2.4F))));
 	public static final DeferredItem<Item> VALONITE_PICKAXE = ITEMS.register("valonite_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_AXE = ITEMS.register("valonite_axe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new ValoniteGreataxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(AxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.0F)).stacksTo(1)));
