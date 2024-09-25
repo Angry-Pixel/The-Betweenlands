@@ -132,7 +132,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
-	private void updateParticles(Level level, BlockPos pos, int maxPredictionTime, int nextPrediction, @Nullable PredictableEnvironmentEvent nextEvent, ResourceLocation@Nullable[] nextEventVisions) {
+	private void updateParticles(Level level, BlockPos pos, int maxPredictionTime, int nextPrediction, @Nullable PredictableEnvironmentEvent nextEvent, @Nullable ResourceLocation[] nextEventVisions) {
 		if (this.predictedEvent != null && this.predictedEvent != nextEvent && this.fadeOutTimer < 20) {
 			this.fadeOutTimer++;
 
