@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:builtin/entity",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/weedwood_rubber_tap_particle"
+  }
+}

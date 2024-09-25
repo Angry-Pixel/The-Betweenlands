@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:builtin/entity",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/syrmorite_rubber_tap_particle"
+  }
+}

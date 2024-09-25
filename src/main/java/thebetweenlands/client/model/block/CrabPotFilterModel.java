@@ -122,6 +122,6 @@ public class CrabPotFilterModel {
 				.addBox(-5.0F, -3.0F, 0.0F, 10, 6, 0),
 			PartPose.offset(0.0F, -9.0F, 7.0F));
 
-		return LayerDefinition.create(definition, 128, 128);
+		return LayerDefinition.create(definition, 128, 64);
 	}
 }

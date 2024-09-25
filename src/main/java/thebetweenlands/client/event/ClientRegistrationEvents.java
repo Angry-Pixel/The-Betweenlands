@@ -186,6 +186,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PUFFSHROOM.get(), PuffshroomRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.REPELLER.get(), RepellerRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.RUBBER_TAP.get(), RubberTapRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SILT_GLASS_JAR.get(), SiltGlassJarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
@@ -260,6 +261,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_1, RootmanSimulacrumModels::makeSimulacrum1);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModels::makeSimulacrum2);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModels::makeSimulacrum3);
+		event.registerLayerDefinition(BLModelLayers.RUBBER_TAP, RubberTapModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.RUBBER_TAP_FLOW, RubberTapModel::theRubberMustFlow);
 		event.registerLayerDefinition(BLModelLayers.SMOKING_RACK, SmokingRackModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.SPIKE_BLOCK, SpikeTrapModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.SPOOP, SpikeTrapModel::makeSpoop);

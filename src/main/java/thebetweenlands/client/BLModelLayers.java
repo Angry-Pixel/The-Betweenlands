@@ -66,6 +66,8 @@ public class BLModelLayers {
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_1 = register("rootman_simulacrum_1");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_2 = register("rootman_simulacrum_2");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_3 = register("rootman_simulacrum_3");
+	public static final ModelLayerLocation RUBBER_TAP = register("rubber_tap");
+	public static final ModelLayerLocation RUBBER_TAP_FLOW = register("rubber_tap_flow");
 	public static final ModelLayerLocation SMOKING_RACK = register("smoking_rack");
 	public static final ModelLayerLocation SPIKE_BLOCK = register("spike_block");
 	public static final ModelLayerLocation SPOOP = register("spoop");
