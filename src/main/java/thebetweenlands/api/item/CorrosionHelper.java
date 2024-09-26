@@ -56,7 +56,7 @@ public class CorrosionHelper {
 		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
 			return ((CustomCorrodible) stack.getItem()).getMaxCorrosion(stack);
 		} else {
-			return MAX_CORROSION;
+			return stack.getOrDefault(DataComponentRegistry.MAX_CORROSION, MAX_CORROSION);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class CorrosionHelper {
 		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
 			return ((CustomCorrodible) stack.getItem()).getMaxCoating(stack);
 		} else {
-			return MAX_COATING;
+			return stack.getOrDefault(DataComponentRegistry.MAX_COATING, MAX_COATING);
 		}
 	}
 

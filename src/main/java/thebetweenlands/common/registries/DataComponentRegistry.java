@@ -60,5 +60,7 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WORMS = COMPONENTS.register("worms", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_CORROSION = COMPONENTS.register("max_corrosion", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_COATING = COMPONENTS.register("max_coating", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
 }
