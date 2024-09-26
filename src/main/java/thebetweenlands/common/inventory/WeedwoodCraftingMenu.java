@@ -29,22 +29,25 @@ public class WeedwoodCraftingMenu extends CraftingMenu {
 		super(containerId, playerInventory, access);
 		this.table = table;
 		this.player = playerInventory.player;
-
+		
 		this.resultSlots = new WeedwoodResultContainer(table);
 		this.craftSlots = new WeedwoodCraftingContainer(this, table);
 		this.craftSlots.startOpen(playerInventory.player);
-
+		
 		// set the slots here because there's a bunch of extra tracking done that's not very useful
 		int i = 0;
-
+		
         this.slots.set(i++, new ResultSlot(playerInventory.player, this.craftSlots, this.resultSlots, 0, 124, 35));
-
+		
 		for(int x = 0; x < 3; ++x) {
 			for(int y = 0; y < 3; ++y) {
-				this.slots.set(i++, new Slot(this.craftSlots, y + x * 3, 30 + y * 18, 17 + x * 18)).index = i++;
+				final int index = i++;
+				final Slot slot = new Slot(this.craftSlots, y + x * 3, 30 + y * 18, 17 + x * 18);
+				this.slots.set(index, slot);
+				slot.index = index;
 			}
 		}
-
+		
 		this.table.slotChangedCraftingGrid();
 	}
 
