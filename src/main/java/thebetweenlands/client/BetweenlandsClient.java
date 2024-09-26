@@ -16,6 +16,7 @@ import thebetweenlands.client.particle.VanillaParticleFactory;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("resource")
 public class BetweenlandsClient {
 
 	@Nullable
@@ -26,6 +27,12 @@ public class BetweenlandsClient {
 	@Nullable
 	public static Player getClientPlayer() {
 		return Minecraft.getInstance().player;
+	}
+
+	@Nullable
+	public static Player getCameraPlayer() {
+		// PLEASE stop removing this method, there are actual cases where we need to use it
+		return Minecraft.getInstance().getCameraEntity() instanceof Player player ? player : null;
 	}
 
 	public static void playLocalSound(SoundInstance instance) {
