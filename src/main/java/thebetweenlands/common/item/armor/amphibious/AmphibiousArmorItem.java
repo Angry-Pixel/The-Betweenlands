@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -307,6 +308,13 @@ public class AmphibiousArmorItem extends ArmorItem {
 		@Override
 		public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> original) {
 			return new AmphibiousArmorModel(slot, Minecraft.getInstance().getEntityModels().bakeLayer(BLModelLayers.AMPHIBIOUS_ARMOR));
+		}
+
+		@Override
+		public void setupModelAnimations(LivingEntity livingEntity, ItemStack stack, EquipmentSlot slot, Model model, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
+			if (model instanceof AmphibiousArmorModel armor) {
+				armor.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+			}
 		}
 	}
 }

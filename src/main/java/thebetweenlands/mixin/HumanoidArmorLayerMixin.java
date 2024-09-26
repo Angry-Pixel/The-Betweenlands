@@ -26,8 +26,8 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, A extends 
 	@Shadow(remap = false)
 	protected abstract boolean usesInnerModel(EquipmentSlot slot);
 
-	@Inject(method = "renderArmorPiece", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/ItemStack;hasFoil()Z", shift = At.Shift.BEFORE), remap = false)
-	public void renderGems(PoseStack stack, MultiBufferSource source, T entity, EquipmentSlot slot, int light, A model, CallbackInfo ci) {
+	@Inject(method = "renderArmorPiece(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;FFFFFF)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/ItemStack;hasFoil()Z", shift = At.Shift.BEFORE), remap = false)
+	public void renderGems(PoseStack stack, MultiBufferSource source, T entity, EquipmentSlot slot, int light, A model, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
 		ItemStack itemstack = entity.getItemBySlot(slot);
 		CircleGemType gem = itemstack.get(DataComponentRegistry.CIRCLE_GEM);
 		if (gem != null) {

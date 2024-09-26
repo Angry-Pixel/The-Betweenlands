@@ -247,6 +247,8 @@ public class AmphibiousArmorModel extends BLArmorModel {
 				this.belt.visible = false;
 				this.rightLeg.visible = false;
 				this.leftLeg.visible = false;
+				this.left_boot.visible = false;
+				this.right_boot.visible = false;
 			}
 			case CHEST -> {
 				this.head.visible = false;
@@ -257,6 +259,8 @@ public class AmphibiousArmorModel extends BLArmorModel {
 				this.belt.visible = false;
 				this.rightLeg.visible = false;
 				this.leftLeg.visible = false;
+				this.left_boot.visible = false;
+				this.right_boot.visible = false;
 			}
 			case LEGS -> {
 				this.head.visible = false;

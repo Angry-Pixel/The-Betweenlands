@@ -16,7 +16,7 @@ Introducing The Betweenlands... a dark and hostile environment. This large and e
 [[dependencies.thebetweenlands]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.0.17-beta,)"
+versionRange = "[21.1.62,)"
 ordering = "NONE"
 side = "BOTH"
 
