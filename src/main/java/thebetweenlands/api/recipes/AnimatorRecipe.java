@@ -48,6 +48,9 @@ public interface AnimatorRecipe extends Recipe<SingleRecipeInput> {
 	@Nullable
 	EntityType<?> getSpawnEntity(SingleRecipeInput input);
 
+	@Nullable
+	EntityType<?> getSpawnEntity();
+
 	/**
 	 * Called when the item is animated. Can return the resulting ItemStack (overrides {@link AnimatorRecipe#assemble(RecipeInput, HolderLookup.Provider)}).
 	 * Also used to spawn entities from animator once animated
@@ -82,5 +85,10 @@ public interface AnimatorRecipe extends Recipe<SingleRecipeInput> {
 	@Override
 	default RecipeType<?> getType() {
 		return RecipeRegistry.ANIMATOR_RECIPE.get();
+	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
 	}
 }

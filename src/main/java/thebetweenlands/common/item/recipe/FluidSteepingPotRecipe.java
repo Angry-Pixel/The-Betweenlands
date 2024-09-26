@@ -30,6 +30,11 @@ public record FluidSteepingPotRecipe(FluidIngredient inputFluid, NonNullList<Ing
 	}
 
 	@Override
+	public FluidIngredient getInputFluid() {
+		return this.inputFluid();
+	}
+
+	@Override
 	public NonNullList<Ingredient> getIngredients() {
 		return this.items();
 	}

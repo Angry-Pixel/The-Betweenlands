@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -35,6 +36,11 @@ public record SiltCrabPotFilterRecipe(Ingredient input, ItemStack result, int fi
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.SILT_CRAB_POT_FILTER_SERIALIZER.get();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, this.input());
 	}
 
 	public static class Serializer implements RecipeSerializer<SiltCrabPotFilterRecipe> {

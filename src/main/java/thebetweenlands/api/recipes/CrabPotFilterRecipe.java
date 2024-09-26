@@ -18,4 +18,9 @@ public interface CrabPotFilterRecipe extends Recipe<ItemAndEntityInput> {
 	default RecipeType<?> getType() {
 		return RecipeRegistry.CRAB_POT_FILTER_RECIPE.get();
 	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
+	}
 }

@@ -38,6 +38,11 @@ public record BasicTrimmingTableRecipe(Ingredient input, NonNullList<ItemStack> 
 	}
 
 	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, this.input());
+	}
+
+	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.TRIMMING_SERIALIZER.get();
 	}

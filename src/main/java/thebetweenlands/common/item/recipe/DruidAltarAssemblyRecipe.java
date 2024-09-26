@@ -56,6 +56,11 @@ public record DruidAltarAssemblyRecipe(NonNullList<Ingredient> items, ItemStack 
 	}
 
 	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return this.items();
+	}
+
+	@Override
 	public ItemStack getToastSymbol() {
 		return new ItemStack(BlockRegistry.DRUID_ALTAR.get());
 	}

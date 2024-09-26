@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:purifier",
+  "input": {
+    "tag": "thebetweenlands:item_frames"
+  },
+  "purifying_time": 432,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:champagne_item_frame"
+  },
+  "water_needed": 250
+}

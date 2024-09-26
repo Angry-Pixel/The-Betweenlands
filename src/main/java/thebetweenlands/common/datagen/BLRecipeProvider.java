@@ -245,7 +245,7 @@ public class BLRecipeProvider extends RecipeProvider {
 		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.GREEN_MIDDLE_GEM_ORE, ItemRegistry.GREEN_MIDDLE_GEM).save(output);
 		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE, ItemRegistry.CRIMSON_MIDDLE_GEM).save(output);
 		CrabPotFilterRecipeBuilder.bubblerCrab(ItemRegistry.SLUDGE_BALL, ItemRegistry.SAP_BALL).save(output);
-//		CrabPotFilterRecipeBuilder.bubblerCrab(ItemRegistry.ROOT_POD, new ItemStack(BlockRegistry.ROOT, 4)).save(output);
+		CrabPotFilterRecipeBuilder.bubblerCrab(BlockRegistry.ROOT_POD, new ItemStack(BlockRegistry.ROOT, 4)).save(output);
 
 		PurifierRecipeBuilder.purifying(Ingredient.of(BlockRegistry.MOSSY_CRAGROCK_TOP, BlockRegistry.MOSSY_CRAGROCK_BOTTOM), BlockRegistry.CRAGROCK).save(output);
 		PurifierRecipeBuilder.purifying(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE, ItemRegistry.CRIMSON_MIDDLE_GEM).save(output);
@@ -254,7 +254,7 @@ public class BLRecipeProvider extends RecipeProvider {
 		PurifierRecipeBuilder.purifying(BlockRegistry.SWAMP_DIRT, BlockRegistry.PURIFIED_SWAMP_DIRT).save(output);
 		PurifierRecipeBuilder.purifying(ItemRegistry.DIRTY_DENTROTHYST_VIAL, ItemRegistry.GREEN_DENTROTHYST_VIAL).save(output);
 		PurifierRecipeBuilder.purifying(ItemRegistry.DIRTY_SILK_BUNDLE, ItemRegistry.SILK_BUNDLE).save(output);
-		//PurifierRecipeBuilder.purifying(BLItemTagProvider.ITEM_FRAMES, ItemRegistry.ITEM_FRAME).save(output);
+		PurifierRecipeBuilder.purifying(BLItemTagProvider.ITEM_FRAMES, ItemRegistry.CHAMPAGNE_ITEM_FRAME).save(output);
 		PurifierRecipeBuilder.purifying(BLItemTagProvider.FILTERED_SILT_GLASS, BlockRegistry.FILTERED_SILT_GLASS).save(output);
 		PurifierRecipeBuilder.purifying(BLItemTagProvider.MUD_BRICK_SHINGLES, BlockRegistry.MUD_BRICK_SHINGLES).save(output);
 		//TODO weedwood rowboat and pouch custom recipes

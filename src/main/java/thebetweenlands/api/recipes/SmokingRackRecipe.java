@@ -18,4 +18,9 @@ public interface SmokingRackRecipe extends Recipe<SingleRecipeInput> {
 	default RecipeType<?> getType() {
 		return RecipeRegistry.SMOKING_RECIPE.get();
 	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
+	}
 }

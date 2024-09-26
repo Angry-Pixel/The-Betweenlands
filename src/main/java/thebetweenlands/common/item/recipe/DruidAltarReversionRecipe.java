@@ -54,6 +54,11 @@ public record DruidAltarReversionRecipe(NonNullList<Ingredient> items, int proce
 	}
 
 	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return this.items();
+	}
+
+	@Override
 	public boolean isSpecial() {
 		return true;
 	}

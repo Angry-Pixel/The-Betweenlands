@@ -1,12 +1,17 @@
 package thebetweenlands.common.item.recipe;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.recipes.SmokingRackRecipe;
@@ -28,10 +33,10 @@ public class AnadiaSmokingRecipe implements SmokingRackRecipe {
 	public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registries) {
 		ItemStack output = input.item().copy();
 
-		CompoundTag entityNbt = ((MobItem) output.getItem()).getEntityData(output);
+		CompoundTag entityNbt = ((MobItem<?>) output.getItem()).getEntityData(output);
 
 		// never called in legit caught anadia, but helps display correct item in JEI smoking recipe ;)
-		if (entityNbt == null) {
+		if (entityNbt.isEmpty()) {
 			entityNbt = new CompoundTag();
 			ResourceLocation id = EntityRegistry.ANADIA.getId();
 			if (id != null) {
@@ -62,7 +67,7 @@ public class AnadiaSmokingRecipe implements SmokingRackRecipe {
 			}
 		}
 
-		((MobItem) output.getItem()).setEntityData(output, entityNbt);
+		((MobItem<?>) output.getItem()).setEntityData(output, entityNbt);
 
 		return output;
 	}
@@ -86,12 +91,22 @@ public class AnadiaSmokingRecipe implements SmokingRackRecipe {
 
 	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
-		return new ItemStack(ItemRegistry.ANADIA.get());
+		return new ItemStack(ItemRegistry.ANADIA, 1, DataComponentPatch.builder().set(DataComponents.ENTITY_DATA, CustomData.of(Util.make(new CompoundTag(), tag -> tag.putByte("fish_color", (byte) AnadiaParts.AnadiaColor.SMOKED.ordinal())))).build());
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.ANADIA_SMOKING_SERIALIZER.get();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, Ingredient.of(ItemRegistry.ANADIA));
+	}
+
+	@Override
+	public boolean isSpecial() {
+		return true;
 	}
 
 	public static class Serializer implements RecipeSerializer<AnadiaSmokingRecipe> {

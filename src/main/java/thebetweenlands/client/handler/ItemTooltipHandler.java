@@ -15,13 +15,13 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
-import thebetweenlands.common.component.item.CompostData;
 import thebetweenlands.common.component.item.UpgradeDamage;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
+import thebetweenlands.common.item.datamaps.CompostableItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.FoodSickness;
 
@@ -137,11 +137,11 @@ public class ItemTooltipHandler {
 				usedInMachines.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.format", amphibiousUpgrades.stream().map(Component::getString).collect(Collectors.joining("/"))).withStyle(ChatFormatting.GRAY));
 			}
 
-			if (stack.has(DataComponentRegistry.COMPOST)) {
-				CompostData data = stack.get(DataComponentRegistry.COMPOST);
+			if (stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE) != null) {
+				CompostableItem data = stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE);
 				String debug = "";
 				if (event.getFlags().isAdvanced()) {
-					debug = " (T: " + COMPOST_AMOUNT_FORMAT.format(data.compostTime() / 20.0F) + "s A: " + data.compostLevel() + ")";
+					debug = " (T: " + COMPOST_AMOUNT_FORMAT.format(data.time() / 20.0F) + "s A: " + data.amount() + ")";
 				}
 				usedInMachines.add(Component.translatable("item.thebetweenlands.compost_recipe").append(debug).withStyle(ChatFormatting.GRAY));
 			}

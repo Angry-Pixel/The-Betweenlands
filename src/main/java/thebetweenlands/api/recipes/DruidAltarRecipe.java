@@ -57,4 +57,9 @@ public interface DruidAltarRecipe extends Recipe<MultiStackInput> {
 	default RecipeType<?> getType() {
 		return RecipeRegistry.DRUID_ALTAR_RECIPE.get();
 	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
+	}
 }

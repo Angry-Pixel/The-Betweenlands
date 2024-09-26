@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.common.registries.RecipeRegistry;
 
@@ -60,6 +62,12 @@ public record ToolRepairAnimatorRecipe(Ingredient input, int minRepairLifeCost, 
 		return null;
 	}
 
+	@Nullable
+	@Override
+	public EntityType<?> getSpawnEntity() {
+		return null;
+	}
+
 	@Override
 	public ItemStack onAnimated(ServerLevel level, BlockPos pos, SingleRecipeInput input) {
 		return ItemStack.EMPTY;
@@ -78,6 +86,11 @@ public record ToolRepairAnimatorRecipe(Ingredient input, int minRepairLifeCost, 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.ANIMATOR_TOOL_SERIALIZER.get();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, this.input());
 	}
 
 	public static class Serializer implements RecipeSerializer<ToolRepairAnimatorRecipe> {

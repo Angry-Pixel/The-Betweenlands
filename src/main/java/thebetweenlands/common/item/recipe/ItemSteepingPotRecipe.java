@@ -35,6 +35,16 @@ public record ItemSteepingPotRecipe(FluidIngredient inputFluid, NonNullList<Ingr
 	}
 
 	@Override
+	public FluidIngredient getInputFluid() {
+		return this.inputFluid();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return this.items();
+	}
+
+	@Override
 	public boolean canCraftInDimensions(int width, int height) {
 		return width * height >= this.items.size() + 1;
 	}

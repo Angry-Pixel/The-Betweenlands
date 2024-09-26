@@ -57,6 +57,24 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
 		this.add("container.thebetweenlands.smoking_rack", "Smoking Rack");
 
+		this.add("jei.thebetweenlands.recipe.animator", "Animator");
+		this.add("jei.thebetweenlands.animator.life", "Life amount: %d");
+		this.add("jei.thebetweenlands.animator.fuel", "Fuel amount: %d");
+		this.add("jei.thebetweenlands.animator.entity_spawn", "This recipe will spawn %s");
+		this.add("jei.thebetweenlands.recipe.bubbler_crab_pot_filter", "Crab Pot Filter (Bubbler Crab)");
+		this.add("jei.thebetweenlands.recipe.compost", "Compost");
+		this.add("jei.thebetweenlands.compost.amount", "Compost amount: %d");
+		this.add("jei.thebetweenlands.time", "Process time: %d minutes and %d seconds");
+		this.add("jei.thebetweenlands.time.minutes", "Process time: %d minutes");
+		this.add("jei.thebetweenlands.time.seconds", "Process time: %d seconds");
+		this.add("jei.thebetweenlands.recipe.druid_altar", "Druid Altar");
+		this.add("jei.thebetweenlands.druid_circle_reactivate", "Reactivates Druid Spawner");
+		this.add("jei.thebetweenlands.recipe.mortar", "Pestle and Mortar");
+		this.add("jei.thebetweenlands.recipe.purifier", "Purifier");
+		this.add("jei.thebetweenlands.recipe.silt_crab_pot_filter", "Crab Pot Filter (Silt Crab)");
+		this.add("jei.thebetweenlands.recipe.smoking_rack", "Smoking Rack");
+		this.add("jei.thebetweenlands.recipe.steeping_pot", "Steeping Pot");
+
 		this.addAdvancement("adventurer.root", "Adventurer", "The beginning of The Betweenlands Adventure");
 		this.addAdvancement("adventurer.give_me_that", "Give Me That", "Obtain the Swamp Talisman");
 		this.addAdvancement("adventurer.dank_world", "Dank World", "Step through the Portal Tree");

@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -42,6 +43,11 @@ public class AnadiaTrimmingRecipe implements TrimmingTableRecipe {
 	@Override
 	public ItemStack getRemains() {
 		return new ItemStack(ItemRegistry.ANADIA_REMAINS.get());
+	}
+
+	@Override
+	public boolean isSpecial() {
+		return true;
 	}
 
 	@Override

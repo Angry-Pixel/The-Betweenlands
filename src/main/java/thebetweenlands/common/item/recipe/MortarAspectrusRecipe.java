@@ -2,9 +2,11 @@ package thebetweenlands.common.item.recipe;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -71,6 +73,11 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 	@Override
 	public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registries) {
 		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, Ingredient.of(ItemRegistry.ASPECTRUS_FRUIT));
 	}
 
 	@Override

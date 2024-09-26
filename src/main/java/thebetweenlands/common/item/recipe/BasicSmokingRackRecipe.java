@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -12,6 +13,8 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.recipes.SmokingRackRecipe;
 import thebetweenlands.common.registries.RecipeRegistry;
+
+import java.util.List;
 
 public record BasicSmokingRackRecipe(Ingredient input, ItemStack result, int smokingTime) implements SmokingRackRecipe {
 
@@ -28,6 +31,11 @@ public record BasicSmokingRackRecipe(Ingredient input, ItemStack result, int smo
 	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return this.result();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, this.input());
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -48,6 +49,12 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 	@Nullable
 	@Override
 	public EntityType<?> getSpawnEntity(SingleRecipeInput input) {
+		return this.resultEntity().orElse(null);
+	}
+
+	@Nullable
+	@Override
+	public EntityType<?> getSpawnEntity() {
 		return this.resultEntity().orElse(null);
 	}
 
@@ -112,6 +119,11 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.ANIMATOR_SERIALIZER.get();
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return NonNullList.of(Ingredient.EMPTY, this.input());
 	}
 
 	public static class Serializer implements RecipeSerializer<BasicAnimatorRecipe> {

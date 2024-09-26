@@ -19,7 +19,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AmphibiousUpgrades;
 import thebetweenlands.common.component.item.AspectContents;
-import thebetweenlands.common.component.item.CompostData;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
@@ -37,7 +36,6 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmphibiousUpgrades>> AMPHIBIOUS_UPGRADES = COMPONENTS.register("amphibious_upgrades", () -> DataComponentType.<AmphibiousUpgrades>builder().persistent(AmphibiousUpgrades.CODEC).networkSynchronized(AmphibiousUpgrades.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectContents>> ASPECT_CONTENTS = COMPONENTS.register("aspect_contents", () -> DataComponentType.<AspectContents>builder().persistent(AspectContents.CODEC).networkSynchronized(AspectContents.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BURN_TICKS = COMPONENTS.register("burn_ticks", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
-	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompostData>> COMPOST = COMPONENTS.register("compost", () -> DataComponentType.<CompostData>builder().persistent(CompostData.CODEC).networkSynchronized(CompostData.STREAM_CODEC).cacheEncoding().build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> CORROSIVE = COMPONENTS.register("corrosive", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CircleGemType>> CIRCLE_GEM = COMPONENTS.register("circle_gem", () -> DataComponentType.<CircleGemType>builder().persistent(CircleGemType.CODEC).networkSynchronized(CircleGemType.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<DiscoveryContainerData>> DISCOVERY_DATA = COMPONENTS.register("discovery_data", () -> DataComponentType.<DiscoveryContainerData>builder().persistent(DiscoveryContainerData.CODEC).networkSynchronized(DiscoveryContainerData.STREAM_CODEC).build());

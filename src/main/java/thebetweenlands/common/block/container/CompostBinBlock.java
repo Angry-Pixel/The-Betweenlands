@@ -23,11 +23,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
-import thebetweenlands.common.component.item.CompostData;
+import thebetweenlands.common.item.datamaps.CompostableItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
@@ -76,10 +78,10 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 				}
 
 				if (!interacted && !stack.isEmpty()) {
-					CompostData data = stack.get(DataComponentRegistry.COMPOST);
+					CompostableItem data = stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE);
 					if (data != null) {
-						int amount = data.compostLevel();
-						int time = data.compostTime();
+						int amount = data.amount();
+						int time = data.time();
 						switch (bin.addItemToBin(level, pos, state, stack, amount, time, true)) {
 							case CompostBinBlockEntity.CompostResult.ADDED:
 								bin.addItemToBin(level, pos, state, stack, amount, time, false);

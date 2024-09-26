@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-07T22:27:41.4192691	Recipes
+// 1.21.1	2024-09-25T23:32:41.5453259	Recipes
 a27668f50f93f9e20446d3fd8e7db973dbfb3ce0 data/thebetweenlands/recipe/animator/angry_pebble.json
 eede61accdf9fa5989c16eb490868442853b348a data/thebetweenlands/recipe/animator/animated_small_spirit_tree_face_mask.json
 5ab65cff3bc11553bfd17e7401139b5a63056f7f data/thebetweenlands/recipe/animator/animated_tar_beast_heart.json
@@ -13,6 +13,7 @@ fe6de9ec4d2eb7ecfe9b0b9c0d6df44b6c0799df data/thebetweenlands/recipe/filter/bubb
 daec133b75f726d6f99854de424d78ab24470184 data/thebetweenlands/recipe/filter/bubbler/filtered_silt.json
 972e1a48fe5f4c8ead0af2e08c12f9a1ef508151 data/thebetweenlands/recipe/filter/bubbler/green_middle_gem.json
 970e5e7f51b9e3be27213e7ffba9e2ab02d60954 data/thebetweenlands/recipe/filter/bubbler/purified_swamp_dirt.json
+974214a5f8f404abbdcf0d29e17ecea0cf60e622 data/thebetweenlands/recipe/filter/bubbler/root.json
 a8d70927eadc985962621eb2aed49abea9fc5d0d data/thebetweenlands/recipe/filter/bubbler/sap_ball.json
 368e46a443e1805b9a1f0a6a01bf134484608b39 data/thebetweenlands/recipe/filter/bubbler/swamp_dirt.json
 357667d7188535537462e8625bac69a06b808825 data/thebetweenlands/recipe/filter/silt/mud.json
@@ -87,6 +88,7 @@ e661b49df06d1eb1812f39b21a72ebea9e8f4527 data/thebetweenlands/recipe/mortar/grou
 164c8783dd548aacee7bd770391051c9b8e0395f data/thebetweenlands/recipe/mortar/limestone_flux.json
 ff19126906e26d96b57b8c40f944f7ad6e5c483d data/thebetweenlands/recipe/mortar/loot_scraps.json
 630fdaa720dbae6f5cceee519a7915a55c896e38 data/thebetweenlands/recipe/purifying/aqua_middle_gem.json
+2a3bf174cc374c842f05d977d8e9f0d2927b66c8 data/thebetweenlands/recipe/purifying/champagne_item_frame.json
 d28f86a3c24da669c4ecee5a6e34460e1767a3b3 data/thebetweenlands/recipe/purifying/cragrock.json
 053e1f22839c4e57504bfd9691d7eccd7fe61ed5 data/thebetweenlands/recipe/purifying/crimson_middle_gem.json
 04400d68f11fcde73272b1179455f542035bc825 data/thebetweenlands/recipe/purifying/filtered_silt_glass.json

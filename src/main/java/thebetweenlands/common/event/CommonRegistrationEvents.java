@@ -223,6 +223,7 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {
+		event.register(DataMapRegistry.COMPOSTABLE);
 		event.register(DataMapRegistry.DECAY_FOOD);
 		event.register(DataMapRegistry.FLUX_MULTIPLIER);
 	}

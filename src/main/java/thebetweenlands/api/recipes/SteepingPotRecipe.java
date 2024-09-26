@@ -4,10 +4,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import thebetweenlands.common.item.recipe.FluidRecipeInput;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 public interface SteepingPotRecipe extends Recipe<FluidRecipeInput> {
+
+	FluidIngredient getInputFluid();
 
 	FluidStack getResultFluid(HolderLookup.Provider registries);
 

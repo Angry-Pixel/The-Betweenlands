@@ -36,4 +36,9 @@ public interface TrimmingTableRecipe extends Recipe<SingleRecipeInput> {
 	default RecipeType<?> getType() {
 		return RecipeRegistry.TRIMMING_TABLE_RECIPE.get();
 	}
+
+	@Override
+	default boolean isIncomplete() {
+		return true;
+	}
 }
