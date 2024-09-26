@@ -269,7 +269,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.CLIMBABLE_MUD_BRICKS, "Climbable Mud Bricks");
 		this.addBlock(BlockRegistry.COARSE_SWAMP_DIRT, "Coarse Swamp Dirt");
 		this.addBlock(BlockRegistry.COMPACTED_MUD, "Compacted Mud");
-		this.addBlock(BlockRegistry.COMPACTED_MUD_MIRAGE, "Compacted Mud");
+		this.addBlock(BlockRegistry.COMPACTED_MUD_MIRAGE, "Compacted Mud Mirage");
 		this.addBlock(BlockRegistry.COMPACTED_MUD_SLAB, "Compacted Mud Slab");
 		this.addBlock(BlockRegistry.COMPACTED_MUD_SLOPE, "Compacted Mud Slope");
 		this.addBlock(BlockRegistry.COMPOST_BIN, "Compost Bin");
@@ -495,7 +495,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.MIDNIGHT_PURPLE_SAMITE_CANVAS_PANEL, "Midnight Purple Samite Canvas Panel");
 		this.addBlock(BlockRegistry.MILKWEED, "Milkweed");
 		this.addBlock(BlockRegistry.MIMIC_DUNGEON_DOOR_RUNES, "Dungeon Door");
-		this.addBlock(BlockRegistry.MIRAGE_BETWEENSTONE_BRICKS, "Betweenstone Bricks");
+		this.addBlock(BlockRegistry.MIRAGE_BETWEENSTONE_BRICKS, "Mirage Betweenstone Bricks");
 		this.addBlock(BlockRegistry.MIRE_CORAL, "Mire Coral");
 		this.addBlock(BlockRegistry.MIRE_CORAL_BLOCK, "Miral Coral Block");
 		this.addBlock(BlockRegistry.MIST_BRIDGE, "Mist Bridge");
@@ -606,7 +606,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.PORTAL_FRAME_TOP_LEFT, "Portal Frame");
 		this.addBlock(BlockRegistry.PORTAL_FRAME_TOP_RIGHT, "Portal Frame");
 		this.addBlock(BlockRegistry.PORTAL_LOG, "Portal Log");
-		this.addBlock(BlockRegistry.POSSESSED_BLOCK, "Betweenstone Bricks");
+		this.addBlock(BlockRegistry.POSSESSED_BLOCK, "Possessed Block");
 		this.addBlock(BlockRegistry.PUDDLE, "Puddle");
 		this.addBlock(BlockRegistry.PUFFSHROOM, "Puffshroom");
 		this.addBlock(BlockRegistry.PURIFIED_DUG_SWAMP_DIRT, "Purified Dug Swamp Dirt");

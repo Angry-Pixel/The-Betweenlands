@@ -139,7 +139,7 @@ public class BlockRegistry {
 
 	public static final DeferredBlock<Block> ANGRY_BETWEENSTONE = register("angry_betweenstone", () -> new Block(BlockBehaviour.Properties.of().lightLevel(value -> 12).strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> BETWEENSTONE_BRICKS = register("betweenstone_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> MIRAGE_BETWEENSTONE_BRICKS = register("mirage_betweenstone_bricks", () -> new MirageBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> MIRAGE_BETWEENSTONE_BRICKS = register("mirage_betweenstone_bricks", () -> new MirageBlock(BETWEENSTONE_BRICKS.get(), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> BETWEENSTONE_TILES = register("betweenstone_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CHISELED_BETWEENSTONE = register("chiseled_betweenstone", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CHISELED_CRAGROCK = register("chiseled_cragrock", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
@@ -470,7 +470,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MUD_TILES_SPIKE_TRAP = register("mud_tile_spike_trap", () -> new SpikeTrapBlock(false, BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_SLOPE = register("compacted_mud_slope", () -> new SwampStairBlock(COMPACTED_MUD.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_SLAB = register("compacted_mud_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));
-	public static final DeferredBlock<Block> COMPACTED_MUD_MIRAGE = register("compacted_mud_mirage", () -> new MirageBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));
+	public static final DeferredBlock<Block> COMPACTED_MUD_MIRAGE = register("compacted_mud_mirage", () -> new MirageBlock(COMPACTED_MUD.get(), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> ROTTEN_PLANKS = register("rotten_planks", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ROTTEN_SLAB = register("rotten_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ROTTEN_STAIRS = register("rotten_stairs", () -> new SwampStairBlock(ROTTEN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));

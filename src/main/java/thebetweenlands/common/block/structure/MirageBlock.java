@@ -10,8 +10,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class MirageBlock extends Block {
 
-	public MirageBlock(Properties properties) {
+	private final Block mirage;
+
+	public MirageBlock(Block mirage, Properties properties) {
 		super(properties);
+		this.mirage = mirage;
+	}
+
+	public Block getMirageBlock() {
+		return this.mirage;
 	}
 
 	@Override
