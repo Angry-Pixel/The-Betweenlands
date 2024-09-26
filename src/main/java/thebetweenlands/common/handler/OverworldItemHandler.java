@@ -40,6 +40,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
@@ -236,6 +239,19 @@ public class OverworldItemHandler {
 		TORCH_PLACE_HANDLERS.put(vanillaTorchPlaceHandler.getID(), vanillaTorchPlaceHandler);
 	}
 	
+	public static void init(IEventBus eventbus, Dist dist) {
+		eventbus.addListener(OverworldItemHandler::onPlayerTorchPlacement);
+		eventbus.addListener(OverworldItemHandler::onUseItem);
+		eventbus.addListener(OverworldItemHandler::onBonemeal);
+		eventbus.addListener(OverworldItemHandler::onBreakSpeed);
+		if(dist.isClient()) {
+			eventbus.addListener(EventPriority.HIGH, OverworldItemHandler::updateArmSwingSpeed);
+		}
+		eventbus.addListener(OverworldItemHandler::onEntitySpawn);
+		eventbus.addListener(OverworldItemHandler::onContainerEntityTick);
+		eventbus.addListener(OverworldItemHandler::onItemPickup);
+	}
+	
 	private static <T> boolean isInRegister(DeferredRegister<T> register, Holder<T> holder) {
 		return holder.getKey().location().getNamespace().equals(register.getNamespace());
 	}
@@ -245,7 +261,6 @@ public class OverworldItemHandler {
 	}
 	
 	// Torch Handler
-	@SubscribeEvent
 	public static void onPlayerTorchPlacement(EntityPlaceEvent event) {
 		if (isTorchDampeningEnabled(event.getEntity().level())) {
 			ItemStack held = event.getEntity().getWeaponItem();
@@ -283,7 +298,6 @@ public class OverworldItemHandler {
 	}
 	
 	// Fire tool & bonemeal blacklist
-	@SubscribeEvent
 	public static void onUseItem(PlayerInteractEvent.RightClickBlock event) {
 		final Player player = event.getEntity();
 		final ItemStack stack = event.getItemStack();
@@ -324,7 +338,6 @@ public class OverworldItemHandler {
 	}
 	
 	// Bonemeal
-	@SubscribeEvent
 	public static void onBonemeal(BonemealEvent event) {
 		final Player player = event.getPlayer();
 		final ItemStack stack = event.getStack();
@@ -356,7 +369,6 @@ public class OverworldItemHandler {
 	}
 
 	// Tool Weakness
-	@SubscribeEvent
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		final Player player = event.getEntity();
 		if(player != null && isToolWeaknessEnabled(player.level()) && isToolWeakened(player.getMainHandItem())) {
@@ -366,7 +378,6 @@ public class OverworldItemHandler {
 	
 	// Tool Weakness
 	// We no longer have ArmSwingSpeedEvent, so we have to use this
-	@SubscribeEvent
 	public static void updateArmSwingSpeed(PlayerTickEvent.Post event) {
 		final Player player = event.getEntity();
 //		if(player != null && isToolWeaknessEnabled(player.level())&& player.swinging && isToolWeakened(player.getItemInHand(player.swingingArm))) {
@@ -398,7 +409,6 @@ public class OverworldItemHandler {
 	}
 	
 	// Rotten food & Tainted Potions
-	@SubscribeEvent
 	public static void onEntitySpawn(EntityJoinLevelEvent event) {
 		if(event.getEntity() instanceof Player player) {
 			updatePlayerInventory(player);
@@ -408,8 +418,7 @@ public class OverworldItemHandler {
 	}
 
 	// Rotten food & Tainted Potions
-	@SubscribeEvent
-	public static void onPlayerTick(EntityTickEvent.Post event) {
+	public static void onContainerEntityTick(EntityTickEvent.Post event) {
 		if(!event.getEntity().level().isClientSide() && event.getEntity().tickCount % 5 == 0) {
 			if(event.getEntity() instanceof Player player) {
 				updatePlayerInventory(player);
@@ -420,7 +429,6 @@ public class OverworldItemHandler {
 	}
 
 	// Rotten food & Tainted Potions
-	@SubscribeEvent
 	public static void onItemPickup(ItemEntityPickupEvent.Pre event) {
 		final Player player = event.getPlayer();
 		final ItemEntity itemEntity = event.getItemEntity();

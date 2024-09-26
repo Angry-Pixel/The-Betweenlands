@@ -28,6 +28,7 @@ import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.config.BetweenlandsConfigSetup;
 import thebetweenlands.common.event.CommonRegistrationEvents;
+import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.BetweenlandsSurfaceRules;
@@ -97,6 +98,7 @@ public class TheBetweenlands {
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
+		OverworldItemHandler.init(eventbus, dist);
 		
 		StorageRegistry.preInit();
 	}
