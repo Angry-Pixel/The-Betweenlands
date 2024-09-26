@@ -19,12 +19,13 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.compat.CompostRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CompostRecipeCategory implements IRecipeCategory<CompostRecipeCategory.CompostRecipe> {
+public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
 	public static final RecipeType<CompostRecipe> COMPOST = RecipeType.create(TheBetweenlands.ID, "compost", CompostRecipe.class);
 	private final IDrawable background;
@@ -88,8 +89,5 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipeCateg
 	@Override
 	public ResourceLocation getRegistryName(CompostRecipe recipe) {
 		return recipe.uid();
-	}
-
-	public record CompostRecipe(Item input, int time, int amount, ResourceLocation uid) {
 	}
 }

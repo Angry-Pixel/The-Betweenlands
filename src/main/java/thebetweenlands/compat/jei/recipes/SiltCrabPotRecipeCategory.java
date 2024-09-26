@@ -27,7 +27,7 @@ public class SiltCrabPotRecipeCategory implements IRecipeCategory<SiltCrabPotFil
 	private final IDrawable arrow;
 
 	public SiltCrabPotRecipeCategory(IGuiHelper helper) {
-		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/crab_pot_filter_grid_silt.png");
+		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/silt_crab_pot_filter_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 91, 83);
 		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.CRAB_POT_FILTER.toStack());
 		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.silt_crab_pot_filter");

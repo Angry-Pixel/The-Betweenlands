@@ -84,7 +84,10 @@ repositories {
 		name "Jared's Maven" // JEI
 		url 'https://maven.blamejared.com/'
 	}
-
+	maven {
+		name = "TerraformersMC" //EMI
+		url = "https://maven.terraformersmc.com/"
+	}
 	maven {
 		name 'Curseforge Maven'
 		url "https://www.cursemaven.com"
@@ -96,6 +99,7 @@ repositories {
 
 dependencies {
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
+	compileOnly "dev.emi:emi-neoforge:${project.emi_version}+${project.minecraft_version}"
 
 	implementation "curse.maven:jade-324717:5706149"
 	runtimeOnly "curse.maven:atlasviewer-633577:5490697"

@@ -9,11 +9,14 @@ import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
+import mezz.jei.library.plugins.vanilla.ingredients.subtypes.PotionSubtypeInterpreter;
 import mezz.jei.library.util.ResourceLocationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.ItemLike;
 import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.WeedwoodCraftingMenu;
@@ -21,6 +24,10 @@ import thebetweenlands.common.item.datamaps.CompostableItem;
 import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
 import thebetweenlands.common.item.recipe.SiltCrabPotFilterRecipe;
 import thebetweenlands.common.registries.*;
+import thebetweenlands.compat.CompostRecipe;
+import thebetweenlands.compat.jei.interpreter.AspectSubtypeInterpreter;
+import thebetweenlands.compat.jei.interpreter.BucketSubtypeInterpreter;
+import thebetweenlands.compat.jei.interpreter.ElixirSubtypeInterpreter;
 import thebetweenlands.compat.jei.recipes.*;
 
 import java.util.Collection;
@@ -78,22 +85,23 @@ public class BetweenlandsJEICompat implements IModPlugin {
 		registration.addRecipes(SteepingPotRecipeCategory.STEEPING_POT, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeRegistry.STEEPING_POT_RECIPE.get()).stream().map(RecipeHolder::value).toList());
 	}
 
-	private List<CompostRecipeCategory.CompostRecipe> collectCompostRecipes(IIngredientManager manager) {
+	private List<CompostRecipe> collectCompostRecipes(IIngredientManager manager) {
 		Collection<ItemStack> allIngredients = manager.getAllItemStacks();
 		IIngredientHelper<ItemStack> ingredientHelper = manager.getIngredientHelper(VanillaTypes.ITEM_STACK);
 
 		return allIngredients.stream()
-			.<CompostRecipeCategory.CompostRecipe>mapMulti((itemStack, consumer) -> {
+			.mapMulti((itemStack, consumer) -> {
 				CompostableItem item = itemStack.getItem().builtInRegistryHolder().getData(DataMapRegistry.COMPOSTABLE);
 				if (item != null) {
-					String ingredientUid = ingredientHelper.getUniqueId(itemStack, UidContext.Recipe);
+					String ingredientUid = ((ItemLike) ingredientHelper.getUid(itemStack, UidContext.Recipe)).asItem().getDescriptionId();
 					String ingredientUidPath = ResourceLocationUtil.sanitizePath(ingredientUid);
 					ResourceLocation recipeUid = ResourceLocation.fromNamespaceAndPath(ModIds.JEI_ID, ingredientUidPath);
-					CompostRecipeCategory.CompostRecipe recipe = new CompostRecipeCategory.CompostRecipe(itemStack.getItem(), item.time(), item.amount(), recipeUid);
+					CompostRecipe recipe = new CompostRecipe(itemStack.getItem(), item.time(), item.amount(), recipeUid);
 					consumer.accept(recipe);
 				}
 			})
-			.sorted(Comparator.comparingInt(CompostRecipeCategory.CompostRecipe::time))
+			.map(CompostRecipe.class::cast)
+			.sorted(Comparator.comparingInt(CompostRecipe::time))
 			.toList();
 	}
 
@@ -109,6 +117,17 @@ public class BetweenlandsJEICompat implements IModPlugin {
 		registration.addRecipeClickArea(SmokingRackScreen.class, 99, 34, 16, 52, SmokingRackRecipeCategory.SMOKING_RACK);
 		registration.addRecipeClickArea(CrabPotFilterScreen.class, 73, 58, 22, 15, BubblerCrabPotRecipeCategory.FILTER);
 		registration.addRecipeClickArea(CrabPotFilterScreen.class, 73, 28, 22, 15, SiltCrabPotRecipeCategory.FILTER);
+	}
+
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistration registration) {
+		registration.registerSubtypeInterpreter(ItemRegistry.ASPECTRUS_FRUIT.get(), AspectSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(ItemRegistry.GREEN_ASPECT_VIAL.get(), AspectSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(ItemRegistry.ORANGE_ASPECT_VIAL.get(), AspectSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(ItemRegistry.ORANGE_ELIXIR.get(), ElixirSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(ItemRegistry.GREEN_ELIXIR.get(), ElixirSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(ItemRegistry.WEEDWOOD_BUCKET.get(), BucketSubtypeInterpreter.INSTANCE);
+		registration.registerSubtypeInterpreter(ItemRegistry.SYRMORITE_BUCKET.get(), BucketSubtypeInterpreter.INSTANCE);
 	}
 
 	@Override

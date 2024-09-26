@@ -28,7 +28,7 @@ public class MortarRecipeCategory implements IRecipeCategory<MortarRecipe> {
 	private final Component localizedName;
 
 	public MortarRecipeCategory(IGuiHelper helper) {
-		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/pam_grid.png");
+		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/mortar_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 107, 34);
 		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.MORTAR.toStack());
 		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.mortar");
