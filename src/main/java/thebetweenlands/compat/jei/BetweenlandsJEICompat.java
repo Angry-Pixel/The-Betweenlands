@@ -1,6 +1,5 @@
 package thebetweenlands.compat.jei;
 
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.ModIds;
@@ -8,18 +7,13 @@ import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import mezz.jei.api.recipe.vanilla.IJeiCompostingRecipe;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
-import mezz.jei.library.plugins.vanilla.compostable.CompostingRecipe;
 import mezz.jei.library.util.ResourceLocationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.ComposterBlock;
 import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.WeedwoodCraftingMenu;

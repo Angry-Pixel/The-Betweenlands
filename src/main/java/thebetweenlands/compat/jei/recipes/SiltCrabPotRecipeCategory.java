@@ -14,7 +14,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
 import thebetweenlands.common.item.recipe.SiltCrabPotFilterRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;

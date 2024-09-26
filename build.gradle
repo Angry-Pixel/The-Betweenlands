@@ -97,6 +97,7 @@ repositories {
 dependencies {
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
 
+	implementation "curse.maven:jade-324717:5706149"
 	runtimeOnly "curse.maven:atlasviewer-633577:5490697"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

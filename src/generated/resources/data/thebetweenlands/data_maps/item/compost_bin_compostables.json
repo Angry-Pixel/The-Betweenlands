@@ -1,796 +1,796 @@
 {
   "values": {
     "thebetweenlands:algae": {
-      "amount": 5000,
-      "time": 3
+      "amount": 3,
+      "time": 5000
     },
     "thebetweenlands:algae_clump": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:arrow_arum": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:arrow_arum_leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:aspectrus_seeds": {
-      "amount": 6000,
-      "time": 10
+      "amount": 10,
+      "time": 6000
     },
     "thebetweenlands:black_hat_mushroom": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:black_hat_mushroom_item": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:bladderwort_flower": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:bladderwort_flower_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:bladderwort_stalk": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:bladderwort_stalk_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:blue_eyed_grass": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:blue_eyed_grass_flowers": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:blue_iris": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:blue_iris_petal": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:bog_bean_flower": {
-      "amount": 8000,
-      "time": 6
+      "amount": 6,
+      "time": 8000
     },
     "thebetweenlands:bog_bean_flower_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:boneset": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:boneset_flowers": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:bottle_brush_grass": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:bottle_brush_grass_blades": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:bottom_spirit_tree_leaves": {
-      "amount": 11000,
-      "time": 6
+      "amount": 6,
+      "time": 11000
     },
     "thebetweenlands:broomsedge": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:broomsedge_leaves": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:bulb_capped_mushroom": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:bulb_capped_mushroom_item": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:button_bush": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:button_bush_flowers": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:cardinal_flower": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:cardinal_flower_petals": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:cattail": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:cattail_head": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:cave_grass": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:cave_grass_blades": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:cave_moss": {
-      "amount": 9000,
-      "time": 6
+      "amount": 6,
+      "time": 9000
     },
     "thebetweenlands:cave_moss_clump": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:copper_iris": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:copper_iris_petals": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:cryptweed": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:cryptweed_blades": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:dead_lichen": {
-      "amount": 3000,
-      "time": 6
+      "amount": 6,
+      "time": 3000
     },
     "thebetweenlands:dead_moss": {
-      "amount": 3000,
-      "time": 6
+      "amount": 6,
+      "time": 3000
     },
     "thebetweenlands:dead_weedwood_bush": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:deep_water_coral": {
-      "amount": 9000,
-      "time": 6
+      "amount": 6,
+      "time": 9000
     },
     "thebetweenlands:deep_water_coral_stalk": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:dried_swamp_reed": {
-      "amount": 5000,
-      "time": 3
+      "amount": 3,
+      "time": 5000
     },
     "thebetweenlands:dry_bark": {
-      "amount": 12000,
-      "time": 30
+      "amount": 30,
+      "time": 12000
     },
     "thebetweenlands:edge_leaf": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:edge_leaf_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:edge_moss": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:edge_moss_clump": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:edge_shroom": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:edge_shroom_gills": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:fallen_leaves": {
-      "amount": 11000,
-      "time": 4
+      "amount": 4,
+      "time": 11000
     },
     "thebetweenlands:flathead_mushroom": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:flathead_mushroom_item": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:flowered_nettle": {
-      "amount": 9000,
-      "time": 6
+      "amount": 6,
+      "time": 9000
     },
     "thebetweenlands:golden_club_flower": {
-      "amount": 8000,
-      "time": 6
+      "amount": 6,
+      "time": 8000
     },
     "thebetweenlands:golden_club_flowers": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_algae": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_angler_tooth": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_arrow_arum": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_blackhat_mushroom": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_bladderwort_flower": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_bladderwort_stalk": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_blue_eyed_grass": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_blue_iris": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_bog_bean": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_boneset": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_bottle_brush_grass": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_broomsedge": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_bulb_capped_mushroom": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_button_bush": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_cardinal_flower": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_cattail": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_cave_grass": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_cave_moss": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_copper_iris": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_crimson_snail_shell": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_cryptweed": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_deep_water_coral": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_dried_swamp_reed": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_edge_leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_edge_moss": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_edge_shroom": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_flathead_mushroom": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_golden_club": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_hanger": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_lichen": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_marsh_hibiscus": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_marsh_mallow": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_marsh_marigold": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_milkweed": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_mire_coral": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_moss": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_nettle": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_ochre_snail_shell": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_pale_grass": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_phragmites": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_pickerelweed": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_pitcher_plant": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_poison_ivy": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_roots": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_rotbulb": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_shoots": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_sludgecreep": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_soft_rush": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_string_roots": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_sundew": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_swamp_grass": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_swamp_kelp": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_thorns": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_venus_fly_trap": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_volarpad": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_water_weeds": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:ground_weedwood_bark": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:hanger": {
-      "amount": 5000,
-      "time": 3
+      "amount": 3,
+      "time": 5000
     },
     "thebetweenlands:hanger_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:hearthgrove_leaves": {
-      "amount": 11000,
-      "time": 4
+      "amount": 4,
+      "time": 11000
     },
     "thebetweenlands:hearthgrove_sapling": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:hollow_log": {
-      "amount": 12000,
-      "time": 25
+      "amount": 25,
+      "time": 12000
     },
     "thebetweenlands:leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:lichen": {
-      "amount": 9000,
-      "time": 6
+      "amount": 6,
+      "time": 9000
     },
     "thebetweenlands:lichen_clump": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:marsh_hibiscus": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:marsh_hibiscus_flower": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:marsh_mallow": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:marsh_mallow_flower": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:marsh_marigold_flower": {
-      "amount": 8000,
-      "time": 6
+      "amount": 6,
+      "time": 8000
     },
     "thebetweenlands:marsh_marigold_flower_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:middle_fruit_bush_seeds": {
-      "amount": 6000,
-      "time": 10
+      "amount": 10,
+      "time": 6000
     },
     "thebetweenlands:middle_spirit_tree_leaves": {
-      "amount": 11000,
-      "time": 6
+      "amount": 6,
+      "time": 11000
     },
     "thebetweenlands:milkweed": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:milkweed_flower": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:mire_coral": {
-      "amount": 9000,
-      "time": 6
+      "amount": 6,
+      "time": 9000
     },
     "thebetweenlands:mire_coral_stalk": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:moss": {
-      "amount": 9000,
-      "time": 6
+      "amount": 6,
+      "time": 9000
     },
     "thebetweenlands:moss_clump": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:nettle": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:nettle_leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:nibbletwig_leaves": {
-      "amount": 11000,
-      "time": 4
+      "amount": 4,
+      "time": 11000
     },
     "thebetweenlands:nibbletwig_sapling": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:pale_grass": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:pale_grass_blades": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:phragmite_stems": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:phragmites": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:pickerelweed": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:pickerelweed_flower": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:pitcher_plant": {
-      "amount": 11000,
-      "time": 12
+      "amount": 12,
+      "time": 11000
     },
     "thebetweenlands:pitcher_plant_trap": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:poison_ivy": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:poison_ivy_leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:root": {
-      "amount": 12000,
-      "time": 20
+      "amount": 20,
+      "time": 12000
     },
     "thebetweenlands:rope": {
-      "amount": 5000,
-      "time": 3
+      "amount": 3,
+      "time": 5000
     },
     "thebetweenlands:rotbulb": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:rotbulb_stalk": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:rotten_bark": {
-      "amount": 12000,
-      "time": 25
+      "amount": 25,
+      "time": 12000
     },
     "thebetweenlands:rubber_sapling": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:rubber_tree_leaves": {
-      "amount": 11000,
-      "time": 4
+      "amount": 4,
+      "time": 11000
     },
     "thebetweenlands:sap_leaves": {
-      "amount": 11000,
-      "time": 4
+      "amount": 4,
+      "time": 11000
     },
     "thebetweenlands:sap_sapling": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:seeded_hanger": {
-      "amount": 6000,
-      "time": 4
+      "amount": 4,
+      "time": 6000
     },
     "thebetweenlands:shoot_leaves": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:shoots": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:short_swamp_grass": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:sludgecreep": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:sludgecreep_leaves": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:soft_rush": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:soft_rush_leaves": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:spirit_tree_sapling": {
-      "amount": 11000,
-      "time": 25
+      "amount": 25,
+      "time": 11000
     },
     "thebetweenlands:spores": {
-      "amount": 6000,
-      "time": 10
+      "amount": 10,
+      "time": 6000
     },
     "thebetweenlands:string_root_fibers": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:string_roots": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:sundew": {
-      "amount": 8000,
-      "time": 10
+      "amount": 10,
+      "time": 8000
     },
     "thebetweenlands:sundew_head": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:swamp_grass_blades": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:swamp_kelp": {
-      "amount": 5000,
-      "time": 3
+      "amount": 3,
+      "time": 5000
     },
     "thebetweenlands:swamp_plant": {
-      "amount": 6000,
-      "time": 4
+      "amount": 4,
+      "time": 6000
     },
     "thebetweenlands:swamp_reed": {
-      "amount": 5000,
-      "time": 3
+      "amount": 3,
+      "time": 5000
     },
     "thebetweenlands:tall_cattail": {
-      "amount": 10000,
-      "time": 6
+      "amount": 6,
+      "time": 10000
     },
     "thebetweenlands:tall_sludgecreep": {
-      "amount": 6000,
-      "time": 8
+      "amount": 8,
+      "time": 6000
     },
     "thebetweenlands:tall_swamp_grass": {
-      "amount": 10000,
-      "time": 6
+      "amount": 6,
+      "time": 10000
     },
     "thebetweenlands:tangled_root": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:thorn_branch": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:thorns": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:top_spirit_tree_leaves": {
-      "amount": 11000,
-      "time": 6
+      "amount": 6,
+      "time": 11000
     },
     "thebetweenlands:venus_fly_trap": {
-      "amount": 10000,
-      "time": 12
+      "amount": 12,
+      "time": 10000
     },
     "thebetweenlands:venus_fly_trap_head": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:volarpad": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:volarpad_leaf": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:water_weeds": {
-      "amount": 8000,
-      "time": 5
+      "amount": 5,
+      "time": 8000
     },
     "thebetweenlands:water_weeds_drop": {
-      "amount": 4000,
-      "time": 3
+      "amount": 3,
+      "time": 4000
     },
     "thebetweenlands:weedwood_bush": {
-      "amount": 12000,
-      "time": 20
+      "amount": 20,
+      "time": 12000
     },
     "thebetweenlands:weedwood_leaves": {
-      "amount": 11000,
-      "time": 4
+      "amount": 4,
+      "time": 11000
     },
     "thebetweenlands:weedwood_sapling": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:weeping_blue": {
-      "amount": 11000,
-      "time": 15
+      "amount": 15,
+      "time": 11000
     },
     "thebetweenlands:yellow_dotted_fungus": {
-      "amount": 10000,
-      "time": 12
+      "amount": 12,
+      "time": 10000
     }
   }
 }

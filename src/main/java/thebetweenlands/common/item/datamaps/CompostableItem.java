@@ -2,11 +2,8 @@ package thebetweenlands.common.item.datamaps;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.chat.Component;
 
-import java.util.List;
-
-public record CompostableItem(int time, int amount) {
+public record CompostableItem(int amount, int time) {
 
 	public static final Codec<CompostableItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.INT.fieldOf("time").forGetter(CompostableItem::time),
