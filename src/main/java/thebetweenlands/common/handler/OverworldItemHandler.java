@@ -1,12 +1,8 @@
 package thebetweenlands.common.handler;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Predicate;
 
 import net.minecraft.core.BlockPos;
@@ -39,13 +35,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
@@ -66,7 +58,6 @@ import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.ItemRegistry;
 
-@EventBusSubscriber(modid = TheBetweenlands.ID, bus = Bus.GAME)
 public class OverworldItemHandler {
 
 	public static interface ITorchPlaceHandler {
@@ -239,17 +230,17 @@ public class OverworldItemHandler {
 		TORCH_PLACE_HANDLERS.put(vanillaTorchPlaceHandler.getID(), vanillaTorchPlaceHandler);
 	}
 	
-	public static void init(IEventBus eventbus, Dist dist) {
-		eventbus.addListener(OverworldItemHandler::onPlayerTorchPlacement);
-		eventbus.addListener(OverworldItemHandler::onUseItem);
-		eventbus.addListener(OverworldItemHandler::onBonemeal);
-		eventbus.addListener(OverworldItemHandler::onBreakSpeed);
+	public static void init(Dist dist) {
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onPlayerTorchPlacement);
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onUseItem);
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onBonemeal);
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onBreakSpeed);
 		if(dist.isClient()) {
-			eventbus.addListener(EventPriority.HIGH, OverworldItemHandler::updateArmSwingSpeed);
+			NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, OverworldItemHandler::updateArmSwingSpeed);
 		}
-		eventbus.addListener(OverworldItemHandler::onEntitySpawn);
-		eventbus.addListener(OverworldItemHandler::onContainerEntityTick);
-		eventbus.addListener(OverworldItemHandler::onItemPickup);
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onEntitySpawn);
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onContainerEntityTick);
+		NeoForge.EVENT_BUS.addListener(OverworldItemHandler::onItemPickup);
 	}
 	
 	private static <T> boolean isInRegister(DeferredRegister<T> register, Holder<T> holder) {

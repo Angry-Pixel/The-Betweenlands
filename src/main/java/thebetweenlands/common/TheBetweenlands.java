@@ -62,6 +62,7 @@ public class TheBetweenlands {
 			ClientRegistrationEvents.initClient(eventbus);
 		}
 		CommonRegistrationEvents.init(eventbus);
+		OverworldItemHandler.init(dist);
 		NeoForgeMod.enableMilkFluid();
 
 		SoundRegistry.SOUNDS.register(eventbus);
@@ -98,7 +99,6 @@ public class TheBetweenlands {
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
-		OverworldItemHandler.init(eventbus, dist);
 		
 		StorageRegistry.preInit();
 	}
