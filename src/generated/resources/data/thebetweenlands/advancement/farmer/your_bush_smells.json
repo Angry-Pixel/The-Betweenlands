@@ -1,5 +1,5 @@
 {
-  "parent": "thebetweenlands:farmer/mr_compost",
+  "parent": "thebetweenlands:farmer/root",
   "criteria": {
     "thorax": {
       "conditions": {

@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "drop_stone": {
+      "trigger": "thebetweenlands:drop_shimmerstone"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.fetch.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:shimmer_stone"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.fetch"
+    }
+  },
+  "requirements": [
+    [
+      "drop_stone"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

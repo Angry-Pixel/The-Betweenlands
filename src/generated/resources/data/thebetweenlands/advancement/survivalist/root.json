@@ -1,0 +1,44 @@
+{
+  "criteria": {
+    "has_base_root": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "thebetweenlands:adventurer/dank_world": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "thebetweenlands:textures/block/swamp_dirt.png",
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:sap_ball"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.root"
+    }
+  },
+  "requirements": [
+    [
+      "has_base_root"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

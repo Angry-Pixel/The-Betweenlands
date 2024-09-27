@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:survivalist/hardcore_munchies",
+  "criteria": {
+    "use_fumigant": {
+      "trigger": "thebetweenlands:used_fumigant"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.uh_oh_stinky.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:fumigant"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.uh_oh_stinky"
+    }
+  },
+  "requirements": [
+    [
+      "use_fumigant"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

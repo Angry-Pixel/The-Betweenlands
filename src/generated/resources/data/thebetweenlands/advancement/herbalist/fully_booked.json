@@ -1,0 +1,27 @@
+{
+  "parent": "thebetweenlands:herbalist/bookworms",
+  "criteria": {
+    "invis_frame": {
+      "trigger": "thebetweenlands:herblore_find_all"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.herbalist.fully_booked.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:herblore_book"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.herbalist.fully_booked"
+    }
+  },
+  "requirements": [
+    [
+      "invis_frame"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "thebetweenlands:miner/root",
+  "criteria": {
+    "pick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:swift_pick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.miner.get_schwifty.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:swift_pick"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.miner.get_schwifty"
+    }
+  },
+  "requirements": [
+    [
+      "pick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

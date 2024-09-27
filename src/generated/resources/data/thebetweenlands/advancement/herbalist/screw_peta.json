@@ -1,0 +1,30 @@
+{
+  "parent": "thebetweenlands:herbalist/im_a_druid",
+  "criteria": {
+    "gecko_test": {
+      "conditions": {
+        "release": true,
+        "test_item": true
+      },
+      "trigger": "thebetweenlands:gecko"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.herbalist.screw_peta.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:gecko"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.herbalist.screw_peta"
+    }
+  },
+  "requirements": [
+    [
+      "gecko_test"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

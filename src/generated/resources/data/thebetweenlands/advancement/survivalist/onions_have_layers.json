@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:survivalist/hardware_laundry",
+  "criteria": {
+    "tool_coated": {
+      "trigger": "thebetweenlands:coat_tool"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.onions_have_layers.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:scabyst"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.onions_have_layers"
+    }
+  },
+  "requirements": [
+    [
+      "tool_coated"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

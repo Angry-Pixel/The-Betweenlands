@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:survivalist/a_cure",
+  "criteria": {
+    "has_petal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weeping_blue_petal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.say_nay_to_decay.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:weeping_blue_petal"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.say_nay_to_decay"
+    }
+  },
+  "requirements": [
+    [
+      "has_petal"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

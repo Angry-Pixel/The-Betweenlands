@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:miner/advanced_darkness",
+  "criteria": {
+    "octine": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:octine_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "syrmorite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:syrmorite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.miner.new_shinies.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:octine_ore"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.miner.new_shinies"
+    }
+  },
+  "requirements": [
+    [
+      "syrmorite",
+      "octine"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:miner/root",
+  "criteria": {
+    "underground": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "position": {
+                  "y": {
+                    "max": 100.0,
+                    "min": 0.0
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.miner.advanced_darkness.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:betweenstone"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.miner.advanced_darkness"
+    }
+  },
+  "requirements": [
+    [
+      "underground"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

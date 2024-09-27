@@ -333,7 +333,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> MEDIUM_LURKER_SKIN_POUCH = ITEMS.register("medium_lurker_skin_pouch", () -> new LurkerSkinPouchItem(18, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(18)))));
 	public static final DeferredItem<Item> LARGE_LURKER_SKIN_POUCH = ITEMS.register("large_lurker_skin_pouch", () -> new LurkerSkinPouchItem(27, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(27)))));
 	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36)))));
-	//caving rope
+	public static final DeferredItem<Item> CAVING_ROPE = ITEMS.register("caving_rope", () -> new Item(new Item.Properties()));
 	//grapples
 	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SLINGSHOT = ITEMS.register("simple_slingshot", () -> new SlingshotItem(new Item.Properties().stacksTo(1).durability(64)));

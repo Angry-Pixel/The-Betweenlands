@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "has_sap": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sap_ball"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.a_cure.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:sap_ball"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.a_cure"
+    }
+  },
+  "requirements": [
+    [
+      "has_sap"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

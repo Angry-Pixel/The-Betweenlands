@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:herbalist/im_a_druid",
+  "criteria": {
+    "get_book": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:herblore_book"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.herbalist.bookworms.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:amate_paper"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.herbalist.bookworms"
+    }
+  },
+  "requirements": [
+    [
+      "get_book"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

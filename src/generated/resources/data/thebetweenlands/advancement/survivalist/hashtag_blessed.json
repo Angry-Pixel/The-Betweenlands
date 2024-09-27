@@ -1,0 +1,27 @@
+{
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "revived": {
+      "trigger": "thebetweenlands:revive_blessed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.hashtag_blessed.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:spirit_fruit"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.hashtag_blessed"
+    }
+  },
+  "requirements": [
+    [
+      "revived"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

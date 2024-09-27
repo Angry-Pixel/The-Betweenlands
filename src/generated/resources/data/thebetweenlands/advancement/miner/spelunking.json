@@ -1,0 +1,82 @@
+{
+  "parent": "thebetweenlands:miner/root",
+  "criteria": {
+    "rope_1": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_10": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_2": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_3": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_4": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_5": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_6": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_7": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_8": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    },
+    "rope_9": {
+      "trigger": "thebetweenlands:caving_rope_placed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.miner.spelunking.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:caving_rope"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.miner.spelunking"
+    }
+  },
+  "requirements": [
+    [
+      "rope_1"
+    ],
+    [
+      "rope_2"
+    ],
+    [
+      "rope_3"
+    ],
+    [
+      "rope_4"
+    ],
+    [
+      "rope_5"
+    ],
+    [
+      "rope_6"
+    ],
+    [
+      "rope_7"
+    ],
+    [
+      "rope_8"
+    ],
+    [
+      "rope_9"
+    ],
+    [
+      "rope_10"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

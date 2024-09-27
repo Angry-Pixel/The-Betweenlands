@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "place_torch": {
+      "trigger": "thebetweenlands:damp_torch_placed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.dimwitted.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:damp_torch"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.dimwitted"
+    }
+  },
+  "requirements": [
+    [
+      "place_torch"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

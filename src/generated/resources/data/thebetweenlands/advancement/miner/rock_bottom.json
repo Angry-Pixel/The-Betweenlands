@@ -1,0 +1,47 @@
+{
+  "parent": "thebetweenlands:miner/advanced_darkness",
+  "criteria": {
+    "pitstone_depth": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "position": {
+                  "y": {
+                    "max": 45.0,
+                    "min": 0.0
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.miner.rock_bottom.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:life_crystal"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.miner.rock_bottom"
+    }
+  },
+  "requirements": [
+    [
+      "pitstone_depth"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

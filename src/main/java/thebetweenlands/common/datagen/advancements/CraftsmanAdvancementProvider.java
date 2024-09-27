@@ -3,17 +3,21 @@ package thebetweenlands.common.datagen.advancements;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.neoforged.neoforge.common.data.AdvancementProvider.AdvancementGenerator;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.advancement.NoCriteriaTrigger;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
-import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -69,15 +73,15 @@ public class CraftsmanAdvancementProvider implements AdvancementGenerator {
 				Component.translatable("advancement.thebetweenlands.craftsman.percolation_station.desc"),
 				null, AdvancementType.TASK, true, true, false)
 			.addCriterion("filter", InventoryChangeTrigger.TriggerInstance.hasItems(BlockRegistry.WATER_FILTER))
-			//TODO clean water bucket
+			.addCriterion("clean_water", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET).hasComponents(DataComponentPredicate.builder().expect(DataComponentRegistry.STORED_FLUID.get(), SimpleFluidContent.copyOf(new FluidStack(FluidRegistry.CLEAN_WATER_STILL, FluidType.BUCKET_VOLUME))).build())))
+			.requirements(AdvancementRequirements.Strategy.AND)
 			.save(consumer, "thebetweenlands:craftsman/percolation_station");
 
-		var oil = Advancement.Builder.advancement().parent(station).display(ItemRegistry.FISH_OIL_BUCKET,
+		var oil = Advancement.Builder.advancement().parent(station).display(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET, 1, DataComponentPatch.builder().set(DataComponentRegistry.STORED_FLUID.get(), SimpleFluidContent.copyOf(new FluidStack(FluidRegistry.FISH_OIL_STILL, FluidType.BUCKET_VOLUME))).build()),
 				Component.translatable("advancement.thebetweenlands.craftsman.omega_3s"),
 				Component.translatable("advancement.thebetweenlands.craftsman.omega_3s.desc"),
 				null, AdvancementType.TASK, true, true, false)
-			//TODO proper bucket
-			.addCriterion("fish_oil", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.FISH_OIL_BUCKET))
+			.addCriterion("fish_oil", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET).hasComponents(DataComponentPredicate.builder().expect(DataComponentRegistry.STORED_FLUID.get(), SimpleFluidContent.copyOf(new FluidStack(FluidRegistry.FISH_OIL_STILL, FluidType.BUCKET_VOLUME))).build())))
 			.save(consumer, "thebetweenlands:craftsman/omega_3s");
 
 		Advancement.Builder.advancement().parent(oil).display(BlockRegistry.TREATED_WEEDWOOD_PLANKS,

@@ -1,6 +1,25 @@
 {
   "parent": "thebetweenlands:craftsman/all_over_again",
   "criteria": {
+    "clean_water": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "thebetweenlands:stored_fluid": {
+                "amount": 1000,
+                "id": "thebetweenlands:clean_water"
+              }
+            },
+            "items": [
+              "thebetweenlands:weedwood_bucket",
+              "thebetweenlands:syrmorite_bucket"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "filter": {
       "conditions": {
         "items": [
@@ -27,6 +46,9 @@
   "requirements": [
     [
       "filter"
+    ],
+    [
+      "clean_water"
     ]
   ],
   "sends_telemetry_event": true

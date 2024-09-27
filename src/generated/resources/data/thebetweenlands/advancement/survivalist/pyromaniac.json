@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "set_fire": {
+      "trigger": "thebetweenlands:octine_ingot_fire"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.pyromaniac.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:octine_ingot"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.pyromaniac"
+    }
+  },
+  "requirements": [
+    [
+      "set_fire"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

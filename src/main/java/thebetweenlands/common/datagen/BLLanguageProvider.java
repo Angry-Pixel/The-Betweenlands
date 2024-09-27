@@ -147,6 +147,39 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addAdvancement("farmer.multicore_threading", "Multicore Threading", "Use lanterns to boost a Moth House's production speed");
 		this.addAdvancement("farmer.grubhub_inc", "Grubhub Inc.", "Awaken a Grub Hub using Pheromone Extract");
 
+		this.addAdvancement("herbalist.root", "Herbalist", "Herbal testing");
+		this.addAdvancement("herbalist.im_a_druid", "I'm a Druid", "Harvest ingredients using your Sickle");
+		this.addAdvancement("herbalist.screw_peta", "Screw PETA", "Test an ingredient on a caged Gecko");
+		this.addAdvancement("herbalist.a_kind_heart", "A Kind Heart After All", "Release a test-Gecko");
+		this.addAdvancement("herbalist.bookworms", "Bookworms", "Obtain an Herblore Book");
+		this.addAdvancement("herbalist.fully_booked", "Fully Booked", "Completely fill in the Herblore Book");
+		this.addAdvancement("herbalist.steep_learning_curve", "Steep Learning Curve", "Place a Steeping Pot");
+		this.addAdvancement("herbalist.tea_bagging", "Tea Bagging", "Craft a Silk Bundle and steep some tea");
+		this.addAdvancement("herbalist.home_remedy_extraordinaire", "Home Remedy Extraordinaire", "Steep all brews");
+		this.addAdvancement("herbalist.you_cant_see_me", "You Can't See Me", "Use the vision aspect to make an Item Frame invisible");
+
+		this.addAdvancement("miner.root", "Miner", "Going deeper");
+		this.addAdvancement("miner.advanced_darkness", "Advanced Darkness", "Enter a cave");
+		this.addAdvancement("miner.new_shinies", "New Shinies", "Obtain a Syrmorite or Octine Ingot");
+		this.addAdvancement("miner.spelunking", "Spelunking", "Find your way back by using Caving Rope");
+		this.addAdvancement("miner.rock_bottom", "Rock Bottom", "Enter the Pitstone Caves");
+		this.addAdvancement("miner.get_schwifty", "Get Schwifty", "Obtain a Swift Pick");
+
+		this.addAdvancement("survivalist.root", "Survivalist", "Living in a swamp");
+		this.addAdvancement("survivalist.a_cure", "A Cure", "Collect Balls of Sap");
+		this.addAdvancement("survivalist.say_nay_to_decay", "Say 'Nay' to Decay", "Collect Weeping Blue Petals");
+		this.addAdvancement("survivalist.you_are_what_you_eat", "You Are What You Eat", "Consume Rotten Food");
+		this.addAdvancement("survivalist.hardcore_munchies", "Hardcore Munchies", "Consume some Chiromaw Wings");
+		this.addAdvancement("survivalist.dimwitted", "Dimwitted", "Use a normal Torch in the Betweenlands");
+		this.addAdvancement("survivalist.pyromaniac", "Pyromaniac", "Set Moss on fire with an Octine ingot");
+		this.addAdvancement("survivalist.quest_for_fire", "Quest for Fire", "Set Peat on fire");
+		this.addAdvancement("survivalist.fetch", "Fetch", "Distract a Peat Mummy with a Shimmerstone");
+		this.addAdvancement("survivalist.hardware_laundry", "Hardware Laundry", "Purify your tools");
+		this.addAdvancement("survivalist.onions_have_layers", "Onions Have Layers, Tools Alike", "Coat your tools against corrosion");
+		this.addAdvancement("survivalist.hashtag_blessed", "#Blessed", "Get saved by the Blessed effect from a Simulacrum");
+		this.addAdvancement("survivalist.uh_oh_stinky", "Uh Oh, Stinky", "Use a Fumigant to remove your stench");
+		this.addAdvancement("survivalist.sacrifices_were_made", "Sacrifices Were Made", "You can't make an Olmlette without breaking some eggs");
+
 
 		this.addBlock(BlockRegistry.ALEMBIC, "Alembic");
 		this.addBlock(BlockRegistry.ALGAE, "Algae");

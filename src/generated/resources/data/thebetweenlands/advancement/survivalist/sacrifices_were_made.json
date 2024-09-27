@@ -1,0 +1,34 @@
+{
+  "parent": "thebetweenlands:survivalist/hardcore_munchies",
+  "criteria": {
+    "has_olmlette": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:olmlette"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.sacrifices_were_made.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:olmlette"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.sacrifices_were_made"
+    }
+  },
+  "requirements": [
+    [
+      "has_olmlette"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

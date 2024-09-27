@@ -1,0 +1,32 @@
+{
+  "parent": "thebetweenlands:herbalist/bookworms",
+  "criteria": {
+    "invis_frame": {
+      "trigger": "thebetweenlands:item_frame_invisible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.herbalist.you_cant_see_me.desc"
+    },
+    "icon": {
+      "components": {
+        "thebetweenlands:aspect_contents": {
+          "amount": 2,
+          "aspect": "thebetweenlands:freiwynn"
+        }
+      },
+      "count": 1,
+      "id": "thebetweenlands:green_aspect_vial"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.herbalist.you_cant_see_me"
+    }
+  },
+  "requirements": [
+    [
+      "invis_frame"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

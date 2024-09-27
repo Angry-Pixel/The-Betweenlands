@@ -1,0 +1,32 @@
+{
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "tool_purified": {
+      "trigger": "thebetweenlands:purify_tool"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.survivalist.hardware_laundry.desc"
+    },
+    "icon": {
+      "components": {
+        "thebetweenlands:stored_fluid": {
+          "amount": 1000,
+          "id": "thebetweenlands:swamp_water"
+        }
+      },
+      "count": 1,
+      "id": "thebetweenlands:weedwood_bucket"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.survivalist.hardware_laundry"
+    }
+  },
+  "requirements": [
+    [
+      "tool_purified"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

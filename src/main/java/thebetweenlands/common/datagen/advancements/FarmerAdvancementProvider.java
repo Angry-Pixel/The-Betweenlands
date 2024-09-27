@@ -135,7 +135,7 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 			.addCriterion("scramble", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.MIRE_SCRAMBLE))
 			.save(consumer, "thebetweenlands:farmer/baby_murderer");
 
-		var thorax = Advancement.Builder.advancement().parent(compost).display(ItemRegistry.PHEROMONE_THORAX,
+		var thorax = Advancement.Builder.advancement().parent(root).display(ItemRegistry.PHEROMONE_THORAX,
 				Component.translatable("advancement.thebetweenlands.farmer.your_bush_smells"),
 				Component.translatable("advancement.thebetweenlands.farmer.your_bush_smells.desc"),
 				null, AdvancementType.TASK, true, true, false)

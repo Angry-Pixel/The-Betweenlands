@@ -5,7 +5,16 @@
       "conditions": {
         "items": [
           {
-            "items": "thebetweenlands:fish_oil_bucket"
+            "components": {
+              "thebetweenlands:stored_fluid": {
+                "amount": 1000,
+                "id": "thebetweenlands:fish_oil"
+              }
+            },
+            "items": [
+              "thebetweenlands:weedwood_bucket",
+              "thebetweenlands:syrmorite_bucket"
+            ]
           }
         ]
       },
@@ -17,8 +26,14 @@
       "translate": "advancement.thebetweenlands.craftsman.omega_3s.desc"
     },
     "icon": {
+      "components": {
+        "thebetweenlands:stored_fluid": {
+          "amount": 1000,
+          "id": "thebetweenlands:fish_oil"
+        }
+      },
       "count": 1,
-      "id": "thebetweenlands:fish_oil_bucket"
+      "id": "thebetweenlands:weedwood_bucket"
     },
     "title": {
       "translate": "advancement.thebetweenlands.craftsman.omega_3s"

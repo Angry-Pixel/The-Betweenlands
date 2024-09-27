@@ -1,0 +1,34 @@
+{
+  "parent": "thebetweenlands:herbalist/root",
+  "criteria": {
+    "place_pot": {
+      "conditions": {
+        "location": [
+          {
+            "block": "thebetweenlands:steeping_pot",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.herbalist.steep_learning_curve.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:steeping_pot"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.herbalist.steep_learning_curve"
+    }
+  },
+  "requirements": [
+    [
+      "place_pot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:herbalist/screw_peta",
+  "criteria": {
+    "gecko_release": {
+      "trigger": "thebetweenlands:gecko"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.herbalist.a_kind_heart.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:gecko_cage"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.herbalist.a_kind_heart"
+    }
+  },
+  "requirements": [
+    [
+      "gecko_release"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
