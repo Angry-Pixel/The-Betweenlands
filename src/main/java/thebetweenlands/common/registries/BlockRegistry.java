@@ -4,10 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DoubleHighBlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -517,7 +514,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_CAP = register("bulb_capped_mushroom_cap", () -> new BulbCappedMushroomCapBlock(BlockBehaviour.Properties.of().lightLevel(value -> 15).noOcclusion().strength(0.2F).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_STALK = register("bulb_capped_mushroom_stalk", () -> new BulbCappedMushroomStemBlock(BlockBehaviour.Properties.of().lightLevel(value -> 15).strength(0.2F).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> SHELF_FUNGUS = register("shelf_fungus", () -> new ShelfFungusBlock(BlockBehaviour.Properties.of().strength(0.2F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> ALGAE = register("algae", () -> new AlgaeBlock(BlockBehaviour.Properties.of().instabreak().pushReaction(PushReaction.DESTROY).noCollission().noOcclusion().replaceable().sound(SoundType.WET_GRASS)));
+	public static final DeferredBlock<Block> ALGAE = registerWaterPlantItem("algae", () -> new AlgaeBlock(BlockBehaviour.Properties.of().instabreak().pushReaction(PushReaction.DESTROY).noCollission().noOcclusion().replaceable().sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> POISON_IVY = register("poison_ivy", () -> new PoisonIvyBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().strength(0.2F).sound(SoundType.VINE).ignitedByLava().pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> GIANT_ROOT = register("giant_root", () -> new Block(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
 	public static final DeferredBlock<Block> ARROW_ARUM = register("arrow_arum", () -> new PlantBlock(PlantBlock.GRASS_SHAPE, false, BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
@@ -535,11 +532,11 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MARSH_MALLOW = register("marsh_mallow", () -> new PlantBlock(PlantBlock.FLOWER_SHAPE, true, BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BLADDERWORT_FLOWER = register("bladderwort_flower", () -> new BladderwortFlowerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BLADDERWORT_STALK = register("bladderwort_stalk", () -> new BladderwortStalkBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().instabreak().sound(SoundType.WET_GRASS)));
-	public static final DeferredBlock<Block> BOG_BEAN_FLOWER = register("bog_bean_flower", () -> new RootedFlowerBlock(BlockRegistry.BOG_BEAN_STALK, BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> BOG_BEAN_FLOWER = registerWaterPlantItem("bog_bean_flower", () -> new RootedFlowerBlock(BlockRegistry.BOG_BEAN_STALK, BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BOG_BEAN_STALK = BLOCKS.register("bog_bean_stalk", () -> new RootedFlowerStalkBlock(BlockRegistry.BOG_BEAN_FLOWER, BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().instabreak().sound(SoundType.WET_GRASS)));
-	public static final DeferredBlock<Block> GOLDEN_CLUB_FLOWER = register("golden_club_flower", () -> new RootedFlowerBlock(BlockRegistry.GOLDEN_CLUB_STALK, BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> GOLDEN_CLUB_FLOWER = registerWaterPlantItem("golden_club_flower", () -> new RootedFlowerBlock(BlockRegistry.GOLDEN_CLUB_STALK, BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> GOLDEN_CLUB_STALK = BLOCKS.register("golden_club_stalk", () -> new RootedFlowerStalkBlock(BlockRegistry.GOLDEN_CLUB_FLOWER, BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().instabreak().sound(SoundType.WET_GRASS)));
-	public static final DeferredBlock<Block> MARSH_MARIGOLD_FLOWER = register("marsh_marigold_flower", () -> new RootedFlowerBlock(BlockRegistry.MARSH_MARIGOLD_STALK, BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> MARSH_MARIGOLD_FLOWER = registerWaterPlantItem("marsh_marigold_flower", () -> new RootedFlowerBlock(BlockRegistry.MARSH_MARIGOLD_STALK, BlockBehaviour.Properties.of().noCollission().noOcclusion().instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> MARSH_MARIGOLD_STALK = BLOCKS.register("marsh_marigold_stalk", () -> new RootedFlowerStalkBlock(BlockRegistry.MARSH_MARIGOLD_FLOWER, BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().instabreak().sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> TALL_SWAMP_GRASS = register("tall_swamp_grass", () -> new FarmableDoublePlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XYZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> MILKWEED = register("milkweed", () -> new PlantBlock(PlantBlock.FLOWER_SHAPE, true, BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
@@ -806,6 +803,12 @@ public class BlockRegistry {
 	public static <T extends Block> DeferredBlock<T> registerDoubleBlockItem(String name, Supplier<T> block) {
 		DeferredBlock<T> ret = BLOCKS.register(name, block);
 		ItemRegistry.ITEMS.register(name, () -> new DoubleHighBlockItem(ret.get(), new Item.Properties()));
+		return ret;
+	}
+
+	public static <T extends Block> DeferredBlock<T> registerWaterPlantItem(String name, Supplier<T> block) {
+		DeferredBlock<T> ret = BLOCKS.register(name, block);
+		ItemRegistry.ITEMS.register(name, () -> new PlaceOnWaterBlockItem(ret.get(), new Item.Properties()));
 		return ret;
 	}
 

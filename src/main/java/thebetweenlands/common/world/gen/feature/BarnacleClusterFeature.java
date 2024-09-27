@@ -10,7 +10,9 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.common.block.farming.BarnacleBlock;
+import thebetweenlands.common.datagen.tags.BLFluidTagGenerator;
 import thebetweenlands.util.WorldGenUtil;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 
@@ -33,7 +35,7 @@ public class BarnacleClusterFeature extends Feature<BlockPlaceConfiguration> {
 		for (int i = 0; i < config.attempts(); i++) {
 			mutable = WorldGenUtil.randomOffset(rand, mutable, pos, config.offset(), config.offset() / 2 + 1, config.offset());
 
-			if (level.isAreaLoaded(mutable, 1) && level.getBlockState(mutable).getFluidState().is(FluidTags.WATER) && config.state().canSurvive(level, mutable)) {
+			if (level.isAreaLoaded(mutable, 1) && level.getBlockState(mutable).getFluidState().is(BLFluidTagGenerator.UNDERWATER_PLANT_PLACEABLE) && config.state().canSurvive(level, mutable)) {
 				Direction direction = Direction.BY_ID.apply(rand.nextInt(Direction.values().length));
 				Direction.Axis axis = direction.getAxis();
 				Direction opposite = direction.getOpposite();

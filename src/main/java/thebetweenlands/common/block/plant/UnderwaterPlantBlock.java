@@ -10,34 +10,46 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.FluidTypeRegistry;
 
 import javax.annotation.Nullable;
 
-//TODO consider allowing underwater plants to exist outside water now that waterlogging isnt forced
-//to do this change LiquidBlockContainer to SimpleWaterloggedBlock, add the property, and check for the property before scheduling fluid ticks
 public class UnderwaterPlantBlock extends Block implements LiquidBlockContainer, FarmablePlant {
 
 	protected static final VoxelShape PLANT_AABB = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 13.0D, 15.0D);
+	public static final BooleanProperty IS_SWAMP_WATER = BooleanProperty.create("swamp_water");
 
 	public UnderwaterPlantBlock(Properties properties) {
 		super(properties);
+		this.registerDefaultState(this.getStateDefinition().any().setValue(IS_SWAMP_WATER, true));
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-		return fluidstate.is(FluidRegistry.SWAMP_WATER_STILL.get()) && fluidstate.getAmount() == 8 ? super.getStateForPlacement(context) : null;
+		if (fluidstate.is(FluidRegistry.SWAMP_WATER_STILL.get()) && fluidstate.getAmount() == 8) {
+			return super.getStateForPlacement(context).setValue(IS_SWAMP_WATER, true);
+		} else if (fluidstate.is(Fluids.WATER) && fluidstate.getAmount() == 8) {
+			return super.getStateForPlacement(context).setValue(IS_SWAMP_WATER, false);
+		}
+		return null;
 	}
 
 	@Override
@@ -52,13 +64,18 @@ public class UnderwaterPlantBlock extends Block implements LiquidBlockContainer,
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		level.scheduleTick(pos, FluidRegistry.SWAMP_WATER_STILL.get(), FluidRegistry.SWAMP_WATER_STILL.get().getTickDelay(level));
-		return state.canSurvive(level, pos) ? state : BlockRegistry.SWAMP_WATER.get().defaultBlockState();
+		if (state.getValue(IS_SWAMP_WATER)) {
+			level.scheduleTick(pos, FluidRegistry.SWAMP_WATER_STILL.get(), FluidRegistry.SWAMP_WATER_STILL.get().getTickDelay(level));
+			return state.canSurvive(level, pos) ? state : BlockRegistry.SWAMP_WATER.get().defaultBlockState();
+		} else {
+			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+			return state.canSurvive(level, pos) ? state : Blocks.WATER.defaultBlockState();
+		}
 	}
 
 	@Override
 	protected FluidState getFluidState(BlockState state) {
-		return FluidRegistry.SWAMP_WATER_STILL.get().getSource(false);
+		return state.getValue(IS_SWAMP_WATER) ? FluidRegistry.SWAMP_WATER_STILL.get().getSource(false) : Fluids.WATER.getSource(false);
 	}
 
 	@Override
@@ -84,7 +101,7 @@ public class UnderwaterPlantBlock extends Block implements LiquidBlockContainer,
 	@Override
 	public boolean canSpreadTo(Level level, BlockPos pos, BlockState state, BlockPos targetPos, RandomSource random) {
 		BlockState block = level.getBlockState(targetPos);
-		if (state.is(BlockRegistry.SWAMP_WATER) && ((LiquidBlock) block.getBlock()).fluid.isSource(level.getFluidState(targetPos))) {
+		if ((state.is(BlockRegistry.SWAMP_WATER) || state.is(Blocks.WATER)) && ((LiquidBlock) block.getBlock()).fluid.isSource(level.getFluidState(targetPos))) {
 			return state.canSurvive(level, targetPos);
 		}
 		return false;
@@ -97,11 +114,16 @@ public class UnderwaterPlantBlock extends Block implements LiquidBlockContainer,
 
 	@Override
 	public void decayPlant(Level level, BlockPos pos, BlockState state, RandomSource random) {
-		level.setBlockAndUpdate(pos, BlockRegistry.SWAMP_WATER.get().defaultBlockState());
+		level.setBlockAndUpdate(pos, state.getValue(IS_SWAMP_WATER) ? BlockRegistry.SWAMP_WATER.get().defaultBlockState() : Blocks.WATER.defaultBlockState());
 	}
 
 	@Override
 	public void spreadTo(Level level, BlockPos pos, BlockState state, BlockPos targetPos, RandomSource random) {
-		level.setBlockAndUpdate(targetPos, this.defaultBlockState());
+		level.setBlockAndUpdate(targetPos, this.defaultBlockState().setValue(IS_SWAMP_WATER, level.getFluidState(targetPos).is(FluidRegistry.SWAMP_WATER_STILL.get())));
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(IS_SWAMP_WATER));
 	}
 }

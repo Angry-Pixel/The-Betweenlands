@@ -1,10 +1,10 @@
 package thebetweenlands.common.item.armor.amphibious.upgrades;
 
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.api.item.amphibious.TickingAmphibiousArmorUpgrade;
 
 import java.util.function.Predicate;
@@ -16,7 +16,7 @@ public class BuoyancyArmorUpgrade extends SimpleAmphibiousArmorUpgrade implement
 
 	@Override
 	public void onArmorTick(Level level, Player player, ItemStack stack, int upgradeCount, int armorCount) {
-		if (player.isEyeInFluid(FluidTags.WATER)) {
+		if (player.isEyeInFluid(Tags.Fluids.WATER)) {
 			if (upgradeCount > 0) {
 				double speedMod = upgradeCount * 0.01D;
 

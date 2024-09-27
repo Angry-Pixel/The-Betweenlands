@@ -81,6 +81,6 @@ public class BladderwortStalkBlock extends UnderwaterPlantBlock {
 
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-		builder.add(AGE);
+		super.createBlockStateDefinition(builder.add(AGE));
 	}
 }

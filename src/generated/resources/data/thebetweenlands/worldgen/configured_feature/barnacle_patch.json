@@ -7,7 +7,8 @@
       "Name": "thebetweenlands:barnacle",
       "Properties": {
         "facing": "north",
-        "stage": "1"
+        "stage": "1",
+        "swamp_water": "true"
       }
     }
   }

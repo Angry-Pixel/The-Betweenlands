@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.item.armor.RubberBootsItem;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -27,6 +28,11 @@ public class PeatBlock extends Block {
 	@Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return PEAT_AABB;
+	}
+
+	@Override
+	protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.block();
 	}
 
 	@Override

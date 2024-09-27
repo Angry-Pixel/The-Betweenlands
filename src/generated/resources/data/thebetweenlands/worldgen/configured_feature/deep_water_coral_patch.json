@@ -4,7 +4,10 @@
     "attempts": 10,
     "offset": 4,
     "state": {
-      "Name": "thebetweenlands:deep_water_coral"
+      "Name": "thebetweenlands:deep_water_coral",
+      "Properties": {
+        "swamp_water": "true"
+      }
     },
     "underwater": true
   }

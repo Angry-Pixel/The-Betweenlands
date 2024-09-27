@@ -45,6 +45,11 @@ public class MudBlock extends Block {
 	}
 
 	@Override
+	protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.block();
+	}
+
+	@Override
 	public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition, Direction facing, BlockState plant) {
 		return state.getBlock() instanceof FarmablePlant ? TriState.TRUE : super.canSustainPlant(state, level, soilPosition, facing, plant);
 	}

@@ -19,9 +19,11 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -42,10 +44,11 @@ public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContai
 		Direction.UP, Block.box(4.0D, 0.0D, 4.0D, 12.0D, 4.0D, 12.0D),
 		Direction.DOWN, Block.box(4.0D, 12.0D, 4.0D, 12.0D, 16.0D, 12.0D)
 	));
+	private static final BooleanProperty IS_SWAMP_WATER = BooleanProperty.create("swamp_water");
 
 	public BarnacleBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(STAGE, 1).setValue(FACING, Direction.NORTH));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(STAGE, 1).setValue(FACING, Direction.NORTH).setValue(IS_SWAMP_WATER, true));
 	}
 
 	@Override
@@ -72,7 +75,12 @@ public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContai
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-		return fluidstate.is(FluidRegistry.SWAMP_WATER_STILL.get()) && fluidstate.getAmount() == 8 ? super.getStateForPlacement(context).setValue(FACING, context.getNearestLookingDirection()) : null;
+		if (fluidstate.is(FluidRegistry.SWAMP_WATER_STILL.get()) && fluidstate.getAmount() == 8) {
+			return super.getStateForPlacement(context).setValue(FACING, context.getNearestLookingDirection()).setValue(IS_SWAMP_WATER, true);
+		} else if (fluidstate.is(Fluids.WATER) && fluidstate.getAmount() == 8) {
+			return super.getStateForPlacement(context).setValue(FACING, context.getNearestLookingDirection()).setValue(IS_SWAMP_WATER, false);
+		}
+		return null;
 	}
 
 	@Override
@@ -114,11 +122,11 @@ public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContai
 
 	@Override
 	protected FluidState getFluidState(BlockState state) {
-		return FluidRegistry.SWAMP_WATER_STILL.get().getSource(false);
+		return state.getValue(IS_SWAMP_WATER) ? FluidRegistry.SWAMP_WATER_STILL.get().getSource(false) : Fluids.WATER.getSource(false);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING, STAGE);
+		builder.add(FACING, STAGE, IS_SWAMP_WATER);
 	}
 }

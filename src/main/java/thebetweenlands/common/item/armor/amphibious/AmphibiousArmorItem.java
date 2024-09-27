@@ -31,6 +31,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import javax.annotation.Nullable;
+
+import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.item.amphibious.TickingAmphibiousArmorUpgrade;
 import thebetweenlands.client.BLModelLayers;
@@ -108,7 +110,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 					player.setDeltaMovement(player.getDeltaMovement().add(0.0D, 0.05D, 0.0D));
 				}
 
-				if (stack.is(ItemRegistry.AMPHIBIOUS_BOOTS) && player.isEyeInFluid(FluidTags.WATER)) {
+				if (stack.is(ItemRegistry.AMPHIBIOUS_BOOTS) && player.isEyeInFluid(Tags.Fluids.WATER)) {
 					if (ascentBoostTicks == 0 && !player.isShiftKeyDown() && player.zza == 0 && !player.getAbilities().flying && !player.jumping) {
 						player.setDeltaMovement(player.getDeltaMovement().x(), Math.sin(player.tickCount / 5.0F) * 0.016D, player.getDeltaMovement().z());
 					}

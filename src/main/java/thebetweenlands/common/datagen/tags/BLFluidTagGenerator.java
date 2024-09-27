@@ -6,6 +6,8 @@ import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
@@ -15,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BLFluidTagGenerator extends FluidTagsProvider {
 
+	public static final TagKey<Fluid> UNDERWATER_PLANT_PLACEABLE = tag("underwater_plant_placeable");
 	public static final TagKey<Fluid> SWAMP_WATER = tag("swamp_water");
 	public static final TagKey<Fluid> STAGNANT_WATER = tag("stagnant_water");
 	public static final TagKey<Fluid> TAR = tag("tar");
@@ -42,6 +45,9 @@ public class BLFluidTagGenerator extends FluidTagsProvider {
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
+		this.tag(UNDERWATER_PLANT_PLACEABLE).add(Fluids.WATER, FluidRegistry.SWAMP_WATER_STILL.get());
+		this.tag(Tags.Fluids.WATER).addTag(SWAMP_WATER);
+
 		this.tag(SWAMP_WATER).add(FluidRegistry.SWAMP_WATER_STILL.get(), FluidRegistry.SWAMP_WATER_FLOW.get());
 		this.tag(STAGNANT_WATER).add(FluidRegistry.STAGNANT_WATER_STILL.get(), FluidRegistry.STAGNANT_WATER_FLOW.get());
 		this.tag(TAR).add(FluidRegistry.TAR_STILL.get(), FluidRegistry.TAR_FLOW.get());

@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.api.item.amphibious.TickingAmphibiousArmorUpgrade;
 
 import java.util.function.Predicate;
@@ -18,7 +19,7 @@ public class VisibilityArmorUpgrade extends SimpleAmphibiousArmorUpgrade impleme
 
 	@Override
 	public void onArmorTick(Level level, Player player, ItemStack stack, int upgradeCount, int armorCount) {
-		if (player.isEyeInFluid(FluidTags.WATER) && upgradeCount >= 1) {
+		if (player.isEyeInFluid(Tags.Fluids.WATER) && upgradeCount >= 1) {
 			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 10, 0));
 		}
 	}

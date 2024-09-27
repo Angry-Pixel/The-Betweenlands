@@ -58,7 +58,7 @@ public class ArmorHandler {
 	private static void modifyBreakSpeedWithLurkerArmor(PlayerEvent.BreakSpeed event) {
 		Player player = event.getEntity();
 
-		if (player.isEyeInFluid(FluidTags.WATER)) {
+		if (player.isEyeInFluid(Tags.Fluids.WATER)) {
 			int pieces = 0;
 			boolean fullSetAmphibious = true;
 			boolean hasMiningUpgrade = false;

@@ -23,6 +23,7 @@ import net.minecraft.world.ticks.ContainerSingleItem;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.CrabPotBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.datagen.tags.BLFluidTagGenerator;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.item.misc.MobItem;
@@ -120,7 +121,7 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 						for (int i = 0; i < checks; i++) {
 							checkPos.set(pos.getX() + level.getRandom().nextInt(13) - 6, pos.getY() + level.getRandom().nextInt(5) - 1, pos.getZ() + level.getRandom().nextInt(13) - 6);
 
-							if (level.getFluidState(checkPos).is(FluidTags.WATER) && level.canSeeSky(checkPos)) {
+							if (level.getFluidState(checkPos).is(BLFluidTagGenerator.UNDERWATER_PLANT_PLACEABLE) && level.canSeeSky(checkPos)) {
 								Biome biome = level.getBiome(checkPos).value();
 
 								if (spawnableBiomes.containsKey(biome)) {

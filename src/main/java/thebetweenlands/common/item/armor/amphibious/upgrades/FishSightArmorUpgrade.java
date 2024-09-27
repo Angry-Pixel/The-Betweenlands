@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.api.item.amphibious.TickingAmphibiousArmorUpgrade;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
@@ -19,7 +20,7 @@ public class FishSightArmorUpgrade extends SimpleAmphibiousArmorUpgrade implemen
 
 	@Override
 	public void onArmorTick(Level level, Player player, ItemStack stack, int upgradeCount, int armorCount) {
-		if (!player.isEyeInFluid(FluidTags.WATER) && player.tickCount % 40 == 0) {
+		if (!player.isEyeInFluid(Tags.Fluids.WATER) && player.tickCount % 40 == 0) {
 			int radius = upgradeCount * 8;
 
 			AABB aabb = new AABB(player.blockPosition()).inflate(radius);

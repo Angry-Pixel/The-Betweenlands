@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.item.tool.BLFishingRodItem;
@@ -117,7 +118,7 @@ public class BLFishHook extends FishingHook implements IEntityWithComplexSpawn {
 
 			float f = 0.0F;
 			FluidState fluidstate = this.level().getFluidState(this.blockPosition());
-			if (fluidstate.is(FluidTags.WATER)) {
+			if (fluidstate.is(Tags.Fluids.WATER)) {
 				f = fluidstate.getHeight(this.level(), this.blockPosition());
 			}
 
@@ -161,7 +162,7 @@ public class BLFishHook extends FishingHook implements IEntityWithComplexSpawn {
 				}
 			}
 
-			if (!fluidstate.is(FluidTags.WATER)) {
+			if (!fluidstate.is(Tags.Fluids.WATER)) {
 				this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.03, 0.0));
 			}
 
