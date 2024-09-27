@@ -19,7 +19,7 @@ public class SwampWaterFluidType extends BasicFluidType {
 
 	@Override
 	public int getTintColor() {
-		return 0xFF1302D2;
+		return 0xFF2981FF;
 	}
 
 	@Override
