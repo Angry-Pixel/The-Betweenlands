@@ -55,6 +55,11 @@ public record PurifierRecipe(Ingredient input, ItemStack result, int purifyingTi
 		return new ItemStack(BlockRegistry.PURIFIER.get());
 	}
 
+	@Override
+	public boolean isIncomplete() {
+		return true;
+	}
+
 	public static class Serializer implements RecipeSerializer<PurifierRecipe> {
 
 		public static final MapCodec<PurifierRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
