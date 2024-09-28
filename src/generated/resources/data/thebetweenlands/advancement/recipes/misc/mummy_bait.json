@@ -7,7 +7,7 @@
           {
             "components": {
               "thebetweenlands:aspect_contents": {
-                "amount": 100,
+                "amount": 1000,
                 "aspect": "thebetweenlands:armaniis"
               }
             },

@@ -1680,7 +1680,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addAspect(AspectTypeRegistry.FIRNALAZ, "Fire", "The aspect that correlates to the element of fire.<nl>Tier II aspect.");
 		this.addAspect(AspectTypeRegistry.FREIWYNN, "Vision", "The aspect that has effect on the perception of light.<nl>Tier II aspect.");
 		this.addAspect(AspectTypeRegistry.GEOLIIRGAZ, "Void", "The aspect that correlates to the formless element of void or ether.<nl>Tier III aspect.");
-		this.addAspect(AspectTypeRegistry.ORDANIIS, "Enchance", "The aspect that activates other aspects or enhances power in any form.<nl>Tier I aspect.");
+		this.addAspect(AspectTypeRegistry.ORDANIIS, "Enhance", "The aspect that activates other aspects or enhances power in any form.<nl>Tier I aspect.");
 		this.addAspect(AspectTypeRegistry.UDURIIS, "Chaos", "The aspect that correlates to the natural orderless state of the universe.<nl>Tier III aspect.");
 		this.addAspect(AspectTypeRegistry.WODREN, "Soul", "The aspect that affects the spiritual state and life force of a being.<nl>Tier III aspect.");
 		this.addAspect(AspectTypeRegistry.YEOWYNN, "Health", "The aspect that influences physical health and recovery.<nl>Tier I aspect.");

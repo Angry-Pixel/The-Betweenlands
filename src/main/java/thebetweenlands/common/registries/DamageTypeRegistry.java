@@ -8,6 +8,7 @@ import thebetweenlands.common.TheBetweenlands;
 
 public class DamageTypeRegistry {
 
+	public static final ResourceKey<DamageType> SWARM = create("swarm");
 	public static final ResourceKey<DamageType> VOODOO = create("voodoo");
 
 	public static ResourceKey<DamageType> create(String name) {
@@ -15,6 +16,7 @@ public class DamageTypeRegistry {
 	}
 
 	public static void bootstrap(BootstrapContext<DamageType> context) {
+		context.register(SWARM, new DamageType("thebetweenlands.swarm", 0.1F));
 		context.register(VOODOO, new DamageType("thebetweenlands.voodoo", 0.1F));
 	}
 }

@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-27T23:39:40.8323678	Recipes
+// 1.21.1	2024-09-28T13:42:12.2721508	Recipes
 937ab63d71c29fe3ff8aa7b094d93075df2adc8d data/thebetweenlands/advancement/recipes/building_blocks/alembic.json
 e08cfe8707ceec8997d54923df2a0ca86b605a91 data/thebetweenlands/advancement/recipes/building_blocks/ancient_remnant_block.json
 832ce804fb41b3d51420f3058ee570c44f547f42 data/thebetweenlands/advancement/recipes/building_blocks/animator.json
@@ -490,7 +490,7 @@ bda8b131230887b08559a9dfbe997df9d91c848b data/thebetweenlands/advancement/recipe
 f1e94f70dabcd787773113459177c00fb6d49ffa data/thebetweenlands/advancement/recipes/misc/midnight_purple_item_frame.json
 7b5e41c78118b36c1ee99c32f6fffe9ed064f2e2 data/thebetweenlands/advancement/recipes/misc/moss_filter.json
 22bac0191caff521418abab36da00835eaffa0f9 data/thebetweenlands/advancement/recipes/misc/mud_brick.json
-d84869e35e10fbb36bd4c671c42cdefa84b4a942 data/thebetweenlands/advancement/recipes/misc/mummy_bait.json
+9487158134c19b7d6eebe8cbf7ebe6fd6cce317c data/thebetweenlands/advancement/recipes/misc/mummy_bait.json
 0907755520de6c0285c868e3ff7891b75db65b6b data/thebetweenlands/advancement/recipes/misc/octine_arrow.json
 9c126c256cdc9db4dec4132fb4f0c9f3a9484cad data/thebetweenlands/advancement/recipes/misc/octine_ingot.json
 955159d36dc12a76feabfeafe0e73f0b531caa7a data/thebetweenlands/advancement/recipes/misc/octine_ingot_from_block.json
@@ -962,7 +962,7 @@ e7cbfae597ec7664c34f8b397e56d788a7f99b17 data/thebetweenlands/recipe/mud_brick_s
 d068a3a515502b33a5bfd685bc49f01e0095615a data/thebetweenlands/recipe/mud_flower_pot.json
 726a227e06d48fea28e4df7d740117c60c5bd7b4 data/thebetweenlands/recipe/mud_flower_pot_candle.json
 c4e99d8e438ce43536fbd95854630f33178ed742 data/thebetweenlands/recipe/mud_tiles.json
-9201ee81b49c88bce03c35f21a3464c0ce2f19c9 data/thebetweenlands/recipe/mummy_bait.json
+30c41789be98eb9b4d976138aa30996e37b2874a data/thebetweenlands/recipe/mummy_bait.json
 c2c3587d8ccc11f5935e2a33332a7cda91ad2a46 data/thebetweenlands/recipe/net.json
 275d3f3360682d1c2546efdc59080255a1f4b6a3 data/thebetweenlands/recipe/nibblestick.json
 a056823b34daef5587c66c775e79b1c85cf599eb data/thebetweenlands/recipe/nibbletwig_bark.json

@@ -7,15 +7,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.SynchedAttachmentType;
-import thebetweenlands.common.component.entity.BlessingData;
-import thebetweenlands.common.component.entity.CircleGemData;
-import thebetweenlands.common.component.entity.DecayData;
-import thebetweenlands.common.component.entity.FallDamageReductionData;
-import thebetweenlands.common.component.entity.FoodSicknessData;
-import thebetweenlands.common.component.entity.InfestationIgnoreData;
-import thebetweenlands.common.component.entity.LastKilledData;
-import thebetweenlands.common.component.entity.MudWalkerData;
-import thebetweenlands.common.component.entity.RotSmellData;
+import thebetweenlands.common.component.entity.*;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageSerializer;
 
@@ -32,6 +24,7 @@ public class AttachmentRegistry {
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<LastKilledData>> LAST_KILLED = ATTACHMENT_TYPES.register("last_killed", () -> AttachmentType.builder(() -> new LastKilledData()).serialize(LastKilledData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<MudWalkerData>> MUD_WALKER = ATTACHMENT_TYPES.register("mud_walker", () -> AttachmentType.builder(() -> new MudWalkerData()).serialize(MudWalkerData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<RotSmellData>> ROT_SMELL = ATTACHMENT_TYPES.register("rot_smell", () -> AttachmentType.builder(RotSmellData::new).serialize(RotSmellData.CODEC).build());
+	public static final DeferredHolder<AttachmentType<?>, AttachmentType<SwarmedData>> SWARMED = ATTACHMENT_TYPES.register("swarmed", () -> AttachmentType.builder(SwarmedData::new).serialize(SwarmedData.CODEC).build());
 
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<BetweenlandsWorldStorage>> WORLD_STORAGE = ATTACHMENT_TYPES.register("world_storage", () -> AttachmentType.builder(BetweenlandsWorldStorage::new).serialize(new WorldStorageSerializer()).build());
 

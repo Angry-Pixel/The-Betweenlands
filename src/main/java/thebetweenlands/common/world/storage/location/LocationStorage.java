@@ -8,6 +8,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.util.Mth;
@@ -283,8 +284,8 @@ public class LocationStorage extends LocalStorageImpl {
 	 *
 	 * @return
 	 */
-	public String getLocalizedName() {
-		return I18n.get("location." + this.dataManager.get(NAME) + ".name");
+	public Component getLocalizedName() {
+		return Component.translatable("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	public boolean hasLocalizedName() {

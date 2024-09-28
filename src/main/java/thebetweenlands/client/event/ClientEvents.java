@@ -11,6 +11,7 @@ import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.ElixirClientHandler;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.handler.MainMenuHandler;
+import thebetweenlands.client.handler.ScreenHandler;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
@@ -24,6 +25,7 @@ public class ClientEvents {
 		ElixirClientHandler.init();
 		ItemTooltipHandler.init();
 		MainMenuHandler.init();
+		ScreenHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
 

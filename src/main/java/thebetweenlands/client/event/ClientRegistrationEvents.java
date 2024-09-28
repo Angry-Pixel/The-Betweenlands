@@ -37,6 +37,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
+import thebetweenlands.client.gui.overlay.swarm.SwarmOverlay;
 import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
@@ -115,6 +116,7 @@ public class ClientRegistrationEvents {
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
 		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
+		event.registerAboveAll(TheBetweenlands.prefix("swarm"), SwarmOverlay.INSTANCE::renderSwarm);
 	}
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
@@ -521,9 +523,10 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.ANIMATOR.get(), AnimatorParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.FLY.get(), BugParticle.FlyFactory::new);
 		event.registerSpriteSet(ParticleRegistry.MOSQUITO.get(), BugParticle.MosquitoFactory::new);
-		event.registerSpriteSet(ParticleRegistry.MOTH.get(), MothParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.MOTH.get(), BugParticle.MothFactory::new);
 		event.registerSpriteSet(ParticleRegistry.SILK_MOTH.get(), BugParticle.SilkMothFactory::new);
 		event.registerSpriteSet(ParticleRegistry.SPIRIT_BUTTERFLY.get(), SpiritButterflyParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.SWARM.get(), SwarmParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_BUG.get(), BugParticle.WaterBugFactory::new);
 		event.registerSpriteSet(ParticleRegistry.FANCY_BUBBLE.get(), FancyBubbleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.FANCY_DRIP.get(), FancyDripParticle.Factory::new);

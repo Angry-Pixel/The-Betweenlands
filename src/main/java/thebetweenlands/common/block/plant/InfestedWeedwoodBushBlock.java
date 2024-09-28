@@ -5,15 +5,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.entity.SwarmedData;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
@@ -72,8 +76,47 @@ public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 			switch (this.stage) {
 //				case 0 -> BLParticles.SULFUR_TORCH.spawn(level, px, py, pz, ParticleArgs.get().withColor(0.6f, 0.35f, 0.8f, 0.28f));
 				case 1 -> TheBetweenlands.createParticle(ParticleRegistry.SILK_MOTH.get(), level, px, py, pz);
-//				case 2, 3, 4 -> BLParticles.DIRT_DECAY.spawn(level, px, py, pz);
+//				case 4 -> BLParticles.DIRT_DECAY.spawn(level, px, py, pz);
 			}
 		}
+	}
+
+	@Override
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+		super.entityInside(state, level, pos, entity);
+
+		if (!level.isClientSide() && entity instanceof Player player) {
+			SwarmedData cap = entity.getData(AttachmentRegistry.SWARMED);
+			cap.setSwarmedStrength(player, cap.getSwarmedStrength() + 0.005f);
+		}
+	}
+
+	@Override
+	public boolean isFarmable(Level level, BlockPos pos, BlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean canSpreadTo(Level level, BlockPos pos, BlockState state, BlockPos targetPos, RandomSource rand) {
+		return false;
+	}
+
+	@Override
+	public float getSpreadChance(Level level, BlockPos pos, BlockState state, BlockPos targetPos, RandomSource rand) {
+		return 0F;
+	}
+
+	@Override
+	public void spreadTo(Level level, BlockPos pos, BlockState state, BlockPos targetPos, RandomSource rand) {
+	}
+
+	@Override
+	public int getCompostCost(Level level, BlockPos pos, BlockState state, RandomSource rand) {
+		return 0;
+	}
+
+	@Override
+	public boolean canBeDestroyedByPuddles(LevelReader level, BlockPos pos, BlockState state) {
+		return true;
 	}
 }

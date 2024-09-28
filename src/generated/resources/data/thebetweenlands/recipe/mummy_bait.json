@@ -15,7 +15,7 @@
       "type": "neoforge:components",
       "components": {
         "thebetweenlands:aspect_contents": {
-          "amount": 1,
+          "amount": 1000,
           "aspect": "thebetweenlands:armaniis"
         }
       },

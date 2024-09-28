@@ -233,9 +233,9 @@ public class BLItemRecipeProvider {
 		//TODO rope
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.MUMMY_BAIT)
 			.requires(ItemRegistry.SHIMMER_STONE).requires(ItemRegistry.ANIMATED_TAR_BEAST_HEART)
-			.requires(ItemRegistry.SLUDGE_BALL).requires(DataComponentIngredient.of(false, DataComponentMap.builder().set(DataComponentRegistry.ASPECT_CONTENTS, new AspectContents(registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 200)).build(), ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get()))
+			.requires(ItemRegistry.SLUDGE_BALL).requires(DataComponentIngredient.of(false, DataComponentMap.builder().set(DataComponentRegistry.ASPECT_CONTENTS, new AspectContents(registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 1000)).build(), ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get()))
 			.unlockedBy("has_shimmerstone", has(ItemRegistry.SHIMMER_STONE)).unlockedBy("has_heart", has(ItemRegistry.ANIMATED_TAR_BEAST_HEART))
-			.unlockedBy("has_aspect", inventoryTrigger(ItemPredicate.Builder.item().of(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.GREEN_ASPECT_VIAL).hasComponents(DataComponentPredicate.builder().expect(DataComponentRegistry.ASPECT_CONTENTS.get(), new AspectContents(registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 200)).build()).build())).save(output);
+			.unlockedBy("has_aspect", inventoryTrigger(ItemPredicate.Builder.item().of(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.GREEN_ASPECT_VIAL).hasComponents(DataComponentPredicate.builder().expect(DataComponentRegistry.ASPECT_CONTENTS.get(), new AspectContents(registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 1000)).build()).build())).save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.AMATE_MAP)
 			.pattern("ppp").pattern("pgp").pattern("ppp").define('p', ItemRegistry.AMATE_PAPER).define('g', Ingredient.of(ItemRegistry.CRIMSON_MIDDLE_GEM, ItemRegistry.GREEN_MIDDLE_GEM, ItemRegistry.AQUA_MIDDLE_GEM))
