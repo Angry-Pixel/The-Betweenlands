@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "d": {
+      "item": "thebetweenlands:maroon_dye"
+    },
+    "i": {
+      "item": "thebetweenlands:reed_mat"
+    }
+  },
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thebetweenlands:maroon_reed_mat"
+  }
+}

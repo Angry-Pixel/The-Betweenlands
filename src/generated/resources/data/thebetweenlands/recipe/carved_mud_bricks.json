@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:mud_brick"
+    },
+    "i": {
+      "item": "thebetweenlands:mud_bricks"
+    }
+  },
+  "pattern": [
+    "iii",
+    "bbb",
+    "iii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:carved_mud_bricks"
+  }
+}

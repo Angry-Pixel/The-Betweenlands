@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:dried_swamp_reed"
+    }
+  },
+  "pattern": [
+    "ii",
+    "ii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:thatch"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:smooth_pitstone"
+    }
+  },
+  "pattern": [
+    "ii",
+    "ii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:pitstone_tiles"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_logs": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:weedwood_log",
+              "thebetweenlands:weedwood_bark"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:weedwood_lever"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_logs"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:weedwood_lever"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:scabyst_bricks"
+    }
+  },
+  "pattern": [
+    "i  ",
+    "ii ",
+    "iii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:scabyst_brick_stairs"
+  }
+}

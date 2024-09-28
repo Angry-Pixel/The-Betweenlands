@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_input": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:betweenstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:smooth_betweenstone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_input"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:smooth_betweenstone"
+    ]
+  }
+}

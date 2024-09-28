@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "thebetweenlands:reed_mats"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:reed_mat"
+  }
+}

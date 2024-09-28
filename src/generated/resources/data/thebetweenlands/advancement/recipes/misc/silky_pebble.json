@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pebble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:angry_pebble"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:silky_pebble"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thread": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:silk_thread"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thread",
+      "has_pebble"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:silky_pebble"
+    ]
+  }
+}

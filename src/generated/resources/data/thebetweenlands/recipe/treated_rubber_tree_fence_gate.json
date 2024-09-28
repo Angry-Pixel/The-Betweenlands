@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:treated_rubber_tree_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "sps",
+    "sps"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:treated_rubber_tree_fence_gate"
+  }
+}

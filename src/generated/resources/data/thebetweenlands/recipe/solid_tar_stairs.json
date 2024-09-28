@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:solid_tar"
+    }
+  },
+  "pattern": [
+    "i  ",
+    "ii ",
+    "iii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:solid_tar_stairs"
+  }
+}

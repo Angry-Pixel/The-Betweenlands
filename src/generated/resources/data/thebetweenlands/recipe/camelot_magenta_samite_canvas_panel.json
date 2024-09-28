@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:camelot_magenta_samite"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    " s ",
+    "sis",
+    " s "
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:camelot_magenta_samite_canvas_panel"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:ancient_remnant_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "thebetweenlands:ancient_remnant"
+  }
+}

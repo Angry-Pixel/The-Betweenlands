@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_input": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:raw_snail_flesh"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:cooked_snail_flesh"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_input"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:cooked_snail_flesh"
+    ]
+  }
+}

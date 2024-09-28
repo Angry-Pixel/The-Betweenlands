@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "thebetweenlands:slimy_bone"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:bone_boots"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:crimson_middle_gem",
+              "thebetweenlands:green_middle_gem",
+              "thebetweenlands:aqua_middle_gem"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_paper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:amate_paper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:amate_map"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_paper",
+      "has_gem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:amate_map"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": [
+      {
+        "item": "thebetweenlands:weedwood_bark"
+      },
+      {
+        "item": "thebetweenlands:weedwood_log"
+      }
+    ],
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    }
+  },
+  "pattern": [
+    "iri",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_shield"
+  }
+}

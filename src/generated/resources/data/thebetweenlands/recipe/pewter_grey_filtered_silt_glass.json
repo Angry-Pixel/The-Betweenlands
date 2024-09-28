@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "d": {
+      "item": "thebetweenlands:pewter_grey_dye"
+    },
+    "i": {
+      "item": "thebetweenlands:filtered_silt_glass"
+    }
+  },
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thebetweenlands:pewter_grey_filtered_silt_glass"
+  }
+}

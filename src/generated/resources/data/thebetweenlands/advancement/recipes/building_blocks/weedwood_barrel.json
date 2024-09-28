@@ -1,0 +1,76 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bucket": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_bucket"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_drip": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:tar_drip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:syrmorite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_slab"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:weedwood_barrel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_slab",
+      "has_planks",
+      "has_ingot",
+      "has_bucket",
+      "has_drip"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:weedwood_barrel"
+    ]
+  }
+}

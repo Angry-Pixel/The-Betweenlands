@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sulfur": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sulfur"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:sulfur_torch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sulfur"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:sulfur_torch"
+    ]
+  }
+}

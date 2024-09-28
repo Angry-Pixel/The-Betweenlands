@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:flathead_mushroom_item"
+    },
+    {
+      "item": "thebetweenlands:black_hat_mushroom_item"
+    },
+    {
+      "item": "thebetweenlands:raw_olm_egg"
+    },
+    {
+      "item": "thebetweenlands:raw_olm_egg"
+    },
+    {
+      "item": "thebetweenlands:weedwood_bowl"
+    },
+    {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:olmlette_mixture"
+  }
+}

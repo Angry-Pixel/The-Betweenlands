@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fruit": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:middle_fruit"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_jello": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sludge_jello"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:middle_fruit_jello"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_jello",
+      "has_fruit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:middle_fruit_jello"
+    ]
+  }
+}

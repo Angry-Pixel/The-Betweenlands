@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": [
+      {
+        "item": "thebetweenlands:nibbletwig_bark"
+      },
+      {
+        "item": "thebetweenlands:nibbletwig_log"
+      }
+    ]
+  },
+  "pattern": [
+    "r",
+    "r"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:nibblestick"
+  }
+}

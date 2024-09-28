@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:chiseled_cragrock"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_moss": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:moss",
+              "thebetweenlands:cave_moss",
+              "thebetweenlands:moss_clump",
+              "thebetweenlands:cave_moss_clump"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:mossy_chiseled_cragrock"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_moss",
+      "has_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:mossy_chiseled_cragrock"
+    ]
+  }
+}

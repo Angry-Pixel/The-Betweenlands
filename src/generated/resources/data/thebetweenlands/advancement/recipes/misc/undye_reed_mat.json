@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:reed_mats"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:undye_reed_mat"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mat"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:undye_reed_mat"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dentrothyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:green_dentrothyst"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:green_dentrothyst_shield"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dentrothyst"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:green_dentrothyst_shield"
+    ]
+  }
+}

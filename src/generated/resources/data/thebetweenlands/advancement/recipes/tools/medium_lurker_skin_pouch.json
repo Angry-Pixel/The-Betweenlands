@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pouch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:small_lurker_skin_pouch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:medium_lurker_skin_pouch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pouch"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:medium_lurker_skin_pouch"
+    ]
+  }
+}

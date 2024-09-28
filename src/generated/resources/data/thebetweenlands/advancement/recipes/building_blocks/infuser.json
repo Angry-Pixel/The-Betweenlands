@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:octine_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_pestle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:pestle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:infuser"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ingot",
+      "has_pestle"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:infuser"
+    ]
+  }
+}

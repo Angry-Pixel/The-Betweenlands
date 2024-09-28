@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "w": [
+      {
+        "item": "thebetweenlands:weedwood_log"
+      },
+      {
+        "item": "thebetweenlands:weedwood_bark"
+      }
+    ]
+  },
+  "pattern": [
+    "s",
+    "w"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_lever"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "s": {
+      "item": "thebetweenlands:weedwood_slab"
+    }
+  },
+  "pattern": [
+    "sss",
+    "   ",
+    "sss"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:item_shelf"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_input": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:filtered_silt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:filtered_silt_glass"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_input"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:filtered_silt_glass"
+    ]
+  }
+}

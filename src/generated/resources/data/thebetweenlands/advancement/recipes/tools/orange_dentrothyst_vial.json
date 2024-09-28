@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rubber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:rubber_ball"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:orange_dentrothyst_shard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:orange_dentrothyst_vial"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rubber",
+      "has_shard"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:orange_dentrothyst_vial"
+    ]
+  }
+}

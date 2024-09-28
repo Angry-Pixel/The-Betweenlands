@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:cragrock_bricks"
+    },
+    [
+      {
+        "item": "thebetweenlands:moss"
+      },
+      {
+        "item": "thebetweenlands:cave_moss"
+      },
+      {
+        "item": "thebetweenlands:moss_clump"
+      },
+      {
+        "item": "thebetweenlands:cave_moss_clump"
+      }
+    ]
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:mossy_cragrock_bricks"
+  }
+}

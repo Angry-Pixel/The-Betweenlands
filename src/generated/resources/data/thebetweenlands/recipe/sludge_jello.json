@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "thebetweenlands:sludge_ball"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:sludge_jello"
+  }
+}

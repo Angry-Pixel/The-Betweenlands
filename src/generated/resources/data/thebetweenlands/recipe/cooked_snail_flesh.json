@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "thebetweenlands:raw_snail_flesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cooked_snail_flesh"
+  }
+}

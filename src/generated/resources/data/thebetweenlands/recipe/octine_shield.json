@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:octine_ingot"
+    }
+  },
+  "pattern": [
+    "iii",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:octine_shield"
+  }
+}

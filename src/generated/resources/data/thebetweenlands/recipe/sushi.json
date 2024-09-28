@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "k": {
+      "item": "thebetweenlands:swamp_kelp"
+    },
+    "l": {
+      "item": "thebetweenlands:ground_lichen"
+    },
+    "m": {
+      "item": "thebetweenlands:raw_anadia_meat"
+    }
+  },
+  "pattern": [
+    "kkk",
+    "mmm",
+    "lll"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:sushi"
+  }
+}

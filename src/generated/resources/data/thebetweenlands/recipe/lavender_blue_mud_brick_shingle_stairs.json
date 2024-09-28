@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:lavender_blue_mud_brick_shingles"
+    }
+  },
+  "pattern": [
+    "i  ",
+    "ii ",
+    "iii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:lavender_blue_mud_brick_shingle_stairs"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:mud_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_cremains": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:cremains"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_remnant": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:ancient_remnant"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:censer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bricks",
+      "has_cremains",
+      "has_remnant"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:censer"
+    ]
+  }
+}

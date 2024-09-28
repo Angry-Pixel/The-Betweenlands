@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:tar_drip"
+    },
+    {
+      "item": "thebetweenlands:lurker_skin"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:lurker_skin_patch"
+  }
+}

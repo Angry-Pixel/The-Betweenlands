@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    [
+      {
+        "item": "thebetweenlands:tarred_hearthgrove_bark"
+      },
+      {
+        "item": "thebetweenlands:tarred_hearthgrove_log"
+      },
+      {
+        "item": "thebetweenlands:hearthgrove_log"
+      },
+      {
+        "item": "thebetweenlands:hearthgrove_bark"
+      }
+    ]
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:hearthgrove_planks"
+  }
+}

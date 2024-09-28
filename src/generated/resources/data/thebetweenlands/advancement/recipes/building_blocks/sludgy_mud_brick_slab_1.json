@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_resource": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sludgy_mud_bricks_1"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:sludgy_mud_brick_slab_1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_resource"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:sludgy_mud_brick_slab_1"
+    ]
+  }
+}

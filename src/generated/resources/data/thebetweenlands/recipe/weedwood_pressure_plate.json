@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "ii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_pressure_plate"
+  }
+}

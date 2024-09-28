@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_resource": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:smooth_cragrock"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:cragrock_tiles"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_resource"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:cragrock_tiles"
+    ]
+  }
+}

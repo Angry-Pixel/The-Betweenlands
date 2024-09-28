@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:rotten_planks"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "r r",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:crab_pot_filter"
+  }
+}

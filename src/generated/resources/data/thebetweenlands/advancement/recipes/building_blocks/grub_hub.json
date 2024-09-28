@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_jar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:filtered_silt_glass_jar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_mask": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:animated_small_spirit_tree_face_mask"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:grub_hub"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mask",
+      "has_planks",
+      "has_jar"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:grub_hub"
+    ]
+  }
+}

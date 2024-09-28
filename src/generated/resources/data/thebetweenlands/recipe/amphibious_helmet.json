@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:anadia_bones"
+    },
+    "e": {
+      "item": "thebetweenlands:anadia_eye"
+    },
+    "g": {
+      "item": "thebetweenlands:anadia_gills"
+    },
+    "l": {
+      "item": "thebetweenlands:lurker_skin_helmet"
+    },
+    "s": {
+      "item": "thebetweenlands:anadia_scales"
+    }
+  },
+  "pattern": [
+    "sss",
+    "ele",
+    "gbg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:amphibious_helmet"
+  }
+}

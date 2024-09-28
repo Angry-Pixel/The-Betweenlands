@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ppp",
+    " s "
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:weedwood_sign"
+  }
+}

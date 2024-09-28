@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "type": "neoforge:components",
+      "components": {
+        "thebetweenlands:stored_fluid": {
+          "amount": 1000,
+          "id": "thebetweenlands:fish_oil"
+        }
+      },
+      "items": [
+        "thebetweenlands:weedwood_bucket",
+        "thebetweenlands:syrmorite_bucket"
+      ],
+      "strict": true
+    },
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "pbp",
+    "ppp"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thebetweenlands:treated_weedwood_planks"
+  }
+}

@@ -1,13 +1,142 @@
 {
   "values": {
+    "thebetweenlands:carved_rotten_bark_1": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_10": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_11": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_12": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_13": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_14": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_15": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_16": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_2": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_3": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_4": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_5": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_6": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_7": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_8": {
+      "burn_time": 300
+    },
+    "thebetweenlands:carved_rotten_bark_9": {
+      "burn_time": 300
+    },
+    "thebetweenlands:chip_path": {
+      "burn_time": 100
+    },
+    "thebetweenlands:compost_bin": {
+      "burn_time": 300
+    },
+    "thebetweenlands:fine_lattice": {
+      "burn_time": 300
+    },
+    "thebetweenlands:fish_trimming_table": {
+      "burn_time": 300
+    },
+    "thebetweenlands:fishing_tackle_box": {
+      "burn_time": 300
+    },
+    "thebetweenlands:gecko_cage": {
+      "burn_time": 300
+    },
+    "thebetweenlands:giant_root": {
+      "burn_time": 300
+    },
     "thebetweenlands:hearthgrove_bark": {
       "burn_time": 800
     },
     "thebetweenlands:hearthgrove_log": {
       "burn_time": 800
     },
+    "thebetweenlands:hollow_log": {
+      "burn_time": 200
+    },
+    "thebetweenlands:item_shelf": {
+      "burn_time": 300
+    },
+    "thebetweenlands:lattice": {
+      "burn_time": 300
+    },
+    "thebetweenlands:moth_house": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_bottom": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_bottom_left": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_bottom_right": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_left": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_right": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_top": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_top_left": {
+      "burn_time": 300
+    },
+    "thebetweenlands:portal_frame_top_right": {
+      "burn_time": 300
+    },
+    "thebetweenlands:purifier": {
+      "burn_time": 300
+    },
+    "thebetweenlands:repeller": {
+      "burn_time": 300
+    },
+    "thebetweenlands:root": {
+      "burn_time": 300
+    },
+    "thebetweenlands:rootman_simulacrum_1": {
+      "burn_time": 300
+    },
+    "thebetweenlands:rootman_simulacrum_2": {
+      "burn_time": 300
+    },
+    "thebetweenlands:rootman_simulacrum_3": {
+      "burn_time": 300
+    },
+    "thebetweenlands:smoking_rack": {
+      "burn_time": 300
+    },
     "thebetweenlands:sulfur": {
       "burn_time": 1600
+    },
+    "thebetweenlands:tangled_root": {
+      "burn_time": 400
     },
     "thebetweenlands:tarred_hearthgrove_bark": {
       "burn_time": 4800
@@ -18,8 +147,53 @@
     "thebetweenlands:undying_embers": {
       "burn_time": 20000
     },
+    "thebetweenlands:walkway": {
+      "burn_time": 300
+    },
+    "thebetweenlands:weedwood_axe": {
+      "burn_time": 200
+    },
+    "thebetweenlands:weedwood_barrel": {
+      "burn_time": 300
+    },
+    "thebetweenlands:weedwood_bow": {
+      "burn_time": 300
+    },
+    "thebetweenlands:weedwood_bowl": {
+      "burn_time": 100
+    },
+    "thebetweenlands:weedwood_crafting_table": {
+      "burn_time": 300
+    },
+    "thebetweenlands:weedwood_fishing_rod": {
+      "burn_time": 300
+    },
+    "thebetweenlands:weedwood_jukebox": {
+      "burn_time": 300
+    },
+    "thebetweenlands:weedwood_pickaxe": {
+      "burn_time": 200
+    },
+    "thebetweenlands:weedwood_shield": {
+      "burn_time": 200
+    },
+    "thebetweenlands:weedwood_shovel": {
+      "burn_time": 200
+    },
     "thebetweenlands:weedwood_stick": {
       "burn_time": 100
+    },
+    "thebetweenlands:weedwood_sword": {
+      "burn_time": 200
+    },
+    "thebetweenlands:wooden_support_beam_1": {
+      "burn_time": 300
+    },
+    "thebetweenlands:wooden_support_beam_2": {
+      "burn_time": 300
+    },
+    "thebetweenlands:wooden_support_beam_3": {
+      "burn_time": 300
     }
   }
 }

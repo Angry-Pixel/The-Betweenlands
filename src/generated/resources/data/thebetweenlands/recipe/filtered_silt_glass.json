@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "thebetweenlands:filtered_silt"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:filtered_silt_glass"
+  }
+}

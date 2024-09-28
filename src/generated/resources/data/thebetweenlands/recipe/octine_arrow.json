@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "w": {
+      "item": "thebetweenlands:dragonfly_wing"
+    }
+  },
+  "pattern": [
+    "a",
+    "s",
+    "w"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:octine_arrow"
+  }
+}

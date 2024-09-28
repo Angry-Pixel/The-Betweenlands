@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_arrow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:angler_tooth_arrow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_gland": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:poison_gland"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:poisoned_angler_tooth_arrow"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_gland",
+      "has_arrow"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:poisoned_angler_tooth_arrow"
+    ]
+  }
+}

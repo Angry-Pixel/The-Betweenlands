@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:pitstone_bricks"
+    },
+    "i": {
+      "item": "thebetweenlands:scabyst"
+    }
+  },
+  "pattern": [
+    "bbb",
+    "bib",
+    "bbb"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:dotted_scabyst_pitstone"
+  }
+}

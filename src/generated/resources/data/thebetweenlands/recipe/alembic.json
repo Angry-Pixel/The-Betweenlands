@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "c": {
+      "item": "thebetweenlands:cragrock"
+    },
+    "g": {
+      "item": "thebetweenlands:green_dentrothyst"
+    },
+    "i": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "v": {
+      "item": "thebetweenlands:green_dentrothyst_vial"
+    }
+  },
+  "pattern": [
+    " i ",
+    " gv",
+    "cic"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:alembic"
+  }
+}

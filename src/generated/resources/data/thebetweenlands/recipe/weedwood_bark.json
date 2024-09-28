@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:weedwood_log"
+    }
+  },
+  "pattern": [
+    "ii",
+    "ii"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:weedwood_bark"
+  }
+}

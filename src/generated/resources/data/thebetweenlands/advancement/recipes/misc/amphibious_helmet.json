@@ -1,0 +1,65 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bones": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_bones"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_eye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_eye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_gills": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_gills"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_scales": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_scales"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:amphibious_helmet"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_scales",
+      "has_eye",
+      "has_gills",
+      "has_bones"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:amphibious_helmet"
+    ]
+  }
+}

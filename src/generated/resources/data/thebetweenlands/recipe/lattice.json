@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "i i",
+    " i ",
+    "i i"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:lattice"
+  }
+}

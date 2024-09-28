@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.4,
+  "ingredient": {
+    "item": "thebetweenlands:olmlette_mixture"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:olmlette"
+  }
+}

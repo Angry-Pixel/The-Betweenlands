@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    [
+      {
+        "item": "thebetweenlands:nibbletwig_log"
+      },
+      {
+        "item": "thebetweenlands:nibbletwig_bark"
+      }
+    ]
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:nibbletwig_planks"
+  }
+}

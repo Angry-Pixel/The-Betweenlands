@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "v": [
+      {
+        "item": "thebetweenlands:volarpad"
+      },
+      {
+        "item": "thebetweenlands:volarpad_leaf"
+      }
+    ]
+  },
+  "pattern": [
+    "vvv",
+    "rsr",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:volarkite"
+  }
+}

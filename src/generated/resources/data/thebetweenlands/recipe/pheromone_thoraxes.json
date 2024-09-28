@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:pheromone_thorax"
+    }
+  },
+  "pattern": [
+    "ii",
+    "ii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:pheromone_thoraxes"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:compost"
+    }
+  },
+  "pattern": [
+    "iii",
+    "iii",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:compost_block"
+  }
+}

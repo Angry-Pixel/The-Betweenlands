@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:anadia_bones"
+    },
+    "f": {
+      "item": "thebetweenlands:anadia_fins"
+    },
+    "l": {
+      "item": "thebetweenlands:lurker_skin_boots"
+    },
+    "s": {
+      "item": "thebetweenlands:anadia_scales"
+    }
+  },
+  "pattern": [
+    "sss",
+    "flf",
+    "sbs"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:amphibious_boots"
+  }
+}

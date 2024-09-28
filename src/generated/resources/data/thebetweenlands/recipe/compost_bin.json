@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    }
+  },
+  "pattern": [
+    "sps",
+    "p p",
+    "p p"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:compost_bin"
+  }
+}

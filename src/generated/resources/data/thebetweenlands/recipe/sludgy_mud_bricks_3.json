@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:sludgy_mud_bricks_2"
+    },
+    {
+      "item": "thebetweenlands:sludge_ball"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:sludgy_mud_bricks_3"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "thebetweenlands:middle_fruit"
+    },
+    "p": {
+      "item": "thebetweenlands:rock_snot_pearl"
+    }
+  },
+  "pattern": [
+    "mmm",
+    "mpm",
+    "mmm"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:pearled_pear"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "f": {
+      "item": "thebetweenlands:sulfur_furnace"
+    },
+    "p": {
+      "item": "thebetweenlands:betweenstone"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "pfp",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:dual_sulfur_furnace"
+  }
+}

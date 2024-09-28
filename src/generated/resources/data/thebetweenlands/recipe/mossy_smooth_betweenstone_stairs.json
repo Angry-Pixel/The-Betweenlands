@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:mossy_smooth_betweenstone"
+    }
+  },
+  "pattern": [
+    "i  ",
+    "ii ",
+    "iii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:mossy_smooth_betweenstone_stairs"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_moss": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:moss_clump",
+              "thebetweenlands:cave_moss_clump",
+              "thebetweenlands:cave_moss",
+              "thebetweenlands:moss"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:moss_bed"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_planks",
+      "has_moss"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:moss_bed"
+    ]
+  }
+}

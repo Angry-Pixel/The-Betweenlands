@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:weedwood_bucket"
+    },
+    "d": {
+      "item": "thebetweenlands:tar_drip"
+    },
+    "i": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    },
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_slab"
+    }
+  },
+  "pattern": [
+    "sds",
+    "ibi",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_barrel"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:mud_brick"
+    },
+    "i": {
+      "item": "thebetweenlands:mud_bricks"
+    }
+  },
+  "pattern": [
+    "iii",
+    "ibi",
+    "iii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:worm_pillar_top"
+  }
+}

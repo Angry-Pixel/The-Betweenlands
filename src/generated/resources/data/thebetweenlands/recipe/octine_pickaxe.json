@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "X": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "###",
+    " X ",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:octine_pickaxe"
+  }
+}

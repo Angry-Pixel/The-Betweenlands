@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:champagne_item_frame"
+    },
+    {
+      "item": "thebetweenlands:pewter_grey_dye"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:pewter_grey_item_frame"
+  }
+}

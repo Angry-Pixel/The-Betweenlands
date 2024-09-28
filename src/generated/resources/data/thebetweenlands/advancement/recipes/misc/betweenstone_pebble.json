@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pebble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:betweenstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:betweenstone_pebble"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pebble"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:betweenstone_pebble"
+    ]
+  }
+}

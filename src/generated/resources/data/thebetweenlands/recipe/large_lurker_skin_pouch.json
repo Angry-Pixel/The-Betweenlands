@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:lurker_skin"
+    },
+    "p": {
+      "item": "thebetweenlands:medium_lurker_skin_pouch"
+    }
+  },
+  "pattern": [
+    "lll",
+    "lpl",
+    "lll"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:large_lurker_skin_pouch"
+  }
+}

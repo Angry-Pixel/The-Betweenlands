@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.4,
+  "ingredient": {
+    "item": "thebetweenlands:mire_snail_egg"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cooked_mire_snail_egg"
+  }
+}

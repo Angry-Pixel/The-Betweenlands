@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "h": {
+      "item": "thebetweenlands:animated_tar_beast_heart"
+    },
+    "t": {
+      "item": "thebetweenlands:tar_drip"
+    }
+  },
+  "pattern": [
+    "ttt",
+    "tht",
+    "ttt"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:tarminion"
+  }
+}

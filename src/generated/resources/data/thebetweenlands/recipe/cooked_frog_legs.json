@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "thebetweenlands:raw_frog_legs"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cooked_frog_legs"
+  }
+}

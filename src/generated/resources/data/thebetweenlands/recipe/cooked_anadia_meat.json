@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "thebetweenlands:raw_anadia_meat"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cooked_anadia_meat"
+  }
+}

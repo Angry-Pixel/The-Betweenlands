@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "v": {
+      "item": "thebetweenlands:valonite_shard"
+    }
+  },
+  "pattern": [
+    " vv",
+    "v s",
+    "  r"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:sickle"
+  }
+}

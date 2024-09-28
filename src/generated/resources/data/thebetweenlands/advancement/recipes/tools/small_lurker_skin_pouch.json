@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_silk": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:silk_thread"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_skin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:lurker_skin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:small_lurker_skin_pouch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_skin",
+      "has_silk"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:small_lurker_skin_pouch"
+    ]
+  }
+}

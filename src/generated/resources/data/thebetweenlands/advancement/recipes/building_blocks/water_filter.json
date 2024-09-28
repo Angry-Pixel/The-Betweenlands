@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rope": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:reed_rope"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_skin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:lurker_skin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:water_filter"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_skin",
+      "has_rope",
+      "has_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:water_filter"
+    ]
+  }
+}

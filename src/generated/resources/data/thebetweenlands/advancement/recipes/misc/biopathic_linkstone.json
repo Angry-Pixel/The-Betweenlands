@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bones": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_bones"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_heart": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:wight_heart"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:biopathic_linkstone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bones",
+      "has_heart"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:biopathic_linkstone"
+    ]
+  }
+}

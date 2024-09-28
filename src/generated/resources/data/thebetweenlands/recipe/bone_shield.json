@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:slimy_bone"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    }
+  },
+  "pattern": [
+    "iri",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:bone_shield"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:solid_tar"
+    }
+  },
+  "pattern": [
+    "iii"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thebetweenlands:solid_tar_slab"
+  }
+}

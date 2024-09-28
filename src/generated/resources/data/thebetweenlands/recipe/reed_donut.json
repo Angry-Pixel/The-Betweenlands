@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:dried_swamp_reed"
+    }
+  },
+  "pattern": [
+    " r ",
+    "r r",
+    " r "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:reed_donut"
+  }
+}

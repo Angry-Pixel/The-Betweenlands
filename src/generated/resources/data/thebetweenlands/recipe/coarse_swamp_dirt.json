@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:swamp_dirt"
+    },
+    {
+      "item": "thebetweenlands:silt"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "thebetweenlands:coarse_swamp_dirt"
+  }
+}

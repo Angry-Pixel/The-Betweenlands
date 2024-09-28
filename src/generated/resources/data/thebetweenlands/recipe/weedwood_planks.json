@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    [
+      {
+        "item": "thebetweenlands:weedwood"
+      },
+      {
+        "item": "thebetweenlands:weedwood_log"
+      },
+      {
+        "item": "thebetweenlands:weedwood_bark"
+      }
+    ]
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:weedwood_planks"
+  }
+}

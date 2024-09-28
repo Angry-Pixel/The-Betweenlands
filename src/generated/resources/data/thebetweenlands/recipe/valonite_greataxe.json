@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": {
+      "item": "thebetweenlands:valonite_axe"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "v": {
+      "item": "thebetweenlands:valonite_shard"
+    }
+  },
+  "pattern": [
+    " va",
+    " sv",
+    "s  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:valonite_greataxe"
+  }
+}

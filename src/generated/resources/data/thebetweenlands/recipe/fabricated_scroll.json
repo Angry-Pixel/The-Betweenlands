@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:amate_paper"
+    },
+    {
+      "item": "thebetweenlands:loot_scraps"
+    },
+    {
+      "item": "thebetweenlands:loot_scraps"
+    },
+    {
+      "item": "thebetweenlands:loot_scraps"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:fabricated_scroll"
+  }
+}

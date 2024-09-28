@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_egg": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:cooked_mire_snail_egg"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_fungus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:yellow_dotted_fungus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:mire_scramble"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_egg",
+      "has_fungus"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:mire_scramble"
+    ]
+  }
+}

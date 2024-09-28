@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_resource": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:mire_coral_stalk"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:mire_coral_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_resource"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:mire_coral_block"
+    ]
+  }
+}

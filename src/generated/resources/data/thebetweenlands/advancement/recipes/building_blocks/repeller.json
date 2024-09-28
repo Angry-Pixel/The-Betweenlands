@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:cragrock"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:repeller"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_vial": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:green_dentrothyst_vial"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stone",
+      "has_vial"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:repeller"
+    ]
+  }
+}

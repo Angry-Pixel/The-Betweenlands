@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "w": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    " r ",
+    "w w",
+    " w "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_bucket"
+  }
+}

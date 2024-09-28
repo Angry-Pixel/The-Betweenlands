@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pitstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:pitstone_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_scabyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:scabyst"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:horizontal_scabyst_pitstone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pitstone",
+      "has_scabyst"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:horizontal_scabyst_pitstone"
+    ]
+  }
+}

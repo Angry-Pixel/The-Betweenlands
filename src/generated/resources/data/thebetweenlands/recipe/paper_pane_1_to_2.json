@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:connected_amate_paper_pane"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:squared_amate_paper_pane"
+  }
+}

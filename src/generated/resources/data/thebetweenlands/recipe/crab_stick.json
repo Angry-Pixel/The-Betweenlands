@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "s": {
+      "item": "thebetweenlands:crab_claw"
+    }
+  },
+  "pattern": [
+    "  s",
+    " s ",
+    "s  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:crab_stick"
+  }
+}

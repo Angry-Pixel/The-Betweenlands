@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:cragrock_brick_slab"
+    }
+  },
+  "pattern": [
+    "i",
+    "i"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:chiseled_cragrock"
+  }
+}

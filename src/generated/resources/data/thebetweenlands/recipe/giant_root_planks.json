@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:giant_root"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:giant_root_planks"
+  }
+}

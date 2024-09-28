@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mask": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:animated_small_spirit_tree_face_mask"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_shield": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_shield"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:living_weedwood_shield"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mask",
+      "has_shield"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:living_weedwood_shield"
+    ]
+  }
+}

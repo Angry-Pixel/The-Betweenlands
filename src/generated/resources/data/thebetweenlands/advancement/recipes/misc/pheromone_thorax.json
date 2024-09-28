@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:pheromone_thorax"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thorax": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:pheromone_thoraxes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thorax"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:pheromone_thorax"
+    ]
+  }
+}

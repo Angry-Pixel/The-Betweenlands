@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:leaf"
+    },
+    "o": {
+      "item": "thebetweenlands:octine_nugget"
+    },
+    "r": {
+      "item": "thebetweenlands:rubber_ball"
+    }
+  },
+  "pattern": [
+    "ll",
+    "or"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:fishing_float_and_hook"
+  }
+}

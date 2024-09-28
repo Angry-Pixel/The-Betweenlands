@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "thebetweenlands:barnacle"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cooked_barnacle"
+  }
+}

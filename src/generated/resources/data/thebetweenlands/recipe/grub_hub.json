@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "j": {
+      "item": "thebetweenlands:filtered_silt_glass_jar"
+    },
+    "m": {
+      "item": "thebetweenlands:animated_small_spirit_tree_face_mask"
+    },
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "pmp",
+    "mjm",
+    " m "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:grub_hub"
+  }
+}

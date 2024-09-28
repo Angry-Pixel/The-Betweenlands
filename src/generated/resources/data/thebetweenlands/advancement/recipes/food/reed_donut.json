@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_reed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:dried_swamp_reed"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:reed_donut"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_reed"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:reed_donut"
+    ]
+  }
+}

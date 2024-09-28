@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:slimy_bone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_crystal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:life_crystal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_moss": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:moss_clump",
+              "thebetweenlands:moss"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:craftable_talisman"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_moss",
+      "has_bone",
+      "has_crystal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:craftable_talisman"
+    ]
+  }
+}

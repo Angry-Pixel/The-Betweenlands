@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "sss",
+    "r r",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:crab_pot"
+  }
+}

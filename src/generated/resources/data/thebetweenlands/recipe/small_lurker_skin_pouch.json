@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:lurker_skin"
+    },
+    "s": {
+      "item": "thebetweenlands:silk_thread"
+    }
+  },
+  "pattern": [
+    "sss",
+    "l l",
+    "lll"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:small_lurker_skin_pouch"
+  }
+}

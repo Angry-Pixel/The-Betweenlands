@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_heart": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:wight_heart"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_tar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:tar_drip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:tar_beast_heart"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tar",
+      "has_heart"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:tar_beast_heart"
+    ]
+  }
+}

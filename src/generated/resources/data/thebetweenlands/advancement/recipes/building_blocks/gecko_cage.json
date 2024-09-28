@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:syrmorite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rope": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:reed_rope"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_slab"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:gecko_cage"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_slab",
+      "has_ingot",
+      "has_rope"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:gecko_cage"
+    ]
+  }
+}

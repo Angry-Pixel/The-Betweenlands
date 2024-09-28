@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "thebetweenlands:rubber_ball"
+    }
+  },
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:rubber_boots"
+  }
+}

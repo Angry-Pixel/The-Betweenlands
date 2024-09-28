@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hook": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:fishing_float_and_hook"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:syrmorite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:weedwood_fishing_rod"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_thread": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:silk_thread"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thread",
+      "has_hook",
+      "has_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:weedwood_fishing_rod"
+    ]
+  }
+}

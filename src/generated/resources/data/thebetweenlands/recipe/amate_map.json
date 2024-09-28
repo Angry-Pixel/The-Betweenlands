@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "g": [
+      {
+        "item": "thebetweenlands:crimson_middle_gem"
+      },
+      {
+        "item": "thebetweenlands:green_middle_gem"
+      },
+      {
+        "item": "thebetweenlands:aqua_middle_gem"
+      }
+    ],
+    "p": {
+      "item": "thebetweenlands:amate_paper"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "pgp",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:amate_map"
+  }
+}

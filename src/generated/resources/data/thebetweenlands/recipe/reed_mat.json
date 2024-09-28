@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "g": {
+      "item": "thebetweenlands:dried_swamp_reed"
+    }
+  },
+  "pattern": [
+    "ggg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:reed_mat"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_aspect": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "thebetweenlands:aspect_contents": {
+                "amount": 100,
+                "aspect": "thebetweenlands:armaniis"
+              }
+            },
+            "items": [
+              "thebetweenlands:orange_aspect_vial",
+              "thebetweenlands:green_aspect_vial"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_heart": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:animated_tar_beast_heart"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_shimmerstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:shimmer_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:mummy_bait"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_shimmerstone",
+      "has_heart",
+      "has_aspect"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:mummy_bait"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:thatch"
+    }
+  },
+  "pattern": [
+    "iii"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thebetweenlands:thatch_slab"
+  }
+}

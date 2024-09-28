@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "o": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "p p",
+    "ppp",
+    "ooo"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:purifier"
+  }
+}

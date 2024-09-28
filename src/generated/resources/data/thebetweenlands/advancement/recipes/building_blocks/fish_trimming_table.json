@@ -1,0 +1,57 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_crab": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:bubbler_crab",
+              "thebetweenlands:silt_crab"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_fish": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:smooth_betweenstone_slab"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:fish_trimming_table"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stone",
+      "has_fish",
+      "has_crab"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:fish_trimming_table"
+    ]
+  }
+}

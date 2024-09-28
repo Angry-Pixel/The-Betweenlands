@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_barrel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_barrel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:syrmorite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:syrmorite_barrel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_barrel",
+      "has_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:syrmorite_barrel"
+    ]
+  }
+}

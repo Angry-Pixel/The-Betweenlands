@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:treated_nibbletwig_planks"
+    }
+  },
+  "pattern": [
+    "pp",
+    "pp",
+    "pp"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:treated_nibbletwig_door"
+  }
+}

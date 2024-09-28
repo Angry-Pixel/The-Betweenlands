@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:ground_weedwood_bark"
+    }
+  },
+  "pattern": [
+    "ppp"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:chip_path"
+  }
+}

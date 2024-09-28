@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_resource": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:brown_rust_mud_brick_shingles"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:brown_rust_mud_brick_shingle_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_resource"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:brown_rust_mud_brick_shingle_stairs"
+    ]
+  }
+}

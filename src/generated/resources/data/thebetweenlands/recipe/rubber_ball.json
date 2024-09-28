@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": {
+    "type": "neoforge:components",
+    "components": {
+      "thebetweenlands:stored_fluid": {
+        "amount": 1000,
+        "id": "thebetweenlands:rubber"
+      }
+    },
+    "items": "thebetweenlands:weedwood_bucket",
+    "strict": true
+  },
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:rubber_ball"
+  }
+}

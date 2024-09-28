@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    }
+  },
+  "pattern": [
+    "ii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:syrmorite_pressure_plate"
+  }
+}

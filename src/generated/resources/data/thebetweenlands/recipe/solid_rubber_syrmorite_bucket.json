@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": {
+    "type": "neoforge:components",
+    "components": {
+      "thebetweenlands:stored_fluid": {
+        "amount": 1000,
+        "id": "thebetweenlands:rubber"
+      }
+    },
+    "items": "thebetweenlands:syrmorite_bucket",
+    "strict": true
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:solid_rubber_syrmorite_bucket"
+  }
+}

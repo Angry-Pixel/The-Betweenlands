@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:chiseled_scabyst_3"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:chiseled_scabyst_1"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:betweenstone"
+    },
+    "h": {
+      "item": "thebetweenlands:wight_heart"
+    },
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "shs",
+    "bbb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:animator"
+  }
+}

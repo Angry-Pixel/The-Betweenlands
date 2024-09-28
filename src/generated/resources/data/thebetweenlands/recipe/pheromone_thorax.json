@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:pheromone_thoraxes"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:pheromone_thorax"
+  }
+}

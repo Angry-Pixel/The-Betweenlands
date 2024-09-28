@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": [
+    {
+      "item": "thebetweenlands:syrmorite_helmet"
+    },
+    {
+      "item": "thebetweenlands:syrmorite_chestplate"
+    },
+    {
+      "item": "thebetweenlands:syrmorite_leggings"
+    },
+    {
+      "item": "thebetweenlands:syrmorite_boots"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:syrmorite_nugget"
+  }
+}

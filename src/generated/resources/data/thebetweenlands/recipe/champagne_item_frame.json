@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "t": {
+      "item": "thebetweenlands:silk_thread"
+    }
+  },
+  "pattern": [
+    "sss",
+    "rtr",
+    "sss"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:champagne_item_frame"
+  }
+}

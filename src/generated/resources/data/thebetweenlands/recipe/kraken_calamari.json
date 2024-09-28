@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": {
+    "item": "thebetweenlands:kraken_tentacle"
+  },
+  "result": {
+    "count": 5,
+    "id": "thebetweenlands:kraken_calamari"
+  }
+}

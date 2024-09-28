@@ -1,0 +1,68 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_crab": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:bubbler_crab",
+              "thebetweenlands:silt_crab"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:rotten_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_remains": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_remains"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rope": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:reed_rope"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:crab_pot_filter"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rope",
+      "has_planks",
+      "has_remains",
+      "has_crab"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:crab_pot_filter"
+    ]
+  }
+}

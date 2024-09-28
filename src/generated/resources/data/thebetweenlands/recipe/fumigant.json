@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:limestone_flux"
+    },
+    {
+      "item": "thebetweenlands:sap_ball"
+    },
+    {
+      "item": "thebetweenlands:ground_swamp_kelp"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:fumigant"
+  }
+}

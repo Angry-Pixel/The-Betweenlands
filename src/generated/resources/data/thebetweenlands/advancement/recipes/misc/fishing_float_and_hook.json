@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_nugget": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:octine_nugget"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rubber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:rubber_ball"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:fishing_float_and_hook"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_nugget",
+      "has_rubber"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:fishing_float_and_hook"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "h": {
+      "item": "thebetweenlands:fishing_float_and_hook"
+    },
+    "i": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "t": {
+      "item": "thebetweenlands:silk_thread"
+    }
+  },
+  "pattern": [
+    "  s",
+    "ist",
+    "sih"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_fishing_rod"
+  }
+}

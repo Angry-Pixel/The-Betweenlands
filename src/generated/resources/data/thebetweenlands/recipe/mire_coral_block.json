@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:mire_coral_stalk"
+    }
+  },
+  "pattern": [
+    "ii",
+    "ii"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:mire_coral_block"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "t": {
+      "item": "thebetweenlands:moss"
+    }
+  },
+  "pattern": [
+    " s ",
+    "sts",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:moss_filter"
+  }
+}

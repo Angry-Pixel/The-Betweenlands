@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:silt_glass"
+    }
+  },
+  "pattern": [
+    "iii",
+    "iii"
+  ],
+  "result": {
+    "count": 16,
+    "id": "thebetweenlands:silt_glass_pane"
+  }
+}

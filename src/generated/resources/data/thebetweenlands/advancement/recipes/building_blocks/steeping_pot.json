@@ -1,0 +1,76 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:slimy_bone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_brick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:mud_brick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_bundle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:silk_bundle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rope": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:reed_rope"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_slabs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:smooth_cragrock_slab"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:steeping_pot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rope",
+      "has_slabs",
+      "has_brick",
+      "has_bone",
+      "has_bundle"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:steeping_pot"
+    ]
+  }
+}

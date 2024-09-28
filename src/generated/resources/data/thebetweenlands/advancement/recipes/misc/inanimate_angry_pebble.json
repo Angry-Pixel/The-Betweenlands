@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cremains": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:cremains"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_pebble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:betweenstone_pebble"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_sulfur": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sulfur"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:inanimate_angry_pebble"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pebble",
+      "has_cremains",
+      "has_sulfur"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:inanimate_angry_pebble"
+    ]
+  }
+}

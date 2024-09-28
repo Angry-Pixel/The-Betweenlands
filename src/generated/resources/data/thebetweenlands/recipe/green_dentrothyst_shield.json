@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:green_dentrothyst"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "isi",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:green_dentrothyst_shield"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dirt": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:swamp_dirt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_silt": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:silt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:coarse_swamp_dirt"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dirt",
+      "has_silt"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:coarse_swamp_dirt"
+    ]
+  }
+}

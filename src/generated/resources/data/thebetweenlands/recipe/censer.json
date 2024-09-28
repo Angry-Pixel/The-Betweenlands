@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:mud_bricks"
+    },
+    "c": {
+      "item": "thebetweenlands:cremains"
+    },
+    "r": {
+      "item": "thebetweenlands:ancient_remnant"
+    }
+  },
+  "pattern": [
+    "rrr",
+    "rcr",
+    "bbb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:censer"
+  }
+}

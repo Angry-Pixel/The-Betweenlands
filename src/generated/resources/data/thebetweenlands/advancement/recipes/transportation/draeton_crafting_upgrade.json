@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_crafting_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_crafting_table"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_draeton": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:draeton"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:draeton_crafting_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_crafting_table",
+      "has_draeton"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:draeton_crafting_upgrade"
+    ]
+  }
+}

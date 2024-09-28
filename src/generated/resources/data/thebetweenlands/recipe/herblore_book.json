@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:lurker_skin"
+    },
+    "p": {
+      "item": "thebetweenlands:amate_paper"
+    }
+  },
+  "pattern": [
+    "lll",
+    "ppp",
+    "lll"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:herblore_book"
+  }
+}

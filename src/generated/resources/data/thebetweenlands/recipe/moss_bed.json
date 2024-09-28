@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": [
+      {
+        "item": "thebetweenlands:moss_clump"
+      },
+      {
+        "item": "thebetweenlands:cave_moss_clump"
+      },
+      {
+        "item": "thebetweenlands:cave_moss"
+      },
+      {
+        "item": "thebetweenlands:moss"
+      }
+    ],
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "mmm",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:moss_bed"
+  }
+}

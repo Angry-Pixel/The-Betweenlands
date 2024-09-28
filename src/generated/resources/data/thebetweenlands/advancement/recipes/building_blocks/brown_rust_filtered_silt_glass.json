@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:filtered_silt_glass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:brown_rust_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:brown_rust_filtered_silt_glass"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_block",
+      "has_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:brown_rust_filtered_silt_glass"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_skin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:lurker_skin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_tar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:tar_drip"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:lurker_skin_patch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_skin",
+      "has_tar"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:lurker_skin_patch"
+    ]
+  }
+}

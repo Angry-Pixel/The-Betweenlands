@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:silk_thread"
+    }
+  },
+  "pattern": [
+    " r ",
+    "s s",
+    "sss"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:silk_bundle"
+  }
+}

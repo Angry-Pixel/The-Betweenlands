@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:nibbletwig_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "psp",
+    "psp"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:nibbletwig_fence"
+  }
+}

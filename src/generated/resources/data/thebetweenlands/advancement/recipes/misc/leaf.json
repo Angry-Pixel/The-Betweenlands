@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_leaves": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:fallen_leaves"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:leaf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_leaves"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:leaf"
+    ]
+  }
+}

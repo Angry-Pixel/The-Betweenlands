@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:poison_gland"
+    },
+    {
+      "item": "thebetweenlands:angler_tooth_arrow"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:poisoned_angler_tooth_arrow"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:samite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:saffron_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:saffron_samite"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_block",
+      "has_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:saffron_samite"
+    ]
+  }
+}

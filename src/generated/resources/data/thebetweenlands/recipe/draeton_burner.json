@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "thebetweenlands:censer"
+    },
+    "e": {
+      "item": "thebetweenlands:undying_embers"
+    },
+    "r": {
+      "item": "thebetweenlands:ancient_remnant"
+    }
+  },
+  "pattern": [
+    "rrr",
+    "rcr",
+    " e "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:draeton_burner"
+  }
+}

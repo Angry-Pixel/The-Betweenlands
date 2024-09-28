@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:reed_mat"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:midnight_purple_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:midnight_purple_reed_mat"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_block",
+      "has_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:midnight_purple_reed_mat"
+    ]
+  }
+}

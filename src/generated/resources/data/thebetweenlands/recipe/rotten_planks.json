@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:rotten_bark"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:rotten_planks"
+  }
+}

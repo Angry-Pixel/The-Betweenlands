@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "s s"
+  ],
+  "result": {
+    "count": 2,
+    "id": "thebetweenlands:walkway"
+  }
+}

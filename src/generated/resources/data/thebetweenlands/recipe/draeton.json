@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:draeton_balloon"
+    },
+    "d": {
+      "item": "thebetweenlands:draeton_burner"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    },
+    "w": {
+      "item": "thebetweenlands:weedwood_rowboat"
+    }
+  },
+  "pattern": [
+    "bbb",
+    "rdr",
+    "sws"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:draeton"
+  }
+}

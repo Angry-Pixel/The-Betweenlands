@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    [
+      {
+        "item": "thebetweenlands:moss_clump"
+      },
+      {
+        "item": "thebetweenlands:moss"
+      }
+    ],
+    {
+      "item": "thebetweenlands:slimy_bone"
+    },
+    {
+      "item": "thebetweenlands:life_crystal"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:swamp_talisman"
+  }
+}

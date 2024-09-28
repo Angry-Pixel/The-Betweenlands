@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_censer": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:censer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ember": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:undying_embers"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_remnant": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:ancient_remnant"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:draeton_burner"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_remnant",
+      "has_ember",
+      "has_censer"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:draeton_burner"
+    ]
+  }
+}

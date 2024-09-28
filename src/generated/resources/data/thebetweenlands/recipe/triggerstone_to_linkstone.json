@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:biopathic_triggerstone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:biopathic_linkstone"
+  }
+}

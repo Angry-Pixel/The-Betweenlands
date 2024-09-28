@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "t": {
+      "item": "thebetweenlands:tar_drip"
+    },
+    "w": {
+      "item": "thebetweenlands:wight_heart"
+    }
+  },
+  "pattern": [
+    "ttt",
+    "twt",
+    "ttt"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:tar_beast_heart"
+  }
+}

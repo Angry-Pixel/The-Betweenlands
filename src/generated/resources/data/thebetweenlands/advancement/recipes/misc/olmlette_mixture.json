@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_eggs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:raw_olm_egg"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:olmlette_mixture"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_eggs"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:olmlette_mixture"
+    ]
+  }
+}

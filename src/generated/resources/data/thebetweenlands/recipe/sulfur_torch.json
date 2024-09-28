@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "s": {
+      "item": "thebetweenlands:sulfur"
+    }
+  },
+  "pattern": [
+    "s",
+    "r"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:sulfur_torch"
+  }
+}

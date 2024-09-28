@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "thebetweenlands:raw_olm_egg"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:cooked_olm_egg"
+  }
+}

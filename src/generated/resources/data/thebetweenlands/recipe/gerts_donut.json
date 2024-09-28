@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:reed_donut"
+    },
+    {
+      "item": "thebetweenlands:wight_heart"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:gerts_donut"
+  }
+}

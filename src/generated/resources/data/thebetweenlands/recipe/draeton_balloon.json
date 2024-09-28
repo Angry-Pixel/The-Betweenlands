@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:lurker_skin"
+    },
+    "r": {
+      "item": "thebetweenlands:rubber_ball"
+    }
+  },
+  "pattern": [
+    "lll",
+    "rrr",
+    "r r"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:draeton_balloon"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_balloon": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:draeton_balloon"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_burner": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:draeton_burner"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rowboat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_rowboat"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:draeton"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_balloon",
+      "has_burner",
+      "has_rowboat"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:draeton"
+    ]
+  }
+}

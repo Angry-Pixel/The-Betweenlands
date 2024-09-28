@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "d": {
+      "item": "thebetweenlands:elm_cyan_dye"
+    },
+    "i": {
+      "tag": "thebetweenlands:samite"
+    }
+  },
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thebetweenlands:elm_cyan_samite"
+  }
+}

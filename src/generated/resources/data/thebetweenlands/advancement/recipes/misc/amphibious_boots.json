@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bones": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_bones"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_fins": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_fins"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_scales": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia_scales"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:amphibious_boots"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_scales",
+      "has_fins",
+      "has_bones"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:amphibious_boots"
+    ]
+  }
+}

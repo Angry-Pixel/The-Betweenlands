@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:aqua_middle_gem_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "thebetweenlands:aqua_middle_gem"
+  }
+}

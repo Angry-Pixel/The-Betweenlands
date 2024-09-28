@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:smooth_betweenstone"
+    }
+  },
+  "pattern": [
+    "iii",
+    "iii"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thebetweenlands:smooth_betweenstone_wall"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:anadia_bones"
+    },
+    "c": {
+      "item": "thebetweenlands:cragrock"
+    },
+    "h": {
+      "item": "thebetweenlands:wight_heart"
+    }
+  },
+  "pattern": [
+    " b ",
+    "bhb",
+    " c "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:biopathic_linkstone"
+  }
+}

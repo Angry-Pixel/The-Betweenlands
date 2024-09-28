@@ -1,0 +1,46 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_base": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:weedwood_log",
+              "thebetweenlands:weedwood_bark"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_others": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:weedwood_planks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_others",
+      "has_base"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:weedwood_planks"
+    ]
+  }
+}

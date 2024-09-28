@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:silk_grub_cocoon"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "thebetweenlands:silk_thread"
+  }
+}

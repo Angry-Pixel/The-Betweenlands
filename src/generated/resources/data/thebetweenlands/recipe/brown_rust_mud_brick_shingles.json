@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "d": {
+      "item": "thebetweenlands:brown_rust_dye"
+    },
+    "i": {
+      "item": "thebetweenlands:mud_brick_shingles"
+    }
+  },
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thebetweenlands:brown_rust_mud_brick_shingles"
+  }
+}

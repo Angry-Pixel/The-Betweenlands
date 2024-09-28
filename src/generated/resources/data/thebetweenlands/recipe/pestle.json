@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": {
+      "item": "thebetweenlands:cragrock"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "s",
+    "c",
+    "c"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:pestle"
+  }
+}

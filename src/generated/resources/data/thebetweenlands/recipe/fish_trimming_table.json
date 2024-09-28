@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:weedwood_log"
+    },
+    "s": {
+      "item": "thebetweenlands:smooth_betweenstone_slab"
+    }
+  },
+  "pattern": [
+    "s",
+    "l"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:fish_trimming_table"
+  }
+}

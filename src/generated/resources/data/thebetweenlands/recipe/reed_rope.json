@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:swamp_reed"
+    }
+  },
+  "pattern": [
+    "r",
+    "r",
+    "r"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:reed_rope"
+  }
+}

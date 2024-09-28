@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": [
+    {
+      "item": "thebetweenlands:valonite_helmet"
+    },
+    {
+      "item": "thebetweenlands:valonite_chestplate"
+    },
+    {
+      "item": "thebetweenlands:valonite_leggings"
+    },
+    {
+      "item": "thebetweenlands:valonite_boots"
+    },
+    {
+      "item": "thebetweenlands:valonite_sword"
+    },
+    {
+      "item": "thebetweenlands:valonite_pickaxe"
+    },
+    {
+      "item": "thebetweenlands:valonite_axe"
+    },
+    {
+      "item": "thebetweenlands:valonite_shovel"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:valonite_splinter"
+  }
+}

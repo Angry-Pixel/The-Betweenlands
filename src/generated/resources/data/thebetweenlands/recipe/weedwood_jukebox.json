@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "p": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "v": {
+      "item": "thebetweenlands:valonite_shard"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "pvp",
+    "ppp"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_jukebox"
+  }
+}

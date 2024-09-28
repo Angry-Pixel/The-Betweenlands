@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sludgy_mud_bricks_4"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_brick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:mud_brick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:sludgy_worm_pillar_top_4"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_block",
+      "has_brick"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:sludgy_worm_pillar_top_4"
+    ]
+  }
+}

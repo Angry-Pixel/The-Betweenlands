@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:sludgy_carved_mud_brick_edge_2"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:sludgy_carved_mud_bricks_2"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "d": {
+      "item": "thebetweenlands:pewter_grey_dye"
+    },
+    "i": {
+      "item": "thebetweenlands:mud_brick_shingles"
+    }
+  },
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thebetweenlands:pewter_grey_mud_brick_shingles"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:sludge_ball"
+    },
+    {
+      "item": "thebetweenlands:ground_bulb_capped_mushroom"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:glowing_goop"
+  }
+}

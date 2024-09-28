@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "c": {
+      "item": "thebetweenlands:cragrock"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "c c",
+    "ccc",
+    "s s"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:mortar"
+  }
+}

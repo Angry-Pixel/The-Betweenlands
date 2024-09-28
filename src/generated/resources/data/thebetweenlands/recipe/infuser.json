@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "p": {
+      "item": "thebetweenlands:pestle"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "i i",
+    "ipi",
+    "sis"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:infuser"
+  }
+}

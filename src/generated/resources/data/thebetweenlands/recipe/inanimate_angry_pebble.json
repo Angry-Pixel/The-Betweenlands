@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:betweenstone_pebble"
+    },
+    {
+      "item": "thebetweenlands:cremains"
+    },
+    {
+      "item": "thebetweenlands:sulfur"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:inanimate_angry_pebble"
+  }
+}

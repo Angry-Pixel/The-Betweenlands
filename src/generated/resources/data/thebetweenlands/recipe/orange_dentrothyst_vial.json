@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:rubber_ball"
+    },
+    "s": {
+      "item": "thebetweenlands:orange_dentrothyst_shard"
+    }
+  },
+  "pattern": [
+    " r ",
+    "s s",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:orange_dentrothyst_vial"
+  }
+}

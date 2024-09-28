@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "a": {
+      "item": "thebetweenlands:ancient_remnant"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:orange_dentrothyst_shard"
+    }
+  },
+  "pattern": [
+    " r ",
+    "ara",
+    "asa"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:wind_chime"
+  }
+}

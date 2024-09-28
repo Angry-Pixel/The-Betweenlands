@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:animated_small_spirit_tree_face_mask"
+    },
+    {
+      "item": "thebetweenlands:weedwood_shield"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:living_weedwood_shield"
+  }
+}

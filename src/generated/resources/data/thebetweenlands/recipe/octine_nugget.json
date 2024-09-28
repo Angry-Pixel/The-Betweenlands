@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": [
+    {
+      "item": "thebetweenlands:octine_sword"
+    },
+    {
+      "item": "thebetweenlands:octine_pickaxe"
+    },
+    {
+      "item": "thebetweenlands:octine_axe"
+    },
+    {
+      "item": "thebetweenlands:octine_shovel"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:octine_nugget"
+  }
+}

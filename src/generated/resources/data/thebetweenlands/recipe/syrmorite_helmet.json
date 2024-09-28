@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    }
+  },
+  "pattern": [
+    "###",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:syrmorite_helmet"
+  }
+}

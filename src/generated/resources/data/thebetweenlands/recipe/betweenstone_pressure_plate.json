@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:betweenstone"
+    }
+  },
+  "pattern": [
+    "ii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:betweenstone_pressure_plate"
+  }
+}

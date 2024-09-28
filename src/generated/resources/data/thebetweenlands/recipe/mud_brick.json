@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.2,
+  "ingredient": {
+    "item": "thebetweenlands:mud"
+  },
+  "result": {
+    "count": 4,
+    "id": "thebetweenlands:mud_brick"
+  }
+}

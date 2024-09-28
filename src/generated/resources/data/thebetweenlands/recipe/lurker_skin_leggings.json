@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "thebetweenlands:lurker_skin"
+    }
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:lurker_skin_leggings"
+  }
+}

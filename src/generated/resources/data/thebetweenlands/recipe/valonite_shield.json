@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:valonite_shard"
+    },
+    "p": {
+      "item": "thebetweenlands:pitstone"
+    }
+  },
+  "pattern": [
+    "ipi",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:valonite_shield"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_flux": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:limestone_flux"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_kelp": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:ground_swamp_kelp"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_sap": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sap_ball"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:fumigant"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_flux",
+      "has_sap",
+      "has_kelp"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:fumigant"
+    ]
+  }
+}

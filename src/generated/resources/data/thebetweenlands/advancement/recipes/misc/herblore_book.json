@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_paper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:amate_paper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_skin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:lurker_skin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:herblore_book"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_skin",
+      "has_paper"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:herblore_book"
+    ]
+  }
+}

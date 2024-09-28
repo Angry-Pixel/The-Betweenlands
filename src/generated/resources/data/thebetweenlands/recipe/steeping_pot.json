@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:mud_brick"
+    },
+    "c": {
+      "item": "thebetweenlands:smooth_cragrock_slab"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:slimy_bone"
+    }
+  },
+  "pattern": [
+    "brb",
+    "sbs",
+    "ccc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:steeping_pot"
+  }
+}

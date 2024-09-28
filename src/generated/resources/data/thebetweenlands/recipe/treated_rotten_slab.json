@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:treated_rotten_planks"
+    }
+  },
+  "pattern": [
+    "iii"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thebetweenlands:treated_rotten_slab"
+  }
+}

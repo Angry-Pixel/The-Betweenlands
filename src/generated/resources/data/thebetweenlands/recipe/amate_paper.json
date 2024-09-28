@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:dry_bark"
+    }
+  },
+  "pattern": [
+    "bbb"
+  ],
+  "result": {
+    "count": 9,
+    "id": "thebetweenlands:amate_paper"
+  }
+}

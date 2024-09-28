@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "i i",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_rowboat"
+  }
+}

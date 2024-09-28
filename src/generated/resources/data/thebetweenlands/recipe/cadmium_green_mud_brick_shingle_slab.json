@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "i": {
+      "item": "thebetweenlands:cadmium_green_mud_brick_shingles"
+    }
+  },
+  "pattern": [
+    "iii"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thebetweenlands:cadmium_green_mud_brick_shingle_slab"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:nibbletwig_bark",
+              "thebetweenlands:nibbletwig_log"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:nibblestick"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:nibblestick"
+    ]
+  }
+}

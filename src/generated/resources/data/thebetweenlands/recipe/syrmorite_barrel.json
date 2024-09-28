@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "b": {
+      "item": "thebetweenlands:weedwood_barrel"
+    },
+    "i": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    }
+  },
+  "pattern": [
+    "iii",
+    "ibi",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:syrmorite_barrel"
+  }
+}

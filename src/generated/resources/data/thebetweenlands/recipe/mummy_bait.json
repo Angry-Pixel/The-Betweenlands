@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:shimmer_stone"
+    },
+    {
+      "item": "thebetweenlands:animated_tar_beast_heart"
+    },
+    {
+      "item": "thebetweenlands:sludge_ball"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "thebetweenlands:aspect_contents": {
+          "amount": 1,
+          "aspect": "thebetweenlands:armaniis"
+        }
+      },
+      "items": [
+        "thebetweenlands:green_aspect_vial",
+        "thebetweenlands:orange_aspect_vial"
+      ]
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:mummy_bait"
+  }
+}
