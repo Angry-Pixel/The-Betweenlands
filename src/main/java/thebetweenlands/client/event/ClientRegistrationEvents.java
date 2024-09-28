@@ -533,10 +533,10 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.RAIN.get(), BLRainParticle.Factory::new);
 		event.registerSpecial(ParticleRegistry.URCHIN_SPIKE.get(), new UrchinSpikeParticle.Factory());
 		event.registerSpriteSet(ParticleRegistry.FISH_VORTEX.get(), FishVortexParticle.Factory::new);
-		event.registerSpriteSet(ParticleRegistry.INFUSER_BUBBLE.get(), sprites -> new BLBubbleParticle.InfuserFactory());
-		event.registerSpriteSet(ParticleRegistry.PURIFIER_BUBBLE.get(), sprites -> new BLBubbleParticle.PurifierFactory());
-		event.registerSpriteSet(ParticleRegistry.TAR_BUBBLE.get(), sprites -> new BLBubbleParticle.TarFactory());
-		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), sprites -> new BLBubbleParticle.Factory());
+		event.registerSpriteSet(ParticleRegistry.INFUSER_BUBBLE.get(), BLBubbleParticle.InfuserFactory::new);
+		event.registerSpriteSet(ParticleRegistry.PURIFIER_BUBBLE.get(), BLBubbleParticle.PurifierFactory::new);
+		event.registerSpriteSet(ParticleRegistry.TAR_BUBBLE.get(), BLBubbleParticle.TarFactory::new);
+		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), BLBubbleParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

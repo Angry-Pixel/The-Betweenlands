@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Holder;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -76,6 +77,7 @@ public class InfuserRenderer implements BlockEntityRenderer<InfuserBlockEntity> 
 		float size = 1F / capacity * amount;
 
 		int itemBob = entity.getItemBob();
+		float bobProgress =  Mth.sin((itemBob + partialTicks) / 10.0F) * 0.1F + 0.1F;
 		int stirProgress = entity.getStirProgress();
 		float crystalRotation = entity.getCrystalRotation();
 		double itemY = 0.3D + size * 0.5D;
@@ -92,7 +94,7 @@ public class InfuserRenderer implements BlockEntityRenderer<InfuserBlockEntity> 
 				stack.translate(xo, 0, zo);
 				stack.pushPose();
 				stack.scale(0.25F, 0.25F, 0.25F);
-				stack.translate(0.0D, amount >= 100 ? (i % 2 == 0 ? (itemBob * 0.01D) : ((-itemBob + 20) * 0.01D)) : 0.0D, 0.0D);
+				stack.translate(0.0D, amount >= 100 ? (i % 2 == 0 ? bobProgress : Mth.sin((-itemBob + 20 + partialTicks) / 10.0F) * 0.1F + 0.1F) : 0.0D, 0.0D);
 				stack.mulPose(Axis.YP.rotationDegrees(-rot));
 				this.itemRenderer.renderStatic(entity.getItem(i), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
@@ -104,7 +106,7 @@ public class InfuserRenderer implements BlockEntityRenderer<InfuserBlockEntity> 
 			stack.pushPose();
 			stack.translate(0.5D, 1.43D, 0.5D);
 			stack.scale(0.25F, 0.25F, 0.25F);
-			stack.translate(0.0D, itemBob * 0.01D, 0.0D);
+			stack.translate(0.0D, bobProgress, 0.0D);
 			stack.mulPose(Axis.YP.rotationDegrees(crystalRotation));
 			this.itemRenderer.renderStatic(entity.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();

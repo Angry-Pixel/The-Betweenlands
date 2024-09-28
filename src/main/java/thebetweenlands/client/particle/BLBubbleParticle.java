@@ -2,13 +2,14 @@ package thebetweenlands.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BubbleParticle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 
 public class BLBubbleParticle extends BubbleParticle {
 	protected BLBubbleParticle(ClientLevel level, double x, double y, double z, double vecX, double vecY, double vecZ, float scale) {
 		super(level, x, y, z, vecX, vecY, vecZ);
-		this.quadSize = scale;
+		this.scale(scale);
 		this.xd = vecX + (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
 		this.yd = vecY + (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
 		this.zd = vecZ + (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
@@ -17,7 +18,6 @@ public class BLBubbleParticle extends BubbleParticle {
 		this.xd = this.xd / (double)f1 * (double)f * 0.3D;
 		this.yd = this.yd / (double)f1 * (double)f * 0.4D + 0.3D;
 		this.zd = this.zd / (double)f1 * (double)f * 0.3D;
-		this.quadSize = scale;
 	}
 
 	@Override
@@ -38,17 +38,33 @@ public class BLBubbleParticle extends BubbleParticle {
 
 	public static final class Factory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
 
+		private final SpriteSet spriteSet;
+
+		public Factory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
 		@Override
 		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			var particle = new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			particle.pickSprite(this.spriteSet);
+			return particle;
 		}
 	}
 
 	public static final class InfuserFactory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
 
+		private final SpriteSet spriteSet;
+
+		public InfuserFactory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
 		@Override
 		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			var particle = new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			particle.pickSprite(this.spriteSet);
+			return particle;
 		}
 
 		@Override
@@ -59,9 +75,17 @@ public class BLBubbleParticle extends BubbleParticle {
 
 	public static final class PurifierFactory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
 
+		private final SpriteSet spriteSet;
+
+		public PurifierFactory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
 		@Override
 		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			var particle = new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			particle.pickSprite(this.spriteSet);
+			return particle;
 		}
 
 		@Override
@@ -72,9 +96,17 @@ public class BLBubbleParticle extends BubbleParticle {
 
 	public static final class TarFactory extends ParticleFactory<InfuserFactory, SimpleParticleType> {
 
+		private final SpriteSet spriteSet;
+
+		public TarFactory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
 		@Override
 		public BLBubbleParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			return new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			var particle = new BLBubbleParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+			particle.pickSprite(this.spriteSet);
+			return particle;
 		}
 
 		@Override

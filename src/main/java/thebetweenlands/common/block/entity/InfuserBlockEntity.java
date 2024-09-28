@@ -186,16 +186,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 					entity.crystalVelocity = level.getRandom().nextFloat() * 18.0F - 9.0F;
 				}
 			}
-			if (entity.countUp && entity.itemBob <= 20) {
-				entity.itemBob++;
-				if (entity.itemBob == 20)
-					entity.countUp = false;
-			}
-			if (!entity.countUp && entity.itemBob >= 0) {
-				entity.itemBob--;
-				if (entity.itemBob == 0)
-					entity.countUp = true;
-			}
+			entity.itemBob++;
 			return;
 		}
 
