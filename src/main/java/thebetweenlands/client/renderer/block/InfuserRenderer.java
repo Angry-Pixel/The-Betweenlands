@@ -1,5 +1,6 @@
 package thebetweenlands.client.renderer.block;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -94,7 +95,7 @@ public class InfuserRenderer implements BlockEntityRenderer<InfuserBlockEntity> 
 				stack.translate(xo, 0, zo);
 				stack.pushPose();
 				stack.scale(0.25F, 0.25F, 0.25F);
-				stack.translate(0.0D, amount >= 100 ? (i % 2 == 0 ? bobProgress : Mth.sin((-itemBob + 20 + partialTicks) / 10.0F) * 0.1F + 0.1F) : 0.0D, 0.0D);
+				stack.translate(0.0D, amount >= 100 ? Mth.sin(((itemBob + (i * 20)) + partialTicks) / 10.0F) * 0.1F + 0.1F : 0.0D, 0.0D);
 				stack.mulPose(Axis.YP.rotationDegrees(-rot));
 				this.itemRenderer.renderStatic(entity.getItem(i), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
@@ -128,6 +129,7 @@ public class InfuserRenderer implements BlockEntityRenderer<InfuserBlockEntity> 
 			}
 			stack.pushPose();
 			stack.translate(0.0F, 0.35F + size * 0.5F, 0.0F);
+			RenderSystem.enableBlend();
 			RenderUtils.renderTopQuad(stack.last(), source.getBuffer(RenderType.entityTranslucent(sprite.atlasLocation())), light, FastColor.ARGB32.colorFromFloat(targetColor[3], targetColor[0], targetColor[1], targetColor[2]), 0.1875F, 0.8125F, 0.0F, 0.1875F, 0.8125F, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
 			stack.popPose();
 		}
