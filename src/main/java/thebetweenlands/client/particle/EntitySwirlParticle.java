@@ -10,20 +10,12 @@ public class EntitySwirlParticle extends SwirlParticle {
 
 	protected final Entity entityTarget;
 	private final Vec3 targetOffset;
-	private final SpriteSet spriteSet;
-	private final int frames;
-	private final int frameTime;
-	private int currentFrame;
 
-	public EntitySwirlParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress, Entity target, SpriteSet spriteSet, int frames, int frameTime) {
+	public EntitySwirlParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress, Entity target) {
 		super(options, level, x, y, z, maxAge, scale, progress);
 		this.entityTarget = target;
 		this.targetOffset = options.targetOffset;
 		this.offset = new Vec3(0, -1.6D, 0);
-		this.spriteSet = spriteSet;
-		this.currentFrame = level.getRandom().nextInt(frames);
-		this.frames = frames;
-		this.frameTime = frameTime;
 
 		this.updateTarget();
 		this.updatePosition();
@@ -44,15 +36,6 @@ public class EntitySwirlParticle extends SwirlParticle {
 		}
 
 		this.updateTarget();
-
-		if (this.age % (this.frameTime * 2) >= this.frameTime) {
-			this.currentFrame++;
-		}
-		if (this.currentFrame > frames) {
-			this.currentFrame = 0;
-		}
-		this.setSprite(this.spriteSet.get(this.currentFrame, this.frames));
-
 		super.tick();
 	}
 }

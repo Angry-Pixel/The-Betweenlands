@@ -9,7 +9,7 @@ import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 
 public class FishVortexParticle extends EntitySwirlParticle {
 	public FishVortexParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress, Entity target, SpriteSet spriteSet) {
-		super(options, level, x, y, z, maxAge, scale, progress, target, spriteSet, 4, 2);
+		super(options, level, x, y, z, maxAge, scale, progress, target);
 	}
 
 	@Override

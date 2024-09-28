@@ -14,10 +14,8 @@ public class BugParticle extends TextureSheetParticle {
 	private final float speed;
 	private final boolean underwater;
 	private double tx, ty, tz;
-	protected final SpriteSet spriteSet;
-	protected final int frametime;
 
-	protected BugParticle(ClientLevel level, double x, double y, double z, double mx, double my, double mz, int maxAge, float speed, float jitter, float scale, boolean underwater, SpriteSet set, int frametime) {
+	protected BugParticle(ClientLevel level, double x, double y, double z, double mx, double my, double mz, int maxAge, float speed, float jitter, float scale, boolean underwater) {
 		super(level, x, y, z, 0, 0, 0);
 		this.x = this.xo = this.tx = x;
 		this.y = this.yo = this.ty = y;
@@ -31,14 +29,11 @@ public class BugParticle extends TextureSheetParticle {
 		this.jitter = jitter;
 		this.speed = speed;
 		this.underwater = underwater;
-		this.spriteSet = set;
-		this.frametime = frametime;
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		this.animateBug();
 		this.move(this.level.getRandom().nextFloat() * this.jitter * 2 - this.jitter, this.level.getRandom().nextFloat() * this.jitter * 2 - this.jitter, this.level.getRandom().nextFloat() * this.jitter * 2 - this.jitter);
 		double distToTarget = Math.sqrt((this.tx - this.x) * (this.tx - this.x) + (this.ty - this.y) * (this.ty - this.y) + (this.tz - this.z) * (this.tz - this.z));
 		BlockState currBlock = this.level.getBlockState(BlockPos.containing(this.x, this.y, this.z));
@@ -66,11 +61,6 @@ public class BugParticle extends TextureSheetParticle {
 		}
 	}
 
-	public void animateBug() {
-		int sprite = this.age % (this.frametime * 2) >= this.frametime ? 1 : 0;
-		this.setSprite(this.spriteSet.get(sprite, 1));
-	}
-
 	@Override
 	public ParticleRenderType getRenderType() {
 		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
@@ -86,8 +76,8 @@ public class BugParticle extends TextureSheetParticle {
 
 		@Override
 		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3), this.spriteSet, 1);
-			particle.setSprite(this.spriteSet.get(0, 1));
+			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3));
+			particle.pickSprite(this.spriteSet);
 			return particle;
 		}
 
@@ -111,8 +101,8 @@ public class BugParticle extends TextureSheetParticle {
 
 		@Override
 		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3), this.spriteSet, 1);
-			particle.setSprite(this.spriteSet.get(0, 1));
+			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3));
+			particle.pickSprite(this.spriteSet);
 			return particle;
 		}
 
@@ -127,6 +117,31 @@ public class BugParticle extends TextureSheetParticle {
 		}
 	}
 
+	public static final class MothFactory extends ParticleFactory<MothFactory, SimpleParticleType> {
+		private final SpriteSet spriteSet;
+
+		public MothFactory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
+		@Override
+		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, false);
+			particle.pickSprite(this.spriteSet);
+			return particle;
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withScale(1.0F).withData(400, 0.02F, 0.005F, 0);
+		}
+
+		@Override
+		protected void setDefaultArguments(ClientLevel level, double x, double y, double z, ParticleArgs<?> args) {
+			args.withScale(level.getRandom().nextFloat()).withDataBuilder().setData(3, level.getRandom().nextInt(2)).buildData();
+		}
+	}
+
 	public static final class SilkMothFactory extends ParticleFactory<SilkMothFactory, SimpleParticleType> {
 		private final SpriteSet spriteSet;
 
@@ -136,8 +151,8 @@ public class BugParticle extends TextureSheetParticle {
 
 		@Override
 		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, false, this.spriteSet, 3);
-			particle.setSprite(this.spriteSet.get(0, 1));
+			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, false);
+			particle.pickSprite(this.spriteSet);
 			return particle;
 		}
 
@@ -161,8 +176,8 @@ public class BugParticle extends TextureSheetParticle {
 
 		@Override
 		public BugParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3), this.spriteSet, 3);
-			particle.setSprite(this.spriteSet.get(0, 1));
+			var particle = new BugParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3));
+			particle.pickSprite(this.spriteSet);
 			return particle;
 		}
 
