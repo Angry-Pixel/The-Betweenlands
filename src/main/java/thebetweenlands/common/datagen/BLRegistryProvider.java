@@ -16,7 +16,7 @@ public class BLRegistryProvider extends DatapackBuiltinEntriesProvider {
 
 	public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
 		.add(Registries.BIOME, BiomeRegistry::bootstrap)
-		.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatureRegistry::bootstrap)
+		.add(Registries.CONFIGURED_FEATURE, (T) -> ConfiguredFeatureRegistry.bootstrap(T))
 		.add(Registries.PLACED_FEATURE, PlacedFeatureRegistry::bootstrap)
 		.add(Registries.STRUCTURE, StructureRegistry::bootstrap)
 //		.add(Registries.CONFIGURED_CARVER, CarverRegistry::bootstrap)
