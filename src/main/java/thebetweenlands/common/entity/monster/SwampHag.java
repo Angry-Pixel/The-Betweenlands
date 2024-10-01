@@ -185,7 +185,7 @@ public class SwampHag extends Monster {
 	}
 
 	public boolean isRidingMummy() {
-		return false; //this.getVehicle() instanceof PeatMummy;
+		return isPassenger(); //this.getVehicle() instanceof PeatMummy;
 	}
 
 	@Nullable
