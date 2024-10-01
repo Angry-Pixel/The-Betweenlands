@@ -81,10 +81,11 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-//		this.dat_detailed_hot_bod.visible = false;
+		setInitPose();
+		//		this.dat_detailed_hot_bod.visible = false;
 		limbSwingAmount = Math.min(limbSwingAmount, 0.25F);
 
-		this.jaw.xRot = entity.jawFloat;
+		this.jaw.xRot = 1.0016444577195458F + entity.jawFloat;
 		this.head2.xRot = -0.8196066167365371F;
 
 		this.head1.yRot = netHeadYaw / (180F / Mth.PI) - 0.045553093477052F;
