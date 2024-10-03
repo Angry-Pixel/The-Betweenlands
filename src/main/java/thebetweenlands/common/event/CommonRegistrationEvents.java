@@ -48,6 +48,7 @@ import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.SludgeWorm;
 import thebetweenlands.common.entity.monster.SwampHag;
 import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
@@ -139,6 +140,7 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.WIGHT.get(), Wight.registerAttributes().build());
 		event.put(EntityRegistry.SWAMP_HAG.get(), SwampHag.registerAttributes().build());
 		event.put(EntityRegistry.GECKO.get(), Gecko.registerAttributes().build());
+		event.put(EntityRegistry.SLUDGE_WORM.get(), SludgeWorm.registerAttributes().build());
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {

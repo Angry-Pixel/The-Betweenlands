@@ -9,18 +9,35 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.*;
+import thebetweenlands.common.entity.BLItemFrame;
+import thebetweenlands.common.entity.FishVortex;
+import thebetweenlands.common.entity.LurkerSkinRaft;
+import thebetweenlands.common.entity.PredatorArrowGuide;
+import thebetweenlands.common.entity.Seat;
 import thebetweenlands.common.entity.creature.Gecko;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.fishing.BLFishHook;
-import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.FishBait;
 import thebetweenlands.common.entity.fishing.SiltCrab;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.SludgeWorm;
 import thebetweenlands.common.entity.monster.SwampHag;
 import thebetweenlands.common.entity.monster.Wight;
-import thebetweenlands.common.entity.projectile.*;
-import thebetweenlands.common.entity.projectile.arrow.*;
+import thebetweenlands.common.entity.projectile.AngryPebble;
+import thebetweenlands.common.entity.projectile.BetweenstonePebble;
+import thebetweenlands.common.entity.projectile.ElectricShock;
+import thebetweenlands.common.entity.projectile.SapSpit;
+import thebetweenlands.common.entity.projectile.ThrownElixir;
+import thebetweenlands.common.entity.projectile.UrchinSpike;
+import thebetweenlands.common.entity.projectile.arrow.AnglerToothArrow;
+import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
+import thebetweenlands.common.entity.projectile.arrow.ChiromawBarb;
+import thebetweenlands.common.entity.projectile.arrow.ChiromawShockBarb;
+import thebetweenlands.common.entity.projectile.arrow.OctineArrow;
+import thebetweenlands.common.entity.projectile.arrow.PoisonAnglerToothArrow;
+import thebetweenlands.common.entity.projectile.arrow.ShockArrow;
+import thebetweenlands.common.entity.projectile.arrow.SludgeWormArrow;
 
 public class EntityRegistry {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TheBetweenlands.ID);
@@ -54,6 +71,9 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawBarb>> CHIROMAW_BARB = ENTITY_TYPES.register("chiromaw_barb", () -> EntityType.Builder.<ChiromawBarb>of(ChiromawBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("chiromaw_barb")));
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawShockBarb>> CHIROMAW_SHOCK_BARB = ENTITY_TYPES.register("chiromaw_shock_barb", () -> EntityType.Builder.<ChiromawShockBarb>of(ChiromawShockBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("chiromaw_shock_barb")));
 	public static final DeferredHolder<EntityType<?>, EntityType<PredatorArrowGuide>> PREDATOR_ARROW_GUIDE = ENTITY_TYPES.register("predator_arrow_guide", () -> EntityType.Builder.of(PredatorArrowGuide::new, MobCategory.MISC).sized(0.1F, 0.1F).clientTrackingRange(4).updateInterval(20).build(prefix("predator_arrow_guide")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWorm>> SLUDGE_WORM = registerWithEgg("sludge_worm", EntityType.Builder.of(SludgeWorm::new, MobCategory.MONSTER).sized(0.4375F, 0.3125F), 0x6D3D39, 0x301411);
+//	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormTiny>> SLUDGE_WORM_TINY = registerWithEgg("sludge_worm_tiny", EntityType.Builder.of(SludgeWormTiny::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F), 0xDAC2A7, 0x5C4639);
+//	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormTinyHelper>> SLUDGE_WORM_TINY_HELPER = register("sludge_worm_tiny_helper", EntityType.Builder.of(SludgeWormTinyHelper::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F));
 
 	private static String prefix(String name) {
 		return TheBetweenlands.prefix(name).toString();
