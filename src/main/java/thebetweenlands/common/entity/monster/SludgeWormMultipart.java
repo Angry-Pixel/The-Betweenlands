@@ -24,12 +24,16 @@ public class SludgeWormMultipart extends net.neoforged.neoforge.entity.PartEntit
         this.refreshDimensions();
         this.parentMob = parentMob;
         this.name = name;
-        this.noPhysics = false;
     }
     
     @Override
     public boolean canBeCollidedWith() {
         return true;
+    }
+    
+    @Override
+    protected double getDefaultGravity() {
+        return 0.1;
     }
     
     @Override

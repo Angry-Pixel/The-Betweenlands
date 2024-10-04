@@ -96,10 +96,8 @@ public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		float jaw_wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.5F) * 0.5F);
-		//stack.pushPose();
 		stack.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
 		head1.render(stack, consumer, light, OverlayTexture.NO_OVERLAY);
-		//stack.popPose();
 		head1.xRot = worm.getXRot() / (180F / (float) Math.PI);
 	    jaw_bottom_left.yRot =  0F - jaw_wibble;
 	    jaw_bottom_right.yRot = 0F + jaw_wibble;
@@ -110,20 +108,16 @@ public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
 	public void renderBody(PoseStack stack, VertexConsumer consumer, int light, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
-		//stack.pushPose();
 		stack.translate(0F, 0F - wibble, 0F - wibble * 2F);
 		stack.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
 		body1.render(stack, consumer, light, OverlayTexture.NO_OVERLAY);
-		//stack.popPose();
 	}
 	
 	public void renderTail(PoseStack stack, VertexConsumer consumer, int light, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
-	//	stack.pushPose();
 		stack.translate(0F, - 0.0625F - wibble * 0.5F, - 0.0625F + wibble * 2F);
 		butt.render(stack, consumer, light, OverlayTexture.NO_OVERLAY);
-	//	stack.popPose();
 	}
 
 	@Override

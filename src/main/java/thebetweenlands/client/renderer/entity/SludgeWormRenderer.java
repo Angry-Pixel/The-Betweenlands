@@ -90,7 +90,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		for(int i = 1; i < entity.parts.length - 1; i++) {
 			
 			renderBodyPart(stack, buffer, packedLight, entity, entity.parts[i], entity.parts[i - 1], rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
-		//	renderDebugBoundingBox(stack, buffer, entity.parts[i], x, y, z, entityYaw, partialTicks, entity.parts[i].xo - entity.xo, entity.parts[i].yo - entity.yo, entity.parts[i].zo - entity.zo);
+	//		renderDebugBoundingBox(stack, buffer, entity.parts[i], x, y, z, entityYaw, partialTicks, entity.parts[i].xo - entity.xo, entity.parts[i].yo - entity.yo, entity.parts[i].zo - entity.zo);
 		}
 
 		renderTailPart(stack, buffer, packedLight, entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
@@ -152,7 +152,6 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
 
 		float yaw = part.yRotO + (part.getYRot() - part.yRotO) * partialTicks;
-
 		double yawDiff = (prevPart.getYRot() - part.getYRot()) % 360.0F;
 		double yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
 		float wibbleStrength = Math.min(avgWibbleStrength, Math.clamp(1.0F - (float)Math.abs(yawInterpolant) / 60.0F, 0, 1));
@@ -160,7 +159,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		stack.pushPose();
 		stack.translate(x, y - 1.125f + zOffset, z);// stack.translate(x, y, z);
 		//stack.scale(-1F, -1F, 1F);
-		stack.mulPose(Axis.YP.rotationDegrees(-yaw));
+		stack.mulPose(Axis.YN.rotationDegrees(yaw));
 		this.renderBodyPartModel(stack, buffer, light, entity, frame, wibbleStrength, partialTicks);
 
 		stack.popPose();

@@ -8,7 +8,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -151,7 +150,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
     
 	@Override
 	public boolean canAttackType(EntityType<?> typeIn) {
-		return !BLEntity.class.isAssignableFrom(typeIn.getBaseClass()); // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
+		return !BLEntity.class.isAssignableFrom(typeIn.getClass()); // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
 	}
 
 	protected boolean damageWorm(DamageSource source, float amount) {
@@ -164,7 +163,6 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 	}
 
 	private void setHitBoxes() {
-		
 		if (tickCount == 1) {
 			for(int i = 1; i < this.parts.length; i++) {
 				this.parts[i].setPos(xo, yo, zo);
@@ -175,6 +173,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 		this.parts[0].setPos(xo, yo, zo);
 		this.parts[0].setYRot(getYRot());
 
+		
 		for(SludgeWormMultipart part : this.parts) {
 			part.yRotO = part.getYRot();
 			part.xRotO = part.getXRot();
@@ -184,15 +183,14 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 				part.yOld = part.yo;
 				part.zOld = part.zo;
 				Vec3 vec3 = part.getDeltaMovement();
-				if(part.yo < this.yo) { // &&level().collidesWithSuffocatingBlock(part, part.getBoundingBox())) {
-					
-					part.move(MoverType.SELF, vec3.multiply(0D,  0.1D, 0D));
-					//part.setDeltaMovement(vec3.multiply(1.0D,  0D, 1.0D));
-				}
+				if(part.yo < this.yo && level().collidesWithSuffocatingBlock(part, part.getBoundingBox()))
+					part.setDeltaMovement(vec3.add(0.0D,  0.1D, 0.0D));
 
-			//	part.move(MoverType.SELF, vec3.multiply(0D, 1D, 0D));
-			//	part.setDeltaMovement(vec3.subtract(0D, 0.08D, 0D));
-			//	part.setDeltaMovement(vec3.multiply(0D, 0.98D * this.getTailMotionYMultiplier(), 0D));
+				double motionY = vec3.y;
+				motionY -= 0.08D;
+				part.setDeltaMovement(vec3.add(0D, motionY, 0D));
+				motionY *= 0.98D * this.getTailMotionYMultiplier();
+				part.setDeltaMovement(vec3.add(0D, motionY, 0D));
 			}
 		}
 
@@ -222,14 +220,14 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 			if(len > maxDist) {
 				Vec3 correction = diff.scale(1.0D / len * (len - maxDist));
 				targetPart.xo += correction.x;
+				targetPart.yo += correction.y;
 				targetPart.zo += correction.z;
 
 				targetPart.setPos(targetPart.xo, targetPart.yo, targetPart.zo);
 
 				double cy = targetPart.yo;
 				Vec3 vec3 = targetPart.getDeltaMovement();
-				//targetPart.move(MoverType.SELF, vec3.add(0D, correction.y, 0D)); // add? // THIS LOOKS LIKE THE PLACE IT IS FUCKING UP
-
+				targetPart.setDeltaMovement(vec3.add(0D, correction.y, 0D));
 				if(Math.abs((targetPart.yo - cy) - correction.y) <= movementTolerance) {
 					correctY = true;
 					break;
@@ -257,8 +255,9 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 
 		double yawDiff = (destYaw - targetPart.getYRot()) % 360.0F;
 		double yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
-
-		targetPart.setYRot((float) (getYRot() + yawInterpolant / yawSpeed));
+		float rotationYaw = targetPart.getYRot();
+		rotationYaw += yawInterpolant / yawSpeed;
+		targetPart.setYRot(rotationYaw);
 
 		targetPart.setXRot(0F);
 
