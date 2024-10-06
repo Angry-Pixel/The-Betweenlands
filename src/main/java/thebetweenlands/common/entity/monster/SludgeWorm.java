@@ -51,12 +51,35 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 				new SludgeWormMultipart(this, "part8", 0.3125F, 0.3125F),
 				new SludgeWormMultipart(this, "part9", 0.3125F, 0.3125F) };
 	//	this.renderBoundingBox = this.getBoundingBox();
+		setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1); 
 	}
 	
-//	public SludgeWorm(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
-//		this(type, level);
-//		this.doSpawningAnimation = doSpawningAnimation;
-//	}
+/*	public SludgeWorm(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
+		this(type, level);
+		this.doSpawningAnimation = doSpawningAnimation;
+	}
+*/
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        for (int i = 0; i < this.parts.length; i++) // Forge: Fix MC-158205: Set part ids to successors of parent mob id
+            this.parts[i].setId(id + i + 1);
+    }
+
+	@Override
+	public @Nullable PartEntity<?>[] getParts() {
+		return parts;
+	}
+
+    public SludgeWormMultipart[] getSubEntities() {
+        return this.parts;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
 
 	@Override
 	protected void registerGoals() {
@@ -149,7 +172,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 		}
 		return true;
 	}
-    
+
 	@Override
 	public boolean canAttackType(EntityType<?> typeIn) {
 		return !BLEntity.class.isAssignableFrom(typeIn.getClass()); // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
@@ -157,11 +180,6 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 
 	protected boolean damageWorm(DamageSource source, float amount) {
 		return super.hurt(source, amount);
-	}
-
-	@Override
-	public @Nullable PartEntity<?>[] getParts() {
-		return parts;
 	}
 
 	private void setHitBoxes() {
@@ -175,7 +193,6 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 		this.parts[0].setPos(xo, yo, zo);
 		this.parts[0].setYRot(getYRot());
 
-		
 		for(SludgeWormMultipart part : this.parts) {
 			part.yRotO = part.getYRot();
 			part.xRotO = part.getXRot();
@@ -223,7 +240,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 			if(len > maxDist) {
 				Vec3 correction = diff.scale(1.0D / len * (len - maxDist));
 				targetPart.xo += correction.x;
-				targetPart.yo += correction.y;
+				targetPart.yo += correction.y; // this?
 				targetPart.zo += correction.z;
 
 				targetPart.setPos(targetPart.xo, targetPart.yo, targetPart.zo);
@@ -252,7 +269,6 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 			}
 		}
 
-
 		Vec3 diff = new Vec3(destinationPart.xo, 0, destinationPart.zo).subtract(new Vec3(targetPart.xo, 0, targetPart.zo));
 		float destYaw = (float)Math.toDegrees(Math.atan2(diff.z, diff.x)) - 90;
 
@@ -267,7 +283,6 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 		targetPart.setPos(targetPart.xo, targetPart.yo, targetPart.zo);
 	}
 
-	// temp Sounds until we have proper ones
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.WORM_LIVING.get();
@@ -292,5 +307,6 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.SMALL_SLUDGE_WORM.get();
 	}
-*/	
+*/
+
 }

@@ -29,7 +29,7 @@ public class SludgeWormMultipart extends net.neoforged.neoforge.entity.PartEntit
     
     @Override
     public boolean canBeCollidedWith() {
-        return true;
+        return false;
     }
     
     @Override
