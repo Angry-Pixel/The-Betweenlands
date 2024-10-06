@@ -24,6 +24,7 @@ public class SludgeWormMultipart extends net.neoforged.neoforge.entity.PartEntit
         this.refreshDimensions();
         this.parentMob = parentMob;
         this.name = name;
+        setInvulnerable(false);
     }
     
     @Override

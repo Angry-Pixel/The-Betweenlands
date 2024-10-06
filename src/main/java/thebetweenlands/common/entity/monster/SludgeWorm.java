@@ -1,7 +1,5 @@
 package thebetweenlands.common.entity.monster;
 
-import java.util.Random;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -22,7 +20,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.common.entity.BLEntity;
@@ -32,9 +29,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 
 	public SludgeWormMultipart[] parts;
 
-	Random rand = new Random();
-
-	private AABB renderBoundingBox;
+	//private AABB renderBoundingBox;
 	
 	private int wallInvulnerabilityTicks = 40;
 
@@ -55,7 +50,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 				new SludgeWormMultipart(this, "part7", 0.3125F, 0.3125F),
 				new SludgeWormMultipart(this, "part8", 0.3125F, 0.3125F),
 				new SludgeWormMultipart(this, "part9", 0.3125F, 0.3125F) };
-		this.renderBoundingBox = this.getBoundingBox();
+	//	this.renderBoundingBox = this.getBoundingBox();
 	}
 	
 //	public SludgeWorm(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
@@ -110,22 +105,22 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 		
 		Vec3 vec3 = this.getDeltaMovement();
 		this.setDeltaMovement(vec3.multiply(1.0D, this.getHeadMotionYMultiplier(), 1.0D));
-
+/*
 		this.renderBoundingBox = this.getBoundingBox();
 	// TODO find out what union is now
 		for(SludgeWormMultipart part : this.parts) {
 			this.renderBoundingBox = this.renderBoundingBox.intersect(part.getBoundingBox());
 		}
-		 
+*/		 
 	}
-	
+/*	
 	@Override
 	   public AABB getBoundingBoxForCulling() {
 		return renderBoundingBox;
 	}
 
 	//TODO Particles 
-	/*
+	
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles(Level level, double x, double y, double z, Random rand) {
 		for (int count = 0; count < 1 + level.rand.nextInt(4); ++count) {
