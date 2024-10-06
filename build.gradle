@@ -103,6 +103,7 @@ dependencies {
 
 	implementation "curse.maven:jade-324717:5706149"
 	runtimeOnly "curse.maven:atlasviewer-633577:5490697"
+	runtimeOnly "curse.maven:debug-utils-forge-783008:5607923"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

@@ -236,8 +236,9 @@ public class ElixirClientHandler {
 		CompoundTag nbt = entity.getPersistentData();
 
 		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
+		//TODO is this even necessary? It currently obliterates the player's FOV so I commented it out for now
 		if (entity.hasEffect(ElixirEffectRegistry.EFFECT_SHOCKED.get().getElixirEffect()) || entity.hasEffect(ElixirEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(entity) || nbt.contains("thebetweenlands.stuckTicks")) {
-			event.setFOV(1);
+//			event.setFOV(1);
 		}
 	}
 }

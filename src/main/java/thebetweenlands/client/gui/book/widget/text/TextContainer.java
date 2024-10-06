@@ -427,7 +427,7 @@ public class TextContainer {
 			throw new RuntimeException("Unclosed tag in text: " + this.unparsedText);
 		}
 		final String strippedText = strippedTextBuilder.toString();
-		//noinspection unchecked
+		@SuppressWarnings({"unchecked", "rawtypes"})
 		final List<ParsedTag>[] tagsArray = new ArrayList[strippedText.length() + 1];
 		for (ParsedTag tag : tagList) {
 			if (tagsArray[tag.index] == null) {

@@ -123,8 +123,9 @@ public class RenderUtils {
 	 * @param fbo
 	 */
 	public static void saveFboToFile(File file, RenderTarget fbo) {
-		// I dislike the hacky hack fix, but you can't suppress the try-with-resources warning and -Werror won't leave you alone if you don't remove it.
-		try (FramebufferStack.State ignored = FramebufferStack.push()) {
+		FramebufferStack.State state = null;
+		try {
+			FramebufferStack.push();
 
 			fbo.bindWrite(false);
 
@@ -153,6 +154,10 @@ public class RenderUtils {
 				ImageIO.write(image, format, file);
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+		} finally {
+			if (state != null) {
+				state.close();
 			}
 		}
 	}

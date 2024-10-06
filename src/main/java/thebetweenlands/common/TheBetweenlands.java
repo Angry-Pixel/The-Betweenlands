@@ -97,9 +97,10 @@ public class TheBetweenlands {
 		AspectCalculatorRegistry.CALCULATORS.register(eventbus);
 		CenserRecipeRegistry.RECIPES.register(eventbus);
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
+		EntityDataSerializerRegistry.DATA_SERIALIZERS.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
-		
+
 		StorageRegistry.preInit();
 	}
 

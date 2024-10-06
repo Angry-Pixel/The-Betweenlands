@@ -171,6 +171,7 @@ public class ManualCategory {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	static class LimitedList<E> extends LinkedList<E> {
 		private final int limit;
 

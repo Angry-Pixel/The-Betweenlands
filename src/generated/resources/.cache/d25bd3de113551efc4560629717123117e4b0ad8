@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-25T15:21:47.9303189	Item Models: thebetweenlands
+// 1.21.1	2024-10-03T21:15:03.7484493	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -441,6 +441,7 @@ cb0080da9a6da9a7e8ebde406ffd6426a3e473ff assets/thebetweenlands/models/item/slud
 f7a5c0a8a0821d8ede55bb40a57e1ddc7763cd8a assets/thebetweenlands/models/item/sludge_jello.json
 f483f2f9465170ff9c108bc978f53386109fa278 assets/thebetweenlands/models/item/sludge_slicer.json
 95df1938d00db203cce65402186deb2b53466c9e assets/thebetweenlands/models/item/sludge_worm_arrow.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/sludge_worm_spawn_egg.json
 6c01386c39b3bc65e3d0df7b350cea54719555b4 assets/thebetweenlands/models/item/small_lurker_skin_pouch.json
 ddf1fa9af951cee3dbd594d5f2582bd6b2533230 assets/thebetweenlands/models/item/smoked_anadia_meat.json
 7640a224429d7d672623ebc0fe633ffdc0fe4fd7 assets/thebetweenlands/models/item/smoked_barnacle.json
@@ -457,6 +458,7 @@ e695bdc4aa17794a2297697d1a9947bac25813be assets/thebetweenlands/models/item/soli
 9bb0524b5354bc37535d473bdf8a8eb6b026e04c assets/thebetweenlands/models/item/spirit_fruit.json
 4254af7cc68942a2ed9c4b29464ac86e87b812d6 assets/thebetweenlands/models/item/stagnant_water_bucket.json
 085054838f05d0046c435366c7c7d4366a5612ad assets/thebetweenlands/models/item/stalker_eye.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/stalker_spawn_egg.json
 0030dd9217f5c454c1181097208d49a8d904ffe1 assets/thebetweenlands/models/item/string_root_fibers.json
 4fe55a0b3503f0230ea82d7d14ec5906a0e50f08 assets/thebetweenlands/models/item/sturdy_stock.json
 c3835f4e96b93039733aa706cf5056bb1cdc560c assets/thebetweenlands/models/item/sturdy_stock_bucket.json

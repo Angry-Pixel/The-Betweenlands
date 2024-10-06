@@ -234,6 +234,7 @@ public class SwarmParticle extends TextureSheetParticle {
 		}
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public SwarmParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
 			var particle = new SwarmParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getObject(Direction.class, 0), args.scale, args.data.getInt(1), args.data.getObject(Vec3.class, 2), args.data.getObject(Supplier.class, 3));
 			particle.pickSprite(this.spriteSet);

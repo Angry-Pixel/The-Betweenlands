@@ -22,6 +22,7 @@ import thebetweenlands.common.entity.fishing.FishBait;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.SludgeWorm;
+import thebetweenlands.common.entity.monster.Stalker;
 import thebetweenlands.common.entity.monster.SwampHag;
 import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.entity.projectile.AngryPebble;
@@ -74,6 +75,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWorm>> SLUDGE_WORM = registerWithEgg("sludge_worm", EntityType.Builder.of(SludgeWorm::new, MobCategory.MONSTER).sized(0.4375F, 0.3125F), 0x6D3D39, 0x301411);
 //	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormTiny>> SLUDGE_WORM_TINY = registerWithEgg("sludge_worm_tiny", EntityType.Builder.of(SludgeWormTiny::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F), 0xDAC2A7, 0x5C4639);
 //	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormTinyHelper>> SLUDGE_WORM_TINY_HELPER = register("sludge_worm_tiny_helper", EntityType.Builder.of(SludgeWormTinyHelper::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F));
+	public static final DeferredHolder<EntityType<?>, EntityType<Stalker>> STALKER = registerWithEgg("stalker", EntityType.Builder.of(Stalker::new, MobCategory.MONSTER).sized(0.85F, 0.85F), 0xE4DCC9, 0xD58888);
 
 	private static String prefix(String name) {
 		return TheBetweenlands.prefix(name).toString();

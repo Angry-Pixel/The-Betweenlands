@@ -21,6 +21,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> PITSTONE_ORE_REPLACEABLE = tag("pitstone_ore_replaceable");
 	public static final TagKey<Block> PRESENTS = tag("presents");
 	public static final TagKey<Block> OCTINE_IGNITES = tag("octine_ignites");
+	public static final TagKey<Block> STALKER_IGNORED_LIGHT_SOURCES = tag("stalker_ignored_light_sources");
 
 	public static final TagKey<Block> INCORRECT_FOR_WEEDWOOD_TOOL = tag("incorrect_for_weedwood_tool");
 	public static final TagKey<Block> INCORRECT_FOR_BONE_TOOL = tag("incorrect_for_bone_tool");
@@ -35,6 +36,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	protected void addTags(HolderLookup.Provider provider) {
 		this.tag(BlockTags.DIRT).add(BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_GRASS.get(), BlockRegistry.MUD.get());
 		this.tag(OCTINE_IGNITES).add(BlockRegistry.CAVE_MOSS.get(), BlockRegistry.MOSS.get(), BlockRegistry.LICHEN.get(), BlockRegistry.DEAD_MOSS.get(), BlockRegistry.DEAD_LICHEN.get(), BlockRegistry.THORNS.get());
+		this.tag(STALKER_IGNORED_LIGHT_SOURCES).add(BlockRegistry.OCTINE_ORE.get(), BlockRegistry.LIFE_CRYSTAL_STALACTITE.get(), BlockRegistry.MOB_SPAWNER.get());
 
 		this.tag(BlockTags.LOGS).add(BlockRegistry.WEEDWOOD_LOG.get(), BlockRegistry.WEEDWOOD_BARK.get(),
 			BlockRegistry.HEARTHGROVE_FENCE_GATE.get(), BlockRegistry.HEARTHGROVE_BARK.get(),
