@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -19,16 +21,16 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class SludgeWorm extends PathfinderMob implements BLEntity{
 
 	public SludgeWormMultipart[] parts;
-
-	public boolean debugHitboxes = false;
 
 	Random rand = new Random();
 
@@ -53,7 +55,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 				new SludgeWormMultipart(this, "part7", 0.3125F, 0.3125F),
 				new SludgeWormMultipart(this, "part8", 0.3125F, 0.3125F),
 				new SludgeWormMultipart(this, "part9", 0.3125F, 0.3125F) };
-	//	this.renderBoundingBox = this.getEntityBoundingBox();
+		this.renderBoundingBox = this.getBoundingBox();
 	}
 	
 //	public SludgeWorm(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
@@ -110,13 +112,18 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 		this.setDeltaMovement(vec3.multiply(1.0D, this.getHeadMotionYMultiplier(), 1.0D));
 
 		this.renderBoundingBox = this.getBoundingBox();
-	//TODO find out what union is now
-		/*for(SludgeWormMultipart part : this.parts) {
-			this.renderBoundingBox = this.renderBoundingBox.union(part.getBoundingBox());
+	// TODO find out what union is now
+		for(SludgeWormMultipart part : this.parts) {
+			this.renderBoundingBox = this.renderBoundingBox.intersect(part.getBoundingBox());
 		}
-		 */
+		 
 	}
 	
+	@Override
+	   public AABB getBoundingBoxForCulling() {
+		return renderBoundingBox;
+	}
+
 	//TODO Particles 
 	/*
 	@SideOnly(Side.CLIENT)
@@ -205,6 +212,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 
 	public void movePiecePos(SludgeWormMultipart targetPart, SludgeWormMultipart destinationPart, float speed, float yawSpeed) {
 		//TODO make this better and use the parent entities motionY 
+
 		if (destinationPart.yo - targetPart.yo < -0.5D)
 			speed = 1.5F;
 
@@ -263,37 +271,31 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 
 		targetPart.setPos(targetPart.xo, targetPart.yo, targetPart.zo);
 	}
-/*
+
 	// temp Sounds until we have proper ones
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.WORM_LIVING;
+		return SoundRegistry.WORM_LIVING.get();
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
-		return SoundRegistry.WORM_HURT;
+		return SoundRegistry.WORM_HURT.get();
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.WORM_DEATH;
+		return SoundRegistry.WORM_DEATH.get();
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
-		playSound(SoundRegistry.WORM_LIVING, 0.5F, 1F);
+	protected void playStepSound(BlockPos pos, BlockState state) {
+		playSound(SoundRegistry.WORM_LIVING.get(), 0.5F, 1F);
 	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public AABB getRenderBoundingBox() {
-		return this.renderBoundingBox;
-	}
-	
+/*
 	@Override
 	protected ResourceLocation getLootTable() {
-		return LootTableRegistry.SMALL_SLUDGE_WORM;
+		return LootTableRegistry.SMALL_SLUDGE_WORM.get();
 	}
-	*/
+*/	
 }
