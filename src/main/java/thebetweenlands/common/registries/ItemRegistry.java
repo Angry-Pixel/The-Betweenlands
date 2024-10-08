@@ -384,6 +384,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("music_disc_waterlogged", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WATERLOGGED)));
 	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
 	//amulets
+	public static final DeferredItem<Item> AMULET_SLOT = ITEMS.register("amulet_slot", () -> new Item(new Item.Properties().stacksTo(1).durability(30).setNoRepair().rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_ASCENT = ITEMS.register("ring_of_ascent", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
@@ -530,7 +531,8 @@ public class ItemRegistry {
 
 	//debug items
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
-	public static final DeferredItem<Item> TEST_CHIMP = ITEMS.register("test_chimp", () -> new TestChimpItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
+	public static final DeferredItem<Item> TEST_CHIMP = ITEMS.register("test_chimp", () -> new TestChimpItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)));
+	public static final DeferredItem<Item> TEST_FLAG = ITEMS.register("test_flag", () -> new TestFlagItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)));
 
 	public static final DeferredItem<BucketItem> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<BucketItem> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));

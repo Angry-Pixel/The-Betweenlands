@@ -79,7 +79,7 @@ public class AspectManager {
 	 * @param nbt
 	 * @param aspectSeed
 	 */
-	public void loadAndPopulateStaticAspects(CompoundTag nbt, HolderLookup.Provider provider, long aspectSeed) {
+	public void loadAndPopulateStaticAspects(@Nullable CompoundTag nbt, HolderLookup.Provider provider, long aspectSeed) {
 		if (nbt != null && nbt.contains("entries")) {
 			this.loadStaticAspects(nbt, provider);
 			//System.out.println("Loaded aspects: ");

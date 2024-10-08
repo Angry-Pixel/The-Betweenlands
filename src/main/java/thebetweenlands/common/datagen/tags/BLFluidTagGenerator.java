@@ -46,6 +46,7 @@ public class BLFluidTagGenerator extends FluidTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		this.tag(UNDERWATER_PLANT_PLACEABLE).add(Fluids.WATER, FluidRegistry.SWAMP_WATER_STILL.get());
+		this.tag(FluidTags.WATER).addTag(SWAMP_WATER);
 		this.tag(Tags.Fluids.WATER).addTag(SWAMP_WATER);
 
 		this.tag(SWAMP_WATER).add(FluidRegistry.SWAMP_WATER_STILL.get(), FluidRegistry.SWAMP_WATER_FLOW.get());

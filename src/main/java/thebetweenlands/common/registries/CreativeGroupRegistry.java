@@ -1,5 +1,6 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
@@ -1016,6 +1017,10 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.MAGIC_ITEM_MAGNET);
 			output.accept(ItemRegistry.GEM_SINGER);
 			output.accept(ItemRegistry.SNOT_POD);
+			if (SharedConstants.IS_RUNNING_IN_IDE) {
+				output.accept(ItemRegistry.TEST_CHIMP);
+				output.accept(ItemRegistry.TEST_FLAG);
+			}
 		}).build());
 
 	// Plants tab

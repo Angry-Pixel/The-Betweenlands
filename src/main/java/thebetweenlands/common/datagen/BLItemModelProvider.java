@@ -438,6 +438,10 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SNOT_POD);
 		this.basicItem(ItemRegistry.GLUE);
 		this.basicItem(ItemRegistry.TEST_CHIMP);
+		this.toolItem(ItemRegistry.TEST_FLAG).transforms()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.5F).translation(0, 4, 0).rotation(0, 90, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).scale(0.6F).translation(0, 4.75F, 2).rotation(0, -90, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.6F).translation(0, 4.75F, 2).rotation(0, 90, 0).end();
 
 		this.basicItem(ItemRegistry.GROUND_LEAF);
 		this.basicItem(ItemRegistry.GROUND_CATTAIL);

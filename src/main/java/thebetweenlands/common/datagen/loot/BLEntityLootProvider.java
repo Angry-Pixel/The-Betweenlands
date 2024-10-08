@@ -10,6 +10,7 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -20,10 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWit
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import thebetweenlands.common.loot.AnadiaBodyPredicate;
-import thebetweenlands.common.loot.AnadiaHeadPredicate;
-import thebetweenlands.common.loot.AnadiaTailPredicate;
-import thebetweenlands.common.loot.SetCountFromAnadiaFunction;
+import thebetweenlands.common.loot.*;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -191,6 +189,25 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 		this.noLoot(EntityRegistry.STALKER);
+		this.add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_SUMMONING)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SHIMMER_STONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))))));
+
+		this.add(EntityRegistry.PEAT_MUMMY.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
+					EntityPredicate.Builder.entity().subPredicate(new BossPeatMummyPredicate(false)).build()))
+				.add(LootItem.lootTableItem(ItemRegistry.SHIMMER_STONE).setWeight(6))
+				.add(LootItem.lootTableItem(ItemRegistry.SHIMMER_STONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))).setWeight(1))
+				.add(EmptyLootItem.emptyItem().setWeight(8)))
+			.withPool(LootPool.lootPool()
+				.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
+					EntityPredicate.Builder.entity().subPredicate(new MummyHoldingShimmerstonePredicate(true)).build()))
+				.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
+					EntityPredicate.Builder.entity().subPredicate(new BossPeatMummyPredicate(false)).build()))
+				.add(LootItem.lootTableItem(ItemRegistry.SHIMMER_STONE).setWeight(9))
+				.add(EmptyLootItem.emptyItem().setWeight(1))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

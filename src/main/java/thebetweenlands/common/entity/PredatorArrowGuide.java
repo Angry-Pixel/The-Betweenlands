@@ -32,11 +32,6 @@ public class PredatorArrowGuide extends Entity {
 	}
 
 	@Override
-	public boolean canBeCollidedWith() {
-		return false;
-	}
-
-	@Override
 	protected void addAdditionalSaveData(CompoundTag compound) {
 
 	}

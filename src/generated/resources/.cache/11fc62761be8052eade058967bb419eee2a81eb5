@@ -1,6 +1,7 @@
-// 1.21.1	2024-10-03T21:15:03.7409352	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2024-10-06T22:53:26.8877324	Tags for minecraft:block mod id thebetweenlands
 c39f7b61e670eac1476e038f7c8723ed2e1fbec3 data/c/tags/block/relocation_not_supported.json
 7394c3d8df7396c60ba3dd205779232dcc1098d8 data/minecraft/tags/block/dirt.json
 2f7aeec6d896bfa15b585ea245d777e8bc2a763a data/minecraft/tags/block/logs.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/block/octine_ignites.json
+9d2b82c32e7eb6fa9305623c015f7f8a65744a8f data/thebetweenlands/tags/block/peat_mummy_spawnable.json
 692d9df04d174258006907e60ddb37e30c779b2f data/thebetweenlands/tags/block/stalker_ignored_light_sources.json

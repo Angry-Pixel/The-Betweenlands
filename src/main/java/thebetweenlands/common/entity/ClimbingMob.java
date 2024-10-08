@@ -390,7 +390,7 @@ public abstract class ClimbingMob extends PathfinderMob implements BLEntity, Pat
 			AABB inclusionBox = new AABB(s.x, s.y, s.z, s.x, s.y, s.z).inflate(2.0F);
 
 			Pair<Vec3, Vec3> attachmentPoint = null;
-			if (this.canAttachToWalls()) attachmentPoint = BoxSmoothingUtil.findClosestPoint(consumer -> this.forEachCollisonBox(inclusionBox, consumer), s, this.attachmentNormal.scale(-1), 1.25f, 1.0f, 0.001f, 20, 0.05f, s);
+			if (this.canAttachToWalls()) attachmentPoint = BoxSmoothingUtil.findClosestPoint(consumer -> this.forEachCollisionBox(inclusionBox, consumer), s, this.attachmentNormal.scale(-1), 1.25f, 1.0f, 0.001f, 20, 0.05f, s);
 
 			AABB entityBox = this.getBoundingBox();
 
@@ -468,7 +468,7 @@ public abstract class ClimbingMob extends PathfinderMob implements BLEntity, Pat
 		return angle;
 	}
 
-	private void forEachCollisonBox(AABB aabb, Shapes.DoubleLineConsumer action) {
+	private void forEachCollisionBox(AABB aabb, Shapes.DoubleLineConsumer action) {
 		int minChunkX = ((Mth.floor(aabb.minX - 1.0E-7D) - 1) >> 4);
 		int maxChunkX = ((Mth.floor(aabb.maxX + 1.0E-7D) + 1) >> 4);
 		int minChunkZ = ((Mth.floor(aabb.minZ - 1.0E-7D) - 1) >> 4);
@@ -535,7 +535,7 @@ public abstract class ClimbingMob extends PathfinderMob implements BLEntity, Pat
 
 	private List<AABB> getCollisionBoxes(AABB aabb) {
 		List<AABB> boxes = new ArrayList<>();
-		this.forEachCollisonBox(aabb, (minX, minY, minZ, maxX, maxY, maxZ) -> boxes.add(new AABB(minX, minY, minZ, maxX, maxY, maxZ)));
+		this.forEachCollisionBox(aabb, (minX, minY, minZ, maxX, maxY, maxZ) -> boxes.add(new AABB(minX, minY, minZ, maxX, maxY, maxZ)));
 		return boxes;
 	}
 

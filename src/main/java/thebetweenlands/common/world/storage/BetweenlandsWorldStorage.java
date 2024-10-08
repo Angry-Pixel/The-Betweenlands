@@ -164,7 +164,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	public static BetweenlandsWorldStorage getOrThrow(ServerLevelAccessor level) {
-		BetweenlandsWorldStorage storage = get(level);
+		BetweenlandsWorldStorage storage = get(level.getLevel());
 		if (storage == null) {
 			throw new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.getLevel().dimension().location()));
 		}
@@ -180,7 +180,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	@Nullable
-	public static BetweenlandsWorldStorage get(LevelAccessor level) {
+	public static BetweenlandsWorldStorage get(Level level) {
 		if (level.getServer() != null && level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
 			return level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY).getData(AttachmentRegistry.WORLD_STORAGE);
 		}

@@ -163,7 +163,7 @@ public class SwatShieldItem extends BaseShieldItem {
 				Vec3 dir = target.position().subtract(user.position()).normalize();
 
 				//45� angle range
-				if (target.canBeCollidedWith() && Math.toDegrees(Math.acos(moveDir.dot(dir))) < 45) {
+				if (target.isPickable() && Math.toDegrees(Math.acos(moveDir.dot(dir))) < 45) {
 					this.onEnemyRammed(stack, user, target, moveDir);
 				}
 			}

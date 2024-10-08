@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:falling_block",
+    "minecraft:in_wall",
+    "#minecraft:is_fire",
+    "#minecraft:is_drowning"
+  ]
+}

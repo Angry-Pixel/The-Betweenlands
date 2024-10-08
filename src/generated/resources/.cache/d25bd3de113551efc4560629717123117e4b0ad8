@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-03T21:15:03.7484493	Item Models: thebetweenlands
+// 1.21.1	2024-10-07T17:33:54.3648796	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -137,6 +137,7 @@ d99b4f49d98d7da9d367fdd1242dcb2cace737df assets/thebetweenlands/models/item/crim
 3bedb9bcd36cebba498b1709402b460d8b7cff4b assets/thebetweenlands/models/item/draeton_balloon.json
 1715b2aa5572318cb911a9afd7aeba2ec19f0482 assets/thebetweenlands/models/item/draeton_burner.json
 c2105ca9da61a5cc03479d27c521d74415c4bbbd assets/thebetweenlands/models/item/dragonfly_wing.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/dreadful_peat_mummy_spawn_egg.json
 00c86c8d3216f3a65fff243980202a3b58916f33 assets/thebetweenlands/models/item/dried_swamp_reed.json
 931386695ea0dcc869b724902187e52ae9245721 assets/thebetweenlands/models/item/dry_bark.json
 66e96add9e2b81228226416651fb705a3077d188 assets/thebetweenlands/models/item/dull_lavender_dye.json
@@ -337,6 +338,7 @@ f4d38de14622e83690e94494ea4eba93d56af089 assets/thebetweenlands/models/item/pale
 0fa5820194997040fab5be4c2f7073ad59830ce5 assets/thebetweenlands/models/item/pearled_pear.json
 0b612a559006527f62ff2b397256d052cfb810db assets/thebetweenlands/models/item/pear_cordial.json
 ee0a0ae7636c6e1998d3a525d1da40add50482e3 assets/thebetweenlands/models/item/pear_cordial_bucket.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/peat_mummy_spawn_egg.json
 e6e05cc04b810f7cf80dfc16a9a88927b4759442 assets/thebetweenlands/models/item/pestle.json
 cbd2b3fd2058842c23d09327a37c90fd422ade56 assets/thebetweenlands/models/item/pestle_animated.json
 d4fc349a7aeb4b867307e261a1a8469dd28cc22c assets/thebetweenlands/models/item/pewter_grey_dye.json
@@ -495,6 +497,7 @@ b1efa921cb442dad44e11a379979801f38ccfa04 assets/thebetweenlands/models/item/tar_
 de9d9ed2d20a5dc4cfe6bc427a3cdf0feeff0c3e assets/thebetweenlands/models/item/tar_drip.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/tar_lore_scrap.json
 5590bf60ec8ab4c0f569897c9c5bbdb7090e5d50 assets/thebetweenlands/models/item/test_chimp.json
+cf3d900259ba59e04287d46eb4ea65bf19d01f75 assets/thebetweenlands/models/item/test_flag.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/them_lore_scrap.json
 011504b75b1e4527b97b6cc62960245df32fd772 assets/thebetweenlands/models/item/thorn_branch.json
 a93261e0ec87f3a9a324571c5754b2dc8dace9e6 assets/thebetweenlands/models/item/tiny_sludge_worm.json

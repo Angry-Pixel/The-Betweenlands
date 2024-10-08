@@ -132,7 +132,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 					}
 				}
 
-				//have to keep breathing hardcoded since its meshed with the armor set air logic... sign
+				//have to keep breathing hardcoded since its meshed with the armor set air logic... sigh
 				var upgradeCount = Math.min(stack.getOrDefault(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.EMPTY).getAllUniqueUpgradesWithCounts().getOrDefault(AmphibiousArmorUpgradeRegistry.BREATHING, 0), 2);
 				if (player.isInWater()) {
 					boolean hasBreathingUpgrade = false;

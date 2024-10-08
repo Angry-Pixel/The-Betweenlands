@@ -43,15 +43,13 @@ import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BLLootProvider;
 import thebetweenlands.common.datagen.tags.*;
+import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.creature.Gecko;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
-import thebetweenlands.common.entity.monster.SludgeWorm;
-import thebetweenlands.common.entity.monster.Stalker;
-import thebetweenlands.common.entity.monster.SwampHag;
-import thebetweenlands.common.entity.monster.Wight;
+import thebetweenlands.common.entity.monster.*;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.clientbound.attachment.*;
@@ -107,6 +105,7 @@ public class CommonRegistrationEvents {
 		gen.addProvider(data, new BLFluidTagGenerator(output, dataProvider, helper));
 		gen.addProvider(data, new BLBiomeTagProvider(output, dataProvider, helper));
 		gen.addProvider(data, new BLDimensionTypeTagProvider(output, dataProvider, helper));
+		gen.addProvider(data, new BLDamageTagProvider(output, dataProvider, helper));
 
 		// Misc Data
 		gen.addProvider(data, new BLRecipeProvider(output, dataProvider));
@@ -143,6 +142,9 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.GECKO.get(), Gecko.registerAttributes().build());
 		event.put(EntityRegistry.SLUDGE_WORM.get(), SludgeWorm.registerAttributes().build());
 		event.put(EntityRegistry.STALKER.get(), Stalker.registerAttributes().build());
+		event.put(EntityRegistry.PEAT_MUMMY.get(), PeatMummy.registerAttributes().build());
+		event.put(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummy.registerAttributes().build());
+		event.put(EntityRegistry.MUMMY_ARM.get(), MummyArm.registerAttributes().build());
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {
@@ -218,6 +220,8 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
 		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
 		registrar.playToClient(UpdateSwarmedPacket.TYPE, UpdateSwarmedPacket.STREAM_CODEC, UpdateSwarmedPacket::handle);
+		registrar.playToClient(SummonPeatMummyParticlesPacket.TYPE, SummonPeatMummyParticlesPacket.STREAM_CODEC, SummonPeatMummyParticlesPacket::handle);
+		registrar.playToClient(AddBetweenlandsBossBarPacket.TYPE, AddBetweenlandsBossBarPacket.STREAM_CODEC, AddBetweenlandsBossBarPacket::handle);
 
 		registrar.playToClient(UpdateSynchedAttachmentPacket.TYPE, UpdateSynchedAttachmentPacket.STREAM_CODEC, UpdateSynchedAttachmentPacket::handle);
 

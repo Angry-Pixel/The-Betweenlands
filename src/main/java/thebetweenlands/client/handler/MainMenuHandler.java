@@ -17,7 +17,6 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class MainMenuHandler {
 
 	public static final BLTitleScreenBackground background = new BLTitleScreenBackground(TheBetweenlands.prefix("textures/gui/menu/layer"), 4);
-	public static final Music BL_MENU = new Music(SoundRegistry.BL_MUSIC_MENU, 20, 600, true);
 
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(MainMenuHandler::openMainMenu);
@@ -48,7 +47,7 @@ public class MainMenuHandler {
 
 	private static void playProperMenuMusic(SelectMusicEvent event) {
 		if (event.getOriginalMusic() == Musics.MENU && BetweenlandsConfig.blMainMenu) {
-			event.overrideMusic(BL_MENU);
+			event.overrideMusic(MusicHandler.BL_MAIN_MENU);
 		}
 	}
 }

@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class ObstructionAwareGroundNavigation<T extends PathfinderMob & PathObstructionAwareEntity> extends GroundPathNavigation {
 	@Nullable
-	protected ClimberPathFinder pathFinder;
+	protected CustomPathFinder pathFinder;
 	protected long lastTimeUpdated;
 	@Nullable
 	protected BlockPos targetPos;
@@ -51,10 +51,10 @@ public class ObstructionAwareGroundNavigation<T extends PathfinderMob & PathObst
 		return this.pathFinder;
 	}
 
-	protected ClimberPathFinder createClimberPathFinder(int maxExpansions) {
+	protected CustomPathFinder createClimberPathFinder(int maxExpansions) {
 		ObstructionAwareNodeEvaluator nodeProcessor = new ObstructionAwareNodeEvaluator();
 		nodeProcessor.setCanPassDoors(true);
-		return new ClimberPathFinder(nodeProcessor, maxExpansions);
+		return new CustomPathFinder(nodeProcessor, maxExpansions);
 	}
 
 	@Nullable

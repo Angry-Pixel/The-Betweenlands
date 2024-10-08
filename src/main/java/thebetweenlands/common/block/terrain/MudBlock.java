@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -14,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -38,10 +41,10 @@ public class MudBlock extends Block {
 
 	@Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		if (context instanceof EntityCollisionContext ctx && this.canEntityWalkOnMud(ctx.getEntity())) {
-			return Shapes.block();
+		if (context instanceof EntityCollisionContext ctx && !this.canEntityWalkOnMud(ctx.getEntity())) {
+			return MUD_AABB;
 		}
-		return MUD_AABB;
+		return super.getCollisionShape(state, level, pos, context);
 	}
 
 	@Override
@@ -57,10 +60,10 @@ public class MudBlock extends Block {
 	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
 		if (!this.canEntityWalkOnMud(entity)) {
-			if (!entity.isInWater() && entity.getDeltaMovement().y() < 0 && entity.onGround())
+			if (!entity.isInWater() && entity.getDeltaMovement().y() < 0 && entity.onGround()) {
 				entity.setDeltaMovement(entity.getDeltaMovement().subtract(0.0D, 0.1D, 0.0D));
-
-			entity.makeStuckInBlock(state, new Vec3(0.08D, 0.02D, 0.08D));
+				entity.makeStuckInBlock(state, new Vec3(0.08D, 0.02D, 0.08D));
+			}
 		}
 	}
 
@@ -77,6 +80,16 @@ public class MudBlock extends Block {
 			double d7 = pos.getZ() + (double) random.nextFloat();
 //			BLParticles.CAVE_WATER_DRIP.spawn(world, d3, d5, d7).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 		}
+	}
+
+	@Override
+	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+		return true;
+	}
+
+	@Override
+	public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @org.jetbrains.annotations.Nullable Mob mob) {
+		return PathType.WALKABLE;
 	}
 
 	@Nullable

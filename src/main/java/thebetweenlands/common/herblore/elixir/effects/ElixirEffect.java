@@ -14,6 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import org.jetbrains.annotations.Nullable;
 
 public class ElixirEffect {
 	public static final int VIAL_INFUSION_MAX_POTENCY = 5;
@@ -147,6 +148,7 @@ public class ElixirEffect {
 		return -1;
 	}
 
+	@Nullable
 	public MobEffectInstance getPotionEffect(LivingEntity entity) {
 		if (entity.hasEffect(this.effect)) {
 			return entity.getEffect(this.elixirEffect);

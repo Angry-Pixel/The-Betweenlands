@@ -51,8 +51,11 @@ public class ScreenHandler {
 	private static final Object2IntMap<LocationStorage> titleDisplayCooldowns = new Object2IntOpenHashMap<>();
 
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getOrThrow(entity.level());
-		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.getX(), entity.getZ(), location -> location.isInside(entity.getEyePosition(1)) && location.isVisible(entity));
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(entity.level());
+		if (worldStorage != null) {
+			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.getX(), entity.getZ(), location -> location.isInside(entity.getEyePosition(1)) && location.isVisible(entity));
+		}
+		return List.of();
 	}
 
 	public static void init() {

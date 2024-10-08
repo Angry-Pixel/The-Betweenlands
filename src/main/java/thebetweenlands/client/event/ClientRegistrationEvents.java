@@ -164,7 +164,6 @@ import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
-import thebetweenlands.common.entity.monster.SludgeWorm;
 import thebetweenlands.common.fluid.BasicFluidType;
 import thebetweenlands.common.fluid.ColoredFluidType;
 import thebetweenlands.common.fluid.SwampWaterFluidType;
@@ -281,6 +280,10 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.PREDATOR_ARROW_GUIDE.get(), PredatorArrowGuideRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM.get(), SludgeWormRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.STALKER.get(), StalkerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PEAT_MUMMY.get(), PeatMummyRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummyRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.MUMMY_ARM.get(), MummyArmRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_BALL.get(), SludgeBallRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -341,6 +344,10 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM, SludgeWormModel::create);
 		event.registerLayerDefinition(BLModelLayers.STALKER, StalkerModel::create);
+		event.registerLayerDefinition(BLModelLayers.DREADFUL_PEAT_MUMMY, DreadfulPeatMummyModel::create);
+		event.registerLayerDefinition(BLModelLayers.PEAT_MUMMY, PeatMummyModel::create);
+		event.registerLayerDefinition(BLModelLayers.MUMMY_ARM, MummyArmModel::create);
+		event.registerLayerDefinition(BLModelLayers.SLUDGE_BALL, SludgeBallModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);

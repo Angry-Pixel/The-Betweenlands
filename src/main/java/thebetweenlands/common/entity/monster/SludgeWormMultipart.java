@@ -26,17 +26,12 @@ public class SludgeWormMultipart extends net.neoforged.neoforge.entity.PartEntit
         this.name = name;
         setInvulnerable(false);
     }
-    
-    @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-    
-    @Override
+
+	@Override
     protected double getDefaultGravity() {
         return 0.1;
     }
-    
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }

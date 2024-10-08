@@ -5,16 +5,21 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.EventHooks;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
+import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class MummyBaitItem extends Item {
 	public MummyBaitItem(Properties properties) {
@@ -58,13 +63,12 @@ public class MummyBaitItem extends Item {
 								}
 							}
 						} else {
-//							DreadfulPeatMummy boss = new DreadfulPeatMummy(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), level);
-//							boss.moveTo(entity.getX(), entity.getY(), entity.getZ(), 0, 0);
-//							if (EventHooks.finalizeMobSpawn(boss, (ServerLevelAccessor) level, level.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null)) {
-//								level.addFreshEntity(boss);
-//								entity.discard();
-//								return true;
-//							}
+							DreadfulPeatMummy boss = new DreadfulPeatMummy(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), level);
+							boss.moveTo(entity.getX(), entity.getY(), entity.getZ(), 0, 0);
+							EventHooks.finalizeMobSpawn(boss, (ServerLevelAccessor) level, level.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
+							level.addFreshEntity(boss);
+							entity.discard();
+							return true;
 						}
 					}
 				}

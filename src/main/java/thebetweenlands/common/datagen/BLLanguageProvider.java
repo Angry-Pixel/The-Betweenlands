@@ -1006,6 +1006,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.WIGHT, "Wight");
 		this.addEntityAndEgg(EntityRegistry.SLUDGE_WORM, "Small Sludge Worm");
 		this.addEntityAndEgg(EntityRegistry.STALKER, "Stalker");
+		this.addEntityAndEgg(EntityRegistry.PEAT_MUMMY, "Peat Mummy");
+		this.addEntityAndEgg(EntityRegistry.DREADFUL_PEAT_MUMMY, "Dreadful Peat Mummy");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1017,6 +1019,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.ITEM_FRAME, "Item Frame");
 		this.addEntityType(EntityRegistry.SEAT, "Seat");
 		this.addEntityType(EntityRegistry.URCHIN_SPIKE, "Urchin Spike");
+		this.addEntityType(EntityRegistry.MUMMY_ARM, "Mummy Arm");
+		this.addEntityType(EntityRegistry.SLUDGE_BALL, "Sludge Ball");
 
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
@@ -1507,6 +1511,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.SNOT_POD, "Rocksnot Pod");
 		this.addItem(ItemRegistry.GLUE, "Glue");
 		this.addItem(ItemRegistry.TEST_CHIMP, "Test Chimp");
+		this.addItem(ItemRegistry.TEST_FLAG, "Flag");
 
 		this.addAspectItem(ItemRegistry.GROUND_LEAF, "Ground Leaf", "Leaves are dropped by the small leafy Swamp Plants that grow in Swamplands biomes, as well as from the Fallen Leaves that gather under trees there.");
 		this.addAspectItem(ItemRegistry.GROUND_CATTAIL, "Ground Cattail", "Cattails are very common plants that grow in Swamplands, Patchy Islands, and Coarse Islands biomes.");

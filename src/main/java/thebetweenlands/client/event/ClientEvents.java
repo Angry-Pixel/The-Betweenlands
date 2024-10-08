@@ -8,10 +8,7 @@ import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
-import thebetweenlands.client.handler.ElixirClientHandler;
-import thebetweenlands.client.handler.ItemTooltipHandler;
-import thebetweenlands.client.handler.MainMenuHandler;
-import thebetweenlands.client.handler.ScreenHandler;
+import thebetweenlands.client.handler.*;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
@@ -22,9 +19,12 @@ import thebetweenlands.util.RenderUtils;
 public class ClientEvents {
 
 	public static void init() {
+		BossHandler.init();
+		CameraPositionHandler.init();
 		ElixirClientHandler.init();
 		ItemTooltipHandler.init();
 		MainMenuHandler.init();
+		MusicHandler.init();
 		ScreenHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);

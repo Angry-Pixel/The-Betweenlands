@@ -1,6 +1,7 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -14,6 +15,7 @@ import thebetweenlands.common.entity.FishVortex;
 import thebetweenlands.common.entity.LurkerSkinRaft;
 import thebetweenlands.common.entity.PredatorArrowGuide;
 import thebetweenlands.common.entity.Seat;
+import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.creature.Gecko;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.fishing.BLFishHook;
@@ -21,16 +23,8 @@ import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.FishBait;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
-import thebetweenlands.common.entity.monster.SludgeWorm;
-import thebetweenlands.common.entity.monster.Stalker;
-import thebetweenlands.common.entity.monster.SwampHag;
-import thebetweenlands.common.entity.monster.Wight;
-import thebetweenlands.common.entity.projectile.AngryPebble;
-import thebetweenlands.common.entity.projectile.BetweenstonePebble;
-import thebetweenlands.common.entity.projectile.ElectricShock;
-import thebetweenlands.common.entity.projectile.SapSpit;
-import thebetweenlands.common.entity.projectile.ThrownElixir;
-import thebetweenlands.common.entity.projectile.UrchinSpike;
+import thebetweenlands.common.entity.monster.*;
+import thebetweenlands.common.entity.projectile.*;
 import thebetweenlands.common.entity.projectile.arrow.AnglerToothArrow;
 import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
 import thebetweenlands.common.entity.projectile.arrow.ChiromawBarb;
@@ -75,7 +69,11 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWorm>> SLUDGE_WORM = registerWithEgg("sludge_worm", EntityType.Builder.of(SludgeWorm::new, MobCategory.MONSTER).sized(0.4375F, 0.3125F), 0x6D3D39, 0x301411);
 //	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormTiny>> SLUDGE_WORM_TINY = registerWithEgg("sludge_worm_tiny", EntityType.Builder.of(SludgeWormTiny::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F), 0xDAC2A7, 0x5C4639);
 //	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormTinyHelper>> SLUDGE_WORM_TINY_HELPER = register("sludge_worm_tiny_helper", EntityType.Builder.of(SludgeWormTinyHelper::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F));
-	public static final DeferredHolder<EntityType<?>, EntityType<Stalker>> STALKER = registerWithEgg("stalker", EntityType.Builder.of(Stalker::new, MobCategory.MONSTER).sized(0.85F, 0.85F), 0xE4DCC9, 0xD58888);
+	public static final DeferredHolder<EntityType<?>, EntityType<Stalker>> STALKER = registerWithEgg("stalker", EntityType.Builder.of(Stalker::new, MobCategory.MONSTER).sized(0.85F, 0.85F).clientTrackingRange(10), 0xE4DCC9, 0xD58888);
+	public static final DeferredHolder<EntityType<?>, EntityType<PeatMummy>> PEAT_MUMMY = registerWithEgg("peat_mummy", EntityType.Builder.of(PeatMummy::new, MobCategory.MONSTER).sized(1.0F, 1.2F).passengerAttachments(0.35F).clientTrackingRange(10).canSpawnFarFromPlayer(), 0x524D3A, 0x69463F);
+	public static final DeferredHolder<EntityType<?>, EntityType<DreadfulPeatMummy>> DREADFUL_PEAT_MUMMY = registerWithEgg("dreadful_peat_mummy", EntityType.Builder.of(DreadfulPeatMummy::new, MobCategory.MONSTER).sized(1.1F, 2.0F).clientTrackingRange(10).fireImmune(), 0x000000, 0x591E08);
+	public static final DeferredHolder<EntityType<?>, EntityType<MummyArm>> MUMMY_ARM = ENTITY_TYPES.register("mummy_arm", () -> EntityType.Builder.<MummyArm>of(MummyArm::new, MobCategory.MISC).sized(0.7F, 0.7F).clientTrackingRange(10).noSummon().fireImmune().build(prefix("mummy_arm")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = ENTITY_TYPES.register("sludge_ball", () -> EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20).build(prefix("sludge_ball")));
 
 	private static String prefix(String name) {
 		return TheBetweenlands.prefix(name).toString();
@@ -83,9 +81,7 @@ public class EntityRegistry {
 
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(TheBetweenlands.prefix(name).toString()));
-		if (primaryColor != 0 && secondaryColor != 0) {
-			SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));
-		}
+		SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));
 		return ret;
 	}
 }
