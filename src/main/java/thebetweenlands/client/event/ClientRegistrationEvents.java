@@ -284,6 +284,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.MUMMY_ARM.get(), MummyArmRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_BALL.get(), SludgeBallRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.MIRE_SNAIL.get(), MireSnailRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -348,6 +349,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.PEAT_MUMMY, PeatMummyModel::create);
 		event.registerLayerDefinition(BLModelLayers.MUMMY_ARM, MummyArmModel::create);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_BALL, SludgeBallModel::create);
+		event.registerLayerDefinition(BLModelLayers.MIRE_SNAIL, MireSnailModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
