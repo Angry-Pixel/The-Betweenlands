@@ -7,14 +7,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.SludgeWormModel;
 import thebetweenlands.common.TheBetweenlands;
@@ -42,8 +40,10 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		stack.pushPose();
 		float totalAngleDiff = 0.0f;
 
-		for(int i = 1; i < entity.parts.length; i++) {
-			SludgeWormMultipart prevPart = entity.parts[i - 1];
+		for(int i = 0; i < entity.parts.length; i++) {
+			Entity prevPart = entity;
+			if (i > 0 )
+				prevPart = entity.parts[i - 1];
 			SludgeWormMultipart part = entity.parts[i];
 			double yawDiff = (prevPart.getYRot() - part.getYRot()) % 360.0F;
 			double yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
@@ -52,17 +52,16 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 
 		float avgAngleDiff = totalAngleDiff;
 
-		if(entity.parts.length > 1)
+		if(entity.parts.length > 0)
 			avgAngleDiff /= (entity.parts.length - 1);
 
 		float avgWibbleStrength = Math.clamp(1.0F - avgAngleDiff / 60.0F, 0, 1);
-
 		float x = 0F;
 		float y = 0F;
 		float z = 0F;
 
 		VertexConsumer consumer = buffer.getBuffer(getRenderType(entity, true, isVisible, isTranslucentToPlayer, isGlowing));
-		renderHead(stack, consumer, packedLight, overlay, colour, entity, 1, x, y + 1.5F, z, entity.parts[0].getYRot(), avgWibbleStrength, partialTicks);
+		renderHead(stack, consumer, packedLight, overlay, colour, entity, 1, x, y + 1.5F, z, entityYaw, avgWibbleStrength, partialTicks);
 
 		double ex = entity.xOld + (entity.getX() - entity.xOld) * (double)partialTicks;
 		double ey = entity.yOld + (entity.getY() - entity.yOld) * (double)partialTicks;
@@ -73,21 +72,11 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		float zOffset = 0;
 
 		consumer = buffer.getBuffer(getRenderType(entity, false, isVisible, isTranslucentToPlayer, isGlowing));
-		for(int i = 1; i < entity.parts.length - 1; i++) {
-			renderBodyPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[i], entity.parts[i - 1], rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
-	//		renderDebugBoundingBox(stack, buffer, entity.parts[i], x, y, z, entityYaw, partialTicks, entity.parts[i].xo - entity.xo, entity.parts[i].yo - entity.yo, entity.parts[i].zo - entity.zo);
+		for(int i = 0; i < entity.parts.length - 1; i++) {
+			renderBodyPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[i], i > 0 ? entity.parts[i - 1] : entity, rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
 		}
 
 		renderTailPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
-		stack.popPose();
-	}
-
-	private void renderDebugBoundingBox(PoseStack stack, MultiBufferSource buffer, Entity entity, double x, double y, double z, float yaw, float partialTicks, double xOff, double yOff, double zOff) {
-		VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.lines());
-		AABB axisalignedbb = entity.getBoundingBox();
-		AABB axisalignedbb1 = new AABB(axisalignedbb.minX - entity.xo + x + xOff, axisalignedbb.minY - entity.yo + y + yOff, axisalignedbb.minZ - entity.zo + z + zOff, axisalignedbb.maxX - entity.xo + x + xOff, axisalignedbb.maxY - entity.yo + y + yOff, axisalignedbb.maxZ - entity.zo + z + zOff);
-		stack.pushPose();
-		LevelRenderer.renderLineBox(stack, consumer, axisalignedbb1, 1F, 1F, 1F, 1F);
 		stack.popPose();
 	}
 
@@ -113,7 +102,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 			return isGlowing ? RenderType.outline(isHeadPart ? TEXTURE_HEAD : TEXTURE_BODY) : null;
 	}
 
-	protected void renderBodyPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, SludgeWormMultipart part, SludgeWormMultipart prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float zOffset, float partialTicks) {
+	protected void renderBodyPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, SludgeWormMultipart part, Entity prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float zOffset, float partialTicks) {
 		double x = part.xOld + (part.xo - part.xOld) * (double)partialTicks - rx;
 		double y = part.yOld + (part.yo - part.yOld) * (double)partialTicks - ry;
 		double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
@@ -129,7 +118,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		stack.popPose();
 	}
 
-	protected void renderTailPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, SludgeWormMultipart part, SludgeWormMultipart prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float partialTicks) {
+	protected void renderTailPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, SludgeWormMultipart part, Entity prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float partialTicks) {
 		double x = part.xOld + (part.xo - part.xOld) * (double)partialTicks - rx;
 		double y = part.yOld + (part.yo - part.yOld) * (double)partialTicks - ry;
 		double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
