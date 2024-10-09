@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -91,7 +92,7 @@ public class SludgeWorm extends PathfinderMob implements BLEntity {
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
-		return WaterAnimal.createMobAttributes()
+		return Animal.createMobAttributes()
 			.add(Attributes.MAX_HEALTH, 10.0D)
 			.add(Attributes.FOLLOW_RANGE, 20.0D)
 			.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
@@ -148,7 +149,8 @@ public class SludgeWorm extends PathfinderMob implements BLEntity {
 		return true;
 	}
 
-    @Override
+    @SuppressWarnings("unlikely-arg-type")
+	@Override
     public boolean hurt(DamageSource source, float amount) {
 		if (source.type().equals(DamageTypes.FELL_OUT_OF_WORLD) || source.type().equals(DamageTypes.THORNS))
 			damageWorm(source, amount);
