@@ -213,4 +213,8 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 		for (int i = 0; i < numberOfSegments; i++)
 			boxes[i].zRot += Mth.cos(f * speed + offset * i) * f1 * degree;
 	}
+
+	public float convertDegtoRad(float angle) {
+		return angle * Mth.DEG_TO_RAD;
+	}
 }

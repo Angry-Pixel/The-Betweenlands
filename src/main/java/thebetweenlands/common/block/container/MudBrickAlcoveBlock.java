@@ -22,8 +22,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.MudBrickAlcoveBlockEntity;
+import thebetweenlands.common.entity.monster.AshSprite;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 
 import javax.annotation.Nullable;
 
@@ -56,10 +58,10 @@ public class MudBrickAlcoveBlock extends HorizontalBaseEntityBlock {
 					Containers.dropContents(level, pos, alcove.getItems());
 
 					if (level.getRandom().nextInt(3) == 0) {
-//						AshSprite entity = new AshSprite(level); //ash sprite here :P
-//						entity.moveTo(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
-//						entity.setBoundOrigin(offsetPos);
-//						level.addFreshEntity(entity);
+						AshSprite entity = new AshSprite(EntityRegistry.ASH_SPRITE.get(), level);
+						entity.moveTo(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
+						entity.setBoundOrigin(offsetPos);
+						level.addFreshEntity(entity);
 					}
 
 					level.playSound(null, pos, state.getSoundType(level, pos, player).getBreakSound(), SoundSource.BLOCKS, 0.5F, 1.0F);

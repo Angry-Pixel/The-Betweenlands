@@ -43,6 +43,7 @@ import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BLLootProvider;
 import thebetweenlands.common.datagen.tags.*;
+import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.creature.Gecko;
 import thebetweenlands.common.entity.creature.MireSnail;
@@ -145,6 +146,8 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.PEAT_MUMMY.get(), PeatMummy.registerAttributes().build());
 		event.put(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummy.registerAttributes().build());
 		event.put(EntityRegistry.MUMMY_ARM.get(), MummyArm.registerAttributes().build());
+		event.put(EntityRegistry.ASH_SPRITE.get(), AshSprite.registerAttributes().build());
+		event.put(EntityRegistry.BARRISHEE.get(), Barrishee.registerAttributes().build());
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {

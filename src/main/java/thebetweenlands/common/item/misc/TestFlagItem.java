@@ -1,18 +1,20 @@
 package thebetweenlands.common.item.misc;
 
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.monster.MummyArm;
-import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.entity.monster.Stalker;
 
 import java.util.List;
 
@@ -40,5 +42,16 @@ public class TestFlagItem extends Item {
 		arm.moveTo(context.getClickLocation());
 		context.getLevel().addFreshEntity(arm);
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
+	}
+
+	@Override
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
+		if (entity instanceof Barrishee barrishee) {
+			barrishee.setIsScreaming(!barrishee.isScreaming());
+			barrishee.setIsScreamingBeam(!barrishee.isScreamingBeam());
+			barrishee.setScreamTimer(0);
+			return InteractionResult.sidedSuccess(player.level().isClientSide());
+		}
+		return super.interactLivingEntity(stack, player, entity, hand);
 	}
 }

@@ -111,16 +111,7 @@ import thebetweenlands.client.model.item.OctineShieldModel;
 import thebetweenlands.client.model.item.SyrmoriteShieldModel;
 import thebetweenlands.client.model.item.ValoniteShieldModel;
 import thebetweenlands.client.model.item.WeedwoodShieldModel;
-import thebetweenlands.client.particle.AnimatorParticle;
-import thebetweenlands.client.particle.BLBubbleParticle;
-import thebetweenlands.client.particle.BLRainParticle;
-import thebetweenlands.client.particle.BugParticle;
-import thebetweenlands.client.particle.FancyBubbleParticle;
-import thebetweenlands.client.particle.FancyDripParticle;
-import thebetweenlands.client.particle.FishVortexParticle;
-import thebetweenlands.client.particle.SpiritButterflyParticle;
-import thebetweenlands.client.particle.SwarmParticle;
-import thebetweenlands.client.particle.UrchinSpikeParticle;
+import thebetweenlands.client.particle.*;
 import thebetweenlands.client.renderer.BLItemRenderer;
 import thebetweenlands.client.renderer.block.AlcoveRenderer;
 import thebetweenlands.client.renderer.block.AlembicRenderer;
@@ -285,6 +276,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.MUMMY_ARM.get(), MummyArmRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_BALL.get(), SludgeBallRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.MIRE_SNAIL.get(), MireSnailRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ASH_SPRITE.get(), AshSpriteRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BARRISHEE.get(), BarrisheeRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -350,6 +343,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.MUMMY_ARM, MummyArmModel::create);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_BALL, SludgeBallModel::create);
 		event.registerLayerDefinition(BLModelLayers.MIRE_SNAIL, MireSnailModel::create);
+		event.registerLayerDefinition(BLModelLayers.ASH_SPRITE, AshSpriteModel::create);
+		event.registerLayerDefinition(BLModelLayers.BARRISHEE, BarrisheeModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
@@ -666,6 +661,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.PURIFIER_BUBBLE.get(), BLBubbleParticle.PurifierFactory::new);
 		event.registerSpriteSet(ParticleRegistry.TAR_BUBBLE.get(), BLBubbleParticle.TarFactory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), BLBubbleParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.SONIC_SCREAM.get(), SonicScreamParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

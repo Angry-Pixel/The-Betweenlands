@@ -208,6 +208,21 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					EntityPredicate.Builder.entity().subPredicate(new BossPeatMummyPredicate(false)).build()))
 				.add(LootItem.lootTableItem(ItemRegistry.SHIMMER_STONE).setWeight(9))
 				.add(EmptyLootItem.emptyItem().setWeight(1))));
+
+		this.add(EntityRegistry.ASH_SPRITE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.CREMAINS)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
+
+		this.add(EntityRegistry.BARRISHEE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.RUNE_DOOR_KEY)))
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.68F))))
+				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.50F))))
+				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.25F))))
+				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.20F))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

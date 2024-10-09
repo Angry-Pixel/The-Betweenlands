@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-07T17:33:54.3648796	Item Models: thebetweenlands
+// 1.21.1	2024-10-08T21:32:09.8767124	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -58,8 +58,10 @@ c4ea81227ad9a8bde80868084efcf8657a91c48a assets/thebetweenlands/models/item/apse
 426e84873431f53cc1f144c30dc963774c8b958a assets/thebetweenlands/models/item/aqua_middle_gem.json
 77136e6856187afed3c675883b56467c47cf1e25 assets/thebetweenlands/models/item/arrow_arum_leaf.json
 2f9250158d47c91737afa3fecc874ec30a109a4f assets/thebetweenlands/models/item/ascent_upgrade.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/ash_sprite_spawn_egg.json
 7f23334a8d0bd09beb963292d9bd2b4d9508a223 assets/thebetweenlands/models/item/bark_amulet.json
 c23d7f1004b43d96e65752479aa2712834407cb7 assets/thebetweenlands/models/item/barnacle.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/barrishee_spawn_egg.json
 f83db78105c7f24fbb5263d228c22920f240f26b assets/thebetweenlands/models/item/basilisk_arrow.json
 1b283ecf733bda0a6c64a5a4c6a6f1bb01d1a169 assets/thebetweenlands/models/item/betweenstone_pebble.json
 6fb0bfd2556c86f3c43484edeadf2749168d9d34 assets/thebetweenlands/models/item/biopathic_linkstone.json

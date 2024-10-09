@@ -46,12 +46,12 @@ public class ObstructionAwareGroundNavigation<T extends PathfinderMob & PathObst
 
 	@Override
 	protected PathFinder createPathFinder(int maxExpansions) {
-		this.pathFinder = this.createClimberPathFinder(maxExpansions);
+		this.pathFinder = this.createAdvancedPathFinder(maxExpansions);
 		this.nodeEvaluator = this.pathFinder.getNodeProcessor();
 		return this.pathFinder;
 	}
 
-	protected CustomPathFinder createClimberPathFinder(int maxExpansions) {
+	protected CustomPathFinder createAdvancedPathFinder(int maxExpansions) {
 		ObstructionAwareNodeEvaluator nodeProcessor = new ObstructionAwareNodeEvaluator();
 		nodeProcessor.setCanPassDoors(true);
 		return new CustomPathFinder(nodeProcessor, maxExpansions);

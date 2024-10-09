@@ -34,6 +34,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ClimbingMob;
 import thebetweenlands.common.entity.ai.goals.StalkerBreakLightGoal;
@@ -43,6 +44,7 @@ import thebetweenlands.common.entity.ai.goals.StalkerScurryGoal;
 import thebetweenlands.common.entity.movement.climb.*;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.function.Predicate;
@@ -483,10 +485,10 @@ public class Stalker extends ClimbingMob implements Enemy {
 		float osx = Mth.sin(angle + Mth.PI * 0.5f) * 0.05f * screechingHeadRotationStrength;
 		float osz = Mth.cos(angle + Mth.PI * 0.5f) * 0.05f * screechingHeadRotationStrength;
 
-//		Particle particle = BLParticles.SONIC_SCREAM.create(this.level(), this.getX() + ox, this.getY() + 1.5f, this.getZ() + oz,
-//			ParticleFactory.ParticleArgs.get().withMotion(osx, 0.3f, osz).withScale(10).withData(30, Mth.floor(this.tickCount * 3.3f))
-//				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
-//
+		TheBetweenlands.createParticle(ParticleRegistry.SONIC_SCREAM.get(), this.level(), this.getX() + ox, this.getY() + 1.5f, this.getZ() + oz,
+			ParticleFactory.ParticleArgs.get().withMotion(osx, 0.3f, osz).withScale(10).withData(30, Mth.floor(this.tickCount * 3.3f))
+				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
+
 //		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING, particle);
 	}
 

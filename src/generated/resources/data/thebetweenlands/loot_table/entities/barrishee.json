@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:rune_door_key"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": 0.68,
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "thebetweenlands:life_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": 0.5,
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "thebetweenlands:life_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": 0.25,
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "thebetweenlands:life_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": 0.2,
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "thebetweenlands:life_crystal"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:entities/barrishee"
+}
