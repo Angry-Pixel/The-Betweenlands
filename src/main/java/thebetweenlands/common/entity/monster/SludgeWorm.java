@@ -32,7 +32,7 @@ import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class SludgeWorm extends PathfinderMob implements BLEntity{
+public class SludgeWorm extends PathfinderMob implements BLEntity {
 
 	public SludgeWormMultipart[] parts;
 
@@ -150,19 +150,18 @@ public class SludgeWorm extends PathfinderMob implements BLEntity{
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-		if (source.type().equals(DamageTypes.FELL_OUT_OF_WORLD) || source.type().equals(DamageTypes.THORNS)) {
+		if (source.type().equals(DamageTypes.FELL_OUT_OF_WORLD) || source.type().equals(DamageTypes.THORNS))
 			damageWorm(source, amount);
-		} else if(source.type().equals(DamageTypes.IN_WALL) && this.wallInvulnerabilityTicks > 0) {
+		else if(source.type().equals(DamageTypes.IN_WALL) && this.wallInvulnerabilityTicks > 0)
 			return false;
-		} else {
+		else
 			damageWorm(source, amount);
-		}
 		return true;
 	}
 
 	@Override
 	public boolean canAttackType(EntityType<?> typeIn) {
-		return !BLEntity.class.isAssignableFrom(typeIn.getClass()); // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
+		return typeIn instanceof BLEntity; // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
 	}
 
 	protected boolean damageWorm(DamageSource source, float amount) {
