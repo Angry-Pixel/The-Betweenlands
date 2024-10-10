@@ -38,7 +38,7 @@ public class SludgeWormTiny extends SludgeWorm {
 				new SludgeWormMultipart(this, "body_part_3", 0.1875F, 0.1875F),
 				new SludgeWormMultipart(this, "body_part_4", 0.1875F, 0.1875F),
 				new SludgeWormMultipart(this, "body_part_5", 0.1875F, 0.1875F),
-				new SludgeWormMultipart(this, "body_part_6", 0.1875F, 0.1875F),
+				new SludgeWormMultipart(this, "body_part_6", 0.1875F, 0.1875F)
 		};
 	}
 /*	
