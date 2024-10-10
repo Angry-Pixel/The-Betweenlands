@@ -10,6 +10,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -135,24 +137,9 @@ public class CommonRegistrationEvents {
 		}
 	}
 
+	@SuppressWarnings("unchecked") //entities added this way will always extend LivingEntity
 	private static void registerAttributes(EntityAttributeCreationEvent event) {
-		event.put(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrab.registerAttributes().build());
-		event.put(EntityRegistry.SILT_CRAB.get(), SiltCrab.registerAttributes().build());
-		event.put(EntityRegistry.ANADIA.get(), Anadia.registerAttributes().build());
-		event.put(EntityRegistry.MIRE_SNAIL.get(), MireSnail.registerAttributes().build());
-		event.put(EntityRegistry.WIGHT.get(), Wight.registerAttributes().build());
-		event.put(EntityRegistry.SWAMP_HAG.get(), SwampHag.registerAttributes().build());
-		event.put(EntityRegistry.GECKO.get(), Gecko.registerAttributes().build());
-		event.put(EntityRegistry.SLUDGE_WORM.get(), SludgeWorm.registerAttributes().build());
-		event.put(EntityRegistry.SLUDGE_WORM_TINY.get(), SludgeWormTiny.registerAttributes().build());
-		event.put(EntityRegistry.STALKER.get(), Stalker.registerAttributes().build());
-		event.put(EntityRegistry.PEAT_MUMMY.get(), PeatMummy.registerAttributes().build());
-		event.put(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummy.registerAttributes().build());
-		event.put(EntityRegistry.MUMMY_ARM.get(), MummyArm.registerAttributes().build());
-		event.put(EntityRegistry.ASH_SPRITE.get(), AshSprite.registerAttributes().build());
-		event.put(EntityRegistry.BARRISHEE.get(), Barrishee.registerAttributes().build());
-		event.put(EntityRegistry.GREEBLING.get(), Greebling.createMobAttributes().build());
-		event.put(EntityRegistry.GREEBLING_CORACLE.get(), GreeblingCoracle.registerAttributes().build());
+		EntityRegistry.ATTRIBUTES.forEach((type, builder) -> event.put((EntityType<? extends LivingEntity>) type.value(), builder.build()));
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {
