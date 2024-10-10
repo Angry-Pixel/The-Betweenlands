@@ -46,6 +46,7 @@ import thebetweenlands.common.datagen.tags.*;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.creature.Gecko;
+import thebetweenlands.common.entity.creature.Greebling;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
@@ -148,6 +149,7 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.MUMMY_ARM.get(), MummyArm.registerAttributes().build());
 		event.put(EntityRegistry.ASH_SPRITE.get(), AshSprite.registerAttributes().build());
 		event.put(EntityRegistry.BARRISHEE.get(), Barrishee.registerAttributes().build());
+		event.put(EntityRegistry.GREEBLING.get(), Greebling.createMobAttributes().build());
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {

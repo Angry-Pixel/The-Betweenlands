@@ -223,6 +223,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.50F))))
 				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.25F))))
 				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.20F))))));
+		this.noLoot(EntityRegistry.GREEBLING);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

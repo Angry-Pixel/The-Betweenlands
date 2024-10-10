@@ -278,6 +278,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.MIRE_SNAIL.get(), MireSnailRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ASH_SPRITE.get(), AshSpriteRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BARRISHEE.get(), BarrisheeRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.GREEBLING.get(), GreeblingRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -334,6 +335,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
+		event.registerLayerDefinition(BLModelLayers.GREEBLING_1, GreeblingModel::createVariant1);
+		event.registerLayerDefinition(BLModelLayers.GREEBLING_2, GreeblingModel::createVariant2);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_ARROW, SludgeWormArrowModel::create);
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM, SludgeWormModel::create);
@@ -662,6 +665,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.TAR_BUBBLE.get(), BLBubbleParticle.TarFactory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), BLBubbleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SONIC_SCREAM.get(), SonicScreamParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.WEEDWOOD_LEAF.get(), WeedwoodLeafParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

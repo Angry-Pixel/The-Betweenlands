@@ -65,7 +65,6 @@ public class MusicHandler {
 
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(MusicHandler::tickMusic);
-		NeoForge.EVENT_BUS.addListener(MusicHandler::setMusicInDimension);
 		NeoForge.EVENT_BUS.addListener(MusicHandler::cancelVanillaMusic);
 	}
 
@@ -177,13 +176,6 @@ public class MusicHandler {
 					playRandomSoundTrack();
 				}
 			}
-		}
-	}
-
-	private static void setMusicInDimension(SelectMusicEvent event) {
-		Music music = event.getOriginalMusic();
-		if (Minecraft.getInstance().level != null && Minecraft.getInstance().player != null && (music == Musics.CREATIVE || music == Musics.UNDER_WATER) && Minecraft.getInstance().level.dimension() == DimensionRegistries.DIMENSION_KEY) {
-			event.setMusic(Minecraft.getInstance().level.getBiomeManager().getNoiseBiomeAtPosition(Minecraft.getInstance().player.blockPosition()).value().getBackgroundMusic().orElse(BL_DIMENSION));
 		}
 	}
 

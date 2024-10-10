@@ -40,6 +40,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> TAR_BUBBLE = PARTICLES.register("tar_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_BUBBLE = PARTICLES.register("water_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SONIC_SCREAM = PARTICLES.register("sonic_scream", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WEEDWOOD_LEAF = PARTICLES.register("weedwood_leaf", () -> new SimpleParticleType(false));
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimitter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimitter) {

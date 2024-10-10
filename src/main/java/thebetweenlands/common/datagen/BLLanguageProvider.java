@@ -1010,6 +1010,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.DREADFUL_PEAT_MUMMY, "Dreadful Peat Mummy");
 		this.addEntityAndEgg(EntityRegistry.ASH_SPRITE, "Ash Sprite");
 		this.addEntityAndEgg(EntityRegistry.BARRISHEE, "Barrishee");
+		this.addEntityAndEgg(EntityRegistry.GREEBLING, "Greebling");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
