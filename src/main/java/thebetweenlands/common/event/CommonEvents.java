@@ -28,6 +28,7 @@ public class CommonEvents {
 		PlayerDecayHandler.init();
 		ShieldHandler.init();
 		SimulacrumHandler.init();
+		InventoryHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(SynchedAttachmentHandler::onPlayerJoinWorld);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);

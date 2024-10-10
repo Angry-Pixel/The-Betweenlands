@@ -1,6 +1,8 @@
 package thebetweenlands.common.item.equipment;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -61,6 +63,11 @@ public class LurkerSkinPouchItem extends Item {
 	@Override
 	public boolean canFitInsideContainerItems() {
 		return false;
+	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !oldStack.getComponentsPatch().forget(type -> type == DataComponents.CONTAINER).equals(newStack.getComponentsPatch().forget(type -> type == DataComponents.CONTAINER));
 	}
 
 	@Override

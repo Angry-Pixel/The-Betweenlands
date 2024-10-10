@@ -40,6 +40,8 @@ public class LurkerSkinPouchMenu extends AbstractContainerMenu {
 		for (int column = 0; column < 9; ++column) {
 			this.addSlot(new Slot(playerInventory, column, 8 + column * 18, 161 + yOffset));
 		}
+
+		pouch.startOpen(playerInventory.player);
 	}
 
 	public int getRows() {
@@ -82,6 +84,7 @@ public class LurkerSkinPouchMenu extends AbstractContainerMenu {
 		if (this.pouch == null) {
 			return true; //Renaming pouch
 		}
+		return pouch.stillValid(player);
 
 //		//Check if pouch is in equipment
 //		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
@@ -96,9 +99,9 @@ public class LurkerSkinPouchMenu extends AbstractContainerMenu {
 //		}
 
 		//Check if pouch is in main inventory
-		if (player.getInventory().contains(this.pouch.getContainerStack())) {
-			return true;
-		}
+//		if (player.getInventory().contains(this.pouch.getContainerStack())) {
+//			return pouch.stillValid(player);
+//		}
 
 //		//Check if pouch is in draeton
 //		List<Draeton> draetons = player.level().getEntitiesOfClass(Draeton.class, player.getBoundingBox().inflate(6));
@@ -113,9 +116,9 @@ public class LurkerSkinPouchMenu extends AbstractContainerMenu {
 //			}
 //		}
 
-		return false;
+//		return false;
 	}
-
+	
 	@Override
 	public void removed(Player player) {
 		this.pouch.stopOpen(player);
