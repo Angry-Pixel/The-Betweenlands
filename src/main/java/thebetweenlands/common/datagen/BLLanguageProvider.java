@@ -1005,6 +1005,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.SWAMP_HAG, "Swamp Hag");
 		this.addEntityAndEgg(EntityRegistry.WIGHT, "Wight");
 		this.addEntityAndEgg(EntityRegistry.SLUDGE_WORM, "Small Sludge Worm");
+		this.addEntityAndEgg(EntityRegistry.SLUDGE_WORM_TINY, "Tiny Sludge Worm");
 		this.addEntityAndEgg(EntityRegistry.STALKER, "Stalker");
 		this.addEntityAndEgg(EntityRegistry.PEAT_MUMMY, "Peat Mummy");
 		this.addEntityAndEgg(EntityRegistry.DREADFUL_PEAT_MUMMY, "Dreadful Peat Mummy");
