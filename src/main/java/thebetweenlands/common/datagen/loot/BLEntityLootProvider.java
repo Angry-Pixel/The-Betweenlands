@@ -188,7 +188,14 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		this.add(EntityRegistry.SLUDGE_WORM.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
+		
+		//TODO change this to use the squashed function for valonite shards and remove the sludgeballs
+		this.add(EntityRegistry.SLUDGE_WORM_TINY.get(), LootTable.lootTable()
+				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
+		
 		this.noLoot(EntityRegistry.STALKER);
+		
 		this.add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_SUMMONING)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT)))
