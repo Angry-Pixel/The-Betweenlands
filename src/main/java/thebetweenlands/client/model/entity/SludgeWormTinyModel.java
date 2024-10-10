@@ -80,7 +80,7 @@ public class SludgeWormTinyModel extends HierarchicalModel<SludgeWormTiny> {
 	public void renderBody(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWormTiny worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
-		stack.translate(0F, -0.125F - wibble, 0F - wibble * 2F);
+		stack.translate(0F, -0.125F - wibble, -0.125F - wibble * 2F);
 		stack.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
 		dat_detailed_hot_bod.render(stack, consumer, light, overlay, colour);
 	}

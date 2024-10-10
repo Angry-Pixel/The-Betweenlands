@@ -85,7 +85,7 @@ public class SludgeWormTinyRenderer extends MobRenderer<SludgeWormTiny, SludgeWo
 		stack.translate(x, y, z);
 		stack.scale(-1F, -1F, 1F);
 		stack.mulPose(Axis.YP.rotationDegrees(180F + yaw));
-		this.model.renderHead(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
+		this.model.renderHead(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength * 0.5F, partialTicks);
 		stack.popPose();
 	}
 
@@ -101,7 +101,7 @@ public class SludgeWormTinyRenderer extends MobRenderer<SludgeWormTiny, SludgeWo
 		stack.pushPose();
 		stack.translate(x, y - 1.125f + zOffset, z);
 		stack.mulPose(Axis.YN.rotationDegrees(yaw));
-		model.renderBody(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
+		model.renderBody(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength * 0.5F, partialTicks);
 		stack.popPose();
 	}
 
@@ -118,7 +118,7 @@ public class SludgeWormTinyRenderer extends MobRenderer<SludgeWormTiny, SludgeWo
 		stack.translate(x, y + 1.525f, z);
 		stack.scale(-1F, -1F, 1F);
 		stack.mulPose(Axis.YP.rotationDegrees(180F + yaw));
-		model.renderTail(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
+		model.renderTail(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength * 0.5F, partialTicks);
 		stack.popPose();
 	}
 	

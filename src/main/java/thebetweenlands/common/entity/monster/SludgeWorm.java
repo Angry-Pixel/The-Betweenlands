@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -21,7 +20,6 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -33,14 +31,14 @@ import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class SludgeWorm extends PathfinderMob implements BLEntity {
+public class SludgeWorm extends Monster implements BLEntity {
 
 	public SludgeWormMultipart[] parts;
 
 	private int wallInvulnerabilityTicks = 40;
 	private boolean doSpawningAnimation = true;
 
-	public SludgeWorm(EntityType<? extends PathfinderMob> type, Level level) {
+	public SludgeWorm(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
 		setPathfindingMalus(PathType.WATER, -10F);
 		parts = new SludgeWormMultipart[] {
