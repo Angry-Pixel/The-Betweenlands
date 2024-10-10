@@ -16,7 +16,7 @@ import net.minecraft.world.entity.Entity;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.SludgeWormTinyModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.monster.SludgeWorm;
+import thebetweenlands.common.entity.monster.SludgeWormTiny;
 import thebetweenlands.common.entity.monster.SludgeWormMultipart;
 import thebetweenlands.common.entity.monster.SludgeWormTiny;
 
@@ -78,7 +78,7 @@ public class SludgeWormTinyRenderer extends MobRenderer<SludgeWormTiny, SludgeWo
 		stack.popPose();
 	}
 
-	public void renderHead(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, int frame, double x, double y, double z, float yaw, float avgWibbleStrength, float partialTicks) {
+	public void renderHead(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWormTiny entity, int frame, double x, double y, double z, float yaw, float avgWibbleStrength, float partialTicks) {
 		double yawDiff = (yaw - entity.parts[1].getYRot()) % 360.0F;
 		double yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
 		float wibbleStrength = Math.min(avgWibbleStrength, Math.clamp(1.0F - (float)Math.abs(yawInterpolant) / 60.0F, 0, 1));
