@@ -90,7 +90,7 @@ public class SludgeWormTinyRenderer extends MobRenderer<SludgeWormTiny, SludgeWo
 		stack.popPose();
 	}
 
-	public void renderBodyPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, SludgeWormMultipart part, Entity prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float zOffset, float partialTicks) {
+	public void renderBodyPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWormTiny entity, SludgeWormMultipart part, Entity prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float zOffset, float partialTicks) {
 		double x = part.xOld + (part.xo - part.xOld) * (double)partialTicks - rx;
 		double y = part.yOld + (part.yo - part.yOld) * (double)partialTicks - ry;
 		double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
