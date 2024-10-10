@@ -1,0 +1,253 @@
+package thebetweenlands.common.loot;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.item.misc.AnadiaMobItem;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootFunctionRegistry;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public record SetAnadiaPropertiesFunction(Optional<Boolean> randomize, Optional<NumberProvider> fishColor, Optional<NumberProvider> fishSize,
+										  Optional<LootPoolEntryContainer> headItem, Optional<LootPoolEntryContainer> bodyItem, Optional<LootPoolEntryContainer> tailItem,
+										  Optional<NumberProvider> headType, Optional<NumberProvider> bodyType, Optional<NumberProvider> tailType,
+										  Optional<Boolean> lootFish, Optional<Boolean> rotten) implements LootItemFunction {
+
+	public static final MapCodec<SetAnadiaPropertiesFunction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+		Codec.BOOL.optionalFieldOf("randomize").forGetter(SetAnadiaPropertiesFunction::randomize),
+		NumberProviders.CODEC.optionalFieldOf("fish_color").forGetter(SetAnadiaPropertiesFunction::fishColor),
+		NumberProviders.CODEC.optionalFieldOf("fish_size").forGetter(SetAnadiaPropertiesFunction::fishSize),
+		LootPoolEntries.CODEC.optionalFieldOf("head_item").forGetter(SetAnadiaPropertiesFunction::headItem),
+		LootPoolEntries.CODEC.optionalFieldOf("body_item").forGetter(SetAnadiaPropertiesFunction::bodyItem),
+		LootPoolEntries.CODEC.optionalFieldOf("tail_item").forGetter(SetAnadiaPropertiesFunction::tailItem),
+		NumberProviders.CODEC.optionalFieldOf("head_type").forGetter(SetAnadiaPropertiesFunction::headType),
+		NumberProviders.CODEC.optionalFieldOf("body_type").forGetter(SetAnadiaPropertiesFunction::bodyType),
+		NumberProviders.CODEC.optionalFieldOf("tail_type").forGetter(SetAnadiaPropertiesFunction::tailType),
+		Codec.BOOL.optionalFieldOf("loot_fish").forGetter(SetAnadiaPropertiesFunction::lootFish),
+		Codec.BOOL.optionalFieldOf("rotten").forGetter(SetAnadiaPropertiesFunction::rotten)
+	).apply(instance, SetAnadiaPropertiesFunction::new));
+
+	public static SetAnadiaPropertiesFunction.Builder builder() {
+		return new SetAnadiaPropertiesFunction.Builder();
+	}
+
+	@Override
+	public LootItemFunctionType<? extends LootItemFunction> getType() {
+		return LootFunctionRegistry.SET_ANADIA_PROPERTIES.get();
+	}
+
+	@Override
+	public ItemStack apply(ItemStack stack, LootContext context) {
+		if (!stack.is(ItemRegistry.ANADIA)) {
+			TheBetweenlands.LOGGER.warn("Loot item {} is not an anadia item stack", stack);
+		} else {
+			Entity entity = ((AnadiaMobItem) stack.getItem()).createCapturedEntity(context.getLevel(), 0, 0, 0, stack, false);
+
+			if (!(entity instanceof Anadia anadia)) {
+				TheBetweenlands.LOGGER.warn("Loot item {} contains a {} and not an anadia entity", stack, entity.getClass().getName());
+			} else {
+
+				if (this.randomize.orElse(false)) {
+					anadia.randomizeAnadiaProperties();
+				}
+
+				this.fishColor.ifPresent(numberProvider -> anadia.setFishColor(AnadiaParts.AnadiaColor.get(numberProvider.getInt(context))));
+
+				this.fishSize.ifPresent(numberProvider -> anadia.setFishSize(numberProvider.getFloat(context)));
+
+				this.lootFish.ifPresent(anadia::setAsLootFish);
+
+				this.headType.ifPresent(numberProvider -> anadia.setHeadType(AnadiaParts.AnadiaHeadParts.get(numberProvider.getInt(context))));
+
+				this.bodyType.ifPresent(numberProvider -> anadia.setBodyType(AnadiaParts.AnadiaBodyParts.get(numberProvider.getInt(context))));
+
+				this.tailType.ifPresent(numberProvider -> anadia.setTailType(AnadiaParts.AnadiaTailParts.get(numberProvider.getInt(context))));
+
+				if (this.headItem.isPresent()) {
+					ItemStack partStack = this.getItem(this.headItem.get(), context);
+					if (!partStack.isEmpty()) {
+						anadia.setHeadItem(partStack);
+					} else {
+						TheBetweenlands.LOGGER.warn("Head item generated by loot entry {} is empty", this.headItem.get().getType());
+					}
+				}
+
+				if (this.bodyItem.isPresent()) {
+					ItemStack partStack = this.getItem(this.bodyItem.get(), context);
+					if (!partStack.isEmpty()) {
+						anadia.setBodyItem(partStack);
+					} else {
+						TheBetweenlands.LOGGER.warn("Body item generated by loot entry {} is empty", this.bodyItem.get().getType());
+					}
+				}
+
+				if (this.tailItem.isPresent()) {
+					ItemStack partStack = this.getItem(this.tailItem.get(), context);
+					if (!partStack.isEmpty()) {
+						anadia.setTailItem(partStack);
+					} else {
+						TheBetweenlands.LOGGER.warn("Tail item generated by loot entry {} is empty", this.tailItem.get().getType());
+					}
+				}
+
+				stack = ItemRegistry.ANADIA.get().capture(anadia);
+
+				((AnadiaMobItem) stack.getItem()).setRotten(context.getLevel(), stack, this.rotten.orElse(false));
+			}
+		}
+		return stack;
+	}
+
+	private ItemStack getItem(LootPoolEntryContainer entry, LootContext context) {
+		List<ItemStack> loot = new ArrayList<>();
+		entry.expand(context, lootPoolEntry -> lootPoolEntry.createItemStack(loot::add, context));
+		if (!loot.isEmpty()) {
+			return loot.getFirst();
+		}
+		return ItemStack.EMPTY;
+	}
+
+	public static class Builder implements LootItemFunction.Builder {
+
+		@Nullable
+		private Boolean randomize;
+		@Nullable
+		private NumberProvider fishColor;
+		@Nullable
+		private NumberProvider fishSize;
+		@Nullable
+		private LootPoolEntryContainer headItem;
+		@Nullable
+		private LootPoolEntryContainer bodyItem;
+		@Nullable
+		private LootPoolEntryContainer tailItem;
+		@Nullable
+		private NumberProvider headType;
+		@Nullable
+		private NumberProvider bodyType;
+		@Nullable
+		private NumberProvider tailType;
+		@Nullable
+		private Boolean lootFish;
+		@Nullable
+		private Boolean rotten;
+
+		public Builder randomize() {
+			this.randomize = true;
+			this.lootFish = false;
+			return this;
+		}
+
+		public Builder setFishColor(AnadiaParts.AnadiaColor color) {
+			this.fishColor = ConstantValue.exactly(color.ordinal());
+			return this;
+		}
+
+		public Builder setFishColor(NumberProvider color) {
+			this.fishColor = color;
+			return this;
+		}
+
+		public Builder setFishSize(NumberProvider size) {
+			this.fishSize = size;
+			return this;
+		}
+
+		public Builder setHeadItem(LootPoolEntryContainer head) {
+			this.headItem = head;
+			return this;
+		}
+
+		public Builder setHeadItem(ItemLike head) {
+			this.headItem = LootItem.lootTableItem(head).build();
+			return this;
+		}
+
+		public Builder setBodyItem(LootPoolEntryContainer body) {
+			this.bodyItem = body;
+			return this;
+		}
+
+		public Builder setBodyItem(ItemLike body) {
+			this.bodyItem = LootItem.lootTableItem(body).build();
+			return this;
+		}
+
+		public Builder setTailItem(LootPoolEntryContainer tail) {
+			this.tailItem = tail;
+			return this;
+		}
+
+		public Builder setTailItem(ItemLike tail) {
+			this.tailItem = LootItem.lootTableItem(tail).build();
+			return this;
+		}
+
+		public Builder setHeadType(AnadiaParts.AnadiaHeadParts head) {
+			this.headType = ConstantValue.exactly(head.ordinal());
+			return this;
+		}
+
+		public Builder setHeadType(NumberProvider head) {
+			this.headType = head;
+			return this;
+		}
+
+		public Builder setBodyType(AnadiaParts.AnadiaBodyParts body) {
+			this.bodyType = ConstantValue.exactly(body.ordinal());
+			return this;
+		}
+
+		public Builder setBodyType(NumberProvider body) {
+			this.bodyType = body;
+			return this;
+		}
+
+		public Builder setTailType(AnadiaParts.AnadiaTailParts tail) {
+			this.tailType = ConstantValue.exactly(tail.ordinal());
+			return this;
+		}
+
+		public Builder setTailType(NumberProvider tail) {
+			this.tailType = tail;
+			return this;
+		}
+
+		public Builder setTreasureFish() {
+			this.lootFish = true;
+			return this;
+		}
+
+		public Builder setRotten() {
+			this.rotten = true;
+			return this;
+		}
+
+		@Override
+		public LootItemFunction build() {
+			return new SetAnadiaPropertiesFunction(Optional.ofNullable(this.randomize), Optional.ofNullable(this.fishColor), Optional.ofNullable(this.fishSize),
+				Optional.ofNullable(this.headItem), Optional.ofNullable(this.bodyItem), Optional.ofNullable(this.tailItem),
+				Optional.ofNullable(this.headType), Optional.ofNullable(this.bodyType), Optional.ofNullable(this.tailType),
+				Optional.ofNullable(this.lootFish), Optional.ofNullable(this.rotten));
+		}
+	}
+}
