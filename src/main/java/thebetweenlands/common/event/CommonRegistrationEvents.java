@@ -143,6 +143,7 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.SWAMP_HAG.get(), SwampHag.registerAttributes().build());
 		event.put(EntityRegistry.GECKO.get(), Gecko.registerAttributes().build());
 		event.put(EntityRegistry.SLUDGE_WORM.get(), SludgeWorm.registerAttributes().build());
+		event.put(EntityRegistry.SLUDGE_WORM_TINY.get(), SludgeWormTiny.registerAttributes().build());
 		event.put(EntityRegistry.STALKER.get(), Stalker.registerAttributes().build());
 		event.put(EntityRegistry.PEAT_MUMMY.get(), PeatMummy.registerAttributes().build());
 		event.put(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummy.registerAttributes().build());

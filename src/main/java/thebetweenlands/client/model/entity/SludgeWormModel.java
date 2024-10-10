@@ -10,7 +10,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import thebetweenlands.common.entity.monster.SludgeWorm;
 
 public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
