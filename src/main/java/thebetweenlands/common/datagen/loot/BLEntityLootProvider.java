@@ -12,16 +12,15 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
-import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.common.loot.*;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -35,14 +34,27 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		super(FeatureFlags.REGISTRY.allFlags(), provider);
 	}
 
-	//TODO actually generate loot tables
+	//TODO add seasonal drops
 	@Override
 	public void generate() {
-		this.noLoot(EntityRegistry.WIGHT);
-		this.noLoot(EntityRegistry.SWAMP_HAG);
+		this.add(EntityRegistry.WIGHT.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.WIGHT_HEART)
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
+				.add(EmptyLootItem.emptyItem().setWeight(2))
+				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
+		this.add(EntityRegistry.SWAMP_HAG.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.noLoot(EntityRegistry.GECKO);
 		this.noLoot(EntityRegistry.BUBBLER_CRAB);
-		this.noLoot(EntityRegistry.SILT_CRAB);
+		this.add(EntityRegistry.SILT_CRAB.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SILT_CRAB_CLAW)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.add(EntityRegistry.ANADIA.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.RAW_ANADIA_MEAT)
@@ -231,11 +243,38 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.25F))))
 				.add(LootItem.lootTableItem(ItemRegistry.LIFE_CRYSTAL).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.20F))))));
 		this.noLoot(EntityRegistry.GREEBLING);
+		this.add(EntityRegistry.GREEBLING_CORACLE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_ANADIA_MEAT).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.TINY_SLUDGE_WORM).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.ANADIA_BONES).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.ANADIA_REMAINS).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.ANADIA).apply(SetAnadiaPropertiesFunction.builder().randomize()).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.ANADIA).apply(SetAnadiaPropertiesFunction.builder().randomize().setRotten()))
+				.add(LootItem.lootTableItem(ItemRegistry.ANADIA).apply(SetAnadiaPropertiesFunction.builder().randomize().setTreasureFish())))
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.ANGLER_TOOTH))
+				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN))
+				.add(LootItem.lootTableItem(BlockRegistry.SWAMP_KELP).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				.add(LootItem.lootTableItem(ItemRegistry.REED_ROPE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				.add(LootItem.lootTableItem(ItemRegistry.ALGAE_CLUMP).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				.add(LootItem.lootTableItem(ItemRegistry.WATER_WEEDS_DROP).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))))
+			.withPool(LootPool.lootPool()
+				.setRolls(UniformGenerator.between(0.0F, 1.0F))
+				.add(LootItem.lootTableItem(ItemRegistry.NET).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.FISHING_FLOAT_AND_HOOK).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.WEEDWOOD_BOWL).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.AMATE_MAP).setWeight(2))
+				//TODO
+//				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.72F))))
+//				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
+				.add(LootItem.lootTableItem(ItemRegistry.FABRICATED_SCROLL))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
 		this.add(type.get(), LootTable.lootTable());
 	}
+
 
 	@Override
 	protected Stream<EntityType<?>> getKnownEntityTypes() {

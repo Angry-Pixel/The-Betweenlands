@@ -92,9 +92,9 @@ public class Anadia extends PathfinderMob implements BLEntity {
 		super(type, level);
 		this.xpReward = 3;
 		this.moveControl = new AnadiaMoveControl(this);
-		this.setPathfindingMalus(PathType.WALKABLE, -8.0F);
-		this.setPathfindingMalus(PathType.BLOCKED, -8.0F);
-		this.setPathfindingMalus(PathType.WATER, 16.0F);
+		this.setPathfindingMalus(PathType.WALKABLE, -1.0F);
+		this.setPathfindingMalus(PathType.BLOCKED, -1.0F);
+		this.setPathfindingMalus(PathType.WATER, 0.0F);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
