@@ -47,6 +47,6 @@ public class SludgeWormArrowRenderer extends ArrowRenderer<SludgeWormArrow> {
 
 	@Override
 	public ResourceLocation getTextureLocation(SludgeWormArrow entity) {
-		return TheBetweenlands.prefix("textures/entity/tiny_sludge_worm.png");
+		return TheBetweenlands.prefix("textures/entity/sludge_worm_tiny.png");
 	}
 }

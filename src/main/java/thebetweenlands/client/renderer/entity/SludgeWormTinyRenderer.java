@@ -21,7 +21,7 @@ import thebetweenlands.common.entity.monster.SludgeWormMultipart;
 import thebetweenlands.common.entity.monster.SludgeWormTiny;
 
 public class SludgeWormTinyRenderer extends MobRenderer<SludgeWormTiny, SludgeWormTinyModel> {
-	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/tiny_sludge_worm.png");
+	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/sludge_worm_tiny.png");
 
 	public SludgeWormTinyRenderer(EntityRendererProvider.Context context) {
 		super(context, new SludgeWormTinyModel(context.bakeLayer(BLModelLayers.SLUDGE_WORM_TINY)), 0F);
