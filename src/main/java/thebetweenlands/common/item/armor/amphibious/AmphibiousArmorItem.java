@@ -30,6 +30,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+
 import javax.annotation.Nullable;
 
 import net.neoforged.neoforge.common.Tags;
@@ -258,7 +259,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 			ItemStack upgradeItem = inv.getItem(i);
 
 			if (!upgradeItem.isEmpty()) {
-				Holder<AmphibiousArmorUpgrade> itemUpgrade = ArmorEffectHelper.getUpgrade(((AmphibiousArmorItem)stack.getItem()).getType().getSlot(), upgradeItem);
+				Holder<AmphibiousArmorUpgrade> itemUpgrade = ArmorEffectHelper.getUpgrade(((AmphibiousArmorItem) stack.getItem()).getType().getSlot(), upgradeItem);
 
 				if (itemUpgrade.value() == upgrade && (damageEvent == AmphibiousArmorUpgrade.DamageEvent.ALL || itemUpgrade.value().isApplicableDamageEvent(damageEvent))) {
 					int damage = upgradeItem.getOrDefault(DataComponentRegistry.UPGRADE_DAMAGE, UpgradeDamage.EMPTY).damage();
@@ -297,6 +298,16 @@ public class AmphibiousArmorItem extends ArmorItem {
 				tooltip.add(Component.translatable("item.thebetweenlands.amphibious_armor.upgrade", upgrade.getKey().getDescription().getString(), String.valueOf(upgrade.getIntValue())).withStyle(ChatFormatting.GRAY));
 			}
 		}
+	}
+
+	public static int getUpgradeCount(LivingEntity entity, Holder<AmphibiousArmorUpgrade> upgrade) {
+		int count = 0;
+		for (ItemStack stack : entity.getArmorSlots()) {
+			if (!stack.isEmpty() && !stack.getOrDefault(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.EMPTY).getAllUniqueStacksWithSlotCounts().isEmpty()) {
+				count += stack.getOrDefault(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.EMPTY).getAllUniqueUpgradesWithCounts().getOrDefault(upgrade, 0);
+			}
+		}
+		return count;
 	}
 
 	@Override

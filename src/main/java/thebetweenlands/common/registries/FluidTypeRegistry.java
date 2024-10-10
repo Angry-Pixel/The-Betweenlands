@@ -1,6 +1,7 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -16,8 +17,11 @@ public class FluidTypeRegistry {
 		.descriptionId("block.thebetweenlands.swamp_water")
 		.fallDistanceModifier(0.0F)
 		.canExtinguish(true)
+		.canSwim(false) //haha
+		.canHydrate(true)
 		.canConvertToSource(true)
 		.supportsBoating(true)
+		.pathType(PathType.WATER)
 		.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 		.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 		.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
@@ -27,8 +31,11 @@ public class FluidTypeRegistry {
 		.descriptionId("block.thebetweenlands.stagnant_water")
 		.fallDistanceModifier(0.0F)
 		.canExtinguish(true)
+		.canSwim(false)
 		.canConvertToSource(true)
 		.supportsBoating(true)
+		.pathType(PathType.DANGER_OTHER)
+		.adjacentPathType(null)
 		.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 		.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 		.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
@@ -36,15 +43,21 @@ public class FluidTypeRegistry {
 
 	public static final DeferredHolder<FluidType, FluidType> TAR = FLUID_TYPES.register("tar", () -> new FluidType(FluidType.Properties.create()
 		.descriptionId("block.thebetweenlands.tar")
+		.canSwim(false)
+		.motionScale(0.002D)
 		.density(2000)
 		.viscosity(2000)
 		.temperature(330)
+		.pathType(PathType.DANGER_OTHER)
+		.adjacentPathType(null)
 		.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 		.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 		.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)));
 
 	public static final DeferredHolder<FluidType, FluidType> RUBBER = FLUID_TYPES.register("rubber", () -> new FluidType(FluidType.Properties.create()
 		.descriptionId("block.thebetweenlands.rubber")
+		.canSwim(false)
+		.motionScale(0.002D)
 		.density(1200)
 		.viscosity(1500)
 		.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)

@@ -235,7 +235,7 @@ public class Anadia extends PathfinderMob implements BLEntity {
 	@Override
 	public void aiStep() {
 		if (this.level().isClientSide() && this.level().getGameTime() % 5 + this.level().getRandom().nextInt(5) == 0) {
-			if (isInWater()) {
+			if (this.canDrownInFluidType(this.getEyeInFluidType())) {
 				for (int i = 0; i < 2; ++i) {
 					double a = Math.toRadians(this.getYRot());
 					double offSetX = -Math.sin(a) * this.getBbWidth() * 0.5D;
@@ -264,6 +264,11 @@ public class Anadia extends PathfinderMob implements BLEntity {
 		}
 
 		super.aiStep();
+	}
+
+	@Override
+	public boolean isInWater() {
+		return this.canDrownInFluidType(this.getEyeInFluidType());
 	}
 
 	@Override

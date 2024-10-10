@@ -2,6 +2,7 @@ package thebetweenlands.common.block.terrain;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -44,7 +45,12 @@ public class MudBlock extends Block {
 		if (context instanceof EntityCollisionContext ctx && !this.canEntityWalkOnMud(ctx.getEntity())) {
 			return MUD_AABB;
 		}
-		return super.getCollisionShape(state, level, pos, context);
+		return Shapes.block();
+	}
+
+	@Override
+	protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return Shapes.block();
 	}
 
 	@Override
@@ -60,16 +66,14 @@ public class MudBlock extends Block {
 	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
 		if (!this.canEntityWalkOnMud(entity)) {
-			if (!entity.isInWater() && entity.getDeltaMovement().y() < 0 && entity.onGround()) {
-				entity.setDeltaMovement(entity.getDeltaMovement().subtract(0.0D, 0.1D, 0.0D));
+			if (entity.onGround()) {
 				entity.makeStuckInBlock(state, new Vec3(0.08D, 0.02D, 0.08D));
 			}
 		}
 	}
 
-	public boolean canEntityWalkOnMud(Entity entity) {
-		boolean mudWalker = entity instanceof Player player && player.getData(AttachmentRegistry.MUD_WALKER).isActive(player);
-		return RubberBootsItem.canEntityWalkOnMud(entity) || mudWalker;
+	public boolean canEntityWalkOnMud(@Nullable Entity entity) {
+		return RubberBootsItem.canEntityWalkOnMud(entity) || (entity instanceof Player player && player.getData(AttachmentRegistry.MUD_WALKER).isActive(player));
 	}
 
 	@Override
@@ -87,20 +91,15 @@ public class MudBlock extends Block {
 		return true;
 	}
 
-	@Override
-	public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @org.jetbrains.annotations.Nullable Mob mob) {
-		return PathType.WALKABLE;
-	}
-
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(IN_WATER, context.getLevel().getFluidState(context.getClickedPos().above()).is(Fluids.WATER));
+		return this.defaultBlockState().setValue(IN_WATER, context.getLevel().getFluidState(context.getClickedPos().above()).is(FluidTags.WATER));
 	}
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		return state.setValue(IN_WATER, level.getFluidState(pos.above()).is(Fluids.WATER));
+		return state.setValue(IN_WATER, level.getFluidState(pos.above()).is(FluidTags.WATER));
 	}
 
 	@Override
