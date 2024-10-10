@@ -16,7 +16,6 @@ import net.minecraft.world.entity.Entity;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.SludgeWormTinyModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.monster.SludgeWormTiny;
 import thebetweenlands.common.entity.monster.SludgeWormMultipart;
 import thebetweenlands.common.entity.monster.SludgeWormTiny;
 

@@ -31,7 +31,7 @@ public class SludgeWormTinyModel extends HierarchicalModel<SludgeWormTiny> {
 		this.spoopy_stinger = cute_lil_butt.getChild("spoopy_stinger");
 	}
 
-	public static LayerDefinition createModelLayer() {
+	public static LayerDefinition create() {
 		MeshDefinition definition = new MeshDefinition();
 		PartDefinition partDefinition = definition.getRoot();
 
