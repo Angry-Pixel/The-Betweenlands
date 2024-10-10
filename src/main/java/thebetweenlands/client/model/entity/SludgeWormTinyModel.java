@@ -10,7 +10,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import thebetweenlands.common.entity.monster.SludgeWorm;
 import thebetweenlands.common.entity.monster.SludgeWormTiny;
 
 public class SludgeWormTinyModel extends HierarchicalModel<SludgeWormTiny> {
@@ -67,7 +66,7 @@ public class SludgeWormTinyModel extends HierarchicalModel<SludgeWormTiny> {
 		return LayerDefinition.create(definition, 32, 32);
 	}
 
-	public void renderHead(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderHead(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWormTiny worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		float jaw_wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.5F) * 0.5F);
@@ -78,7 +77,7 @@ public class SludgeWormTinyModel extends HierarchicalModel<SludgeWormTiny> {
 		beak_right.yRot = 0F + jaw_wibble;
 	}
 
-	public void renderBody(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderBody(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWormTiny worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		stack.translate(0F, -0.125F - wibble, 0F - wibble * 2F);
@@ -86,7 +85,7 @@ public class SludgeWormTinyModel extends HierarchicalModel<SludgeWormTiny> {
 		dat_detailed_hot_bod.render(stack, consumer, light, overlay, colour);
 	}
 
-	public void renderTail(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderTail(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWormTiny worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		stack.translate(0F, -0.0625F - wibble * 0.5F, -0.0625F + wibble * 2F);
