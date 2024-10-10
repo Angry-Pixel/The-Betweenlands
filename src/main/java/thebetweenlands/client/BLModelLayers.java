@@ -31,6 +31,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SLUDGE_WORM_ARROW = register("sludge_worm_arrow");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_2 = register("small_spirit_tree_face_2");
 	public static final ModelLayerLocation SLUDGE_WORM = register("sludge_worm");
+	public static final ModelLayerLocation SLUDGE_WORM_TINY = register("sludge_worm_tiny");
 	public static final ModelLayerLocation STALKER = register("stalker");
 
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");

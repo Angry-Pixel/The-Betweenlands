@@ -270,6 +270,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_ARROW.get(), SludgeWormArrowRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.PREDATOR_ARROW_GUIDE.get(), PredatorArrowGuideRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM.get(), SludgeWormRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_TINY.get(), SludgeWormTinyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.STALKER.get(), StalkerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.PEAT_MUMMY.get(), PeatMummyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), DreadfulPeatMummyRenderer::new);
