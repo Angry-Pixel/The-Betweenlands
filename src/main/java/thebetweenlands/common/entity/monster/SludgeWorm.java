@@ -161,7 +161,7 @@ public class SludgeWorm extends Monster implements BLEntity {
 
 	@Override
 	public boolean canAttackType(EntityType<?> typeIn) {
-		return typeIn instanceof BLEntity; // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
+		return !(typeIn instanceof BLEntity); // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
 	}
 
 	protected boolean damageWorm(DamageSource source, float amount) {

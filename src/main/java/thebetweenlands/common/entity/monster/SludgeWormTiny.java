@@ -43,16 +43,27 @@ public class SludgeWormTiny extends SludgeWorm {
 				new SludgeWormMultipart(this, "body_part_2", 0.1875F, 0.1875F),
 				new SludgeWormMultipart(this, "body_part_3", 0.1875F, 0.1875F),
 				new SludgeWormMultipart(this, "body_part_4", 0.1875F, 0.1875F),
-				new SludgeWormMultipart(this, "body_part_5", 0.1875F, 0.1875F),
-				//new SludgeWormMultipart(this, "body_part_6", 0.1875F, 0.1875F)
+				new SludgeWormMultipart(this, "body_part_5", 0.1875F, 0.1875F)
+				
 		};
 		xpReward = 1;
+		setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
 	}
+	
+	
 /*	
 	public SludgeWormTiny(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
 		this(type, level);
 	}
 */	
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        for (int i = 0; i < this.parts.length; i++)
+            this.parts[i].setId(id + i + 1);
+    }
+
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new LeapAtTargetGoal(this, 0.3F) {
@@ -63,7 +74,7 @@ public class SludgeWormTiny extends SludgeWorm {
 			}
 		});
 		goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
-		goalSelector.addGoal(1, new RandomStrollGoal(this, 0.8D, 1));
+		goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8D, 1));
 		targetSelector.addGoal(0, new HurtByTargetGoal(this));
 		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
 		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, null));
