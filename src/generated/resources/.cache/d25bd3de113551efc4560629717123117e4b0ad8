@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-10T11:10:30.9219066	Item Models: thebetweenlands
+// 1.21.1	2024-10-10T17:09:13.0440363	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -131,6 +131,7 @@ d0366e49eab489d94080dcb39b6df04e8f967bae assets/thebetweenlands/models/item/crim
 d99b4f49d98d7da9d367fdd1242dcb2cace737df assets/thebetweenlands/models/item/crimson_snail_shell.json
 7305a6392a3fc12f9319255551b19bd41a7d9fac assets/thebetweenlands/models/item/critter_cruncher.json
 074a369fabd75f888712c074c393e76fa0085a62 assets/thebetweenlands/models/item/cryptweed_blades.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/crypt_crawler_spawn_egg.json
 922b9bc64188c265e96e082e20002a1929779533 assets/thebetweenlands/models/item/deep_water_coral_stalk.json
 21d4a710538d84a5e6a4ebf795bd9866af032bc7 assets/thebetweenlands/models/item/deep_water_theme.json
 79ead9ed85b67a83256fb5914082e1c902fc6852 assets/thebetweenlands/models/item/dirty_dentrothyst_vial.json

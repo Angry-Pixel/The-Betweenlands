@@ -1013,6 +1013,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.BARRISHEE, "Barrishee");
 		this.addEntityAndEgg(EntityRegistry.GREEBLING, "Greebling");
 		this.addEntityAndEgg(EntityRegistry.GREEBLING_CORACLE, "Greebling Coracle");
+		this.addEntityAndEgg(EntityRegistry.CRYPT_CRAWLER, "Crypt Crawler");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1026,7 +1027,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.URCHIN_SPIKE, "Urchin Spike");
 		this.addEntityType(EntityRegistry.MUMMY_ARM, "Mummy Arm");
 		this.addEntityType(EntityRegistry.SLUDGE_BALL, "Sludge Ball");
-
+		this.addEntityType(EntityRegistry.BIPED_CRYPT_CRAWLER, "Crypt Crawler");
+		this.addEntityType(EntityRegistry.CHIEF_CRYPT_CRAWLER, "Crypt Crawler");
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");

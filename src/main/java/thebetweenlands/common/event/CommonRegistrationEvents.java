@@ -66,6 +66,7 @@ import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 
+import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 
 public class CommonRegistrationEvents {
@@ -133,13 +134,13 @@ public class CommonRegistrationEvents {
 			}
 		}
 		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-			EntityRegistry.SPAWN_EGGS.getEntries().forEach(item -> event.accept(new ItemStack(item)));
+			EntityRegistry.SPAWN_EGGS.getEntries().stream().sorted(Comparator.comparing(DeferredHolder::getId)).forEach(item -> event.accept(new ItemStack(item)));
 		}
 	}
 
 	@SuppressWarnings("unchecked") //entities added this way will always extend LivingEntity
 	private static void registerAttributes(EntityAttributeCreationEvent event) {
-		EntityRegistry.ATTRIBUTES.forEach((type, builder) -> event.put((EntityType<? extends LivingEntity>) type.value(), builder.build()));
+		EntityRegistry.ATTRIBUTES.forEach((type, builder) -> event.put((EntityType<? extends LivingEntity>) type.value(), builder.get().build()));
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {

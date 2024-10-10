@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
@@ -200,14 +201,14 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		this.add(EntityRegistry.SLUDGE_WORM.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
-		
+
 		//TODO change this to use the squashed function for valonite shards and remove the sludgeballs
 		this.add(EntityRegistry.SLUDGE_WORM_TINY.get(), LootTable.lootTable()
 				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
-		
+
 		this.noLoot(EntityRegistry.STALKER);
-		
+
 		this.add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_SUMMONING)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT)))
@@ -269,12 +270,36 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 //				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.72F))))
 //				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
 				.add(LootItem.lootTableItem(ItemRegistry.FABRICATED_SCROLL))));
+
+		this.add(EntityRegistry.CRYPT_CRAWLER.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.TAR_DRIP).setWeight(3))
+				.add(LootItem.lootTableItem(ItemRegistry.VALONITE_SPLINTER).setWeight(1))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING).setWeight(10))
+				.add(LootItem.lootTableItem(ItemRegistry.OCTINE_NUGGET).setWeight(13))
+				.add(LootItem.lootTableItem(ItemRegistry.SYRMORITE_NUGGET).setWeight(15))
+				.add(LootItem.lootTableItem(ItemRegistry.AMATE_PAPER).setWeight(10))
+				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN).setWeight(10))
+				.add(LootItem.lootTableItem(ItemRegistry.REED_DONUT).setWeight(5))
+				.add(LootItem.lootTableItem(ItemRegistry.REED_ROPE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).setWeight(35)))
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.ANCIENT_REMNANT).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
+				.add(EmptyLootItem.emptyItem())));
+
+		this.add(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
+		this.add(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
 		this.add(type.get(), LootTable.lootTable());
 	}
 
+	public LootTable.Builder fromEntityLootTable(EntityType<?> parent) {
+		return LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.setRolls(ConstantValue.exactly(1))
+				.add(NestedLootTable.lootTableReference(parent.getDefaultLootTable())));
+	}
 
 	@Override
 	protected Stream<EntityType<?>> getKnownEntityTypes() {

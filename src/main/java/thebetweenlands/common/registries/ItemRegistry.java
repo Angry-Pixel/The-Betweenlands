@@ -574,4 +574,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
 	public static final DeferredItem<Item> EXTINGUISHED_SULFUR_TORCH = ITEMS.register("extinguished_sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.EXTINGUISHED_SULFUR_TORCH.get(), BlockRegistry.EXTINGUISHED_SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
 	public static final DeferredItem<Item> WEEDWOOD_SIGN = ITEMS.register("weedwood_sign", () -> new SignItem(new Item.Properties(), BlockRegistry.WEEDWOOD_SIGN.get(), BlockRegistry.WEEDWOOD_WALL_SIGN.get()));
+
+	public static final DeferredItem<Item> CRYPT_CRAWLER_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("crypt_crawler_spawn_egg", () -> new CryptCrawlerSpawnEggItem(new Item.Properties()));
 }
