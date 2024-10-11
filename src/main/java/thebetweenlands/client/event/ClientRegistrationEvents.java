@@ -124,6 +124,7 @@ import thebetweenlands.client.particle.SwarmParticle;
 import thebetweenlands.client.particle.UrchinSpikeParticle;
 import thebetweenlands.client.particle.WeedwoodLeafParticle;
 import thebetweenlands.client.renderer.BLItemRenderer;
+import thebetweenlands.client.renderer.entity.ChiefCryptCrawlerRenderer;
 import thebetweenlands.client.renderer.block.AlcoveRenderer;
 import thebetweenlands.client.renderer.block.AlembicRenderer;
 import thebetweenlands.client.renderer.block.AnimatorRenderer;
@@ -292,6 +293,9 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.BARRISHEE.get(), BarrisheeRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GREEBLING.get(), GreeblingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GREEBLING_CORACLE.get(), GreeblingCoracleRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CRYPT_CRAWLER.get(), CryptCrawlerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), BipedCryptCrawlerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), ChiefCryptCrawlerRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -363,6 +367,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ASH_SPRITE, AshSpriteModel::create);
 		event.registerLayerDefinition(BLModelLayers.BARRISHEE, BarrisheeModel::create);
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_CORACLE, GreeblingCoracleModel::create);
+		event.registerLayerDefinition(BLModelLayers.BIPED_CRYPT_CRAWLER, BipedCryptCrawlerModel::create);
+		event.registerLayerDefinition(BLModelLayers.CRYPT_CRAWLER, CryptCrawlerModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
