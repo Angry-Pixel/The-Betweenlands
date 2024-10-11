@@ -1,19 +1,14 @@
 package thebetweenlands.common.entity.monster;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
@@ -25,7 +20,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -47,22 +41,14 @@ public class SludgeWormTiny extends SludgeWorm {
 				
 		};
 		xpReward = 1;
-		setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
+		super.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
 	}
-	
-	
+
 /*	
 	public SludgeWormTiny(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
 		this(type, level);
 	}
 */	
-
-    @Override
-    public void setId(int id) {
-        super.setId(id);
-        for (int i = 0; i < this.parts.length; i++)
-            this.parts[i].setId(id + i + 1);
-    }
 
 	@Override
 	protected void registerGoals() {
@@ -176,15 +162,5 @@ public class SludgeWormTiny extends SludgeWorm {
 	@Override
     public float getVoicePitch() {
 		return super.getVoicePitch() * 1.5F;
-	}
-
-	@Nullable
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-		for (int i = 0; i < this.parts.length; i++) {
-			this.parts[i].setPos(xo, yo, zo);
-			this.parts[i].setYRot(getYRot());
-		}
-		return spawnGroupData;
 	}
 }
