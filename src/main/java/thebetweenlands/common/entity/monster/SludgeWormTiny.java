@@ -20,6 +20,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -90,46 +91,50 @@ public class SludgeWormTiny extends SludgeWorm {
 	@Override
 	public void playerTouch(Player player) {
 		if (!this.level().isClientSide()) {
-			for (SludgeWormMultipart part : this.parts) {
-				if (player.getBoundingBox().maxY >= part.getBoundingBox().minY
-						&& player.getBoundingBox().minY <= part.getBoundingBox().maxY
-						&& player.getBoundingBox().maxX >= part.getBoundingBox().minX
-						&& player.getBoundingBox().minX <= part.getBoundingBox().maxX
-						&& player.getBoundingBox().maxZ >= part.getBoundingBox().minZ
-						&& player.getBoundingBox().minZ <= part.getBoundingBox().maxZ
-						&& !player.onGround() && player.getDeltaMovement().y() < 0) {
-					player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
-					
-					if (level().getDifficulty() == Difficulty.NORMAL) {
-						player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(80, 1));
-					} else if (level().getDifficulty() == Difficulty.HARD) {
-						player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(160, 1));
+			// head
+			if (isPartJumpedOn(player, this.getBoundingBox()))
+				squashWorm(player);
+			// rest of worm
+			else
+				for (SludgeWormMultipart part : this.parts) {
+					if (isPartJumpedOn(player, part.getBoundingBox())) {
+						squashWorm(player);
 					}
-					this.isSquashed = true;
 				}
-			}
-			
-			if (this.isSquashed) {
-				level().broadcastEntityEvent(this, EVENT_SQUASHED);
-				
-				level().playSound(null, this.xo, this.yo, this.zo, getJumpedOnSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
-				level().playSound(null, this.xo, this.yo, this.zo, getDeathSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
-				
-				this.damageWorm(damageSources().playerAttack(player), this.getHealth());
-			}
 		}
+	}
+
+	public boolean isPartJumpedOn(Player player, AABB hitBox) {
+		return player.getBoundingBox().maxY >= hitBox.minY && player.getBoundingBox().minY <= hitBox.maxY
+				&& player.getBoundingBox().maxX >= hitBox.minX && player.getBoundingBox().minX <= hitBox.maxX
+				&& player.getBoundingBox().maxZ >= hitBox.minZ && player.getBoundingBox().minZ <= hitBox.maxZ
+				&& !player.onGround() && player.getDeltaMovement().y() < 0;
+	}
+
+	public void squashWorm(Player player) {
+		player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
+
+		if (level().getDifficulty() == Difficulty.NORMAL)
+			player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(80, 1));
+		else if (level().getDifficulty() == Difficulty.HARD)
+			player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(160, 1));
+
+		this.isSquashed = true;
+		level().broadcastEntityEvent(this, EVENT_SQUASHED);
+		level().playSound(null, this.xo, this.yo, this.zo, getJumpedOnSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
+		level().playSound(null, this.xo, this.yo, this.zo, getDeathSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
+		this.damageWorm(damageSources().playerAttack(player), this.getHealth());
+
 	}
 
 	public boolean isSquashed() {
 		return this.isSquashed;
 	}
-	
+
     @Override
     protected void tickDeath() {
-		if (this.isSquashed) {
+		if (this.isSquashed)
 			this.deathTime = 19;
-		}
-		
 		super.tickDeath();
 	}
 	
