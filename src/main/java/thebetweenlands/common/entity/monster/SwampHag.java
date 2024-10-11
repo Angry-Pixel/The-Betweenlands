@@ -60,12 +60,7 @@ public class SwampHag extends Monster {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new BreakDoorGoal(this, difficulty -> true));
 		this.goalSelector.addGoal(2, new ThrowWormGoal(this));
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true) {
-			 @Override
-			    public boolean canUse() {
-				 return !mob.isPassenger() && super.canUse();
-			 }
-		});
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
 		this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 1.0D));
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.75D));
 		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
