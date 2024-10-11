@@ -111,7 +111,7 @@ public class SludgeWormTiny extends SludgeWorm {
 						&& player.getBoundingBox().minX <= part.getBoundingBox().maxX
 						&& player.getBoundingBox().maxZ >= part.getBoundingBox().minZ
 						&& player.getBoundingBox().minZ <= part.getBoundingBox().maxZ
-						&& player.yOld > player.yo) {
+						&& !player.onGround() && player.getDeltaMovement().y() < 0) {
 					player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
 					
 					if (level().getDifficulty() == Difficulty.NORMAL) {
@@ -119,7 +119,6 @@ public class SludgeWormTiny extends SludgeWorm {
 					} else if (level().getDifficulty() == Difficulty.HARD) {
 						player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(160, 1));
 					}
-					
 					this.isSquashed = true;
 				}
 			}
