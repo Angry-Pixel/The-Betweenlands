@@ -1,12 +1,17 @@
 package thebetweenlands.common.entity.ai.goals;
 
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import javax.annotation.Nullable;
+import thebetweenlands.common.entity.monster.PeatMummy;
+import thebetweenlands.common.entity.monster.SludgeWormTiny;
 import thebetweenlands.common.entity.monster.SwampHag;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import java.util.EnumSet;
 
 public class ThrowWormGoal extends Goal {
 
@@ -25,7 +30,7 @@ public class ThrowWormGoal extends Goal {
 
 		if (!this.hag.isRidingMummy())
 			return false;
-		if (this.hag.isRidingMummy() /*&& !this.hag.getMummyMount().isSpawningFinished()*/)
+		if (this.hag.isRidingMummy() && !((PeatMummy) this.hag.getMummyMount()).isSpawningFinished())
 			return false;
 		if (this.target == null)
 			return false;
@@ -51,11 +56,11 @@ public class ThrowWormGoal extends Goal {
 				double targetX = this.target.getX() - this.hag.getX();
 				double targetY = this.target.getBoundingBox().minY + (double) (this.target.getBbHeight() / 2.0F) - (this.hag.getY() + (double) (this.hag.getBbHeight() / 2.0F));
 				double targetZ = this.target.getZ() - this.hag.getZ();
-//				double targetDistance = Math.sqrt(targetX * targetX + targetZ * targetZ);
-//				TinySludgeWorm worm = new TinySludgeWorm(this.hag.level());
-//				worm.setPos(this.hag.getX(), this.hag.getY() + (double) this.hag.getEyeHeight() - 0.10000000149011612D, this.hag.getZ());
-//				this.throwWorm(worm, targetX, targetY + targetDistance * 0.2D, targetZ, 1.6F, 0F);
-//				this.hag.level().addFreshEntity(worm);
+				double targetDistance = Math.sqrt(targetX * targetX + targetZ * targetZ);
+				SludgeWormTiny worm = EntityRegistry.SLUDGE_WORM_TINY.get().create(hag.level());
+				worm.setPos(this.hag.getX(), this.hag.getY() + (double) this.hag.getEyeHeight() - 0.10000000149011612D, this.hag.getZ());
+				this.throwWorm(worm, targetX, targetY + targetDistance * 0.2D, targetZ, 1.8F, 0F);
+				this.hag.level().addFreshEntity(worm);
 				this.hag.playSound(SoundRegistry.WORM_THROW.get(), 1F, 1F + (this.hag.level().getRandom().nextFloat() - this.hag.level().getRandom().nextFloat()) * 0.8F);
 				this.hag.playPullSound = true;
 			}
@@ -75,22 +80,22 @@ public class ThrowWormGoal extends Goal {
 		this.target = null;
 	}
 
-//	public void throwWorm(TinySludgeWorm entity, double x, double y, double z, float velocity, float inaccuracy) {
-//		double f = Math.sqrt(x * x + y * y + z * z);
-//		x /= f;
-//		y /= f;
-//		z /= f;
-//		x = x + entity.getRandom().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-//		y = y + entity.getRandom().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-//		z = z + entity.getRandom().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-//		x = x * (double) velocity;
-//		y = y * (double) velocity;
-//		z = z * (double) velocity;
-//		entity.setDeltaMovement(x, y, z);
-//		double f1 = Math.sqrt(x * x + z * z);
-//		entity.setYRot((float) (Mth.atan2(x, z) * Mth.RAD_TO_DEG));
-//		entity.setXRot((Mth.atan2(y, f1) * Mth.DEG_TO_RAD));
-//		entity.yRot0 = entity.getYRot();
-//		entity.xRot0 = entity.getXRot();
-//	}
+	public void throwWorm(SludgeWormTiny entity, double x, double y, double z, float velocity, float inaccuracy) {
+		double f = Mth.sqrt((float) (x * x + y * y + z * z));
+		x /= f;
+		y /= f;
+		z /= f;
+		x = x + entity.getRandom().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		y = y + entity.getRandom().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		z = z + entity.getRandom().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		x = x * (double) velocity;
+		y = y * (double) velocity;
+		z = z * (double) velocity;
+		entity.setDeltaMovement(x, y, z);
+		double f1 = Mth.sqrt((float) (x * x + z * z));
+		entity.setYRot((float) (Mth.atan2(x, z) * Mth.RAD_TO_DEG));
+		entity.setXRot((float) (Mth.atan2(y, f1) * Mth.DEG_TO_RAD));
+		entity.yRotO = entity.getYRot();
+		entity.xRotO = entity.getXRot();
+	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.model.MowzieModelBase;
+import thebetweenlands.common.entity.monster.PeatMummy;
 import thebetweenlands.common.entity.monster.SwampHag;
 
 public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implements HeadedModel {
@@ -180,18 +181,18 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 
 		//TODO Fix this when peat mummies are added back
 		if (entity.isRidingMummy()) {
-			/*if (entity.isRidingMummy() /&& !entity.getMummyMount().isSpawningFinished()) {
+			if (entity.isRidingMummy() && !((PeatMummy) entity.getMummyMount()).isSpawningFinished()) {
 
-			} else {*/
+			} else {
 				this.legright1.xRot = -1.4137167F;
 				this.legright1.yRot = (Mth.PI / 10F);
 				this.legright1.zRot = 0.07853982F;
 				this.legleft1.xRot = -1.4137167F;
 				this.legleft1.yRot = -(Mth.PI / 10F);
 				this.legleft1.zRot = -0.07853982F;
-			//}
+			}
 
-			//if (entity.isRidingMummy() /*&& entity.getMummyMount().isSpawningFinished()*/) {
+			if (entity.isRidingMummy() && ((PeatMummy) entity.getMummyMount()).isSpawningFinished()) {
 				if (entity.getThrowTimer() < 90) {
 					this.armright.xRot += -(Mth.PI / 5F) - this.convertDegtoRad(entity.getThrowTimer()) * 0.35F;
 					this.armright.yRot = this.convertDegtoRad(entity.getThrowTimer());
@@ -210,7 +211,7 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 				this.armright.xRot -= (Mth.PI / 5F);
 			}
 		}
-	//}
+	}
 
 	public float convertDegtoRad(float angleIn) {
 		return angleIn * (Mth.PI / 180F);
