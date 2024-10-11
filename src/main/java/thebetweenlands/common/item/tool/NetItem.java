@@ -12,7 +12,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.entity.creature.Gecko;
+import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.creature.Olm;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.SludgeWormTiny;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -37,13 +40,13 @@ public class NetItem extends Item {
 //		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
 //		register(EntityChiromawTame.class, ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
 //		register(EntityChiromawTame.class, ItemRegistry.CHIROMAW_TAME_LIGHTNING, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
-//		register(EntityTinySludgeWorm.class, ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
+		register(SludgeWormTiny.class, ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
 //		register(EntityTinySludgeWormHelper.class, ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
-//		register(EntityMireSnail.class, ItemRegistry.CRITTER, (p, e) -> true);
+		register(MireSnail.class, ItemRegistry.MIRE_SNAIL, (p, e) -> true);
 		register(Anadia.class, ItemRegistry.ANADIA, (p, e) -> e.getNettableTimer() > 0);
 //		register(EntityFreshwaterUrchin.class, ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
 //		register(EntityCaveFish.class, ItemRegistry.CRITTER, (p, e) -> true);
-//		register(EntityOlm.class, ItemRegistry.CRITTER, (p, e) -> true);
+		register(Olm.class, ItemRegistry.OLM, (p, e) -> true);
 //		register(EntityJellyfish.class, ItemRegistry.JELLYFISH, (p, e) -> true);
 	}
 

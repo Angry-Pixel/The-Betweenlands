@@ -19,10 +19,7 @@ import thebetweenlands.common.entity.PredatorArrowGuide;
 import thebetweenlands.common.entity.Seat;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
-import thebetweenlands.common.entity.creature.Gecko;
-import thebetweenlands.common.entity.creature.Greebling;
-import thebetweenlands.common.entity.creature.GreeblingCoracle;
-import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.creature.*;
 import thebetweenlands.common.entity.fishing.BLFishHook;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.FishBait;
@@ -90,7 +87,7 @@ public class EntityRegistry {
 	//lurker
 	public static final DeferredHolder<EntityType<?>, EntityType<MireSnail>> MIRE_SNAIL = registerWithEgg("mire_snail", EntityType.Builder.of(MireSnail::new, MobCategory.CREATURE).sized(0.75F, 0.6F), 0x8E9456, 0xF2FA96, MireSnail::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<MummyArm>> MUMMY_ARM = registerWithAttributes("mummy_arm", EntityType.Builder.<MummyArm>of(MummyArm::new, MobCategory.MISC).sized(0.7F, 0.7F).clientTrackingRange(10).noSummon().fireImmune(), MummyArm::registerAttributes);
-	//olm
+	public static final DeferredHolder<EntityType<?>, EntityType<Olm>> OLM = registerWithEgg("olm", EntityType.Builder.of(Olm::new, MobCategory.MISC).sized(0.95F, 0.25F).eyeHeight(0.125F), 0xE8D8B8, 0xE79B7B, Olm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<PeatMummy>> PEAT_MUMMY = registerWithEgg("peat_mummy", EntityType.Builder.of(PeatMummy::new, MobCategory.MONSTER).sized(1.0F, 1.2F).passengerAttachments(0.35F).clientTrackingRange(10).canSpawnFarFromPlayer(), 0x524D3A, 0x69463F, PeatMummy::registerAttributes);
 	//primordial malevolence
 	//puffin

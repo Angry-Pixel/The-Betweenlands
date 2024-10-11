@@ -16,9 +16,12 @@ import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.entity.creature.Gecko;
+import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.creature.Olm;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.SludgeWormTiny;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.item.armor.amphibious.UpgradeToggleItem;
@@ -195,14 +198,20 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> LIFE_CRYSTAL = ITEMS.register("life_crystal", () -> new LifeCrystalItem(true, new Item.Properties().setNoRepair().stacksTo(1).durability(128)));
 	public static final DeferredItem<Item> LIFE_CRYSTAL_FRAGMENT = ITEMS.register("life_crystal_fragment", () -> new LifeCrystalItem(false, new Item.Properties().setNoRepair().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> PYRAD_FLAME = ITEMS.register("pyrad_flame", () -> new Item(new Item.Properties()));
-	//critters :)
+	//firefly
+	public static final DeferredItem<MobItem<MireSnail>> MIRE_SNAIL = ITEMS.register("mire_snail", () -> new MobItem<>(new Item.Properties().stacksTo(1), 6.0D, EntityRegistry.MIRE_SNAIL.get(), null));
 	public static final DeferredItem<MobItem<Gecko>> GECKO = ITEMS.register("gecko", () -> new MobItem<>(new Item.Properties().stacksTo(1), 12.0D, EntityRegistry.GECKO.get(), null));
+	//dragonfly
+	public static final DeferredItem<MobItem<Olm>> OLM = ITEMS.register("olm", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.OLM.get(), null));
+	//cave fish
 	public static final DeferredItem<Item> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<MobItem<?>> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem<>(new Item.Properties().stacksTo(1), 4.0D, null, null));
+	public static final DeferredItem<MobItem<SludgeWormTiny>> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem<>(new Item.Properties().stacksTo(1), 4.0D, EntityRegistry.SLUDGE_WORM_TINY.get(), null));
 	public static final DeferredItem<MobItem<?>> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem<>(new Item.Properties().stacksTo(1), 30.0D, null, null));
 	public static final DeferredItem<MobItem<Anadia>> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));
+	//jellyfish
 	public static final DeferredItem<MobItem<BubblerCrab>> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.BUBBLER_CRAB.get(), null));
 	public static final DeferredItem<MobItem<SiltCrab>> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.SILT_CRAB.get(), null));
+	//freshwater urchin
 	public static final DeferredItem<Item> CHIROMAW_EGG = ITEMS.register("chiromaw_egg", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));

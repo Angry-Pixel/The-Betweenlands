@@ -778,12 +778,12 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.LIFE_CRYSTAL);
 			output.accept(ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
 			output.accept(ItemRegistry.PYRAD_FLAME);
-			//dragonfly
 			//firefly
-			//olm
+			output.accept(ItemRegistry.MIRE_SNAIL);
 			output.accept(ItemRegistry.GECKO);
+			//dragonfly
+			output.accept(ItemRegistry.OLM);
 			//cave fish
-			//mire snail
 			//sludge worm egg sac
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM);
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM_HELPER);

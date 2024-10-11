@@ -228,7 +228,9 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_fragment_3"))).end()
 			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_fragment_4")));
 		this.basicItem(ItemRegistry.PYRAD_FLAME);
+		this.basicItem(ItemRegistry.MIRE_SNAIL);
 		this.basicItem(ItemRegistry.GECKO);
+		this.basicItem(ItemRegistry.OLM);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);

@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-10T17:09:13.0440363	Item Models: thebetweenlands
+// 1.21.1	2024-10-10T22:23:48.5103753	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -298,6 +298,7 @@ e7f4924d64d32861925a25325f544301f116db47 assets/thebetweenlands/models/item/milk
 9cd0b37f582a833c35a0295c775ac1c6f5a0c05f assets/thebetweenlands/models/item/mince_pie.json
 3b4ba232cbb2cb348c2a56aa2758b1446528dd64 assets/thebetweenlands/models/item/mire_coral_stalk.json
 bdf5ef562ad00d9739aaa84515dc5ce44bad3eb0 assets/thebetweenlands/models/item/mire_scramble.json
+833885d33b8b309d24a9b593aa834d3733c6614d assets/thebetweenlands/models/item/mire_snail.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/mire_snail_spawn_egg.json
 0b97c7541e165a8917ef931669eb287b70934922 assets/thebetweenlands/models/item/mist_staff.json
 f6dd6ba4cb0d44ad406ab517414ba3f25a0c9e84 assets/thebetweenlands/models/item/moss_clump.json
@@ -333,8 +334,10 @@ b4b51d6676895c9faeff4444f7cbf10f72ad6a55 assets/thebetweenlands/models/item/nett
 5c368bf81179ffafc454e419955818ada9014517 assets/thebetweenlands/models/item/octine_pickaxe.json
 80e4550281e674f8ee7ce1db290b05d4e06c93ba assets/thebetweenlands/models/item/octine_shovel.json
 d88d04775e26437626d5940bc0f9fd390c5256ba assets/thebetweenlands/models/item/octine_sword.json
+f719a66d1a35fdce7c4b30e1d89d98b2ed714d7d assets/thebetweenlands/models/item/olm.json
 ac81274c60f05e649e223ae84963ca85bed01363 assets/thebetweenlands/models/item/olmlette.json
 a38dab7269f926bf429f43c8f157d1c2bbea35bb assets/thebetweenlands/models/item/olmlette_mixture.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/olm_spawn_egg.json
 6fa515eecf67318127ef1f9f07a08e16e74262aa assets/thebetweenlands/models/item/orange_aspect_vial.json
 520fe51119e9708d929c114a75eb5267a0f41d8e assets/thebetweenlands/models/item/orange_dentrothyst_shard.json
 adafe4f73ae38a9f8f7fb3c6c46dcebffcb02b3d assets/thebetweenlands/models/item/orange_dentrothyst_vial.json

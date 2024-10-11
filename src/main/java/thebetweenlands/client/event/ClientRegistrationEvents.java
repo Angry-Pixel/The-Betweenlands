@@ -296,6 +296,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.CRYPT_CRAWLER.get(), CryptCrawlerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), BipedCryptCrawlerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), ChiefCryptCrawlerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.OLM.get(), OlmRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -369,6 +370,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_CORACLE, GreeblingCoracleModel::create);
 		event.registerLayerDefinition(BLModelLayers.BIPED_CRYPT_CRAWLER, BipedCryptCrawlerModel::create);
 		event.registerLayerDefinition(BLModelLayers.CRYPT_CRAWLER, CryptCrawlerModel::create);
+		event.registerLayerDefinition(BLModelLayers.OLM, OlmModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
