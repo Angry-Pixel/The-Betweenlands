@@ -64,7 +64,7 @@ public class SludgeWormTiny extends SludgeWorm {
 		goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8D, 1));
 		targetSelector.addGoal(0, new HurtByTargetGoal(this));
 		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, null));
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, entity -> entity instanceof Monster == false));
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
