@@ -623,7 +623,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		return this.multiLayerItem(pouch.getId().getPath(), this.itemTexture(pouch), this.itemTexture(pouch).withSuffix("_cord"));
 	}
 
-	private static final String[] TYPES = {"", "_poison", "_octine", "_basilisk", "_shock", "_barb"};
+	private static final String[] TYPES = {"", "_poison", "_octine", "_basilisk", "_shock", "_barb", "_worm"};
 	private static final float[] PULLS = {0.0F, 0.65F, 0.9F};
 
 	public ItemModelBuilder bow(DeferredItem<Item> bow) {
