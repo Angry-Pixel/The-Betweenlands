@@ -1030,6 +1030,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.SLUDGE_BALL, "Sludge Ball");
 		this.addEntityType(EntityRegistry.BIPED_CRYPT_CRAWLER, "Crypt Crawler");
 		this.addEntityType(EntityRegistry.CHIEF_CRYPT_CRAWLER, "Crypt Crawler");
+		this.addEntityType(EntityRegistry.SLUDGE_WORM_TINY_HELPER, "Tiny Sludge Worm Helper");
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");
