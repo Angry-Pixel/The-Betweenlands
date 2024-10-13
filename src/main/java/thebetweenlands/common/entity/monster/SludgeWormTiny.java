@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
@@ -31,7 +32,7 @@ public class SludgeWormTiny extends SludgeWorm {
 
 	protected boolean isSquashed = false;
 	
-	public SludgeWormTiny(EntityType<? extends Monster> type, Level level) {
+	public SludgeWormTiny(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 		this.parts = new SludgeWormMultipart[] {
 				new SludgeWormMultipart(this, "body_part_1", 0.1875F, 0.1875F),

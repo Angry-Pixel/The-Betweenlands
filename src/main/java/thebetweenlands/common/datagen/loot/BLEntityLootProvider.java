@@ -207,6 +207,8 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
+		this.noLoot(EntityRegistry.SLUDGE_WORM_TINY_HELPER);
+
 		this.noLoot(EntityRegistry.STALKER);
 
 		this.add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), LootTable.lootTable()
