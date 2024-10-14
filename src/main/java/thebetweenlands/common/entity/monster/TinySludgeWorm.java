@@ -41,7 +41,6 @@ public class TinySludgeWorm extends SludgeWorm {
 				new SludgeWormMultipart(this, 0.1875F, 0.1875F),
 				new SludgeWormMultipart(this, 0.1875F, 0.1875F),
 				new SludgeWormMultipart(this, 0.1875F, 0.1875F)
-
 		};
 		this.xpReward = 1;
 	}
