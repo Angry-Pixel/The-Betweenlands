@@ -59,10 +59,12 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		float x = 0F;
 		float y = 0F;
 		float z = 0F;
-
-		VertexConsumer consumer = buffer.getBuffer(getRenderType(entity, true, isVisible, isTranslucentToPlayer, isGlowing));
-		renderHead(stack, consumer, packedLight, overlay, colour, entity, 1, x, y + 1.5F, z, entityYaw, avgWibbleStrength, partialTicks);
-
+		RenderType renderType = getRenderType(entity, true, isVisible, isTranslucentToPlayer, isGlowing);
+		VertexConsumer consumer;
+		if(renderType != null) {
+			consumer = buffer.getBuffer(renderType);
+			renderHead(stack, consumer, packedLight, overlay, colour, entity, 1, x, y + 1.5F, z, entityYaw, avgWibbleStrength, partialTicks);
+		}
 		double ex = entity.xOld + (entity.getX() - entity.xOld) * (double)partialTicks;
 		double ey = entity.yOld + (entity.getY() - entity.yOld) * (double)partialTicks;
 		double ez = entity.zOld + (entity.getZ() - entity.zOld) * (double)partialTicks;
@@ -70,13 +72,13 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		double ry = ey - y;
 		double rz = ez - z;
 		float zOffset = 0;
-
-		consumer = buffer.getBuffer(getRenderType(entity, false, isVisible, isTranslucentToPlayer, isGlowing));
-		for(int i = 0; i < entity.parts.length - 1; i++) {
-			renderBodyPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[i], i > 0 ? entity.parts[i - 1] : entity, rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderType = getRenderType(entity, false, isVisible, isTranslucentToPlayer, isGlowing);
+		if(renderType != null) {
+			consumer = buffer.getBuffer(renderType);
+			for(int i = 0; i < entity.parts.length - 1; i++)
+				renderBodyPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[i], i > 0 ? entity.parts[i - 1] : entity, rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+			renderTailPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
 		}
-
-		renderTailPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
 		stack.popPose();
 	}
 
