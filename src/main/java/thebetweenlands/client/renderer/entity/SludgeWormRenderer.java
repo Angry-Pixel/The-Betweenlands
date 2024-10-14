@@ -36,7 +36,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		boolean isGlowing = minecraft.shouldEntityAppearGlowing(entity);
 		int overlay = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
 		int colour = isTranslucentToPlayer ? 654311423 : -1;
-
+		
 		stack.pushPose();
 		float totalAngleDiff = 0.0f;
 
@@ -60,25 +60,23 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		float y = 0F;
 		float z = 0F;
 
-		var renderType = this.getRenderType(entity, isVisible, isTranslucentToPlayer, isGlowing);
-		if (renderType != null) {
-			VertexConsumer consumer = buffer.getBuffer(renderType);
-			this.renderHead(stack, consumer, packedLight, overlay, colour, entity, 1, x, y + 1.5F, z, entityYaw, avgWibbleStrength, partialTicks);
+		VertexConsumer consumer = buffer.getBuffer(getRenderType(entity, true, isVisible, isTranslucentToPlayer, isGlowing));
+		renderHead(stack, consumer, packedLight, overlay, colour, entity, 1, x, y + 1.5F, z, entityYaw, avgWibbleStrength, partialTicks);
 
-			double ex = entity.xOld + (entity.getX() - entity.xOld) * (double) partialTicks;
-			double ey = entity.yOld + (entity.getY() - entity.yOld) * (double) partialTicks;
-			double ez = entity.zOld + (entity.getZ() - entity.zOld) * (double) partialTicks;
-			double rx = ex - x;
-			double ry = ey - y;
-			double rz = ez - z;
-			float zOffset = 0;
+		double ex = entity.xOld + (entity.getX() - entity.xOld) * (double)partialTicks;
+		double ey = entity.yOld + (entity.getY() - entity.yOld) * (double)partialTicks;
+		double ez = entity.zOld + (entity.getZ() - entity.zOld) * (double)partialTicks;
+		double rx = ex - x;
+		double ry = ey - y;
+		double rz = ez - z;
+		float zOffset = 0;
 
-			for (int i = 0; i < entity.parts.length - 1; i++) {
-				this.renderBodyPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[i], i > 0 ? entity.parts[i - 1] : entity, rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
-			}
-
-			this.renderTailPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
+		consumer = buffer.getBuffer(getRenderType(entity, false, isVisible, isTranslucentToPlayer, isGlowing));
+		for(int i = 0; i < entity.parts.length - 1; i++) {
+			renderBodyPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[i], i > 0 ? entity.parts[i - 1] : entity, rx, ry, rz, i, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
 		}
+
+		renderTailPart(stack, consumer, packedLight, overlay, colour, entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
 		stack.popPose();
 	}
 
@@ -90,8 +88,18 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		stack.translate(x, y, z);
 		stack.scale(-1F, -1F, 1F);
 		stack.mulPose(Axis.YP.rotationDegrees(180F + yaw));
-		this.model.renderHead(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
+		model.renderHead(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
 		stack.popPose();
+	}
+
+	@Nullable
+	protected RenderType getRenderType(SludgeWorm entity, boolean isHeadPart, boolean isVisible, boolean isTranslucentToPlayer, boolean isGlowing) {
+		if (isTranslucentToPlayer)
+			return RenderType.itemEntityTranslucentCull(isHeadPart ? TEXTURE_HEAD : TEXTURE_BODY);
+		else if (isVisible)
+			return this.model.renderType(isHeadPart ? TEXTURE_HEAD : TEXTURE_BODY);
+		else
+			return isGlowing ? RenderType.outline(isHeadPart ? TEXTURE_HEAD : TEXTURE_BODY) : null;
 	}
 
 	protected void renderBodyPart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm entity, SludgeWormMultipart part, Entity prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float zOffset, float partialTicks) {
@@ -106,7 +114,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		stack.pushPose();
 		stack.translate(x, y - 1.125f + zOffset, z);
 		stack.mulPose(Axis.YN.rotationDegrees(yaw));
-		this.model.renderBody(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
+		model.renderBody(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
 		stack.popPose();
 	}
 
@@ -123,7 +131,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		stack.translate(x, y + 1.525f, z);
 		stack.scale(-1F, -1F, 1F);
 		stack.mulPose(Axis.YP.rotationDegrees(180F + yaw));
-		this.model.renderTail(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
+		model.renderTail(stack, consumer, light, overlay, colour, entity, frame, wibbleStrength, partialTicks);
 		stack.popPose();
 	}
 
