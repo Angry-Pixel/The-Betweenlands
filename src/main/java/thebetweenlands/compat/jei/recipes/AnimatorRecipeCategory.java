@@ -53,11 +53,6 @@ public class AnimatorRecipeCategory implements IRecipeCategory<AnimatorRecipe> {
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -81,6 +76,7 @@ public class AnimatorRecipeCategory implements IRecipeCategory<AnimatorRecipe> {
 
 	@Override
 	public void draw(AnimatorRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		SingleRecipeInput currentInput = new SingleRecipeInput(recipeSlotsView.getSlotViews(RecipeIngredientRole.INPUT).getFirst().getDisplayedItemStack().orElse(ItemStack.EMPTY));
 		if (mouseX >= 18 && mouseX <= 51 && mouseY >= 42 && mouseY <= 66) {
 			float lifeAmount = recipe.getRequiredLife(currentInput);

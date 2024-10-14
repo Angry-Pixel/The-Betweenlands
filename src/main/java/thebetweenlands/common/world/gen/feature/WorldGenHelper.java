@@ -61,6 +61,7 @@ public abstract class WorldGenHelper<T extends FeatureConfiguration> extends Fea
 	 * @param callbacks  All callbacks are called once a block is placed
 	 */
 	@SafeVarargs
+	@SuppressWarnings("fallthrough")
 	public final void rotatedCubeVolume(WorldGenLevel level, Predicate<BlockPos> pred, int x, int y, int z, int offsetX, int offsetY, int offsetZ, BlockState state, int sizeWidth, int sizeHeight, int sizeDepth, Direction rotation, Consumer<BlockPos>... callbacks) {
 		x -= width / 2;
 		z -= depth / 2;

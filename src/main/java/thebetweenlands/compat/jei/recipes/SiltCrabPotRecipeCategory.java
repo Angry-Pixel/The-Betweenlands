@@ -48,11 +48,6 @@ public class SiltCrabPotRecipeCategory implements IRecipeCategory<SiltCrabPotFil
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -66,6 +61,7 @@ public class SiltCrabPotRecipeCategory implements IRecipeCategory<SiltCrabPotFil
 
 	@Override
 	public void draw(SiltCrabPotFilterRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		this.arrow.draw(graphics, 31, 47);
 		this.remains.draw(graphics, 1, 51);
 	}

@@ -95,6 +95,11 @@ public class TextContainer {
 			return false;
 		}
 
+		@Override
+		public int hashCode() {
+			return Objects.hash(this.page, this.x, this.y, this.width, this.height, this.properties);
+		}
+
 		public void addProperty(Object obj) {
 			this.properties.add(obj);
 		}
@@ -322,6 +327,11 @@ public class TextContainer {
 				return super.equals(area) && area.text.equals(this.text);
 			}
 			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(super.hashCode(), this.text);
 		}
 	}
 

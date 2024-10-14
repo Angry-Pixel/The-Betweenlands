@@ -50,11 +50,6 @@ public class SteepingPotRecipeCategory implements IRecipeCategory<SteepingPotRec
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -77,6 +72,7 @@ public class SteepingPotRecipeCategory implements IRecipeCategory<SteepingPotRec
 
 	@Override
 	public void draw(SteepingPotRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		this.arrow.draw(graphics, 42, 78);
 	}
 

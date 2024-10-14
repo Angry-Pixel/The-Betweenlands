@@ -50,11 +50,6 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -67,6 +62,7 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
 	@Override
 	public void draw(CompostRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		if (mouseX >= 18 && mouseX <= 39 && mouseY >= 3 && mouseY <= 18) {
 			int minutes = (recipe.time() / 20) / 60;
 			int seconds = (recipe.time() / 20) % 60;

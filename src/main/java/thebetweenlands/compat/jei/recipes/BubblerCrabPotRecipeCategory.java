@@ -48,11 +48,6 @@ public class BubblerCrabPotRecipeCategory implements IRecipeCategory<BubblerCrab
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -66,6 +61,7 @@ public class BubblerCrabPotRecipeCategory implements IRecipeCategory<BubblerCrab
 
 	@Override
 	public void draw(BubblerCrabPotFilterRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		this.arrow.draw(graphics, 31, 47);
 		this.remains.draw(graphics, 1, 51);
 	}

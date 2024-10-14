@@ -42,11 +42,6 @@ public class SmokingRackRecipeCategory implements IRecipeCategory<SmokingRackRec
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -60,6 +55,7 @@ public class SmokingRackRecipeCategory implements IRecipeCategory<SmokingRackRec
 
 	@Override
 	public void draw(SmokingRackRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		String time = String.format("%ds", recipe.smokingTime() / 20);
 		int x = 66;
 		x -= Minecraft.getInstance().font.width(time) / 2;

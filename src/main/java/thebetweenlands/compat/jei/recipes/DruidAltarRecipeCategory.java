@@ -44,11 +44,6 @@ public class DruidAltarRecipeCategory implements IRecipeCategory<DruidAltarRecip
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -64,6 +59,7 @@ public class DruidAltarRecipeCategory implements IRecipeCategory<DruidAltarRecip
 
 	@Override
 	public void draw(DruidAltarRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		if (recipe.getResultItem(Minecraft.getInstance().level.registryAccess()).isEmpty()) {
 			String string = Component.translatable("jei.thebetweenlands.druid_circle_reactivate").getString();
 

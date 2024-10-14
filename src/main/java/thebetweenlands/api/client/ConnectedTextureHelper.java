@@ -289,6 +289,7 @@ public class ConnectedTextureHelper {
 	 * @param canConnectThrough Returns whether this block can connect through the specified block pos;
 	 * @return Connection array
 	 */
+	@SuppressWarnings("fallthrough")
 	public static boolean[] getConnectionArray(BlockAndTintGetter world, BlockPos pos, Direction dir, ConnectionRules connectionRules) {
 		int x = pos.getX();
 		int y = pos.getY();

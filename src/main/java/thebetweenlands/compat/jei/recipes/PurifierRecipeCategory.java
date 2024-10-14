@@ -45,11 +45,6 @@ public class PurifierRecipeCategory implements IRecipeCategory<PurifierRecipe> {
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return this.background;
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return this.icon;
 	}
@@ -63,6 +58,7 @@ public class PurifierRecipeCategory implements IRecipeCategory<PurifierRecipe> {
 
 	@Override
 	public void draw(PurifierRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+		this.background.draw(graphics);
 		int water = Mth.ceil((recipe.requiredWater() / 4000.0F) * 64.0F) + 1;
 		graphics.blitSprite(TANK, 12, 65, 0, 65 - water, 0, (65 - water), 12, water);
 	}

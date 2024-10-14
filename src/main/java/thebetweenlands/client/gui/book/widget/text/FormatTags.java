@@ -10,6 +10,7 @@ import thebetweenlands.client.gui.book.widget.text.TextContainer.TooltipArea;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FormatTags {
 
@@ -205,6 +206,11 @@ public class FormatTags {
 					return super.equals(area) && area.page.equals(this.page);
 				}
 				return false;
+			}
+
+			@Override
+			public int hashCode() {
+				return Objects.hash(super.hashCode(), this.page);
 			}
 		}
 

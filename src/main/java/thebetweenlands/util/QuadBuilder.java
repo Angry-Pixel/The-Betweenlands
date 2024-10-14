@@ -475,6 +475,7 @@ public class QuadBuilder {
 //		}
 //	}
 
+	@SuppressWarnings("fallthrough")
 	private void putVertex(VertexFormat format, CustomQuadVertexConsumer builder, Vec3 quadNormal, Vertex vert) {
 		boolean hasTransform = vert.transformation != null && !vert.transformation.equals(Transformation.identity());
 		builder.beginVertex();
