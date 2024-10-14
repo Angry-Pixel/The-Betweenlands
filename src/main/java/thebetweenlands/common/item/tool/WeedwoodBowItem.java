@@ -49,7 +49,7 @@ public class WeedwoodBowItem extends BowItem {
 	public static float	getArrowType(Player player, ItemStack stack) {
 		return switch (player.getProjectile(stack).getItem()) {
 			case PoisonAnglerToothArrowItem ignored -> 1.0F;
-			case OctineIngotItem ignored -> 2.0F;
+			case OctineArrowItem ignored -> 2.0F;
 			case BasiliskArrowItem ignored -> 3.0F;
 			case ShockArrowItem ignored -> 4.0F;
 			case ChiromawBarbItem ignored -> 5.0F;
