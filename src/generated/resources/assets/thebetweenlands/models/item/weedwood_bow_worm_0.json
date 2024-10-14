@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/bow",
+  "textures": {
+    "layer0": "thebetweenlands:item/weedwood_bow_worm_0"
+  }
+}

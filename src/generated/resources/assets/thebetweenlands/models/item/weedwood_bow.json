@@ -144,6 +144,30 @@
         "thebetweenlands:pulling": 1.0,
         "thebetweenlands:type": 5.0
       }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_worm_0",
+      "predicate": {
+        "thebetweenlands:pull": 0.0,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 6.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_worm_1",
+      "predicate": {
+        "thebetweenlands:pull": 0.65,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 6.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/weedwood_bow_worm_2",
+      "predicate": {
+        "thebetweenlands:pull": 0.9,
+        "thebetweenlands:pulling": 1.0,
+        "thebetweenlands:type": 6.0
+      }
     }
   ],
   "textures": {

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -26,46 +27,39 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class SludgeWormTiny extends SludgeWorm {
+public class TinySludgeWorm extends SludgeWorm {
 	public static final byte EVENT_SQUASHED = 80;
 	public static final byte EVENT_LEAP = 81;
 
 	protected boolean isSquashed = false;
-	
-	public SludgeWormTiny(EntityType<? extends PathfinderMob> type, Level level) {
+
+	public TinySludgeWorm(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
 		this.parts = new SludgeWormMultipart[] {
-				new SludgeWormMultipart(this, "body_part_1", 0.1875F, 0.1875F),
-				new SludgeWormMultipart(this, "body_part_2", 0.1875F, 0.1875F),
-				new SludgeWormMultipart(this, "body_part_3", 0.1875F, 0.1875F),
-				new SludgeWormMultipart(this, "body_part_4", 0.1875F, 0.1875F),
-				new SludgeWormMultipart(this, "body_part_5", 0.1875F, 0.1875F)
-				
-		};
-		xpReward = 1;
-		super.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
-	}
+				new SludgeWormMultipart(this, 0.1875F, 0.1875F),
+				new SludgeWormMultipart(this, 0.1875F, 0.1875F),
+				new SludgeWormMultipart(this, 0.1875F, 0.1875F),
+				new SludgeWormMultipart(this, 0.1875F, 0.1875F),
+				new SludgeWormMultipart(this, 0.1875F, 0.1875F)
 
-/*	
-	public SludgeWormTiny(EntityType<? extends PathfinderMob> type, Level level, boolean doSpawningAnimation) {
-		this(type, level);
+		};
+		this.xpReward = 1;
 	}
-*/	
 
 	@Override
 	protected void registerGoals() {
-		goalSelector.addGoal(0, new LeapAtTargetGoal(this, 0.3F) {
+		this.goalSelector.addGoal(0, new LeapAtTargetGoal(this, 0.3F) {
 			@Override
 			public void start() {
 				super.start();
-				SludgeWormTiny.this.level().broadcastEntityEvent(SludgeWormTiny.this, EVENT_LEAP);
+				TinySludgeWorm.this.level().broadcastEntityEvent(TinySludgeWorm.this, EVENT_LEAP);
 			}
 		});
-		goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
-		goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8D, 1));
-		targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, entity -> entity instanceof Monster == false));
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
+		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8D, 1));
+		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, false, entity -> !(entity instanceof Enemy)));
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -83,9 +77,8 @@ public class SludgeWormTiny extends SludgeWorm {
 
 	@Override
 	public boolean doHurtTarget(Entity entity) {
-		if (hasLineOfSight(entity) && entity.onGround())
-			if (super.doHurtTarget(entity))
-				return true;
+		if (this.hasLineOfSight(entity) && entity.onGround())
+			return super.doHurtTarget(entity);
 		return false;
 	}
 
@@ -93,13 +86,13 @@ public class SludgeWormTiny extends SludgeWorm {
 	public void playerTouch(Player player) {
 		if (!this.level().isClientSide()) {
 			// head
-			if (isPartJumpedOn(player, this.getBoundingBox()))
-				squashWorm(player);
+			if (this.isPartJumpedOn(player, this.getBoundingBox()))
+				this.squashWorm(player);
 			// rest of worm
 			else
 				for (SludgeWormMultipart part : this.parts) {
-					if (isPartJumpedOn(player, part.getBoundingBox())) {
-						squashWorm(player);
+					if (this.isPartJumpedOn(player, part.getBoundingBox())) {
+						this.squashWorm(player);
 					}
 				}
 		}
@@ -115,16 +108,16 @@ public class SludgeWormTiny extends SludgeWorm {
 	public void squashWorm(Player player) {
 		player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
 
-		if (level().getDifficulty() == Difficulty.NORMAL)
+		if (this.level().getDifficulty() == Difficulty.NORMAL)
 			player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(80, 1));
-		else if (level().getDifficulty() == Difficulty.HARD)
+		else if (this.level().getDifficulty() == Difficulty.HARD)
 			player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(160, 1));
 
 		this.isSquashed = true;
-		level().broadcastEntityEvent(this, EVENT_SQUASHED);
-		level().playSound(null, this.xo, this.yo, this.zo, getJumpedOnSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
-		level().playSound(null, this.xo, this.yo, this.zo, getDeathSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
-		this.damageWorm(damageSources().playerAttack(player), this.getHealth());
+		this.level().broadcastEntityEvent(this, EVENT_SQUASHED);
+		this.level().playSound(null, this.xo, this.yo, this.zo, this.getJumpedOnSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
+		this.level().playSound(null, this.xo, this.yo, this.zo, this.getDeathSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
+		this.hurt(this.damageSources().playerAttack(player), this.getHealth());
 
 	}
 
@@ -134,19 +127,19 @@ public class SludgeWormTiny extends SludgeWorm {
 
     @Override
     protected void tickDeath() {
-		if (this.isSquashed)
+		if (this.isSquashed())
 			this.deathTime = 19;
 		super.tickDeath();
 	}
-	
+
     @Override
-    public void handleEntityEvent(byte id) {	
+    public void handleEntityEvent(byte id) {
 		if(id == EVENT_SQUASHED) {
 			for(int i = 0; i < 100; i++) {
-				RandomSource rnd = level().random;
-				float rx = rnd.nextFloat() * 1.0F - 0.5F;
-				float ry = rnd.nextFloat() * 1.0F - 0.5F;
-				float rz = rnd.nextFloat() * 1.0F - 0.5F;
+				RandomSource rnd = this.level().getRandom();
+				float rx = rnd.nextFloat() - 0.5F;
+				float ry = rnd.nextFloat() - 0.5F;
+				float rz = rnd.nextFloat() - 0.5F;
 				Vec3 vec = new Vec3(rx, ry, rz);
 				vec = vec.normalize();
 			//	BLParticles.SPLASH_TAR.spawn(level(), this.xo + rx + 0.1F, this.yo + ry + 0.1F, this.zo + rz + 0.1F, ParticleArgs.get().withMotion(vec.x * 0.4F, vec.y * 0.4F, vec.z * 0.4F)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);

@@ -1005,7 +1005,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.SWAMP_HAG, "Swamp Hag");
 		this.addEntityAndEgg(EntityRegistry.WIGHT, "Wight");
 		this.addEntityAndEgg(EntityRegistry.SLUDGE_WORM, "Small Sludge Worm");
-		this.addEntityAndEgg(EntityRegistry.SLUDGE_WORM_TINY, "Tiny Sludge Worm");
+		this.addEntityAndEgg(EntityRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
 		this.addEntityAndEgg(EntityRegistry.STALKER, "Stalker");
 		this.addEntityAndEgg(EntityRegistry.PEAT_MUMMY, "Peat Mummy");
 		this.addEntityAndEgg(EntityRegistry.DREADFUL_PEAT_MUMMY, "Dreadful Peat Mummy");
@@ -1030,7 +1030,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.SLUDGE_BALL, "Sludge Ball");
 		this.addEntityType(EntityRegistry.BIPED_CRYPT_CRAWLER, "Crypt Crawler");
 		this.addEntityType(EntityRegistry.CHIEF_CRYPT_CRAWLER, "Crypt Crawler");
-		this.addEntityType(EntityRegistry.SLUDGE_WORM_TINY_HELPER, "Tiny Sludge Worm Helper");
+		this.addEntityType(EntityRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");

@@ -53,6 +53,7 @@ public class WeedwoodBowItem extends BowItem {
 			case BasiliskArrowItem ignored -> 3.0F;
 			case ShockArrowItem ignored -> 4.0F;
 			case ChiromawBarbItem ignored -> 5.0F;
+			case SludgeWormArrowItem ignored -> 6.0F;
 			default -> 0.0F;
 		};
 	}

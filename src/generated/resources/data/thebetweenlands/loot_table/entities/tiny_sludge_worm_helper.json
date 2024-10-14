@@ -1,0 +1,4 @@
+{
+  "type": "minecraft:entity",
+  "random_sequence": "thebetweenlands:entities/tiny_sludge_worm_helper"
+}

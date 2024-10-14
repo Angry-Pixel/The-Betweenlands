@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.entity.monster.SludgeWormTinyHelper;
+import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -30,7 +30,7 @@ public class SludgeWormArrow extends AbstractArrow {
 	protected void doPostHurtEffects(LivingEntity target) {
 		super.doPostHurtEffects(target);
 		if (!this.level().isClientSide()) {
-			SludgeWormTinyHelper worm = EntityRegistry.SLUDGE_WORM_TINY_HELPER.get().create(this.level());
+			TinySludgeWormHelper worm = EntityRegistry.TINY_SLUDGE_WORM_HELPER.get().create(this.level());
 			worm.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
 			worm.setTarget(target);
 			if (this.getOwner() instanceof Player player) {

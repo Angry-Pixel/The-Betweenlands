@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import thebetweenlands.common.entity.monster.PeatMummy;
-import thebetweenlands.common.entity.monster.SludgeWormTiny;
+import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.SwampHag;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -57,7 +57,7 @@ public class ThrowWormGoal extends Goal {
 				double targetY = this.target.getBoundingBox().minY + (double) (this.target.getBbHeight() / 2.0F) - (this.hag.getY() + (double) (this.hag.getBbHeight() / 2.0F));
 				double targetZ = this.target.getZ() - this.hag.getZ();
 				double targetDistance = Math.sqrt(targetX * targetX + targetZ * targetZ);
-				SludgeWormTiny worm = EntityRegistry.SLUDGE_WORM_TINY.get().create(hag.level());
+				TinySludgeWorm worm = EntityRegistry.TINY_SLUDGE_WORM.get().create(hag.level());
 				worm.setPos(this.hag.getX(), this.hag.getY() + (double) this.hag.getEyeHeight() - 0.10000000149011612D, this.hag.getZ());
 				this.throwWorm(worm, targetX, targetY + targetDistance * 0.2D, targetZ, 1.8F, 0F);
 				this.hag.level().addFreshEntity(worm);
@@ -80,7 +80,7 @@ public class ThrowWormGoal extends Goal {
 		this.target = null;
 	}
 
-	public void throwWorm(SludgeWormTiny entity, double x, double y, double z, float velocity, float inaccuracy) {
+	public void throwWorm(TinySludgeWorm entity, double x, double y, double z, float velocity, float inaccuracy) {
 		double f = Mth.sqrt((float) (x * x + y * y + z * z));
 		x /= f;
 		y /= f;
