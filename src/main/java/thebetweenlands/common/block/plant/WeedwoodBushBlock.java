@@ -1,7 +1,12 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,6 +14,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -27,12 +34,11 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.api.entity.WeedwoodBushUncollidableEntity;
 import thebetweenlands.common.block.terrain.NestBlock;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.Map;
 
 public class WeedwoodBushBlock extends Block implements FarmablePlant {
 
@@ -56,6 +62,12 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false).setValue(DOWN, false));
 	}
 
+//	@Override
+//	public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+////		return mob instanceof WeedwoodBushUncollidableEntity ? PathType.OPEN : super.getBlockPathType(state, level, pos, mob);
+//		return mob instanceof WeedwoodBushUncollidableEntity == false ? super.getBlockPathType(state, level, pos, mob) : PathType.OPEN;
+//	}
+	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.getStateWithConnections(context.getLevel(), context.getClickedPos(), this.defaultBlockState());
