@@ -562,15 +562,15 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(BlockRegistry.ROOT, false);
 		this.simpleBlock(BlockRegistry.GIANT_ROOT.get(), this.models().cubeAll("giant_root", this.modLoc("block/root_bottom")));
 		this.simpleBlockItem(BlockRegistry.GIANT_ROOT);
-		ModelFile log1 = this.models().withExistingParent("hollow_log_1", this.modLoc("block/cube_inner")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
+		ModelFile log1 = this.models().withExistingParent("hollow_log_1", this.modLoc("block/cube_inner_culled")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
 			.texture("down", this.modLoc("block/hollow_log_side")).texture("up", this.modLoc("block/hollow_log_side_hole"))
 			.texture("north", this.modLoc("block/hollow_log_end")).texture("south", this.modLoc("block/hollow_log_end"))
 			.texture("west", this.modLoc("block/hollow_log_side_moss")).texture("east", this.modLoc("block/hollow_log_side_moss"));
-		ModelFile log2 = this.models().withExistingParent("hollow_log_2", this.modLoc("block/cube_inner")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
+		ModelFile log2 = this.models().withExistingParent("hollow_log_2", this.modLoc("block/cube_inner_culled")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
 			.texture("down", this.modLoc("block/hollow_log_side_hole")).texture("up", this.modLoc("block/hollow_log_side"))
 			.texture("north", this.modLoc("block/hollow_log_end")).texture("south", this.modLoc("block/hollow_log_end"))
 			.texture("west", this.modLoc("block/hollow_log_side_moss")).texture("east", this.modLoc("block/hollow_log_side_moss"));
-		ModelFile log3 = this.models().withExistingParent("hollow_log_3", this.modLoc("block/cube_inner")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
+		ModelFile log3 = this.models().withExistingParent("hollow_log_3", this.modLoc("block/cube_inner_culled")).renderType("cutout").texture("particle", this.modLoc("block/hollow_log_side"))
 			.texture("down", this.modLoc("block/hollow_log_side")).texture("up", this.modLoc("block/hollow_log_side"))
 			.texture("north", this.modLoc("block/hollow_log_end")).texture("south", this.modLoc("block/hollow_log_end"))
 			.texture("west", this.modLoc("block/hollow_log_side_moss")).texture("east", this.modLoc("block/hollow_log_side_moss"));

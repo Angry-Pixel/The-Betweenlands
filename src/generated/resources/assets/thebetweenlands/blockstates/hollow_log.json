@@ -1,6 +1,6 @@
 {
   "variants": {
-    "facing=east": [
+    "facing=east,negative_face=false,positive_face=false": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 90
@@ -14,7 +14,49 @@
         "y": 90
       }
     ],
-    "facing=north": [
+    "facing=east,negative_face=false,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=false": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=north,negative_face=false,positive_face=false": [
       {
         "model": "thebetweenlands:block/hollow_log_1"
       },
@@ -25,7 +67,40 @@
         "model": "thebetweenlands:block/hollow_log_3"
       }
     ],
-    "facing=south": [
+    "facing=north,negative_face=false,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=false": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=south,negative_face=false,positive_face=false": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 180
@@ -39,7 +114,91 @@
         "y": 180
       }
     ],
-    "facing=west": [
+    "facing=south,negative_face=false,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=false": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=west,negative_face=false,positive_face=false": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=false,positive_face=true": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=false": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=true": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 270

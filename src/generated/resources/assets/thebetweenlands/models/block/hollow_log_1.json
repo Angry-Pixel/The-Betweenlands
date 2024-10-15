@@ -1,5 +1,5 @@
 {
-  "parent": "thebetweenlands:block/cube_inner",
+  "parent": "thebetweenlands:block/cube_inner_culled",
   "render_type": "minecraft:cutout",
   "textures": {
     "down": "thebetweenlands:block/hollow_log_side",
