@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-15T22:28:59.5376738	Item Models: thebetweenlands
+// 1.21.1	2024-10-16T09:42:43.3007508	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -258,6 +258,12 @@ b3d571d7d45fd881166f72cf28d14406694113a5 assets/thebetweenlands/models/item/inan
 1804017058d5e2152ad233f6553e6014d377520e assets/thebetweenlands/models/item/inanimate_tarminion.json
 873598eebe30890f94351b9b7c4a72db0309895a assets/thebetweenlands/models/item/item_scroll.json
 72882522f0f8d49f6f540d7d9bc4f45d2105548b assets/thebetweenlands/models/item/jam_donut.json
+77e635f7138864a4e4a9177b7a32fa4b09cd52e3 assets/thebetweenlands/models/item/jellyfish.json
+db78cfa2f01a3b207dd84ab30b767b29b05c67c8 assets/thebetweenlands/models/item/jellyfish_2.json
+77ff835cdd92d189dcb6b183146556ae4a40807e assets/thebetweenlands/models/item/jellyfish_3.json
+b2b0f698caba76d88468e077a1fdbcd67bf729b8 assets/thebetweenlands/models/item/jellyfish_4.json
+49d1014aacff999564a06e0cbafc961273e36ac9 assets/thebetweenlands/models/item/jellyfish_5.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/jellyfish_spawn_egg.json
 42da799eea89b880f32d25cda4e359397e7646b6 assets/thebetweenlands/models/item/kraken_calamari.json
 ef07c9ead87d3cb6e9f560784d2c29f47786caa5 assets/thebetweenlands/models/item/kraken_tentacle.json
 b05945461f2ce9480dc6dbec84821e8d32b4d335 assets/thebetweenlands/models/item/lake_broth.json

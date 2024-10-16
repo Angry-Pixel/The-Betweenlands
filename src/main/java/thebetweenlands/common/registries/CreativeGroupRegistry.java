@@ -788,7 +788,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM);
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM_HELPER);
 			output.accept(ItemRegistry.ANADIA);
-			//jellyfish
+			output.accept(ItemRegistry.JELLYFISH);
 			output.accept(ItemRegistry.SILT_CRAB);
 			output.accept(ItemRegistry.BUBBLER_CRAB);
 			//urchin

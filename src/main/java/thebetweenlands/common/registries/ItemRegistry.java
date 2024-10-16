@@ -207,7 +207,7 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem<TinySludgeWorm>> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem<>(new Item.Properties().stacksTo(1), 4.0D, EntityRegistry.TINY_SLUDGE_WORM.get(), null));
 	public static final DeferredItem<MobItem<TinySludgeWormHelper>> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem<>(new Item.Properties().stacksTo(1), 30.0D, EntityRegistry.TINY_SLUDGE_WORM_HELPER.get(), null));
 	public static final DeferredItem<MobItem<Anadia>> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));
-	//jellyfish
+	public static final DeferredItem<MobItem<Jellyfish>> JELLYFISH = ITEMS.register("jellyfish", () -> new MobItem<>(new Item.Properties().stacksTo(1), 5.0D, EntityRegistry.JELLYFISH.get(), null));
 	public static final DeferredItem<MobItem<BubblerCrab>> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.BUBBLER_CRAB.get(), null));
 	public static final DeferredItem<MobItem<SiltCrab>> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.SILT_CRAB.get(), null));
 	//freshwater urchin

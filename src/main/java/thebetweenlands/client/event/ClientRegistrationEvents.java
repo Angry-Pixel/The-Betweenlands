@@ -164,6 +164,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
+import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.WeedwoodBowItem;
@@ -291,6 +292,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.EMBERLING_SHAMAN.get(), EmberlingShamanRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.DRAGONFLY.get(), DragonflyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FIREFLY.get(), FireflyRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.JELLYFISH.get(), JellyfishRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -369,6 +371,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.EMBERLING_SHAMAN, EmberlingShamanModel::create);
 		event.registerLayerDefinition(BLModelLayers.DRAGONFLY, DragonflyModel::create);
 		event.registerLayerDefinition(BLModelLayers.FIREFLY, FireflyModel::create);
+		event.registerLayerDefinition(BLModelLayers.JELLYFISH, JellyfishModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
@@ -481,10 +484,10 @@ public class ClientRegistrationEvents {
 			if (entity == null) {
 				return 0.0F;
 			} else {
-				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+				return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
 			}
 		});
-		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 
 		ItemProperties.register(ItemRegistry.BIOPATHIC_TRIGGERSTONE.get(), TheBetweenlands.prefix("effect"), (stack, level, entity, seed) -> {
 			var upgrade = stack.getOrDefault(DataComponentRegistry.SELECTED_UPGRADE, AmphibiousArmorUpgradeRegistry.NONE.get());
@@ -513,22 +516,28 @@ public class ClientRegistrationEvents {
 			if (entity == null) {
 				return 0.0F;
 			} else {
-				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+				return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
 			}
 		});
-		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed)  -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.WEEDWOOD_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed) -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
 
 		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pull"), (stack, level, entity, seed) -> {
 			if (entity == null) {
 				return 0.0F;
 			} else {
-				return entity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+				return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
 			}
 		});
-		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed)  -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed)  -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.PREDATOR_BOW.get(), TheBetweenlands.prefix("type"), (stack, level, entity, seed) -> entity instanceof Player player ? WeedwoodBowItem.getArrowType(player, stack) : 0.0F);
 
+		ItemProperties.register(ItemRegistry.JELLYFISH.get(), TheBetweenlands.prefix("color"), (stack, level, entity, idk) -> {
+			if (stack.getItem() instanceof MobItem<?> mob && !mob.getEntityData(stack).isEmpty()) {
+				return mob.getEntityData(stack).getByte("color");
+			}
+			return 0;
+		});
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -776,9 +785,9 @@ public class ClientRegistrationEvents {
 		}, ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.ORANGE_ASPECT_VIAL);
 
 		event.register((stack, tintIndex) -> {
-			if (tintIndex != 0) return 0xFFFFFFFF;
-			return stack.getItem() instanceof BLItemFrameItem frame ? frame.getColor() | 0xFF000000 : 0xFFFFFFFF;
-		}, ItemRegistry.DULL_LAVENDER_ITEM_FRAME, ItemRegistry.MAROON_ITEM_FRAME, ItemRegistry.SHADOW_GREEN_ITEM_FRAME, ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME,
+				if (tintIndex != 0) return 0xFFFFFFFF;
+				return stack.getItem() instanceof BLItemFrameItem frame ? frame.getColor() | 0xFF000000 : 0xFFFFFFFF;
+			}, ItemRegistry.DULL_LAVENDER_ITEM_FRAME, ItemRegistry.MAROON_ITEM_FRAME, ItemRegistry.SHADOW_GREEN_ITEM_FRAME, ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME,
 			ItemRegistry.SAFFRON_ITEM_FRAME, ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME, ItemRegistry.VIVID_TANGERINE_ITEM_FRAME, ItemRegistry.CHAMPAGNE_ITEM_FRAME,
 			ItemRegistry.RAISIN_BLACK_ITEM_FRAME, ItemRegistry.SUSHI_GREEN_ITEM_FRAME, ItemRegistry.ELM_CYAN_ITEM_FRAME, ItemRegistry.CADMIUM_GREEN_ITEM_FRAME,
 			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME, ItemRegistry.BROWN_RUST_ITEM_FRAME, ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME, ItemRegistry.PEWTER_GREY_ITEM_FRAME);
@@ -789,9 +798,9 @@ public class ClientRegistrationEvents {
 		}, ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
 
 		event.register((stack, tint) -> {
-				var fluid = ((BucketItem)stack.getItem()).content;
+				var fluid = ((BucketItem) stack.getItem()).content;
 				return tint == 1 ? IClientFluidTypeExtensions.of(fluid).getTintColor(new FluidStack(fluid, FluidType.BUCKET_VOLUME)) : -1;
-		}, ItemRegistry.DULL_LAVENDER_DYE_BUCKET, ItemRegistry.MAROON_DYE_BUCKET, ItemRegistry.SHADOW_GREEN_DYE_BUCKET, ItemRegistry.CAMELOT_MAGENTA_DYE_BUCKET,
+			}, ItemRegistry.DULL_LAVENDER_DYE_BUCKET, ItemRegistry.MAROON_DYE_BUCKET, ItemRegistry.SHADOW_GREEN_DYE_BUCKET, ItemRegistry.CAMELOT_MAGENTA_DYE_BUCKET,
 			ItemRegistry.SAFFRON_DYE_BUCKET, ItemRegistry.CARIBBEAN_GREEN_DYE_BUCKET, ItemRegistry.VIVID_TANGERINE_DYE_BUCKET, ItemRegistry.CHAMPAGNE_DYE_BUCKET,
 			ItemRegistry.RAISIN_BLACK_DYE_BUCKET, ItemRegistry.SUSHI_GREEN_DYE_BUCKET, ItemRegistry.ELM_CYAN_DYE_BUCKET, ItemRegistry.CADMIUM_GREEN_DYE_BUCKET,
 			ItemRegistry.LAVENDER_BLUE_DYE_BUCKET, ItemRegistry.BROWN_RUST_DYE_BUCKET, ItemRegistry.MIDNIGHT_PURPLE_DYE_BUCKET, ItemRegistry.PEWTER_GREY_DYE_BUCKET,

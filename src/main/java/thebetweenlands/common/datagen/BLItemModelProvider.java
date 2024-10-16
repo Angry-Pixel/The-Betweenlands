@@ -235,6 +235,11 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.OLM);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
+		this.otherTextureItem(ItemRegistry.JELLYFISH, this.modLoc("jellyfish_1"))
+			.override().predicate(TheBetweenlands.prefix("color"), 1).model(this.basicItem(this.modLoc("jellyfish_2"))).end()
+			.override().predicate(TheBetweenlands.prefix("color"), 2).model(this.basicItem(this.modLoc("jellyfish_3"))).end()
+			.override().predicate(TheBetweenlands.prefix("color"), 3).model(this.basicItem(this.modLoc("jellyfish_4"))).end()
+			.override().predicate(TheBetweenlands.prefix("color"), 4).model(this.basicItem(this.modLoc("jellyfish_5"))).end();
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);
 		this.basicItem(ItemRegistry.SILT_CRAB);
 		//critters

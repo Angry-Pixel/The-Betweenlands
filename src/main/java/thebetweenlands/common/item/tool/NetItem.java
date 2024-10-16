@@ -45,7 +45,7 @@ public class NetItem extends Item {
 //		register(EntityFreshwaterUrchin.class, ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
 //		register(EntityCaveFish.class, ItemRegistry.CRITTER, (p, e) -> true);
 		register(Olm.class, ItemRegistry.OLM, (p, e) -> true);
-//		register(EntityJellyfish.class, ItemRegistry.JELLYFISH, (p, e) -> true);
+		register(Jellyfish.class, ItemRegistry.JELLYFISH, (p, e) -> true);
 	}
 
 	public NetItem(Properties properties) {

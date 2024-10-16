@@ -313,6 +313,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.noLoot(EntityRegistry.FIREFLY);
+		this.noLoot(EntityRegistry.JELLYFISH);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

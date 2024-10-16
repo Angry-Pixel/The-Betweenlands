@@ -77,7 +77,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingCoracle>> GREEBLING_CORACLE = registerWithEgg("greebling_coracle", EntityType.Builder.of(GreeblingCoracle::new, MobCategory.AMBIENT).sized(1.0F, 1.0F).clientTrackingRange(16), 0x7CB2AA, 0xC3726C, GreeblingCoracle::registerAttributes);
 	//greebling volarpad floater
 	//infestation
-	//jellyfish
+	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
 	//large sludge worm
 	//leech
 	//lurker
@@ -86,7 +86,6 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Olm>> OLM = registerWithEgg("olm", EntityType.Builder.of(Olm::new, MobCategory.MISC).sized(0.95F, 0.25F).eyeHeight(0.125F), 0xE8D8B8, 0xE79B7B, Olm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<PeatMummy>> PEAT_MUMMY = registerWithEgg("peat_mummy", EntityType.Builder.of(PeatMummy::new, MobCategory.MONSTER).sized(1.0F, 1.2F).passengerAttachments(0.35F).clientTrackingRange(10).canSpawnFarFromPlayer(), 0x524D3A, 0x69463F, PeatMummy::registerAttributes);
 	//primordial malevolence
-	//puffin
 	//pyrad
 	//rock snot
 	//root sprite

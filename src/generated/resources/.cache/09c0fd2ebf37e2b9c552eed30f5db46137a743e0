@@ -1,8 +1,8 @@
-// 1.21.1	2024-10-15T15:34:51.4662251	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2024-10-16T09:50:18.4884267	Tags for minecraft:entity_type mod id thebetweenlands
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/c/tags/entity_type/bosses.json
-af094874472b3c1f0c197f6d8f45d33406774e9b data/minecraft/tags/entity_type/aquatic.json
+4f486d112e776a9ffe41e049e5390a56125cbd9a data/minecraft/tags/entity_type/aquatic.json
 0084f2bd1c5387196454f0ebd96935a107155ebe data/minecraft/tags/entity_type/arrows.json
-16d894eaa38c44de74b0717c1b11f476eebb3ea6 data/minecraft/tags/entity_type/can_breathe_under_water.json
+d7f2da30af87ba38f4e046e704bf217c6dd53311 data/minecraft/tags/entity_type/can_breathe_under_water.json
 d70590e08caf538b7865ac783c57ad59627e39cf data/minecraft/tags/entity_type/fall_damage_immune.json
 b4bf27e55ad67dcfdcac87ccda57df2038658651 data/minecraft/tags/entity_type/freeze_hurts_extra_types.json
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/minecraft/tags/entity_type/freeze_immune_entity_types.json
