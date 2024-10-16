@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-13T21:30:09.6645071	Item Models: thebetweenlands
+// 1.21.1	2024-10-15T15:32:29.462337	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -154,6 +154,8 @@ f86859b45f380441a56b5263419b0843e4cb0ba8 assets/thebetweenlands/models/item/edge
 cef39ea745081ebae4bf14016bb714a8ffa6b580 assets/thebetweenlands/models/item/elm_cyan_dye.json
 7b0310c88fadedbd0499d78b1f8388c8aaa218ed assets/thebetweenlands/models/item/elm_cyan_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/elm_cyan_item_frame.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_shaman_spawn_egg.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_spawn_egg.json
 f94da2497630fae1a4f23ab7b23fb8fb33cf9e79 assets/thebetweenlands/models/item/fabricated_scroll.json
 0f8fce75845dea8ecd855e954a21ff70c41c4554 assets/thebetweenlands/models/item/filled_amate_map.json
 e16a860b9ea258486f284d5e166d070922adb4c9 assets/thebetweenlands/models/item/fishing_float_and_hook.json

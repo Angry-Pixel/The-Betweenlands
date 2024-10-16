@@ -16,13 +16,11 @@ import thebetweenlands.common.entity.boss.Barrishee;
 public class BarrisheeRenderer extends MobRenderer<Barrishee, BarrisheeModel> {
 
 	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/barrishee.png");
-	//FIXME for some reason, when this is set to RenderType.eyes, the whole model appears fullbright. I have no idea why
-	private static final RenderType EYES = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/barrishee_face.png"));
 	private int fudge = 0;
 
 	public BarrisheeRenderer(EntityRendererProvider.Context context) {
 		super(context, new BarrisheeModel(context.bakeLayer(BLModelLayers.BARRISHEE)), 1.0F);
-		this.addLayer(new GenericEyesLayer<>(this, EYES));
+		this.addLayer(new GenericEyesLayer<>(this, TheBetweenlands.prefix("textures/entity/barrishee_face.png")));
 	}
 
 	@Override

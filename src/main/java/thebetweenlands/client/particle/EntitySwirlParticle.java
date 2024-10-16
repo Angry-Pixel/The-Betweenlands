@@ -2,6 +2,7 @@ package thebetweenlands.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
@@ -15,18 +16,14 @@ public class EntitySwirlParticle extends SwirlParticle {
 		super(options, level, x, y, z, maxAge, scale, progress);
 		this.entityTarget = target;
 		this.targetOffset = options.targetOffset;
-		this.offset = new Vec3(0, -1.6D, 0);
 
 		this.updateTarget();
-		this.updatePosition();
-		this.xo = this.x;
-		this.yo = this.y;
-		this.zo = this.z;
 	}
 
 	public void updateTarget() {
 		this.targetMotion = new Vec3(this.entityTarget.getX() - this.entityTarget.xo, this.entityTarget.getY() - this.entityTarget.yo, this.entityTarget.getZ() - this.entityTarget.zo);
 		this.target = new Vec3(this.entityTarget.getX() + this.targetOffset.x(), this.entityTarget.getY() + this.entityTarget.getEyeHeight() / 2.0D + this.targetOffset.y(), this.entityTarget.getZ() + this.targetOffset.z());
+		this.setChanged();
 	}
 
 	@Override
@@ -37,5 +34,26 @@ public class EntitySwirlParticle extends SwirlParticle {
 
 		this.updateTarget();
 		super.tick();
+	}
+
+	public static final class EmberSwirlFactory extends ParticleFactory<EmberSwirlFactory, EntitySwirlParticleOptions> {
+
+		private final SpriteSet spriteSet;
+
+		public EmberSwirlFactory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
+		@Override
+		public EntitySwirlParticle createParticle(EntitySwirlParticleOptions options, ImmutableParticleArgs args) {
+			var particle = new EntitySwirlParticle(options, args.level, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
+			particle.pickSprite(this.spriteSet);
+			return particle;
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(400, 0.0F, null);
+		}
 	}
 }

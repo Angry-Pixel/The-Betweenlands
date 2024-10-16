@@ -111,18 +111,7 @@ import thebetweenlands.client.model.item.OctineShieldModel;
 import thebetweenlands.client.model.item.SyrmoriteShieldModel;
 import thebetweenlands.client.model.item.ValoniteShieldModel;
 import thebetweenlands.client.model.item.WeedwoodShieldModel;
-import thebetweenlands.client.particle.AnimatorParticle;
-import thebetweenlands.client.particle.BLBubbleParticle;
-import thebetweenlands.client.particle.BLRainParticle;
-import thebetweenlands.client.particle.BugParticle;
-import thebetweenlands.client.particle.FancyBubbleParticle;
-import thebetweenlands.client.particle.FancyDripParticle;
-import thebetweenlands.client.particle.FishVortexParticle;
-import thebetweenlands.client.particle.SonicScreamParticle;
-import thebetweenlands.client.particle.SpiritButterflyParticle;
-import thebetweenlands.client.particle.SwarmParticle;
-import thebetweenlands.client.particle.UrchinSpikeParticle;
-import thebetweenlands.client.particle.WeedwoodLeafParticle;
+import thebetweenlands.client.particle.*;
 import thebetweenlands.client.renderer.BLItemRenderer;
 import thebetweenlands.client.renderer.entity.ChiefCryptCrawlerRenderer;
 import thebetweenlands.client.renderer.block.AlcoveRenderer;
@@ -298,6 +287,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), BipedCryptCrawlerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), ChiefCryptCrawlerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.OLM.get(), OlmRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.EMBERLING.get(), EmberlingRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.EMBERLING_SHAMAN.get(), EmberlingShamanRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -372,6 +363,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.BIPED_CRYPT_CRAWLER, BipedCryptCrawlerModel::create);
 		event.registerLayerDefinition(BLModelLayers.CRYPT_CRAWLER, CryptCrawlerModel::create);
 		event.registerLayerDefinition(BLModelLayers.OLM, OlmModel::create);
+		event.registerLayerDefinition(BLModelLayers.EMBERLING, EmberlingModel::create);
+		event.registerLayerDefinition(BLModelLayers.EMBERLING_SHAMAN, EmberlingShamanModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
@@ -690,6 +683,8 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), BLBubbleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SONIC_SCREAM.get(), SonicScreamParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.WEEDWOOD_LEAF.get(), WeedwoodLeafParticle.Factory::new);
+		event.registerSprite(ParticleRegistry.SLEEPING.get(), (type, level, x, y, z, xSpeed, ySpeed, zSpeed) -> new SleepingParticle(level, x, y, z, xSpeed, ySpeed, zSpeed));
+		event.registerSpriteSet(ParticleRegistry.EMBER_SWIRL.get(), EntitySwirlParticle.EmberSwirlFactory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

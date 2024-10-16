@@ -19,18 +19,19 @@ public class SwirlParticle extends TextureSheetParticle {
 
 	protected Vec3 offset;
 	protected Vec3 target;
-	protected Vec3 targetMotion = Vec3.ZERO;
+	protected Vec3 targetMotion;
 
-	protected boolean rotate3D = false;
+	protected boolean rotate3D;
 
-	private static final float VELOCITY_OFFSET_MULTIPLIER = 4.0F;
+	protected static final float VELOCITY_OFFSET_MULTIPLIER = 4.0F;
 
 	protected double prevRotSinX;
 	protected double prevRotCosZ;
 	protected double rotSinX;
 	protected double rotCosZ;
 
-	protected double rotationSpeed = 4.0D;
+	protected double rotationSpeed;
+	private boolean firstUpdate = true;
 
 	public SwirlParticle(SwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress) {
 		super(level, x, y, z, 0, 0, 0);
@@ -43,24 +44,30 @@ public class SwirlParticle extends TextureSheetParticle {
 		this.quadSize = scale * 0.1F;
 		this.offset = options.offset;
 		this.target = options.target;
-		if (this.target != Vec3.ZERO) {
-			this.updatePosition();
-			this.xo = this.x;
-			this.yo = this.y;
-			this.zo = this.z;
-		}
-
 		this.targetMotion = options.targetMotion;
-		if (this.targetMotion != Vec3.ZERO) {
-			double tmx = this.targetMotion.x();
-			double tmy = this.targetMotion.y();
-			double my = tmy * VELOCITY_OFFSET_MULTIPLIER;
-			double tmz = this.targetMotion.z();
-
-			this.drag = new Vec3(Mth.clamp(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1), Mth.clamp(my, -0.3D, 1), Mth.clamp(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1));
-		}
 		this.rotationSpeed = options.rotationSpeed;
 		this.rotate3D = options.rotate3D;
+		this.setChanged();
+	}
+
+	protected void setChanged() {
+		if (this.firstUpdate) {
+			if (!this.targetMotion.equals(Vec3.ZERO)) {
+				double tmx = this.targetMotion.x();
+				double tmy = this.targetMotion.y();
+				double my = tmy * VELOCITY_OFFSET_MULTIPLIER;
+				double tmz = this.targetMotion.z();
+
+				this.drag = new Vec3(Mth.clamp(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1), Mth.clamp(my, -0.3D, 1), Mth.clamp(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1));
+			}
+
+			if (!this.target.equals(Vec3.ZERO)) {
+				this.updatePosition();
+				this.xo = this.x;
+				this.yo = this.y;
+				this.zo = this.z;
+			}
+		}
 	}
 
 	@Override
@@ -80,16 +87,16 @@ public class SwirlParticle extends TextureSheetParticle {
 				float outx = irx * this.quadSize;
 				float outz = irz * this.quadSize;
 
-				Vector3f[] vertices = new Vector3f[] {
+				Vector3f[] vertices = new Vector3f[]{
 					new Vector3f(-sidex * h + (outx * v - sidex * (1 - h)), -this.quadSize * h, -sidez * h + (outz * v - sidez * (1 - h))),
 					new Vector3f(-sidex * h + (-outx * v - sidex * (1 - h)), this.quadSize * h, -sidez * h + (-outz * v - sidez * (1 - h))),
 					new Vector3f(sidex * h + (-outx * v + sidex * (1 - h)), this.quadSize * h, sidez * h + (-outz * v + sidez * (1 - h))),
 					new Vector3f(sidex * h + (outx * v + sidex * (1 - h)), -this.quadSize * h, sidez * h + (outz * v + sidez * (1 - h)))
 				};
 
-				float rx = (float)(Mth.lerp(partialTicks, this.xo, this.x) - renderInfo.getPosition().x());
-				float ry = (float)(Mth.lerp(partialTicks, this.yo, this.y) - renderInfo.getPosition().y());
-				float rz = (float)(Mth.lerp(partialTicks, this.zo, this.z) - renderInfo.getPosition().z());
+				float rx = (float) (Mth.lerp(partialTicks, this.xo, this.x) - renderInfo.getPosition().x());
+				float ry = (float) (Mth.lerp(partialTicks, this.yo, this.y) - renderInfo.getPosition().y());
+				float rz = (float) (Mth.lerp(partialTicks, this.zo, this.z) - renderInfo.getPosition().z());
 				float minU = this.getU0();
 				float maxU = this.getU1();
 				float minV = this.getV0();
@@ -129,6 +136,8 @@ public class SwirlParticle extends TextureSheetParticle {
 
 		this.updateDrag();
 		this.updatePosition();
+
+		this.firstUpdate = false;
 	}
 
 	protected void updateDrag() {
@@ -173,7 +182,7 @@ public class SwirlParticle extends TextureSheetParticle {
 
 	protected void updatePosition() {
 		double sx = this.target.x() + this.offset.x() - this.drag.x();
-		double sy = this.target.x() + this.offset.y() - this.drag.y();
+		double sy = this.target.y() + this.offset.y() - this.drag.y();
 		double sz = this.target.z() + this.offset.z() - this.drag.z();
 
 		double dx = this.target.x() - sx;
@@ -186,7 +195,7 @@ public class SwirlParticle extends TextureSheetParticle {
 		this.rotCosZ = Math.cos(this.startRotation + this.progress * this.rotationSpeed * Math.PI * 2.0F);
 
 		this.x = sx + dx * (1 - Math.pow(1 - this.progress, 3)) + this.rotSinX * this.progress * this.endRadius;
-//		this.y = sy + dy * this.progress;
+		this.y = sy + dy * this.progress;
 		this.z = sz + dz * (1 - Math.pow(1 - this.progress, 3)) + this.rotCosZ * this.progress * this.endRadius;
 	}
 

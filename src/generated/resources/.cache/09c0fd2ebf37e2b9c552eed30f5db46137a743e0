@@ -1,9 +1,10 @@
-// 1.21.1	2024-10-08T16:42:24.0074593	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2024-10-15T15:34:51.4662251	Tags for minecraft:entity_type mod id thebetweenlands
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/c/tags/entity_type/bosses.json
 af094874472b3c1f0c197f6d8f45d33406774e9b data/minecraft/tags/entity_type/aquatic.json
 0084f2bd1c5387196454f0ebd96935a107155ebe data/minecraft/tags/entity_type/arrows.json
-98b0be6f10ed21556001dae8dd00935860759ba3 data/minecraft/tags/entity_type/can_breathe_under_water.json
+16d894eaa38c44de74b0717c1b11f476eebb3ea6 data/minecraft/tags/entity_type/can_breathe_under_water.json
 d70590e08caf538b7865ac783c57ad59627e39cf data/minecraft/tags/entity_type/fall_damage_immune.json
+b4bf27e55ad67dcfdcac87ccda57df2038658651 data/minecraft/tags/entity_type/freeze_hurts_extra_types.json
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/minecraft/tags/entity_type/freeze_immune_entity_types.json
 23cd27b2d3ccdf50a7c8e8693c905338fafdb51d data/minecraft/tags/entity_type/undead.json
 14cce96b27fee784266db8912b804acfb02fe7b8 data/thebetweenlands/tags/entity_type/hag_hacker_instakills.json

@@ -14,12 +14,11 @@ import thebetweenlands.common.entity.monster.SwampHag;
 public class SwampHagRenderer<T extends SwampHag> extends MobRenderer<T, SwampHagModel<T>> {
 
 	private static final ResourceLocation SWAMP_HAG_TEXTURE = TheBetweenlands.prefix("textures/entity/swamp_hag.png");
-	private static final RenderType SWAMP_HAG_EYES = RenderType.eyes(TheBetweenlands.prefix("textures/entity/swamp_hag_eyes.png"));
 	public static final ModelLayerLocation SWAMP_HAG_MODEL_LAYER = new ModelLayerLocation(TheBetweenlands.prefix("main"), "swamp_hag");
 
 	public SwampHagRenderer(EntityRendererProvider.Context context) {
 		super(context, new SwampHagModel<>(context.bakeLayer(SWAMP_HAG_MODEL_LAYER)), 0.8F);
-		this.addLayer(new GenericEyesLayer<>(this, SWAMP_HAG_EYES));
+		this.addLayer(new GenericEyesLayer<>(this, TheBetweenlands.prefix("textures/entity/swamp_hag_eyes.png")));
 	}
 
 	@Override

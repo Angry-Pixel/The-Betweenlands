@@ -41,9 +41,11 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_BUBBLE = PARTICLES.register("water_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SONIC_SCREAM = PARTICLES.register("sonic_scream", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WEEDWOOD_LEAF = PARTICLES.register("weedwood_leaf", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SLEEPING = PARTICLES.register("sleeping", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> EMBER_SWIRL = register("ember_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 
-	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimitter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
-		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimitter) {
+	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
+		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {
 			@Override
 			public MapCodec<T> codec() {
 				return codecGetter.apply(this);

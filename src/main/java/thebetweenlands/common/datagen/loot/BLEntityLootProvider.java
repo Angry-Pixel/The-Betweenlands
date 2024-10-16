@@ -290,6 +290,22 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 
 		this.add(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
 		this.add(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
+		this.add(EntityRegistry.EMBERLING.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.OCTINE_NUGGET)
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1, 3)))))
+			.withPool(LootPool.lootPool()
+				.setRolls(UniformGenerator.between(1, 2))
+				.add(LootItem.lootTableItem(ItemRegistry.UNDYING_EMBERS)
+					.when(LootItemKilledByPlayerCondition.killedByPlayer())
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+		this.add(EntityRegistry.EMBERLING_SHAMAN.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.setRolls(UniformGenerator.between(1, 2))
+				.add(LootItem.lootTableItem(ItemRegistry.UNDYING_EMBERS)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
