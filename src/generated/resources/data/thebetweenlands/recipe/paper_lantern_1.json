@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "f": {
+      "item": "thebetweenlands:firefly"
+    },
+    "p": [
+      {
+        "item": "thebetweenlands:connected_amate_paper_pane"
+      },
+      {
+        "item": "thebetweenlands:rounded_amate_paper_pane"
+      },
+      {
+        "item": "thebetweenlands:squared_amate_paper_pane"
+      }
+    ],
+    "s": {
+      "item": "thebetweenlands:weedwood_slab"
+    },
+    "w": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "sss",
+    "pfp",
+    "www"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:paper_lantern_1"
+  }
+}

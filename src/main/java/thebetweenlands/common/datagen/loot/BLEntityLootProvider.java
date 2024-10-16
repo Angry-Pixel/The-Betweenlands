@@ -306,6 +306,13 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.UNDYING_EMBERS)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+		this.add(EntityRegistry.DRAGONFLY.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.setRolls(UniformGenerator.between(1, 2))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+		this.noLoot(EntityRegistry.FIREFLY);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

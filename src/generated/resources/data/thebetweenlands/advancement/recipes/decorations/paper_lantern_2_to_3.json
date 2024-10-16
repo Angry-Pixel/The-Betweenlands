@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_lantern": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:paper_lantern_2"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:paper_lantern_2_to_3"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_lantern"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:paper_lantern_2_to_3"
+    ]
+  }
+}

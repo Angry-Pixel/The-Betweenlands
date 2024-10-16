@@ -64,11 +64,11 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiefCryptCrawler>> CHIEF_CRYPT_CRAWLER = registerWithAttributes("chief_crypt_crawler", EntityType.Builder.of(ChiefCryptCrawler::new, MobCategory.MONSTER).sized(0.98F, 1.9F), ChiefCryptCrawler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CryptCrawler>> CRYPT_CRAWLER = registerWithAttributes("crypt_crawler", EntityType.Builder.of(CryptCrawler::new, MobCategory.MONSTER).sized(0.95F, 1.0F), CryptCrawler::registerAttributes);
 	//dark druid
-	//dragonfly
+	public static final DeferredHolder<EntityType<?>, EntityType<Dragonfly>> DRAGONFLY = registerWithEgg("dragonfly", EntityType.Builder.of(Dragonfly::new, MobCategory.AMBIENT).sized(0.9F, 0.5F), 0x356721, 0xC0FFEE, Dragonfly::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<DreadfulPeatMummy>> DREADFUL_PEAT_MUMMY = registerWithEgg("dreadful_peat_mummy", EntityType.Builder.of(DreadfulPeatMummy::new, MobCategory.MONSTER).sized(1.1F, 2.0F).clientTrackingRange(10).fireImmune(), 0x000000, 0x591E08, DreadfulPeatMummy::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Emberling>> EMBERLING = registerWithEgg("emberling", EntityType.Builder.of(Emberling::new, MobCategory.MONSTER).sized(0.9F, 0.85F).clientTrackingRange(10).fireImmune(), 0xA43B2E, 0x391211, Emberling::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<EmberlingShaman>> EMBERLING_SHAMAN = registerWithEgg("emberling_shaman", EntityType.Builder.of(EmberlingShaman::new, MobCategory.MONSTER).sized(0.9F, 1.0F).clientTrackingRange(10).fireImmune(), 0xA43B2E, 0x391211, EmberlingShaman::registerAttributes);
-	//firefly
+	public static final DeferredHolder<EntityType<?>, EntityType<Firefly>> FIREFLY = registerWithEgg("firefly", EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.6F, 0.6F), 0xDCFF51, 0x402A21, Firefly::registerAttributes);
 	//freshwater urchin
 	//frog
 	public static final DeferredHolder<EntityType<?>, EntityType<Gecko>> GECKO = registerWithEgg("gecko", EntityType.Builder.of(Gecko::new, MobCategory.CREATURE).sized(0.75F, 0.35F),  0xFF8000, 0x22E0B1, Gecko::registerAttributes);

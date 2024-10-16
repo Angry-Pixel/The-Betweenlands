@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:paper_lantern_1"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:paper_lantern_2"
+  }
+}

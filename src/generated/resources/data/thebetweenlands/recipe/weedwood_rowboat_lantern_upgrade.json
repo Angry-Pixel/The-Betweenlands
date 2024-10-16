@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "f": {
+      "item": "thebetweenlands:firefly"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_slab"
+    },
+    "w": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "sss",
+    "rfr",
+    "www"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:weedwood_rowboat_lantern_upgrade"
+  }
+}

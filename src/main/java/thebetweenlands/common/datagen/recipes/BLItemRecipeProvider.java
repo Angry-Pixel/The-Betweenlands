@@ -258,7 +258,11 @@ public class BLItemRecipeProvider {
 		ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ItemRegistry.DRAETON_CRAFTING_UPGRADE).pattern("wcw").pattern("sos")
 			.define('w', BlockRegistry.WEEDWOOD_SLAB).define('c', BlockRegistry.WEEDWOOD_CRAFTING_TABLE).define('s', ItemRegistry.WEEDWOOD_STICK).define('o', ItemRegistry.OCTINE_INGOT)
 			.unlockedBy("has_crafting_table", has(BlockRegistry.WEEDWOOD_CRAFTING_TABLE)).unlockedBy("has_draeton", has(ItemRegistry.DRAETON)).save(output);
-		//TODO lantern upgrade
+		ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE)
+			.pattern("sss").pattern("rfr").pattern("www")
+			.define('s', BlockRegistry.WEEDWOOD_SLAB).define('r', ItemRegistry.REED_ROPE)
+			.define('f', ItemRegistry.FIREFLY).define('w', BlockRegistry.WEEDWOOD_PLANKS)
+			.unlockedBy("has_boat", has(ItemRegistry.WEEDWOOD_ROWBOAT)).unlockedBy("has_firefly", has(ItemRegistry.FIREFLY)).save(output);
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.AMATE_NAME_TAG).requires(ItemRegistry.AMATE_PAPER).requires(ItemRegistry.REED_ROPE).unlockedBy("has_paper", has(ItemRegistry.AMATE_PAPER)).unlockedBy("has_rope", has(ItemRegistry.REED_ROPE)).save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.BIOPATHIC_LINKSTONE).pattern(" b ").pattern("bhb").pattern(" c ")
 			.define('b', ItemRegistry.ANADIA_BONES).define('h', ItemRegistry.WIGHT_HEART).define('c', BlockRegistry.CRAGROCK)

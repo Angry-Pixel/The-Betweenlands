@@ -289,6 +289,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.OLM.get(), OlmRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.EMBERLING.get(), EmberlingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.EMBERLING_SHAMAN.get(), EmberlingShamanRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.DRAGONFLY.get(), DragonflyRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FIREFLY.get(), FireflyRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -365,6 +367,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.OLM, OlmModel::create);
 		event.registerLayerDefinition(BLModelLayers.EMBERLING, EmberlingModel::create);
 		event.registerLayerDefinition(BLModelLayers.EMBERLING_SHAMAN, EmberlingShamanModel::create);
+		event.registerLayerDefinition(BLModelLayers.DRAGONFLY, DragonflyModel::create);
+		event.registerLayerDefinition(BLModelLayers.FIREFLY, FireflyModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);

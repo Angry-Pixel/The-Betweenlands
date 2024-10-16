@@ -54,7 +54,7 @@ public class MusicHandler {
 	private static final RandomSource RANDOM = RandomSource.create();
 	private static int timeUntilMusic = 100;
 	@Nullable
-	private static  SoundInstance currentSound;
+	private static SoundInstance currentSound;
 	@Nullable
 	private static Sound previousSound;
 	private static final IntSet playingEntityMusicLayers = new IntOpenHashSet();

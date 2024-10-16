@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_amate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "thebetweenlands:connected_amate_paper_pane",
+              "thebetweenlands:rounded_amate_paper_pane",
+              "thebetweenlands:squared_amate_paper_pane"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_firefly": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:firefly"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:paper_lantern_1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_amate",
+      "has_firefly"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:paper_lantern_1"
+    ]
+  }
+}

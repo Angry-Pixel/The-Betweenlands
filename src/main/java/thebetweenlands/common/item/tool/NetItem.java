@@ -10,9 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.common.entity.creature.Gecko;
-import thebetweenlands.common.entity.creature.MireSnail;
-import thebetweenlands.common.entity.creature.Olm;
+import thebetweenlands.common.entity.creature.*;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
@@ -32,9 +30,9 @@ public class NetItem extends Item {
 	}
 
 	static {
-//		register(EntityFirefly.class, ItemRegistry.CRITTER, (p, e) -> true);
+		register(Firefly.class, ItemRegistry.FIREFLY, (p, e) -> true);
 		register(Gecko.class, ItemRegistry.GECKO, (p, e) -> true);
-//		register(EntityDragonFly.class, ItemRegistry.CRITTER, (p, e) -> true);
+		register(Dragonfly.class, ItemRegistry.DRAGONFLY, (p, e) -> true);
 //		register(EntityTinyWormEggSac.class, ItemRegistry.SLUDGE_WORM_EGG_SAC, (p, e) -> true);
 //		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG, (p, e) -> !e.getHasHatched() && !e.getElectricBoogaloo());
 //		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());

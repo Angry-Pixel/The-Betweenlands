@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import thebetweenlands.api.entity.WeedwoodBushUncollidableEntity;
 import thebetweenlands.common.entity.BLEntity;
-import thebetweenlands.common.entity.ai.goals.HideFromRainGoal;
+import thebetweenlands.common.entity.ai.goals.GeckoHideFromRainGoal;
 import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -60,7 +60,7 @@ public class Gecko extends Animal implements BLEntity, WeedwoodBushUncollidableE
 		//TODO tempt tag
 		this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, stack -> stack.is(ItemRegistry.SAP_SPIT), true));
 		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, PLAYER_MIN_DISTANCE, 0.65D, 1.0D));
-		this.goalSelector.addGoal(4, new HideFromRainGoal(this, 0.65D));
+		this.goalSelector.addGoal(4, new GeckoHideFromRainGoal(this, 0.65D));
 		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.6D));
 		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "f": {
+      "item": "thebetweenlands:firefly"
+    },
+    "p": {
+      "item": "thebetweenlands:silt_glass_pane"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_slab"
+    },
+    "w": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "pattern": [
+    "sss",
+    "pfp",
+    "www"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:silt_glass_lantern"
+  }
+}

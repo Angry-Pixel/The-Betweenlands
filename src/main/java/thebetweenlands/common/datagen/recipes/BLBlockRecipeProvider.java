@@ -364,7 +364,23 @@ public class BLBlockRecipeProvider {
 			.define('r', ItemRegistry.REED_ROPE).define('a', ItemRegistry.ANCIENT_REMNANT).define('s', ItemRegistry.ORANGE_DENTROTHYST_SHARD)
 			.unlockedBy("has_remnant", has(ItemRegistry.ANCIENT_REMNANT)).unlockedBy("has_shard", has(ItemRegistry.ORANGE_DENTROTHYST_SHARD)).save(output);
 
-		//TODO lanterns (need firefly item)
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, BlockRegistry.PAPER_LANTERN_1)
+			.pattern("sss").pattern("pfp").pattern("www")
+			.define('s', BlockRegistry.WEEDWOOD_SLAB).define('p', Ingredient.of(BlockRegistry.CONNECTED_AMATE_PAPER_PANE, BlockRegistry.ROUNDED_AMATE_PAPER_PANE, BlockRegistry.SQUARED_AMATE_PAPER_PANE))
+			.define('f', ItemRegistry.FIREFLY).define('w', BlockRegistry.WEEDWOOD_PLANKS)
+			.unlockedBy("has_amate", inventoryTrigger(ItemPredicate.Builder.item().of(BlockRegistry.CONNECTED_AMATE_PAPER_PANE, BlockRegistry.ROUNDED_AMATE_PAPER_PANE, BlockRegistry.SQUARED_AMATE_PAPER_PANE))).unlockedBy("has_firefly", has(ItemRegistry.FIREFLY)).save(output);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, BlockRegistry.PAPER_LANTERN_2)
+				.requires(BlockRegistry.PAPER_LANTERN_1).unlockedBy("has_lantern", has(BlockRegistry.PAPER_LANTERN_1)).save(output, TheBetweenlands.prefix("paper_lantern_1_to_2"));
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, BlockRegistry.PAPER_LANTERN_3)
+			.requires(BlockRegistry.PAPER_LANTERN_2).unlockedBy("has_lantern", has(BlockRegistry.PAPER_LANTERN_2)).save(output, TheBetweenlands.prefix("paper_lantern_2_to_3"));
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, BlockRegistry.PAPER_LANTERN_1)
+			.requires(BlockRegistry.PAPER_LANTERN_3).unlockedBy("has_lantern", has(BlockRegistry.PAPER_LANTERN_3)).save(output, TheBetweenlands.prefix("paper_lantern_3_to_1"));
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, BlockRegistry.SILT_GLASS_LANTERN)
+			.pattern("sss").pattern("pfp").pattern("www")
+			.define('s', BlockRegistry.WEEDWOOD_SLAB).define('p', BlockRegistry.SILT_GLASS_PANE)
+			.define('f', ItemRegistry.FIREFLY).define('w', BlockRegistry.WEEDWOOD_PLANKS)
+			.unlockedBy("has_glass", has(BlockRegistry.SILT_GLASS_PANE)).unlockedBy("has_firefly", has(ItemRegistry.FIREFLY)).save(output);
+
 		//TODO fishing tackle box
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlockRegistry.SMOKING_RACK)

@@ -17,7 +17,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 import java.util.*;
 
-public class HideFromRainGoal extends Goal {
+public class GeckoHideFromRainGoal extends Goal {
 
 	private final Comparator<BlockPos> closest = (a, b) -> {
 		double aLength = a.distToCenterSqr(0, 0, 0);
@@ -33,7 +33,7 @@ public class HideFromRainGoal extends Goal {
 	@Nullable
 	private BlockPos target;
 
-	public HideFromRainGoal(Gecko gecko, double speed) {
+	public GeckoHideFromRainGoal(Gecko gecko, double speed) {
 		this.gecko = gecko;
 		this.speed = speed;
 	}

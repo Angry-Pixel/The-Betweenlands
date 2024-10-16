@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-15T15:32:29.462337	Item Models: thebetweenlands
+// 1.21.1	2024-10-15T22:28:59.5376738	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -139,6 +139,8 @@ d99b4f49d98d7da9d367fdd1242dcb2cace737df assets/thebetweenlands/models/item/crim
 45c96dee68d4d11c3e69e934b73adc867da51eac assets/thebetweenlands/models/item/dj_wights_mixtape.json
 3bedb9bcd36cebba498b1709402b460d8b7cff4b assets/thebetweenlands/models/item/draeton_balloon.json
 1715b2aa5572318cb911a9afd7aeba2ec19f0482 assets/thebetweenlands/models/item/draeton_burner.json
+a0c24102d452c19e48ba914ae7d23b85fd6d86d0 assets/thebetweenlands/models/item/dragonfly.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/dragonfly_spawn_egg.json
 c2105ca9da61a5cc03479d27c521d74415c4bbbd assets/thebetweenlands/models/item/dragonfly_wing.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/dreadful_peat_mummy_spawn_egg.json
 00c86c8d3216f3a65fff243980202a3b58916f33 assets/thebetweenlands/models/item/dried_swamp_reed.json
@@ -158,6 +160,8 @@ cef39ea745081ebae4bf14016bb714a8ffa6b580 assets/thebetweenlands/models/item/elm_
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_spawn_egg.json
 f94da2497630fae1a4f23ab7b23fb8fb33cf9e79 assets/thebetweenlands/models/item/fabricated_scroll.json
 0f8fce75845dea8ecd855e954a21ff70c41c4554 assets/thebetweenlands/models/item/filled_amate_map.json
+d04657e81e3097966eef11e7e10a54fa7776ebb0 assets/thebetweenlands/models/item/firefly.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/firefly_spawn_egg.json
 e16a860b9ea258486f284d5e166d070922adb4c9 assets/thebetweenlands/models/item/fishing_float_and_hook.json
 c9b3e6ff10ebc79a86c2054108fdbfaf37a0b262 assets/thebetweenlands/models/item/fish_bait.json
 52f2382b5108b4debbe2b53fc7cdc518a0edc437 assets/thebetweenlands/models/item/fish_oil_bucket.json

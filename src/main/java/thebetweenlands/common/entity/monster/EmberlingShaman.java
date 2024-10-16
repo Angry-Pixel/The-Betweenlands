@@ -22,6 +22,7 @@ import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.GenericPartEntity;
 import thebetweenlands.common.entity.ai.goals.ShamanFireColumnGoal;
 import thebetweenlands.common.entity.ai.goals.ShamanHoverSpinAttackGoal;
@@ -30,7 +31,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
 
-public class EmberlingShaman extends Monster {
+public class EmberlingShaman extends Monster implements BLEntity {
 
 	public final PartEntity<?> tailPart;
 	private static final EntityDataAccessor<Boolean> IS_CASTING_SPELL = SynchedEntityData.defineId(EmberlingShaman.class, EntityDataSerializers.BOOLEAN);
