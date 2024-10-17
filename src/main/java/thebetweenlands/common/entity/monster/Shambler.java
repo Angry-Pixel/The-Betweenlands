@@ -259,7 +259,7 @@ public class Shambler extends Monster implements BLEntity {
 	@SuppressWarnings("rawtypes")
 	@Override
     public void tick() {
-		
+		super.tick();
 		
 		Vec3 vector = getViewVector(1F);
 		
@@ -286,9 +286,15 @@ public class Shambler extends Monster implements BLEntity {
 		}
 		
 		checkCollision();
-		super.tick();
+		
     }
-	
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return null;
+    }
+
 	@Override
 	public void positionRider(Entity entity, MoveFunction moveFunction) {
 		super.positionRider(entity, moveFunction);
