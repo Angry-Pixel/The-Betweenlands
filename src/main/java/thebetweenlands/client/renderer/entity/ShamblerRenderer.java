@@ -17,7 +17,7 @@ import thebetweenlands.common.entity.GenericPartEntity;
 import thebetweenlands.common.entity.monster.Shambler;
 
 public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel <Shambler>> {
-	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("thebetweenlands:textures/entity/shambler.png");
+	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/shambler.png");
 
 	public ShamblerRenderer(EntityRendererProvider.Context context) {
 		super(context, new ShamblerModel<>(context.bakeLayer(BLModelLayers.SHAMBLER)), 0.5F);
