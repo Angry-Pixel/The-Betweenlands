@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-16T09:42:43.3007508	Item Models: thebetweenlands
+// 1.21.1	2024-10-16T16:38:33.6553495	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -292,6 +292,7 @@ e6023a3c6e4797fd6937acf4b3f011cd97286112 assets/thebetweenlands/models/item/lurk
 45527a6a9c112804e90186b5f11dc5226078e731 assets/thebetweenlands/models/item/lurker_skin_helmet.json
 5902f9f1b319ed98939f926fed2e2f81fdc3789c assets/thebetweenlands/models/item/lurker_skin_leggings.json
 a31cc9488990a29624298494e8670340f33d5db7 assets/thebetweenlands/models/item/lurker_skin_patch.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/lurker_spawn_egg.json
 3c9ff3532ebf43f74d442d91aa1da2503efc4757 assets/thebetweenlands/models/item/magic_item_magnet.json
 c847b569cf46cdfb393be2e8930974d4f7b84155 assets/thebetweenlands/models/item/maroon_dye.json
 582bf3acd13701dbfebeb0a5b7424a898e290e5f assets/thebetweenlands/models/item/maroon_dye_bucket.json

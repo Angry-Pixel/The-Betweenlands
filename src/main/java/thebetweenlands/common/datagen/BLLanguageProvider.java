@@ -1020,6 +1020,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.DRAGONFLY, "Dragonfly");
 		this.addEntityAndEgg(EntityRegistry.FIREFLY, "Firefly");
 		this.addEntityAndEgg(EntityRegistry.JELLYFISH, "Jellyfish");
+		this.addEntityAndEgg(EntityRegistry.LURKER, "Lurker");
 		this.addEntityAndEgg(EntityRegistry.SHAMBLER, "Shambler");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
