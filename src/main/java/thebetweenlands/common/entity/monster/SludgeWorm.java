@@ -51,7 +51,16 @@ public class SludgeWorm extends Monster implements BLEntity {
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
-			new SludgeWormMultipart(this, 0.3125F, 0.3125F)};
+			new SludgeWormMultipart(this, 0.3125F, 0.3125F)
+			};
+		setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
+	}
+	
+	@Override
+	public void setId(int id) {
+		super.setId(id);
+		for (int i = 0; i < this.parts.length; i++)
+			this.parts[i].setId(id + i + 1);
 	}
 
 	@Override
