@@ -42,10 +42,10 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
 		int colour = isTranslucentToPlayer ? 654311423 : -1;
 
 		if (entity.getTongueLength() > 0) {
-			double ex = entity.xOld + (entity.xo - entity.xOld) * (double) partialTicks;
-			double ey = entity.yOld + (entity.yo - entity.yOld) * (double) partialTicks;
-			double ez = entity.zOld + (entity.zo - entity.zOld) * (double) partialTicks;
-			RenderType renderType = getRenderType(entity, isGlowing, isGlowing, isGlowing);
+			double ex = entity.xOld + (entity.getX() - entity.xOld) * (double) partialTicks;
+			double ey = entity.yOld + (entity.getY() - entity.yOld) * (double) partialTicks;
+			double ez = entity.zOld + (entity.getZ() - entity.zOld) * (double) partialTicks;
+			RenderType renderType = getRenderType(entity, isVisible, isTranslucentToPlayer, isGlowing);
 			if (renderType != null) {
 				for (int i = 0; i < entity.tongue_array.length; i++) {
 					renderTonguePart(entity, entity.tongue_array[i], ex, ey, ez, partialTicks, stack, buffer.getBuffer(renderType), packedLight, overlay, colour);
@@ -59,11 +59,10 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
 		return TEXTURE;
 	}
 
-	@SuppressWarnings({ "rawtypes"})
 	private void renderTonguePart(Shambler entity, ShamblerTongueMultipart part, double rx, double ry, double rz, float partialTicks, PoseStack stack, VertexConsumer consumer, int packedLight, int overlay, int colour) {
-		double x = part.xOld + (part.xo - part.xOld) * (double)partialTicks - rx;
-        double y = part.yOld + (part.yo - part.yOld) * (double)partialTicks - ry;
-        double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
+		double x = part.xOld + (part.getX() - part.xOld) * (double)partialTicks - rx;
+        double y = part.yOld + (part.getY() - part.yOld) * (double)partialTicks - ry;
+        double z = part.zOld + (part.getZ() - part.zOld) * (double)partialTicks - rz;
         float yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
         float pitch = entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks;
 		stack.pushPose();

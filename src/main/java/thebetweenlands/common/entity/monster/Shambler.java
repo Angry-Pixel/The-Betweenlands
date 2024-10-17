@@ -56,11 +56,9 @@ public class Shambler extends Monster implements BLEntity {
 
 	public Shambler(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
-		//this.setSize(0.95F, 1.25F);
 		tongue_array = new ShamblerTongueMultipart[16];
-		for(int i = 0; i < tongue_array.length - 1; i++) {
+		for(int i = 0; i < tongue_array.length - 1; i++) 
 			tongue_array[i] = new ShamblerTongueMultipart(this, 0.125F, 0.125F);
-		}
 		tongue_array[tongue_array.length - 1] = tongue_end;
 		setId(ENTITY_COUNTER.getAndAdd(this.tongue_array.length + 1) + 1);
 	}
@@ -194,7 +192,7 @@ public class Shambler extends Monster implements BLEntity {
 		if (!level().isClientSide()) {
 			if (getTarget() != null && hasLineOfSight(getTarget())) {
 				getLookControl().setLookAt(getTarget(), 10.0F, 20.0F);
-				double distance = distanceToTarget(getTarget().xo, getTarget().getBoundingBox().minY, getTarget().zo);
+				double distance = distanceToTarget(getTarget().getX(), getTarget().getBoundingBox().minY, getTarget().getZ());
 
 				if (distance > 5.0D) {
 					if(jawsAreOpen()) {
@@ -276,11 +274,11 @@ public class Shambler extends Monster implements BLEntity {
 		for(ShamblerTongueMultipart part : tongue_array) {
 			part.yRotO = part.getYRot();
 			part.xRotO = part.getXRot();
-			part.xOld = part.xo;
-			part.yOld = part.yo;
-			part.zOld = part.zo;
+			part.xOld = part.getX();
+			part.yOld = part.getY();
+			part.zOld = part.getZ();
 			
-			part.setPos(xo + offSetX + vector.x * getTongueLength() * tongueLength, yo + this.getEyeHeight() - 0.32 + offsetY + vector.y * getTongueLength() * tongueLength, zo + offSetZ + vector.z * getTongueLength() * tongueLength);
+			part.setPos(getX() + offSetX + (vector.x * getTongueLength() * tongueLength), getY() + getEyeHeight() - 0.32 + offsetY + (vector.y * getTongueLength() * tongueLength), getZ() + offSetZ + (vector.z * getTongueLength() * tongueLength));
 			part.setYRot(getYRot());
 			part.setXRot(getXRot());
 		
@@ -300,7 +298,7 @@ public class Shambler extends Monster implements BLEntity {
 			double a = Math.toRadians(getYRot());
 			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
 			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
-			entity.setPos(tongue_end.xo + offSetX, tongue_end.yo - entity.getBbHeight() * 0.3D, tongue_end.zo + offSetZ);
+			entity.setPos(tongue_end.getX() + offSetX, tongue_end.getY() - entity.getBbHeight() * 0.3D, tongue_end.getZ() + offSetZ);
 			if (entity.isCrouching())
 				entity.setPose(Pose.STANDING);
 		}
@@ -351,7 +349,7 @@ public class Shambler extends Monster implements BLEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
 		for (ShamblerTongueMultipart part : tongue_array) {
-			part.setPos(this.xo, this.yo, this.zo);
+			part.setPos(this.getX(), this.getY(), this.getZ());
 			part.setYRot(this.getYRot());
 		}
 		return data;

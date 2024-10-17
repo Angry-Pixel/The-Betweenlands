@@ -309,33 +309,6 @@ public class ShamblerModel extends HierarchicalModel<Shambler> {
 				CubeListBuilder.create().texOffs(96, 98).addBox(-1.5F, 0.0F, -2.0F, 3F, 2F, 2F),
 				PartPose.offset(0.0F, -2.0F, -2.0F));
 
-		
-  /*     
-        tail2 = new ModelRenderer(this, 0, 61);
-        tail2.setRotationPoint(0.015F, 0.0F, 3.0F);
-        tail2.addBox(-2.0F, -4.0F, 0.0F, 4, 4, 5, 0.0F);
-        setRotateAngle(tail2, 0.5009094953223726F, 0.0F, 0.0F);
-       
-               tail3 = new ModelRenderer(this, 0, 71);
-        tail3.setRotationPoint(0.0F, 0.0F, 5.0F);
-        tail3.addBox(-1.5F, -3.0F, 0.0F, 3, 3, 5, 0.0F);
-        setRotateAngle(tail3, 0.7740535232594852F, 0.0F, 0.0F);
-        
-        tail4 = new ModelRenderer(this, 0, 80);
-        tail4.setRotationPoint(0.015F, 0.0F, 5.0F);
-        tail4.addBox(-1.5F, -3.0F, 0.0F, 3, 3, 4, 0.0F);
-        setRotateAngle(tail4, 0.8651597102135892F, 0.0F, 0.0F);
-       
-        tail5 = new ModelRenderer(this, 0, 88);
-        tail5.setRotationPoint(0.015F, 0.0F, 4.0F);
-        tail5.addBox(-1.5F, -3.0F, 0.0F, 3, 3, 4, 0.0F);
-        setRotateAngle(tail5, 0.8651597102135892F, 0.0F, 0.0F);
-        
-        tail6 = new ModelRenderer(this, 0, 96);
-        tail6.setRotationPoint(0.015F, 0.0F, 4.0F);
-        tail6.addBox(-1.5F, -3.0F, 0.0F, 3, 3, 3, 0.0F);
-        setRotateAngle(tail6, 0.8196066167365371F, 0.0F, 0.0F);
-*/
 		return LayerDefinition.create(definition, 128, 128);
     }
 
@@ -345,17 +318,13 @@ public class ShamblerModel extends HierarchicalModel<Shambler> {
 	}
 
 	public void renderTonguePart(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour) {
-		stack.pushPose();
 		stack.mulPose(Axis.YP.rotationDegrees(180F));
-		tongue_part.render(stack, consumer, colour, colour, colour);
-		stack.popPose();
+		tongue_part.render(stack, consumer, light, overlay, colour);
 	}
 
 	public void renderTongueEnd(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour) {
-		stack.pushPose();
 		stack.mulPose(Axis.YP.rotationDegrees(180F));
-		tongue_end.render(stack, consumer, colour, colour, colour);
-		stack.popPose();
+		tongue_end.render(stack, consumer, light, overlay, colour);
 	}
 
 	@Override
