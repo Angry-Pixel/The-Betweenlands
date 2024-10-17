@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-17T14:54:15.5413051	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2024-10-17T15:19:32.3446194	Tags for minecraft:entity_type mod id thebetweenlands
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/c/tags/entity_type/bosses.json
 4bc66f6b3530e5c51f70e0f61dc94ff437371439 data/minecraft/tags/entity_type/aquatic.json
 0084f2bd1c5387196454f0ebd96935a107155ebe data/minecraft/tags/entity_type/arrows.json
@@ -7,6 +7,7 @@ f8956e58f7a4e61c786462f174d3654d5841f25d data/minecraft/tags/entity_type/can_bre
 b4bf27e55ad67dcfdcac87ccda57df2038658651 data/minecraft/tags/entity_type/freeze_hurts_extra_types.json
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/minecraft/tags/entity_type/freeze_immune_entity_types.json
 23cd27b2d3ccdf50a7c8e8693c905338fafdb51d data/minecraft/tags/entity_type/undead.json
+dd437ef398b76d6a9452e7f01f41b5eaba76f0ae data/thebetweenlands/tags/entity_type/critter_cruncher_instakills.json
 14cce96b27fee784266db8912b804acfb02fe7b8 data/thebetweenlands/tags/entity_type/hag_hacker_instakills.json
 58b4a5a804ab53c1c5a60a5177f73eb453dd8c57 data/thebetweenlands/tags/entity_type/ignores_weedwood_bushes.json
 2cfa151ea9a92efe076b837822ea3758e566bf72 data/thebetweenlands/tags/entity_type/wights_bane_instakills.json

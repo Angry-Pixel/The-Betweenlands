@@ -32,6 +32,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(IGNORES_WEEDWOOD_BUSHES).add(EntityType.PLAYER, EntityRegistry.GECKO.get());
 		this.tag(WIGHTS_BANE_INSTAKILLS).add(EntityRegistry.WIGHT.get());
 		this.tag(HAG_HACKER_INSTAKILLS).add(EntityRegistry.SWAMP_HAG.get());
+		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.MIRE_SNAIL.get());
 		this.tag(Tags.EntityTypes.BOSSES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get());
 		this.tag(EntityTypeTags.ARROWS).add(EntityRegistry.ANGLER_TOOTH_ARROW.get(), EntityRegistry.BASILISK_ARROW.get(), EntityRegistry.OCTINE_ARROW.get(), EntityRegistry.POISON_ANGLER_TOOTH_ARROW.get(), EntityRegistry.SHOCK_ARROW.get(), EntityRegistry.SLUDGE_WORM_ARROW.get());
 		this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get());
