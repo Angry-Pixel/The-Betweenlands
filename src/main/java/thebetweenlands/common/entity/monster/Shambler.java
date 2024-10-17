@@ -268,7 +268,7 @@ public class Shambler extends Monster implements BLEntity {
 	@Override
 	public void positionRider(Entity entity, MoveFunction moveFunction) {
 		super.positionRider(entity, moveFunction);
-		//PlayerUtil.resetFloating(entity);
+		//PlayerUtils.resetFloating(entity); //TODO - I think this should set levitationStartTime to 0 in ServerPlayer now
 		
 		if (entity instanceof LivingEntity) {
 			double a = Math.toRadians(getYRot());
