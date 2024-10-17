@@ -210,7 +210,7 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem<Jellyfish>> JELLYFISH = ITEMS.register("jellyfish", () -> new MobItem<>(new Item.Properties().stacksTo(1), 5.0D, EntityRegistry.JELLYFISH.get(), null));
 	public static final DeferredItem<MobItem<BubblerCrab>> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.BUBBLER_CRAB.get(), null));
 	public static final DeferredItem<MobItem<SiltCrab>> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.SILT_CRAB.get(), null));
-	//freshwater urchin
+	public static final DeferredItem<MobItem<FreshwaterUrchin>> FRESHWATER_URCHIN = ITEMS.register("freshwater_urchin", () -> new FreshwaterUrchinMobItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CHIROMAW_EGG = ITEMS.register("chiromaw_egg", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));

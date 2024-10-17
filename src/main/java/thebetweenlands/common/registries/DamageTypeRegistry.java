@@ -10,6 +10,7 @@ public class DamageTypeRegistry {
 
 	public static final ResourceKey<DamageType> FLAME_JET = create("flame_jet");
 	public static final ResourceKey<DamageType> SWARM = create("swarm");
+	public static final ResourceKey<DamageType> URCHIN_SPIKE = create("urchin_spike");
 	public static final ResourceKey<DamageType> VOODOO = create("voodoo");
 
 	public static ResourceKey<DamageType> create(String name) {
@@ -19,6 +20,7 @@ public class DamageTypeRegistry {
 	public static void bootstrap(BootstrapContext<DamageType> context) {
 		context.register(FLAME_JET, new DamageType("thebetweenlands.flame_jet", 0.1F));
 		context.register(SWARM, new DamageType("thebetweenlands.swarm", 0.1F));
+		context.register(URCHIN_SPIKE, new DamageType("thebetweenlands.urchin_spike", 0.1F));
 		context.register(VOODOO, new DamageType("thebetweenlands.voodoo", 0.1F));
 	}
 }

@@ -233,6 +233,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.GECKO);
 		this.basicItem(ItemRegistry.DRAGONFLY);
 		this.basicItem(ItemRegistry.OLM);
+		//cave fish
+		this.basicItem(ItemRegistry.SLUDGE_WORM_EGG_SAC);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
 		this.otherTextureItem(ItemRegistry.JELLYFISH, this.modLoc("jellyfish_1"))
@@ -242,7 +244,11 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.override().predicate(TheBetweenlands.prefix("color"), 4).model(this.basicItem(this.modLoc("jellyfish_5"))).end();
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);
 		this.basicItem(ItemRegistry.SILT_CRAB);
-		//critters
+		this.basicItem(ItemRegistry.FRESHWATER_URCHIN);
+		//chiromaw egg
+		//lightning chiromaw egg
+		//chiromaw
+		//lightning chiromaw
 		this.basicItem(ItemRegistry.SHIMMER_STONE);
 		//tarminion
 		this.basicItem(ItemRegistry.SLUDGE_BALL);

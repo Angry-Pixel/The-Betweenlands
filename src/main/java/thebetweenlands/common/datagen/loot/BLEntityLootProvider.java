@@ -294,6 +294,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 
 		this.add(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
 		this.add(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
+		this.noLoot(EntityRegistry.OLM);
 		this.add(EntityRegistry.EMBERLING.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.OCTINE_NUGGET)
@@ -323,6 +324,13 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN)
 					.when(LootItemKilledByPlayerCondition.killedByPlayer())
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+		this.add(EntityRegistry.FRESHWATER_URCHIN.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.setRolls(UniformGenerator.between(1, 2))
+				.add(LootItem.lootTableItem(ItemRegistry.URCHIN_SPIKE)
+					.when(LootItemKilledByPlayerCondition.killedByPlayer())
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 	}
 

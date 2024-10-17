@@ -5,17 +5,14 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-public abstract class ProximitySpawnerEntity extends Mob implements BLEntity {
+public abstract class ProximitySpawnerEntity extends PathfinderMob implements BLEntity {
 
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Mob.createMobAttributes()
@@ -23,7 +20,7 @@ public abstract class ProximitySpawnerEntity extends Mob implements BLEntity {
 				.add(Attributes.MOVEMENT_SPEED, 01D);
 	}
 
-	public ProximitySpawnerEntity(Level level, EntityType<Mob> type) {
+	public ProximitySpawnerEntity(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 	}
 	/**
@@ -32,7 +29,7 @@ public abstract class ProximitySpawnerEntity extends Mob implements BLEntity {
 	 * @return amount to expand proximity box all around in the x & z axis.
 	 */
 	protected abstract float getProximityHorizontal();
-	
+
 	/**
 	 * Amount to extend proximity area in Y axis
 	 *
@@ -70,7 +67,7 @@ public abstract class ProximitySpawnerEntity extends Mob implements BLEntity {
 	protected abstract int getEntitySpawnCount();
 
 	/**
-	 * Test if spawner is just a single use 
+	 * Test if spawner is just a single use
 	 *
 	 * @return true to set dead after spawn. false to deny it.
 	 */
@@ -82,7 +79,7 @@ public abstract class ProximitySpawnerEntity extends Mob implements BLEntity {
 	 * @return amount of uses.
 	 */
 	protected abstract int maxUseCount();
-	
+
 	/**
 	 * Action to happen just before entity spawns
 	 *
@@ -103,7 +100,7 @@ public abstract class ProximitySpawnerEntity extends Mob implements BLEntity {
 	 */
 
 	protected void performPostSpawnaction(@Nullable Entity targetEntity, @Nullable Entity entitySpawned) { }
-	
+
 	/**
 	 * The Proximity box used
 	 *
