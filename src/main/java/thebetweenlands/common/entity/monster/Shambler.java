@@ -1,115 +1,108 @@
 package thebetweenlands.common.entity.monster;
-/*
+
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
-import thebetweenlands.common.registries.LootTableRegistry;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.PartEntity;
+import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.GenericPartEntity;
+import thebetweenlands.common.entity.creature.Dragonfly;
+import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.util.PlayerUtil;
+public class Shambler extends Monster implements BLEntity {
 
-public class EntityShambler extends EntityMob implements IEntityMultiPart, IEntityBL {
-
-	private static final DataParameter<Boolean> JAWS_OPEN = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> TONGUE_EXTEND = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> TONGUE_LENGTH = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
+	private static final EntityDataAccessor<Boolean> JAWS_OPEN = SynchedEntityData.defineId(Shambler.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> TONGUE_EXTEND = SynchedEntityData.defineId(Shambler.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> JAW_ANGLE = SynchedEntityData.defineId(Shambler.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TONGUE_LENGTH = SynchedEntityData.defineId(Shambler.class, EntityDataSerializers.INT);
 
 	private int prevJawAngle;
 	private int prevTongueLength;
 	
-	public MultiPartEntityPart[] tongue_array; // we may want to make more tongue parts
-	public MultiPartEntityPart tongue_end = new MultiPartEntityPart(this, "tongue_end", 0.5F, 0.5F);
+	public GenericPartEntity[] tongue_array; // we may want to make more tongue parts
+	public GenericPartEntity tongue_end = new GenericPartEntity(this, 0.5F, 0.5F);
 
-	public EntityShambler(World world) {
-		super(world);
-		this.setSize(0.95F, 1.25F);
-		tongue_array = new MultiPartEntityPart[16];
+	public Shambler(EntityType<? extends Monster> type, Level level) {
+		super(type, level);
+		//this.setSize(0.95F, 1.25F);
+		tongue_array = new GenericPartEntity[16];
 		for(int i = 0; i < tongue_array.length - 1; i++) {
-			tongue_array[i] = new MultiPartEntityPart(this, "tongue_" + i, 0.125F, 0.125F);
+			tongue_array[i] = new GenericPartEntity(this, 0.125F, 0.125F);
 		}
 		tongue_array[tongue_array.length - 1] = tongue_end;
 	}
 
 	@Override
-	public World getWorld() {
-		return getEntityWorld();
+	protected void registerGoals() {
+		goalSelector.addGoal(0, new FloatGoal(this));
+		goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.8D, true));
+		goalSelector.addGoal(2, new MoveTowardsRestrictionGoal(this, 1.0D));
+		goalSelector.addGoal(3, new RandomStrollGoal(this, 0.75D));
+		goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+
+		this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers(Shambler.class));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Villager.class, 3, true, true, null).setUnseenMemoryTicks(120)); //remove after testing
+		//this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Frog.class, 3, true, true, null).setUnseenMemoryTicks(120));
+	//	this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, MireSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
+	//	this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, BloodSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Dragonfly.class, 3, true, true, null).setUnseenMemoryTicks(120));
 	}
 
 	@Override
-	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.8D, true));
-		this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(3, new EntityAIWander(this, 0.75D));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(5, new EntityAILookIdle(this));
-
-		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityFrog.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityChiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		this.targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityMireSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		this.targetTasks.addTask(5, new EntityAINearestAttackableTarget<>(this, EntityBloodSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		this.targetTasks.addTask(6, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, 3, true, true, null).setUnseenMemoryTicks(120));
-	}
-
-	@Override
-	protected void entityInit() {
-		super.entityInit();
-		dataManager.register(JAWS_OPEN, false);
-		dataManager.register(TONGUE_EXTEND, false);
-		dataManager.register(JAW_ANGLE, 0);
-		dataManager.register(TONGUE_LENGTH, 0);
-	}
-	
-	@Override
-	protected ResourceLocation getLootTable() {
-		return LootTableRegistry.SHAMBLER;
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(JAWS_OPEN, false);
+		builder.define(TONGUE_EXTEND, false);
+		builder.define(JAW_ANGLE, 0);
+		builder.define(TONGUE_LENGTH, 0);
 	}
 
 	public boolean jawsAreOpen() {
-		return dataManager.get(JAWS_OPEN);
+		return getEntityData().get(JAWS_OPEN);
 	}
 
 	public void setOpenJaws(boolean jawState) {
-		dataManager.set(JAWS_OPEN, jawState);
+		getEntityData().set(JAWS_OPEN, jawState);
 	}
 
 	public boolean isExtendingTongue() {
-		return dataManager.get(TONGUE_EXTEND);
+		return getEntityData().get(TONGUE_EXTEND);
 	}
 
 	public void setExtendingTongue(boolean tongueState) {
-		dataManager.set(TONGUE_EXTEND, tongueState);
+		getEntityData().set(TONGUE_EXTEND, tongueState);
 	}
 
 	public void setJawAngle(int count) {
-		dataManager.set(JAW_ANGLE, count);
+		getEntityData().set(JAW_ANGLE, count);
 	}
 
 	public void setJawAnglePrev(int count) {
@@ -117,7 +110,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public void setTongueLength(int count) {
-		dataManager.set(TONGUE_LENGTH, count);
+		getEntityData().set(TONGUE_LENGTH, count);
 	}
 
 	public void setTongueLengthPrev(int count) {
@@ -125,7 +118,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public int getJawAngle() {
-		return dataManager.get(JAW_ANGLE);
+		return getEntityData().get(JAW_ANGLE);
 	}
 
 	public int getJawAnglePrev() {
@@ -133,61 +126,50 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public int getTongueLength() {
-		return dataManager.get(TONGUE_LENGTH);
+		return getEntityData().get(TONGUE_LENGTH);
 	}
 
 	public int getTongueLengthPrev() {
 		return prevTongueLength;
 	}
 
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+	public static AttributeSupplier.Builder registerAttributes() {
+		return Mob.createMobAttributes()
+		.add(Attributes.MAX_HEALTH, 20.0D)
+		.add(Attributes.MOVEMENT_SPEED, 0.3D)
+		.add(Attributes.ATTACK_DAMAGE, 2.0D)
+		.add(Attributes.FOLLOW_RANGE, 20.0D);
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere();
-	}
-
-	@Override
-	public int getMaxSpawnedInChunk() {
-		return 3;
-	}
-	
-	@Override
-	protected float getSoundPitch() {
-		return super.getSoundPitch() * 1.5F;
+    public float getVoicePitch() {
+		return super.getVoicePitch() * 1.5F;
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SHAMBLER_LIVING;
+		return SoundRegistry.SHAMBLER_LIVING.get();
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
-		return SoundRegistry.SHAMBLER_HURT;
+		return SoundRegistry.SHAMBLER_HURT.get();
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.SHAMBLER_DEATH;
+		return SoundRegistry.SHAMBLER_DEATH.get();
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void aiStep() {
 		setJawAnglePrev(getJawAngle());
 		setTongueLengthPrev(getTongueLength());
 		
-		if (!getEntityWorld().isRemote) {
-			if (getAttackTarget() != null && canEntityBeSeen(getAttackTarget())) {
-				faceEntity(getAttackTarget(), 10.0F, 20.0F);
-				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
+		if (!level().isClientSide()) {
+			if (getTarget() != null && hasLineOfSight(getTarget())) {
+				getLookControl().setLookAt(getTarget(), 10.0F, 20.0F);
+				double distance = distanceToTarget(getTarget().xo, getTarget().getBoundingBox().minY, getTarget().zo);
 
 				if (distance > 5.0D) {
 					if(jawsAreOpen()) {
@@ -202,13 +184,13 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 						setOpenJaws(true);
 						if (!isExtendingTongue()) {
 							setExtendingTongue(true);
-							playSound(SoundRegistry.SHAMBLER_LICK, 1F, 1F + this.rand.nextFloat() * 0.3F);
+							playSound(SoundRegistry.SHAMBLER_LICK.get(), 1F, 1F + this.random.nextFloat() * 0.3F);
 						}
 					}
 				}
 			}
 
-			if (getAttackTarget() == null) {
+			if (getTarget() == null) {
 				if(jawsAreOpen())
 					setOpenJaws(false);
 				if (isExtendingTongue())
@@ -241,14 +223,22 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 				setExtendingTongue(false);
 			}
 		}
-		super.onLivingUpdate();
+		super.aiStep();
 	}
+	
+    public float distanceToTarget(double x, double y, double z) {
+        float f = (float)(this.getX() - x);
+        float f1 = (float)(this.getY() - y);
+        float f2 = (float)(this.getZ() - z);
+        return Mth.sqrt(f * f + f1 * f1 + f2 * f2);
+    }
 
+	@SuppressWarnings("rawtypes")
 	@Override
-    public void onUpdate() {
-		super.onUpdate();
+    public void tick() {
+		super.tick();
 		
-		Vec3d vector = getLook(1);
+		Vec3 vector = getLookAngle().scale(1D);
 		
 		double offSetX = vector.x * -0.25D;
 		double offsetY = vector.y * -0.25D;
@@ -258,17 +248,16 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		
 		double tongueLength = lengthIncrement;
 		
-		for(MultiPartEntityPart part : tongue_array) {
-			part.prevRotationYaw = part.rotationYaw;
-			part.prevRotationPitch = part.rotationPitch;
+		for(GenericPartEntity part : tongue_array) {
+			part.yRotO = part.getYRot();
+			part.xRotO = part.getXRot();
+			part.xOld = part.xo;
+			part.yOld = part.yo;
+			part.zOld = part.zo;
 			
-			part.lastTickPosX = part.prevPosX = part.posX;
-			part.lastTickPosY = part.prevPosY = part.posY;
-			part.lastTickPosZ = part.prevPosZ = part.posZ;
-			
-			part.setPosition(posX + offSetX + ((double) vector.x * getTongueLength() * tongueLength), posY + this.getEyeHeight() - 0.32 + offsetY + ((double) vector.y * getTongueLength() * tongueLength), posZ + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
-			part.rotationYaw = this.rotationYaw;
-			part.rotationPitch = this.rotationPitch;
+			part.setPos(xo + offSetX + ((double) vector.x * getTongueLength() * tongueLength), yo + this.getEyeHeight() - 0.32 + offsetY + ((double) vector.y * getTongueLength() * tongueLength), zo + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
+			part.setYRot(getYRot());
+			part.setXRot(getXRot());
 		
 			tongueLength += lengthIncrement;
 		}
@@ -277,16 +266,17 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
     }
 	
 	@Override
-	public void updatePassenger(Entity entity) {
-		PlayerUtil.resetFloating(entity);
+	public void positionRider(Entity entity, MoveFunction moveFunction) {
+		super.positionRider(entity, moveFunction);
+		//PlayerUtil.resetFloating(entity);
 		
-		if (entity instanceof EntityLivingBase) {
-			double a = Math.toRadians(rotationYaw);
+		if (entity instanceof LivingEntity) {
+			double a = Math.toRadians(getYRot());
 			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
 			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
-			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
-			if (entity.isSneaking())
-				entity.setSneaking(false);
+			entity.setPos(tongue_end.xo + offSetX, tongue_end.yo - entity.getBbHeight() * 0.3D, tongue_end.zo + offSetZ);
+			if (entity.isCrouching())
+				entity.setPose(Pose.STANDING);
 		}
 	}
 
@@ -301,14 +291,14 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	protected Entity checkCollision() {
-		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, tongue_end.getEntityBoundingBox());
+		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, tongue_end.getBoundingBox());
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
-			if (entity != null && entity == getAttackTarget() && !(entity instanceof IEntityMultiPart) && !(entity instanceof MultiPartEntityPart)) {
-				if (entity instanceof EntityLivingBase)
-					if (!isBeingRidden()) {
+			if (entity != null && entity == getTarget() && !(entity instanceof PartEntity)) {
+				if (entity instanceof LivingEntity)
+					if (!isPassenger()) {
 						entity.startRiding(this, true);
-						if (!getEntityWorld().isRemote)
+						if (!level().isClientSide())
 							if (isExtendingTongue())
 								setExtendingTongue(false); //eeeeeh!
 					}
@@ -317,24 +307,17 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		return null;
 	}
 
-    @SideOnly(Side.CLIENT)
     public float smoothedAngle(float partialTicks) {
         return getJawAnglePrev() + (getJawAngle() - getJawAnglePrev()) * partialTicks;
     }
 
 	@Override
-	public boolean attackEntityAsMob(Entity entity) {
-		return canEntityBeSeen(entity) ? super.attackEntityAsMob(entity) : false;
+	public boolean doHurtTarget(Entity entity) {
+		return hasLineOfSight(entity) ? super.doHurtTarget(entity) : false;
 	}
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
-		damageShambler(source, dmg); // we may want seperate tongue damage - dunno
-		return true;
-	}
-
-	protected boolean damageShambler(DamageSource source, float ammount) {
-		return super.attackEntityFrom(source, ammount);
+	public boolean hurt(DamageSource source, float ammount) {
+		return super.hurt(source, ammount);
 	}
 }
-*/

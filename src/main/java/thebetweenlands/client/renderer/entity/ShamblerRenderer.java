@@ -1,102 +1,82 @@
 package thebetweenlands.client.renderer.entity;
-/*
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.model.entity.ModelShambler;
-import thebetweenlands.common.entity.mobs.EntityShambler;
 
-@SideOnly(Side.CLIENT)
-public class RenderShambler extends RenderLiving<EntityShambler> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
-	public final ModelShambler model = new ModelShambler();
-	public RenderShambler(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelShambler(), 0.5F);
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+import thebetweenlands.client.BLModelLayers;
+import thebetweenlands.client.model.entity.ShamblerModel;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.GenericPartEntity;
+import thebetweenlands.common.entity.monster.Shambler;
+
+public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel <Shambler>> {
+	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("thebetweenlands:textures/entity/shambler.png");
+
+	public ShamblerRenderer(EntityRendererProvider.Context context) {
+		super(context, new ShamblerModel<>(context.bakeLayer(BLModelLayers.SHAMBLER)), 0.5F);
 	}
 
 	@Override
-	public void doRender(EntityShambler entity, double x, double y, double z, float yaw, float partialTicks) {
-		super.doRender(entity, x, y, z, yaw, partialTicks);
-		//	renderDebugBoundingBox(entity, x, y, z, yaw, partialTicks, 0, 0, 0);
+    protected void scale(Shambler entity, PoseStack stack, float partialTickTime) {
+		float flap = (float) (Math.sin(entity.tickCount * 0.3F) * 0.8F);
+		stack.pushPose();
+		stack.translate(0F, 0F - flap * 0.0625F, 0F);
+		stack.popPose();
+    }
 
-		if(entity.getTongueLength() > 0) {
+	@Override
+	public void render(Shambler entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+		super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
+		Minecraft minecraft = Minecraft.getInstance();
+		boolean isVisible = this.isBodyVisible(entity);
+		boolean isTranslucentToPlayer = !isVisible && !entity.isInvisibleTo(minecraft.player);
+		boolean isGlowing = minecraft.shouldEntityAppearGlowing(entity);
+		int overlay = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
+		int colour = isTranslucentToPlayer ? 654311423 : -1;
 
-			renderDebugBoundingBox(entity.tongue_end, x, y, z, yaw, partialTicks, entity.tongue_end.posX - entity.posX, entity.tongue_end.posY - entity.posY, entity.tongue_end.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_1, x, y, z, yaw, partialTicks, entity.tongue_1.posX - entity.posX, entity.tongue_1.posY - entity.posY, entity.tongue_1.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_2, x, y, z, yaw, partialTicks, entity.tongue_2.posX - entity.posX, entity.tongue_2.posY - entity.posY, entity.tongue_2.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_3, x, y, z, yaw, partialTicks, entity.tongue_3.posX - entity.posX, entity.tongue_3.posY - entity.posY, entity.tongue_3.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_4, x, y, z, yaw, partialTicks, entity.tongue_4.posX - entity.posX, entity.tongue_4.posY - entity.posY, entity.tongue_4.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_5, x, y, z, yaw, partialTicks, entity.tongue_5.posX - entity.posX, entity.tongue_5.posY - entity.posY, entity.tongue_5.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_6, x, y, z, yaw, partialTicks, entity.tongue_6.posX - entity.posX, entity.tongue_6.posY - entity.posY, entity.tongue_6.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_7, x, y, z, yaw, partialTicks, entity.tongue_7.posX - entity.posX, entity.tongue_7.posY - entity.posY, entity.tongue_7.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_8, x, y, z, yaw, partialTicks, entity.tongue_8.posX - entity.posX, entity.tongue_8.posY - entity.posY, entity.tongue_8.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_9, x, y, z, yaw, partialTicks, entity.tongue_9.posX - entity.posX, entity.tongue_9.posY - entity.posY, entity.tongue_9.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_10, x, y, z, yaw, partialTicks, entity.tongue_10.posX - entity.posX, entity.tongue_10.posY - entity.posY, entity.tongue_10.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_11, x, y, z, yaw, partialTicks, entity.tongue_11.posX - entity.posX, entity.tongue_11.posY - entity.posY, entity.tongue_11.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_12, x, y, z, yaw, partialTicks, entity.tongue_12.posX - entity.posX, entity.tongue_12.posY - entity.posY, entity.tongue_12.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_13, x, y, z, yaw, partialTicks, entity.tongue_13.posX - entity.posX, entity.tongue_13.posY - entity.posY, entity.tongue_13.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_14, x, y, z, yaw, partialTicks, entity.tongue_14.posX - entity.posX, entity.tongue_14.posY - entity.posY, entity.tongue_14.posZ - entity.posZ);
-			renderDebugBoundingBox(entity.tongue_15, x, y, z, yaw, partialTicks, entity.tongue_15.posX - entity.posX, entity.tongue_15.posY - entity.posY, entity.tongue_15.posZ - entity.posZ);
-		
-			double ex = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)partialTicks;
-	        double ey = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)partialTicks;
-	        double ez = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)partialTicks;
-
-	        double rx = ex - x;
-	        double ry = ey - y;
-	        double rz = ez - z;
-
-	        for(int i = 0; i < entity.tongue_array.length; i++) {
-	        	renderTonguePart(entity, entity.tongue_array[i], rx, ry, rz, partialTicks);
-	        }
+		if (entity.getTongueLength() > 0) {
+			double ex = entity.xOld + (entity.xo - entity.xOld) * (double) partialTicks;
+			double ey = entity.yOld + (entity.yo - entity.yOld) * (double) partialTicks;
+			double ez = entity.zOld + (entity.zo - entity.zOld) * (double) partialTicks;
+			double rx = ex;
+			double ry = ey;
+			double rz = ez;
+			RenderType renderType = getRenderType(entity, isGlowing, isGlowing, isGlowing);
+			if (renderType != null) {
+				for (int i = 0; i < entity.tongue_array.length; i++) {
+					renderTonguePart(entity, entity.tongue_array[i], rx, ry, rz, partialTicks, stack, buffer.getBuffer(renderType), packedLight, overlay, colour);
+				}
+			}
 		}
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityShambler entity) {
+	public ResourceLocation getTextureLocation(Shambler entity) {
 		return TEXTURE;
 	}
 
-	private void renderTonguePart(EntityShambler entity, MultiPartEntityPart part, double rx, double ry, double rz, float partialTicks) {
-		double x = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double)partialTicks - rx;
-        double y = part.lastTickPosY + (part.posY - part.lastTickPosY) * (double)partialTicks - ry;
-        double z = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double)partialTicks - rz;
-        float yaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
-        float pitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
-		bindTexture(TEXTURE);
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y - 0.85D, z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		GlStateManager.rotate(180F + yaw, 0F, 1F, 0F);
-		GlStateManager.rotate(180F + pitch, 1F, 0F, 0F);
+	private void renderTonguePart(Shambler entity, GenericPartEntity part, double rx, double ry, double rz, float partialTicks, PoseStack stack, VertexConsumer consumer, int packedLight, int overlay, int colour) {
+		double x = part.xOld + (part.xo - part.xOld) * (double)partialTicks - rx;
+        double y = part.yOld + (part.yo - part.yOld) * (double)partialTicks - ry;
+        double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
+        float yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
+        float pitch = entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks;
+		stack.pushPose();
+		stack.translate(x, y - 0.85D, z);
+		stack.scale(-1F, -1F, 1F);
+		stack.mulPose(Axis.YP.rotationDegrees(180F + yaw));
+		stack.mulPose(Axis.XP.rotationDegrees(180F + pitch));
 		if(part == entity.tongue_end)
-			model.renderTongueEnd(0.0625F);
+			model.renderTongueEnd(stack, consumer, packedLight, overlay, colour);
 		else
-			model.renderTonguePart(0.0625F);
-		GlStateManager.popMatrix();
-	}
-
-	private void renderDebugBoundingBox(Entity entity, double x, double y, double z, float yaw, float partialTicks, double xOff, double yOff, double zOff) {
-		GlStateManager.depthMask(false);
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
-		GlStateManager.disableCull();
-		GlStateManager.disableBlend();
-		AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox();
-		AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.minX - entity.posX + x + xOff, axisalignedbb.minY - entity.posY + y + yOff, axisalignedbb.minZ - entity.posZ + z + zOff, axisalignedbb.maxX - entity.posX + x + xOff, axisalignedbb.maxY - entity.posY + y + yOff, axisalignedbb.maxZ - entity.posZ + z + zOff);
-		RenderGlobal.drawSelectionBoundingBox(axisalignedbb1, 1F, 1F, 1F, 1F);
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
-		GlStateManager.enableCull();
-		GlStateManager.disableBlend();
-		GlStateManager.depthMask(true);
+			model.renderTonguePart(stack, consumer, packedLight, overlay, colour);
+		stack.popPose();
 	}
 }
-*/

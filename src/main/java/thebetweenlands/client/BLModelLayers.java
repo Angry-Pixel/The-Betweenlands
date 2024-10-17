@@ -35,13 +35,14 @@ public class BLModelLayers {
 	public static final ModelLayerLocation MUMMY_ARM = register("mummy_arm");
 	public static final ModelLayerLocation OLM = register("olm");
 	public static final ModelLayerLocation PEAT_MUMMY = register("peat_mummy");
+	public static final ModelLayerLocation SHAMBLER = register("shambler");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
 	public static final ModelLayerLocation SLUDGE_BALL = register("sludge_ball");
+	public static final ModelLayerLocation SLUDGE_WORM = register("sludge_worm");
 	public static final ModelLayerLocation SLUDGE_WORM_ARROW = register("sludge_worm_arrow");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_2 = register("small_spirit_tree_face_2");
-	public static final ModelLayerLocation SLUDGE_WORM = register("sludge_worm");
-	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 	public static final ModelLayerLocation STALKER = register("stalker");
+	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");
 	public static final ModelLayerLocation GECKO = register("gecko");
