@@ -783,7 +783,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.GECKO);
 			output.accept(ItemRegistry.DRAGONFLY);
 			output.accept(ItemRegistry.OLM);
-			//cave fish
+			output.accept(ItemRegistry.CAVE_FISH);
 			//sludge worm egg sac
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM);
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM_HELPER);

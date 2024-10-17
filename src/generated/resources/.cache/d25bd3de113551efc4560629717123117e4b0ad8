@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-17T12:18:19.7422521	Item Models: thebetweenlands
+// 1.21.1	2024-10-17T14:54:15.5307851	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -107,6 +107,8 @@ cc44aa72575c83fe4e570914d54c50ff15c2869a assets/thebetweenlands/models/item/bulb
 4cfe4270c947afac3ac67e00af7d5f939b94a710 assets/thebetweenlands/models/item/caribbean_green_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/caribbean_green_item_frame.json
 dd9c4b8301c0482efbb3975432b3161218084cef assets/thebetweenlands/models/item/cattail_head.json
+2d7870694b2cd49b8357e0cef3383daec7273732 assets/thebetweenlands/models/item/cave_fish.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/cave_fish_spawn_egg.json
 9b7b9773eea4e481c8149ab7039e1f4a389c81d4 assets/thebetweenlands/models/item/cave_grass_blades.json
 6b7d046b2310831dcada4ddeaa6f82373af76ee6 assets/thebetweenlands/models/item/cave_moss_clump.json
 6b7fcf5bb9c99144a7aac611a7e55cf36200b4c7 assets/thebetweenlands/models/item/champagne_dye.json

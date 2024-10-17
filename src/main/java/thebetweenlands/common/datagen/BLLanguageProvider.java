@@ -1023,6 +1023,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.LURKER, "Lurker");
 		this.addEntityAndEgg(EntityRegistry.SHAMBLER, "Shambler");
 		this.addEntityAndEgg(EntityRegistry.FRESHWATER_URCHIN, "Freshwater Urchin");
+		this.addEntityAndEgg(EntityRegistry.CAVE_FISH, "Cave Fish");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");

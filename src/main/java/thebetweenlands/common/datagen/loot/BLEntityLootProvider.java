@@ -332,6 +332,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.when(LootItemKilledByPlayerCondition.killedByPlayer())
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+		this.noLoot(EntityRegistry.CAVE_FISH);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

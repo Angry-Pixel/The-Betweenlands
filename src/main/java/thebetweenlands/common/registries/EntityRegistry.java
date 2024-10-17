@@ -55,7 +55,7 @@ public class EntityRegistry {
 	//blood snail
 	//boulder sprite
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C, BubblerCrab::registerAttributes);
-	//cave fish
+	public static final DeferredHolder<EntityType<?>, EntityType<CaveFish>> CAVE_FISH = registerWithEgg("cave_fish", EntityType.Builder.of(CaveFish::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.3F, 0.2F), 0xFF8000, 0xE6E6E6, CaveFish::registerAttributes);
 	//cave jellyfish
 	//chiromaw
 	//chiromaw greebling rider

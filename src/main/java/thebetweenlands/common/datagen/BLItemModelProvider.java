@@ -233,7 +233,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.GECKO);
 		this.basicItem(ItemRegistry.DRAGONFLY);
 		this.basicItem(ItemRegistry.OLM);
-		//cave fish
+		this.basicItem(ItemRegistry.CAVE_FISH);
 		this.basicItem(ItemRegistry.SLUDGE_WORM_EGG_SAC);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));

@@ -295,6 +295,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.LURKER.get(), LurkerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SHAMBLER.get(), ShamblerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FRESHWATER_URCHIN.get(), FreshwaterUrchinRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CAVE_FISH.get(), CaveFishRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -377,6 +378,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.LURKER, LurkerModel::create);
 		event.registerLayerDefinition(BLModelLayers.SHAMBLER, ShamblerModel::create);
 		event.registerLayerDefinition(BLModelLayers.FRESHWATER_URCHIN, FreshwaterUrchinModel::create);
+		event.registerLayerDefinition(BLModelLayers.CAVE_FISH, CaveFishModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
