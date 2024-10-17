@@ -42,7 +42,7 @@ public class NetItem extends Item {
 		register(TinySludgeWormHelper.class, ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
 		register(MireSnail.class, ItemRegistry.MIRE_SNAIL, (p, e) -> true);
 		register(Anadia.class, ItemRegistry.ANADIA, (p, e) -> e.getNettableTimer() > 0);
-//		register(EntityFreshwaterUrchin.class, ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
+		register(FreshwaterUrchin.class, ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
 //		register(EntityCaveFish.class, ItemRegistry.CRITTER, (p, e) -> true);
 		register(Olm.class, ItemRegistry.OLM, (p, e) -> true);
 		register(Jellyfish.class, ItemRegistry.JELLYFISH, (p, e) -> true);
