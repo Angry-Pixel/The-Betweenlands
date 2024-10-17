@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -35,6 +36,7 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.item.herblore.AspectVialItem;
@@ -44,7 +46,7 @@ import thebetweenlands.common.registries.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepellerBlock extends HorizontalBaseEntityBlock {
+public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final EnumProperty<DoubleBlockHalf> HALF = EnumProperty.create("half", DoubleBlockHalf.class);
 	public static final VoxelShape BOTTOM_SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
@@ -52,7 +54,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 
 	public RepellerBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -135,6 +137,9 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(currentPos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
 		DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
 		if (facing.getAxis() != Direction.Axis.Y
 			|| doubleblockhalf == DoubleBlockHalf.LOWER != (facing == Direction.UP)
@@ -153,13 +158,13 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 		BlockPos blockpos = context.getClickedPos();
 		Level level = context.getLevel();
 		return blockpos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockpos.above()).canBeReplaced(context)
-			? super.getStateForPlacement(context)
+			? super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()))
 			: null;
 	}
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
+		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER).setValue(WATER_TYPE, WaterType.getFromFluid(level.getFluidState(pos.above()).getType())));
 	}
 
 	@Override
@@ -231,6 +236,11 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 		}
 	}
 
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -245,6 +255,6 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(HALF));
+		super.createBlockStateDefinition(builder.add(HALF, WATER_TYPE));
 	}
 }

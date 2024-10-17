@@ -2,7 +2,9 @@ package thebetweenlands.common.block.container;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,16 +23,18 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class SmokingRackBlock extends HorizontalBaseEntityBlock {
+public class SmokingRackBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final VoxelShape X_AXIS_SHAPE = Block.box(0.0D, 0.0D, 1.0D, 16.0D, 16.0D, 15.0D);
 	public static final VoxelShape Z_AXIS_SHAPE = Block.box(1.0D, 0.0D, 0.0D, 15.0D, 16.0D, 16.0D);
@@ -39,7 +43,7 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 
 	public SmokingRackBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER).setValue(HEATED, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER).setValue(HEATED, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -49,6 +53,9 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		if (state.getValue(WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) {
+			return InteractionResult.PASS;
+		}
 		if (state.getValue(HALF) == DoubleBlockHalf.UPPER && level.getBlockState(pos.below()).is(this)) {
 			return this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(), player, hitResult);
 		}
@@ -65,6 +72,9 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(currentPos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
 		DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
 		if (facing.getAxis() != Direction.Axis.Y
 			|| doubleblockhalf == DoubleBlockHalf.LOWER != (facing == Direction.UP)
@@ -83,19 +93,19 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 		BlockPos blockpos = context.getClickedPos();
 		Level level = context.getLevel();
 		return blockpos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockpos.above()).canBeReplaced(context)
-			? super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection()).setValue(HEATED, context.getLevel().getBlockState(context.getClickedPos().below()).is(BlockRegistry.SMOULDERING_PEAT))
+			? super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection()).setValue(HEATED, context.getLevel().getBlockState(context.getClickedPos().below()).is(BlockRegistry.SMOULDERING_PEAT)).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()))
 			: null;
 	}
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER).setValue(FACING, state.getValue(FACING)));
+		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER).setValue(FACING, state.getValue(FACING)).setValue(WATER_TYPE, WaterType.getFromFluid(level.getFluidState(pos.above()).getType())));
 	}
 
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		if (state.getValue(HALF) != DoubleBlockHalf.UPPER) {
-			return super.canSurvive(state, level, pos);
+			return level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP);
 		} else {
 			BlockState blockstate = level.getBlockState(pos.below());
 			if (state.getBlock() != this) return super.canSurvive(state, level, pos);
@@ -121,6 +131,12 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 		super.playerDestroy(level, player, pos, Blocks.AIR.defaultBlockState(), te, stack);
 	}
 
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		super.onRemove(state, level, pos, newState, movedByPiston);
+	}
+
 	protected static void preventDropFromBottomPart(Level level, BlockPos pos, BlockState state, Player player) {
 		DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
 		if (doubleblockhalf == DoubleBlockHalf.UPPER) {
@@ -134,8 +150,13 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(HALF).add(HEATED));
+		super.createBlockStateDefinition(builder.add(HALF).add(HEATED).add(WATER_TYPE));
 	}
 
 	@Nullable

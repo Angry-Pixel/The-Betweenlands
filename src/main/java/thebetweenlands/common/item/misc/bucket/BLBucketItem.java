@@ -38,6 +38,7 @@ import javax.annotation.Nullable;
 import thebetweenlands.common.block.container.RubberTapBlock;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.block.terrain.RubberLogBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.component.item.InfusionBucketData;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -157,7 +158,7 @@ public class BLBucketItem extends Item {
 			if(player.mayUseItemAt(pos, context.getClickedFace(), context.getItemInHand())) {
 				BlockState blockState = level.getBlockState(pos);
 
-				if(blockState.is(BlockRegistry.RUBBER_LOG) && blockState.getValue(RubberLogBlock.NATURAL)) {
+				if(blockState.is(BlockRegistry.RUBBER_LOG) && blockState.getValue(RubberLogBlock.NATURAL) && blockState.getValue(RubberLogBlock.WATER_TYPE) == SwampWaterLoggable.WaterType.NONE) {
 					BlockPos offset = pos.relative(context.getClickedFace());
 					BlockState tap = this.tap.defaultBlockState().setValue(RubberTapBlock.FACING, context.getClickedFace());
 					if(level.getBlockState(offset).canBeReplaced() && tap.canSurvive(level, offset)) {

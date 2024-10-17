@@ -1,7 +1,6 @@
 package thebetweenlands.common.block.container;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -10,60 +9,40 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.LootPotBlockEntity;
-import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 
 import javax.annotation.Nullable;
 
-public class LootPotBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
+public class BuriedLootPotBlock extends HorizontalBaseEntityBlock {
 
-	public static final VoxelShape POT_1 = Shapes.or(
-		Block.box(4.0D, 0.0D, 4.0D, 12.0D, 2.0D, 12.0D),
-		Block.box(2.0D, 2.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-		Block.box(3.0D, 12.0D, 3.0D, 13.0D, 14.0D, 13.0D),
-		Block.box(6.0D, 14.0D, 6.0D, 10.0D, 16.0D, 10.0D));
+	//due to wack lighting calculations this block cant be a full block
+	public static final VoxelShape ALMOST_FULL = Block.box(0.001D, 0.0D, 0.001D, 15.999D, 16.0D, 15.999D);
 
-	public static final VoxelShape POT_2 = Shapes.or(
-		Block.box(4.0D, 0.0D, 4.0D, 12.0D, 2.0D, 12.0D),
-		Block.box(5.0D, 2.0D, 5.0D, 11.0D, 4.0D, 11.0D),
-		Block.box(3.0D, 4.0D, 3.0D, 13.0D, 6.0D, 13.0D),
-		Block.box(2.0D, 6.0D, 2.0D, 14.0D, 12.0D, 14.0D),
-		Block.box(4.0D, 12.0D, 4.0D, 12.0D, 14.0D, 12.0D),
-		Block.box(3.0D, 14.0D, 3.0D, 13.0D, 16.0D, 13.0D));
-
-	public static final VoxelShape POT_3 = Shapes.or(
-		Block.box(3.0D, 0.0D, 3.0D, 13.0D, 2.0D, 13.0D),
-		Block.box(1.0D, 2.0D, 1.0D, 15.0D, 12.0D, 15.0D),
-		Block.box(4.0D, 12.0D, 4.0D, 12.0D, 14.0D, 12.0D),
-		Block.box(3.0D, 14.0D, 3.0D, 13.0D, 16.0D, 13.0D));
-
-	private final VoxelShape shape;
-
-	public LootPotBlock(VoxelShape shape, Properties properties) {
+	public BuriedLootPotBlock(BlockBehaviour.Properties properties) {
 		super(properties);
-		this.shape = shape;
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-		return this.shape;
+		return ALMOST_FULL;
+	}
+
+	@Override
+	protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.block();
 	}
 
 	@Override
@@ -121,10 +100,10 @@ public class LootPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 	@Override
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
 		//TODO
-//		if (!level.isClientSide()) {
+		if (!level.isClientSide()) {
 //			LivingEntity entity;
 //			if (level.getRandom().nextInt(3) == 0) {
-//				if (state.getValue(WATER_TYPE) == WaterType.NONE) {
+//				if (!level.getFluidState(pos.above()).is(Tags.Fluids.WATER)) {
 //					entity = new Termite(level);
 //					entity.getAttribute(Termite.SMALL).setBaseValue(1);
 //				} else {
@@ -138,28 +117,8 @@ public class LootPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 //					level.addFreshEntity(entity);
 //				}
 //			}
-//		}
-		super.playerDestroy(level, player, pos, state, blockEntity, tool);
-	}
-
-	@Nullable
-	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
-	}
-
-	@Override
-	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
-			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
 		}
-
-		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
-	}
-
-	@Override
-	protected FluidState getFluidState(BlockState state) {
-		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+		super.playerDestroy(level, player, pos, state, blockEntity, tool);
 	}
 
 	@Override
@@ -172,10 +131,5 @@ public class LootPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new LootPotBlockEntity(pos, state);
-	}
-
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(WATER_TYPE));
 	}
 }

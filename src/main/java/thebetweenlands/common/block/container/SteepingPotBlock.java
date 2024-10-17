@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,12 +35,13 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.SteepingPotBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.Optional;
 
-public class SteepingPotBlock extends HorizontalBaseEntityBlock {
+public class SteepingPotBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final BooleanProperty HANGING = BooleanProperty.create("hanging");
 	public static final VoxelShape OUTSIDE_GROUND_SHAPE = Shapes.or(
@@ -67,13 +69,13 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 
 	public SteepingPotBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HANGING, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HANGING, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return super.getStateForPlacement(context).setValue(HANGING, this.canHang(context.getLevel(), context.getClickedPos()));
+		return super.getStateForPlacement(context).setValue(HANGING, this.canHang(context.getLevel(), context.getClickedPos())).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 	}
 
 	@Override
@@ -83,6 +85,9 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
 		return direction == Direction.UP ? state.setValue(HANGING, this.canHang(level, pos)) : super.updateShape(state, direction, neighborState, level, pos, neighborPos);
 	}
 
@@ -179,6 +184,11 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -193,6 +203,6 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(HANGING));
+		super.createBlockStateDefinition(builder.add(HANGING, WATER_TYPE));
 	}
 }

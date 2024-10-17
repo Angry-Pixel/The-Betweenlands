@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -32,12 +33,13 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import javax.annotation.Nullable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.MothHouseBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.Map;
 
-public class MothHouseBlock extends HorizontalBaseEntityBlock {
+public class MothHouseBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final BooleanProperty ON_WALL = BooleanProperty.create("on_wall");
 	public static final VoxelShape Z_SHAPE = Block.box(2.0D, 0.0D, 4.0D, 14.0D, 16.0D, 12.0D);
@@ -51,7 +53,7 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 
 	public MothHouseBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(ON_WALL, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(ON_WALL, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -67,9 +69,9 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		if (context.getClickedFace().getAxis() != Direction.Axis.Y) {
-			return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(ON_WALL, true);
+			return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(ON_WALL, true).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 		} else {
-			return super.getStateForPlacement(context);
+			return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 		}
 	}
 
@@ -93,11 +95,15 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
 		return state.canSurvive(level, pos) ? super.updateShape(state, direction, neighborState, level, pos, neighborPos) : Blocks.AIR.defaultBlockState();
 	}
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (state.getValue(WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) return ItemInteractionResult.CONSUME;
 		if (level.getBlockEntity(pos) instanceof MothHouseBlockEntity house) {
 			var cap = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, state, house, null);
 			if (stack.is(ItemRegistry.SILK_GRUB) && cap != null) {
@@ -137,6 +143,11 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		Containers.dropContentsOnDestroy(state, newState, level, pos);
 		super.onRemove(state, level, pos, newState, movedByPiston);
@@ -156,6 +167,6 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(ON_WALL));
+		super.createBlockStateDefinition(builder.add(ON_WALL, WATER_TYPE));
 	}
 }

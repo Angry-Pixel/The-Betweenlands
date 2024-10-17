@@ -13,6 +13,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.common.block.container.AlembicBlock;
+import thebetweenlands.common.block.container.CenserBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.InfusionBucketData;
@@ -59,6 +62,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, AlembicBlockEntity entity) {
+		if (state.getValue(AlembicBlock.WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) return;
 		if (entity.loadInfusionData) {
 			entity.loadFromInfusion(level);
 			entity.loadInfusionData = false;

@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
@@ -56,11 +57,12 @@ public class AlcoveRenderer implements BlockEntityRenderer<MudBrickAlcoveBlockEn
 		this.alcove.render(stack, consumer, light, overlay);
 
 		if (entity.getLevel() != null) {
+			boolean sturdyBottom = entity.getLevel().getBlockState(entity.getBlockPos().below()).isFaceSturdy(entity.getLevel(), entity.getBlockPos(), Direction.UP);
 			RandomSource random = RandomSource.create(entity.getBlockPos().asLong());
-			if (random.nextBoolean()) {
+			if (random.nextBoolean() && sturdyBottom) {
 				this.smallCandle.render(stack, consumer, light, overlay);
 			}
-			if (random.nextBoolean()) {
+			if (random.nextBoolean() && sturdyBottom) {
 				this.largeCandle.render(stack, consumer, light, overlay);
 			}
 			if (random.nextBoolean()) {

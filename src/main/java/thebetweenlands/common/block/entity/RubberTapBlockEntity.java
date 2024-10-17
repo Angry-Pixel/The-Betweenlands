@@ -11,6 +11,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.common.block.container.RubberTapBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 
 public class RubberTapBlockEntity extends SyncedBlockEntity implements IFluidHandler {
@@ -23,7 +24,7 @@ public class RubberTapBlockEntity extends SyncedBlockEntity implements IFluidHan
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, RubberTapBlockEntity entity) {
-		if (!level.isClientSide()) {
+		if (!level.isClientSide() && level.getBlockState(pos.relative(state.getValue(RubberTapBlock.FACING).getOpposite())).is(BlockRegistry.RUBBER_LOG)) {
 			final int ticksPerStep = ((RubberTapBlock) state.getBlock()).getTicksPerStep();
 			if (entity.tank.getFluidAmount() < FluidType.BUCKET_VOLUME) {
 				entity.fillProgress++;

@@ -813,7 +813,8 @@ public class ClientRegistrationEvents {
 			ItemRegistry.LAVENDER_BLUE_DYE_BUCKET, ItemRegistry.BROWN_RUST_DYE_BUCKET, ItemRegistry.MIDNIGHT_PURPLE_DYE_BUCKET, ItemRegistry.PEWTER_GREY_DYE_BUCKET,
 			ItemRegistry.NETTLE_SOUP_BUCKET, ItemRegistry.NETTLE_TEA_BUCKET, ItemRegistry.PHEROMONE_EXTRACT_BUCKET, ItemRegistry.SWAMP_BROTH_BUCKET,
 			ItemRegistry.STURDY_STOCK_BUCKET, ItemRegistry.PEAR_CORDIAL_BUCKET, ItemRegistry.SHAMANS_BREW_BUCKET, ItemRegistry.LAKE_BROTH_BUCKET,
-			ItemRegistry.SHELL_STOCK_BUCKET, ItemRegistry.FROG_LEG_EXTRACT_BUCKET, ItemRegistry.WITCH_TEA_BUCKET, ItemRegistry.SWAMP_BROTH_BUCKET.get());
+			ItemRegistry.SHELL_STOCK_BUCKET, ItemRegistry.FROG_LEG_EXTRACT_BUCKET, ItemRegistry.WITCH_TEA_BUCKET, ItemRegistry.SWAMP_BROTH_BUCKET.get(),
+			ItemRegistry.SWAMP_WATER_BUCKET);
 
 		event.register((stack, tint) -> tint == 1 ? InfusionBucketItem.getColor(stack) : -1, ItemRegistry.WEEDWOOD_INFUSION_BUCKET, ItemRegistry.SYRMORITE_INFUSION_BUCKET);
 	}

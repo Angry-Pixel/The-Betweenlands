@@ -15,7 +15,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.CenserBlock;
+import thebetweenlands.common.block.container.MothHouseBlock;
 import thebetweenlands.common.block.misc.BLLanternBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -48,6 +51,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, MothHouseBlockEntity entity) {
+		if (state.getValue(MothHouseBlock.WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) return;
 		if (level.getGameTime() % 20 == 0) {
 			if (entity.isWorking) {
 				if (level.isClientSide() && level.getRandom().nextInt(3) == 0) {

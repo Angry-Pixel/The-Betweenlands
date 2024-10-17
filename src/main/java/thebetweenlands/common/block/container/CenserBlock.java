@@ -59,6 +59,9 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+		}
 		Optional<IFluidHandler> fluidHandler = FluidUtil.getFluidHandler(level, pos, hitResult.getDirection());
 
 		if (fluidHandler.isPresent() && FluidUtil.getFluidHandler(stack).isPresent()) {
@@ -72,6 +75,9 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			return InteractionResult.PASS;
+		}
 		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		} else {

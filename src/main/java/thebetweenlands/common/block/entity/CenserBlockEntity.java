@@ -33,6 +33,7 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.common.block.container.CenserBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.inventory.CenserMenu;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.CenserRecipeRegistry;
@@ -108,6 +109,7 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, CenserBlockEntity entity) {
+		if (state.getValue(CenserBlock.WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) return;
 		if (!level.isClientSide()) {
 			if (entity.fuelTicks > 0) {
 				entity.fuelTicks--;

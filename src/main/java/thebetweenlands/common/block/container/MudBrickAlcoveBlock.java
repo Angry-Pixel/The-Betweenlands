@@ -1,48 +1,98 @@
 package thebetweenlands.common.block.container;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.MudBrickAlcoveBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.entity.monster.AshSprite;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
-public class MudBrickAlcoveBlock extends HorizontalBaseEntityBlock {
+public class MudBrickAlcoveBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final BooleanProperty HAS_URN = BooleanProperty.create("has_urn");
 	public static final IntegerProperty MUD_LEVEL = IntegerProperty.create("mud", 0, 4);
-	public static final VoxelShape ALMOST_FULL = Block.box(0.001D, 0.0D, 0.001D, 15.999D, 16.0D, 15.999D);
+	public static final VoxelShape NORTH_SHAPE = Shapes.or(
+		Block.box(0.0D, 0.0D, 10.0D, 16.0D, 12.0D, 16.0D), //back
+		Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D), //top
+		Block.box(0.0D, 10.0D, 0.0D, 2.0D, 12.0D, 10.0D), //left top support beam
+		Block.box(14.0D, 10.0D, 0.0D, 16.0D, 12.0D, 10.0D), //right top support beam
+		Block.box(0.0D, 0.0D, 8.0D, 2.0D, 10.0D, 10.0D), //left side beam
+		Block.box(14.0D, 0.0D, 8.0D, 16.0D, 10.0D, 10.0D) //right side beam
+	);
+	public static final VoxelShape SOUTH_SHAPE = Shapes.or(
+		Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 6.0D), //back
+		Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D), //top
+		Block.box(0.0D, 10.0D, 6.0D, 2.0D, 12.0D, 16.0D), //left top support beam
+		Block.box(14.0D, 10.0D, 6.0D, 16.0D, 12.0D, 16.0D), //right top support beam
+		Block.box(0.0D, 0.0D, 6.0D, 2.0D, 10.0D, 8.0D), //left side beam
+		Block.box(14.0D, 0.0D, 6.0D, 16.0D, 10.0D, 8.0D) //right side beam
+	);
+	public static final VoxelShape WEST_SHAPE = Shapes.or(
+		Block.box(10.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), //back
+		Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D), //top
+		Block.box(0.0D, 10.0D, 0.0D, 10.0D, 12.0D, 2.0D), //left top support beam
+		Block.box(0.0D, 10.0D, 14.0D, 10.0D, 12.0D, 16.0D), //right top support beam
+		Block.box(8.0D, 0.0D, 0.0D, 10.0D, 10.0D, 2.0D), //left side beam
+		Block.box(8.0D, 0.0D, 14.0D, 10.0D, 10.0D, 16.0D) //right side beam
+	);
+	public static final VoxelShape EAST_SHAPE = Shapes.or(
+		Block.box(0.0D, 0.0D, 0.0D, 6.0D, 12.0D, 16.0D), //back
+		Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D), //top
+		Block.box(6.0D, 10.0D, 0.0D, 16.0D, 12.0D, 2.0D), //left top support beam
+		Block.box(6.0D, 10.0D, 14.0D, 16.0D, 12.0D, 16.0D), //right top support beam
+		Block.box(6.0D, 0.0D, 0.0D, 8.0D, 10.0D, 2.0D), //left side beam
+		Block.box(6.0D, 0.0D, 14.0D, 8.0D, 10.0D, 16.0D) //right side beam
+	);
+	private static final Map<Direction, VoxelShape> SHAPE_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(
+		Direction.NORTH, NORTH_SHAPE,
+		Direction.WEST, WEST_SHAPE,
+		Direction.SOUTH, SOUTH_SHAPE,
+		Direction.EAST, EAST_SHAPE
+	));
 
 	public MudBrickAlcoveBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HAS_URN, false).setValue(MUD_LEVEL, 0));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HAS_URN, false).setValue(WATER_TYPE, WaterType.NONE).setValue(MUD_LEVEL, 0));
 	}
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return ALMOST_FULL;
+		return SHAPE_BY_DIRECTION.get(state.getValue(FACING));
+	}
+
+	@Override
+	protected VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.block();
 	}
 
 	@Override
@@ -85,12 +135,32 @@ public class MudBrickAlcoveBlock extends HorizontalBaseEntityBlock {
 
 	@Nullable
 	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
+
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+	}
+
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Nullable
+	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new MudBrickAlcoveBlockEntity(pos, state);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(HAS_URN, MUD_LEVEL));
+		super.createBlockStateDefinition(builder.add(HAS_URN, MUD_LEVEL, WATER_TYPE));
 	}
 }

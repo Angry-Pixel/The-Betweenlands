@@ -22,10 +22,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.SmokingRackRecipe;
+import thebetweenlands.common.block.container.CenserBlock;
 import thebetweenlands.common.block.container.SmokingRackBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.inventory.SmokingRackMenu;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 import javax.annotation.Nullable;
@@ -82,6 +85,8 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SmokingRackBlockEntity entity) {
+		if (state.getValue(SmokingRackBlock.WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) return;
+		if (!level.getBlockState(pos.above()).is(BlockRegistry.SMOKING_RACK) || level.getBlockState(pos.above()).getValue(SmokingRackBlock.WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) return;
 		if (!level.isClientSide()) {
 			boolean setChanged = false;
 			if (state.getValue(SmokingRackBlock.HEATED)) {

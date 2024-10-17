@@ -8,8 +8,10 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -17,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -27,13 +30,14 @@ import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.entity.Seat;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
 
-public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
+public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final VoxelShape X_AXIS_SHAPE = Block.box(3.0D, 0.0D, 1.0D, 13.0D, 11.5D, 15.0D);
 	public static final VoxelShape Z_AXIS_SHAPE = Block.box(1.0D, 0.0D, 3.0D, 15.0D, 11.5D, 13.0D);
@@ -41,7 +45,7 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 
 	public FishingTackleBoxBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(OPEN, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(OPEN, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -118,9 +122,29 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 		return super.getDrops(state, params);
 	}
 
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
+
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+	}
+
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(OPEN));
+		super.createBlockStateDefinition(builder.add(OPEN, WATER_TYPE));
 	}
 
 	@Nullable
