@@ -34,6 +34,7 @@ import thebetweenlands.common.entity.GenericPartEntity;
 import thebetweenlands.common.entity.creature.Dragonfly;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.registries.SoundRegistry;
+
 public class Shambler extends Monster implements BLEntity {
 
 	private static final EntityDataAccessor<Boolean> JAWS_OPEN = SynchedEntityData.defineId(Shambler.class, EntityDataSerializers.BOOLEAN);
@@ -296,7 +297,7 @@ public class Shambler extends Monster implements BLEntity {
 			Entity entity = list.get(i);
 			if (entity != null && entity == getTarget() && !(entity instanceof PartEntity)) {
 				if (entity instanceof LivingEntity)
-					if (!isPassenger()) {
+					if (!isVehicle()) {
 						entity.startRiding(this, true);
 						if (!level().isClientSide())
 							if (isExtendingTongue())
