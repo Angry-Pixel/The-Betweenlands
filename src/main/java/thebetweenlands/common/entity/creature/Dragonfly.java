@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity.creature;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvent;
@@ -176,15 +175,15 @@ public class Dragonfly extends AmbientCreature implements BLEntity {
 	}
 
 	private boolean isInLurkersMouth() {
-		return false; //this.getVehicle() instanceof Lurker;
+		return this.getVehicle() instanceof Lurker;
 	}
 
 	@Override
 	public void remove(RemovalReason reason) {
 		if (!this.level().isClientSide() && reason.shouldDestroy()) {
-//			if (this.getKillCredit() instanceof EntityLurker lurker) {
-//				lurker.setHuntingTimer(1200); // 1 minute cooldown
-//			}
+			if (this.getKillCredit() instanceof Lurker lurker) {
+				lurker.setHuntingTimer(1200); // 1 minute cooldown
+			}
 		}
 		super.remove(reason);
 	}

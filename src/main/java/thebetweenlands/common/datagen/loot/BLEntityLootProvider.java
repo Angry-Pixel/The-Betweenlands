@@ -318,6 +318,12 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.noLoot(EntityRegistry.FIREFLY);
 		this.noLoot(EntityRegistry.JELLYFISH);
+		this.add(EntityRegistry.LURKER.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN)
+					.when(LootItemKilledByPlayerCondition.killedByPlayer())
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

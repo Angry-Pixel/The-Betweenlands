@@ -232,6 +232,11 @@ public class Jellyfish extends WaterAnimal implements BLEntity {
 	}
 
 	@Override
+	protected void pushEntities() {
+
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.getEntity() instanceof Jellyfish) {
 			return false;
@@ -243,9 +248,9 @@ public class Jellyfish extends WaterAnimal implements BLEntity {
 	@Override
 	public void remove(RemovalReason reason) {
 		if (!this.level().isClientSide() && reason.shouldDestroy()) {
-//			if (this.getKillCredit() instanceof EntityLurker lurker) {
-//				lurker.setHuntingTimer(1200); // 1 minute cooldown
-//			}
+			if (this.getKillCredit() instanceof Lurker lurker) {
+				lurker.setHuntingTimer(1200); // 1 minute cooldown
+			}
 		}
 		super.remove(reason);
 	}
