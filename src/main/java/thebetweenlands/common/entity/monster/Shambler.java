@@ -2,17 +2,22 @@ package thebetweenlands.common.entity.monster;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -27,10 +32,10 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.common.entity.BLEntity;
-import thebetweenlands.common.entity.GenericPartEntity;
 import thebetweenlands.common.entity.creature.Dragonfly;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -45,17 +50,36 @@ public class Shambler extends Monster implements BLEntity {
 	private int prevJawAngle;
 	private int prevTongueLength;
 	
-	public GenericPartEntity[] tongue_array; // we may want to make more tongue parts
-	public GenericPartEntity tongue_end = new GenericPartEntity(this, 0.5F, 0.5F);
+	public ShamblerTongueMultipart[] tongue_array; // we may want to make more tongue parts
+
+	public ShamblerTongueMultipart tongue_end = new ShamblerTongueMultipart(this, 0.5F, 0.5F);
 
 	public Shambler(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
 		//this.setSize(0.95F, 1.25F);
-		tongue_array = new GenericPartEntity[16];
+		tongue_array = new ShamblerTongueMultipart[16];
 		for(int i = 0; i < tongue_array.length - 1; i++) {
-			tongue_array[i] = new GenericPartEntity(this, 0.125F, 0.125F);
+			tongue_array[i] = new ShamblerTongueMultipart(this, 0.125F, 0.125F);
 		}
 		tongue_array[tongue_array.length - 1] = tongue_end;
+		setId(ENTITY_COUNTER.getAndAdd(this.tongue_array.length + 1) + 1);
+	}
+
+	@Override
+	public void setId(int id) {
+		super.setId(id);
+		for (int i = 0; i < this.tongue_array.length; i++)
+			this.tongue_array[i].setId(id + i + 1);
+	}
+
+	@Override
+	public PartEntity<?>[] getParts() {
+		return tongue_array;
+	}
+
+	@Override
+	public boolean isMultipartEntity() {
+		return true;
 	}
 
 	@Override
@@ -237,9 +261,9 @@ public class Shambler extends Monster implements BLEntity {
 	@SuppressWarnings("rawtypes")
 	@Override
     public void tick() {
-		super.tick();
 		
-		Vec3 vector = getLookAngle().scale(1D);
+		
+		Vec3 vector = getViewVector(1F);
 		
 		double offSetX = vector.x * -0.25D;
 		double offsetY = vector.y * -0.25D;
@@ -249,14 +273,14 @@ public class Shambler extends Monster implements BLEntity {
 		
 		double tongueLength = lengthIncrement;
 		
-		for(GenericPartEntity part : tongue_array) {
+		for(ShamblerTongueMultipart part : tongue_array) {
 			part.yRotO = part.getYRot();
 			part.xRotO = part.getXRot();
 			part.xOld = part.xo;
 			part.yOld = part.yo;
 			part.zOld = part.zo;
 			
-			part.setPos(xo + offSetX + ((double) vector.x * getTongueLength() * tongueLength), yo + this.getEyeHeight() - 0.32 + offsetY + ((double) vector.y * getTongueLength() * tongueLength), zo + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
+			part.setPos(xo + offSetX + vector.x * getTongueLength() * tongueLength, yo + this.getEyeHeight() - 0.32 + offsetY + vector.y * getTongueLength() * tongueLength, zo + offSetZ + vector.z * getTongueLength() * tongueLength);
 			part.setYRot(getYRot());
 			part.setXRot(getXRot());
 		
@@ -264,6 +288,7 @@ public class Shambler extends Monster implements BLEntity {
 		}
 		
 		checkCollision();
+		super.tick();
     }
 	
 	@Override
@@ -320,5 +345,15 @@ public class Shambler extends Monster implements BLEntity {
 	@Override
 	public boolean hurt(DamageSource source, float ammount) {
 		return super.hurt(source, ammount);
+	}
+	
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
+		for (ShamblerTongueMultipart part : tongue_array) {
+			part.setPos(this.xo, this.yo, this.zo);
+			part.setYRot(this.getYRot());
+		}
+		return data;
 	}
 }

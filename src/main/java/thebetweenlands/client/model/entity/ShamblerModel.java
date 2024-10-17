@@ -13,7 +13,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import thebetweenlands.common.entity.monster.Shambler;
 
-public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
+public class ShamblerModel extends HierarchicalModel<Shambler> {
 	public ModelPart root;
 	public ModelPart body_base;
 	public ModelPart body2;
@@ -73,11 +73,11 @@ public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
 		body3 = body2.getChild("body3");
 		weird_butt = body3.getChild("weird_butt");
 		surprise_tail = weird_butt.getChild("surprise_tail");
-		tail2 = surprise_tail.getChild("tail2 ");
+		tail2 = surprise_tail.getChild("tail2");
 		tail3 = tail2.getChild("tail3");
 		tail4 = tail3.getChild("tail4");
-		tail5 = tail5.getChild("tail5");
-		tail6 = tail6.getChild("tail6");
+		tail5 = tail4.getChild("tail5");
+		tail6 = tail5.getChild("tail6");
 		head1 = body_base.getChild("head1");
 		cranialthing1 = head1.getChild("cranialthing1");
 		cranialthing2 = cranialthing1.getChild("cranialthing2");
@@ -106,8 +106,8 @@ public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
 		toe_left1 = foot_left1.getChild("toe_left1");
 		toe_left2 = foot_left1.getChild("toe_left2");
 		toe_left3 = foot_left1.getChild("toe_left3");
-		tongue_part = root.getChild("tongue_part");
-		tongue_end = root.getChild("tongue_end");
+		tongue_part = root.getChild("root").getChild("tongue_part");
+		tongue_end = root.getChild("root").getChild("tongue_end");
 		tongue1 = tongue_end.getChild("tongue1");
 		tongue2 = tongue_end.getChild("tongue2");
 		teeth1 = tongue1.getChild("teeth1");
@@ -130,7 +130,7 @@ public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
 				PartPose.offsetAndRotation(0.0F, 0.0F, 7.0F, -0.3643F, 0.0F, 0.0F));
 
 		PartDefinition body3 = body2.addOrReplaceChild("body3",
-				CubeListBuilder.create().texOffs(0, 30).addBox(-4.01F, 0.0F, 0.0F, 8, 8, 3),
+				CubeListBuilder.create().texOffs(0, 30).addBox(-4.01F, 0.0F, 0.0F, 8F, 8F, 3F),
 				PartPose.offsetAndRotation(0.0F, 0.0F, 5.0F, -0.2731F, 0.0F, 0.0F));
 
 		PartDefinition weird_butt = body3.addOrReplaceChild("weird_butt",
@@ -170,7 +170,7 @@ public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
 				PartPose.offsetAndRotation(-1.99F, 3.0F, -5.0F, 0.4363323129985824F, 0.0F, 0.0F));
 
 		PartDefinition hindleg_right3 = hindleg_right2.addOrReplaceChild("hindleg_right3",
-				CubeListBuilder.create().texOffs(40, 25).addBox(0.02F, 0.0F, -4.0F, 3, 4, 4),
+				CubeListBuilder.create().texOffs(40, 25).addBox(0.02F, 0.0F, -4.0F, 3F, 4F, 4F),
 				PartPose.offsetAndRotation(0.0F, 6.0F, 4.0F, -1.0471975511965976F, 0.0F, 0.0F));
 
 		PartDefinition foot_right1 = hindleg_right3.addOrReplaceChild("foot_right1",
@@ -178,135 +178,135 @@ public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
 				PartPose.offsetAndRotation(1.5F, 4.0F, -4.0F, 0.4886921905584123F, 0.0F, 0.0F));
 
 		PartDefinition toe_right1 = foot_right1.addOrReplaceChild("toe_right1",
-				CubeListBuilder.create().texOffs(40, 41).addBox(-2.0F, 0.0F, -4.0F, 2, 2, 5),
+				CubeListBuilder.create().texOffs(40, 41).addBox(-2.0F, 0.0F, -4.0F, 2F, 2F, 5F),
 				PartPose.offsetAndRotation(-0.5F, 0.0F, 2.0F, -0.045553093477052F, 0.18203784098300857F, -0.091106186954104F));
 
 		PartDefinition toe_right2 = foot_right1.addOrReplaceChild("toe_right2",
-				CubeListBuilder.create().texOffs(40, 49).addBox(-1.0F, 0.0F, -2.5F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(40, 49).addBox(-1.0F, 0.0F, -2.5F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, -0.2F, 0.0F, -0.045553093477052F, 0.0F, 0.0F));
 
 		PartDefinition toe_right3 = foot_right1.addOrReplaceChild("toe_right3",
-				CubeListBuilder.create().texOffs(40, 55).addBox(0.0F, 0.0F, -5.0F, 2, 2, 6),
+				CubeListBuilder.create().texOffs(40, 55).addBox(0.0F, 0.0F, -5.0F, 2F, 2F, 6F),
 				PartPose.offsetAndRotation(0.5F, 0.0F, 2.0F, -0.045553093477052F, -0.18203784098300857F, 0.091106186954104F));
 
 		PartDefinition hindleg_left1 = body2.addOrReplaceChild("hindleg_left1",
-				CubeListBuilder.create().texOffs(61, 0).addBox(-1.0F, -3.0F, -5.0F, 3, 6, 7),
+				CubeListBuilder.create().texOffs(61, 0).addBox(-1.0F, -3.0F, -5.0F, 3F, 6F, 7F),
 				PartPose.offsetAndRotation(4.0F, 5.0F, 3.0F, 0.5235987755982988F, 0.0F, 0.0F));
 
 		PartDefinition hindleg_left2 = hindleg_left1.addOrReplaceChild("hindleg_left2",
-				CubeListBuilder.create().texOffs(61, 14).addBox(0.0F, 0.0F, 0.0F, 3, 6, 4),
+				CubeListBuilder.create().texOffs(61, 14).addBox(0.0F, 0.0F, 0.0F, 3F, 6F, 4F),
 				PartPose.offsetAndRotation(-1.02F, 3.0F, -5.0F, 0.4363323129985824F, 0.0F, 0.0F));
 
 		PartDefinition hindleg_left3 = hindleg_left2.addOrReplaceChild("hindleg_left3",
-				CubeListBuilder.create().texOffs(61, 25).addBox(-3.02F, 0.0F, -4.0F, 3, 4, 4),
+				CubeListBuilder.create().texOffs(61, 25).addBox(-3.02F, 0.0F, -4.0F, 3F, 4F, 4F),
 				PartPose.offsetAndRotation(3.0F, 6.0F, 4.0F, -1.0471975511965976F, 0.0F, 0.0F));
 
 		PartDefinition foot_left1 = hindleg_left3.addOrReplaceChild("foot_left1",
-				CubeListBuilder.create().texOffs(61, 34).addBox(-1.5F, 0.0F, 0.0F, 3, 2, 4),
+				CubeListBuilder.create().texOffs(61, 34).addBox(-1.5F, 0.0F, 0.0F, 3F, 2F, 4F),
 				PartPose.offsetAndRotation(-1.5F, 4.0F, -4.0F, 0.4886921905584123F, 0.0F, 0.0F));
 
 		PartDefinition toe_left1 = foot_left1.addOrReplaceChild("toe_left1",
-				CubeListBuilder.create().texOffs(61, 41).addBox(0.0F, 0.0F, -4.0F, 2, 2, 5),
+				CubeListBuilder.create().texOffs(61, 41).addBox(0.0F, 0.0F, -4.0F, 2F, 2F, 5F),
 				PartPose.offsetAndRotation(0.5F, 0.0F, 2.0F, -0.045553093477052F, -0.18203784098300857F, 0.091106186954104F));
 
 		PartDefinition toe_left2 = foot_left1.addOrReplaceChild("toe_left2",
-				CubeListBuilder.create().texOffs(61, 49).addBox(-1.0F, 0.0F, -2.5F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(61, 49).addBox(-1.0F, 0.0F, -2.5F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, -0.2F, 0.0F, -0.045553093477052F, 0.0F, 0.0F));
 
 		PartDefinition toe_left3 = foot_left1.addOrReplaceChild("toe_left3",
-				CubeListBuilder.create().texOffs(61, 55).addBox(-2.0F, 0.0F, -5.0F, 2, 2, 6),
+				CubeListBuilder.create().texOffs(61, 55).addBox(-2.0F, 0.0F, -5.0F, 2F, 2F, 6F),
 				PartPose.offsetAndRotation(-0.5F, 0.0F, 2.0F, -0.045553093477052F, 0.18203784098300857F,
 						-0.091106186954104F));
 
 		PartDefinition head1 = body_base.addOrReplaceChild("head1",
-				CubeListBuilder.create().texOffs(85, 0).addBox(-4.0F, -3.5F, -6.0F, 8, 8, 7),
+				CubeListBuilder.create().texOffs(85, 0).addBox(-4.0F, -3.5F, -6.0F, 8F, 8F, 7F),
 				PartPose.offset(0.0F, 1.0F, 2.0F));
 
 		PartDefinition mouth = head1.addOrReplaceChild("mouth",
-				CubeListBuilder.create().texOffs(85, 16).addBox(-3.0F, 0.0F, -2.0F, 6, 6, 2),
+				CubeListBuilder.create().texOffs(85, 16).addBox(-3.0F, 0.0F, -2.0F, 6F, 6F, 2F),
 				PartPose.offset(0.0F, -2.5F, -6.0F));
 
 		PartDefinition mouth_arm1a = head1.addOrReplaceChild("mouth_arm1a",
-				CubeListBuilder.create().texOffs(85, 25).addBox(0.0F, 0.0F, -4.0F, 3, 3, 5),
+				CubeListBuilder.create().texOffs(85, 25).addBox(0.0F, 0.0F, -4.0F, 3F, 3F, 5F),
 				PartPose.offsetAndRotation(-3.9F, -3.3F, -5.0F, 0.08726646259971647F, 0.0F, 0.0F));
 
 		PartDefinition mouth_arm1b = mouth_arm1a.addOrReplaceChild("mouth_arm1b",
-				CubeListBuilder.create().texOffs(85, 34).addBox(0.0F, 0.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(85, 34).addBox(0.0F, 0.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.5F, 0.5F, -4.0F, 0.36425021489121656F, -0.36425021489121656F, -0.045553093477052F));
 
 		PartDefinition mouth_arm1c = mouth_arm1b.addOrReplaceChild("mouth_arm1c",
-				CubeListBuilder.create().texOffs(85, 40).addBox(0.0F, 0.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(85, 40).addBox(0.0F, 0.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, 0.01F, -3.0F, 0.0F, -0.5462880558742251F, 0.0F));
 
 		PartDefinition mouth_arm2a = head1.addOrReplaceChild("mouth_arm2a",
-				CubeListBuilder.create().texOffs(102, 25).addBox(-3.0F, 0.0F, -4.0F, 3, 3, 5),
+				CubeListBuilder.create().texOffs(102, 25).addBox(-3.0F, 0.0F, -4.0F, 3F, 3F, 5F),
 				PartPose.offsetAndRotation(3.9F, -3.3F, -5.0F, 0.08726646259971647F, 0.0F, 0.0F));
 
 		PartDefinition mouth_arm2b = mouth_arm2a.addOrReplaceChild("mouth_arm2b",
-				CubeListBuilder.create().texOffs(102, 34).addBox(-2.0F, 0.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(102, 34).addBox(-2.0F, 0.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(-0.5F, 0.5F, -4.0F, 0.36425021489121656F, 0.36425021489121656F,
 						0.045553093477052F));
 
 		PartDefinition mouth_arm2c = mouth_arm2b.addOrReplaceChild("mouth_arm2c",
-				CubeListBuilder.create().texOffs(102, 40).addBox(-2.0F, 0.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(102, 40).addBox(-2.0F, 0.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, 0.01F, -3.0F, 0.0F, 0.5462880558742251F, 0.0F));
 
 		PartDefinition mouth_arm3a = head1.addOrReplaceChild("mouth_arm3a",
-				CubeListBuilder.create().texOffs(85, 46).addBox(0.0F, -3.0F, -4.0F, 3, 3, 5),
+				CubeListBuilder.create().texOffs(85, 46).addBox(0.0F, -3.0F, -4.0F, 3F, 3F, 5F),
 				PartPose.offsetAndRotation(-3.9F, 4.3F, -5.0F, -0.08726646259971647F, 0.0F, 0.0F));
 
 		PartDefinition mouth_arm3b = mouth_arm3a.addOrReplaceChild("mouth_arm3b",
-				CubeListBuilder.create().texOffs(85, 55).addBox(0.0F, -2.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(85, 55).addBox(0.0F, -2.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.5F, -0.5F, -4.0F, -0.36425021489121656F, -0.36425021489121656F,
 						0.045553093477052F));
 
 		PartDefinition mouth_arm3c = mouth_arm3b.addOrReplaceChild("mouth_arm3c",
-				CubeListBuilder.create().texOffs(85, 61).addBox(0.0F, -2.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(85, 61).addBox(0.0F, -2.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, -0.01F, -3.0F, 0.0F, -0.5462880558742251F, 0.0F));
 
 		PartDefinition mouth_arm4a = head1.addOrReplaceChild("mouth_arm4a",
-				CubeListBuilder.create().texOffs(102, 46).addBox(-3.0F, -3.0F, -4.0F, 3, 3, 5),
+				CubeListBuilder.create().texOffs(102, 46).addBox(-3.0F, -3.0F, -4.0F, 3F, 3F, 5F),
 				PartPose.offsetAndRotation(3.9F, 4.3F, -5.0F, -0.0890117918517108F, 0.0F, 0.0F));
 
 		PartDefinition mouth_arm4b = mouth_arm4a.addOrReplaceChild("mouth_arm4b",
-				CubeListBuilder.create().texOffs(102, 55).addBox(-2.0F, -2.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(102, 55).addBox(-2.0F, -2.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(-0.5F, -0.5F, -4.0F, -0.36425021489121656F, 0.36425021489121656F,
 						-0.045553093477052F));
 
 		PartDefinition mouth_arm4c = mouth_arm4b.addOrReplaceChild("mouth_arm4c",
-				CubeListBuilder.create().texOffs(102, 61).addBox(-2.0F, -2.0F, -3.0F, 2, 2, 3),
+				CubeListBuilder.create().texOffs(102, 61).addBox(-2.0F, -2.0F, -3.0F, 2F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, -0.01F, -3.0F, 0.0F, 0.5462880558742251F, 0.0F));
 
 		PartDefinition cranialthing1 = head1.addOrReplaceChild("cranialthing1",
-				CubeListBuilder.create().texOffs(85, 74).addBox(-4.0F, -2.0F, 0.0F, 8, 2, 3),
+				CubeListBuilder.create().texOffs(85, 74).addBox(-4.0F, -2.0F, 0.0F, 8F, 2F, 3F),
 				PartPose.offsetAndRotation(0.0F, -1.5F, 1.0F, 0.18203784098300857F, 0.0F, 0.0F));
 
 		PartDefinition cranialthing2 = cranialthing1.addOrReplaceChild("cranialthing2",
-				CubeListBuilder.create().texOffs(85, 80).addBox(-3.0F, -2.0F, 0.0F, 6, 2, 2),
+				CubeListBuilder.create().texOffs(85, 80).addBox(-3.0F, -2.0F, 0.0F, 6F, 2F, 2F),
 				PartPose.offsetAndRotation(0.0F, 0.0F, 3.0F, 0.18203784098300857F, 0.0F, 0.0F));
 
 		PartDefinition tongue_part = root.addOrReplaceChild("tongue_part",
-				CubeListBuilder.create().texOffs(85, 86).addBox(-1.0F, -1.0F, -2.0F, 2, 2, 4),
+				CubeListBuilder.create().texOffs(85, 86).addBox(-1.0F, -1.0F, -2.0F, 2F, 2F, 4F),
 				PartPose.offset(0.0F, 16.0F, 0.0F));
 
 		PartDefinition tongue_end = root.addOrReplaceChild("tongue_end",
-				CubeListBuilder.create().texOffs(85, 86).addBox(-1.0F, -1.0F, -2.0F, 2, 2, 4),
+				CubeListBuilder.create().texOffs(85, 86).addBox(-1.0F, -1.0F, -2.0F, 2F, 2F, 4F),
 				PartPose.offset(0.0F, 16.0F, 0.0F));
 
 		PartDefinition tongue1 = tongue_end.addOrReplaceChild("tongue1",
-				CubeListBuilder.create().texOffs(85, 93).addBox(-1.5F, 0.0F, -2.0F, 3, 2, 2),
+				CubeListBuilder.create().texOffs(85, 93).addBox(-1.5F, 0.0F, -2.0F, 3F, 2F, 2F),
 				PartPose.offsetAndRotation(0.0F, 0.0F, -1.0F, 0.5009094953223726F, 0.0F, 0.0F));
 
 		PartDefinition teeth1 = tongue1.addOrReplaceChild("teeth1",
-				CubeListBuilder.create().texOffs(85, 98).addBox(-1.5F, -2.0F, -2.0F, 3, 2, 2),
+				CubeListBuilder.create().texOffs(85, 98).addBox(-1.5F, -2.0F, -2.0F, 3F, 2F, 2F),
 				PartPose.offset(0.0F, 2.0F, -2.0F));
 
 		PartDefinition tongue2 = tongue_end.addOrReplaceChild("tongue2",
-				CubeListBuilder.create().texOffs(96, 93).addBox(-1.5F, -2.0F, -2.0F, 3, 2, 2),
+				CubeListBuilder.create().texOffs(96, 93).addBox(-1.5F, -2.0F, -2.0F, 3F, 2F, 2F),
 				PartPose.offsetAndRotation(0.0F, 0.0F, -1.0F, -0.5009094953223726F, 0.0F, 0.0F));
 
 		PartDefinition teeth2 = tongue2.addOrReplaceChild("teeth2",
-				CubeListBuilder.create().texOffs(96, 98).addBox(-1.5F, 0.0F, -2.0F, 3, 2, 2),
+				CubeListBuilder.create().texOffs(96, 98).addBox(-1.5F, 0.0F, -2.0F, 3F, 2F, 2F),
 				PartPose.offset(0.0F, -2.0F, -2.0F));
 
 		
@@ -359,18 +359,18 @@ public class ShamblerModel<T extends Shambler> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		head1.yRot = (float) Math.clamp(Math.toRadians(netHeadYaw), -60, 60);
+	public void setupAnim(Shambler entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	//	head1.yRot = (float) Math.clamp(Math.toRadians(netHeadYaw), -60, 60);
 	}
 
 	@Override
-	public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTickTime) {
+	public void prepareMobModel(Shambler entity, float limbSwing, float limbSwingAmount, float partialTickTime) {
 
 		float animation = (float) (Math.cos((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F);
 		float animation2 = (float) (Math.sin((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F);
 		float flap = (float) (Math.sin((entity.tickCount + partialTickTime) * 0.3F) * 0.8F);
 		float smoothedAngle = entity.smoothedAngle(partialTickTime);
-		float headX = 0F + entity.getYRot() / (180F / (float) Math.PI);
+		float headX = 0F + entity.getXRot() / (180F / (float) Math.PI);
 
 		hindleg_left1.xRot = 0.5235987755982988F - (animation2 * 14F) + flap * 0.1F - flap * 0.075F / (180F / (float) Math.PI);
 		hindleg_right1.xRot = 0.5235987755982988F - (animation * 14F) + flap * 0.1F - flap * 0.075F / (180F / (float) Math.PI);

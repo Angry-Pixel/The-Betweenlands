@@ -13,14 +13,14 @@ import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.ShamblerModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.GenericPartEntity;
 import thebetweenlands.common.entity.monster.Shambler;
+import thebetweenlands.common.entity.monster.ShamblerTongueMultipart;
 
-public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel <Shambler>> {
+public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
 	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/shambler.png");
 
 	public ShamblerRenderer(EntityRendererProvider.Context context) {
-		super(context, new ShamblerModel<>(context.bakeLayer(BLModelLayers.SHAMBLER)), 0.5F);
+		super(context, new ShamblerModel(context.bakeLayer(BLModelLayers.SHAMBLER)), 0.5F);
 	}
 
 	@Override
@@ -45,13 +45,10 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel <Shamb
 			double ex = entity.xOld + (entity.xo - entity.xOld) * (double) partialTicks;
 			double ey = entity.yOld + (entity.yo - entity.yOld) * (double) partialTicks;
 			double ez = entity.zOld + (entity.zo - entity.zOld) * (double) partialTicks;
-			double rx = ex;
-			double ry = ey;
-			double rz = ez;
 			RenderType renderType = getRenderType(entity, isGlowing, isGlowing, isGlowing);
 			if (renderType != null) {
 				for (int i = 0; i < entity.tongue_array.length; i++) {
-					renderTonguePart(entity, entity.tongue_array[i], rx, ry, rz, partialTicks, stack, buffer.getBuffer(renderType), packedLight, overlay, colour);
+					renderTonguePart(entity, entity.tongue_array[i], ex, ey, ez, partialTicks, stack, buffer.getBuffer(renderType), packedLight, overlay, colour);
 				}
 			}
 		}
@@ -62,7 +59,8 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel <Shamb
 		return TEXTURE;
 	}
 
-	private void renderTonguePart(Shambler entity, GenericPartEntity part, double rx, double ry, double rz, float partialTicks, PoseStack stack, VertexConsumer consumer, int packedLight, int overlay, int colour) {
+	@SuppressWarnings({ "rawtypes"})
+	private void renderTonguePart(Shambler entity, ShamblerTongueMultipart part, double rx, double ry, double rz, float partialTicks, PoseStack stack, VertexConsumer consumer, int packedLight, int overlay, int colour) {
 		double x = part.xOld + (part.xo - part.xOld) * (double)partialTicks - rx;
         double y = part.yOld + (part.yo - part.yOld) * (double)partialTicks - ry;
         double z = part.zOld + (part.zo - part.zOld) * (double)partialTicks - rz;
