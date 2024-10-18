@@ -1,6 +1,5 @@
 package thebetweenlands.compat.jei.recipes;
 
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
@@ -9,7 +8,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
@@ -22,36 +21,18 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class SteepingPotRecipeCategory implements IRecipeCategory<SteepingPotRecipe> {
+public class SteepingPotRecipeCategory extends AbstractRecipeCategory<SteepingPotRecipe> {
 
 	public static final RecipeType<SteepingPotRecipe> STEEPING_POT = RecipeType.create(TheBetweenlands.ID, "steeping_pot", SteepingPotRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 	private final IDrawable arrow;
 
 	public SteepingPotRecipeCategory(IGuiHelper helper) {
+		super(STEEPING_POT, Component.translatable("jei.thebetweenlands.recipe.steeping_pot"), helper.createDrawableItemLike(BlockRegistry.STEEPING_POT), 100, 100);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/steeping_pot_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 100, 100);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.STEEPING_POT.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.steeping_pot");
 		var arrow = helper.createDrawable(location, 100, 14, 16, 14);
 		this.arrow = helper.createAnimatedDrawable(arrow, 200, IDrawableAnimated.StartDirection.LEFT, false);
-	}
-
-	@Override
-	public RecipeType<SteepingPotRecipe> getRecipeType() {
-		return STEEPING_POT;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package thebetweenlands.compat.jei.recipes;
 
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -8,7 +7,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -17,33 +16,15 @@ import thebetweenlands.api.recipes.SmokingRackRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class SmokingRackRecipeCategory implements IRecipeCategory<SmokingRackRecipe> {
+public class SmokingRackRecipeCategory extends AbstractRecipeCategory<SmokingRackRecipe> {
 
 	public static final RecipeType<SmokingRackRecipe> SMOKING_RACK = RecipeType.create(TheBetweenlands.ID, "smoking_rack", SmokingRackRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 
 	public SmokingRackRecipeCategory(IGuiHelper helper) {
+		super(SMOKING_RACK, Component.translatable("jei.thebetweenlands.recipe.smoking_rack"), helper.createDrawableItemLike(BlockRegistry.SMOKING_RACK), 126, 18);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/smoking_rack_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 126, 18);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.SMOKING_RACK.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.smoking_rack");
-	}
-
-	@Override
-	public RecipeType<SmokingRackRecipe> getRecipeType() {
-		return SMOKING_RACK;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

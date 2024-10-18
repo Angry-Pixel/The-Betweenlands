@@ -8,6 +8,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,33 +26,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
+public class CompostRecipeCategory extends AbstractRecipeCategory<CompostRecipe> {
 
 	public static final RecipeType<CompostRecipe> COMPOST = RecipeType.create(TheBetweenlands.ID, "compost", CompostRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 
 	public CompostRecipeCategory(IGuiHelper helper) {
+		super(COMPOST, Component.translatable("jei.thebetweenlands.recipe.compost"), helper.createDrawableItemLike(BlockRegistry.COMPOST_BIN), 58, 21);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/compost_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 58, 21);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.COMPOST_BIN.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.compost");
-	}
-
-	@Override
-	public RecipeType<CompostRecipe> getRecipeType() {
-		return COMPOST;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

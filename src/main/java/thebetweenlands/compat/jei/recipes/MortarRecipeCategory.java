@@ -8,6 +8,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,33 +23,15 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class MortarRecipeCategory implements IRecipeCategory<MortarRecipe> {
+public class MortarRecipeCategory extends AbstractRecipeCategory<MortarRecipe> {
 
 	public static final RecipeType<MortarRecipe> MORTAR = RecipeType.create(TheBetweenlands.ID, "mortar", MortarRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 
 	public MortarRecipeCategory(IGuiHelper helper) {
+		super(MORTAR, Component.translatable("jei.thebetweenlands.recipe.mortar"), helper.createDrawableItemLike(BlockRegistry.MORTAR), 107, 34);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/mortar_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 107, 34);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.MORTAR.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.mortar");
-	}
-
-	@Override
-	public RecipeType<MortarRecipe> getRecipeType() {
-		return MORTAR;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

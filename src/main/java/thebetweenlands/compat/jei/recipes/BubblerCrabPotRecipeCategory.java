@@ -9,6 +9,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -18,38 +19,21 @@ import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class BubblerCrabPotRecipeCategory implements IRecipeCategory<BubblerCrabPotFilterRecipe> {
+public class BubblerCrabPotRecipeCategory extends AbstractRecipeCategory<BubblerCrabPotFilterRecipe> {
+
 	public static final RecipeType<BubblerCrabPotFilterRecipe> FILTER = RecipeType.create(TheBetweenlands.ID, "bubbler_crab_pot_filter", BubblerCrabPotFilterRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 	private final IDrawable remains;
 	private final IDrawable arrow;
 
 	public BubblerCrabPotRecipeCategory(IGuiHelper helper) {
+		super(FILTER, Component.translatable("jei.thebetweenlands.recipe.bubbler_crab_pot_filter"), helper.createDrawableItemLike(BlockRegistry.CRAB_POT_FILTER), 91, 83);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/bubbler_crab_pot_filter_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 91, 83);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.CRAB_POT_FILTER.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.bubbler_crab_pot_filter");
 		var remains = helper.createDrawable(location, 92, 4, 16, 10);
 		this.remains = helper.createAnimatedDrawable(remains, 200, IDrawableAnimated.StartDirection.TOP, true);
 		var arrow = helper.createDrawable(location, 91, 18, 22, 16);
 		this.arrow = helper.createAnimatedDrawable(arrow, 200, IDrawableAnimated.StartDirection.LEFT, false);
-	}
-
-	@Override
-	public RecipeType<BubblerCrabPotFilterRecipe> getRecipeType() {
-		return FILTER;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

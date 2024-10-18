@@ -1,6 +1,5 @@
 package thebetweenlands.compat.jei.recipes;
 
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -8,7 +7,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -26,35 +25,17 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class AnimatorRecipeCategory implements IRecipeCategory<AnimatorRecipe> {
+public class AnimatorRecipeCategory extends AbstractRecipeCategory<AnimatorRecipe> {
 
 	public static final DecimalFormat LIFE_CRYSTAL_PERCENTAGE = new DecimalFormat("##%");
 
 	public static final RecipeType<AnimatorRecipe> ANIMATOR = RecipeType.create(TheBetweenlands.ID, "animator", AnimatorRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 
 	public AnimatorRecipeCategory(IGuiHelper helper) {
+		super(ANIMATOR, Component.translatable("jei.thebetweenlands.recipe.animator"), helper.createDrawableItemLike(BlockRegistry.ANIMATOR), 108, 67);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/animator_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 108, 67);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.ANIMATOR.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.animator");
-	}
-
-	@Override
-	public RecipeType<AnimatorRecipe> getRecipeType() {
-		return ANIMATOR;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

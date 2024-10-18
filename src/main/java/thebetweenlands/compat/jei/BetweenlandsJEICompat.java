@@ -42,6 +42,11 @@ public class BetweenlandsJEICompat implements IModPlugin {
 	}
 
 	@Override
+	public void registerModInfo(IModInfoRegistration registration) {
+		registration.addModAliases(TheBetweenlands.ID, "betweenlands", "bl");
+	}
+
+	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		registration.addRecipeCatalyst(BlockRegistry.ANIMATOR.toStack(), AnimatorRecipeCategory.ANIMATOR);
 		registration.addRecipeCatalyst(BlockRegistry.CRAB_POT_FILTER.toStack(), BubblerCrabPotRecipeCategory.FILTER);

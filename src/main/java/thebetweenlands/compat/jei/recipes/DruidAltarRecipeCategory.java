@@ -8,6 +8,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,33 +20,15 @@ import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class DruidAltarRecipeCategory implements IRecipeCategory<DruidAltarRecipe> {
+public class DruidAltarRecipeCategory extends AbstractRecipeCategory<DruidAltarRecipe> {
 
 	public static final RecipeType<DruidAltarRecipe> ALTAR = RecipeType.create(TheBetweenlands.ID, "druid_altar", DruidAltarRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 
 	public DruidAltarRecipeCategory(IGuiHelper helper) {
+		super(ALTAR, Component.translatable("jei.thebetweenlands.recipe.druid_altar"), helper.createDrawableItemLike(BlockRegistry.DRUID_ALTAR), 75, 75);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/druid_altar_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 75, 75);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.DRUID_ALTAR.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.druid_altar");
-	}
-
-	@Override
-	public RecipeType<DruidAltarRecipe> getRecipeType() {
-		return ALTAR;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override

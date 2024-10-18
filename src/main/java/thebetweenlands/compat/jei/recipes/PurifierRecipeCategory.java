@@ -8,6 +8,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,34 +20,16 @@ import thebetweenlands.common.item.recipe.PurifierRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class PurifierRecipeCategory implements IRecipeCategory<PurifierRecipe> {
+public class PurifierRecipeCategory extends AbstractRecipeCategory<PurifierRecipe> {
 
 	public static final RecipeType<PurifierRecipe> PURIFIER = RecipeType.create(TheBetweenlands.ID, "purifier", PurifierRecipe.class);
 	private final IDrawable background;
-	private final IDrawable icon;
-	private final Component localizedName;
 	private static final ResourceLocation TANK = TheBetweenlands.prefix("container/purifier/tank");
 
 	public PurifierRecipeCategory(IGuiHelper helper) {
+		super(PURIFIER, Component.translatable("jei.thebetweenlands.recipe.purifier"), helper.createDrawableItemLike(BlockRegistry.PURIFIER), 107, 65);
 		ResourceLocation location = TheBetweenlands.prefix("textures/gui/viewer/purifier_grid.png");
 		this.background = helper.createDrawable(location, 0, 0, 107, 65);
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, BlockRegistry.PURIFIER.toStack());
-		this.localizedName = Component.translatable("jei.thebetweenlands.recipe.purifier");
-	}
-
-	@Override
-	public RecipeType<PurifierRecipe> getRecipeType() {
-		return PURIFIER;
-	}
-
-	@Override
-	public Component getTitle() {
-		return this.localizedName;
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return this.icon;
 	}
 
 	@Override
