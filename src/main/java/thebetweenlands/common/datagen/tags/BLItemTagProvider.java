@@ -11,6 +11,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.api.item.CustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
@@ -61,6 +62,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
 
 	public static final TagKey<Item> DOES_NOT_ROT = tag("does_not_rot");
+	public static final TagKey<Item> CIRCLE_GEM_APPLICABLE = tag("circle_gem_applicable");
 
 	public BLItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, ExistingFileHelper helper) {
 		super(output, lookupProvider, blockTags, TheBetweenlands.ID, helper);
@@ -244,6 +246,13 @@ public class BLItemTagProvider extends ItemTagsProvider {
 		this.tag(DOES_NOT_ROT).add(Items.ROTTEN_FLESH); // TODO: add BL food items here
 
 		this.tag(IGNORES_TOOL_WEAKNESS).addTag(CORRODIBLE);
+
+		this.tag(CIRCLE_GEM_APPLICABLE).remove(ItemRegistry.AMPHIBIOUS_HELMET.get())
+			.remove(ItemRegistry.AMPHIBIOUS_CHESTPLATE.get())
+			.remove(ItemRegistry.AMPHIBIOUS_LEGGINGS.get())
+			.remove(ItemRegistry.AMPHIBIOUS_BOOTS.get())
+			.addTag(Tags.Items.ARMORS).addTag(ItemTags.SWORDS).addTag(ItemTags.PICKAXES).addTag(ItemTags.AXES).addTag(ItemTags.SHOVELS).addTag(ItemTags.HOES)
+			.addTag(Tags.Items.TOOLS_SHIELD).addTag(Tags.Items.TOOLS_BOW).addTag(Tags.Items.TOOLS_CROSSBOW).addTag(Tags.Items.TOOLS_MACE).addTag(Tags.Items.TOOLS_SPEAR); //TODO amulets
 	}
 
 	public static TagKey<Item> tag(String tagName) {

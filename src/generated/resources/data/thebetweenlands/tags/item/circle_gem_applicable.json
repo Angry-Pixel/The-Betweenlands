@@ -1,0 +1,21 @@
+{
+  "remove": [
+    "thebetweenlands:amphibious_helmet",
+    "thebetweenlands:amphibious_chestplate",
+    "thebetweenlands:amphibious_leggings",
+    "thebetweenlands:amphibious_boots"
+  ],
+  "values": [
+    "#c:armors",
+    "#minecraft:swords",
+    "#minecraft:pickaxes",
+    "#minecraft:axes",
+    "#minecraft:shovels",
+    "#minecraft:hoes",
+    "#c:tools/shield",
+    "#c:tools/bow",
+    "#c:tools/crossbow",
+    "#c:tools/mace",
+    "#c:tools/spear"
+  ]
+}

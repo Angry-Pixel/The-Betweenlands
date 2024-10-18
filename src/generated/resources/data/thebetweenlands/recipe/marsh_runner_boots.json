@@ -3,17 +3,11 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "thebetweenlands:shimmer_stone"
-    },
-    {
-      "item": "thebetweenlands:animated_tar_beast_heart"
-    },
-    {
-      "item": "thebetweenlands:sludge_ball"
+      "item": "thebetweenlands:rubber_boots"
     },
     {
       "type": "thebetweenlands:aspect",
-      "aspect": "thebetweenlands:armaniis",
+      "aspect": "thebetweenlands:byrginaz",
       "input": [
         {
           "item": "thebetweenlands:green_aspect_vial"
@@ -27,6 +21,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "thebetweenlands:mummy_bait"
+    "id": "thebetweenlands:marsh_runner_boots"
   }
 }

@@ -98,6 +98,7 @@ public class TheBetweenlands {
 		CenserRecipeRegistry.RECIPES.register(eventbus);
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
 		EntityDataSerializerRegistry.DATA_SERIALIZERS.register(eventbus);
+		RecipeRegistry.INGREDIENT_TYPES.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
 

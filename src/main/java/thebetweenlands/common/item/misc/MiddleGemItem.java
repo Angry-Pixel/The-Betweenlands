@@ -5,12 +5,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 
 import java.util.List;
 
 public class MiddleGemItem extends Item {
-	public MiddleGemItem(Properties properties) {
+
+	private final CircleGemType type;
+
+	public MiddleGemItem(CircleGemType type, Properties properties) {
 		super(properties);
+		this.type = type;
 	}
 
 	@Override
@@ -19,5 +24,9 @@ public class MiddleGemItem extends Item {
 		tooltip.add(Component.translatable(this.getDescriptionId() + ".tool").withStyle(ChatFormatting.BLUE));
 		tooltip.add(Component.translatable("item.thebetweenlands.modifiers.armor").withStyle(ChatFormatting.GRAY));
 		tooltip.add(Component.translatable(this.getDescriptionId() + ".armor").withStyle(ChatFormatting.BLUE));
+	}
+
+	public CircleGemType getType() {
+		return this.type;
 	}
 }

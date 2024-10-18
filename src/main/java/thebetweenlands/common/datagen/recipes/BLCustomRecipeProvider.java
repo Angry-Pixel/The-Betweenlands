@@ -2,6 +2,7 @@ package thebetweenlands.common.datagen.recipes;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -12,6 +13,7 @@ import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.item.recipe.AnadiaSmokingRecipe;
 import thebetweenlands.common.item.recipe.AnadiaTrimmingRecipe;
 import thebetweenlands.common.item.recipe.MortarAspectrusRecipe;
+import thebetweenlands.common.item.recipe.special.*;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -252,6 +254,16 @@ public class BLCustomRecipeProvider {
 		PurifierRecipeBuilder.purifying(DifferenceIngredient.of(Ingredient.of(BLItemTagProvider.ITEM_FRAMES), Ingredient.of(ItemRegistry.CHAMPAGNE_ITEM_FRAME)), ItemRegistry.CHAMPAGNE_ITEM_FRAME).save(output);
 		PurifierRecipeBuilder.purifying(BLItemTagProvider.FILTERED_SILT_GLASS, BlockRegistry.FILTERED_SILT_GLASS).save(output);
 		PurifierRecipeBuilder.purifying(BLItemTagProvider.MUD_BRICK_SHINGLES, BlockRegistry.MUD_BRICK_SHINGLES).save(output);
-		//TODO weedwood rowboat and pouch custom recipes
+
+		SpecialRecipeBuilder.special(AddWormToRodRecipe::new).save(output, TheBetweenlands.prefix("add_worm_to_fishing_rod"));
+		SpecialRecipeBuilder.special(CircleGemRecipe::new).save(output, TheBetweenlands.prefix("add_circle_gem"));
+		SpecialRecipeBuilder.special(CleanToolRecipe::new).save(output, TheBetweenlands.prefix("clean_tool"));
+		SpecialRecipeBuilder.special(CoatToolRecipe::new).save(output, TheBetweenlands.prefix("coat_tool"));
+		SpecialRecipeBuilder.special(DyeLurkerPouchRecipe::new).save(output, TheBetweenlands.prefix("dye_lurker_pouch"));
+		SpecialRecipeBuilder.special(EmptyAspectVialRecipe::new).save(output, TheBetweenlands.prefix("empty_aspect_vial"));
+		SpecialRecipeBuilder.special(HearthgroveTarringRecipe::new).save(output, TheBetweenlands.prefix("hearthgrove_tarring"));
+		SpecialRecipeBuilder.special(HerbloreBookCopyRecipe::new).save(output, TheBetweenlands.prefix("copy_herblore_book"));
+		SpecialRecipeBuilder.special(LifeCrystalRechargeRecipe::new).save(output, TheBetweenlands.prefix("recharge_life_crystal"));
+		SpecialRecipeBuilder.special(UpgradeFishBaitRecipe::new).save(output, TheBetweenlands.prefix("upgrade_fish_bait"));
 	}
 }

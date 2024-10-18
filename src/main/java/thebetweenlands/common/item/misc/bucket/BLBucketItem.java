@@ -73,6 +73,15 @@ public class BLBucketItem extends Item {
 	}
 
 	@Override
+	public boolean hasCraftingRemainingItem(ItemStack stack) {
+		var tank = stack.getCapability(Capabilities.FluidHandler.ITEM);
+		if (tank != null) {
+			return tank.getFluidInTank(0).getAmount() > 0;
+		}
+		return false;
+	}
+
+	@Override
 	public Component getName(ItemStack stack) {
 		if (!stack.getOrDefault(DataComponentRegistry.STORED_FLUID, SimpleFluidContent.EMPTY).isEmpty()) {
 			return Component.translatable(this.getDescriptionId() + ".fluid", Component.translatable(stack.get(DataComponentRegistry.STORED_FLUID).getFluidType().getDescriptionId()));

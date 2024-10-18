@@ -6,7 +6,6 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -17,12 +16,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.registries.AspectTypeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.AspectIngredient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -78,6 +79,10 @@ public class BLItemRecipeProvider {
 		armorSet(output, ItemRegistry.SYRMORITE_HELMET, ItemRegistry.SYRMORITE_CHESTPLATE, ItemRegistry.SYRMORITE_LEGGINGS, ItemRegistry.SYRMORITE_BOOTS, ItemRegistry.SYRMORITE_INGOT);
 		armorSet(output, ItemRegistry.VALONITE_HELMET, ItemRegistry.VALONITE_CHESTPLATE, ItemRegistry.VALONITE_LEGGINGS, ItemRegistry.VALONITE_BOOTS, ItemRegistry.VALONITE_SHARD);
 		bootsItem(output, ItemRegistry.RUBBER_BOOTS, ItemRegistry.RUBBER_BALL);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.MARSH_RUNNER_BOOTS)
+			.requires(ItemRegistry.RUBBER_BOOTS).requires(new AspectIngredient(Ingredient.of(ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get()), registries.holderOrThrow(AspectTypeRegistry.BYRGINAZ), 1000).toVanilla())
+			.unlockedBy("has_boots", has(ItemRegistry.RUBBER_BOOTS)).save(output);
+
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.AMPHIBIOUS_HELMET)
 			.pattern("sss").pattern("ele").pattern("gbg")
 			.define('s', ItemRegistry.ANADIA_SCALES).define('e', ItemRegistry.ANADIA_EYE).define('l', ItemRegistry.LURKER_SKIN_HELMET)
@@ -233,9 +238,8 @@ public class BLItemRecipeProvider {
 		//TODO rope
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.MUMMY_BAIT)
 			.requires(ItemRegistry.SHIMMER_STONE).requires(ItemRegistry.ANIMATED_TAR_BEAST_HEART)
-			.requires(ItemRegistry.SLUDGE_BALL).requires(DataComponentIngredient.of(false, DataComponentMap.builder().set(DataComponentRegistry.ASPECT_CONTENTS, new AspectContents(registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 1000)).build(), ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get()))
-			.unlockedBy("has_shimmerstone", has(ItemRegistry.SHIMMER_STONE)).unlockedBy("has_heart", has(ItemRegistry.ANIMATED_TAR_BEAST_HEART))
-			.unlockedBy("has_aspect", inventoryTrigger(ItemPredicate.Builder.item().of(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.GREEN_ASPECT_VIAL).hasComponents(DataComponentPredicate.builder().expect(DataComponentRegistry.ASPECT_CONTENTS.get(), new AspectContents(registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 1000)).build()).build())).save(output);
+			.requires(ItemRegistry.SLUDGE_BALL).requires(new AspectIngredient(Ingredient.of(ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get()), registries.holderOrThrow(AspectTypeRegistry.ARMANIIS), 1000).toVanilla())
+			.unlockedBy("has_shimmerstone", has(ItemRegistry.SHIMMER_STONE)).unlockedBy("has_heart", has(ItemRegistry.ANIMATED_TAR_BEAST_HEART)).save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.AMATE_MAP)
 			.pattern("ppp").pattern("pgp").pattern("ppp").define('p', ItemRegistry.AMATE_PAPER).define('g', Ingredient.of(ItemRegistry.CRIMSON_MIDDLE_GEM, ItemRegistry.GREEN_MIDDLE_GEM, ItemRegistry.AQUA_MIDDLE_GEM))

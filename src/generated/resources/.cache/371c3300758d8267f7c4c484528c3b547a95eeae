@@ -1,9 +1,10 @@
-// 1.21.1	2024-10-17T20:35:10.845236	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2024-10-17T22:23:49.4525025	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
 6d94a07fd1401c7963d0cbd25416072ff5145982 data/minecraft/tags/item/shovels.json
 d06ec18ea23cf0b2bcd37583a885baeab6942c1f data/minecraft/tags/item/swords.json
+a7598dbab37e1a8e21a417106272d54c15d70163 data/thebetweenlands/tags/item/circle_gem_applicable.json
 64e73efc633e013c26a0476e03cdd737fd89a3b2 data/thebetweenlands/tags/item/corrodible.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/item/corrodible/custom.json
 2c1c14f6b8be0569d1e36c9e929fc0fe5488ef9c data/thebetweenlands/tags/item/corrodible/default.json

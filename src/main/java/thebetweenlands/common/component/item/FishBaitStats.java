@@ -24,4 +24,20 @@ public record FishBaitStats(int sinkSpeed, int dissolveTime, int range, boolean 
 		ByteBufCodecs.BOOL, FishBaitStats::glowing,
 		FishBaitStats::new
 	);
+
+	public FishBaitStats withSinkSpeed(int speed) {
+		return new FishBaitStats(speed, this.dissolveTime(), this.range(), this.glowing());
+	}
+
+	public FishBaitStats withDissolveTime(int time) {
+		return new FishBaitStats(this.sinkSpeed(), time, this.range(), this.glowing());
+	}
+
+	public FishBaitStats withRange(int range) {
+		return new FishBaitStats(this.sinkSpeed(), this.dissolveTime(), range, this.glowing());
+	}
+
+	public FishBaitStats withGlow(boolean glow) {
+		return new FishBaitStats(this.sinkSpeed(), this.dissolveTime(), this.range(), glow);
+	}
 }

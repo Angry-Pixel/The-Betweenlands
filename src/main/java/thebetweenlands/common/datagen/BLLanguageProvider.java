@@ -1208,6 +1208,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.ORANGE_DENTROTHYST_SHARD, "Orange Dentrothyst Shard");
 		this.addItem(ItemRegistry.GREEN_DENTROTHYST_SHARD, "Green Dentrothyst Shard");
 		this.addItem(ItemRegistry.FISH_BAIT, "Fish Bait");
+		this.add(ItemRegistry.FISH_BAIT.get().getDescriptionId() + ".sink_speed", "Sink speed: %s");
+		this.add(ItemRegistry.FISH_BAIT.get().getDescriptionId() + ".dissolve_time", "Dissolve time: %s");
+		this.add(ItemRegistry.FISH_BAIT.get().getDescriptionId() + ".range", "Range: %s");
+		this.add(ItemRegistry.FISH_BAIT.get().getDescriptionId() + ".glowing", "Glowing: %s");
 		this.addItemWithDesc(ItemRegistry.FUMIGANT, "Fumigant", "Removes the Stench of Rot on a Player");
 		this.addItem(ItemRegistry.SAP_BALL, "Ball of Sap");
 		this.addItem(ItemRegistry.MIRE_SNAIL_EGG, "Mire Snail Egg");

@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -21,14 +22,12 @@ public class FishBaitItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		if (stack.has(DataComponentRegistry.FISH_BAIT)) {
-			FishBaitStats stats = stack.get(DataComponentRegistry.FISH_BAIT);
-			//	tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.saturation", stack.getTagCompound().getInteger("saturation")));
-			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.sink_speed", stats.sinkSpeed()));
-			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.dissolve_time", stats.dissolveTime()));
-			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.range", stats.range()));
-			tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.glowing", stats.glowing()));
-		}
+		FishBaitStats stats = stack.getOrDefault(DataComponentRegistry.FISH_BAIT, FishBaitStats.DEFAULT);
+		//	tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.saturation", stack.getTagCompound().getInteger("saturation")));
+		tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.sink_speed", stats.sinkSpeed()).withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.dissolve_time", stats.dissolveTime()).withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.range", stats.range()).withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("item.thebetweenlands.fish_bait.glowing", stats.glowing()).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override

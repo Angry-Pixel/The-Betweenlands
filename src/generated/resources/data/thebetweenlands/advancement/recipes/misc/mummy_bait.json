@@ -1,25 +1,6 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_aspect": {
-      "conditions": {
-        "items": [
-          {
-            "components": {
-              "thebetweenlands:aspect_contents": {
-                "amount": 1000,
-                "aspect": "thebetweenlands:armaniis"
-              }
-            },
-            "items": [
-              "thebetweenlands:orange_aspect_vial",
-              "thebetweenlands:green_aspect_vial"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
     "has_heart": {
       "conditions": {
         "items": [
@@ -51,8 +32,7 @@
     [
       "has_the_recipe",
       "has_shimmerstone",
-      "has_heart",
-      "has_aspect"
+      "has_heart"
     ]
   ],
   "rewards": {
