@@ -1,17 +1,47 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,water_type=none": {
       "model": "thebetweenlands:block/climbable_mud_bricks",
       "y": 90
     },
-    "facing=north": {
+    "facing=east,water_type=swamp_water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 90
+    },
+    "facing=east,water_type=water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 90
+    },
+    "facing=north,water_type=none": {
       "model": "thebetweenlands:block/climbable_mud_bricks"
     },
-    "facing=south": {
+    "facing=north,water_type=swamp_water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks"
+    },
+    "facing=north,water_type=water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks"
+    },
+    "facing=south,water_type=none": {
       "model": "thebetweenlands:block/climbable_mud_bricks",
       "y": 180
     },
-    "facing=west": {
+    "facing=south,water_type=swamp_water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 180
+    },
+    "facing=south,water_type=water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 180
+    },
+    "facing=west,water_type=none": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 270
+    },
+    "facing=west,water_type=swamp_water": {
+      "model": "thebetweenlands:block/climbable_mud_bricks",
+      "y": 270
+    },
+    "facing=west,water_type=water": {
       "model": "thebetweenlands:block/climbable_mud_bricks",
       "y": 270
     }

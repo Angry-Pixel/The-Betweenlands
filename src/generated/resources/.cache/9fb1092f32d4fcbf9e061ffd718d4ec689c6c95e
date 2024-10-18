@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-15T22:39:09.5428024	Recipes
+// 1.21.1	2024-10-17T20:35:10.8482372	Recipes
 937ab63d71c29fe3ff8aa7b094d93075df2adc8d data/thebetweenlands/advancement/recipes/building_blocks/alembic.json
 e08cfe8707ceec8997d54923df2a0ca86b605a91 data/thebetweenlands/advancement/recipes/building_blocks/ancient_remnant_block.json
 832ce804fb41b3d51420f3058ee570c44f547f42 data/thebetweenlands/advancement/recipes/building_blocks/animator.json
@@ -1038,7 +1038,9 @@ c3daf75739607ffdb77c1b49a168087f41e8a447 data/thebetweenlands/recipe/polished_li
 7d086dd9bd2ce969f0ed192ecad579dabe93211f data/thebetweenlands/recipe/polished_orange_dentrothyst_shield.json
 3fd709a39c68bbd927698fc8efb53b8952608d8c data/thebetweenlands/recipe/purifier.json
 630fdaa720dbae6f5cceee519a7915a55c896e38 data/thebetweenlands/recipe/purifying/aqua_middle_gem.json
-2a3bf174cc374c842f05d977d8e9f0d2927b66c8 data/thebetweenlands/recipe/purifying/champagne_item_frame.json
+8ea0d34eef70c2e632b1b32af1cf3db12a456dca data/thebetweenlands/recipe/purifying/champagne_item_frame.json
+02986256d6f58a1f6f0a2eaa1d5006142776d3a7 data/thebetweenlands/recipe/purifying/champagne_samite.json
+dfdf3348a167abfc58cd58803f69eae1a7ff7655 data/thebetweenlands/recipe/purifying/champagne_samite_canvas_panel.json
 d28f86a3c24da669c4ecee5a6e34460e1767a3b3 data/thebetweenlands/recipe/purifying/cragrock.json
 053e1f22839c4e57504bfd9691d7eccd7fe61ed5 data/thebetweenlands/recipe/purifying/crimson_middle_gem.json
 04400d68f11fcde73272b1179455f542035bc825 data/thebetweenlands/recipe/purifying/filtered_silt_glass.json

@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-25T14:41:11.2566412	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2024-10-17T20:35:10.845236	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
@@ -8,9 +8,13 @@ d06ec18ea23cf0b2bcd37583a885baeab6942c1f data/minecraft/tags/item/swords.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/item/corrodible/custom.json
 2c1c14f6b8be0569d1e36c9e929fc0fe5488ef9c data/thebetweenlands/tags/item/corrodible/default.json
 ed812d11a070d92ca88d1d889a167aa4dcda4159 data/thebetweenlands/tags/item/does_not_rot.json
+e39599083a08fd0b74e2f8af9a0e617c34222b57 data/thebetweenlands/tags/item/filtered_silt_glass.json
 ba1aefcc3cb9b53ae9fa889e92a2505d08b2c486 data/thebetweenlands/tags/item/gives_food_sickness.json
 4aefcf1e42362b88f2c9227f266db365af2163d1 data/thebetweenlands/tags/item/ignores_tool_weakness.json
+73fbcfa979e96dc3dde4a6da962942cc383a54a4 data/thebetweenlands/tags/item/item_frames.json
+dab1a03dad5eaa4505b23e07e83731aba7ec66c5 data/thebetweenlands/tags/item/mud_brick_shingles.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/item/octine_ignites.json
+fd07d5cc7ab353f0d7c9ddb34b284da21abca8be data/thebetweenlands/tags/item/reed_mats.json
 026303e26c0aabdd2a479bb655cf86e6857a7421 data/thebetweenlands/tags/item/repairs_bone_tools.json
 d6f1d1333804eee9525718a07f541cfb0a1aed5d data/thebetweenlands/tags/item/repairs_green_dentrothyst_shield.json
 570d7f3c9be64dde7e570e73e41f9834b09b03b5 data/thebetweenlands/tags/item/repairs_lurker_skin_shield.json
@@ -19,4 +23,6 @@ d6f1d1333804eee9525718a07f541cfb0a1aed5d data/thebetweenlands/tags/item/repairs_
 acfa9371b1f86fc431faf8337cd533e716c06649 data/thebetweenlands/tags/item/repairs_syrmorite_shield.json
 2d7c01937dc8842885395c073b6a0c26a006ba8f data/thebetweenlands/tags/item/repairs_valonite_tools.json
 1b800d5d4c92f2bd3368adb321e38640ff076ce6 data/thebetweenlands/tags/item/repairs_weedwood_tools.json
+e7acf1217e6b03bd758438ba0a0f0ee548b03bef data/thebetweenlands/tags/item/samite.json
+47c424da0debcdd6c4fee6808267c1e53747ff20 data/thebetweenlands/tags/item/samite_canvas_panels.json
 0b4fb1710c1ea70138d18db6ea9e27f8d1280827 data/thebetweenlands/tags/item/slingshot_ammo.json

@@ -5,6 +5,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.builders.*;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
@@ -246,7 +247,9 @@ public class BLCustomRecipeProvider {
 		PurifierRecipeBuilder.purifying(BlockRegistry.SWAMP_DIRT, BlockRegistry.PURIFIED_SWAMP_DIRT).save(output);
 		PurifierRecipeBuilder.purifying(ItemRegistry.DIRTY_DENTROTHYST_VIAL, ItemRegistry.GREEN_DENTROTHYST_VIAL).save(output);
 		PurifierRecipeBuilder.purifying(ItemRegistry.DIRTY_SILK_BUNDLE, ItemRegistry.SILK_BUNDLE).save(output);
-		PurifierRecipeBuilder.purifying(BLItemTagProvider.ITEM_FRAMES, ItemRegistry.CHAMPAGNE_ITEM_FRAME).save(output);
+		PurifierRecipeBuilder.purifying(DifferenceIngredient.of(Ingredient.of(BLItemTagProvider.SAMITE), Ingredient.of(BlockRegistry.CHAMPAGNE_SAMITE)), BlockRegistry.CHAMPAGNE_SAMITE).save(output);
+		PurifierRecipeBuilder.purifying(DifferenceIngredient.of(Ingredient.of(BLItemTagProvider.SAMITE_CANVAS_PANELS), Ingredient.of(BlockRegistry.CHAMPAGNE_SAMITE_CANVAS_PANEL)), BlockRegistry.CHAMPAGNE_SAMITE_CANVAS_PANEL).save(output);
+		PurifierRecipeBuilder.purifying(DifferenceIngredient.of(Ingredient.of(BLItemTagProvider.ITEM_FRAMES), Ingredient.of(ItemRegistry.CHAMPAGNE_ITEM_FRAME)), ItemRegistry.CHAMPAGNE_ITEM_FRAME).save(output);
 		PurifierRecipeBuilder.purifying(BLItemTagProvider.FILTERED_SILT_GLASS, BlockRegistry.FILTERED_SILT_GLASS).save(output);
 		PurifierRecipeBuilder.purifying(BLItemTagProvider.MUD_BRICK_SHINGLES, BlockRegistry.MUD_BRICK_SHINGLES).save(output);
 		//TODO weedwood rowboat and pouch custom recipes

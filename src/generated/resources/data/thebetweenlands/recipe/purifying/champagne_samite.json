@@ -3,16 +3,16 @@
   "input": {
     "type": "neoforge:difference",
     "base": {
-      "tag": "thebetweenlands:item_frames"
+      "tag": "thebetweenlands:samite"
     },
     "subtracted": {
-      "item": "thebetweenlands:champagne_item_frame"
+      "item": "thebetweenlands:champagne_samite"
     }
   },
   "purifying_time": 432,
   "result": {
     "count": 1,
-    "id": "thebetweenlands:champagne_item_frame"
+    "id": "thebetweenlands:champagne_samite"
   },
   "water_needed": 250
 }
