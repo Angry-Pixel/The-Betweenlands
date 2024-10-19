@@ -2,6 +2,7 @@ package thebetweenlands.common.block.container;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
@@ -84,7 +85,7 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
+		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator && animator.isRunning()) {
 			Direction facing = state.getValue(FACING);
 
 			double zOff = facing.getStepX() * (facing.getAxis() == Direction.Axis.X ? 0.5F : -0.14F);
@@ -95,8 +96,8 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 			points.add(new Vec3(pos.getX() + 0.5D + (random.nextFloat() - 0.5F) * 0.3D + xOff, pos.getY() + 0.9, pos.getZ() + 0.5 + (random.nextFloat() - 0.5F) * 0.3D + zOff));
 			points.add(new Vec3(pos.getX() + 0.5D + (random.nextFloat() - 0.5F) * 0.3D + xOff, pos.getY() + 1.36, pos.getZ() + 0.5 + (random.nextFloat() - 0.5F) * 0.3D + zOff));
 			points.add(new Vec3(pos.getX() + 0.5D, pos.getY() + 1.45D, pos.getZ() + 0.5D));
-			TheBetweenlands.createParticle(ParticleRegistry.ANIMATOR.get(), level, pos.getX(), pos.getY() + 0.7D, pos.getZ() + 0.65D, ParticleFactory.ParticleArgs.get().withData(points));
-//			BLParticles.SMOKE.spawn(level, pos.getX() + 0.5 + random.nextFloat() * 0.3D - 0.15D, pos.getY() + 0.3, pos.getZ() + 0.5 + random.nextFloat() * 0.3D - 0.15D);
+			TheBetweenlands.createParticle(ParticleRegistry.ANIMATOR.get(), level, points.getFirst().x(), points.getFirst().y(), points.getFirst().z(), ParticleFactory.ParticleArgs.get().withData(points));
+			TheBetweenlands.createParticle(ParticleTypes.WHITE_SMOKE, level, pos.getX() + 0.5 + random.nextFloat() * 0.3D - 0.15D, pos.getY() + 0.3, pos.getZ() + 0.5 + random.nextFloat() * 0.3D - 0.15D);
 		}
 	}
 
