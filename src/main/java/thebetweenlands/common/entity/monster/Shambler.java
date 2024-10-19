@@ -190,7 +190,7 @@ public class Shambler extends Monster implements BLEntity {
 		setTongueLengthPrev(getTongueLength());
 		
 		if (!level().isClientSide()) {
-			if (getTarget() != null && hasLineOfSight(getTarget())) {
+			if (getTarget() != null && hasLineOfSight(getTarget()) && !isVehicle()) {
 				getLookControl().setLookAt(getTarget(), 10.0F, 20.0F);
 				double distance = distanceToTarget(getTarget().getX(), getTarget().getBoundingBox().minY, getTarget().getZ());
 
@@ -274,9 +274,9 @@ public class Shambler extends Monster implements BLEntity {
 		for(ShamblerTongueMultipart part : tongue_array) {
 			part.yRotO = part.getYRot();
 			part.xRotO = part.getXRot();
-			part.xOld = part.getX();
-			part.yOld = part.getY();
-			part.zOld = part.getZ();
+			part.xOld = part.xo = part.getX();
+			part.yOld = part.yo = part.getY();
+			part.zOld = part.zo = part.getZ();
 			
 			part.setPos(getX() + offSetX + (vector.x * getTongueLength() * tongueLength), getY() + getEyeHeight() - 0.32 + offsetY + (vector.y * getTongueLength() * tongueLength), getZ() + offSetZ + (vector.z * getTongueLength() * tongueLength));
 			part.setYRot(getYRot());

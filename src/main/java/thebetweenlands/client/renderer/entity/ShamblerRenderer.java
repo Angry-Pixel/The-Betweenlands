@@ -66,7 +66,7 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
         float yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
         float pitch = entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks;
 		stack.pushPose();
-		stack.translate(x, y - 0.85D, z);
+		stack.translate(x, y - 0.9375, z);
 		stack.scale(-1F, -1F, 1F);
 		stack.mulPose(Axis.YP.rotationDegrees(180F + yaw));
 		stack.mulPose(Axis.XP.rotationDegrees(180F + pitch));
