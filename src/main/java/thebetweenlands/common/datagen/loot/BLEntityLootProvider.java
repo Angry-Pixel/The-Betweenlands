@@ -1,6 +1,7 @@
 package thebetweenlands.common.datagen.loot;
 
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.EntitySubPredicates;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.EntityLootSubProvider;
@@ -14,9 +15,7 @@ import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -333,6 +332,34 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.noLoot(EntityRegistry.CAVE_FISH);
+		this.add(EntityRegistry.DARK_DRUID.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(0, 1))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1)
+					.when(AnyOfCondition.anyOf(
+						LootItemKilledByPlayerCondition.killedByPlayer().invert(),
+						PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1).invert())))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2)
+					.when(AnyOfCondition.anyOf(
+						LootItemKilledByPlayerCondition.killedByPlayer().invert(),
+						PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2).invert())))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3)
+					.when(AnyOfCondition.anyOf(
+						LootItemKilledByPlayerCondition.killedByPlayer().invert(),
+						PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3).invert())))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4)
+					.when(AnyOfCondition.anyOf(
+						LootItemKilledByPlayerCondition.killedByPlayer().invert(),
+						PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4).invert()))))
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(0, 1))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3))
+				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4))
+			.when(AllOfCondition.allOf(
+				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1),
+				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2),
+				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3),
+				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4)))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

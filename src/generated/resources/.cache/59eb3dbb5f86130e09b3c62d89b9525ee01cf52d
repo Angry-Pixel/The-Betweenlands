@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-18T21:33:43.5064958	Loot Tables
+// 1.21.1	2024-10-19T11:51:56.6864896	Loot Tables
 f897c8a016a213548473521ee06c237da021e2d7 data/thebetweenlands/loot_table/blocks/alembic.json
 703fc307aae4fa78c0aaf2621a86898c84d7cc7b data/thebetweenlands/loot_table/blocks/algae.json
 4b2f4187db2ea6e4ddadcb4ddf797e4356f89ea9 data/thebetweenlands/loot_table/blocks/ancient_remnant_block.json
@@ -734,6 +734,7 @@ e399405a4dbd11a207f0cedcfaf7b0387f9bc6a5 data/thebetweenlands/loot_table/entitie
 6f14640732c17442e4f39a9c77208bf13fec2835 data/thebetweenlands/loot_table/entities/cave_fish.json
 d655ec1e14dbe2708bf662d277a6db4603f41d2b data/thebetweenlands/loot_table/entities/chief_crypt_crawler.json
 0281a5bfe5574d7e03d0063b586f186add2f044a data/thebetweenlands/loot_table/entities/crypt_crawler.json
+856fa6854605cead1f199c1d28612a7259aaf201 data/thebetweenlands/loot_table/entities/dark_druid.json
 f6d93accadefe4f75d464f7c8b92c9a4bf5c26cd data/thebetweenlands/loot_table/entities/dragonfly.json
 3d44ced2763979b38d063af9cd21e1641433a6ed data/thebetweenlands/loot_table/entities/dreadful_peat_mummy.json
 8c94c448cf80d6624bffe8d6a72a8009da7c22be data/thebetweenlands/loot_table/entities/emberling.json

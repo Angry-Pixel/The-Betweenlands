@@ -296,6 +296,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SHAMBLER.get(), ShamblerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FRESHWATER_URCHIN.get(), FreshwaterUrchinRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.CAVE_FISH.get(), CaveFishRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.DARK_DRUID.get(), DarkDruidRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -379,6 +380,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SHAMBLER, ShamblerModel::create);
 		event.registerLayerDefinition(BLModelLayers.FRESHWATER_URCHIN, FreshwaterUrchinModel::create);
 		event.registerLayerDefinition(BLModelLayers.CAVE_FISH, CaveFishModel::create);
+		event.registerLayerDefinition(BLModelLayers.DARK_DRUID, DarkDruidModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
@@ -705,6 +707,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.WEEDWOOD_LEAF.get(), WeedwoodLeafParticle.Factory::new);
 		event.registerSprite(ParticleRegistry.SLEEPING.get(), (type, level, x, y, z, xSpeed, ySpeed, zSpeed) -> new SleepingParticle(level, x, y, z, xSpeed, ySpeed, zSpeed));
 		event.registerSpriteSet(ParticleRegistry.EMBER_SWIRL.get(), EntitySwirlParticle.EmberSwirlFactory::new);
+		event.registerSpriteSet(ParticleRegistry.DRUID_CASTING.get(), DruidCastingParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

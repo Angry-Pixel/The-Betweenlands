@@ -41,3 +41,4 @@
 * Light sources that stalkers cant break are now controlled via the `thebetweenlands:stalker_ignored_light_sources` block tag.
 * All instakill weapons now define what mobs they kill with entity tags.
 * Biomes that the dreadful peat mummy can be summoned in are now controlled via the `thebetweenlands:dreadul_peat_mummy_summonable` biome tag
+* Some Betweenlands plants can now be put in flower pots. This includes all saplings and 12 other plants

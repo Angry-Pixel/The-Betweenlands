@@ -224,6 +224,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(BlockGuardDataPacket.TYPE, BlockGuardDataPacket.STREAM_CODEC, BlockGuardDataPacket::handle);
 		registrar.playToClient(ClearBlockGuardPacket.TYPE, ClearBlockGuardPacket.STREAM_CODEC, ClearBlockGuardPacket::handle);
 		registrar.playToClient(ChangeBlockGuardSectionPacket.TYPE, ChangeBlockGuardSectionPacket.STREAM_CODEC, ChangeBlockGuardSectionPacket::handle);
+		registrar.playToClient(DruidParticlePacket.TYPE, DruidParticlePacket.STREAM_CODEC, DruidParticlePacket::handle);
 		registrar.playToClient(InfestWeedwoodBushPacket.TYPE, InfestWeedwoodBushPacket.STREAM_CODEC, InfestWeedwoodBushPacket::handle);
 		registrar.playToClient(OpenLoreScrapPacket.TYPE, OpenLoreScrapPacket.STREAM_CODEC, OpenLoreScrapPacket::handle);
 		registrar.playToClient(ShowFoodSicknessPacket.TYPE, ShowFoodSicknessPacket.STREAM_CODEC, ShowFoodSicknessPacket::handle);

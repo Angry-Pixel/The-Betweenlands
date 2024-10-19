@@ -99,6 +99,7 @@ public class TheBetweenlands {
 		AmphibiousArmorUpgradeRegistry.UPGRADES.register(eventbus);
 		EntityDataSerializerRegistry.DATA_SERIALIZERS.register(eventbus);
 		RecipeRegistry.INGREDIENT_TYPES.register(eventbus);
+		LootFunctionRegistry.CONDITIONS.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
 

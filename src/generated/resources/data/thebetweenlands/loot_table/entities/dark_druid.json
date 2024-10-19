@@ -1,0 +1,177 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:killed_by_player"
+                  }
+                },
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "thebetweenlands:has_item",
+                    "item": {
+                      "id": "thebetweenlands:swamp_talisman_piece_1"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "thebetweenlands:swamp_talisman_piece_1"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:killed_by_player"
+                  }
+                },
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "thebetweenlands:has_item",
+                    "item": {
+                      "id": "thebetweenlands:swamp_talisman_piece_2"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "thebetweenlands:swamp_talisman_piece_2"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:killed_by_player"
+                  }
+                },
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "thebetweenlands:has_item",
+                    "item": {
+                      "id": "thebetweenlands:swamp_talisman_piece_3"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "thebetweenlands:swamp_talisman_piece_3"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:killed_by_player"
+                  }
+                },
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "thebetweenlands:has_item",
+                    "item": {
+                      "id": "thebetweenlands:swamp_talisman_piece_4"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "thebetweenlands:swamp_talisman_piece_4"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "thebetweenlands:has_item",
+              "item": {
+                "id": "thebetweenlands:swamp_talisman_piece_1"
+              }
+            },
+            {
+              "condition": "thebetweenlands:has_item",
+              "item": {
+                "id": "thebetweenlands:swamp_talisman_piece_2"
+              }
+            },
+            {
+              "condition": "thebetweenlands:has_item",
+              "item": {
+                "id": "thebetweenlands:swamp_talisman_piece_3"
+              }
+            },
+            {
+              "condition": "thebetweenlands:has_item",
+              "item": {
+                "id": "thebetweenlands:swamp_talisman_piece_4"
+              }
+            }
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:swamp_talisman_piece_1"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:swamp_talisman_piece_2"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:swamp_talisman_piece_3"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:swamp_talisman_piece_4"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      }
+    }
+  ],
+  "random_sequence": "thebetweenlands:entities/dark_druid"
+}

@@ -63,7 +63,7 @@ public class EntityRegistry {
 	//chiromaw matriarch
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiefCryptCrawler>> CHIEF_CRYPT_CRAWLER = registerWithAttributes("chief_crypt_crawler", EntityType.Builder.of(ChiefCryptCrawler::new, MobCategory.MONSTER).sized(0.98F, 1.9F), ChiefCryptCrawler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CryptCrawler>> CRYPT_CRAWLER = registerWithAttributes("crypt_crawler", EntityType.Builder.of(CryptCrawler::new, MobCategory.MONSTER).sized(0.95F, 1.0F), CryptCrawler::registerAttributes);
-	//dark druid
+	public static final DeferredHolder<EntityType<?>, EntityType<DarkDruid>> DARK_DRUID = registerWithEgg("dark_druid", EntityType.Builder.of(DarkDruid::new, MobCategory.MONSTER).sized(0.9F, 1.9F), 0x000000, 0xFF0000, DarkDruid::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Dragonfly>> DRAGONFLY = registerWithEgg("dragonfly", EntityType.Builder.of(Dragonfly::new, MobCategory.AMBIENT).sized(0.9F, 0.5F).eyeHeight(0.25F), 0x356721, 0xC0FFEE, Dragonfly::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<DreadfulPeatMummy>> DREADFUL_PEAT_MUMMY = registerWithEgg("dreadful_peat_mummy", EntityType.Builder.of(DreadfulPeatMummy::new, MobCategory.MONSTER).sized(1.1F, 2.0F).clientTrackingRange(10).fireImmune(), 0x000000, 0x591E08, DreadfulPeatMummy::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Emberling>> EMBERLING = registerWithEgg("emberling", EntityType.Builder.of(Emberling::new, MobCategory.MONSTER).sized(0.9F, 0.85F).clientTrackingRange(10).fireImmune(), 0xA43B2E, 0x391211, Emberling::registerAttributes);
