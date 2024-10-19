@@ -11,6 +11,7 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
@@ -27,6 +28,8 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 	public static final TagKey<Biome> SPAWNS_GREEN_ANADIA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("spawns_green_anadia"));
 	public static final TagKey<Biome> DREADFUL_PEAT_MUMMY_SUMMONABLE = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("dreadful_peat_mummy_summonable"));
 
+	public static final TagKey<Biome> GENERATES_DRUID_CIRCLE = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("generates_druid_circle"));
+
 	public BLBiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, Registries.BIOME, provider, TheBetweenlands.ID, existingFileHelper);
 	}
@@ -40,6 +43,8 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 		this.tag(SPAWNS_PURPLE_ANADIA).add(BiomeRegistry.COARSE_ISLANDS, BiomeRegistry.RAISED_ISLES);
 		this.tag(SPAWNS_GREEN_ANADIA).add(BiomeRegistry.PATCHY_ISLANDS);
 		this.tag(DREADFUL_PEAT_MUMMY_SUMMONABLE).add(BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH);
+
+		this.tag(GENERATES_DRUID_CIRCLE).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP);
 
 		this.tag(IN_BETWEENLANDS).add(BiomeRegistry.COARSE_ISLANDS,
 			BiomeRegistry.DEEP_WATERS, BiomeRegistry.ERODED_MARSH, BiomeRegistry.MARSH,

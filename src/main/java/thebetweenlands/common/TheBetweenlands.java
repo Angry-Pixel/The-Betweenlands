@@ -100,6 +100,8 @@ public class TheBetweenlands {
 		EntityDataSerializerRegistry.DATA_SERIALIZERS.register(eventbus);
 		RecipeRegistry.INGREDIENT_TYPES.register(eventbus);
 		LootFunctionRegistry.CONDITIONS.register(eventbus);
+		StructureTypeRegistry.TYPES.register(eventbus);
+		StructureTypeRegistry.PIECE_TYPES.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
 

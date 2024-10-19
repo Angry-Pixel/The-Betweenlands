@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1696132362,
+    "separation": 7,
+    "spacing": 10,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "thebetweenlands:druid_circle",
+      "weight": 1
+    }
+  ]
+}

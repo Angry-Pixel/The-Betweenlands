@@ -16,7 +16,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
@@ -200,15 +203,14 @@ public abstract class BetweenlandsBaseSpawner extends BaseSpawner {
 							BlockPos down = entity.blockPosition().below();
 							BlockState blockState = serverLevel.getBlockState(down);
 							if (!blockState.isAir()) {
-								AABB boundingBox = blockState.getCollisionShape(serverLevel, down).bounds();
-								if (!boundingBox.hasNaN()) {
-									boundingBox = boundingBox.move(down);
-									AABB entityBoundingBox = entity.getBoundingBox();
-									if (boundingBox.intersects(entityBoundingBox.minX, boundingBox.minY, entityBoundingBox.minZ, entityBoundingBox.maxX, boundingBox.maxY, entityBoundingBox.maxZ)) {
-										Optional<Vec3> intercept = boundingBox.clip(entity.position(), entity.position().add(0, -2, 0));
-										if (intercept.isPresent()) {
+								VoxelShape boundingBox = blockState.getCollisionShape(serverLevel, down);
+								if (!boundingBox.isEmpty()) {
+									boundingBox = boundingBox.move(0, -1, 0);
+									if (!boundingBox.isEmpty()) {
+										BlockHitResult intercept = boundingBox.clip(entity.position(), entity.position().add(0, -2, 0), down);
+										if (intercept != null && intercept.getType() == HitResult.Type.BLOCK) {
 											canSpawn = true;
-											entity.moveTo(entity.getX(), intercept.get().y + 0.1D, entity.getZ(), entity.getYRot(), entity.getXRot());
+											entity.moveTo(entity.getX(), intercept.getLocation().y + 0.1D, entity.getZ(), entity.getYRot(), entity.getXRot());
 										}
 									}
 								}
@@ -254,5 +256,21 @@ public abstract class BetweenlandsBaseSpawner extends BaseSpawner {
 		if (level != null && level.isClientSide()) {
 			this.displayEntity = null;
 		}
+	}
+
+	@Override
+	public CompoundTag save(CompoundTag tag) {
+		tag.putBoolean("SpawnInAir", this.spawnInAir);
+		tag.putBoolean("SpawnParticles", this.spawnParticles);
+		tag.putDouble("CheckRange", this.checkRange);
+		return super.save(tag);
+	}
+
+	@Override
+	public void load(@Nullable Level level, BlockPos pos, CompoundTag tag) {
+		super.load(level, pos, tag);
+		this.checkRange = tag.getDouble("CheckRange");
+		this.spawnInAir = tag.getBoolean("SpawnInAir");
+		this.spawnParticles = tag.getBoolean("SpawnParticles");
 	}
 }

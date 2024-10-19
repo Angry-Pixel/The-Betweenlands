@@ -146,8 +146,6 @@ public class DarkDruid extends Monster {
 			}
 		}
 		if (this.level().isClientSide()) {
-			this.yBodyRotO = this.yRotO;
-			this.yBodyRot = this.getYRot();
 			this.prevAttackAnimationTime = this.attackAnimationTime;
 			if (this.isCasting()) {
 				if (this.attackAnimationTime < MAX_ATTACK_ANIMATION_TIME) {

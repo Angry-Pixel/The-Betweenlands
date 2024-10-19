@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-18T17:30:23.667955	Registries
+// 1.21.1	2024-10-19T13:59:49.0711624	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -186,6 +186,7 @@ f1db277472a19d9d8137573e540cb462a5298181 data/thebetweenlands/worldgen/configure
 b9c03b1e27d249a67860408da5f344749e711145 data/thebetweenlands/worldgen/configured_feature/weedwood_bush.json
 dde22e60a6513501586e42d27679bd803bd1334a data/thebetweenlands/worldgen/noise_settings/the_betweenlands.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/cragrock_tower.json
+f3af74b048bb7f12999716b62bebde1938deb82c data/thebetweenlands/worldgen/structure/druid_circle.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/floating_island.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/giant_tree.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/idol_head.json
@@ -193,3 +194,4 @@ ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/sludge_worm_dungeon_maze.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/small_ruins.json
 ec42a3d9de0040ca16609ae770390d17282b608d data/thebetweenlands/worldgen/structure/wight_fortress.json
+9014268639076fa3a9db25e746a1eabc0ed255e8 data/thebetweenlands/worldgen/structure_set/druid_circle.json

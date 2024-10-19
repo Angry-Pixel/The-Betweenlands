@@ -1,0 +1,7 @@
+{
+  "type": "thebetweenlands:druid_circle",
+  "biomes": "#thebetweenlands:generates_druid_circle",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin"
+}

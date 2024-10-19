@@ -19,6 +19,7 @@ public class BLRegistryProvider extends DatapackBuiltinEntriesProvider {
 		.add(Registries.CONFIGURED_FEATURE, (T) -> ConfiguredFeatureRegistry.bootstrap(T))
 		.add(Registries.PLACED_FEATURE, PlacedFeatureRegistry::bootstrap)
 		.add(Registries.STRUCTURE, StructureRegistry::bootstrap)
+		.add(Registries.STRUCTURE_SET, StructureRegistry::bootstrapSet)
 //		.add(Registries.CONFIGURED_CARVER, CarverRegistry::bootstrap)
 		.add(Registries.LEVEL_STEM, DimensionRegistries::bootstrapStem)
 		.add(Registries.DIMENSION_TYPE, DimensionRegistries::bootstrapType)
