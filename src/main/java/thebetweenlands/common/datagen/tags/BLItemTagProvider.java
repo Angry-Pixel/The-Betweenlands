@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -82,59 +83,20 @@ public class BLItemTagProvider extends ItemTagsProvider {
 		this.tag(REPAIRS_SYRMORITE_SHIELD).add(ItemRegistry.SYRMORITE_INGOT.get());
 		this.tag(REPAIRS_LURKER_SKIN_SHIELD).add(ItemRegistry.LURKER_SKIN.get());
 
-		this.tag(FILTERED_SILT_GLASS).add(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS.asItem(), BlockRegistry.MAROON_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS.asItem(), BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.SAFFRON_FILTERED_SILT_GLASS.asItem(), BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.VIVID_TANGERINE_FILTERED_SILT_GLASS.asItem(), BlockRegistry.CHAMPAGNE_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.RAISIN_BLACK_FILTERED_SILT_GLASS.asItem(), BlockRegistry.SUSHI_GREEN_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.ELM_CYAN_FILTERED_SILT_GLASS.asItem(), BlockRegistry.CADMIUM_GREEN_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.LAVENDER_BLUE_FILTERED_SILT_GLASS.asItem(), BlockRegistry.BROWN_RUST_FILTERED_SILT_GLASS.asItem(),
-			BlockRegistry.MIDNIGHT_PURPLE_FILTERED_SILT_GLASS.asItem(), BlockRegistry.PEWTER_GREY_FILTERED_SILT_GLASS.asItem());
+		this.copy(BLBlockTagProvider.FILTERED_SILT_GLASS, FILTERED_SILT_GLASS);
+		this.copy(BLBlockTagProvider.MUD_BRICK_SHINGLES, MUD_BRICK_SHINGLES);
+		this.copy(BLBlockTagProvider.SAMITE, SAMITE);
+		this.copy(BLBlockTagProvider.SAMITE_CANVAS_PANELS, SAMITE_CANVAS_PANELS);
+		this.copy(BLBlockTagProvider.REED_MATS, REED_MATS);
 
-		this.tag(MUD_BRICK_SHINGLES).add(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.MAROON_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.SAFFRON_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLES.asItem(),
-			BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES.asItem(), BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLES.asItem());
-
-		this.tag(SAMITE).add(BlockRegistry.DULL_LAVENDER_SAMITE.asItem(), BlockRegistry.MAROON_SAMITE.asItem(),
-			BlockRegistry.SHADOW_GREEN_SAMITE.asItem(), BlockRegistry.CAMELOT_MAGENTA_SAMITE.asItem(),
-			BlockRegistry.SAFFRON_SAMITE.asItem(), BlockRegistry.CARIBBEAN_GREEN_SAMITE.asItem(),
-			BlockRegistry.VIVID_TANGERINE_SAMITE.asItem(), BlockRegistry.CHAMPAGNE_SAMITE.asItem(),
-			BlockRegistry.RAISIN_BLACK_SAMITE.asItem(), BlockRegistry.SUSHI_GREEN_SAMITE.asItem(),
-			BlockRegistry.ELM_CYAN_SAMITE.asItem(), BlockRegistry.CADMIUM_GREEN_SAMITE.asItem(),
-			BlockRegistry.LAVENDER_BLUE_SAMITE.asItem(), BlockRegistry.BROWN_RUST_SAMITE.asItem(),
-			BlockRegistry.MIDNIGHT_PURPLE_SAMITE.asItem(), BlockRegistry.PEWTER_GREY_SAMITE.asItem());
-
-		this.tag(SAMITE_CANVAS_PANELS).add(BlockRegistry.DULL_LAVENDER_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.MAROON_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.SHADOW_GREEN_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.CAMELOT_MAGENTA_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.SAFFRON_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.CARIBBEAN_GREEN_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.VIVID_TANGERINE_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.CHAMPAGNE_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.RAISIN_BLACK_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.SUSHI_GREEN_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.ELM_CYAN_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.CADMIUM_GREEN_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.LAVENDER_BLUE_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.BROWN_RUST_SAMITE_CANVAS_PANEL.asItem(),
-			BlockRegistry.MIDNIGHT_PURPLE_SAMITE_CANVAS_PANEL.asItem(), BlockRegistry.PEWTER_GREY_SAMITE_CANVAS_PANEL.asItem());
-
-		this.tag(REED_MATS).add(BlockRegistry.DULL_LAVENDER_REED_MAT.asItem(), BlockRegistry.MAROON_REED_MAT.asItem(),
-			BlockRegistry.SHADOW_GREEN_REED_MAT.asItem(), BlockRegistry.CAMELOT_MAGENTA_REED_MAT.asItem(),
-			BlockRegistry.SAFFRON_REED_MAT.asItem(), BlockRegistry.CARIBBEAN_GREEN_REED_MAT.asItem(),
-			BlockRegistry.VIVID_TANGERINE_REED_MAT.asItem(), BlockRegistry.CHAMPAGNE_REED_MAT.asItem(),
-			BlockRegistry.RAISIN_BLACK_REED_MAT.asItem(), BlockRegistry.SUSHI_GREEN_REED_MAT.asItem(),
-			BlockRegistry.ELM_CYAN_REED_MAT.asItem(), BlockRegistry.CADMIUM_GREEN_REED_MAT.asItem(),
-			BlockRegistry.LAVENDER_BLUE_REED_MAT.asItem(), BlockRegistry.BROWN_RUST_REED_MAT.asItem(),
-			BlockRegistry.MIDNIGHT_PURPLE_REED_MAT.asItem(), BlockRegistry.PEWTER_GREY_REED_MAT.asItem());
-
-		this.tag(ITEM_FRAMES).add(ItemRegistry.DULL_LAVENDER_ITEM_FRAME.asItem(), ItemRegistry.MAROON_ITEM_FRAME.asItem(),
-			ItemRegistry.SHADOW_GREEN_ITEM_FRAME.asItem(), ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME.asItem(),
-			ItemRegistry.SAFFRON_ITEM_FRAME.asItem(), ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME.asItem(),
-			ItemRegistry.VIVID_TANGERINE_ITEM_FRAME.asItem(), ItemRegistry.CHAMPAGNE_ITEM_FRAME.asItem(),
-			ItemRegistry.RAISIN_BLACK_ITEM_FRAME.asItem(), ItemRegistry.SUSHI_GREEN_ITEM_FRAME.asItem(),
-			ItemRegistry.ELM_CYAN_ITEM_FRAME.asItem(), ItemRegistry.CADMIUM_GREEN_ITEM_FRAME.asItem(),
-			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME.asItem(), ItemRegistry.BROWN_RUST_ITEM_FRAME.asItem(),
-			ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME.asItem(), ItemRegistry.PEWTER_GREY_ITEM_FRAME.asItem());
+		this.tag(ITEM_FRAMES).add(ItemRegistry.DULL_LAVENDER_ITEM_FRAME.get(), ItemRegistry.MAROON_ITEM_FRAME.get(),
+			ItemRegistry.SHADOW_GREEN_ITEM_FRAME.get(), ItemRegistry.CAMELOT_MAGENTA_ITEM_FRAME.get(),
+			ItemRegistry.SAFFRON_ITEM_FRAME.get(), ItemRegistry.CARIBBEAN_GREEN_ITEM_FRAME.get(),
+			ItemRegistry.VIVID_TANGERINE_ITEM_FRAME.get(), ItemRegistry.CHAMPAGNE_ITEM_FRAME.get(),
+			ItemRegistry.RAISIN_BLACK_ITEM_FRAME.get(), ItemRegistry.SUSHI_GREEN_ITEM_FRAME.get(),
+			ItemRegistry.ELM_CYAN_ITEM_FRAME.get(), ItemRegistry.CADMIUM_GREEN_ITEM_FRAME.get(),
+			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME.get(), ItemRegistry.BROWN_RUST_ITEM_FRAME.get(),
+			ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME.get(), ItemRegistry.PEWTER_GREY_ITEM_FRAME.get());
 
 		// Those two "inherit" from this one
 		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);

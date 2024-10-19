@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-17T12:18:19.7477671	Registries
+// 1.21.1	2024-10-18T17:30:23.667955	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -96,7 +96,7 @@ efe3df727c6ebadef1dc24ea4d82f6930806297f data/thebetweenlands/damage_type/flame_
 135cc3c27d127bd614aa243a9f5cfd4779c02c58 data/thebetweenlands/damage_type/urchin_spike.json
 3de69333739d59c68a34cbcae05a969c6930ea9d data/thebetweenlands/damage_type/voodoo.json
 72278291ef635921dd008ec4bf3340044de3cd65 data/thebetweenlands/dimension/the_betweenlands.json
-2b786ad82142bd826db2f8d86df9ed42bf08bd5f data/thebetweenlands/dimension_type/the_betweenlands.json
+319b9f564814ee1c6926b87d070e65c0851c95a3 data/thebetweenlands/dimension_type/the_betweenlands.json
 6746ffa114afaffc2054dc1664c52a901af83806 data/thebetweenlands/jukebox_song/ancient.json
 5a37dcae649227f27d9f790afad08eaf57aa4f0b data/thebetweenlands/jukebox_song/astatos.json
 10611f4d2920bb4dd5d33246c58daa3c362fb13e data/thebetweenlands/jukebox_song/beneath_a_green_sky.json

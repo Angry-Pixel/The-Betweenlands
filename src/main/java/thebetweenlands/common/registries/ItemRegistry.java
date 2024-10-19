@@ -85,7 +85,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> OCTINE_NUGGET = ITEMS.register("octine_nugget", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> VALONITE_SPLINTER = ITEMS.register("valonite_splinter", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> CREMAINS = ITEMS.register("cremains", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> UNDYING_EMBERS = ITEMS.register("undying_embers", () -> new UndyingEmberItem(new Item.Properties()));
+	public static final DeferredItem<Item> UNDYING_EMBERS = ITEMS.register("undying_embers", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> INANIMATE_ANGRY_PEBBLE = ITEMS.register("inanimate_angry_pebble", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ANCIENT_REMNANT = ITEMS.register("ancient_remnant", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> LOOT_SCRAPS = ITEMS.register("loot_scraps", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));

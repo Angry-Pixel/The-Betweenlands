@@ -1,7 +1,14 @@
-// 1.21.1	2024-09-11T08:35:15.4273884	Tags for minecraft:worldgen/biome mod id thebetweenlands
+// 1.21.1	2024-10-18T17:30:23.6659538	Tags for minecraft:worldgen/biome mod id thebetweenlands
+46db2353181edb61141d15cc5773cd25480ad4f1 data/c/tags/worldgen/biome/no_default_monsters.json
+46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/has_closer_water_fog.json
+46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/spawns_warm_variant_frogs.json
+46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/without_patrol_spawns.json
+46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/without_wandering_trader_spawns.json
+46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/without_zombie_sieges.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/corroding_aura.json
 5b1e41881166590b7d1165ad29750d03a2b9f449 data/thebetweenlands/tags/worldgen/biome/disable_corrosion.json
 9fe43a3a4dfff54de22d5dade50eef3015dea75e data/thebetweenlands/tags/worldgen/biome/dreadful_peat_mummy_summonable.json
+543636c66d009b702ed0bb4732fb9ffcf07f1d9a data/thebetweenlands/tags/worldgen/biome/in_betweenlands.json
 51a7256f06b7d7fa3003331089214358c8af862a data/thebetweenlands/tags/worldgen/biome/spawns_green_anadia.json
 47be813c6a65fca3df2d4743324930f710177f41 data/thebetweenlands/tags/worldgen/biome/spawns_purple_anadia.json
 a7187eeb0cafa192eaec70eb057aabbc83e38568 data/thebetweenlands/tags/worldgen/biome/spawns_silver_anadia.json

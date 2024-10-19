@@ -28,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.entity.PartEntity;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.GenericPartEntity;
 import thebetweenlands.common.entity.ai.goals.EmberlingFireBreathGoal;
@@ -177,7 +178,7 @@ public class Emberling extends TamableAnimal implements BLEntity, Enemy {
 		if (!this.level().isClientSide() && this.isInSittingPose()) {
 			if (this.getHealth() < this.getMaxHealth()) {
 				if (this.tickCount % 600 == 0) {
-					if (this.level().getBlockState(this.blockPosition().below()).is(BlockRegistry.OCTINE_BLOCK)) { //TODO tag
+					if (this.level().getBlockState(this.blockPosition().below()).is(BLBlockTagProvider.EMBERLING_HEALS_ON)) {
 						this.heal(1); // passive heal, 1 health every 30s whilst sleeping on an octine block.
 						this.spawnTamingParticles(true);
 						this.level().broadcastEntityEvent(this, (byte) 7);

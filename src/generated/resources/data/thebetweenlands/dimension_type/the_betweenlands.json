@@ -7,7 +7,7 @@
   "has_raids": false,
   "has_skylight": true,
   "height": 256,
-  "infiniburn": "#thebetweenlands:betweenstone_ore_replaceable",
+  "infiniburn": "#minecraft:infiniburn_overworld",
   "logical_height": 256,
   "min_y": 0,
   "monster_spawn_block_light_limit": 7,

@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -43,7 +44,7 @@ public class DimensionRegistries {
 			0,
 			256,
 			256,
-			BLBlockTagProvider.BETWEENSTONE_ORE_REPLACEABLE,
+			BlockTags.INFINIBURN_OVERWORLD,
 			DIMENSION_RENDERER,
 			0.0F,
 			new DimensionType.MonsterSettings(false, false, UniformInt.of(0, 7), 7)

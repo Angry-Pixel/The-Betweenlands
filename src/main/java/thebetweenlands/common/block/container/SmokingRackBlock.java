@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -81,7 +82,7 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock implements Swamp
 			|| facingState.is(this) && facingState.getValue(HALF) != doubleblockhalf) {
 			return doubleblockhalf == DoubleBlockHalf.LOWER && facing == Direction.DOWN && !state.canSurvive(level, currentPos)
 				? Blocks.AIR.defaultBlockState()
-				: super.updateShape(state, facing, facingState, level, currentPos, facingPos).setValue(HEATED, level.getBlockState(currentPos.below()).is(BlockRegistry.SMOULDERING_PEAT));
+				: super.updateShape(state, facing, facingState, level, currentPos, facingPos).setValue(HEATED, level.getBlockState(currentPos.below()).is(BLBlockTagProvider.HEATS_SMOKING_RACK));
 		} else {
 			return Blocks.AIR.defaultBlockState();
 		}
@@ -92,8 +93,9 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock implements Swamp
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockPos blockpos = context.getClickedPos();
 		Level level = context.getLevel();
+		WaterType type = WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType());
 		return blockpos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockpos.above()).canBeReplaced(context)
-			? super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection()).setValue(HEATED, context.getLevel().getBlockState(context.getClickedPos().below()).is(BlockRegistry.SMOULDERING_PEAT)).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()))
+			? super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection()).setValue(HEATED, context.getLevel().getBlockState(context.getClickedPos().below()).is(BLBlockTagProvider.HEATS_SMOKING_RACK) && type == WaterType.NONE).setValue(WATER_TYPE, type)
 			: null;
 	}
 

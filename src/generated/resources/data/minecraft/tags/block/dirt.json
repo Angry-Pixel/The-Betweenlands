@@ -1,8 +1,13 @@
 {
   "values": [
+    "thebetweenlands:sludgy_dirt",
     "thebetweenlands:swamp_dirt",
+    "thebetweenlands:coarse_swamp_dirt",
+    "thebetweenlands:slimy_dirt",
+    "thebetweenlands:purified_swamp_dirt",
     "thebetweenlands:swamp_grass",
     "thebetweenlands:dead_grass",
+    "thebetweenlands:slimy_grass",
     "thebetweenlands:mud"
   ]
 }

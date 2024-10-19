@@ -18,6 +18,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.item.herblore.AspectVialItem;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
@@ -248,9 +249,8 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		}
 	}
 
-	//TODO turn into tag
 	private boolean isHeatSource(BlockState state) {
-		return state.is(BlockRegistry.SMOULDERING_PEAT) || state.is(BlockTags.FIRE);
+		return state.is(BLBlockTagProvider.HEATS_INFUSER);
 	}
 
 	public int getInfusionColorGradientTicks() {

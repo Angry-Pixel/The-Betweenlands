@@ -1,0 +1,28 @@
+{
+  "values": [
+    "thebetweenlands:mud",
+    "thebetweenlands:peat",
+    "thebetweenlands:smouldering_peat",
+    "thebetweenlands:sludgy_dirt",
+    "thebetweenlands:spreading_sludgy_dirt",
+    "thebetweenlands:slimy_dirt",
+    "thebetweenlands:slimy_grass",
+    "thebetweenlands:swamp_dirt",
+    "thebetweenlands:coarse_swamp_dirt",
+    "thebetweenlands:swamp_grass",
+    "thebetweenlands:aqua_middle_gem_ore",
+    "thebetweenlands:crimson_middle_gem_ore",
+    "thebetweenlands:green_middle_gem_ore",
+    "thebetweenlands:silt",
+    "thebetweenlands:filtered_silt",
+    "thebetweenlands:dead_grass",
+    "thebetweenlands:compost_block",
+    "thebetweenlands:purified_swamp_dirt",
+    "thebetweenlands:purified_dug_swamp_dirt",
+    "thebetweenlands:purified_dug_swamp_grass",
+    "thebetweenlands:dug_swamp_dirt",
+    "thebetweenlands:dug_swamp_grass",
+    "thebetweenlands:snow",
+    "thebetweenlands:sludge"
+  ]
+}
