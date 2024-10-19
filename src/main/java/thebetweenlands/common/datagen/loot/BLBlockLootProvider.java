@@ -792,6 +792,26 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.add(BlockRegistry.LIGHT_BLUE_BAUBLE.get(), LootTable.lootTable());
 		this.add(BlockRegistry.MAGENTA_BAUBLE.get(), LootTable.lootTable());
 		this.add(BlockRegistry.PINK_BAUBLE.get(), LootTable.lootTable());
+
+		this.dropPottedContents(BlockRegistry.POTTED_WEEDWOOD_SAPLING.get());
+		this.dropPottedContents(BlockRegistry.POTTED_SAP_SAPLING.get());
+		this.dropPottedContents(BlockRegistry.POTTED_RUBBER_SAPLING.get());
+		this.dropPottedContents(BlockRegistry.POTTED_HEARTHGROVE_SAPLING.get());
+		this.dropPottedContents(BlockRegistry.POTTED_NIBBLETWIG_SAPLING.get());
+		this.dropPottedContents(BlockRegistry.POTTED_SPIRIT_TREE_SAPLING.get());
+
+		this.dropPottedContents(BlockRegistry.POTTED_ARROW_ARUM.get());
+		this.dropPottedContents(BlockRegistry.POTTED_BLUE_IRIS.get());
+		this.dropPottedContents(BlockRegistry.POTTED_BONESET.get());
+		this.dropPottedContents(BlockRegistry.POTTED_BUTTON_BUSH.get());
+		this.dropPottedContents(BlockRegistry.POTTED_COPPER_IRIS.get());
+		this.dropPottedContents(BlockRegistry.POTTED_DEAD_WEEDWOOD_BUSH.get());
+		this.dropPottedContents(BlockRegistry.POTTED_FLOWERED_NETTLE.get());
+		this.dropPottedContents(BlockRegistry.POTTED_MARSH_HIBISCUS.get());
+		this.dropPottedContents(BlockRegistry.POTTED_MARSH_MALLOW.get());
+		this.dropPottedContents(BlockRegistry.POTTED_MILKWEED.get());
+		this.dropPottedContents(BlockRegistry.POTTED_NETTLE.get());
+		this.dropPottedContents(BlockRegistry.POTTED_PICKERELWEED.get());
 	}
 
 	protected LootTable.Builder createBLLeavesDrops(Block leavesBlock, Block saplingBlock, boolean stick) {

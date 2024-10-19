@@ -791,7 +791,25 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> TREATED_ROTTEN_FENCE = register("treated_rotten_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.ofFullCopy(ROTTEN_FENCE.get())));
 	public static final DeferredBlock<Block> TREATED_ROTTEN_FENCE_GATE = register("treated_rotten_fence_gate", () -> new FenceGateBlock(BLWoodTypes.ROTTEN_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(ROTTEN_FENCE_GATE.get())));
 
-	//TODO flower pots for most (if not all) of our unique plants
+	public static final DeferredBlock<FlowerPotBlock> POTTED_WEEDWOOD_SAPLING = BLOCKS.register("potted_weedwood_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, WEEDWOOD_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_SAP_SAPLING = BLOCKS.register("potted_sap_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SAP_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_RUBBER_SAPLING = BLOCKS.register("potted_rubber_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, RUBBER_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_HEARTHGROVE_SAPLING = BLOCKS.register("potted_hearthgrove_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, HEARTHGROVE_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_NIBBLETWIG_SAPLING = BLOCKS.register("potted_nibbletwig_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, NIBBLETWIG_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_SPIRIT_TREE_SAPLING = BLOCKS.register("potted_spirit_tree_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SPIRIT_TREE_SAPLING, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+
+	public static final DeferredBlock<FlowerPotBlock> POTTED_ARROW_ARUM = BLOCKS.register("potted_arrow_arum", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, ARROW_ARUM, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_BLUE_IRIS = BLOCKS.register("potted_blue_iris", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BLUE_IRIS, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_BONESET = BLOCKS.register("potted_boneset", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BONESET, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_BUTTON_BUSH = BLOCKS.register("potted_button_bush", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, BUTTON_BUSH, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_COPPER_IRIS = BLOCKS.register("potted_copper_iris", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, COPPER_IRIS, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_DEAD_WEEDWOOD_BUSH = BLOCKS.register("potted_dead_weedwood_bush", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DEAD_WEEDWOOD_BUSH, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_FLOWERED_NETTLE = BLOCKS.register("potted_flowered_nettle", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, FLOWERED_NETTLE, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_MARSH_HIBISCUS = BLOCKS.register("potted_marsh_hibiscus", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, MARSH_HIBISCUS, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_MARSH_MALLOW = BLOCKS.register("potted_marsh_mallow", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, MARSH_MALLOW, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_MILKWEED = BLOCKS.register("potted_milkweed", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, MILKWEED, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_NETTLE = BLOCKS.register("potted_nettle", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, NETTLE, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
+	public static final DeferredBlock<FlowerPotBlock> POTTED_PICKERELWEED = BLOCKS.register("potted_pickerelweed", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, PICKERELWEED, BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

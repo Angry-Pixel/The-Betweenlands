@@ -242,6 +242,11 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(BlockTags.BEDS).add(BlockRegistry.MOSS_BED.get());
 		this.tag(BlockTags.DIRT).add(BlockRegistry.SLUDGY_DIRT.get(), BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.COARSE_SWAMP_DIRT.get(), BlockRegistry.SLIMY_DIRT.get(),
 			BlockRegistry.PURIFIED_SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_GRASS.get(), BlockRegistry.SLIMY_GRASS.get(), BlockRegistry.MUD.get());
+		this.tag(BlockTags.FLOWER_POTS).add(BlockRegistry.POTTED_WEEDWOOD_SAPLING.get(), BlockRegistry.POTTED_SAP_SAPLING.get(), BlockRegistry.POTTED_RUBBER_SAPLING.get(),
+			BlockRegistry.POTTED_HEARTHGROVE_SAPLING.get(), BlockRegistry.POTTED_NIBBLETWIG_SAPLING.get(), BlockRegistry.POTTED_SPIRIT_TREE_SAPLING.get(), BlockRegistry.POTTED_ARROW_ARUM.get(),
+			BlockRegistry.POTTED_BLUE_IRIS.get(), BlockRegistry.POTTED_BONESET.get(), BlockRegistry.POTTED_COPPER_IRIS.get(), BlockRegistry.POTTED_DEAD_WEEDWOOD_BUSH.get(),
+			BlockRegistry.POTTED_FLOWERED_NETTLE.get(), BlockRegistry.POTTED_MARSH_HIBISCUS.get(), BlockRegistry.POTTED_MARSH_MALLOW.get(), BlockRegistry.POTTED_MILKWEED.get(),
+			BlockRegistry.POTTED_NETTLE.get(), BlockRegistry.POTTED_PICKERELWEED.get(), BlockRegistry.POTTED_BUTTON_BUSH.get());
 		this.tag(BlockTags.ICE).add(BlockRegistry.BLACK_ICE.get());
 		this.tag(BlockTags.STANDING_SIGNS).add(BlockRegistry.WEEDWOOD_SIGN.get());
 		this.tag(BlockTags.WALL_SIGNS).add(BlockRegistry.WEEDWOOD_WALL_SIGN.get());

@@ -264,6 +264,7 @@
     "thebetweenlands:betweenstone_pressure_plate",
     "thebetweenlands:scabyst_door",
     "thebetweenlands:scabyst_trapdoor",
-    "thebetweenlands:black_ice"
+    "thebetweenlands:black_ice",
+    "#thebetweenlands:mud_brick_shingles"
   ]
 }

@@ -13,8 +13,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -72,6 +75,7 @@ import java.util.concurrent.CompletableFuture;
 public class CommonRegistrationEvents {
 
 	public static void init(IEventBus bus) {
+		bus.addListener(CommonRegistrationEvents::commonSetup);
 		bus.addListener(CommonRegistrationEvents::createDatagen);
 		bus.addListener(CommonRegistrationEvents::makeNewRegistries);
 		bus.addListener(CommonRegistrationEvents::extraRegistration);
@@ -86,6 +90,32 @@ public class CommonRegistrationEvents {
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
 
 		CommonEvents.init();
+	}
+
+	private static void commonSetup(FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> {
+			FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
+
+			pot.addPlant(BlockRegistry.WEEDWOOD_SAPLING.getId(), BlockRegistry.POTTED_WEEDWOOD_SAPLING);
+			pot.addPlant(BlockRegistry.SAP_SAPLING.getId(), BlockRegistry.POTTED_SAP_SAPLING);
+			pot.addPlant(BlockRegistry.RUBBER_SAPLING.getId(), BlockRegistry.POTTED_RUBBER_SAPLING);
+			pot.addPlant(BlockRegistry.HEARTHGROVE_SAPLING.getId(), BlockRegistry.POTTED_HEARTHGROVE_SAPLING);
+			pot.addPlant(BlockRegistry.NIBBLETWIG_SAPLING.getId(), BlockRegistry.POTTED_NIBBLETWIG_SAPLING);
+			pot.addPlant(BlockRegistry.SPIRIT_TREE_SAPLING.getId(), BlockRegistry.POTTED_SPIRIT_TREE_SAPLING);
+
+			pot.addPlant(BlockRegistry.ARROW_ARUM.getId(), BlockRegistry.POTTED_ARROW_ARUM);
+			pot.addPlant(BlockRegistry.BLUE_IRIS.getId(), BlockRegistry.POTTED_BLUE_IRIS);
+			pot.addPlant(BlockRegistry.BONESET.getId(), BlockRegistry.POTTED_BONESET);
+			pot.addPlant(BlockRegistry.BUTTON_BUSH.getId(), BlockRegistry.POTTED_BUTTON_BUSH);
+			pot.addPlant(BlockRegistry.COPPER_IRIS.getId(), BlockRegistry.POTTED_COPPER_IRIS);
+			pot.addPlant(BlockRegistry.DEAD_WEEDWOOD_BUSH.getId(), BlockRegistry.POTTED_DEAD_WEEDWOOD_BUSH);
+			pot.addPlant(BlockRegistry.FLOWERED_NETTLE.getId(), BlockRegistry.POTTED_FLOWERED_NETTLE);
+			pot.addPlant(BlockRegistry.MARSH_HIBISCUS.getId(), BlockRegistry.POTTED_MARSH_HIBISCUS);
+			pot.addPlant(BlockRegistry.MARSH_MALLOW.getId(), BlockRegistry.POTTED_MARSH_MALLOW);
+			pot.addPlant(BlockRegistry.MILKWEED.getId(), BlockRegistry.POTTED_MILKWEED);
+			pot.addPlant(BlockRegistry.NETTLE.getId(), BlockRegistry.POTTED_NETTLE);
+			pot.addPlant(BlockRegistry.PICKERELWEED.getId(), BlockRegistry.POTTED_PICKERELWEED);
+		});
 	}
 
 	private static void createDatagen(GatherDataEvent event) {

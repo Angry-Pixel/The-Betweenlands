@@ -919,6 +919,26 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlock(BlockRegistry.SWAMP_KELP_PLANT);
 		this.crossBlock(BlockRegistry.SWAMP_KELP);
 		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
+
+		this.flowerPot(BlockRegistry.POTTED_WEEDWOOD_SAPLING);
+		this.flowerPot(BlockRegistry.POTTED_SAP_SAPLING);
+		this.flowerPot(BlockRegistry.POTTED_RUBBER_SAPLING);
+		this.flowerPot(BlockRegistry.POTTED_HEARTHGROVE_SAPLING);
+		this.flowerPot(BlockRegistry.POTTED_NIBBLETWIG_SAPLING);
+		this.flowerPot(BlockRegistry.POTTED_SPIRIT_TREE_SAPLING);
+
+		this.flowerPot(BlockRegistry.POTTED_ARROW_ARUM);
+		this.flowerPot(BlockRegistry.POTTED_BLUE_IRIS);
+		this.flowerPot(BlockRegistry.POTTED_BONESET);
+		this.flowerPot(BlockRegistry.POTTED_BUTTON_BUSH);
+		this.flowerPot(BlockRegistry.POTTED_COPPER_IRIS);
+		this.flowerPot(BlockRegistry.POTTED_DEAD_WEEDWOOD_BUSH);
+		this.flowerPot(BlockRegistry.POTTED_FLOWERED_NETTLE);
+		this.flowerPot(BlockRegistry.POTTED_MARSH_HIBISCUS);
+		this.flowerPot(BlockRegistry.POTTED_MARSH_MALLOW);
+		this.flowerPot(BlockRegistry.POTTED_MILKWEED);
+		this.flowerPot(BlockRegistry.POTTED_NETTLE);
+		this.flowerPot(BlockRegistry.POTTED_PICKERELWEED);
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {
@@ -1246,6 +1266,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.getMultipartBuilder(dugBlock.get()).part().modelFile(this.models().withExistingParent(dugBlock.getId().toString(), this.modLoc("block/dug_soil_base")).texture("bottom", bottom).texture("side", side)).addModel().end().part().modelFile(this.models().getExistingFile(this.modLoc("block/" + dugBlock.getId().getPath() + "_top"))).addModel().end();
 		var model = this.models().cubeBottomTop(dugBlock.getId().withSuffix("_inventory").toString(), side, bottom, this.modLoc("block/" + dugBlock.getId().getPath().replace("purified_", "") + "_0"));
 		this.itemModels().getBuilder(dugBlock.getId().getPath()).parent(model);
+	}
+
+	private void flowerPot(DeferredBlock<FlowerPotBlock> block) {
+		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/flower_pot_cross").renderType("cutout").texture("plant", this.blockTexture(block.get().getPotted())));
 	}
 
 	public void nibbletwigLogs() {
