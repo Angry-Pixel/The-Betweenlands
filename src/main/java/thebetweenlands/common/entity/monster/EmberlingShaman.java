@@ -40,6 +40,13 @@ public class EmberlingShaman extends Monster implements BLEntity {
 	public EmberlingShaman(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
 		this.tailPart = new GenericPartEntity<>(this, 0.5F, 0.5F);
+		this.setId(ENTITY_COUNTER.getAndAdd(3));
+	}
+
+	@Override
+	public void setId(int id) {
+		super.setId(id);
+		this.tailPart.setId(id + 1);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {

@@ -61,6 +61,13 @@ public class Emberling extends TamableAnimal implements BLEntity, Enemy {
 		this.waterPathNavigation.setCanFloat(true);
 
 		this.updateMovementAndPathfinding();
+		this.setId(ENTITY_COUNTER.getAndAdd(3));
+	}
+
+	@Override
+	public void setId(int id) {
+		super.setId(id);
+		this.tailPart.setId(id + 1);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
