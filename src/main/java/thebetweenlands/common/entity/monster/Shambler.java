@@ -256,16 +256,15 @@ public class Shambler extends Monster implements BLEntity {
         return Mth.sqrt(f * f + f1 * f1 + f2 * f2);
     }
 
-	@SuppressWarnings("rawtypes")
 	@Override
     public void tick() {
 		super.tick();
 		
-		Vec3 vector = getViewVector(1F);
+		Vec3 vector = getViewVector(1F).normalize().scale(1D);
 		
-		double offSetX = vector.x * -0.25D;
-		double offsetY = vector.y * -0.25D;
-		double offSetZ = vector.z * -0.25D;
+		double offSetX = vector.x * 0.125D;
+		double offsetY = vector.y * 0.125D;
+		double offSetZ = vector.z * 0.125D;
 		
 		double lengthIncrement = 0.5D / tongue_array.length;
 		
@@ -302,8 +301,8 @@ public class Shambler extends Monster implements BLEntity {
 		
 		if (entity instanceof LivingEntity) {
 			double a = Math.toRadians(getYRot());
-			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
-			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
+			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.4D;
+			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.4D;
 			entity.setPos(tongue_end.getX() + offSetX, tongue_end.getY() - entity.getBbHeight() * 0.3D, tongue_end.getZ() + offSetZ);
 			if (entity.isCrouching())
 				entity.setPose(Pose.STANDING);
