@@ -54,6 +54,7 @@ import thebetweenlands.common.entity.creature.Gecko;
 import thebetweenlands.common.entity.creature.Greebling;
 import thebetweenlands.common.entity.creature.GreeblingCoracle;
 import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
@@ -194,6 +195,7 @@ public class CommonRegistrationEvents {
 		event.dataPackRegistry(BLRegistries.Keys.ASPECT_ITEMS, AspectItem.DIRECT_CODEC, AspectItem.DIRECT_CODEC);
 		event.dataPackRegistry(BLRegistries.Keys.ASPECT_TYPES, AspectType.DIRECT_CODEC, AspectType.DIRECT_CODEC);
 		event.dataPackRegistry(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipe.CODEC, ElixirRecipe.CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.FROG_VARIANT, FrogVariant.DIRECT_CODEC, FrogVariant.DIRECT_CODEC);
 	}
 
 	private static void makeNewRegistries(NewRegistryEvent event) {

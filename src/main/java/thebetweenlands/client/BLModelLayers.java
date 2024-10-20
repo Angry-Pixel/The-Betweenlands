@@ -30,6 +30,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation FIREFLY = register("firefly");
 	public static final ModelLayerLocation FISH_HOOK = register("fish_hook");
 	public static final ModelLayerLocation FRESHWATER_URCHIN = register("freshwater_urchin");
+	public static final ModelLayerLocation FROG = register("frog");
 	public static final ModelLayerLocation GREEBLING_1 = register("greebling_1");
 	public static final ModelLayerLocation GREEBLING_2 = register("greebling_2");
 	public static final ModelLayerLocation GREEBLING_CORACLE = register("greebling_coracle");

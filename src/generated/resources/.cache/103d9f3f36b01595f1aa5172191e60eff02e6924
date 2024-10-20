@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-19T13:59:49.0711624	Registries
+// 1.21.1	2024-10-19T18:36:56.4429621	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -112,6 +112,11 @@ d077ddcebb36d5f7661fa909fd2bd9740fe1eb95 data/thebetweenlands/jukebox_song/stuck
 5af1688dafbe88bc9dc493e62545ab7ed3f18939 data/thebetweenlands/jukebox_song/the_explorer.json
 a6947b81609ea05b2a42d4cbd996ca6827d93ec7 data/thebetweenlands/jukebox_song/wandering_wisps.json
 6da446d81622c2c0b1f9ed5d5e1cda0bc747f6f3 data/thebetweenlands/jukebox_song/waterlogged.json
+de32c466029f0fa5e125efdc3308bd9d57c017ca data/thebetweenlands/thebetweenlands/frog_variant/blue.json
+6656dfb35769a9a80294eb376e2dc2a13fcccb6d data/thebetweenlands/thebetweenlands/frog_variant/green.json
+c965be6172267625aa31034e7c1d72e0aaf1362e data/thebetweenlands/thebetweenlands/frog_variant/poison.json
+bb63b2684918e0c305d74e1c42672f3b4fed760e data/thebetweenlands/thebetweenlands/frog_variant/purple.json
+5ade6e01029ef7c3f77bf98fc235a144bd60159d data/thebetweenlands/thebetweenlands/frog_variant/yellow.json
 2c8f7d2d4f4c44032b3fa6b27a8869cd691a7dea data/thebetweenlands/worldgen/biome/coarse_islands.json
 8c7f17adfa76bf502bf0e3bc2feaecdfec40bf03 data/thebetweenlands/worldgen/biome/deep_waters.json
 69cea8accbd78f6f5eb7fed1d685d6fdcb1cfe8d data/thebetweenlands/worldgen/biome/eroded_marsh.json

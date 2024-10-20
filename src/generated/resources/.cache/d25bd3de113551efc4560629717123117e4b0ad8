@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-19T11:51:56.6960145	Item Models: thebetweenlands
+// 1.21.1	2024-10-19T18:21:43.9806741	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -177,6 +177,7 @@ d0a1c08222716a5a4bc3e5963ab0a529a096d0e0 assets/thebetweenlands/models/item/forb
 c92c883ce786ce3bd2d10b33be2cfb07142f475f assets/thebetweenlands/models/item/fried_swamp_kelp.json
 2efea65889a85fe506d144b4bd03a762d7b7d53d assets/thebetweenlands/models/item/frog_leg_extract.json
 0f9f78f75fa2df52a18936021aa2f3a554dedc95 assets/thebetweenlands/models/item/frog_leg_extract_bucket.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/frog_spawn_egg.json
 2b20b46981aff750cd199fdee8c2b84f8e47d30c assets/thebetweenlands/models/item/fumigant.json
 a48a2e9f16148b4c2deb265816bbdca01aae272b assets/thebetweenlands/models/item/gecko.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/gecko_spawn_egg.json

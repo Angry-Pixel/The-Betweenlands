@@ -20,10 +20,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.common.loot.*;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.EntityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.*;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -360,6 +357,17 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2),
 				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3),
 				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4)))));
+		this.add(EntityRegistry.FROG.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_FROG_LEGS)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1)))
+					.apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot()))))
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.POISON_GLAND)
+					.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
+						EntityPredicate.Builder.entity().subPredicate(FrogVariantPredicate.variant(this.registries.holderOrThrow(FrogVariantRegistry.POISON)))))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 2))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

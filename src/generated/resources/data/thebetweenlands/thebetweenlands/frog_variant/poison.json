@@ -1,0 +1,17 @@
+{
+  "particle": {
+    "type": "minecraft:entity_effect",
+    "color": -11627984
+  },
+  "texture": "thebetweenlands:textures/entity/frog/poison.png",
+  "touch_effect": {
+    "duration": 140,
+    "id": "minecraft:poison",
+    "neoforge:cures": [
+      "honey",
+      "protected_by_totem",
+      "milk"
+    ],
+    "show_icon": true
+  }
+}

@@ -18,6 +18,7 @@
 * Amphibious armor upgrades are now a custom registry
 * Overhauled the aspect system. Aspect Types and Items are now defined via datapack registries, more info can be found here: _**TODO**_ gist link
 * Elixir recipes are now defined via a custom datapack registry
+* Frog variants are now defined via a custom datapack registry
 * Fixed Herblore book table of contents not flipping to the proper pages
 * Improved how items visually bob when in the steeping pot, infuser, and mortar
 * Fixed various plants having weird tinting as items

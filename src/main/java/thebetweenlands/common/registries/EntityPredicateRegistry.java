@@ -2,11 +2,17 @@ package thebetweenlands.common.registries;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.EntitySubPredicates;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.creature.frog.Frog;
+import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.loot.*;
+
+import java.util.Optional;
 
 public class EntityPredicateRegistry {
 
@@ -17,5 +23,5 @@ public class EntityPredicateRegistry {
 	public static final DeferredHolder<MapCodec<? extends EntitySubPredicate>, MapCodec<AnadiaTailPredicate>> ANADIA_TAIL = PREDICATES.register("anadia_tail_type", () -> AnadiaTailPredicate.CODEC);
 	public static final DeferredHolder<MapCodec<? extends EntitySubPredicate>, MapCodec<BossPeatMummyPredicate>> BOSS_MUMMY = PREDICATES.register("boss_summoned", () -> BossPeatMummyPredicate.CODEC);
 	public static final DeferredHolder<MapCodec<? extends EntitySubPredicate>, MapCodec<MummyHoldingShimmerstonePredicate>> HAS_SHIMMERSTONE = PREDICATES.register("holding_shimmerstone", () -> MummyHoldingShimmerstonePredicate.CODEC);
-
+	public static final DeferredHolder<MapCodec<? extends EntitySubPredicate>, MapCodec<FrogVariantPredicate>> FROG = PREDICATES.register("frog", () -> FrogVariantPredicate.CODEC);
 }

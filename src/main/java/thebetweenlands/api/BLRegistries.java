@@ -17,6 +17,7 @@ import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.SynchedAttachmentType;
+import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
@@ -42,6 +43,7 @@ public class BLRegistries {
 		public static final ResourceKey<Registry<ElixirEffect>> ELIXIR_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("elixir_effect"));
 		public static final ResourceKey<Registry<ElixirRecipe>> ELIXIR_RECIPES = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "elixir_recipe"));
 		public static final ResourceKey<Registry<EnvironmentEvent>> ENVIRONMENT_EVENTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("environment_event"));
+		public static final ResourceKey<Registry<FrogVariant>> FROG_VARIANT = ResourceKey.createRegistryKey(TheBetweenlands.prefix("frog_variant"));
 		public static final ResourceKey<Registry<SimulacrumEffect>> SIMULACRUM_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("simulacrum_effect"));
 		public static final ResourceKey<Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>>> WORLD_STORAGE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("world_storage"));
 		public static final ResourceKey<Registry<SynchedAttachmentType<?>>> SYNCHED_ATTACHMENT_TYPES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("synched_attachment_types"));

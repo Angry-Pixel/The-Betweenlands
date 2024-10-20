@@ -16,6 +16,7 @@ import thebetweenlands.common.entity.*;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.creature.*;
+import thebetweenlands.common.entity.creature.frog.Frog;
 import thebetweenlands.common.entity.fishing.BLFishHook;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.FishBait;
@@ -70,7 +71,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<EmberlingShaman>> EMBERLING_SHAMAN = registerWithEgg("emberling_shaman", EntityType.Builder.of(EmberlingShaman::new, MobCategory.MONSTER).sized(0.9F, 1.0F).clientTrackingRange(10).fireImmune(), 0xA43B2E, 0x391211, EmberlingShaman::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Firefly>> FIREFLY = registerWithEgg("firefly", EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.6F, 0.6F), 0xDCFF51, 0x402A21, Firefly::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<FreshwaterUrchin>> FRESHWATER_URCHIN = registerWithEgg("freshwater_urchin", EntityType.Builder.of(FreshwaterUrchin::new, MobCategory.WATER_AMBIENT).sized(0.6875F, 0.4375F), 0x612E2E, 0x13363F, FreshwaterUrchin::registerAttributes);
-	//frog
+	public static final DeferredHolder<EntityType<?>, EntityType<Frog>> FROG = registerWithEgg("frog", EntityType.Builder.of(Frog::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.5F), 0x1E4921, 0x479219, Frog::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Gecko>> GECKO = registerWithEgg("gecko", EntityType.Builder.of(Gecko::new, MobCategory.CREATURE).sized(0.75F, 0.35F),  0xFF8000, 0x22E0B1, Gecko::registerAttributes);
 	//giant toad
 	public static final DeferredHolder<EntityType<?>, EntityType<Greebling>> GREEBLING = registerWithEgg("greebling", EntityType.Builder.of(Greebling::new, MobCategory.AMBIENT).sized(1.0F, 0.75F).clientTrackingRange(16), 0x7CB2AA, 0xC3726C, Greebling::createMobAttributes);
