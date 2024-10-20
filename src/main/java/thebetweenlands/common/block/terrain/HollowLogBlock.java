@@ -31,10 +31,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
-import thebetweenlands.common.block.waterlog.SwampWaterLoggable.WaterType;
 
 public class HollowLogBlock extends HorizontalDirectionalBlock implements SwampWaterLoggable {
 
+	public static final MapCodec<HollowLogBlock> CODEC = simpleCodec(HollowLogBlock::new);
+	
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 	// originally CLOCKWISE_FACE and ANTICLOCKWISE_FACE, but this is easier to work with on the collisions side of thing
 	public static final BooleanProperty POSITIVE_FACE = BooleanProperty.create("positive_face");
@@ -62,12 +63,12 @@ public class HollowLogBlock extends HorizontalDirectionalBlock implements SwampW
 	
 	public HollowLogBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(POSITIVE_FACE, true).setValue(NEGATIVE_FACE, true));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(POSITIVE_FACE, true).setValue(NEGATIVE_FACE, true).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
 	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-		return null;
+		return CODEC;
 	}
 
 	@Override
