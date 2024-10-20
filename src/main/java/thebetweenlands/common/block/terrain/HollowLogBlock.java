@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
@@ -8,6 +10,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,12 +24,16 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable.WaterType;
 
-public class HollowLogBlock extends HorizontalDirectionalBlock {
+public class HollowLogBlock extends HorizontalDirectionalBlock implements SwampWaterLoggable {
 
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 	// originally CLOCKWISE_FACE and ANTICLOCKWISE_FACE, but this is easier to work with on the collisions side of thing
@@ -87,16 +96,16 @@ public class HollowLogBlock extends HorizontalDirectionalBlock {
 		final BlockPos pos = context.getClickedPos();
 		
 		final BlockState positiveState = level.getBlockState(pos.relative(Direction.get(AxisDirection.POSITIVE, oppositeAxis)));
-		if(positiveState.is(this) && positiveState.getValue(FACING).getAxis() == oppositeAxis) {
-			state = state.setValue(POSITIVE_FACE, false);
-		}
+		final boolean positiveFace = !(positiveState.is(this) && positiveState.getValue(FACING).getAxis() == oppositeAxis);
 		
 		final BlockState negativeState = level.getBlockState(pos.relative(Direction.get(AxisDirection.NEGATIVE, oppositeAxis)));
-		if(negativeState.is(this) && negativeState.getValue(FACING).getAxis() == oppositeAxis) {
-			state = state.setValue(NEGATIVE_FACE, false);
-		}
-		
-		return state;
+		final boolean negativeFace = !(negativeState.is(this) && negativeState.getValue(FACING).getAxis() == oppositeAxis);
+
+		FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+		return state
+				.setValue(POSITIVE_FACE, positiveFace)
+				.setValue(NEGATIVE_FACE, negativeFace)
+				.setValue(WATER_TYPE, WaterType.getFromFluid(fluidstate.getType()));
 	}
 
 	@Override
@@ -111,6 +120,11 @@ public class HollowLogBlock extends HorizontalDirectionalBlock {
 			
 			final BlockState negativeState = level.getBlockState(pos.relative(Direction.get(AxisDirection.NEGATIVE, oppositeAxis)));
 			newState = newState.setValue(NEGATIVE_FACE, !negativeState.is(this) || negativeState.getValue(FACING).getAxis() != oppositeAxis);
+			
+			//waterlogging
+			if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+				level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+			}
 		}
 		
 		return newState;
@@ -138,6 +152,34 @@ public class HollowLogBlock extends HorizontalDirectionalBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING).add(POSITIVE_FACE).add(NEGATIVE_FACE);
+		super.createBlockStateDefinition(builder);
+		builder.add(FACING, POSITIVE_FACE, NEGATIVE_FACE, WATER_TYPE);
+	}
+	
+	// ---- waterlogging ----
+	
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+	
+	@Override
+	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+		return SwampWaterLoggable.super.canPlaceLiquid(player, level, pos, state, fluid);
+	}
+
+	@Override
+	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidState) {
+		return SwampWaterLoggable.super.placeLiquid(level, pos, state, fluidState);
+	}
+
+	@Override
+	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
+		return SwampWaterLoggable.super.pickupBlock(player, level, pos, state);
+	}
+
+	@Override
+	public Optional<SoundEvent> getPickupSound() {
+		return SwampWaterLoggable.super.getPickupSound();
 	}
 }
