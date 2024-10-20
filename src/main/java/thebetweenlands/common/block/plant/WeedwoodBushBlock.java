@@ -62,10 +62,13 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false).setValue(DOWN, false));
 	}
 
+	public static boolean isPassable(BlockGetter level, BlockPos pos, Entity entity) {
+		return entity != null && entity.getType().is(BLEntityTagProvider.WEEDWOOD_BUSH_PASSABLE) || entity instanceof WeedwoodBushPassableEntity passable && passable.canPassThroughBush(level, pos);
+	}
+	
 //	@Override
 //	public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-////		return mob instanceof WeedwoodBushUncollidableEntity ? PathType.OPEN : super.getBlockPathType(state, level, pos, mob);
-//		return mob instanceof WeedwoodBushUncollidableEntity == false ? super.getBlockPathType(state, level, pos, mob) : PathType.OPEN;
+//		return isPassable(level, pos, mob) ? PathType.OPEN : super.getBlockPathType(state, level, pos, mob);
 //	}
 	
 	@Override
@@ -89,7 +92,7 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 
 	@Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		if (context instanceof EntityCollisionContext ctx && ctx.getEntity() != null && (ctx.getEntity().getType().is(BLEntityTagProvider.WEEDWOOD_BUSH_PASSABLE) || ctx.getEntity() instanceof WeedwoodBushPassableEntity passable && passable.canPassThroughBush(level, pos))) {
+		if (context instanceof EntityCollisionContext ctx && ctx.getEntity() != null && isPassable(level, pos, ctx.getEntity())) {
 			return Shapes.empty();
 		}
 		return super.getCollisionShape(state, level, pos, context);

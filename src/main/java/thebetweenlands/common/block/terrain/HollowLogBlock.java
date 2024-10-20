@@ -71,6 +71,51 @@ public class HollowLogBlock extends HorizontalDirectionalBlock implements SwampW
 		return CODEC;
 	}
 
+//	@Override
+//	public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+//		if(mob != null && state.is(this)) {
+//			Axis axis;
+//			Vec3 axisVec = mob.position().subtract(pos.getCenter());
+//			if(axisVec.x > axisVec.z) {
+//				axis = Axis.X;
+//			} else {
+//				axis = Axis.Z;
+//			}
+//			if(state.getValue(FACING).getAxis() == axis) {
+//				return PathType.OPEN;
+//			} else {
+//				return PathType.BLOCKED;
+//			}
+//		}
+//		return super.getBlockPathType(state, level, pos, mob);
+//	}
+//	
+//	@Override
+//	public @Nullable PathType getAdjacentBlockPathType(BlockState currentState, BlockGetter level, BlockPos pos, @Nullable Mob mob, PathType originalType) {
+//		BlockState adjacentState = level.getBlockState(pos);
+//		if(mob != null && adjacentState.is(this)) {
+//			Axis axis;
+//			Vec3 axisVec = mob.position().subtract(pos.getCenter());
+//			if(axisVec.x > axisVec.z) {
+//				axis = Axis.X;
+//			} else {
+//				axis = Axis.Z;
+//			}
+//			//don't walk through the wall of a log
+//			// TODO: open sides on connections
+//			if(adjacentState.getValue(FACING).getAxis() == axis) {
+//				AABB block = new AABB(pos);
+//				AABB mobAABB = mob.getBoundingBox();
+//				// If it can even fit
+//				if(block.contains(mobAABB.getBottomCenter()) && block.contains(Mth.lerp(0.5, mobAABB.minX, mobAABB.maxX), mobAABB.maxY, Mth.lerp(0.5, mobAABB.minZ, mobAABB.maxZ))) {
+//					return PathType.OPEN;
+//				}
+//			}
+//			return PathType.BLOCKED;
+//		}
+//		return super.getAdjacentBlockPathType(currentState, level, pos, mob, originalType);
+//	}
+	
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
 		final Axis axis = state.getValue(FACING).getAxis();
