@@ -34,7 +34,7 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.block.FarmablePlant;
-import thebetweenlands.api.entity.WeedwoodBushUncollidableEntity;
+import thebetweenlands.api.entity.WeedwoodBushPassableEntity;
 import thebetweenlands.common.block.terrain.NestBlock;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -89,7 +89,7 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 
 	@Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		if (context instanceof EntityCollisionContext ctx && ctx.getEntity() != null && ctx.getEntity().getType().is(BLEntityTagProvider.IGNORES_WEEDWOOD_BUSHES)) {
+		if (context instanceof EntityCollisionContext ctx && ctx.getEntity() != null && ctx.getEntity().getType().is(BLEntityTagProvider.WEEDWOOD_BUSH_PASSABLE)) {
 			return Shapes.empty();
 		}
 		return super.getCollisionShape(state, level, pos, context);

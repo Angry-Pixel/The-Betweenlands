@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
 
-import thebetweenlands.api.entity.WeedwoodBushUncollidableEntity;
+import thebetweenlands.api.entity.WeedwoodBushPassableEntity;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.GeckoHideFromRainGoal;
 import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
@@ -31,7 +31,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
 
-public class Gecko extends Animal implements BLEntity, WeedwoodBushUncollidableEntity {
+public class Gecko extends Animal implements BLEntity, WeedwoodBushPassableEntity {
 
 	private static final int MIN_HIDE_TIME = 20 * 60 * 2;
 	private static final float UNHIDE_CHANCE = 0.1F;
