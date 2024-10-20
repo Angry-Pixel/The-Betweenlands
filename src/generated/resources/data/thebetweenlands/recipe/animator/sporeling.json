@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:spores"
+  },
+  "render_entity": "thebetweenlands:sporeling",
+  "required_fuel": 8,
+  "required_life": 4,
+  "result_entity": "thebetweenlands:sporeling"
+}

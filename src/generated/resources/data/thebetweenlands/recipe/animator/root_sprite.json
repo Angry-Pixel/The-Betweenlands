@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:root_pod"
+  },
+  "render_entity": "thebetweenlands:root_sprite",
+  "required_fuel": 10,
+  "required_life": 6,
+  "result_entity": "thebetweenlands:root_sprite"
+}

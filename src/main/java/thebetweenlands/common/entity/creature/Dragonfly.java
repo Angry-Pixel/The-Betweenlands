@@ -165,8 +165,18 @@ public class Dragonfly extends AmbientCreature implements BLEntity {
 	}
 
 	@Override
+	public boolean canBeSeenByAnyone() {
+		return !this.isInLurkersMouth() && super.canBeSeenByAnyone();
+	}
+
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
+	}
+
+	@Override
+	protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+
 	}
 
 	@Override

@@ -14,10 +14,7 @@ import thebetweenlands.common.item.recipe.AnadiaSmokingRecipe;
 import thebetweenlands.common.item.recipe.AnadiaTrimmingRecipe;
 import thebetweenlands.common.item.recipe.MortarAspectrusRecipe;
 import thebetweenlands.common.item.recipe.special.*;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.*;
 
 public class BLCustomRecipeProvider {
 
@@ -54,26 +51,26 @@ public class BLCustomRecipeProvider {
 			.requiredLife(32)
 			.save(output);
 
-//		AnimatorRecipeBuilder.animator(ItemRegistry.INANIMATE_TARMINION)
-//			.setResultStack(ItemRegistry.TARMINION)
-//			.requiredFuel(8)
-//			.requiredLife(8)
-//			.setRenderEntity(EntityRegistry.TARMINION.get())
-//			.save(output);
-//
-//		AnimatorRecipeBuilder.animator(ItemRegistry.SPORES)
-//			.requiredFuel(8)
-//			.requiredLife(4)
-//			.setResultEntity(EntityRegistry.SPORELING.get())
-//			.setRenderEntity(EntityRegistry.SPORELING.get())
-//			.save(output, TheBetweenlands.prefix("sporeling"));
-//
-//		AnimatorRecipeBuilder.animator(BlockRegistry.ROOT_POD)
-//			.requiredFuel(10)
-//			.requiredLife(6)
-//			.setResultEntity(EntityRegistry.ROOT_SPRITE.get())
-//			.setRenderEntity(EntityRegistry.ROOT_SPRITE.get())
-//			.save(output, TheBetweenlands.prefix("root_sprite"));
+		AnimatorRecipeBuilder.animator(ItemRegistry.INANIMATE_TARMINION)
+			.setResultStack(ItemRegistry.TARMINION)
+			.requiredFuel(8)
+			.requiredLife(8)
+			.setRenderEntity(EntityRegistry.TARMINION.get())
+			.save(output);
+
+		AnimatorRecipeBuilder.animator(ItemRegistry.SPORES)
+			.requiredFuel(8)
+			.requiredLife(4)
+			.setResultEntity(EntityRegistry.SPORELING.get())
+			.setRenderEntity(EntityRegistry.SPORELING.get())
+			.save(output, TheBetweenlands.prefix("sporeling"));
+
+		AnimatorRecipeBuilder.animator(BlockRegistry.ROOT_POD)
+			.requiredFuel(10)
+			.requiredLife(6)
+			.setResultEntity(EntityRegistry.ROOT_SPRITE.get())
+			.setRenderEntity(EntityRegistry.ROOT_SPRITE.get())
+			.save(output, TheBetweenlands.prefix("root_sprite"));
 
 		AnimatorRecipeBuilder.animator(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK)
 			.setResultStack(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK)

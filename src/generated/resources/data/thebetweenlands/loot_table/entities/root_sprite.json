@@ -1,0 +1,254 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:root_pod"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:root_pod"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 14
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": {
+            "pools": [
+              {
+                "bonus_rolls": 0.0,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:leaf"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:algae_clump"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:arrow_arum_leaf"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:blue_eyed_grass_flowers"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:blue_iris_petal"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:mire_coral_stalk"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:deep_water_coral_stalk"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:bog_bean_flower_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:boneset_flowers"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:bottle_brush_grass_blades"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:broomsedge_leaves"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:button_bush_flowers"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:cardinal_flower_petals"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:cattail_head"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:cave_grass_blades"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:copper_iris_petals"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:golden_club_flowers"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:lichen_clump"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:marsh_hibiscus_flower"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:marsh_mallow_flower"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:marsh_marigold_flower_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:nettle_leaf"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:phragmite_stems"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:pickerelweed_flower"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:shoot_leaves"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:sludgecreep_leaves"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:soft_rush_leaves"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:sundew_head"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:swamp_grass_blades"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:cave_moss_clump"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:moss_clump"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:milkweed_flower"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:hanger_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:pitcher_plant_trap"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:water_weeds_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:venus_fly_trap_head"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:volarpad_leaf"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:thorn_branch"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:poison_ivy_leaf"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:bladderwort_stalk_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:bladderwort_flower_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:edge_shroom_gills"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:edge_moss_clump"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:edge_leaf_drop"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:rotbulb_stalk"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:pale_grass_blades"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:string_root_fibers"
+                  },
+                  {
+                    "type": "minecraft:item",
+                    "name": "thebetweenlands:cryptweed_blades"
+                  }
+                ],
+                "rolls": 1.0
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:middle_fruit_bush_seeds",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:aspectrus_seeds"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:entities/root_sprite"
+}

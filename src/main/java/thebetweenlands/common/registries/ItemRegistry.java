@@ -214,7 +214,7 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem<FreshwaterUrchin>> FRESHWATER_URCHIN = ITEMS.register("freshwater_urchin", () -> new FreshwaterUrchinMobItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CHIROMAW_EGG = ITEMS.register("chiromaw_egg", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
-	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
+	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new TarminionItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16)));
 	public static final DeferredItem<Item> SLUDGE_BALL = ITEMS.register("sludge_ball", () -> new Item(new Item.Properties()));
 	//rope
 	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, new Item.Properties()));
@@ -367,7 +367,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
 	public static final DeferredItem<Item> ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("animated_small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
 	//gallery frames
-	//silk mask
+	public static final DeferredItem<Item> SILK_MASK = ITEMS.register("silk_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
 	public static final DeferredItem<Item> WIGHTS_BANE = ITEMS.register("wights_bane", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.WIGHTS_BANE_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
 	public static final DeferredItem<Item> SLUDGE_SLICER = ITEMS.register("sludge_slicer", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.SLUDGE_SLICER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
 	public static final DeferredItem<Item> CRITTER_CRUNCHER = ITEMS.register("critter_cruncher", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.CRITTER_CRUNCHER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));

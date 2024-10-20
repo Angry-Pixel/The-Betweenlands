@@ -74,7 +74,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 				stack.pushPose();
 				stack.translate(0.0F, 0.43F, 0.0F);
 				stack.scale(0.18F, 0.18F, 0.18F);
-				stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) + Mth.HALF_PI));
+				stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) + Mth.PI));
 				this.itemRenderer.renderStatic(crystal, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 				stack.popPose();
 			}
@@ -91,13 +91,13 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 				if (recipe != null) {
 					if (!(inputStack.getItem() instanceof SpawnEggItem) && recipe.value().getRenderEntity(input, entity.getLevel()) == null) {
 						stack.scale(0.3F, 0.3F, 0.3F);
-						stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) - Mth.HALF_PI));
+						stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) + Mth.PI));
 						this.itemRenderer.renderStatic(inputStack, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					} else {
 						Entity renderEntity = this.fetchEntityForRendering(entity, recipe, input);
 						if (renderEntity != null) {
 							stack.translate(0.0D, renderEntity.getBbHeight() / 8.0D, 0.0D);
-							stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) - Mth.HALF_PI));
+							stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks)));
 							stack.scale(0.75F, 0.75F, 0.75F);
 							renderEntity.setYRot(0.0F);
 							renderEntity.setXRot(0.0F);

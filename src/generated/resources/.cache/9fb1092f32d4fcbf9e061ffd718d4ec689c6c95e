@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-17T23:21:25.4205267	Recipes
+// 1.21.1	2024-10-19T23:47:11.0918446	Recipes
 937ab63d71c29fe3ff8aa7b094d93075df2adc8d data/thebetweenlands/advancement/recipes/building_blocks/alembic.json
 e08cfe8707ceec8997d54923df2a0ca86b605a91 data/thebetweenlands/advancement/recipes/building_blocks/ancient_remnant_block.json
 832ce804fb41b3d51420f3058ee570c44f547f42 data/thebetweenlands/advancement/recipes/building_blocks/animator.json
@@ -628,9 +628,12 @@ a27668f50f93f9e20446d3fd8e7db973dbfb3ce0 data/thebetweenlands/recipe/animator/an
 eede61accdf9fa5989c16eb490868442853b348a data/thebetweenlands/recipe/animator/animated_small_spirit_tree_face_mask.json
 5ab65cff3bc11553bfd17e7401139b5a63056f7f data/thebetweenlands/recipe/animator/animated_tar_beast_heart.json
 f327dad0ac7f3a5abd3d84dfe38b4a3cbe966052 data/thebetweenlands/recipe/animator/fabricated_scroll.json
+e4c79e478e365cdbc64be0c2e6ceba5556b93053 data/thebetweenlands/recipe/animator/root_sprite.json
 b2e11f0e4e69a03556de7fe69fe27d9a1d773a87 data/thebetweenlands/recipe/animator/scroll.json
 ed70172d19610bdabb235d6d89c05a96ed74ab32 data/thebetweenlands/recipe/animator/sludge_worm_arrow.json
 1528ea63a66b4265b2278946f09dc754259a9626 data/thebetweenlands/recipe/animator/snot_pod.json
+9862801bdaf02580e8ca7c798ed5c63da794f9e0 data/thebetweenlands/recipe/animator/sporeling.json
+4c8254de45134295e198283e74ea70dc781a1be7 data/thebetweenlands/recipe/animator/tarminion.json
 13b16628bcc0962ac0b5edfc3f8cab2311bc607e data/thebetweenlands/recipe/aqua_middle_gem_block.json
 55f5336c8dc59f8d03db81e58664a71b82b92089 data/thebetweenlands/recipe/aqua_middle_gem_from_block.json
 daaf99fb264c4c0661b2cf902b5933a7935ad4ed data/thebetweenlands/recipe/betweenstone_bricks.json

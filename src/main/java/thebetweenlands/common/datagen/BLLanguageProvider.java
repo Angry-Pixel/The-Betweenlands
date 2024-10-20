@@ -1026,6 +1026,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.CAVE_FISH, "Cave Fish");
 		this.addEntityAndEgg(EntityRegistry.DARK_DRUID, "Dark Druid");
 		this.addEntityAndEgg(EntityRegistry.FROG, "Frog");
+		this.addEntityAndEgg(EntityRegistry.ROOT_SPRITE, "Root Sprite");
+		this.addEntityAndEgg(EntityRegistry.SPORELING, "Sporeling");
+		this.addEntityAndEgg(EntityRegistry.SPLODESHROOM, "Splodeshroom");
+		this.addEntityAndEgg(EntityRegistry.TARMINION, "Tarminion");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1042,6 +1046,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.BIPED_CRYPT_CRAWLER, "Crypt Crawler");
 		this.addEntityType(EntityRegistry.CHIEF_CRYPT_CRAWLER, "Crypt Crawler");
 		this.addEntityType(EntityRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
+		this.addEntityType(EntityRegistry.THROWN_TARMINION, "Thrown Tarminion");
 
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");
@@ -1304,10 +1309,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.life_crystal.remaining", "%s%% remaining");
 		this.addItem(ItemRegistry.PYRAD_FLAME, "Pyrad Flame");
 		this.add("item.thebetweenlands.mob.health", "Health: %s/%s");
-		this.addItem(ItemRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
-		this.addItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
+		this.addItem(ItemRegistry.SLUDGE_WORM_EGG_SAC, "Sludge Worm Egg Sac");
 		this.addItem(ItemRegistry.SHIMMER_STONE, "Shimmerstone");
-		//tarminion
+		this.addItem(ItemRegistry.TARMINION, "Tarminion");
 		this.addItem(ItemRegistry.SLUDGE_BALL, "Sludge Ball");
 		//rope
 		this.addItem(ItemRegistry.ANGRY_PEBBLE, "Angry Pebble");
@@ -1477,11 +1481,13 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.SILK_BUNDLE, "Silk Bundle");
 		this.add("item.thebetweenlands.silk_bundle.item", "- %s");
 
-		//skull mask
+		this.addItem(ItemRegistry.SKULL_MASK, "Skull Mask");
 		//explorer hat
+		this.addItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK, "Small Spirit Tree Face Mask");
+		this.addItem(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK, "Small Animated Spirit Tree Face Mask");
 		//tree masks
 		//gallery frames
-		//silk mask
+		this.addItem(ItemRegistry.SILK_MASK, "Silk Mask");
 		this.addItem(ItemRegistry.WIGHTS_BANE, "Wight's Bane");
 		this.addItem(ItemRegistry.SLUDGE_SLICER, "Sludge Slicer");
 		this.addItem(ItemRegistry.CRITTER_CRUNCHER, "Critter Cruncher");
@@ -1507,7 +1513,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addDisc(ItemRegistry.RECORD_WATERLOGGED, "Music Disc", "Voog2 - Waterlogged");
 		this.addDisc(ItemRegistry.MYSTERIOUS_RECORD, "Mysterious Disc", "...");
 		//amulets
-		//amulet slot
+		this.addItem(ItemRegistry.AMULET_SLOT, "Amulet Slot");
 		this.addItemWithDesc(ItemRegistry.RING_OF_POWER, "Ring of Power", "Grants a bonus to attack damage and movement speed at the cost of XP");
 		this.addItemWithDesc(ItemRegistry.RING_OF_ASCENT, "Ring of Ascent", "Grants the gift of levitation at the cost of XP");
 		this.addItemWithDesc(ItemRegistry.RING_OF_RECRUITMENT, "Ring of Recruitment", "Grants the power to recruit and control entities at the cost of XP");

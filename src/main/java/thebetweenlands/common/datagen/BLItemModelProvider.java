@@ -250,7 +250,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		//chiromaw
 		//lightning chiromaw
 		this.basicItem(ItemRegistry.SHIMMER_STONE);
-		//tarminion
+		this.basicItem(ItemRegistry.TARMINION);
 		this.basicItem(ItemRegistry.SLUDGE_BALL);
 		//rope
 		Function<DeferredItem<?>, ModelFile> pebbleOverlay = item -> this.multiLayerItem(item.getId().getPath() + "_active", this.itemTexture(item), TheBetweenlands.prefix("item/angry_pebble_overlay"));
@@ -396,11 +396,13 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.BIOPATHIC_LINKSTONE);
 		this.basicItem(ItemRegistry.SILK_BUNDLE);
 
-		//skull mask
+		this.basicItem(ItemRegistry.SKULL_MASK);
 		//explorer hat
+		this.basicItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK);
+		this.basicItem(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK);
 		//tree masks
 		//gallery frames
-		//silk mask
+		this.basicItem(ItemRegistry.SILK_MASK);
 		this.toolItem(ItemRegistry.WIGHTS_BANE);
 		this.toolItem(ItemRegistry.SLUDGE_SLICER);
 		this.toolItem(ItemRegistry.CRITTER_CRUNCHER);
@@ -426,7 +428,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.RECORD_WATERLOGGED);
 		this.basicItem(ItemRegistry.MYSTERIOUS_RECORD);
 		//amulets
-		//amulet slot
+		this.basicItem(ItemRegistry.AMULET_SLOT);
 		this.basicItem(ItemRegistry.RING_OF_POWER);
 		this.basicItem(ItemRegistry.RING_OF_ASCENT);
 		this.basicItem(ItemRegistry.RING_OF_RECRUITMENT);

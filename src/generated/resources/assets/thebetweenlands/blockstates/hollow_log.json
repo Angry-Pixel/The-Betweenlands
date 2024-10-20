@@ -1,6 +1,6 @@
 {
   "variants": {
-    "facing=east,negative_face=false,positive_face=false": [
+    "facing=east,negative_face=false,positive_face=false,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 90
@@ -14,7 +14,7 @@
         "y": 90
       }
     ],
-    "facing=east,negative_face=false,positive_face=true": [
+    "facing=east,negative_face=false,positive_face=false,water_type=swamp_water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 90
@@ -28,7 +28,7 @@
         "y": 90
       }
     ],
-    "facing=east,negative_face=true,positive_face=false": [
+    "facing=east,negative_face=false,positive_face=false,water_type=water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 90
@@ -42,7 +42,7 @@
         "y": 90
       }
     ],
-    "facing=east,negative_face=true,positive_face=true": [
+    "facing=east,negative_face=false,positive_face=true,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 90
@@ -56,7 +56,119 @@
         "y": 90
       }
     ],
-    "facing=north,negative_face=false,positive_face=false": [
+    "facing=east,negative_face=false,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=false,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=false,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=false,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=false,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=true,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=east,negative_face=true,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 90
+      }
+    ],
+    "facing=north,negative_face=false,positive_face=false,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1"
       },
@@ -67,7 +179,7 @@
         "model": "thebetweenlands:block/hollow_log_3"
       }
     ],
-    "facing=north,negative_face=false,positive_face=true": [
+    "facing=north,negative_face=false,positive_face=false,water_type=swamp_water": [
       {
         "model": "thebetweenlands:block/hollow_log_1"
       },
@@ -78,7 +190,7 @@
         "model": "thebetweenlands:block/hollow_log_3"
       }
     ],
-    "facing=north,negative_face=true,positive_face=false": [
+    "facing=north,negative_face=false,positive_face=false,water_type=water": [
       {
         "model": "thebetweenlands:block/hollow_log_1"
       },
@@ -89,7 +201,7 @@
         "model": "thebetweenlands:block/hollow_log_3"
       }
     ],
-    "facing=north,negative_face=true,positive_face=true": [
+    "facing=north,negative_face=false,positive_face=true,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1"
       },
@@ -100,7 +212,95 @@
         "model": "thebetweenlands:block/hollow_log_3"
       }
     ],
-    "facing=south,negative_face=false,positive_face=false": [
+    "facing=north,negative_face=false,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=false,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=false,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=false,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=false,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=true,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=north,negative_face=true,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3"
+      }
+    ],
+    "facing=south,negative_face=false,positive_face=false,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 180
@@ -114,7 +314,7 @@
         "y": 180
       }
     ],
-    "facing=south,negative_face=false,positive_face=true": [
+    "facing=south,negative_face=false,positive_face=false,water_type=swamp_water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 180
@@ -128,7 +328,7 @@
         "y": 180
       }
     ],
-    "facing=south,negative_face=true,positive_face=false": [
+    "facing=south,negative_face=false,positive_face=false,water_type=water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 180
@@ -142,7 +342,7 @@
         "y": 180
       }
     ],
-    "facing=south,negative_face=true,positive_face=true": [
+    "facing=south,negative_face=false,positive_face=true,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 180
@@ -156,7 +356,119 @@
         "y": 180
       }
     ],
-    "facing=west,negative_face=false,positive_face=false": [
+    "facing=south,negative_face=false,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=false,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=false,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=false,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=false,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=true,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=south,negative_face=true,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 180
+      }
+    ],
+    "facing=west,negative_face=false,positive_face=false,water_type=none": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 270
@@ -170,7 +482,7 @@
         "y": 270
       }
     ],
-    "facing=west,negative_face=false,positive_face=true": [
+    "facing=west,negative_face=false,positive_face=false,water_type=swamp_water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 270
@@ -184,7 +496,7 @@
         "y": 270
       }
     ],
-    "facing=west,negative_face=true,positive_face=false": [
+    "facing=west,negative_face=false,positive_face=false,water_type=water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 270
@@ -198,7 +510,119 @@
         "y": 270
       }
     ],
-    "facing=west,negative_face=true,positive_face=true": [
+    "facing=west,negative_face=false,positive_face=true,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=false,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=false,positive_face=true,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=false,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=false,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=false,water_type=water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=true,water_type=none": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=true,water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/hollow_log_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/hollow_log_3",
+        "y": 270
+      }
+    ],
+    "facing=west,negative_face=true,positive_face=true,water_type=water": [
       {
         "model": "thebetweenlands:block/hollow_log_1",
         "y": 270

@@ -298,6 +298,11 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.CAVE_FISH.get(), CaveFishRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.DARK_DRUID.get(), DarkDruidRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FROG.get(), FrogRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ROOT_SPRITE.get(), RootSpriteRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SPLODESHROOM.get(), SplodeshroomRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SPORELING.get(), SporelingRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.TARMINION.get(), TarminionRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.THROWN_TARMINION.get(), ThrownTarminionRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -383,6 +388,10 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.CAVE_FISH, CaveFishModel::create);
 		event.registerLayerDefinition(BLModelLayers.DARK_DRUID, DarkDruidModel::create);
 		event.registerLayerDefinition(BLModelLayers.FROG, FrogModel::create);
+		event.registerLayerDefinition(BLModelLayers.ROOT_SPRITE, RootSpriteModel::create);
+		event.registerLayerDefinition(BLModelLayers.SPLODESHROOM, SplodeshroomModel::create);
+		event.registerLayerDefinition(BLModelLayers.SPORELING, SporelingModel::create);
+		event.registerLayerDefinition(BLModelLayers.TARMINION, TarminionModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
@@ -710,6 +719,10 @@ public class ClientRegistrationEvents {
 		event.registerSprite(ParticleRegistry.SLEEPING.get(), (type, level, x, y, z, xSpeed, ySpeed, zSpeed) -> new SleepingParticle(level, x, y, z, xSpeed, ySpeed, zSpeed));
 		event.registerSpriteSet(ParticleRegistry.EMBER_SWIRL.get(), EntitySwirlParticle.EmberSwirlFactory::new);
 		event.registerSpriteSet(ParticleRegistry.DRUID_CASTING.get(), DruidCastingParticle.Factory::new);
+		event.registerSprite(ParticleRegistry.DRIPPING_TAR.get(), TarBeastDripParticle::createTarHangParticle);
+		event.registerSprite(ParticleRegistry.FALLING_TAR.get(), TarBeastDripParticle::createTarFallParticle);
+		event.registerSprite(ParticleRegistry.LANDING_TAR.get(), TarBeastDripParticle::createTarLandParticle);
+
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

@@ -11,7 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -779,12 +778,12 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
 			output.accept(ItemRegistry.PYRAD_FLAME);
 			output.accept(ItemRegistry.FIREFLY);
-			output.accept(ItemRegistry.MIRE_SNAIL);
 			output.accept(ItemRegistry.GECKO);
+			output.accept(ItemRegistry.MIRE_SNAIL);
+			output.accept(ItemRegistry.CAVE_FISH);
 			output.accept(ItemRegistry.DRAGONFLY);
 			output.accept(ItemRegistry.OLM);
-			output.accept(ItemRegistry.CAVE_FISH);
-			//sludge worm egg sac
+			output.accept(ItemRegistry.SLUDGE_WORM_EGG_SAC);
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM);
 			output.accept(ItemRegistry.TINY_SLUDGE_WORM_HELPER);
 			output.accept(ItemRegistry.ANADIA);
@@ -797,7 +796,7 @@ public class CreativeGroupRegistry {
 			//chiromaw
 			//lightning chiromaw
 			output.accept(ItemRegistry.SHIMMER_STONE);
-			//tarminion
+			output.accept(ItemRegistry.TARMINION);
 			output.accept(ItemRegistry.SLUDGE_BALL);
 			//rope
 			output.accept(ItemRegistry.ANGRY_PEBBLE);
@@ -965,7 +964,7 @@ public class CreativeGroupRegistry {
 //			output.accept(ItemRegistry.SMALL_GALLERY_FRAME);
 //			output.accept(ItemRegistry.LARGE_GALLERY_FRAME);
 //			output.accept(ItemRegistry.VERY_LARGE_GALLERY_FRAME);
-//			output.accept(ItemRegistry.SILK_MASK);
+			output.accept(ItemRegistry.SILK_MASK);
 			output.accept(ItemRegistry.WIGHTS_BANE);
 			output.accept(ItemRegistry.SLUDGE_SLICER);
 			output.accept(ItemRegistry.CRITTER_CRUNCHER);
@@ -993,7 +992,7 @@ public class CreativeGroupRegistry {
 			//aqua amulet
 			//crimson amulet
 			//green amulet
-			//amulet slot
+			output.accept(ItemRegistry.AMULET_SLOT);
 			output.accept(ItemRegistry.RING_OF_POWER);
 			output.accept(ItemRegistry.RING_OF_ASCENT);
 			output.accept(ItemRegistry.RING_OF_RECRUITMENT);

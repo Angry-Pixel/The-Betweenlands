@@ -195,8 +195,8 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.5F, 0.0625F)))));
 
 		this.add(EntityRegistry.SHAMBLER.get(), LootTable.lootTable()
-				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SHAMBLER_TONGUE))
-					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SHAMBLER_TONGUE))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
 		this.add(EntityRegistry.SLUDGE_WORM.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
@@ -204,8 +204,8 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 
 		//TODO change this to use the squashed function for valonite shards and remove the sludgeballs
 		this.add(EntityRegistry.TINY_SLUDGE_WORM.get(), LootTable.lootTable()
-				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
-					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
 		this.noLoot(EntityRegistry.TINY_SLUDGE_WORM_HELPER);
 
@@ -352,11 +352,11 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2))
 				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3))
 				.add(LootItem.lootTableItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4))
-			.when(AllOfCondition.allOf(
-				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1),
-				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2),
-				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3),
-				PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4)))));
+				.when(AllOfCondition.allOf(
+					PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1),
+					PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2),
+					PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3),
+					PlayerHasItemCondition.hasItem(ItemRegistry.SWAMP_TALISMAN_PIECE_4)))));
 		this.add(EntityRegistry.FROG.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.RAW_FROG_LEGS)
@@ -368,6 +368,49 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
 						EntityPredicate.Builder.entity().subPredicate(FrogVariantPredicate.variant(this.registries.holderOrThrow(FrogVariantRegistry.POISON)))))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 2))))));
+		this.add(EntityRegistry.ROOT_SPRITE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(BlockRegistry.ROOT_POD)))
+			.withPool(LootPool.lootPool()
+				.add(EmptyLootItem.emptyItem().setWeight(2))
+				.add(LootItem.lootTableItem(BlockRegistry.ROOT_POD)))
+			.withPool(LootPool.lootPool()
+				.add(EmptyLootItem.emptyItem().setWeight(14))
+				.add(NestedLootTable.inlineLootTable(LootTable.lootTable().withPool(LootPool.lootPool()
+					.add(LootItem.lootTableItem(ItemRegistry.LEAF)).add(LootItem.lootTableItem(ItemRegistry.ALGAE_CLUMP))
+					.add(LootItem.lootTableItem(ItemRegistry.ARROW_ARUM_LEAF)).add(LootItem.lootTableItem(ItemRegistry.BLUE_EYED_GRASS_FLOWERS))
+					.add(LootItem.lootTableItem(ItemRegistry.BLUE_IRIS_PETAL)).add(LootItem.lootTableItem(ItemRegistry.MIRE_CORAL_STALK))
+					.add(LootItem.lootTableItem(ItemRegistry.DEEP_WATER_CORAL_STALK)).add(LootItem.lootTableItem(ItemRegistry.BOG_BEAN_FLOWER_DROP))
+					.add(LootItem.lootTableItem(ItemRegistry.BONESET_FLOWERS)).add(LootItem.lootTableItem(ItemRegistry.BOTTLE_BRUSH_GRASS_BLADES))
+					.add(LootItem.lootTableItem(ItemRegistry.BROOMSEDGE_LEAVES)).add(LootItem.lootTableItem(ItemRegistry.BUTTON_BUSH_FLOWERS))
+					.add(LootItem.lootTableItem(ItemRegistry.CARDINAL_FLOWER_PETALS)).add(LootItem.lootTableItem(ItemRegistry.CATTAIL_HEAD))
+					.add(LootItem.lootTableItem(ItemRegistry.CAVE_GRASS_BLADES)).add(LootItem.lootTableItem(ItemRegistry.COPPER_IRIS_PETALS))
+					.add(LootItem.lootTableItem(ItemRegistry.GOLDEN_CLUB_FLOWERS)).add(LootItem.lootTableItem(ItemRegistry.LICHEN_CLUMP))
+					.add(LootItem.lootTableItem(ItemRegistry.MARSH_HIBISCUS_FLOWER)).add(LootItem.lootTableItem(ItemRegistry.MARSH_MALLOW_FLOWER))
+					.add(LootItem.lootTableItem(ItemRegistry.MARSH_MARIGOLD_FLOWER_DROP)).add(LootItem.lootTableItem(ItemRegistry.NETTLE_LEAF))
+					.add(LootItem.lootTableItem(ItemRegistry.PHRAGMITE_STEMS)).add(LootItem.lootTableItem(ItemRegistry.PICKERELWEED_FLOWER))
+					.add(LootItem.lootTableItem(ItemRegistry.SHOOT_LEAVES)).add(LootItem.lootTableItem(ItemRegistry.SLUDGECREEP_LEAVES))
+					.add(LootItem.lootTableItem(ItemRegistry.SOFT_RUSH_LEAVES)).add(LootItem.lootTableItem(ItemRegistry.SUNDEW_HEAD))
+					.add(LootItem.lootTableItem(ItemRegistry.SWAMP_GRASS_BLADES)).add(LootItem.lootTableItem(ItemRegistry.CAVE_MOSS_CLUMP))
+					.add(LootItem.lootTableItem(ItemRegistry.MOSS_CLUMP)).add(LootItem.lootTableItem(ItemRegistry.MILKWEED_FLOWER))
+					.add(LootItem.lootTableItem(ItemRegistry.HANGER_DROP)).add(LootItem.lootTableItem(ItemRegistry.PITCHER_PLANT_TRAP))
+					.add(LootItem.lootTableItem(ItemRegistry.WATER_WEEDS_DROP)).add(LootItem.lootTableItem(ItemRegistry.VENUS_FLY_TRAP_HEAD))
+					.add(LootItem.lootTableItem(ItemRegistry.VOLARPAD_LEAF)).add(LootItem.lootTableItem(ItemRegistry.THORN_BRANCH))
+					.add(LootItem.lootTableItem(ItemRegistry.POISON_IVY_LEAF)).add(LootItem.lootTableItem(ItemRegistry.BLADDERWORT_STALK_DROP))
+					.add(LootItem.lootTableItem(ItemRegistry.BLADDERWORT_FLOWER_DROP)).add(LootItem.lootTableItem(ItemRegistry.EDGE_SHROOM_GILLS))
+					.add(LootItem.lootTableItem(ItemRegistry.EDGE_MOSS_CLUMP)).add(LootItem.lootTableItem(ItemRegistry.EDGE_LEAF_DROP))
+					.add(LootItem.lootTableItem(ItemRegistry.ROTBULB_STALK)).add(LootItem.lootTableItem(ItemRegistry.PALE_GRASS_BLADES))
+					.add(LootItem.lootTableItem(ItemRegistry.STRING_ROOT_FIBERS)).add(LootItem.lootTableItem(ItemRegistry.CRYPTWEED_BLADES))).build()))
+				.add(LootItem.lootTableItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.ASPECTRUS_SEEDS))));
+		this.add(EntityRegistry.SPORELING.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SPORES))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1)))));
+		this.add(EntityRegistry.TARMINION.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.INANIMATE_TARMINION))));
+		this.noLoot(EntityRegistry.SPLODESHROOM);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
