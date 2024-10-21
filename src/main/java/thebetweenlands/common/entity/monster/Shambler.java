@@ -29,7 +29,6 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -38,6 +37,7 @@ import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.creature.Dragonfly;
 import thebetweenlands.common.entity.creature.MireSnail;
+import thebetweenlands.common.entity.creature.frog.Frog;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class Shambler extends Monster implements BLEntity {
@@ -88,14 +88,13 @@ public class Shambler extends Monster implements BLEntity {
 		goalSelector.addGoal(3, new RandomStrollGoal(this, 0.75D));
 		goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-
+		//TODO add back AIs when mobs are re-added
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers(Shambler.class));
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Villager.class, 3, true, true, null).setUnseenMemoryTicks(120)); //remove after testing
-		//this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Frog.class, 3, true, true, null).setUnseenMemoryTicks(120));
-	//	this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Frog.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		//this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, MireSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
-	//	this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, BloodSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		//this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, BloodSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Dragonfly.class, 3, true, true, null).setUnseenMemoryTicks(120));
 	}
 
@@ -188,7 +187,7 @@ public class Shambler extends Monster implements BLEntity {
 	public void aiStep() {
 		setJawAnglePrev(getJawAngle());
 		setTongueLengthPrev(getTongueLength());
-		
+
 		if (!level().isClientSide()) {
 			if (getTarget() != null && hasLineOfSight(getTarget()) && !isVehicle()) {
 				getLookControl().setLookAt(getTarget(), 10.0F, 20.0F);
@@ -248,7 +247,7 @@ public class Shambler extends Monster implements BLEntity {
 		}
 		super.aiStep();
 	}
-	
+
     public float distanceToTarget(double x, double y, double z) {
         float f = (float)(this.getX() - x);
         float f1 = (float)(this.getY() - y);
@@ -259,33 +258,29 @@ public class Shambler extends Monster implements BLEntity {
 	@Override
     public void tick() {
 		super.tick();
-		
+
 		Vec3 vector = getViewVector(1F).normalize().scale(1D);
-		
 		double offSetX = vector.x * 0.125D;
 		double offsetY = vector.y * 0.125D;
 		double offSetZ = vector.z * 0.125D;
-		
 		double lengthIncrement = 0.5D / tongue_array.length;
-		
 		double tongueLength = lengthIncrement;
-		
+
 		for(ShamblerTongueMultipart part : tongue_array) {
 			part.yRotO = part.getYRot();
 			part.xRotO = part.getXRot();
 			part.xOld = part.xo = part.getX();
 			part.yOld = part.yo = part.getY();
 			part.zOld = part.zo = part.getZ();
-			
+
 			part.setPos(getX() + offSetX + (vector.x * getTongueLength() * tongueLength), getY() + getEyeHeight() - 0.32 + offsetY + (vector.y * getTongueLength() * tongueLength), getZ() + offSetZ + (vector.z * getTongueLength() * tongueLength));
 			part.setYRot(getYRot());
 			part.setXRot(getXRot());
-		
+
 			tongueLength += lengthIncrement;
 		}
-		
-		checkCollision();
-		
+		if (getTarget() != null)
+			checkCollision();
     }
 
     @Nullable
@@ -298,7 +293,7 @@ public class Shambler extends Monster implements BLEntity {
 	public void positionRider(Entity entity, MoveFunction moveFunction) {
 		super.positionRider(entity, moveFunction);
 		//PlayerUtils.resetFloating(entity); //TODO - I think this should set levitationStartTime to 0 in ServerPlayer now
-		
+
 		if (entity instanceof LivingEntity) {
 			double a = Math.toRadians(getYRot());
 			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.4D;
@@ -319,7 +314,7 @@ public class Shambler extends Monster implements BLEntity {
 		return false;
 	}
 
-	protected Entity checkCollision() {
+	public void checkCollision() {
 		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, tongue_end.getBoundingBox());
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
@@ -331,9 +326,16 @@ public class Shambler extends Monster implements BLEntity {
 							if (isExtendingTongue())
 								setExtendingTongue(false); //eeeeeh!
 					}
+					else {
+						if (!level().isClientSide())
+							if(getTongueLength() <= 0 && !entity.isInvulnerable() && tickCount >= getLastHurtMobTimestamp() + 20) {
+								getLookControl().setLookAt(getTarget(), 10.0F, 20.0F);
+								doHurtTarget(entity); // screw you minecraft - I want to attack a passenger
+						}
+					}
 			}
 		}
-		return null;
+		return;
 	}
 
     public float smoothedAngle(float partialTicks) {
@@ -345,11 +347,6 @@ public class Shambler extends Monster implements BLEntity {
 		return hasLineOfSight(entity) ? super.doHurtTarget(entity) : false;
 	}
 
-	@Override
-	public boolean hurt(DamageSource source, float ammount) {
-		return super.hurt(source, ammount);
-	}
-	
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
