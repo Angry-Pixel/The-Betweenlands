@@ -9,8 +9,8 @@
     "id": "minecraft:poison",
     "neoforge:cures": [
       "protected_by_totem",
-      "milk",
-      "honey"
+      "honey",
+      "milk"
     ],
     "show_icon": true
   }

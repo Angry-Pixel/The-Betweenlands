@@ -398,6 +398,9 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CRAFTING, DraetonModel::createCraftingUpgrade);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_FURNACE, DraetonModel::createFurnaceUpgrade);
 
+		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_ROWBOAT, WeedwoodRowboatModel::createBoat);
+		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_ROWBOAT_LANTERN, WeedwoodRowboatModel::createLantern);
+
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
 		event.registerLayerDefinition(BLModelLayers.MUTATED_GECKO, CagedGeckoModel::createMutatedGecko);
@@ -608,7 +611,8 @@ public class ClientRegistrationEvents {
 			ItemRegistry.OCTINE_SHIELD.get(), ItemRegistry.VALONITE_SHIELD.get(), ItemRegistry.WEEDWOOD_SHIELD.get(), ItemRegistry.LIVING_WEEDWOOD_SHIELD.get(),
 			ItemRegistry.SYRMORITE_SHIELD.get(), ItemRegistry.BONE_SHIELD.get(), ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), ItemRegistry.POLISHED_GREEN_DENTROTHYST_SHIELD.get(),
 			ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), ItemRegistry.POLISHED_ORANGE_DENTROTHYST_SHIELD.get(), ItemRegistry.LURKER_SKIN_SHIELD.get(),
-			ItemRegistry.DRAETON.get(), ItemRegistry.DRAETON_ANCHOR_UPGRADE.get(), ItemRegistry.DRAETON_CRAFTING_UPGRADE.get(), ItemRegistry.DRAETON_FURNACE_UPGRADE.get());
+			ItemRegistry.DRAETON.get(), ItemRegistry.DRAETON_ANCHOR_UPGRADE.get(), ItemRegistry.DRAETON_CRAFTING_UPGRADE.get(), ItemRegistry.DRAETON_FURNACE_UPGRADE.get(),
+			ItemRegistry.WEEDWOOD_ROWBOAT.get(), ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE.get());
 
 		event.registerItem(AmphibiousArmorItem.ArmorRender.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),

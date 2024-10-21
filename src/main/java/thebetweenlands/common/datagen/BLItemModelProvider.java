@@ -104,6 +104,13 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SHOCKWAVE_SWORD_PIECE_2);
 		this.basicItem(ItemRegistry.SHOCKWAVE_SWORD_PIECE_3);
 		this.basicItem(ItemRegistry.SHOCKWAVE_SWORD_PIECE_4);
+		this.getBuilder(ItemRegistry.WEEDWOOD_ROWBOAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).transforms()
+			.transform(ItemDisplayContext.GUI).scale(0.25F).translation(-1, 2, 0).rotation(30, 225, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.15F).translation(0, 2, 0).end()
+			.transform(ItemDisplayContext.HEAD).scale(0.25F).rotation(0, 180, 0).end()
+			.transform(ItemDisplayContext.FIXED).scale(0.3F).rotation(0, 90, 0).translation(3, 0, 0).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.25F).rotation(75, 45, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.25F).rotation(0, 45, 0).end();
 		this.basicItem(ItemRegistry.AMULET_SOCKET);
 		this.basicItem(ItemRegistry.SCABYST);
 		this.basicItem(ItemRegistry.ITEM_SCROLL);
@@ -285,7 +292,12 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.transform(ItemDisplayContext.FIXED).scale(0.8F).translation(-6, -5, 6).end()
 			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.375F).rotation(75, 45, 0).translation(-1, -3, 0).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.4F).rotation(0, 45, 0).translation(6, -4, 0).end();
-		//rowboat lantern
+		this.getBuilder(ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).transforms()
+			.transform(ItemDisplayContext.GUI).rotation(30, 45, 0).translation(0, -13, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.5F).translation(-6, 0, 6).end()
+			.transform(ItemDisplayContext.FIXED).rotation(0, 180, 0).translation(8, -8, -8).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.5F).rotation(75, 45, 0).translation(0, -5, -2).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.65F).rotation(0, 45, 0).translation(6, -8, 0).end();
 		this.basicItem(ItemRegistry.AMATE_NAME_TAG);
 		this.basicItem(ItemRegistry.DULL_LAVENDER_DYE);
 		this.basicItem(ItemRegistry.MAROON_DYE);

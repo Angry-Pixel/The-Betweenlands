@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-21T12:14:08.2159741	Item Models: thebetweenlands
+// 1.21.1	2024-10-21T16:33:25.6514025	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -599,6 +599,8 @@ cc3a925327c1c87db042ac0c00b6b24741b3ad1b assets/thebetweenlands/models/item/weed
 c112b0f4684b7000194c5cda40ac651953daa368 assets/thebetweenlands/models/item/weedwood_bucket.json
 41b3e90b5896792a737a484b7f11495731a24c2f assets/thebetweenlands/models/item/weedwood_infusion_bucket.json
 4b92b2830cb60ec8566b3df7d4e49f64a97ddb85 assets/thebetweenlands/models/item/weedwood_pickaxe.json
+5ffed08e37a94c1399308f988015d37029632a25 assets/thebetweenlands/models/item/weedwood_rowboat.json
+f33601a58f79af70d3a55331d26fba17caa30998 assets/thebetweenlands/models/item/weedwood_rowboat_lantern_upgrade.json
 3d3c8c911df9abee79400defe0d0aa4bf657eca7 assets/thebetweenlands/models/item/weedwood_shovel.json
 c99b17456fac3048397ad4e67ca148b93091ee4a assets/thebetweenlands/models/item/weedwood_stick.json
 e94826b70c5bcdc887f66718b785064bfa256509 assets/thebetweenlands/models/item/weedwood_sword.json

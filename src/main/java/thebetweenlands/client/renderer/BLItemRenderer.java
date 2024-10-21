@@ -29,6 +29,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.item.*;
 import thebetweenlands.client.renderer.entity.DraetonRenderer;
+import thebetweenlands.client.renderer.entity.WeedwoodRowboatRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.ShieldSpitData;
 import thebetweenlands.common.item.shield.BaseShieldItem;
@@ -58,6 +59,8 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private ModelPart draetonFurnace;
 	private ModelPart draetonCrafting;
 	private ModelPart draetonAnchor;
+	private ModelPart weedwoodRowboat;
+	private ModelPart lantern;
 
 	private BLItemRenderer() {
 		super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
@@ -73,6 +76,8 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 		this.draetonFurnace = this.models.bakeLayer(BLModelLayers.DRAETON_FURNACE);
 		this.draetonCrafting = this.models.bakeLayer(BLModelLayers.DRAETON_CRAFTING);
 		this.draetonAnchor = this.models.bakeLayer(BLModelLayers.DRAETON_ANCHOR);
+		this.weedwoodRowboat = this.models.bakeLayer(BLModelLayers.WEEDWOOD_ROWBOAT);
+		this.lantern = this.models.bakeLayer(BLModelLayers.WEEDWOOD_ROWBOAT_LANTERN);
 		SHIELD_MODELS.put(ItemRegistry.BONE_SHIELD.get(), new BoneShieldModel(this.models.bakeLayer(BLModelLayers.BONE_SHIELD)));
 		SHIELD_MODELS.put(ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), new DentrothystShieldModel(this.models.bakeLayer(BLModelLayers.DENTROTHYST_SHIELD)));
 		SHIELD_MODELS.put(ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), new DentrothystShieldModel(this.models.bakeLayer(BLModelLayers.DENTROTHYST_SHIELD)));
@@ -141,6 +146,18 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 			pose.scale(1.0F, -1.0F, -1.0F);
 			pose.translate(1.0D, -1.25D, 0.0D);
 			this.draetonFurnace.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(DraetonRenderer.TEXTURE_FURNACE)), light, overlay);
+			pose.popPose();
+		} else if (stack.is(ItemRegistry.WEEDWOOD_ROWBOAT)) {
+			pose.pushPose();
+			pose.scale(1.0F, -1.0F, -1.0F);
+			pose.translate(1.0D, 0D, 0.0D);
+			this.weedwoodRowboat.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(WeedwoodRowboatRenderer.TEXTURE)), light, overlay);
+			pose.popPose();
+		} else if (stack.is(ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE)) {
+			pose.pushPose();
+			pose.scale(1.0F, -1.0F, -1.0F);
+			pose.translate(1.0D, -1.25D, 0.0D);
+			this.lantern.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(WeedwoodRowboatRenderer.TEXTURE)), light, overlay);
 			pose.popPose();
 		}
 	}
