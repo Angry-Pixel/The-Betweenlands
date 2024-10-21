@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-19T23:47:11.0793254	Item Models: thebetweenlands
+// 1.21.1	2024-10-21T12:14:08.2159741	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -142,8 +142,12 @@ d99b4f49d98d7da9d367fdd1242dcb2cace737df assets/thebetweenlands/models/item/crim
 79ead9ed85b67a83256fb5914082e1c902fc6852 assets/thebetweenlands/models/item/dirty_dentrothyst_vial.json
 79c83788aa51c3dc67d3e346680cddd166354daa assets/thebetweenlands/models/item/dirty_silk_bundle.json
 45c96dee68d4d11c3e69e934b73adc867da51eac assets/thebetweenlands/models/item/dj_wights_mixtape.json
+c0b90f900fb3397ea9f0f78e3a1433992efe59d7 assets/thebetweenlands/models/item/draeton.json
+dc7a65b08ef3b72affc742fcb41482b0906a707a assets/thebetweenlands/models/item/draeton_anchor_upgrade.json
 3bedb9bcd36cebba498b1709402b460d8b7cff4b assets/thebetweenlands/models/item/draeton_balloon.json
 1715b2aa5572318cb911a9afd7aeba2ec19f0482 assets/thebetweenlands/models/item/draeton_burner.json
+dc7a65b08ef3b72affc742fcb41482b0906a707a assets/thebetweenlands/models/item/draeton_crafting_upgrade.json
+dc7a65b08ef3b72affc742fcb41482b0906a707a assets/thebetweenlands/models/item/draeton_furnace_upgrade.json
 a0c24102d452c19e48ba914ae7d23b85fd6d86d0 assets/thebetweenlands/models/item/dragonfly.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/dragonfly_spawn_egg.json
 c2105ca9da61a5cc03479d27c521d74415c4bbbd assets/thebetweenlands/models/item/dragonfly_wing.json

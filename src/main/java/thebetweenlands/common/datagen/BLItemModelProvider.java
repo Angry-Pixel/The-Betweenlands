@@ -7,13 +7,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.client.model.DynamicFluidContainerModel;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -262,8 +260,31 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.LURKER_SKIN_PATCH);
 		this.basicItem(ItemRegistry.DRAETON_BALLOON);
 		this.basicItem(ItemRegistry.DRAETON_BURNER);
-		//draeton
-		//draeton upgrades
+		this.getBuilder(ItemRegistry.DRAETON.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).transforms()
+			.transform(ItemDisplayContext.GUI).scale(0.3F).translation(-1, 0, 0).rotation(30, 45, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.15F).translation(0, 2, 0).end()
+			.transform(ItemDisplayContext.HEAD).scale(0.25F).rotation(0, 180, 0).end()
+			.transform(ItemDisplayContext.FIXED).scale(0.3F).rotation(0, 90, 0).translation(3, 0, 0).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.25F).rotation(75, 45, 0).translation(0, 3.5F, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.25F).rotation(0, 45, 0).end();
+		this.getBuilder(ItemRegistry.DRAETON_ANCHOR_UPGRADE.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).transforms()
+			.transform(ItemDisplayContext.GUI).scale(0.8F).rotation(30, 225, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.5F).translation(-6, 0, 6).end()
+			.transform(ItemDisplayContext.FIXED).scale(0.8F).translation(-6, -5, 6).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.375F).rotation(75, 45, 0).translation(-1, -3, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.4F).rotation(0, 45, 0).translation(6, -4, 0).end();
+		this.getBuilder(ItemRegistry.DRAETON_CRAFTING_UPGRADE.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).transforms()
+			.transform(ItemDisplayContext.GUI).scale(0.8F).rotation(30, 225, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.5F).translation(-6, 0, 6).end()
+			.transform(ItemDisplayContext.FIXED).scale(0.8F).translation(-6, -5, 6).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.375F).rotation(75, 45, 0).translation(-1, -3, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.4F).rotation(0, 45, 0).translation(6, -4, 0).end();
+		this.getBuilder(ItemRegistry.DRAETON_FURNACE_UPGRADE.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).transforms()
+			.transform(ItemDisplayContext.GUI).scale(0.8F).rotation(30, 225, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.5F).translation(-6, 0, 6).end()
+			.transform(ItemDisplayContext.FIXED).scale(0.8F).translation(-6, -5, 6).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.375F).rotation(75, 45, 0).translation(-1, -3, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.4F).rotation(0, 45, 0).translation(6, -4, 0).end();
 		//rowboat lantern
 		this.basicItem(ItemRegistry.AMATE_NAME_TAG);
 		this.basicItem(ItemRegistry.DULL_LAVENDER_DYE);

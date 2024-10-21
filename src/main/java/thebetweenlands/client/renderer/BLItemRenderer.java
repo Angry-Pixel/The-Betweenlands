@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.item.*;
+import thebetweenlands.client.renderer.entity.DraetonRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.ShieldSpitData;
 import thebetweenlands.common.item.shield.BaseShieldItem;
@@ -53,6 +54,10 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 	private static final Map<Item, Model> SHIELD_MODELS = new HashMap<>();
 	private final EntityModelSet models;
 	private ModelPart face;
+	private ModelPart draetonCarriage;
+	private ModelPart draetonFurnace;
+	private ModelPart draetonCrafting;
+	private ModelPart draetonAnchor;
 
 	private BLItemRenderer() {
 		super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
@@ -64,6 +69,10 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 		cachedBEInstances.clear();
 		SHIELD_MODELS.clear();
 		this.face = this.models.bakeLayer(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2);
+		this.draetonCarriage = this.models.bakeLayer(BLModelLayers.DRAETON_CARRIAGE);
+		this.draetonFurnace = this.models.bakeLayer(BLModelLayers.DRAETON_FURNACE);
+		this.draetonCrafting = this.models.bakeLayer(BLModelLayers.DRAETON_CRAFTING);
+		this.draetonAnchor = this.models.bakeLayer(BLModelLayers.DRAETON_ANCHOR);
 		SHIELD_MODELS.put(ItemRegistry.BONE_SHIELD.get(), new BoneShieldModel(this.models.bakeLayer(BLModelLayers.BONE_SHIELD)));
 		SHIELD_MODELS.put(ItemRegistry.GREEN_DENTROTHYST_SHIELD.get(), new DentrothystShieldModel(this.models.bakeLayer(BLModelLayers.DENTROTHYST_SHIELD)));
 		SHIELD_MODELS.put(ItemRegistry.ORANGE_DENTROTHYST_SHIELD.get(), new DentrothystShieldModel(this.models.bakeLayer(BLModelLayers.DENTROTHYST_SHIELD)));
@@ -108,6 +117,30 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 				}
 				pose.popPose();
 			}
+			pose.popPose();
+		} else if (stack.is(ItemRegistry.DRAETON)) {
+			pose.pushPose();
+			pose.scale(1.0F, -1.0F, -1.0F);
+			pose.translate(0.5D, -1.25D, 0.0D);
+			this.draetonCarriage.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(DraetonRenderer.TEXTURE)), light, overlay);
+			pose.popPose();
+		} else if (stack.is(ItemRegistry.DRAETON_ANCHOR_UPGRADE)) {
+			pose.pushPose();
+			pose.scale(1.0F, -1.0F, -1.0F);
+			pose.translate(1.0D, -1.25D, 0.0D);
+			this.draetonAnchor.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(DraetonRenderer.TEXTURE_ANCHOR)), light, overlay);
+			pose.popPose();
+		} else if (stack.is(ItemRegistry.DRAETON_CRAFTING_UPGRADE)) {
+			pose.pushPose();
+			pose.scale(1.0F, -1.0F, -1.0F);
+			pose.translate(1.0D, -1.25D, 0.0D);
+			this.draetonCrafting.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(DraetonRenderer.TEXTURE_CRAFTING)), light, overlay);
+			pose.popPose();
+		} else if (stack.is(ItemRegistry.DRAETON_FURNACE_UPGRADE)) {
+			pose.pushPose();
+			pose.scale(1.0F, -1.0F, -1.0F);
+			pose.translate(1.0D, -1.25D, 0.0D);
+			this.draetonFurnace.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(DraetonRenderer.TEXTURE_FURNACE)), light, overlay);
 			pose.popPose();
 		}
 	}

@@ -23,6 +23,13 @@ public class BLModelLayers {
 	public static final ModelLayerLocation CAVE_FISH = register("cave_fish");
 	public static final ModelLayerLocation CRYPT_CRAWLER = register("crypt_crawler");
 	public static final ModelLayerLocation DARK_DRUID = register("dark_druid");
+	public static final ModelLayerLocation DRAETON_BALLOON = register("draeton", "balloon");
+	public static final ModelLayerLocation DRAETON_CARRIAGE = register("draeton", "carriage");
+	public static final ModelLayerLocation DRAETON_ANCHOR = register("draeton", "anchor");
+	public static final ModelLayerLocation DRAETON_CRAFTING = register("draeton", "crafting");
+	public static final ModelLayerLocation DRAETON_FURNACE = register("draeton", "furnace");
+	public static final ModelLayerLocation DRAETON_PULLEY = register("draeton", "pulley");
+	public static final ModelLayerLocation DRAETON_STORAGE = register("draeton", "storage");
 	public static final ModelLayerLocation DRAGONFLY = register("dragonfly");
 	public static final ModelLayerLocation DREADFUL_PEAT_MUMMY = register("dreadful_peat_mummy");
 	public static final ModelLayerLocation EMBERLING = register("emberling");
