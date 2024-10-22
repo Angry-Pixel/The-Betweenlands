@@ -50,10 +50,12 @@ public class BLModelLayers {
 	public static final ModelLayerLocation ROOT_SPRITE = register("root_sprite");
 	public static final ModelLayerLocation SHAMBLER = register("shambler");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
+	public static final ModelLayerLocation SLUDGE = register("sludge");
 	public static final ModelLayerLocation SLUDGE_BALL = register("sludge_ball");
 	public static final ModelLayerLocation SLUDGE_WORM = register("sludge_worm");
 	public static final ModelLayerLocation SLUDGE_WORM_ARROW = register("sludge_worm_arrow");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_2 = register("small_spirit_tree_face_2");
+	public static final ModelLayerLocation SMOL_SLUDGE = register("smol_sludge");
 	public static final ModelLayerLocation SPLODESHROOM = register("splodeshroom");
 	public static final ModelLayerLocation SPORELING = register("sporeling");
 	public static final ModelLayerLocation STALKER = register("stalker");

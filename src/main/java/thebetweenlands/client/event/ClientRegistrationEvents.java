@@ -303,6 +303,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SPORELING.get(), SporelingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TARMINION.get(), TarminionRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.THROWN_TARMINION.get(), ThrownTarminionRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE.get(), SludgeRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SMOL_SLUDGE.get(), SmolSludgeRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -392,6 +394,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SPLODESHROOM, SplodeshroomModel::create);
 		event.registerLayerDefinition(BLModelLayers.SPORELING, SporelingModel::create);
 		event.registerLayerDefinition(BLModelLayers.TARMINION, TarminionModel::create);
+		event.registerLayerDefinition(BLModelLayers.SLUDGE, SludgeModel::create);
+		event.registerLayerDefinition(BLModelLayers.SMOL_SLUDGE, SmolSludgeModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

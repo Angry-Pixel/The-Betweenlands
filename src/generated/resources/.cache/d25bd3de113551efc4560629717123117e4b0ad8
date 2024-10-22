@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-21T16:33:25.6514025	Item Models: thebetweenlands
+// 1.21.1	2024-10-21T18:44:05.7800563	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -482,6 +482,7 @@ ae28b806d61d22922bbe85fa940981e289a1525c assets/thebetweenlands/models/item/slud
 cb0080da9a6da9a7e8ebde406ffd6426a3e473ff assets/thebetweenlands/models/item/sludge_ball.json
 f7a5c0a8a0821d8ede55bb40a57e1ddc7763cd8a assets/thebetweenlands/models/item/sludge_jello.json
 f483f2f9465170ff9c108bc978f53386109fa278 assets/thebetweenlands/models/item/sludge_slicer.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/sludge_spawn_egg.json
 95df1938d00db203cce65402186deb2b53466c9e assets/thebetweenlands/models/item/sludge_worm_arrow.json
 266f768ba41ce1ad2555715fb38d14f1f47416a8 assets/thebetweenlands/models/item/sludge_worm_egg_sac.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/sludge_worm_spawn_egg.json
@@ -494,6 +495,7 @@ ddf1fa9af951cee3dbd594d5f2582bd6b2533230 assets/thebetweenlands/models/item/smok
 56a45330236bb1a215012197a24ab7ae3ce31fc0 assets/thebetweenlands/models/item/smoked_puffshroom_tendril.json
 76767d90ec3217f031630cd439eaf65840ddb555 assets/thebetweenlands/models/item/smoked_silt_crab_claw.json
 4639708ad2bf54ffc2b3e6eb7fc8cce43e499586 assets/thebetweenlands/models/item/smoked_snail_flesh.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/smol_sludge_spawn_egg.json
 f034d2128b3f6fa4c34f94771b76f9b1477a646d assets/thebetweenlands/models/item/snapper_root.json
 190e3be840fbe69ebeb9645887a7bd07d3909422 assets/thebetweenlands/models/item/snot.json
 584c2fee1a7f3c1212d3a99de52540ce55017424 assets/thebetweenlands/models/item/snot_pod.json

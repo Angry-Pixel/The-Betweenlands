@@ -62,4 +62,9 @@ public class SludgeBlock extends Block {
 			entity.makeStuckInBlock(state, new Vec3(0.25D, 0.05D, 0.25D));
 		}
 	}
+
+	@Override
+	protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
+		return adjacentState.is(this) || super.skipRendering(state, adjacentState, direction);
+	}
 }
