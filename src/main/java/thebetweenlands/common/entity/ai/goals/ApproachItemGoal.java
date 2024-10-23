@@ -3,7 +3,7 @@ package thebetweenlands.common.entity.ai.goals;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -15,14 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-
 public class ApproachItemGoal extends Goal {
-	public final Predicate<Entity> entitySelector =
-		entity -> entity.isAlive() && entity.distanceTo(ApproachItemGoal.this.entity) <= ApproachItemGoal.this.targetDistance
-			&& entity instanceof ItemEntity item &&
-			(ApproachItemGoal.this.ignoreDamage ? ItemStack.isSameItem(item.getItem(), ApproachItemGoal.this.targetItem) : ItemStack.isSameItemSameComponents(item.getItem(), ApproachItemGoal.this.targetItem));
-
 	private final Mob entity;
 	private final double farSpeed;
 	private final double nearSpeed;
@@ -55,9 +48,16 @@ public class ApproachItemGoal extends Goal {
 		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
+	// Moved from a lambda predicate to a method due to IDE silliness
+	public boolean isValidItemEntity(Entity maybeItemEntity) {
+		return maybeItemEntity.isAlive() && maybeItemEntity.distanceTo(ApproachItemGoal.this.entity) <= ApproachItemGoal.this.targetDistance
+				&& maybeItemEntity instanceof ItemEntity itemEntity &&
+				(ApproachItemGoal.this.ignoreDamage ? ItemStack.isSameItem(itemEntity.getItem(), ApproachItemGoal.this.targetItem) : ItemStack.isSameItemSameComponents(itemEntity.getItem(), ApproachItemGoal.this.targetItem));
+	}
+	
 	@Override
 	public boolean canUse() {
-		List<ItemEntity> list = this.entity.level().getEntitiesOfClass(ItemEntity.class, this.entity.getBoundingBox().inflate(this.targetDistance, 3, this.targetDistance), this.entitySelector);
+		List<ItemEntity> list = this.entity.level().getEntitiesOfClass(ItemEntity.class, this.entity.getBoundingBox().inflate(this.targetDistance, 3, this.targetDistance), this::isValidItemEntity);
 		if (list.isEmpty()) {
 			return false;
 		}
