@@ -41,5 +41,10 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get());
 		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get());
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get());
+
+		// TODO Pit of Decay Mechanism
+//		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(EntityRegistry.DECAY_PIT_TARGET, EntityRegistry.WIGHT);
+//		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(EntityRegistry.DECAY_PIT_TARGET);
+		
 	}
 }
