@@ -43,8 +43,22 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get());
 
 		// TODO Pit of Decay Mechanism
-//		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(EntityRegistry.DECAY_PIT_TARGET, EntityRegistry.WIGHT);
-//		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(EntityRegistry.DECAY_PIT_TARGET);
+		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(
+//				EntityRegistry.DECAY_PIT_TARGET.get(),
+//				EntityRegistry.LIGHTNING_BOLT.get(),
+				EntityRegistry.SEAT.get(),
+				EntityRegistry.WIGHT.get(),
+				EntityRegistry.FLAME_JET.get(),
+				EntityRegistry.FISH_HOOK.get(),
+				EntityRegistry.FISH_VORTEX.get(),
+				EntityRegistry.ELECTRIC_SHOCK.get(),
+				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
+			);
+		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(
+//				EntityRegistry.DECAY_PIT_TARGET.get(),
+				EntityRegistry.SEAT.get(),
+				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
+			);
 		
 	}
 }
