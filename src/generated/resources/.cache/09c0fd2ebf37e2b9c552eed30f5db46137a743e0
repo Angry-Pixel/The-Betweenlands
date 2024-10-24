@@ -1,5 +1,7 @@
-// 1.21.1	2024-10-20T11:37:02.9857171	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2024-10-24T17:17:03.3339633	Tags for minecraft:entity_type mod id thebetweenlands
 8eccb4fb2928e58abd46c0908862f5ce908dd8a7 data/c/tags/entity_type/bosses.json
+b01c677e7055b6e39b31637ef923e1a1bff66d2e data/c/tags/entity_type/capturing_not_supported.json
+713539d2eff717ed6ddadbba55828eb3a1f7e9b8 data/c/tags/entity_type/teleporting_not_supported.json
 1b6b37a7a9398c19e8ced402ffbd6b5bcc52e2e2 data/minecraft/tags/entity_type/aquatic.json
 0084f2bd1c5387196454f0ebd96935a107155ebe data/minecraft/tags/entity_type/arrows.json
 fa6f3785723bd94d7ee39c505781767260b67d35 data/minecraft/tags/entity_type/can_breathe_under_water.json
