@@ -23,6 +23,8 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 	public static final TagKey<EntityType<?>> CRITTER_CRUNCHER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("critter_cruncher_instakills"));
 	public static final TagKey<EntityType<?>> SLUDGE_SLICER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("sludge_slicer_instakills"));
 
+//	public static final TagKey<EntityType<?>> TRIGGER_SPIKE_TRAPS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("trigger_spike_traps"));
+
 	public BLEntityTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
@@ -42,6 +44,8 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get());
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get());
 
+//		this.tag(TRIGGER_SPIKE_TRAPS).add(EntityType.PLAYER);
+		
 		// TODO Pit of Decay Mechanism
 		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(
 //				EntityRegistry.DECAY_PIT_TARGET.get(),
@@ -54,6 +58,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 				EntityRegistry.ELECTRIC_SHOCK.get(),
 				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
 			);
+		
 		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(
 //				EntityRegistry.DECAY_PIT_TARGET.get(),
 				EntityRegistry.SEAT.get(),

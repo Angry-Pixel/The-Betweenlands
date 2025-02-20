@@ -1,6 +1,11 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -11,14 +16,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.block.terrain.SludgeBlock;
 import thebetweenlands.common.block.structure.SpikeTrapBlock;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 
@@ -39,25 +41,17 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		super(BlockEntityRegistry.SPIKE_TRAP.get(), pos, state);
 		this.canSpook = canSpook;
 	}
+	
+	public static boolean canBeTargeted(Entity entity) {
+		// Need to move BLEntity to a tag
+		return entity instanceof LivingEntity livingEntity && !livingEntity.isDeadOrDying() && !(entity instanceof BLEntity);
+	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SpikeTrapBlockEntity entity) {
 		if (!level.isClientSide() && !level.isDebug()) {
-			Direction facing = state.getValue(SpikeTrapBlock.FACING);
-
-			BlockState stateFacing = level.getBlockState(pos.relative(facing, 1));
-			if (!stateFacing.isAir() && stateFacing.getDestroySpeed(level, pos.relative(facing, 1)) >= 0.0F && !(stateFacing.getBlock() instanceof SludgeBlock)) {
-				entity.setActive(level, pos, state, true);
-				entity.setStabbing(level, pos, state, true);
-				level.levelEvent(null, 2001, pos.relative(facing, 1), Block.getId(stateFacing));
-				level.destroyBlock(pos.relative(facing, 1), true);
-			}
-			BlockState stateFacing2 = level.getBlockState(pos.relative(facing, 2));
-			if (!stateFacing2.isAir() && stateFacing2.getDestroySpeed(level, pos.relative(facing, 2)) >= 0.0F && !(stateFacing2.getBlock() instanceof SludgeBlock)) {
-				entity.setActive(level, pos, state, true);
-				entity.setStabbing(level, pos, state, true);
-				level.levelEvent(null, 2001, pos.relative(facing, 2), Block.getId(state));
-				level.destroyBlock(pos.relative(facing, 2), true);
-			}
+			
+			entity.destroyBlocksInFront(level, pos, state);
+			
 			if (level.getRandom().nextInt(500) == 0) {
 				if (entity.isActive(state) && !entity.stabbing && entity.animationTicks == 0)
 					entity.setActive(level, pos, state, false);
@@ -101,6 +95,59 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
+	public BlockPos destroyBlocksInFront(Level level, BlockPos pos, BlockState state) {
+		return destroyBlocksInFront(level, pos, state, 2);
+	}
+	
+	/**
+	 * Attempt to destroy n blocks in front of the spike trap, breaking early if it is blocked
+	 * @param level The level the spike trap is in
+	 * @param pos	The position of the spike trap
+	 * @param state	The state of the spike trap
+	 * @param totalDistance	The number of blocks to attempt to break on the spike's front face
+	 * @return the position of the block that blocked the spike trap, or the position {@code totalDistance} away from the spike trap's face if it wasn't blocked
+	 */
+	public BlockPos destroyBlocksInFront(Level level, BlockPos pos, BlockState state, int totalDistance) {
+		Direction facing = state.getValue(SpikeTrapBlock.FACING);
+
+		MutableBlockPos targetPos = pos.mutable();
+		
+		for(int i = 0; i < totalDistance; ++i) {
+			targetPos.move(facing, 1);
+			boolean notBlocked = attemptDestroyBlock(level, pos, state, targetPos);
+			if(!notBlocked) {
+				return targetPos.immutable();
+			}
+		}
+		
+		return targetPos.immutable();
+	}
+	
+	/**
+	 * Attempt to destroy the block at the target position with the spike trap
+	 * @param level	The level the spike trap is in
+	 * @param spikeTrapPos	The position of the spike trap
+	 * @param spikeTrapState	The state of the spike trap
+	 * @param targetPos	The position of the block to attempt destroying
+	 * @return false if it tried and failed to break a block, true otherwise
+	 */
+	public boolean attemptDestroyBlock(Level level, BlockPos spikeTrapPos, BlockState spikeTrapState, BlockPos targetPos) {
+		BlockState targetState = level.getBlockState(targetPos);
+		
+		if(targetState.is(BLBlockTagProvider.SPIKE_TRAPS_BLOCKED_BY)) {
+			return false;
+		} else if(targetState.is(BLBlockTagProvider.SPIKE_TRAPS_IGNORE) || targetState.isAir()) {
+			return true;
+		} else if(targetState.getDestroySpeed(level, targetPos) >= 0.0F) { // TODO - Figure out if checking for destroy speed is still necessary or needs to be replaced
+			this.setActive(level, spikeTrapPos, spikeTrapState, true);
+			this.setStabbing(level, spikeTrapPos, spikeTrapState, true);
+			level.levelEvent(null, 2001, targetPos, Block.getId(targetState));
+			return level.destroyBlock(targetPos, true);
+		} else {
+			return true;
+		}
+	}
+
 	public void setStabbing(Level level, BlockPos pos, BlockState state, boolean stabbing) {
 		this.stabbing = stabbing;
 		level.sendBlockUpdated(pos, state, state, 2);
@@ -122,12 +169,10 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	protected void activateBlock(Level level, BlockPos pos, BlockState state) {
 		Direction facing = state.getValue(SpikeTrapBlock.FACING);
 		BlockPos hitArea = pos.relative(facing, 1);
-		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea));
+		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea), SpikeTrapBlockEntity::canBeTargeted);
 		if (animationTicks >= 1) {
 			for (LivingEntity entity : list) {
-				if (entity != null)
-					if (!(entity instanceof BLEntity))
-						entity.hurt(level.damageSources().cactus(), 2);
+					entity.hurt(level.damageSources().cactus(), 2);
 			}
 		}
 	}
@@ -136,11 +181,9 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	protected Entity isBlockOccupied(Level level, BlockPos pos, BlockState state) {
 		Direction facing = state.getValue(SpikeTrapBlock.FACING);
 		BlockPos hitArea = pos.relative(facing, 1);
-		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea).deflate(0.25D));
+		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea).deflate(0.25D), SpikeTrapBlockEntity::canBeTargeted);
 		for (Entity entity : list) {
-			if (entity != null)
-				if (!(entity instanceof BLEntity))
-					return entity;
+				return entity;
 		}
 		return null;
 	}
