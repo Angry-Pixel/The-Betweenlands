@@ -11,6 +11,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -44,7 +45,9 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	
 	public static boolean canBeTargeted(Entity entity) {
 		// Need to move BLEntity to a tag
-		return entity instanceof LivingEntity livingEntity && !livingEntity.isDeadOrDying() && !(entity instanceof BLEntity);
+		return EntitySelector.LIVING_ENTITY_STILL_ALIVE.test(entity) &&
+				EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) &&
+				!(entity instanceof BLEntity);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SpikeTrapBlockEntity entity) {
@@ -71,7 +74,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 				level.playSound(null, pos, SoundRegistry.SPIKE.get(), SoundSource.BLOCKS, 1.25F, 1.0F);
 			if (entity.animationTicks <= 20)
 				entity.animationTicks += 4;
-			if (entity.animationTicks == 20 && !level.isClientSide())
+			if (entity.animationTicks >= 20 && !level.isClientSide())
 				entity.setStabbing(level, pos, state, false);
 		} else {
 			if (entity.animationTicks >= 1) {
