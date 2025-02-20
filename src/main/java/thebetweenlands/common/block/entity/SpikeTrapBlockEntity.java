@@ -38,9 +38,9 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		BREAK;
 	}
 	
-	public int prevAnimationTicks;
-	public int animationTicks;
-	public boolean stabbing;
+	public int prevExtendingTicks;
+	public int extendingTicks;
+	public boolean extending;
 	public final boolean canSpook;
 
 	public int prevSpoopAnimationTicks;
@@ -84,29 +84,29 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 			entity.destroyBlocksInFront(level, pos, state);
 			
 			if (level.getRandom().nextInt(500) == 0) {
-				if (entity.isActive(state) && !entity.stabbing && entity.animationTicks == 0)
+				if (entity.isActive(state) && !entity.isExtending() && entity.extendingTicks == 0)
 					entity.setActive(level, pos, state, false);
 				else if (entity.isBlockOccupied(level, pos, state) == null)
 					entity.setActive(level, pos, state, true);
 			}
 
 			if (entity.isBlockOccupied(level, pos, state) != null && entity.isActive(state))
-				if (!entity.stabbing && entity.animationTicks == 0)
-					entity.setStabbing(level, pos, state, true);
+				if (!entity.isExtending() && entity.extendingTicks == 0)
+					entity.setExtending(level, pos, state, true);
 
 		}
-		entity.prevAnimationTicks = entity.animationTicks;
-		if (entity.stabbing) {
+		entity.prevExtendingTicks = entity.extendingTicks;
+		if (entity.isExtending()) {
 			entity.activateBlock(level, pos, state);
-			if (entity.animationTicks == 0)
+			if (entity.extendingTicks == 0)
 				level.playSound(null, pos, SoundRegistry.SPIKE.get(), SoundSource.BLOCKS, 1.25F, 1.0F);
-			if (entity.animationTicks <= 20)
-				entity.animationTicks += 4;
-			if (entity.animationTicks >= 20 && !level.isClientSide())
-				entity.setStabbing(level, pos, state, false);
+			if (entity.extendingTicks <= 20)
+				entity.extendingTicks += 4;
+			if (entity.extendingTicks >= 20 && !level.isClientSide())
+				entity.setExtending(level, pos, state, false);
 		} else {
-			if (entity.animationTicks >= 1) {
-				entity.animationTicks--;
+			if (entity.extendingTicks >= 1) {
+				entity.extendingTicks--;
 			}
 		}
 
@@ -200,18 +200,22 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 			return shouldAttempt;
 		} else {
 			this.setActive(level, spikeTrapPos, spikeTrapState, true);
-			this.setStabbing(level, spikeTrapPos, spikeTrapState, true);
+			this.setExtending(level, spikeTrapPos, spikeTrapState, true);
 			level.levelEvent(null, 2001, targetPos, Block.getId(targetState));
 			boolean couldBreak = level.destroyBlock(targetPos, true);
 			return couldBreak ? BreakBlockResult.BREAK : BreakBlockResult.BLOCK;
 		}
 	}
 
-	public void setStabbing(Level level, BlockPos pos, BlockState state, boolean stabbing) {
-		this.stabbing = stabbing;
+	public void setExtending(Level level, BlockPos pos, BlockState state, boolean extending) {
+		this.extending = extending;
 		level.sendBlockUpdated(pos, state, state, 2);
 	}
 
+	public boolean isExtending() {
+		return this.extending;
+	}
+	
 	public boolean isActive(BlockState state) {
 		return state.getValue(SpikeTrapBlock.ACTIVE);
 	}
@@ -226,7 +230,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	}
 
 	protected void activateBlock(Level level, BlockPos pos, BlockState state) {
-		if (animationTicks >= 1) {
+		if (extendingTicks >= 1) {
 			Direction facing = state.getValue(SpikeTrapBlock.FACING);
 			BlockPos hitArea = pos.relative(facing, 1);
 			List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea), SPIKE_TRAP_CAN_HURT);
@@ -251,14 +255,14 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		tag.putInt("animation_ticks", this.animationTicks);
-		tag.putBoolean("stabbing", this.stabbing);
+		tag.putInt("extending_ticks", this.extendingTicks);
+		tag.putBoolean("extending", this.extending);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.animationTicks = tag.getInt("animation_ticks");
-		this.stabbing = tag.getBoolean("stabbing");
+		this.extendingTicks = tag.getInt("extending_ticks");
+		this.extending = tag.getBoolean("extending");
 	}
 }

@@ -34,10 +34,10 @@ public class SpikeTrapRenderer implements BlockEntityRenderer<SpikeTrapBlockEnti
 		stack.mulPose(entity.getBlockState().getValue(SpikeTrapBlock.FACING).getRotation());
 		stack.scale(1.0F, -1.0F, -1.0F);
 
-		if (entity.animationTicks > 0) {
+		if (entity.extendingTicks > 0) {
 			stack.pushPose();
-			float interpolatedAnimationTicks = entity.prevAnimationTicks + (entity.animationTicks - entity.prevAnimationTicks) * partialTick;
-			if (entity.stabbing || interpolatedAnimationTicks > 0) {
+			float interpolatedAnimationTicks = entity.prevExtendingTicks + (entity.extendingTicks - entity.prevExtendingTicks) * partialTick;
+			if (entity.isExtending() || interpolatedAnimationTicks > 0) {
 				if (interpolatedAnimationTicks <= 5.0F) {
 					stack.translate(0.0F, 0.0F - 1.0F / 5.0F * interpolatedAnimationTicks, 0.0F);
 				} else {
