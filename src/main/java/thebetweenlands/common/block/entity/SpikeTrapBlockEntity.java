@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.entity;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -19,12 +20,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.block.structure.SpikeTrapBlock;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
+import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 
+	public static final Predicate<Entity> SPIKE_TRAP_CAN_HURT = 
+			EntitySelector.LIVING_ENTITY_STILL_ALIVE
+			.and(EntitySelector.NO_CREATIVE_OR_SPECTATOR)
+			.and(entity -> !entity.getType().is(BLEntityTagProvider.SPIKE_TRAP_IMMUNE));
+	
+	public static enum BreakBlockResult {
+		IGNORE,
+		BLOCK,
+		BREAK;
+	}
+	
 	public int prevAnimationTicks;
 	public int animationTicks;
 	public boolean stabbing;
@@ -45,9 +58,24 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	
 	public static boolean canBeTargeted(Entity entity) {
 		// Need to move BLEntity to a tag
-		return EntitySelector.LIVING_ENTITY_STILL_ALIVE.test(entity) &&
-				EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) &&
+		return  entity != null &&
+				SPIKE_TRAP_CAN_HURT.test(entity) &&
 				!(entity instanceof BLEntity);
+	}
+	
+	public static boolean canTriggerTrap(Level level, BlockPos pos, BlockState state, Entity entity) {
+		if(entity == null || !canBeTargeted(entity)) {
+			return false;
+		}
+		
+		if(entity.isInvisible()) {
+			AABB aabb = new AABB(pos).inflate(0.0625);
+			if(!aabb.intersects(entity.getBoundingBox())) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SpikeTrapBlockEntity entity) {
@@ -104,10 +132,10 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	
 	/**
 	 * Attempt to destroy n blocks in front of the spike trap, breaking early if it is blocked
-	 * @param level The level the spike trap is in
-	 * @param pos	The position of the spike trap
-	 * @param state	The state of the spike trap
-	 * @param totalDistance	The number of blocks to attempt to break on the spike's front face
+	 * @param level the level the spike trap is in
+	 * @param pos	the position of the spike trap
+	 * @param state	the state of the spike trap
+	 * @param totalDistance	the number of blocks to attempt to break on the spike's front face
 	 * @return the position of the block that blocked the spike trap, or the position {@code totalDistance} away from the spike trap's face if it wasn't blocked
 	 */
 	public BlockPos destroyBlocksInFront(Level level, BlockPos pos, BlockState state, int totalDistance) {
@@ -117,8 +145,8 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		
 		for(int i = 0; i < totalDistance; ++i) {
 			targetPos.move(facing, 1);
-			boolean notBlocked = attemptDestroyBlock(level, pos, state, targetPos);
-			if(!notBlocked) {
+			BreakBlockResult result = attemptDestroyBlock(level, pos, state, targetPos);
+			if(result == BreakBlockResult.BLOCK) {
 				return targetPos.immutable();
 			}
 		}
@@ -127,27 +155,55 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	}
 	
 	/**
+	 * Should this spike trap attempt to break the target block at the target position?
+	 * @param level	the level the target block is in
+	 * @param targetPos	the position of the target block
+	 * @param targetState the state of the target block
+	 * @return
+	 */
+	public BreakBlockResult shouldAttemptDestroyBlock(Level level, BlockPos targetPos, BlockState targetState) {
+		
+		// WARNING: Don't change up the order of these if statements, as they're currently set up to maximize compatibility
+		
+		// If tagged to ignore -> ignore
+		if(targetState.is(BLBlockTagProvider.SPIKE_TRAPS_IGNORE)) {
+			return BreakBlockResult.IGNORE;
+		// If tagged to block -> block
+		} else if(targetState.is(BLBlockTagProvider.SPIKE_TRAPS_BLOCKED_BY)) {
+			return BreakBlockResult.BLOCK;
+		// If air -> ignore
+		} else if(targetState.isAir()) {
+			return BreakBlockResult.IGNORE;
+		// If unbreakable -> block (air can be unbreakable)
+		} else if(targetState.getDestroySpeed(level, targetPos) < 0.0F) {
+			return BreakBlockResult.BLOCK;
+		// If none of the above -> try your best
+		} else {
+			return BreakBlockResult.BREAK;
+		}
+	}
+	
+	/**
 	 * Attempt to destroy the block at the target position with the spike trap
-	 * @param level	The level the spike trap is in
-	 * @param spikeTrapPos	The position of the spike trap
-	 * @param spikeTrapState	The state of the spike trap
-	 * @param targetPos	The position of the block to attempt destroying
+	 * @param level	the level the spike trap is in
+	 * @param spikeTrapPos	the position of the spike trap
+	 * @param spikeTrapState	the state of the spike trap
+	 * @param targetPos	the position of the block to attempt destroying
 	 * @return false if it tried and failed to break a block, true otherwise
 	 */
-	public boolean attemptDestroyBlock(Level level, BlockPos spikeTrapPos, BlockState spikeTrapState, BlockPos targetPos) {
+	public BreakBlockResult attemptDestroyBlock(Level level, BlockPos spikeTrapPos, BlockState spikeTrapState, BlockPos targetPos) {
 		BlockState targetState = level.getBlockState(targetPos);
 		
-		if(targetState.is(BLBlockTagProvider.SPIKE_TRAPS_BLOCKED_BY)) {
-			return false;
-		} else if(targetState.is(BLBlockTagProvider.SPIKE_TRAPS_IGNORE) || targetState.isAir()) {
-			return true;
-		} else if(targetState.getDestroySpeed(level, targetPos) >= 0.0F) { // TODO - Figure out if checking for destroy speed is still necessary or needs to be replaced
+		BreakBlockResult shouldAttempt = shouldAttemptDestroyBlock(level, targetPos, targetState);
+		
+		if(shouldAttempt != BreakBlockResult.BREAK) {
+			return shouldAttempt;
+		} else {
 			this.setActive(level, spikeTrapPos, spikeTrapState, true);
 			this.setStabbing(level, spikeTrapPos, spikeTrapState, true);
 			level.levelEvent(null, 2001, targetPos, Block.getId(targetState));
-			return level.destroyBlock(targetPos, true);
-		} else {
-			return true;
+			boolean couldBreak = level.destroyBlock(targetPos, true);
+			return couldBreak ? BreakBlockResult.BREAK : BreakBlockResult.BLOCK;
 		}
 	}
 
@@ -170,12 +226,12 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	}
 
 	protected void activateBlock(Level level, BlockPos pos, BlockState state) {
-		Direction facing = state.getValue(SpikeTrapBlock.FACING);
-		BlockPos hitArea = pos.relative(facing, 1);
-		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea), SpikeTrapBlockEntity::canBeTargeted);
 		if (animationTicks >= 1) {
+			Direction facing = state.getValue(SpikeTrapBlock.FACING);
+			BlockPos hitArea = pos.relative(facing, 1);
+			List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea), SPIKE_TRAP_CAN_HURT);
 			for (LivingEntity entity : list) {
-					entity.hurt(level.damageSources().cactus(), 2);
+				entity.hurt(level.damageSources().cactus(), 2);
 			}
 		}
 	}
@@ -184,8 +240,9 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	protected Entity isBlockOccupied(Level level, BlockPos pos, BlockState state) {
 		Direction facing = state.getValue(SpikeTrapBlock.FACING);
 		BlockPos hitArea = pos.relative(facing, 1);
-		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea).deflate(0.25D), SpikeTrapBlockEntity::canBeTargeted);
+		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea).deflate(0.25D));
 		for (Entity entity : list) {
+			if(canTriggerTrap(level, pos, state, entity))
 				return entity;
 		}
 		return null;

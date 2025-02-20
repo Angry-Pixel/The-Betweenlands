@@ -16,13 +16,15 @@ import thebetweenlands.common.registries.EntityRegistry;
 import java.util.concurrent.CompletableFuture;
 
 public class BLEntityTagProvider extends EntityTypeTagsProvider {
+	
+	public static final TagKey<EntityType<?>> WEEDWOOD_BUSH_PASSABLE = tag("weedwood_bush_passable");
+	public static final TagKey<EntityType<?>> WIGHTS_BANE_INSTAKILLS = tag("wights_bane_instakills");
+	public static final TagKey<EntityType<?>> HAG_HACKER_INSTAKILLS = tag("hag_hacker_instakills");
+	public static final TagKey<EntityType<?>> CRITTER_CRUNCHER_INSTAKILLS = tag("critter_cruncher_instakills");
+	public static final TagKey<EntityType<?>> SLUDGE_SLICER_INSTAKILLS = tag("sludge_slicer_instakills");
 
-	public static final TagKey<EntityType<?>> WEEDWOOD_BUSH_PASSABLE = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("weedwood_bush_passable"));
-	public static final TagKey<EntityType<?>> WIGHTS_BANE_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("wights_bane_instakills"));
-	public static final TagKey<EntityType<?>> HAG_HACKER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("hag_hacker_instakills"));
-	public static final TagKey<EntityType<?>> CRITTER_CRUNCHER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("critter_cruncher_instakills"));
-	public static final TagKey<EntityType<?>> SLUDGE_SLICER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("sludge_slicer_instakills"));
-
+	public static final TagKey<EntityType<?>> BYPASSES_REPELLER = tag("bypasses_repeller");
+	public static final TagKey<EntityType<?>> SPIKE_TRAP_IMMUNE = tag("spike_trap_immune");
 //	public static final TagKey<EntityType<?>> TRIGGER_SPIKE_TRAPS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("trigger_spike_traps"));
 
 	public BLEntityTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
@@ -44,6 +46,12 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get());
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get());
 
+		this.tag(BYPASSES_REPELLER)
+			.addTag(Tags.EntityTypes.BOSSES)
+			.add(EntityRegistry.WIGHT.get());
+		this.tag(SPIKE_TRAP_IMMUNE)
+			.addTag(Tags.EntityTypes.BOSSES)
+			.add(/* EntityRegistry.TAR_BEAST.get(), */EntityRegistry.WIGHT.get());
 //		this.tag(TRIGGER_SPIKE_TRAPS).add(EntityType.PLAYER);
 		
 		// TODO Pit of Decay Mechanism
@@ -65,5 +73,9 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
 			);
 		
+	}
+
+	public static TagKey<EntityType<?>> tag(String path) {
+		return TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix(path));
 	}
 }

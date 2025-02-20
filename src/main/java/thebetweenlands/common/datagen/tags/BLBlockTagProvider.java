@@ -1,23 +1,21 @@
 package thebetweenlands.common.datagen.tags;
 
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-
-import javax.annotation.Nullable;
-
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.concurrent.CompletableFuture;
 
 public class BLBlockTagProvider extends BlockTagsProvider {
 

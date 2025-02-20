@@ -27,12 +27,13 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.ThrowWormGoal;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
-public class SwampHag extends Monster {
+public class SwampHag extends Monster implements BLEntity {
 
 	public static final EntityDataAccessor<Byte> TALK_SOUND = SynchedEntityData.defineId(SwampHag.class, EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Boolean> SHOULD_JAW_MOVE = SynchedEntityData.defineId(SwampHag.class, EntityDataSerializers.BOOLEAN);
