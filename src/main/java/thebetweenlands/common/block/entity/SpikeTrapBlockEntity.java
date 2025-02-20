@@ -37,6 +37,11 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		BLOCK,
 		BREAK;
 	}
+
+	// Damage cooldown makes sure damage is always dealt in no shorter than 25 tick intervals (5 tick extension, 20 tick retraction)
+	// Without the cooldown, placing a block every tick for the spikes to destroy would make it deal damage each tick (undesirable behaviour)
+	// Also yes I checked that the extension & retraction is 25 ticks long in the 1.12.2 release as well
+	public int damageCooldown = 0;
 	
 	public int prevExtendingTicks;
 	public int extendingTicks;
@@ -95,15 +100,20 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 					entity.setExtending(level, pos, state, true);
 
 		}
+		
 		entity.prevExtendingTicks = entity.extendingTicks;
 		if (entity.isExtending()) {
 			entity.activateBlock(level, pos, state);
 			if (entity.extendingTicks == 0)
 				level.playSound(null, pos, SoundRegistry.SPIKE.get(), SoundSource.BLOCKS, 1.25F, 1.0F);
-			if (entity.extendingTicks <= 20)
+			if (entity.extendingTicks < 20)
 				entity.extendingTicks += 4;
-			if (entity.extendingTicks >= 20 && !level.isClientSide())
-				entity.setExtending(level, pos, state, false);
+			if(entity.extendingTicks >= 20) {
+				entity.extendingTicks = 20;
+				if(!level.isClientSide) {
+					entity.setExtending(level, pos, state, false);
+				}
+			}
 		} else {
 			if (entity.extendingTicks >= 1) {
 				entity.extendingTicks--;
@@ -115,7 +125,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 			if (!entity.activeSpoop && level.getRandom().nextInt(11) + level.getGameTime() % 10 == 0 && entity.spoopAnimationTicks == 0)
 				entity.setActiveSpoop(level, pos, state, true);
 			if (entity.activeSpoop) {
-				if (entity.spoopAnimationTicks <= 20)
+				if (entity.spoopAnimationTicks < 20)
 					entity.spoopAnimationTicks += 1;
 				if (entity.spoopAnimationTicks == 20)
 					entity.setActiveSpoop(level, pos, state, false);
@@ -123,6 +133,10 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 			if (!entity.activeSpoop)
 				if (entity.spoopAnimationTicks >= 1)
 					entity.spoopAnimationTicks--;
+		}
+		
+		if(entity.damageCooldown > 0) {
+			--entity.damageCooldown;
 		}
 	}
 
@@ -230,12 +244,13 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	}
 
 	protected void activateBlock(Level level, BlockPos pos, BlockState state) {
-		if (extendingTicks >= 1) {
+		if (extendingTicks >= 1 && damageCooldown == 0) {
 			Direction facing = state.getValue(SpikeTrapBlock.FACING);
 			BlockPos hitArea = pos.relative(facing, 1);
 			List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(hitArea), SPIKE_TRAP_CAN_HURT);
 			for (LivingEntity entity : list) {
 				entity.hurt(level.damageSources().cactus(), 2);
+				this.damageCooldown = 25; // 5 tick extension, 20 tick retraction
 			}
 		}
 	}
@@ -257,6 +272,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		super.saveAdditional(tag, registries);
 		tag.putInt("extending_ticks", this.extendingTicks);
 		tag.putBoolean("extending", this.extending);
+		tag.putInt("damage_cooldown", this.damageCooldown);
 	}
 
 	@Override
@@ -264,5 +280,6 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		super.loadAdditional(tag, registries);
 		this.extendingTicks = tag.getInt("extending_ticks");
 		this.extending = tag.getBoolean("extending");
+		this.damageCooldown = tag.getInt("daamge_cooldown");
 	}
 }
