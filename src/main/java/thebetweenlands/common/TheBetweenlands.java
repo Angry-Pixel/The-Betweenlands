@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.RunningOnDifferentThreadException;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -157,6 +158,22 @@ public class TheBetweenlands {
 			//TODO send particles to client
 		}
 	}
+	
+	public static boolean isOnServerGameThread() {
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		return server != null && server.isSameThread();
+	}
+	
+	public static boolean isOnGameThread() {
+		return isOnServerGameThread() || (FMLEnvironment.dist.isClient() ? BetweenlandsClient.isOnClientGameThread() : false);
+	}
+
+	public static void ensureOnGameThread() {
+		if(!TheBetweenlands.isOnGameThread()) {
+			throw RunningOnDifferentThreadException.RUNNING_ON_DIFFERENT_THREAD;
+		}
+	}
+
 
 	// Helper: Whether or not we're on the authoritative side of things currently
 	public static boolean isRemote(Level level) { return level.isClientSide(); }

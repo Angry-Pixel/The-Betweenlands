@@ -5,7 +5,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
 import thebetweenlands.common.inventory.slot.SilkBundleSlot;
 import thebetweenlands.common.registries.MenuRegistry;
@@ -13,7 +12,7 @@ import thebetweenlands.common.registries.MenuRegistry;
 public class SilkBundleMenu extends SecureInventoryItemMenu {
 
 	public SilkBundleMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(containerId, playerInventory, new SecureItemContainer(ItemStack.STREAM_CODEC.decode(buf), 4, TheBetweenlands.isRemote(playerInventory)));
+		this(containerId, playerInventory, new SecureItemContainer(ItemStack.STREAM_CODEC.decode(buf), 4));
 	}
 
 	public SilkBundleMenu(int containerId, Inventory playerInventory, SecureItemContainer bundle) {

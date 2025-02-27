@@ -5,7 +5,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
 import thebetweenlands.common.inventory.slot.FilteredSlot;
 import thebetweenlands.common.registries.MenuRegistry;
@@ -15,7 +14,7 @@ public class LurkerSkinPouchMenu extends SecureInventoryItemMenu {
 	private final int numRows;
 
 	public LurkerSkinPouchMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(containerId, playerInventory, new SecureItemContainer(ItemStack.STREAM_CODEC.decode(buf), buf.readInt(), TheBetweenlands.isRemote(playerInventory)));
+		this(containerId, playerInventory, new SecureItemContainer(ItemStack.STREAM_CODEC.decode(buf), buf.readInt()));
 	}
 
 	public LurkerSkinPouchMenu(int containerId, Inventory playerInventory, SecureItemContainer pouch) {

@@ -2,6 +2,7 @@ package thebetweenlands.common.inventory.container;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -13,7 +14,6 @@ import net.minecraft.world.ContainerListener;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.fml.loading.FMLLoader;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.util.ZeroCullingObject2IntHashMap;
@@ -25,15 +25,20 @@ import thebetweenlands.util.ZeroCullingObject2IntHashMap;
 public class SecureItemContainer extends ItemContainer {
 
 	// Separate tracker for remote (client) worlds, to prevent any race conditions where the server erroneously thinks there are open containers
-	// TODO Look into switching to a non-static methods of achieving this same thing
-	public static final ContainerTracker SERVER_TRACKER = new ContainerTracker();
-	public static final ContainerTracker CLIENT_TRACKER = FMLLoader.getDist().isClient() ? new ContainerTracker() : null; // Singleplayer
+	// TODO Look into switching to a non-static method of achieving this same thing
+	// Use a ThreadLocal so we have a different tracker on both the singleplayer client and server (ThreadLocal is used in a bunch of places in vanilla too)
+	public static final ThreadLocal<ContainerTracker> TRACKER = ThreadLocal.<SecureItemContainer.ContainerTracker>withInitial(ContainerTracker::new);
 
-	public static final ContainerTracker getTracker(boolean isClientSide) { return isClientSide ? CLIENT_TRACKER : SERVER_TRACKER; }
-	public static final ContainerTracker getTracker(Player player) { return getTracker(TheBetweenlands.isRemote(player)); }
+	public static final ContainerTracker getTrackerUnchecked() { return TRACKER.get(); }
+	public static final ContainerTracker getTracker() {
+		TheBetweenlands.ensureOnGameThread();
+		return getTrackerUnchecked();
+	}
+//	public static final ContainerTracker getTracker(boolean isClientSide) { return getTracker(); }
+	public static final ContainerTracker getTracker(Player player) { return getTracker(); }
 	
 	// For handling edgecases with modded compound containers
-	public static class ContainerTracker {
+	public static class ContainerTracker implements Iterable<SecureItemContainer> {
 		// Track number of containers opened on a single bag uuid, the map clears keys when their value is 0
 		public final ZeroCullingObject2IntHashMap<UUID> OPEN_CONTAINERS_BY_UUID = new ZeroCullingObject2IntHashMap<UUID>();
 		public final Set<SecureItemContainer> OPEN_CONTAINERS = new HashSet<>();
@@ -60,6 +65,7 @@ public class SecureItemContainer extends ItemContainer {
 
 		/**
 		 * Returns the number of other containers tracking a UUID, excluding the passed container.
+		 * Does not modify the tracked containers
 		 * @param container the container to check against.
 		 * @return the number of other open containers that refer to the same pouch
 		 */
@@ -68,6 +74,26 @@ public class SecureItemContainer extends ItemContainer {
 			if(OPEN_CONTAINERS.contains(container)) count--;
 			return count;
 		}
+		
+		/**
+		 * @param uuid the stack UUID to check the number of open containers for
+		 * @return the number of currently tracked containers for stack with the UUID
+		 */
+		public int getOpenContainerCount(UUID uuid) {
+			return OPEN_CONTAINERS_BY_UUID.getInt(uuid);
+		}
+		
+		/**
+		 * @return the total number of currently tracked containers
+		 */
+		public int getOpenContainerCount() {
+			return OPEN_CONTAINERS.size();
+		}
+
+		@Override
+		public Iterator<SecureItemContainer> iterator() {
+			return OPEN_CONTAINERS.iterator();
+		}
 	}
 	
 	
@@ -75,22 +101,24 @@ public class SecureItemContainer extends ItemContainer {
 	// Track multiple players accessing the same gui in case of fake (simulated) players or admin menu spectator tools
 	protected final Set<UUID> trackingPlayers = new HashSet<UUID>();
 	protected Map<UUID, ContainerListener> playerListeners = new HashMap<UUID, ContainerListener>();
-	// Whether or not we're on the authoritative side of things
-	protected final boolean isClientSide;
+	// The ContainerTracker
 	protected final ContainerTracker tracker;
 	// UUID of the ItemStack, used to identify any copies (ItemStack#copy()) in the player's inventory
 	protected UUID stackUUID;
 	// Used to inform whether or not to strip the UUID component from the item when the container closes
 	private boolean isTracked = false;
 	
-	public SecureItemContainer(ItemStack stack, int slots, boolean isClientSide) {
+	public SecureItemContainer(ItemStack stack, int slots) {
+		this(stack, slots, getTracker());
+	}
+	
+	public SecureItemContainer(ItemStack stack, int slots, ContainerTracker tracker) {
 		super(stack, slots);
 		if(!stack.has(DataComponentRegistry.INVENTORY_ITEM_UUID)) {
 			stack.set(DataComponentRegistry.INVENTORY_ITEM_UUID, UUID.randomUUID());
 		}
 		this.stackUUID = stack.get(DataComponentRegistry.INVENTORY_ITEM_UUID);
-		this.isClientSide = isClientSide;
-		this.tracker = getTracker(isClientSide);
+		this.tracker = tracker;
 	}
 	
 	@Nonnull
@@ -221,7 +249,7 @@ public class SecureItemContainer extends ItemContainer {
 //		if(player == null || !player.hasContainerOpen()) return null;
 		if(player == null) return null;
 		final UUID playerUUID = player.getUUID();
-		for(SecureItemContainer container : getTracker(player).OPEN_CONTAINERS) {
+		for(SecureItemContainer container : getTracker(player)) {
 			if(container.trackingPlayers.contains(playerUUID)) {
 				return container;
 			}

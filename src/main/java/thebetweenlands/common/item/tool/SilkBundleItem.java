@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.SilkBundleMenu;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
 
@@ -33,7 +32,7 @@ public class SilkBundleItem extends Item {
 			player.openMenu(new MenuProvider() {
 				@Override
 				public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-					return new SilkBundleMenu(containerId, playerInventory, new SecureItemContainer(stack, 4, TheBetweenlands.isRemote(playerInventory)));
+					return new SilkBundleMenu(containerId, playerInventory, new SecureItemContainer(stack, 4));
 				}
 
 				@Override

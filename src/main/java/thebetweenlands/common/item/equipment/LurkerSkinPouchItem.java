@@ -18,7 +18,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.client.BetweenlandsKeybinds;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.LurkerSkinPouchMenu;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
 import thebetweenlands.common.network.clientbound.OpenRenameScreenPacket;
@@ -41,7 +40,7 @@ public class LurkerSkinPouchItem extends Item {
 				player.openMenu(new MenuProvider() {
 					@Override
 					public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-						return new LurkerSkinPouchMenu(containerId, playerInventory, new SecureItemContainer(stack, LurkerSkinPouchItem.this.slots, TheBetweenlands.isRemote(player)));
+						return new LurkerSkinPouchMenu(containerId, playerInventory, new SecureItemContainer(stack, LurkerSkinPouchItem.this.slots));
 					}
 
 					@Override

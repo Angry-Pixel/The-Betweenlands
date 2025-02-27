@@ -19,6 +19,10 @@ import javax.annotation.Nullable;
 @SuppressWarnings("resource")
 public class BetweenlandsClient {
 
+	public static boolean isOnClientGameThread() {
+		return Minecraft.getInstance().isSameThread();
+	}
+	
 	@Nullable
 	public static ClientLevel getClientLevel() {
 		return Minecraft.getInstance().level;
