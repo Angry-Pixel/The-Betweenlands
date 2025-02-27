@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-08T16:49:53.7368437	Tags for minecraft:fluid mod id thebetweenlands
+// 1.21.1	2025-02-27T22:47:12.7477325	Tags for minecraft:fluid mod id thebetweenlands
 af92406839ba4810fb004deb84c90e765c35e895 data/c/tags/fluid/water.json
 af92406839ba4810fb004deb84c90e765c35e895 data/minecraft/tags/fluid/water.json
 48e2d20a0a962e53a250c0694018c7bb378b1b5c data/thebetweenlands/tags/fluid/clean_water.json
@@ -14,6 +14,8 @@ b74d954c339f685b18b8bba0a2dbd421cc9eeceb data/thebetweenlands/tags/fluid/rubber.
 196ed5c5f63b8b48de761683674f40c184a665e3 data/thebetweenlands/tags/fluid/shallowbreath.json
 41d7bb0e3a92e33bbb3b2e6609507d8ad162aaea data/thebetweenlands/tags/fluid/shamans_brew.json
 df4e182a4231fd36a9457cae79f29f35b751891d data/thebetweenlands/tags/fluid/shell_stock.json
+7c21c66e9858a48320d75b20795c1b45fca33c28 data/thebetweenlands/tags/fluid/spike_traps_blocked_by.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/fluid/spike_traps_break.json
 0b0ee5f7641a10ff633d089f7e12f04b9801eeeb data/thebetweenlands/tags/fluid/stagnant_water.json
 e7233717a2fca42f56eafc847926cfccb5fa2899 data/thebetweenlands/tags/fluid/sturdy_stock.json
 0234ad0798829be3761d08d2c1b66a24cf9de0ec data/thebetweenlands/tags/fluid/swamp_broth.json

@@ -113,11 +113,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 				BlockRegistry.MUD_TILES_SPIKE_TRAP.get()
 			);
 		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(SPIKE_TRAPS);
-		this.tag(SPIKE_TRAPS_IGNORE).add(
-				BlockRegistry.SLUDGE.get(), Blocks.SNOW,
-				Blocks.WATER, Blocks.LAVA,
-				BlockRegistry.SWAMP_WATER.get(), BlockRegistry.STAGNANT_WATER.get(), BlockRegistry.TAR.get()
-			);
+		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW);
 
 		this.tag(FILTERED_SILT_GLASS).add(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS.get(), BlockRegistry.MAROON_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS.get(), BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS.get(),

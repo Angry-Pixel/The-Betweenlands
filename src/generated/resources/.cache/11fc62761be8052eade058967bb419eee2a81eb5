@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-20T20:30:36.0794205	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2025-02-27T21:34:37.8226208	Tags for minecraft:block mod id thebetweenlands
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
 3f5fad641908fbb7e303debf78e8c85a4afe96b5 data/c/tags/block/dyed/cadmium_green.json
@@ -118,5 +118,5 @@ e7acf1217e6b03bd758438ba0a0f0ee548b03bef data/thebetweenlands/tags/block/samite.
 47c424da0debcdd6c4fee6808267c1e53747ff20 data/thebetweenlands/tags/block/samite_canvas_panels.json
 ee72b4ea91deb77e44bb2c0d99dfaf2af014f78e data/thebetweenlands/tags/block/spike_traps.json
 740d8b21c6c1d710239847388cc82e4eda819f66 data/thebetweenlands/tags/block/spike_traps_blocked_by.json
-01930aa3c162932678b6cc4639a4f28d5bc6e750 data/thebetweenlands/tags/block/spike_traps_ignore.json
+358cf0f357def72166e051b639c2913893e7b8a8 data/thebetweenlands/tags/block/spike_traps_ignore.json
 692d9df04d174258006907e60ddb37e30c779b2f data/thebetweenlands/tags/block/stalker_ignored_light_sources.json

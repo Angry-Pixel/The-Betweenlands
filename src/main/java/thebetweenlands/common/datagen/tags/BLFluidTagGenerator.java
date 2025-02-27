@@ -1,5 +1,9 @@
 package thebetweenlands.common.datagen.tags;
 
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
@@ -9,11 +13,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.FluidRegistry;
-
-import java.util.concurrent.CompletableFuture;
 
 public class BLFluidTagGenerator extends FluidTagsProvider {
 
@@ -38,6 +39,10 @@ public class BLFluidTagGenerator extends FluidTagsProvider {
 	public static final TagKey<Fluid> SHELL_STOCK = tag("shell_stock");
 	public static final TagKey<Fluid> FROG_LEG_EXTRACT = tag("frog_leg_extract");
 	public static final TagKey<Fluid> WITCH_TEA =  tag("witch_tea");
+	
+	// Fluids are ignored by default
+	public static final TagKey<Fluid> SPIKE_TRAPS_BLOCKED_BY = tag("spike_traps_blocked_by");
+	public static final TagKey<Fluid> SPIKE_TRAPS_BREAK = tag("spike_traps_break");
 
 	public BLFluidTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
@@ -69,6 +74,9 @@ public class BLFluidTagGenerator extends FluidTagsProvider {
 		this.tag(SHELL_STOCK).add(FluidRegistry.SHELL_STOCK_STILL.get(), FluidRegistry.SHELL_STOCK_FLOW.get());
 		this.tag(FROG_LEG_EXTRACT).add(FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), FluidRegistry.FROG_LEG_EXTRACT_FLOW.get());
 		this.tag(WITCH_TEA).add(FluidRegistry.WITCH_TEA_STILL.get(), FluidRegistry.WITCH_TEA_FLOW.get());
+
+		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(RUBBER);
+		this.tag(SPIKE_TRAPS_BREAK);
 	}
 
 	private static TagKey<Fluid> tag(String tagName) {
