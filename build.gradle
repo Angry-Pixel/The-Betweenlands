@@ -80,6 +80,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' exclude '.cache' }
 
 repositories {
 	mavenLocal()
+	mavenCentral()
 	maven {
 		name "Jared's Maven" // JEI
 		url 'https://maven.blamejared.com/'
@@ -87,6 +88,10 @@ repositories {
 	maven {
 		name = "TerraformersMC" //EMI
 		url = "https://maven.terraformersmc.com/"
+	}
+	maven {
+		name = "Flemmli97" //Flan
+		url = "https://gitlab.com/api/v4/projects/21830712/packages/maven"
 	}
 	maven {
 		name 'Curseforge Maven'
@@ -100,11 +105,17 @@ repositories {
 dependencies {
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
 	compileOnly "dev.emi:emi-neoforge:${project.emi_version}+${project.minecraft_version}"
-
+    compileOnly "io.github.flemmli97:flan:${project.minecraft_version}-${project.flan_version}-neoforge:api"
+    
 	implementation "curse.maven:jade-324717:5706149"
 	runtimeOnly "curse.maven:atlasviewer-633577:5490697"
 	runtimeOnly "curse.maven:debug-utils-forge-783008:5607923"
+	
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	
+	compileOnly 'com.google.auto.service:auto-service:1.1.0'
+	annotationProcessor 'com.google.auto.service:auto-service:1.1.0'
+	
 }
 
 tasks.named('jar', Jar).configure {
