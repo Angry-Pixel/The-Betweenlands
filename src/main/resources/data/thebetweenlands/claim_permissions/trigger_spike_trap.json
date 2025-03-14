@@ -1,0 +1,12 @@
+{
+  "defaultDescription": [
+    "Permission to trigger spike traps when walked over"
+  ],
+  "defaultVal": true,
+  "global": false,
+  "required_mod": "thebetweenlands",
+  "guiItem": {
+    "id": "thebetweenlands:spike_trap"
+  },
+  "order": 64
+}

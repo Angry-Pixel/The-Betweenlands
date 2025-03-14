@@ -5,12 +5,12 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import mezz.jei.neoforge.platform.FluidHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.SpikeTrapBlock;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
@@ -30,6 +31,7 @@ import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.compat.flan.BetweenlandsFlanCompat;
 
 public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 
@@ -90,6 +92,13 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	public static boolean canTriggerTrap(Level level, BlockPos pos, BlockState state, Entity entity, int delayedTriggerTicks) {
 		if(entity == null || !canBeTargeted(entity)) {
 			return false;
+		}
+		
+		if(entity instanceof ServerPlayer && BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {
+			boolean canTrigger = BetweenlandsFlanCompat.getEntityPermission(level, pos, entity, TheBetweenlands.prefix("trigger_spike_trap")).orElse(true);
+			if(!canTrigger) {
+				return false;
+			}
 		}
 		
 		if(entity.isInvisible()) {
@@ -219,15 +228,42 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		return targetPos.immutable();
 	}
 	
+	public boolean isBlockHardProtected(Level level, BlockPos trapPos, BlockPos targetPos) {
+		// TODO enable once location storage is up again
+//		if(LocationStorage.isLocationGuarded(level, null, targetPos)) {
+//			return true;
+//		}
+		
+		// *DO NOT* use BLClaimCompatHelper.restrictBlockBreak because that won't account for them both being in the same claim
+		if(BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {
+			if(!BetweenlandsFlanCompat.areSameClaim(level, trapPos, targetPos)) {
+				if(BetweenlandsFlanCompat.restrictBlockBreak(level, targetPos, null)) {
+					return true;
+				}
+				
+				boolean couldPistonPush = BetweenlandsFlanCompat.getEntityPermission(level, targetPos, null, BetweenlandsFlanCompat.prefix("piston_border")).orElse(true);
+				
+				if(!couldPistonPush) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Should this spike trap attempt to break the target block at the target position?
 	 * @param level	the level the target block is in
+	 * @param trapPos	the position of the trap block
 	 * @param targetPos	the position of the target block
 	 * @param targetState the state of the target block
 	 * @return how to react to this block
 	 */
 	@SuppressWarnings("deprecation")
-	public BreakBlockResult shouldAttemptDestroyBlock(Level level, BlockPos targetPos, BlockState targetState) {
+	public BreakBlockResult shouldAttemptDestroyBlock(Level level, BlockPos trapPos, BlockPos targetPos, BlockState targetState) {
+		if(isBlockHardProtected(level, trapPos, targetPos)) {
+			return BreakBlockResult.BLOCK;
+		}
 		
 		// WARNING: Don't change up the order of these if statements, as they're currently set up to maximize compatibility
 		
@@ -259,7 +295,10 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	 * @param targetState the state of the target block
 	 * @return how to react to this block
 	 */
-	public BreakBlockResult shouldAttemptDestroyFluid(Level level, BlockPos targetPos, BlockState targetState) {
+	public BreakBlockResult shouldAttemptDestroyFluid(Level level, BlockPos trapPos, BlockPos targetPos, BlockState targetState) {
+		if(isBlockHardProtected(level, trapPos, targetPos)) {
+			return BreakBlockResult.BLOCK;
+		}
 		
 		FluidState fluidState = targetState.getFluidState();
 		if(fluidState.isEmpty()) {
@@ -284,8 +323,8 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	public BreakBlockResult attemptDestroyBlock(Level level, BlockPos spikeTrapPos, BlockState spikeTrapState, BlockPos targetPos) {
 		BlockState targetState = level.getBlockState(targetPos);
 		
-		BreakBlockResult shouldAttemptBreakBlock = shouldAttemptDestroyBlock(level, targetPos, targetState);
-		BreakBlockResult shouldAttemptBreakBlockBasedOnFluid = shouldAttemptDestroyFluid(level, targetPos, targetState);
+		BreakBlockResult shouldAttemptBreakBlock = shouldAttemptDestroyBlock(level, spikeTrapPos, targetPos, targetState);
+		BreakBlockResult shouldAttemptBreakBlockBasedOnFluid = shouldAttemptDestroyFluid(level, spikeTrapPos, targetPos, targetState);
 		BreakBlockResult shouldAttempt = BreakBlockResult.or(shouldAttemptBreakBlock, shouldAttemptBreakBlockBasedOnFluid);
 		
 		if(shouldAttempt != BreakBlockResult.BREAK) {

@@ -22,13 +22,16 @@ import thebetweenlands.compat.BLClaimCompatHelper;
 import thebetweenlands.compat.IBetweenlandsModCompat;
 
 public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
-	public static final String MOD_ID = "flan";
-
-	public static final BetweenlandsFlanCompat INSTANCE = IBetweenlandsModCompat.getService(BetweenlandsFlanCompat.class, MOD_ID).orElseGet(BetweenlandsFlanCompatUnloaded::new);
+	public static final String MODID = "flan";
+	
+	public static final BetweenlandsFlanCompat INSTANCE = IBetweenlandsModCompat.getService(BetweenlandsFlanCompat.class, MODID).orElseGet(BetweenlandsFlanCompatUnloaded::new);
+	
+	public static ResourceLocation prefix(String path) { return ResourceLocation.fromNamespaceAndPath(MODID, path); }
+	
 	
 	@Override
 	public default String getModId() {
-		return MOD_ID;
+		return MODID;
 	}
 
 	public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity);
@@ -37,7 +40,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 
 	public boolean areSameClaim(ServerLevel level, BlockPos pos1, BlockPos pos2);
 
-	public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, Entity entity, ResourceLocation permission);
+	public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission);
 	
 	// Static methods
 	public static boolean restrictBlockBreak(Level level, BlockPos pos, @Nullable Entity entity) {
@@ -72,7 +75,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 	 * @param permission The permission to check whether the entity has
 	 * @return an optional representing whether or not the entity has the permission
 	 */
-	public static OptionalBoolean getEntityPermission(Level level, BlockPos pos, Entity entity, ResourceLocation permission) {
+	public static OptionalBoolean getEntityPermission(Level level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
 		if(level instanceof ServerLevel serverLevel && BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {
 			return BetweenlandsFlanCompat.INSTANCE.canInteract(serverLevel, pos, entity, permission);
 		} else {
@@ -107,7 +110,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		}
 
 		@Override
-		public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, Entity entity, ResourceLocation permission) {
+		public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
 			return OptionalBoolean.of(ClaimHandler.canInteract(entity instanceof ServerPlayer player ? player : null, pos, permission));
 		}
 	}
@@ -135,7 +138,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		}
 		
 		@Override
-		public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, Entity entity, ResourceLocation permission) {
+		public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
 			return OptionalBoolean.empty();
 		}
 	}

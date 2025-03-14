@@ -529,6 +529,20 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param level
 	 * @return
 	 */
+	public static List<LocationStorage> getLocations(Level level, Vec3i position) { // BlockPos is a Vec3i
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		if (worldStorage != null) {
+			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.getX(), position.getZ(), (location) -> location.isInside(position));
+		}
+		return List.of();
+	}
+	
+	/**
+	 * Returns a list of all locations at the specified position
+	 *
+	 * @param level
+	 * @return
+	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3 position) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
 		if (worldStorage != null) {
