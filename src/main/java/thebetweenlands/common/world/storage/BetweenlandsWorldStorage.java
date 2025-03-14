@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -27,6 +28,7 @@ import thebetweenlands.api.entity.spawning.CustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.CustomSpawnEntry;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.client.BetweenlandsClient;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
@@ -162,33 +164,63 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 		return false;
 	}
-
-	public static BetweenlandsWorldStorage getOrThrow(ServerLevelAccessor level) {
-		BetweenlandsWorldStorage storage = get(level.getLevel());
-		if (storage == null) {
-			throw new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.getLevel().dimension().location()));
-		}
-		return storage;
+	
+	/**
+	 * Gets any existing Betweenlands World Storage for the Level (regardless of whether or not that level is The Betweenlands)
+	 * @param level
+	 * @return
+	 */
+	public static Optional<BetweenlandsWorldStorage> getExistingForLevel(Level level) {
+		return level.getExistingData(AttachmentRegistry.WORLD_STORAGE);
 	}
 
-	public static BetweenlandsWorldStorage getOrThrow(Level level) {
-		BetweenlandsWorldStorage storage = get(level);
-		if (storage == null) {
-			throw new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.dimension().location()));
+	public static BetweenlandsWorldStorage getOrCreateForLevel(Level level) {
+		return level.getData(AttachmentRegistry.WORLD_STORAGE);
+	}
+
+	public static Optional<BetweenlandsWorldStorage> getForLevel(Level level) {
+		if(TheBetweenlands.isBetweenlands(level)) {
+			return Optional.of(getOrCreateForLevel(level));
+		} else {
+			return getExistingForLevel(level);
 		}
-		return storage;
+	}
+	
+	public static BetweenlandsWorldStorage getForLevelNullable(Level level) {
+		return getForLevel(level).orElse(null);
+	}
+	
+	public static Optional<BetweenlandsWorldStorage> getExisting(Level level) {
+		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
+		if(betweenlandsLevel != null) {
+			return getExistingForLevel(betweenlandsLevel);
+		}
+		return Optional.empty();
+	}
+	
+	public static Optional<BetweenlandsWorldStorage> get(Level level) {
+		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
+		if(betweenlandsLevel != null) {
+			return Optional.of(getOrCreateForLevel(betweenlandsLevel));
+		}
+		return Optional.empty();
 	}
 
 	@Nullable
-	public static BetweenlandsWorldStorage get(Level level) {
-		if (level.getServer() != null && level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
-			return level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY).getData(AttachmentRegistry.WORLD_STORAGE);
-		}
-		return null;
+	public static BetweenlandsWorldStorage getNullable(Level level) {
+		return get(level).orElse(null);
+	}
+	
+	public static BetweenlandsWorldStorage getOrThrow(Level level) {
+		return get(level).orElseThrow(() -> new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.dimension().location())));
+	}
+
+	public static BetweenlandsWorldStorage getOrThrow(ServerLevelAccessor level) {
+		return getOrThrow((Level)level.getLevel());
 	}
 
 	public static boolean isEventActive(Level level, Holder<EnvironmentEvent> event) {
-		return BetweenlandsWorldStorage.get(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getActiveEvents().contains(event.value());
+		return BetweenlandsWorldStorage.get(level).map(storage -> storage.getEnvironmentEventRegistry().getActiveEvents().contains(event.value())).orElse(false);
 	}
 
 	public List<SpiritTreeKillToken> getSpiritTreeKillTokens() {

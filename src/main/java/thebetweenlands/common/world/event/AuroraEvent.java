@@ -74,7 +74,7 @@ public class AuroraEvent extends TimedEnvironmentEvent {
 	}
 
 	protected boolean canBeActive(Level level) {
-		if (BetweenlandsWorldStorage.get(level) != null) {
+		if (BetweenlandsWorldStorage.getNullable(level) != null) {
 			for (EnvironmentEvent event : BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getEventsOfState(true)) {
 				if (event != this && event.getClass() != WinterEvent.class && event.getClass() != SnowfallEvent.class &&
 					event.getClass() != RiftEvent.class) {

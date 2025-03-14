@@ -513,7 +513,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 	public void update(ClientLevel level, Minecraft mc) {
 		this.ticks++;
 
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getNullable(level);
 		if (storage != null) {
 			this.spoopy = BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.SPOOPY);
 

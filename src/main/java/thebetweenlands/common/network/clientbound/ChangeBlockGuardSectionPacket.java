@@ -52,7 +52,7 @@ public class ChangeBlockGuardSectionPacket implements CustomPacketPayload {
 
 	public static void handle(ChangeBlockGuardSectionPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(context.player().level());
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(context.player().level());
 			if (worldStorage != null) {
 				ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id));
 				if (storage instanceof LocationGuarded location) {

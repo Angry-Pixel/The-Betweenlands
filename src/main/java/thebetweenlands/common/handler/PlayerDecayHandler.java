@@ -66,7 +66,7 @@ public class PlayerDecayHandler {
 						decaySpeed += (player.walkDist - player.walkDistO) * 4 * decayBaseSpeed;
 					}
 
-					BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(player.level());
+					BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getNullable(player.level());
 					if (storage != null && storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId()) && player.level().canSeeSky(player.blockPosition())) {
 						decaySpeed += decayBaseSpeed;
 					}

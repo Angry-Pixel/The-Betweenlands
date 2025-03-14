@@ -103,7 +103,7 @@ public class RiftEvent extends TimedEnvironmentEvent {
 	@Override
 	public void setDefaults(Level level) {
 		super.setDefaults(level);
-		if(BetweenlandsWorldStorage.get(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().isDisabled()) {
+		if(BetweenlandsWorldStorage.getNullable(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().isDisabled()) {
 			this.dataManager.set(ACTIVATION_TICKS, this.lastActivationTicks = 0).syncImmediately();
 		} else {
 			this.playRiftOpenSound = false;

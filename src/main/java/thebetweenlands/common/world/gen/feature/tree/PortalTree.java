@@ -127,7 +127,7 @@ public class PortalTree {
 			}
 		}
 
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 		if (worldStorage != null) {
 			LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
 			location.addBounds(new AABB(pos).inflate(8, 7, 8).move(0, 7, 0));

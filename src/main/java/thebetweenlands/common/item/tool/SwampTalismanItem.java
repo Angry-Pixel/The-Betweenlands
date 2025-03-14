@@ -73,7 +73,7 @@ public class SwampTalismanItem extends Item {
 							if (TreePortalBlock.isPatternValid(level, portalPos.above())) {
 								//Only create new location is none exists
 								if (this.getPortalAt(level, portalPos.above()) == null) {
-									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 									if (worldStorage != null) {
 										LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), portalPos.relative(closestDir).below());
 										location.addBounds(new AABB(portalPos.above()).inflate(1, 2, 1).expandTowards(0, -0.5D, 0));
@@ -162,7 +162,7 @@ public class SwampTalismanItem extends Item {
 
 	@Nullable
 	protected LocationPortal getPortalAt(Level level, BlockPos pos) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 		if (worldStorage != null) {
 //			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(pos.getCenter()));
 //			if (!portals.isEmpty()) {
@@ -174,7 +174,7 @@ public class SwampTalismanItem extends Item {
 
 	@Nullable
 	protected LocationPortal getLinkPortal(ServerLevel level, BlockPos portal2Pos) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 		if (worldStorage != null) {
 //			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(portal2Pos.getCenter()) && portal2Pos.equals(location.getPortalPosition()));
 //			if (!portals.isEmpty()) {

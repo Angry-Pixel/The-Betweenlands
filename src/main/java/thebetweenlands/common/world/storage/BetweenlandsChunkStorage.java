@@ -37,7 +37,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 
 	@Nullable
 	public static BetweenlandsChunkStorage forChunk(Level level, ChunkAccess chunk) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 		if (worldStorage != null) {
 			ChunkStorageImpl chunkStorage = worldStorage.getChunkStorage(chunk);
 			if (chunkStorage instanceof BetweenlandsChunkStorage) {

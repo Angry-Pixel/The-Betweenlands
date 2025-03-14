@@ -100,7 +100,7 @@ public class TokenBucket {
 			return 0;
 		}
 
-		IWorldStorage storage = BetweenlandsWorldStorage.get(this.level);
+		IWorldStorage storage = BetweenlandsWorldStorage.getNullable(this.level);
 		if (storage != null) {
 			ILocalStorageHandler handler = storage.getLocalStorageHandler();
 

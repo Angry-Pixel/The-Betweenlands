@@ -40,7 +40,7 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 
 	public static float getSnowingStrength(@Nullable Level level) {
 		if (level != null) {
-			BetweenlandsWorldStorage provider = BetweenlandsWorldStorage.get(level);
+			BetweenlandsWorldStorage provider = BetweenlandsWorldStorage.getNullable(level);
 			if (provider != null) {
 				return EnvironmentEventRegistry.SNOWFALL.get().getSnowingStrength();
 			}

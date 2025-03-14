@@ -32,7 +32,7 @@ public class BarrisheeNodeEvaluator extends WalkNodeEvaluator {
 
 		BlockPos pos = new BlockPos(x, y, z);
 
-		var storage = BetweenlandsWorldStorage.get(this.barrishee.level());
+		var storage = BetweenlandsWorldStorage.getNullable(this.barrishee.level());
 
 		if (storage != null) {
 			List<LocationSludgeWormDungeon> locations = storage.getLocalStorageHandler().getLocalStorages(LocationSludgeWormDungeon.class, new AABB(pos), location -> location.getGuard() != null);

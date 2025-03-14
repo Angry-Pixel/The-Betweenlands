@@ -530,7 +530,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3i position) { // BlockPos is a Vec3i
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(level);
 		if (worldStorage != null) {
 			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.getX(), position.getZ(), (location) -> location.isInside(position));
 		}
@@ -544,7 +544,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3 position) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(level);
 		if (worldStorage != null) {
 			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.x, position.z, (location) -> location.isInside(position));
 		}
@@ -559,7 +559,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, AABB aabb) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(level);
 		if (worldStorage != null) {
 			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> location.intersects(aabb));
 		}

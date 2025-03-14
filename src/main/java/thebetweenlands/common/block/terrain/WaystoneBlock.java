@@ -126,7 +126,7 @@ public class WaystoneBlock extends BaseEntityBlock implements SwampWaterLoggable
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		super.onRemove(state, level, pos, newState, movedByPiston);
-		var worldStorage = BetweenlandsWorldStorage.get(level);
+		var worldStorage = BetweenlandsWorldStorage.getNullable(level);
 		if (worldStorage != null) {
 //			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
 //			List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(LocationStorage.class, new AABB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);

@@ -15,8 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.RunningOnDifferentThreadException;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -158,6 +156,21 @@ public class TheBetweenlands {
 			//TODO send particles to client
 		}
 	}
+
+	public static boolean isBetweenlands(Level level) {
+		return level.dimension() == DimensionRegistries.DIMENSION_KEY;
+	}
+	
+	@Nullable
+	public static Level getBetweenlands(Level level) {
+		if(isBetweenlands(level)) {
+			return level;
+		} else if (level.getServer() != null && level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
+			return level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY);
+		} else {
+			return null;
+		}
+	}
 	
 	public static boolean isOnServerGameThread() {
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -173,12 +186,6 @@ public class TheBetweenlands {
 			throw RunningOnDifferentThreadException.RUNNING_ON_DIFFERENT_THREAD;
 		}
 	}
-
-
-	// Helper: Whether or not we're on the authoritative side of things currently
-	public static boolean isRemote(Level level) { return level.isClientSide(); }
-	public static boolean isRemote(Entity entity) { return isRemote(entity.level()); }
-	public static boolean isRemote(Inventory playerInventory) { return isRemote(playerInventory.player); }
 }
 
 

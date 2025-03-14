@@ -25,7 +25,7 @@ public record RemoveLocalStoragePacket(StorageID id) implements CustomPacketPayl
 	}
 
 	public static void handle(RemoveLocalStoragePacket packet, IPayloadContext context) {
-		IWorldStorage worldStorage = BetweenlandsWorldStorage.get(context.player().level());
+		IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(context.player().level());
 		if (worldStorage != null) {
 			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
 			ILocalStorage loadedStorage = localStorageHandler.getLocalStorage(packet.id());

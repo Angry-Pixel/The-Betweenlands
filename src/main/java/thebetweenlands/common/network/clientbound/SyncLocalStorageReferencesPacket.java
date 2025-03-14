@@ -37,7 +37,7 @@ public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) im
 			Level level = context.player().level();
 			ChunkAccess chunk = level.getChunkSource().getChunkNow(packet.pos().x, packet.pos().z);
 			if (chunk != null) {
-				IWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+				IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 				if (worldStorage != null) {
 					IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
 					if (chunkStorage != null) {

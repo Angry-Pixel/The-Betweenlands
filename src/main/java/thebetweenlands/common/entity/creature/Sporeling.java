@@ -228,7 +228,7 @@ public class Sporeling extends PathfinderMob implements BLEntity {
 	}
 
 	public boolean isBloodSkiesActive() {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(this.level());
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(this.level());
 		return worldStorage != null && EnvironmentEventRegistry.BLOOD_SKY.get().isActive();
 	}
 }

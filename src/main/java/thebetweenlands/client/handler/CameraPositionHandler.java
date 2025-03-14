@@ -51,7 +51,7 @@ public class CameraPositionHandler {
 //			}
 
 			//Crumbling cragrock tower
-			BetweenlandsWorldStorage worldData = BetweenlandsWorldStorage.get(level);
+			BetweenlandsWorldStorage worldData = BetweenlandsWorldStorage.getNullable(level);
 			if (worldData != null) {
 				List<LocationCragrockTower> towers = worldData.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, renderViewEntity.getX(), renderViewEntity.getZ(), location -> location.getInnerBoundingBox().inflate(4, 4, 4).contains(renderViewEntity.position()));
 				for (LocationCragrockTower tower : towers) {

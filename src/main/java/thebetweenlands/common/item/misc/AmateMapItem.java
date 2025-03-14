@@ -169,7 +169,7 @@ public class AmateMapItem extends MapItem {
 	}
 
 	private void locateBLLocations(Level world, Map<Integer, List<Integer>> posList, int centerX, int centerZ, int blocksPerPixel, AmateMapData data) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(world);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(world);
 		if (worldStorage != null) {
 			ILocalStorageHandler handler = worldStorage.getLocalStorageHandler();
 

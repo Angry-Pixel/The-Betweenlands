@@ -69,7 +69,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 			entity.chimeTicks = Math.max(entity.chimeTicks - 1, 0);
 		}
 
-		var storage = BetweenlandsWorldStorage.get(level);
+		var storage = BetweenlandsWorldStorage.getNullable(level);
 		if (storage != null) {
 			BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
 
@@ -250,7 +250,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 
 	@Nullable
 	public ResourceLocation cycleAttunedEvent(Level level) {
-		if (BetweenlandsWorldStorage.get(level) != null) {
+		if (BetweenlandsWorldStorage.getNullable(level) != null) {
 			BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry();
 
 			List<PredictableEnvironmentEvent> choices = new ArrayList<>();

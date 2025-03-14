@@ -62,7 +62,7 @@ public class SyncLocalStorageDataPacket implements CustomPacketPayload {
 			Level level = context.player().level();
 			StorageID id = StorageID.readFromNBT(packet.idNbt);
 
-			IWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+			IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 			if (worldStorage != null) {
 				ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
 

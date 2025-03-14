@@ -100,7 +100,7 @@ public class WispBlock extends Block implements EntityBlock {
 	}
 
 	protected boolean checkVisibility(Level level, BlockPos pos) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getNullable(level);
 
 		if (storage != null) {
 			if (BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)) {
