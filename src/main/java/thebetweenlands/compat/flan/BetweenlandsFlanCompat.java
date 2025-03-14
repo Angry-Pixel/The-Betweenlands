@@ -91,14 +91,18 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 			return IBetweenlandsModCompat.createVersionRangeFromSpec("*");
 		}
 		
+		public static boolean canInteract(ServerLevel level, Entity entity, BlockPos pos, ResourceLocation permission) {
+			return ClaimHandler.getPermissionStorage(level).getForPermissionCheck(pos).canInteract(entity instanceof ServerPlayer player ? player : null, permission, pos);
+		}
+		
 		@Override
 		public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity) {
-			return !ClaimHandler.canInteract(entity instanceof ServerPlayer player ? player : null, pos, BuiltinPermission.BREAK);
+			return !canInteract(level, entity, pos, BuiltinPermission.BREAK);
 		}
 
 		@Override
 		public boolean claimRestrictsBlockPlace(ServerLevel level, BlockPos pos, Entity entity) {
-			return !ClaimHandler.canInteract(entity instanceof ServerPlayer player ? player : null, pos, BuiltinPermission.PLACE);
+			return !canInteract(level, entity, pos, BuiltinPermission.PLACE);
 		}
 
 		@Override
@@ -111,7 +115,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 
 		@Override
 		public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
-			return OptionalBoolean.of(ClaimHandler.canInteract(entity instanceof ServerPlayer player ? player : null, pos, permission));
+			return OptionalBoolean.of(canInteract(level, entity, pos, permission));
 		}
 	}
 
