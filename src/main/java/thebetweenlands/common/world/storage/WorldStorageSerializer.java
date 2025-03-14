@@ -46,7 +46,10 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 
 	@Override
 	public BetweenlandsWorldStorage read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
+		if(!(holder instanceof Level level)) throw new IllegalArgumentException("World storage attachments must be registered to a Level!");
 		BetweenlandsWorldStorage storage = new BetweenlandsWorldStorage();
+		storage.setLevel(level);
+		
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
 			event.readFromNBT(tag, registries);
 		}
@@ -69,6 +72,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		for (int i = 0; i < spiritTreeKillTokensNbt.size(); i++) {
 			storage.getSpiritTreeKillTokens().add(SpiritTreeKillToken.readFromNBT(spiritTreeKillTokensNbt.getCompound(i)));
 		}
+		
 		return storage;
 	}
 }

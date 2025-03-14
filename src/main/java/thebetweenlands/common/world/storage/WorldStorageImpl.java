@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -23,11 +24,30 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	private ILocalStorageHandler localStorageHandler;
 
+	private Level level;
+	private ResourceKey<Level> dimension;
+	
+	public void setLevel(Level level) {
+		this.level = level;
+		this.dimension = level.dimension();
+		this.localStorageHandler = new LocalStorageHandlerImpl(this);
+	}
+	
 	/**
 	 * Called after the world is set
 	 */
-	protected void init(Level level) {
+	protected void init() {
+		
+	}
 
+	@Override
+	public Level getLevel() {
+		return this.level;
+	}
+	
+	@Override
+	public ResourceKey<Level> getDimension() {
+		return this.dimension;
 	}
 
 	@Override

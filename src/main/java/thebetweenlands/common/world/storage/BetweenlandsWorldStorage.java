@@ -24,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import thebetweenlands.api.entity.spawning.CustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.CustomSpawnEntry;
 import thebetweenlands.api.environment.EnvironmentEvent;
@@ -48,6 +49,14 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	private final List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
+	public static BetweenlandsWorldStorage create(IAttachmentHolder attachmentHolder) {
+		if(!(attachmentHolder instanceof Level level)) throw new IllegalArgumentException("World storage attachments must be registered to a Level!");
+		BetweenlandsWorldStorage worldStorage = new BetweenlandsWorldStorage();
+		worldStorage.setLevel(level);
+		worldStorage.init();
+		return worldStorage;
+	}
+	
 //	@Override
 //	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome) {
 //		if (biome instanceof ICustomSpawnEntriesProvider) {
@@ -62,7 +71,9 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 //	}
 
 	@Override
-	protected void init(Level level) {
+	protected void init() {
+		super.init();
+		Level level = getLevel();
 		if (!level.isClientSide()) {
 			for (EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.setDefaults(level);

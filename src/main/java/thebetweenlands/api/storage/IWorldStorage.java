@@ -1,15 +1,28 @@
 package thebetweenlands.api.storage;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
-import javax.annotation.Nullable;
-
 public interface IWorldStorage {
 
+	/**
+	 * Get the dimension this world storage is registered for
+	 * @return
+	 */
+	ResourceKey<Level> getDimension();
+	
+	/**
+	 * Get the level this world storage is registered for
+	 * @return
+	 */
+	Level getLevel();
+	
 	/**
 	 * Called when a chunk storage needs to be read from the specified NBT and loaded
 	 * @param chunk
