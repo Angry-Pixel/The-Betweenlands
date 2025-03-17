@@ -22,7 +22,7 @@ import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.api.storage.ILocalStorage;
-import thebetweenlands.api.storage.ILocalStorageInstanceHandler;
+import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
@@ -141,7 +141,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public ILocalStorageInstanceHandler getOrLoadLocalStorage(LocalStorageReference reference) {
+	public ILocalStorageHandle getOrLoadLocalStorage(LocalStorageReference reference) {
 		// TODO Auto-generated method stub
 		return null;
 	}
