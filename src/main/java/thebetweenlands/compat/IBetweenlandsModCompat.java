@@ -106,7 +106,11 @@ public interface IBetweenlandsModCompat {
 		return 0;
 	}
 	
-	public static interface Unloaded extends IBetweenlandsModCompat {
+	public default boolean isFallbackHandler() {
+		return false;
+	}
+	
+	public static interface IFallbackModCompat extends IBetweenlandsModCompat {
 		@Override
 		public default boolean isModLoaded() {
 			return false;
@@ -120,6 +124,11 @@ public interface IBetweenlandsModCompat {
 		@Override
 		default VersionRange supportedModVersions() {
 			return ALL_VERSIONS;
+		}
+		
+		@Override
+		default boolean isFallbackHandler() {
+			return true;
 		}
 	}
 }

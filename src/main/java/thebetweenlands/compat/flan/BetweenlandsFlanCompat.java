@@ -24,7 +24,7 @@ import thebetweenlands.compat.IBetweenlandsModCompat;
 public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 	public static final String MODID = "flan";
 	
-	public static final BetweenlandsFlanCompat INSTANCE = IBetweenlandsModCompat.getService(BetweenlandsFlanCompat.class, MODID).orElseGet(BetweenlandsFlanCompatUnloaded::new);
+	public static final BetweenlandsFlanCompat INSTANCE = IBetweenlandsModCompat.getService(BetweenlandsFlanCompat.class, MODID).orElseGet(BetweenlandsFlanCompatFallback::new);
 	
 	public static ResourceLocation prefix(String path) { return ResourceLocation.fromNamespaceAndPath(MODID, path); }
 	
@@ -120,7 +120,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 	}
 
 	// Typically shouldn't be necessary with AutoService handling the registering of BetweenlandsFlanCompatImpl, but it's here for futureproofing anyways
-	public static class BetweenlandsFlanCompatUnloaded implements BetweenlandsFlanCompat, IBetweenlandsModCompat.Unloaded {
+	public static class BetweenlandsFlanCompatFallback implements BetweenlandsFlanCompat, IBetweenlandsModCompat.IFallbackModCompat {
 		@Override
 		public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity) {
 			return BLClaimCompatHelper.RESTRICT_BLOCK_BREAK_DEFAULT;
