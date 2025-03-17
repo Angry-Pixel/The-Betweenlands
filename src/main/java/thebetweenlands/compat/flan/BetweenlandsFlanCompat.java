@@ -59,12 +59,16 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		}
 	}
 
-	public static boolean areSameClaim(Level level, BlockPos pos1, BlockPos pos2) {
-		if(level instanceof ServerLevel serverLevel) {
-			return BetweenlandsFlanCompat.INSTANCE.isModLoaded() && BetweenlandsFlanCompat.INSTANCE.areSameClaim(serverLevel, pos1, pos2);
+	public static OptionalBoolean areSameClaimOptional(Level level, BlockPos pos1, BlockPos pos2) {
+		if(level instanceof ServerLevel serverLevel && BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {
+			return OptionalBoolean.of(BetweenlandsFlanCompat.INSTANCE.areSameClaim(serverLevel, pos1, pos2));
 		} else {
-			return BLClaimCompatHelper.ARE_SAME_CLAIM_DEFAULT;
+			return OptionalBoolean.empty();
 		}
+	}
+	
+	public static boolean areSameClaim(Level level, BlockPos pos1, BlockPos pos2) {
+		return areSameClaimOptional(level, pos1, pos2).orElse(BLClaimCompatHelper.ARE_SAME_CLAIM_DEFAULT);
 	}
 
 	/**

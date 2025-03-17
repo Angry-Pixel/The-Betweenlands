@@ -23,4 +23,8 @@ public class BLClaimCompatHelper {
 	public static boolean restrictBlockPlace(Level level, BlockPos pos, @Nullable Entity entity) {
 		return BetweenlandsFlanCompat.restrictBlockPlace(level, pos, entity);
 	}
+
+	public static boolean areSameClaim(Level level, BlockPos pos1, BlockPos pos2) {
+		return BetweenlandsFlanCompat.areSameClaim(level, pos1, pos2);
+	}
 }
