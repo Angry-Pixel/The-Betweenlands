@@ -85,7 +85,7 @@ public interface ILocalStorageHandler {
 	ILocalStorage loadLocalStorage(LocalStorageReference reference);
 
 	/**
-	 * Returns a {@link ILocalStorageHandle} of the local storage of the specified reference. If the local storage is already loaded that
+	 * Returns a {@link ILocalStorageInstanceHandler} of the local storage of the specified reference. If the local storage is already loaded that
 	 * instance will be returned, otherwise it will be loaded from a file or the region cache if the local storage
 	 * uses a region.
 	 * Handle must be closed when no longer needed.
@@ -93,7 +93,7 @@ public interface ILocalStorageHandler {
 	 * @return
 	 */
 	@Nullable
-	ILocalStorageHandle getOrLoadLocalStorage(LocalStorageReference reference);
+	ILocalStorageInstanceHandler getOrLoadLocalStorage(LocalStorageReference reference);
 
 	/**
 	 * Unloads a local storage and saves to a file if necessary

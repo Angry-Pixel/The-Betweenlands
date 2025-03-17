@@ -18,7 +18,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
-import thebetweenlands.api.storage.ILocalStorageHandle;
+import thebetweenlands.api.storage.ILocalStorageInstanceHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
@@ -93,7 +93,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 		while(refIT.hasNext()) {
 			LocalStorageReference ref = refIT.next();
 
-			try(ILocalStorageHandle handle = this.worldStorage.getLocalStorageHandler().getOrLoadLocalStorage(ref)) {
+			try(ILocalStorageInstanceHandler handle = this.worldStorage.getLocalStorageHandler().getOrLoadLocalStorage(ref)) {
 				//Load reference if properly linked
 				if(handle != null && handle.get().getLinkedChunks().contains(this.chunk.getPos())) {
 					handle.get().loadReference(ref);

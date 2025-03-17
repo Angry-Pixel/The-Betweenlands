@@ -9,7 +9,7 @@ import java.io.Closeable;
  * After closing the location will be saved and unloaded if not
  * referenced anywhere else.
  */
-public interface ILocalStorageHandle extends Closeable, AutoCloseable {
+public interface ILocalStorageInstanceHandler extends Closeable, AutoCloseable {
 	ILocalStorage get();
 
 	@Override

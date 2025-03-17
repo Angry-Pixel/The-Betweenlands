@@ -2,19 +2,19 @@ package thebetweenlands.common.world.storage;
 
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.storage.ILocalStorage;
-import thebetweenlands.api.storage.ILocalStorageHandle;
+import thebetweenlands.api.storage.ILocalStorageInstanceHandler;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.DimensionRegistries;
 
 import javax.annotation.Nullable;
 
-public class LocalStorageHandleImpl implements ILocalStorageHandle {
+public class LocalStorageInstanceHandlerImpl implements ILocalStorageInstanceHandler {
 	private final ILocalStorage storage;
 	@Nullable
 	private final LocalStorageReference handleRef;
 
-	public LocalStorageHandleImpl(ILocalStorage storage, LocalStorageReference reference) {
+	public LocalStorageInstanceHandlerImpl(ILocalStorage storage, LocalStorageReference reference) {
 		this.storage = storage;
 
 		Level level = TheBetweenlands.getLevelWorkaround(DimensionRegistries.DIMENSION_KEY);

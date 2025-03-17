@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import javax.annotation.Nullable;
 
-public record LocalStorageReference(ChunkPos pos, StorageID id, @Nullable LocalRegion region, @Nullable ILocalStorageHandle handle) {
+public record LocalStorageReference(ChunkPos pos, StorageID id, @Nullable LocalRegion region, @Nullable ILocalStorageInstanceHandler handle) {
 
 	/**
 	 * Creates a new local storage reference.
@@ -22,7 +22,7 @@ public record LocalStorageReference(ChunkPos pos, StorageID id, @Nullable LocalR
 	 * @param id
 	 * @param region
 	 */
-	public LocalStorageReference(ILocalStorageHandle handle, StorageID id, @Nullable LocalRegion region) {
+	public LocalStorageReference(ILocalStorageInstanceHandler handle, StorageID id, @Nullable LocalRegion region) {
 		this(new ChunkPos(0, 0), id, region, handle);
 	}
 
@@ -56,12 +56,12 @@ public record LocalStorageReference(ChunkPos pos, StorageID id, @Nullable LocalR
 	}
 
 	/**
-	 * Returns the {@link ILocalStorageHandle} this reference belongs to,
+	 * Returns the {@link ILocalStorageInstanceHandler} this reference belongs to,
 	 * if this reference is from a handle
 	 * @return
 	 */
 	@Nullable
-	public ILocalStorageHandle getHandle() {
+	public ILocalStorageInstanceHandler getHandle() {
 		return this.handle;
 	}
 
