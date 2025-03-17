@@ -88,7 +88,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 	public static class BetweenlandsFlanCompatImpl implements BetweenlandsFlanCompat {
 		@Override
 		public VersionRange supportedModVersions() {
-			return IBetweenlandsModCompat.createVersionRangeFromSpec("*");
+			return ALL_VERSIONS; // Flan uses the same API in 1.21+ as it does in 1.16, so all versions *should* be compatible
 		}
 		
 		public static boolean canInteract(ServerLevel level, Entity entity, BlockPos pos, ResourceLocation permission) {
@@ -119,13 +119,8 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		}
 	}
 
-	// Shouldn't be necessary
+	// Typically shouldn't be necessary with AutoService handling the registering of BetweenlandsFlanCompatImpl, but it's here for futureproofing anyways
 	public static class BetweenlandsFlanCompatUnloaded implements BetweenlandsFlanCompat, IBetweenlandsModCompat.Unloaded {
-		@Override
-		public VersionRange supportedModVersions() {
-			return IBetweenlandsModCompat.createVersionRangeFromSpec("*");
-		}
-		
 		@Override
 		public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity) {
 			return BLClaimCompatHelper.RESTRICT_BLOCK_BREAK_DEFAULT;
