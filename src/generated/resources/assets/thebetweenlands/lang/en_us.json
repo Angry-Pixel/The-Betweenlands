@@ -1150,6 +1150,8 @@
   "entity.thebetweenlands.tiny_sludge_worm_helper": "Tiny Sludge Worm Helper",
   "entity.thebetweenlands.urchin_spike": "Urchin Spike",
   "entity.thebetweenlands.wight": "Wight",
+  "gui.thebetweenlands.april_fools.subtitle": "Go to Options to activate The Betweenlands",
+  "gui.thebetweenlands.april_fools.title": "Activate Betweenlands",
   "item.thebetweenlands.algae_clump": "Algae Clump",
   "item.thebetweenlands.amate_map": "Empty Amate Map",
   "item.thebetweenlands.amate_map.invalid": "Can't create an Amate Map outside of The Betweenlands",

@@ -49,6 +49,7 @@ import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.client.BetweenlandsSpecialEffects;
 import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
+import thebetweenlands.client.gui.overlay.AprilFoolsOverlay;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.overlay.swarm.SwarmOverlay;
@@ -224,6 +225,7 @@ public class ClientRegistrationEvents {
 		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 		event.registerAboveAll(TheBetweenlands.prefix("swarm"), SwarmOverlay.INSTANCE::renderSwarm);
+		event.registerAboveAll(TheBetweenlands.prefix("april_fools"), AprilFoolsOverlay.INSTANCE::renderAprilFools);
 	}
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {

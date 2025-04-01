@@ -75,6 +75,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("jei.thebetweenlands.recipe.smoking_rack", "Smoking Rack");
 		this.add("jei.thebetweenlands.recipe.steeping_pot", "Steeping Pot");
 
+		this.add("gui.thebetweenlands.april_fools.title", "Activate Betweenlands");
+		this.add("gui.thebetweenlands.april_fools.subtitle", "Go to Options to activate The Betweenlands");
+
 		this.addAdvancement("adventurer.root", "Adventurer", "The beginning of The Betweenlands Adventure");
 		this.addAdvancement("adventurer.give_me_that", "Give Me That", "Obtain the Swamp Talisman");
 		this.addAdvancement("adventurer.dank_world", "Dank World", "Step through the Portal Tree");
