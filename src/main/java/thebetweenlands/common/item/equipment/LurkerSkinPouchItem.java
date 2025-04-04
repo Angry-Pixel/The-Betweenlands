@@ -30,33 +30,44 @@ public class LurkerSkinPouchItem extends Item {
 		super(properties);
 		this.slots = slots;
 	}
+	
+	public static void openMenu(Player player, ItemStack stack, int slots) {
+		player.openMenu(new MenuProvider() {
+			@Override
+			public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+				return new LurkerSkinPouchMenu(containerId, playerInventory, new SecureItemContainer(stack, slots));
+			}
+
+			@Override
+			public Component getDisplayName() {
+				return stack.getHoverName();
+			}
+		}, buf -> {
+			ItemStack.STREAM_CODEC.encode(buf, stack);
+			buf.writeInt(slots);
+		});
+	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (!level.isClientSide()) {
-			if (!player.isShiftKeyDown()) {
-				player.openMenu(new MenuProvider() {
-					@Override
-					public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-						return new LurkerSkinPouchMenu(containerId, playerInventory, new SecureItemContainer(stack, LurkerSkinPouchItem.this.slots));
-					}
-
-					@Override
-					public Component getDisplayName() {
-						return stack.getHoverName();
-					}
-				}, buf -> {
-					ItemStack.STREAM_CODEC.encode(buf, stack);
-					buf.writeInt(LurkerSkinPouchItem.this.slots);
-				});
-			} else {
-				PacketDistributor.sendToPlayer((ServerPlayer) player, OpenRenameScreenPacket.INSTANCE);
-			}
+		boolean shouldOpenMenu = !player.isShiftKeyDown();
+		boolean shouldRename = hand == InteractionHand.MAIN_HAND;
+		
+		if (level.isClientSide() && (shouldOpenMenu || shouldRename)) {
+			return InteractionResultHolder.success(stack);
+		} 
+		
+		if (shouldOpenMenu) {
+			LurkerSkinPouchItem.openMenu(player, stack, this.slots);
+			return InteractionResultHolder.consume(stack);
+		} else if(shouldRename) { // Don't rename if in offhand, because that renames the mainhand item instead
+			PacketDistributor.sendToPlayer((ServerPlayer) player, OpenRenameScreenPacket.INSTANCE);
 			return InteractionResultHolder.consume(stack);
 		}
-		return InteractionResultHolder.success(stack);
+		
+		return super.use(level, player, hand);
 	}
 
 	@Override

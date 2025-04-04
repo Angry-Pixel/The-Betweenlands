@@ -23,23 +23,27 @@ public class SilkBundleItem extends Item {
 	public SilkBundleItem(Properties properties) {
 		super(properties);
 	}
+	
+	public static void openMenu(Player player, ItemStack stack) {
+		player.openMenu(new MenuProvider() {
+			@Override
+			public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+				return new SilkBundleMenu(containerId, playerInventory, new SecureItemContainer(stack, 4));
+			}
+
+			@Override
+			public Component getDisplayName() {
+				return stack.getHoverName();
+			}
+		}, buf -> ItemStack.STREAM_CODEC.encode(buf, stack));
+	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
 		if (player.isShiftKeyDown() && !level.isClientSide()) {
-			player.openMenu(new MenuProvider() {
-				@Override
-				public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-					return new SilkBundleMenu(containerId, playerInventory, new SecureItemContainer(stack, 4));
-				}
-
-				@Override
-				public Component getDisplayName() {
-					return SilkBundleItem.this.getName(stack);
-				}
-			}, buf -> ItemStack.STREAM_CODEC.encode(buf, stack));
+			SilkBundleItem.openMenu(player, stack);
 			return InteractionResultHolder.consume(stack);
 		}
 		return InteractionResultHolder.pass(stack);
