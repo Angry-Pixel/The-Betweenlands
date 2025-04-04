@@ -9,8 +9,10 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
+import thebetweenlands.util.SlotWrapper;
 
 public abstract class SecureInventoryItemMenu extends AbstractContainerMenu {
 
@@ -29,19 +31,38 @@ public abstract class SecureInventoryItemMenu extends AbstractContainerMenu {
 		setDataUUID(stackUuidDataSlot, secureContainer.getContainerStackUUID());
 	}
 
+	/**
+	 * Protects slots using mayPickup() to avoid duplication bugs caused by JEI, REI, EMI, etc's "Recipe Fill" / "Move Item" capabilities
+	 */
+	public class ProtectedSlot<T extends Slot> extends SlotWrapper<T> {
+		public ProtectedSlot(T slot) {
+			super(slot);
+		}
+		
+		@Override
+		public boolean mayPickup(Player player) {
+			return super.mayPickup(player) && (this.isFake() || !getSecureContainer().isStackOrCopyOfStack(this.getItem()));
+		}
+	}
+	
+	@Override
+	protected Slot addSlot(Slot slot) {
+		return super.addSlot(new ProtectedSlot<>(slot));
+	}
+	
 	public class UUIDChangeListener implements ContainerListener {
 		@Override
 		public void slotChanged(AbstractContainerMenu containerToSend, int dataSlotIndex, ItemStack stack) { }
 
 		@Override
 		public void dataChanged(AbstractContainerMenu containerMenu, int dataSlotIndex, int value) {
-			secureContainer.setContainerStackUUID(getDataUUID(stackUuidDataSlot));
+			getSecureContainer().setContainerStackUUID(getDataUUID(getUuidDataSlot()));
 		}
 	}
 	
 	public void addUUIDChangeListener() {
 		this.addSlotListener(new UUIDChangeListener());
-		secureContainer.setContainerStackUUID(getDataUUID(stackUuidDataSlot));
+		getSecureContainer().setContainerStackUUID(getDataUUID(getUuidDataSlot()));
 	}
 
 	public SecureItemContainer getSecureContainer() {
@@ -54,7 +75,7 @@ public abstract class SecureInventoryItemMenu extends AbstractContainerMenu {
 	
 	@Override
 	public boolean stillValid(Player player) {
-		return secureContainer.stillValid(player);
+		return getSecureContainer().stillValid(player);
 	}
 	
 	public static void setDataUUID(final ContainerData data, final UUID uuid) {
