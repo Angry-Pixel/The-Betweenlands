@@ -27,101 +27,101 @@ public class SlotWrapper<T extends Slot> extends Slot {
 		return new SlotWrapper<T>(Objects.requireNonNull(slot));
 	}
 	
-	protected final T wrappedSlot;
+	protected final T delegate;
 	
 	public SlotWrapper(T slot) {
 		super(slot.container, slot.getSlotIndex(), slot.x, slot.y);
-		this.wrappedSlot = slot;
+		this.delegate = slot;
 	}
 	
-	public T getWrappedSlot() {
-		return this.wrappedSlot;
+	public T getDelegate() {
+		return this.delegate;
 	}
 
 	@Override
 	public void onQuickCraft(ItemStack oldStack, ItemStack newStack) {
-		this.getWrappedSlot().onQuickCraft(oldStack, newStack);
+		this.getDelegate().onQuickCraft(oldStack, newStack);
 	}
 	
 	@Override
 	public void onTake(Player player, ItemStack stack) {
-		this.getWrappedSlot().onTake(player, stack);
+		this.getDelegate().onTake(player, stack);
 	}
 
 	@Override
 	public boolean mayPlace(ItemStack stack) {
-		return this.getWrappedSlot().mayPlace(stack);
+		return this.getDelegate().mayPlace(stack);
 	}
 
 	@Override
 	public ItemStack getItem() {
-		return this.getWrappedSlot().getItem();
+		return this.getDelegate().getItem();
 	}
 
 	@Override
 	public boolean hasItem() {
-		return this.getWrappedSlot().hasItem();
+		return this.getDelegate().hasItem();
 	}
 
 	@Override
 	public void setByPlayer(ItemStack newStack, ItemStack oldStack) {
-		this.getWrappedSlot().setByPlayer(newStack, oldStack);
+		this.getDelegate().setByPlayer(newStack, oldStack);
 	}
 
 	@Override
 	public void set(ItemStack stack) {
-		this.getWrappedSlot().set(stack);
+		this.getDelegate().set(stack);
 	}
 
 	@Override
 	public void setChanged() {
-		this.getWrappedSlot().setChanged();
+		this.getDelegate().setChanged();
 	}
 
 	@Override
 	public int getMaxStackSize() {
-		return this.getWrappedSlot().getMaxStackSize();
+		return this.getDelegate().getMaxStackSize();
 	}
 
 	@Override
 	public int getMaxStackSize(ItemStack stack) {
-		return this.getWrappedSlot().getMaxStackSize(stack);
+		return this.getDelegate().getMaxStackSize(stack);
 	}
 
 	@Nullable
 	@Override
 	public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-		return this.getWrappedSlot().getNoItemIcon();
+		return this.getDelegate().getNoItemIcon();
 	}
 
 	@Override
 	public ItemStack remove(int amount) {
-		return this.getWrappedSlot().remove(amount);
+		return this.getDelegate().remove(amount);
 	}
 
 	@Override
 	public boolean mayPickup(Player player) {
-		return this.getWrappedSlot().mayPickup(player);
+		return this.getDelegate().mayPickup(player);
 	}
 
 	@Override
 	public boolean isActive() {
-		return this.getWrappedSlot().isActive();
+		return this.getDelegate().isActive();
 	}
 
 	@Override
 	public int getSlotIndex() {
-		return this.getWrappedSlot().getSlotIndex();
+		return this.getDelegate().getSlotIndex();
 	}
 
 	@Override
 	public boolean isSameInventory(Slot other) {
-		return this.getWrappedSlot().isSameInventory(other);
+		return this.getDelegate().isSameInventory(other);
 	}
 
 	@Override
 	public Slot setBackground(ResourceLocation atlas, ResourceLocation sprite) {
-		this.getWrappedSlot().setBackground(atlas, sprite);
+		this.getDelegate().setBackground(atlas, sprite);
 		return this;
 	}
 	
@@ -132,7 +132,7 @@ public class SlotWrapper<T extends Slot> extends Slot {
 		} else if (!this.allowModification(player) && decrement < this.getItem().getCount()) {
 			return Optional.empty();
 		} else {
-			return this.getWrappedSlot().tryRemove(count, decrement, player);
+			return this.getDelegate().tryRemove(count, decrement, player);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class SlotWrapper<T extends Slot> extends Slot {
 		} else if (!this.allowModification(player) && decrement < this.getItem().getCount()) {
 			return ItemStack.EMPTY;
 		} else {
-			return this.getWrappedSlot().safeTake(count, decrement, player);
+			return this.getDelegate().safeTake(count, decrement, player);
 		}
 	}
 
@@ -152,7 +152,7 @@ public class SlotWrapper<T extends Slot> extends Slot {
 		if (!this.mayPlace(stack)) {
 			return stack;
 		} else {
-			return this.getWrappedSlot().safeInsert(stack);
+			return this.getDelegate().safeInsert(stack);
 		}
 	}
 
@@ -161,28 +161,28 @@ public class SlotWrapper<T extends Slot> extends Slot {
 		if (!this.mayPlace(stack)) {
 			return stack;
 		} else {
-			return this.getWrappedSlot().safeInsert(stack, increment);
+			return this.getDelegate().safeInsert(stack, increment);
 		}
 	}
 
 	@Override
 	public boolean allowModification(Player player) {
 		// super.allowModification(player) checks this.mayPickup(player) & this.mayPlace(player, stack)
-		return super.allowModification(player) && this.getWrappedSlot().allowModification(player);
+		return super.allowModification(player) && this.getDelegate().allowModification(player);
 	}
 
 	@Override
 	public int getContainerSlot() {
-		return this.getWrappedSlot().getContainerSlot();
+		return this.getDelegate().getContainerSlot();
 	}
 
 	@Override
 	public boolean isHighlightable() {
-		return this.getWrappedSlot().isHighlightable();
+		return this.getDelegate().isHighlightable();
 	}
 
 	@Override
 	public boolean isFake() {
-		return this.getWrappedSlot().isFake();
+		return this.getDelegate().isFake();
 	}
 }
