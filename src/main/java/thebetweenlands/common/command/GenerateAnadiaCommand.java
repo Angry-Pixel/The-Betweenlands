@@ -28,7 +28,7 @@ public class GenerateAnadiaCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> register() {
 		return Commands.literal("generate_anadia")
-			.requires(cs -> cs.hasPermission(2))
+			.requires(cs -> cs.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.then(Commands.argument("targets", EntityArgument.players())
 				.then(Commands.literal("random")
 					.executes(context -> generateRandom(context.getSource(), EntityArgument.getPlayers(context, "targets"))))

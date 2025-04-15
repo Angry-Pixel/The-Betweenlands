@@ -25,7 +25,7 @@ public class EventCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> register() {
 		return Commands.literal("event")
-			.requires(cs -> cs.hasPermission(Commands.LEVEL_ADMINS))
+			.requires(cs -> cs.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.then(Commands.literal("toggle")
 				.then(Commands.argument("event", StringArgumentType.string())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggestResource(getEventNames(), builder))
@@ -40,8 +40,10 @@ public class EventCommand {
 					.suggests((context, builder) -> SharedSuggestionProvider.suggestResource(getEventsForState(true), builder))
 					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocation.parse(StringArgumentType.getString(context, "event")), false))))
 			.then(Commands.literal("disable")
+				.requires(cs -> cs.hasPermission(Commands.LEVEL_ADMINS))
 				.executes(EventCommand::disableEvents))
 			.then(Commands.literal("enable")
+				.requires(cs -> cs.hasPermission(Commands.LEVEL_ADMINS))
 				.executes(EventCommand::enableEvents));
 
 	}
