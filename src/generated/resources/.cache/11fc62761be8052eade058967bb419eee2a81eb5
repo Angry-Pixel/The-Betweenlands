@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-27T21:34:37.8226208	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2025-04-17T20:00:16.522645	Tags for minecraft:block mod id thebetweenlands
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
 3f5fad641908fbb7e303debf78e8c85a4afe96b5 data/c/tags/block/dyed/cadmium_green.json
@@ -102,6 +102,7 @@ bdde9b4553d08a50aa727f2c453ee681f0253f52 data/minecraft/tags/block/wooden_pressu
 d5db431b52f6675845390e0b06270aa7fb3ab2c4 data/minecraft/tags/block/wooden_slabs.json
 59e979b5f4a81a1cf2b50b59ce84fd840324d056 data/minecraft/tags/block/wooden_stairs.json
 14dc0e8f723e00e04caf5f93a3dd4cb708b73c88 data/minecraft/tags/block/wooden_trapdoors.json
+861ba42222569569ce5ba91fc0992a030398f85c data/thebetweenlands/tags/block/can_break_when_guarded.json
 1a7a4d27a732a67b2fabd84547c6a09f8d583e55 data/thebetweenlands/tags/block/emberling_heals_on.json
 e39599083a08fd0b74e2f8af9a0e617c34222b57 data/thebetweenlands/tags/block/filtered_silt_glass.json
 87185665d0f379d8b2efcd1f689a88ce128c58b9 data/thebetweenlands/tags/block/heats_infuser.json

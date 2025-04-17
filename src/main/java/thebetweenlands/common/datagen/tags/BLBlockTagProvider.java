@@ -32,6 +32,9 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> HEATS_INFUSER = tag("heats_infuser");
 	public static final TagKey<Block> HEATS_SMOKING_RACK = tag("heats_smoking_rack");
 
+	// Blocks tagged with this can be broken even inside structure guards
+	public static final TagKey<Block> CAN_BREAK_WHEN_GUARDED = tag("can_break_when_guarded");
+	
 	public static final TagKey<Block> INCORRECT_FOR_WEEDWOOD_TOOL = tag("incorrect_for_weedwood_tool");
 	public static final TagKey<Block> INCORRECT_FOR_BONE_TOOL = tag("incorrect_for_bone_tool");
 	public static final TagKey<Block> INCORRECT_FOR_OCTINE_TOOL = tag("incorrect_for_octine_tool");
@@ -107,11 +110,9 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(INCORRECT_FOR_VALONITE_TOOL).addTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
 		this.tag(INCORRECT_FOR_WEEDWOOD_TOOL).addTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
 		
-		this.tag(SPIKE_TRAPS).add(
-				BlockRegistry.SPIKE_TRAP.get(),
-				BlockRegistry.MUD_BRICK_SPIKE_TRAP.get(),
-				BlockRegistry.MUD_TILES_SPIKE_TRAP.get()
-			);
+		this.tag(CAN_BREAK_WHEN_GUARDED).addOptionalTag(commonTag("graves"));
+		
+		this.tag(SPIKE_TRAPS).add(BlockRegistry.SPIKE_TRAP.get(), BlockRegistry.MUD_BRICK_SPIKE_TRAP.get(), BlockRegistry.MUD_TILES_SPIKE_TRAP.get());
 		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(SPIKE_TRAPS);
 		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW);
 
