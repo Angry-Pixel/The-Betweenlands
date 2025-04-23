@@ -44,8 +44,6 @@ public class BLLanguageProvider extends LanguageProvider {
 
 	@Override
 	protected void addTranslations() {
-		// NOTE: Technically most of these should be of the form "thebetweenlands.xxx" instead of "xxx.thebetweenlands.xxx"
-		//       because of ResourceLocation::toLanguageKey & ResourceLocation::toShortLanguageKey
 		this.add("itemGroup.thebetweenlands.blocks", "The Betweenlands Blocks");
 		this.add("itemGroup.thebetweenlands.items", "The Betweenlands Items");
 		this.add("itemGroup.thebetweenlands.gear", "The Betweenlands Gear");
