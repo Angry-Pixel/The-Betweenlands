@@ -1,6 +1,8 @@
 package thebetweenlands.common.network.serverbound;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -55,14 +57,17 @@ public class ExtendedReachAttackPacket implements CustomPacketPayload {
 					List<Entity> entities = message.entityList.getEntities();
 
 					if(!extendedReach.onSwing(player, heldItem, entities)) return;
-
+					
+					Set<Entity> seen = new HashSet<>(entities.size());
 					for(Entity entity : entities) {
-						if (entity != null && entity.isAlive()) {
+						if (entity != null && entity.isAlive() && !seen.contains(entity)) {
 							double reach = extendedReach.getReach(player, heldItem);
 							// Inflation is the actual correct way to check if a player would realistically be able to reach it
 							if (player.isCreative() || entity.getBoundingBox().inflate(entity.getPickRadius() + reach).contains(player.getEyePosition())) {
 								player.attack(entity);
 							}
+							// Prevent one entity being hit 10000 times in a single attack or something
+							seen.add(entity);
 						}
 					}
 				}
