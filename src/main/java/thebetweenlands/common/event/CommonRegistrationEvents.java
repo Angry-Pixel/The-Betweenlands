@@ -245,7 +245,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
 		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
 		registrar.playToClient(OpenHerbloreBookPacket.TYPE, OpenHerbloreBookPacket.STREAM_CODEC, OpenHerbloreBookPacket::handle);
-		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, (packet, context) -> OpenRenameScreenPacket.handle(context));
+		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, OpenRenameScreenPacket::handle);
 		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
 		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
 		registrar.playToClient(UpdateSwarmedPacket.TYPE, UpdateSwarmedPacket.STREAM_CODEC, UpdateSwarmedPacket::handle);

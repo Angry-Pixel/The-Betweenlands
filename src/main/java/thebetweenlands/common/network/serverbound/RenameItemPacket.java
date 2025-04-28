@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public record RenameItemPacket(String name) implements CustomPacketPayload {
 
@@ -21,15 +22,23 @@ public record RenameItemPacket(String name) implements CustomPacketPayload {
 	}
 
 	public static void handle(RenameItemPacket message, IPayloadContext ctx) {
-		ctx.enqueueWork(() -> {
-			if (ctx.flow().isServerbound()) {
+		if (ctx.flow().isServerbound()) {
+			ctx.enqueueWork(() -> {
 				ItemStack stack = ctx.player().getInventory().getSelected();
-				if (message.name().isEmpty() || Component.translatable(stack.getDescriptionId()).getString().equals(message.name())) {
+				
+				if(!stack.has(DataComponentRegistry.RENAMABLE)) return;
+				
+				String name = message.name();
+				int maxLength = stack.get(DataComponentRegistry.RENAMABLE).maxLength();
+				
+				if (name.isEmpty()) {
 					stack.remove(DataComponents.CUSTOM_NAME);
 				} else {
-					stack.set(DataComponents.CUSTOM_NAME, Component.literal(message.name()));
+					if(name.length() > maxLength)
+						name = name.substring(0, maxLength);
+					stack.set(DataComponents.CUSTOM_NAME, Component.literal(name));
 				}
-			}
-		});
+			});
+		}
 	}
 }

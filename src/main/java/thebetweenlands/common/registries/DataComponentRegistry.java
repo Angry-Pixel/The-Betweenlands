@@ -28,6 +28,7 @@ import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.FishBaitStats;
 import thebetweenlands.common.component.item.InfusionBucketData;
 import thebetweenlands.common.component.item.OriginalItemData;
+import thebetweenlands.common.component.item.RenamableData;
 import thebetweenlands.common.component.item.ShieldSpitData;
 import thebetweenlands.common.component.item.UpgradeDamage;
 
@@ -63,6 +64,8 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_CORROSION = COMPONENTS.register("max_corrosion", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_COATING = COMPONENTS.register("max_coating", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<RenamableData>> RENAMABLE = COMPONENTS.register("renamable", () -> DataComponentType.<RenamableData>builder().persistent(RenamableData.CODEC).networkSynchronized(RenamableData.STREAM_CODEC).build());
 
 	// Transient Component
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_ITEM_UUID = COMPONENTS.register("inventory_item_uuid", () -> DataComponentType.<UUID>builder().networkSynchronized(UUIDUtil.STREAM_CODEC).build());

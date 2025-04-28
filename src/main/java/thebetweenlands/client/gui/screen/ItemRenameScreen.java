@@ -22,12 +22,23 @@ public class ItemRenameScreen extends Screen {
 		TheBetweenlands.prefix("container/item_naming/save_button"),
 		TheBetweenlands.prefix("container/item_naming/save_button_selected")
 	};
+	private int maxLength;
 	private int leftPos;
 	private int topPos;
 	private EditBox name;
 
-	public ItemRenameScreen(Component title) {
+	public ItemRenameScreen(Component title, int maxLength) {
 		super(title);
+		this.maxLength = maxLength;
+	}
+	
+	public void setMaxLength(int maxLength) {
+		this.maxLength = maxLength;
+		this.name.setMaxLength(maxLength);
+	}
+	
+	public int getMaxLength() {
+		return this.maxLength;
 	}
 
 	@Override
@@ -36,7 +47,7 @@ public class ItemRenameScreen extends Screen {
 		this.topPos = (this.height - 55) / 2;
 		this.addRenderableWidget(new RenameButton(this.leftPos, this.topPos - 18, button -> this.onClose()));
 		this.name = new EditBox(this.font, this.leftPos + 22, this.topPos + 17, 136, 20, Component.empty());
-		this.name.setMaxLength(20);
+		this.name.setMaxLength(this.maxLength);
 		this.name.setFocused(false);
 		this.name.setTextColor(5635925);
 		ItemStack stack = Minecraft.getInstance().player.getInventory().getSelected();

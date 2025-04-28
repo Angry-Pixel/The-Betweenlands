@@ -19,11 +19,12 @@ public class AmateNameTagItem extends NameTagItem {
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 
+		 // TODO move renaming to an event handler
 		if (player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND) { // Don't rename if in offhand, because that renames the mainhand item instead
 			if (level.isClientSide()) {
 				return InteractionResultHolder.success(stack);
 			} else {
-				PacketDistributor.sendToPlayer((ServerPlayer) player, OpenRenameScreenPacket.INSTANCE);
+				PacketDistributor.sendToPlayer((ServerPlayer) player, new OpenRenameScreenPacket(stack));
 				return InteractionResultHolder.consume(stack);
 			}
 		}

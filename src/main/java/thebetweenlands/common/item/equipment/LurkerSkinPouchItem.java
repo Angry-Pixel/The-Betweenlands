@@ -3,6 +3,7 @@ package thebetweenlands.common.item.equipment;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +22,7 @@ import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.common.inventory.LurkerSkinPouchMenu;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
 import thebetweenlands.common.network.clientbound.OpenRenameScreenPacket;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class LurkerSkinPouchItem extends Item {
 
@@ -53,7 +55,8 @@ public class LurkerSkinPouchItem extends Item {
 		ItemStack stack = player.getItemInHand(hand);
 
 		boolean shouldOpenMenu = !player.isShiftKeyDown();
-		boolean shouldRename = hand == InteractionHand.MAIN_HAND;
+		 // TODO move renaming to an event handler
+		boolean shouldRename = hand == InteractionHand.MAIN_HAND && stack.has(DataComponentRegistry.RENAMABLE);
 		
 		if (level.isClientSide() && (shouldOpenMenu || shouldRename)) {
 			return InteractionResultHolder.success(stack);
@@ -63,7 +66,7 @@ public class LurkerSkinPouchItem extends Item {
 			LurkerSkinPouchItem.openMenu(player, stack, this.slots);
 			return InteractionResultHolder.consume(stack);
 		} else if(shouldRename) { // Don't rename if in offhand, because that renames the mainhand item instead
-			PacketDistributor.sendToPlayer((ServerPlayer) player, OpenRenameScreenPacket.INSTANCE);
+			PacketDistributor.sendToPlayer((ServerPlayer) player, new OpenRenameScreenPacket(stack));
 			return InteractionResultHolder.consume(stack);
 		}
 		

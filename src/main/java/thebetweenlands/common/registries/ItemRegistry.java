@@ -7,7 +7,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemContainerContents;
-import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -15,6 +14,7 @@ import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
+import thebetweenlands.common.component.item.RenamableData;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.entity.creature.*;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
@@ -230,7 +230,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> DRAETON_ANCHOR_UPGRADE = ITEMS.register("draeton_anchor_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> DRAETON_CRAFTING_UPGRADE = ITEMS.register("draeton_crafting_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> WEEDWOOD_ROWBOAT_LANTERN_UPGRADE = ITEMS.register("weedwood_rowboat_lantern_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new AmateNameTagItem(new Item.Properties()));
+	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new AmateNameTagItem(new Item.Properties().component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
 	public static final DeferredItem<Item> DULL_LAVENDER_DYE = ITEMS.register("dull_lavender_dye", () -> new BLDyeItem(BLDyeColor.DULL_LAVENDER, new Item.Properties()));
 	public static final DeferredItem<Item> MAROON_DYE = ITEMS.register("maroon_dye", () -> new BLDyeItem(BLDyeColor.MAROON, new Item.Properties()));
 	public static final DeferredItem<Item> SHADOW_GREEN_DYE = ITEMS.register("shadow_green_dye", () -> new BLDyeItem(BLDyeColor.SHADOW_GREEN, new Item.Properties()));
@@ -338,10 +338,10 @@ public class ItemRegistry {
 	//ancient weapons
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().stacksTo(1).durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));
-	public static final DeferredItem<Item> SMALL_LURKER_SKIN_POUCH = ITEMS.register("small_lurker_skin_pouch", () -> new LurkerSkinPouchItem(9, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(9)))));
-	public static final DeferredItem<Item> MEDIUM_LURKER_SKIN_POUCH = ITEMS.register("medium_lurker_skin_pouch", () -> new LurkerSkinPouchItem(18, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(18)))));
-	public static final DeferredItem<Item> LARGE_LURKER_SKIN_POUCH = ITEMS.register("large_lurker_skin_pouch", () -> new LurkerSkinPouchItem(27, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(27)))));
-	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36)))));
+	public static final DeferredItem<Item> SMALL_LURKER_SKIN_POUCH = ITEMS.register("small_lurker_skin_pouch", () -> new LurkerSkinPouchItem(9, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(9))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
+	public static final DeferredItem<Item> MEDIUM_LURKER_SKIN_POUCH = ITEMS.register("medium_lurker_skin_pouch", () -> new LurkerSkinPouchItem(18, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(18))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
+	public static final DeferredItem<Item> LARGE_LURKER_SKIN_POUCH = ITEMS.register("large_lurker_skin_pouch", () -> new LurkerSkinPouchItem(27, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(27))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
+	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
 	public static final DeferredItem<Item> CAVING_ROPE = ITEMS.register("caving_rope", () -> new Item(new Item.Properties()));
 	//grapples
 	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
