@@ -118,6 +118,7 @@ import thebetweenlands.client.renderer.block.AlcoveRenderer;
 import thebetweenlands.client.renderer.block.AlembicRenderer;
 import thebetweenlands.client.renderer.block.AnimatorRenderer;
 import thebetweenlands.client.renderer.block.BarrelRenderer;
+import thebetweenlands.client.renderer.block.BeamOriginRenderer;
 import thebetweenlands.client.renderer.block.CenserRenderer;
 import thebetweenlands.client.renderer.block.CompostBinRenderer;
 import thebetweenlands.client.renderer.block.CrabPotFilterRenderer;
@@ -312,6 +313,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.BARREL.get(), BarrelRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.BEAM_ORIGIN.get(), BeamOriginRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT.get(), CrabPotRenderer::new);
