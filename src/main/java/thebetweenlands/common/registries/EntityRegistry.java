@@ -127,7 +127,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<FishVortex>> FISH_VORTEX = ENTITY_TYPES.register("fish_vortex", () -> EntityType.Builder.of(FishVortex::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("fish_vortex")));
 	//fishing spear
 	public static final DeferredHolder<EntityType<?>, EntityType<FlameJet>> FLAME_JET = ENTITY_TYPES.register("flame_jet", () -> EntityType.Builder.<FlameJet>of(FlameJet::new, MobCategory.MISC).sized(1.0F, 2.6F).fireImmune().noSummon().noSave().build(prefix("flame_jet")));
-	//gallery frame
+	public static final DeferredHolder<EntityType<?>, EntityType<GalleryFrame>> GALLERY_FRAME = ENTITY_TYPES.register("gallery_frame", () -> EntityType.Builder.<GalleryFrame>of(GalleryFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE).build(prefix("gallery_frame")));
 	//glowing goop
 	//grappling hoke node
 	//greebling corpse

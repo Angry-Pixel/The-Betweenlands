@@ -11,8 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thebetweenlands.client.event.ClientRegistrationEvents;
+import thebetweenlands.client.gui.screen.GalleryFrameScreen;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.VanillaParticleFactory;
+import thebetweenlands.common.entity.GalleryFrame;
 
 import javax.annotation.Nullable;
 
@@ -22,7 +24,7 @@ public class BetweenlandsClient {
 	public static boolean isOnClientGameThread() {
 		return Minecraft.getInstance().isSameThread();
 	}
-	
+
 	@Nullable
 	public static ClientLevel getClientLevel() {
 		return Minecraft.getInstance().level;
@@ -49,6 +51,10 @@ public class BetweenlandsClient {
 
 	public static AspectIconTextureManager getAspectIconManager() {
 		return ClientRegistrationEvents.aspectIcons;
+	}
+
+	public static void openGalleryScreen(GalleryFrame frame) {
+		Minecraft.getInstance().setScreen(new GalleryFrameScreen(frame));
 	}
 
 	/**

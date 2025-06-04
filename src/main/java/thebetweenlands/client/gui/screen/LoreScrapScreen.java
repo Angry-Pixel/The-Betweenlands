@@ -33,7 +33,7 @@ public class LoreScrapScreen extends Screen {
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 		super.render(graphics, mouseX, mouseY, partialTick);
-		this.drawTexture(graphics, this.xStart, this.yStart, (int) WIDTH, (int) HEIGHT, WIDTH, HEIGHT, 0, (int) WIDTH, 0, (int) HEIGHT);
+		drawTexture(this.pageTexture, graphics, this.xStart, this.yStart, (int) WIDTH, (int) HEIGHT, WIDTH, HEIGHT, 0, (int) WIDTH, 0, (int) HEIGHT);
 	}
 
 	@Override
@@ -42,13 +42,13 @@ public class LoreScrapScreen extends Screen {
 		return true;
 	}
 
-	private void drawTexture(GuiGraphics graphics, int xStart, int yStart, int width, int height, double textureWidth, double textureHeight, int textureXStart, int textureXEnd, int textureYStart, int textureYEnd) {
+	public static void drawTexture(ResourceLocation texture, GuiGraphics graphics, int xStart, int yStart, int width, int height, double textureWidth, double textureHeight, int textureXStart, int textureXEnd, int textureYStart, int textureYEnd) {
 		float umin = (float) (1.0F / textureWidth * textureXStart);
 		float umax = (float) (1.0F / textureWidth * textureXEnd);
 		float vmin = (float) (1.0F / textureHeight * textureYStart);
 		float vmax = (float) (1.0F / textureHeight * textureYEnd);
 
-		RenderSystem.setShaderTexture(0, this.pageTexture);
+		RenderSystem.setShaderTexture(0, texture);
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.enableBlend();
 		Matrix4f matrix4f = graphics.pose().last().pose();

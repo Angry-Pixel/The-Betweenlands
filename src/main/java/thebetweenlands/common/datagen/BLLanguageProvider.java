@@ -75,6 +75,17 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("jei.thebetweenlands.recipe.smoking_rack", "Smoking Rack");
 		this.add("jei.thebetweenlands.recipe.steeping_pot", "Steeping Pot");
 
+		this.add("gui.thebetweenlands.gallery.not_found", "Online picture gallery is currently disabled. This feature can be enabled in the config under 'General' and 'Online picture gallery'. Then restart the game to download the pictures.");
+		this.add("gui.thebetweenlands.gallery.author", "Author: %s");
+		this.add("gui.thebetweenlands.gallery.description", "Description: ");
+		this.add("gui.thebetweenlands.gallery.source_url", "Source: ");
+		this.add("gui.thebetweenlands.gallery.source_url_click", "Open URL");
+		this.add("gui.thebetweenlands.gallery.info_not_found", "Could not find any information about this picture");
+		this.add("gui.thebetweenlands.gallery.search", "Search: ");
+		this.add("gui.thebetweenlands.gallery.random", "Randomize!");
+		this.add("gui.thebetweenlands.gallery.submission", "Want to see your own fan art featured? Submit it to %s on Twitter or on our %s server using the #BetweenlandsGallery hashtag!");
+
+
 		this.add("gui.thebetweenlands.april_fools.title", "Activate Betweenlands");
 		this.add("gui.thebetweenlands.april_fools.subtitle", "Go to Options to activate The Betweenlands");
 
@@ -1053,6 +1064,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
 		this.addEntityType(EntityRegistry.THROWN_TARMINION, "Thrown Tarminion");
 
+		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
+		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
+		this.add("entity.thebetweenlands.very_large_gallery_frame", "Very Large Gallery Frame");
+
 		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
 		this.add("item.thebetweenlands.anadia.size", "Size: %s");
 		this.add("item.thebetweenlands.anadia.speed", "Speed: %s");
@@ -1491,7 +1506,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK, "Small Spirit Tree Face Mask");
 		this.addItem(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK, "Small Animated Spirit Tree Face Mask");
 		//tree masks
-		//gallery frames
+		this.addItem(ItemRegistry.SMALL_GALLERY_FRAME, "Small Gallery Frame");
+		this.addItem(ItemRegistry.LARGE_GALLERY_FRAME, "Large Gallery Frame");
+		this.addItem(ItemRegistry.VERY_LARGE_GALLERY_FRAME, "Very Large Gallery Frame");
 		this.addItem(ItemRegistry.SILK_MASK, "Silk Mask");
 		this.addItem(ItemRegistry.WIGHTS_BANE, "Wight's Bane");
 		this.addItem(ItemRegistry.SLUDGE_SLICER, "Sludge Slicer");

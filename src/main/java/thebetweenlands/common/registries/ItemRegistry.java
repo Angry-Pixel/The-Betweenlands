@@ -16,6 +16,7 @@ import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.RenamableData;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
+import thebetweenlands.common.entity.GalleryFrame;
 import thebetweenlands.common.entity.creature.*;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 import thebetweenlands.common.entity.fishing.SiltCrab;
@@ -366,7 +367,9 @@ public class ItemRegistry {
 	//explorer hat
 	public static final DeferredItem<Item> SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
 	public static final DeferredItem<Item> ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("animated_small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
-	//gallery frames
+	public static final DeferredItem<Item> SMALL_GALLERY_FRAME = ITEMS.register("small_gallery_frame", () -> new GalleryFrameItem(GalleryFrame.Type.SMALL, new Item.Properties().rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> LARGE_GALLERY_FRAME = ITEMS.register("large_gallery_frame", () -> new GalleryFrameItem(GalleryFrame.Type.LARGE, new Item.Properties().rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> VERY_LARGE_GALLERY_FRAME = ITEMS.register("very_large_gallery_frame", () -> new GalleryFrameItem(GalleryFrame.Type.VERY_LARGE, new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> SILK_MASK = ITEMS.register("silk_mask", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1)));
 	public static final DeferredItem<Item> WIGHTS_BANE = ITEMS.register("wights_bane", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.WIGHTS_BANE_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
 	public static final DeferredItem<Item> SLUDGE_SLICER = ITEMS.register("sludge_slicer", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.SLUDGE_SLICER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));

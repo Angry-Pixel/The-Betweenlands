@@ -66,6 +66,7 @@ import thebetweenlands.client.gui.screen.MortarScreen;
 import thebetweenlands.client.gui.screen.PurifierScreen;
 import thebetweenlands.client.gui.screen.SilkBundleScreen;
 import thebetweenlands.client.gui.screen.SmokingRackScreen;
+import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
@@ -183,6 +184,8 @@ import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.util.BLDyeColor;
 import thebetweenlands.util.DrinkableBrew;
 
+import java.io.File;
+
 public class ClientRegistrationEvents {
 
 	public static RiftVariantReloadListener riftVariantListener;
@@ -208,6 +211,10 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void clientSetup(FMLClientSetupEvent event) {
+		File galleryFolder = new File(new File(Minecraft.getInstance().gameDirectory, "betweenlands_gallery"), "gallery_" + TheBetweenlands.GALLERY_VERSION);
+		galleryFolder.mkdirs();
+		GalleryManager.INSTANCE.checkAndUpdate(galleryFolder);
+
 		event.enqueueWork(() -> {
 			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
 			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
@@ -308,6 +315,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.THROWN_TARMINION.get(), ThrownTarminionRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE.get(), SludgeRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SMOL_SLUDGE.get(), SmolSludgeRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.GALLERY_FRAME.get(), GalleryFrameRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);

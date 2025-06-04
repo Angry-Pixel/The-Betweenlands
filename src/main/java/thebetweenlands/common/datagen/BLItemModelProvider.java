@@ -434,7 +434,9 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK);
 		this.basicItem(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK);
 		//tree masks
-		//gallery frames
+		this.basicItem(ItemRegistry.SMALL_GALLERY_FRAME);
+		this.basicItem(ItemRegistry.LARGE_GALLERY_FRAME);
+		this.basicItem(ItemRegistry.VERY_LARGE_GALLERY_FRAME);
 		this.basicItem(ItemRegistry.SILK_MASK);
 		this.toolItem(ItemRegistry.WIGHTS_BANE);
 		this.toolItem(ItemRegistry.SLUDGE_SLICER);

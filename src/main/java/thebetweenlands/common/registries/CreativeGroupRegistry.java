@@ -961,9 +961,9 @@ public class CreativeGroupRegistry {
 //			output.accept(ItemRegistry.LARGE_SPIRIT_TREE_MASK);
 			output.accept(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK);
 			output.accept(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK);
-//			output.accept(ItemRegistry.SMALL_GALLERY_FRAME);
-//			output.accept(ItemRegistry.LARGE_GALLERY_FRAME);
-//			output.accept(ItemRegistry.VERY_LARGE_GALLERY_FRAME);
+			output.accept(ItemRegistry.SMALL_GALLERY_FRAME);
+			output.accept(ItemRegistry.LARGE_GALLERY_FRAME);
+			output.accept(ItemRegistry.VERY_LARGE_GALLERY_FRAME);
 			output.accept(ItemRegistry.SILK_MASK);
 			output.accept(ItemRegistry.WIGHTS_BANE);
 			output.accept(ItemRegistry.SLUDGE_SLICER);

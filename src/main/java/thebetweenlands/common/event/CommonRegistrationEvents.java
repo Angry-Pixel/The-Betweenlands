@@ -62,10 +62,7 @@ import thebetweenlands.common.entity.monster.*;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.clientbound.attachment.*;
-import thebetweenlands.common.network.serverbound.ChopFishPacket;
-import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
-import thebetweenlands.common.network.serverbound.RenameItemPacket;
-import thebetweenlands.common.network.serverbound.SetLastPageDataPacket;
+import thebetweenlands.common.network.serverbound.*;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
@@ -258,6 +255,7 @@ public class CommonRegistrationEvents {
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
 		registrar.playToServer(RenameItemPacket.TYPE, RenameItemPacket.STREAM_CODEC, RenameItemPacket::handle);
+		registrar.playToServer(SetGalleryUrlPacket.TYPE, SetGalleryUrlPacket.STREAM_CODEC, SetGalleryUrlPacket::handle);
 		registrar.playToServer(SetLastPageDataPacket.TYPE, SetLastPageDataPacket.STREAM_CODEC, SetLastPageDataPacket::handle);
 	}
 

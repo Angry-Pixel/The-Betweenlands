@@ -37,6 +37,7 @@ import thebetweenlands.common.world.BetweenlandsSurfaceRules;
 @Mod(TheBetweenlands.ID)
 public class TheBetweenlands {
 	public static final String ID = "thebetweenlands";
+	public static final String GALLERY_VERSION = "1.0.0"; //Protocol version of the online gallery. Change this when a breaking change is introduced to the gallery protocol or format. For backwards compatibility.
 
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final ItemAbility SICKLE_HARVEST = ItemAbility.get("sickle_harvest");
@@ -160,7 +161,7 @@ public class TheBetweenlands {
 	public static boolean isBetweenlands(Level level) {
 		return level.dimension() == DimensionRegistries.DIMENSION_KEY;
 	}
-	
+
 	@Nullable
 	public static Level getBetweenlands(Level level) {
 		if(isBetweenlands(level)) {
@@ -171,12 +172,12 @@ public class TheBetweenlands {
 			return null;
 		}
 	}
-	
+
 	public static boolean isOnServerGameThread() {
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		return server != null && server.isSameThread();
 	}
-	
+
 	public static boolean isOnGameThread() {
 		return isOnServerGameThread() || (FMLEnvironment.dist.isClient() ? BetweenlandsClient.isOnClientGameThread() : false);
 	}
