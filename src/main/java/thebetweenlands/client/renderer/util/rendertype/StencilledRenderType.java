@@ -1,11 +1,10 @@
-package thebetweenlands.client.renderer.util;
+package thebetweenlands.client.renderer.util.rendertype;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.MeshData;
@@ -13,6 +12,10 @@ import com.mojang.blaze3d.vertex.MeshData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.neoforge.client.GlStateBackup;
+import thebetweenlands.client.renderer.util.Stencil;
+import thebetweenlands.client.renderer.util.StencilInfo;
+import thebetweenlands.client.renderer.util.StencilState;
+import thebetweenlands.client.renderer.util.StencilType;
 
 /**
  * Renders as the delegate render type, but only within the 
@@ -95,7 +98,7 @@ public class StencilledRenderType extends ProxyRenderType {
 				// then we require that both stencils pass
 				if(after.stencilTestEnabled() && after.stencilFunc() == GL11.GL_EQUAL) {
 					int mask = stencil.getMask();
-					RenderSystem.stencilFunc(GL11.GL_EQUAL, mask | after.stencilValueMask(), after.stencilWriteMask() & ~mask);
+					RenderSystem.stencilFunc(GL11.GL_EQUAL, mask | after.stencilRef(), after.stencilMask() & ~mask);
 				} else {
 					stencil.func(GL11.GL_EQUAL, true);
 				}
@@ -152,35 +155,5 @@ public class StencilledRenderType extends ProxyRenderType {
 		};
 	}
 	
-	public static record StencilState(boolean stencilTestEnabled, int stencilFunc, int stencilValueMask, int stencilWriteMask) implements AutoCloseable {
-		public static StencilState get() {
-	        RenderSystem.assertOnRenderThread();
-			boolean stencilTestEnabled = GL11.glIsEnabled(GL11.GL_STENCIL_TEST);
-			int stencilFunc = GlStateManager._getInteger(GL11.GL_STENCIL_FUNC);
-			int stencilMask = GlStateManager._getInteger(GL11.GL_STENCIL_VALUE_MASK);
-			int stencilWriteMask = GlStateManager._getInteger(GL11.GL_STENCIL_WRITEMASK);
-			return new StencilState(stencilTestEnabled, stencilFunc, stencilMask, stencilWriteMask);
-		}
-
-		public void apply() {
-			if(stencilTestEnabled) {
-				GL11.glEnable(GL11.GL_STENCIL_TEST);
-			} else {
-				GL11.glDisable(GL11.GL_STENCIL_TEST);
-			}
-			RenderSystem.stencilFunc(stencilFunc, stencilValueMask, stencilWriteMask);
-		}
-		
-		@Override
-		public void close() {
-			this.apply();
-		}
-	}
 	
-	protected static record StencilInfo(Stencil stencil, StencilState before, StencilState after) {}
-	
-	public static enum StencilType {
-		STENCIL_IS_KEPT,
-		STENCIL_IS_REMOVED;
-	}
 }

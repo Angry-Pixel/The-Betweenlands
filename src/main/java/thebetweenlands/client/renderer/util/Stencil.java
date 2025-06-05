@@ -3,7 +3,6 @@ package thebetweenlands.client.renderer.util;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.neoforged.neoforge.client.StencilManager;
@@ -89,6 +88,11 @@ public final class Stencil implements AutoCloseable {
 		if(this.isValid()) {
 			StencilManager.releaseBit(this.bit);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Stencil[bit=%d, mask=%d]", this.bit, this.mask);
 	}
 
 	/**

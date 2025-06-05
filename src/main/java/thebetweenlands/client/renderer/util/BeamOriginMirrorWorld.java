@@ -8,6 +8,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -111,6 +112,17 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 	public int getBlockTint(BlockPos blockPos, ColorResolver colorResolver) {
 		return 0xFFFFFF;
 	}
+	
+	@Override
+	public int getBrightness(LightLayer lightType, BlockPos blockPos) {
+		switch(lightType) {
+		case BLOCK:
+			return (this.getModelLightValue() & 0xFF) >> 4;
+		case SKY:
+			return ((this.getModelLightValue() >> 8) & 0xFF) >> 4;
+		}
+		return BlockAndTintGetter.super.getBrightness(lightType, blockPos);
+	}
 
 	public static class MirrorWorldLightEngine extends LevelLightEngine {
 
@@ -124,8 +136,8 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 		@Override
 		public int getRawBrightness(BlockPos blockPos, int amount) {
 			int brightness = this.mirrorWorld.getModelLightValue();
-			int skyLight = (brightness >> 8) - amount;
-			int blockLight = brightness & 0xFF;
+			int skyLight = (((brightness >> 8) & 0xFF) >> 4) - amount;
+			int blockLight = (brightness & 0xFF) >> 4;
 			return Math.max(skyLight, blockLight);
 		}
 	}

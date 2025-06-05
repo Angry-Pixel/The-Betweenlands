@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.MeshData;
 
 import net.minecraft.client.renderer.RenderType;
+import thebetweenlands.client.renderer.util.rendertype.ProxyRenderType;
 
 /**
  * Renders as the delegate render type, but flips the culled face (FRONT <-> BACK)

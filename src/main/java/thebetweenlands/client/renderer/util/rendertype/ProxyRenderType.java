@@ -1,4 +1,4 @@
-package thebetweenlands.client.renderer.util;
+package thebetweenlands.client.renderer.util.rendertype;
 
 import java.util.Optional;
 
