@@ -65,6 +65,9 @@ public class ProxyMultiBufferSource implements MultiBufferSource {
 	@Override
 	public VertexConsumer getBuffer(RenderType renderType) {
 		RenderType proxyRenderType = this.getRenderType(renderType);
+		if(proxyRenderType == null) {
+			return NULL_CONSUMER;
+		}
 		VertexConsumer vertexConsumer = this.delegate.getBuffer(proxyRenderType);
 		return this.vertexConsumerProxy.apply(renderType, proxyRenderType, vertexConsumer);
 	}
@@ -75,4 +78,37 @@ public class ProxyMultiBufferSource implements MultiBufferSource {
 		
 		public VertexConsumer apply(RenderType originalRenderType, RenderType proxyRenderType, VertexConsumer vertexConsumer);
 	}
+	
+	public static final VertexConsumer NULL_CONSUMER = new VertexConsumer() {
+		
+		@Override
+		public VertexConsumer setUv2(int u, int v) {
+			return this;
+		}
+		
+		@Override
+		public VertexConsumer setUv1(int u, int v) {
+			return this;
+		}
+		
+		@Override
+		public VertexConsumer setUv(float u, float v) {
+			return this;
+		}
+		
+		@Override
+		public VertexConsumer setNormal(float normalX, float normalY, float normalZ) {
+			return this;
+		}
+		
+		@Override
+		public VertexConsumer setColor(int red, int green, int blue, int alpha) {
+			return this;
+		}
+		
+		@Override
+		public VertexConsumer addVertex(float x, float y, float z) {
+			return this;
+		}
+	};
 }

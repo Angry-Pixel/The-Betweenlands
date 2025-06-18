@@ -77,7 +77,7 @@ public class StencilModifier implements RenderTypeModifier<StencilModifier.Stenc
 		
 		if(stencil == null || !stencil.isValid()) {
 			// invalid or null stencil
-			stencilStack.addLast(new StencilInfo(Stencil.INVALID, null, null));
+			stencilStack.addLast(StencilInfo.INVALID);
 		} else {
 			boolean stencilPushed = false;
 			
@@ -128,7 +128,7 @@ public class StencilModifier implements RenderTypeModifier<StencilModifier.Stenc
 				
 				// because it's not impossible for the error to be handled and for setupRenderState()/clearRenderState()
 				// to be called anyways, we have to keep the stack balanced to not lose the stencils
-				stencilStack.addLast(new StencilInfo(Stencil.INVALID, null, null));
+				stencilStack.addLast(StencilInfo.INVALID);
 				throw e;
 			}
 		}
@@ -146,7 +146,7 @@ public class StencilModifier implements RenderTypeModifier<StencilModifier.Stenc
 
 		if(stencil == null || !stencil.isValid()) {
 			// invalid or null stencil
-			stencilStack.addLast(new StencilInfo(Stencil.INVALID, null, null));
+			stencilStack.addLast(StencilInfo.INVALID);
 		} else {
 			try {
 				// cache state after setup
@@ -164,6 +164,7 @@ public class StencilModifier implements RenderTypeModifier<StencilModifier.Stenc
 				// then we require that both stencils pass
 				if(after.stencilTestEnabled() && after.stencilFunc() == GL11.GL_EQUAL) {
 //					TheBetweenlands.LOGGER.info("Compatible stencil state found, current stencil is {}", stencil);
+					@SuppressWarnings("removal")
 					int mask = stencil.getMask();
 					RenderSystem.stencilFunc(GL11.GL_EQUAL, mask | after.stencilRef(), after.stencilMask() | mask);
 //					TheBetweenlands.LOGGER.info("New stencil stencil state is {}", StencilState.get());
@@ -187,7 +188,7 @@ public class StencilModifier implements RenderTypeModifier<StencilModifier.Stenc
 				
 				// because it's not impossible for the error to be handled and for clearRenderState()
 				// to be called anyways, we have to keep the stack balanced to not lose the stencils
-				stencilStack.addLast(new StencilInfo(Stencil.INVALID, null, null));
+				stencilStack.addLast(StencilInfo.INVALID);
 				throw e;
 			}
 		}

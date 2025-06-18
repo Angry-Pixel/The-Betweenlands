@@ -34,6 +34,7 @@ public final class Stencil implements AutoCloseable {
 		return this.bit != -1;
 	}
 
+	@Deprecated(forRemoval = true)
 	public int getMask() {
 		return this.mask;
 	}
@@ -128,5 +129,11 @@ public final class Stencil implements AutoCloseable {
 		}
 		
 		return Stencil.INVALID;
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		this.close();
+		super.finalize();
 	}
 }

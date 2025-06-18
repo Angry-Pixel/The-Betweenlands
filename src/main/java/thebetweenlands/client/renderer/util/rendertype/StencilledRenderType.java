@@ -97,6 +97,7 @@ public class StencilledRenderType extends ProxyRenderType {
 				// if previous stencil state was compatible (e.g. multiple StencilledRenderType have been applied), 
 				// then we require that both stencils pass
 				if(after.stencilTestEnabled() && after.stencilFunc() == GL11.GL_EQUAL) {
+					@SuppressWarnings("removal")
 					int mask = stencil.getMask();
 					RenderSystem.stencilFunc(GL11.GL_EQUAL, mask | after.stencilRef(), after.stencilMask() & ~mask);
 				} else {
