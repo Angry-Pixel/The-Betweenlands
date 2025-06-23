@@ -1,4 +1,4 @@
-# Blocks
+upg# Blocks
 tile.thebetweenlands.angry_betweenstone.name=Pierre en colère
 tile.thebetweenlands.aqua_middle_gem_ore.name=Minerais de gemme aquatique
 tile.thebetweenlands.arrow_arum.name=Peltandra
@@ -1156,11 +1156,11 @@ item.thebetweenlands.frog_legs_smoked.name=Cuisse de grenouille fumée
 item.thebetweenlands.puffshroom_tendril_smoked.name=Vrille de champisouffle fumée
 item.thebetweenlands.silt_crab_claw_smoked.name=Pince de crabe fumée
 item.thebetweenlands.snail_flesh_smoked.name=Chaire d'escargot fumée
-item.thebetweenlands.aa_upgrade_electric.name=Amélioration d'armure amphibie - Électricité
-item.thebetweenlands.aa_upgrade_glide.name=Amélioration d'armure amphibie - Planage
-item.thebetweenlands.aa_upgrade_leap.name=Amélioration d'armure amphibie - Ascension
-item.thebetweenlands.aa_upgrade_urchin.name=Amélioration d'armure amphibie - Piquants d'oursin
-item.thebetweenlands.aa_upgrade_vortex.name=Amélioration  d'armure amphibie - Vortex à poisson
+item.thebetweenlands.aa_upgrade_electric.name=Organe électrique
+item.thebetweenlands.aa_upgrade_glide.name=Synthorax d'odonathe
+item.thebetweenlands.aa_upgrade_leap.name=Cuisses musclées
+item.thebetweenlands.aa_upgrade_urchin.name=Membrane épineuses
+item.thebetweenlands.aa_upgrade_vortex.name=Organe vortex
 item.thebetweenlands.aa_upgrade_trigger.name=Pierre de stimulus biopathique
 item.thebetweenlands.aa_upgrade_toggle.name=Pierre de lien biopathique
 item.thebetweenlands.mist_staff.name=Sceptre du marcheur de brume
