@@ -1797,7 +1797,7 @@ bl.potion.rootBound=Liée aux racines
 bl.potion.enlightened=Éclairé·e
 
 bl.effect.blessed=Béni·e
-bl.effect.shocked=Choqué·e
+bl.effect.shocked=Sonné·e
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Druide noir
