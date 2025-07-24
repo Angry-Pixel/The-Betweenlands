@@ -1,15 +1,11 @@
 package thebetweenlands.client.shader.postprocessing;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import thebetweenlands.common.TheBetweenlands;
+
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
-import thebetweenlands.client.shader.ShaderHelper;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.util.RenderUtils;
 
 public class GroundFog extends PostProcessingEffect<GroundFog> {
 	public static final ResourceLocation TEXTURE_GROUND_FOG_HEIGHT_MAP = TheBetweenlands.prefix("textures/shaders/ground_fog_height_map.png");
@@ -92,6 +88,7 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 		return true;
 	}
 
+	/*
 	@Override
 	protected void uploadUniforms(float partialTicks) {
 		WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
@@ -130,4 +127,5 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 
 		//this.uploadInt(this.fogModeUniformID, FogHandler.getCurrentFogMode());
 	}
+	 */
 }

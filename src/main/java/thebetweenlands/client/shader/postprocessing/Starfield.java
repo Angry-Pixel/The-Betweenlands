@@ -1,10 +1,19 @@
 package thebetweenlands.client.shader.postprocessing;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.shaders.Uniform;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import thebetweenlands.common.TheBetweenlands;
 
-public class Starfield extends PostProcessingEffect<Starfield> {
+import javax.annotation.Nullable;
+import java.io.IOException;
+
+public class Starfield extends PostChain implements AutoCloseable {
 	private final boolean faded;
 
 	private float timeScale = 1.0F;
@@ -13,15 +22,45 @@ public class Starfield extends PostProcessingEffect<Starfield> {
 	private float offsetY = 0.0F;
 	private float offsetZ = 0.0F;
 
-	private int timeUniformID = -1;
-	private int timeScaleUniformID = -1;
-	private int zoomUniformID = -1;
-	private int offsetXUniformID = -1;
-	private int offsetYUniformID = -1;
-	private int offsetZUniformID = -1;
+	private static final int STARFIELD_INDEX = 0;	// The Starfield pass index
 
-	public Starfield(boolean faded) {
+	// Textures
+	public RenderTarget starfieldTexture;
+
+	// Uniforms
+	@Nullable
+	public Uniform timeUniform;
+	@Nullable
+	public Uniform timeScaleUniform;
+	@Nullable
+	public Uniform zoomUniform;
+	@Nullable
+	public Uniform offsetXUniform;
+	@Nullable
+	public Uniform offsetYUniform;
+	@Nullable
+	public Uniform offsetZUniform;
+
+	public Starfield(TextureManager textureManager, ResourceProvider resourceProvider, RenderTarget screenTarget, boolean faded, int width, int height) throws IOException, JsonSyntaxException {
+		super(textureManager, resourceProvider, screenTarget, ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, faded ? "shaders/post/starfield_faded.json" : "shaders/post/starfield.json"));
+
+		/* 	PostChain structure:
+		 * 		0 - 	Starfield shader 		= STARFIELD_INDEX
+		*/
+
+		// Get uniforms
 		this.faded = faded;
+		this.timeUniform = getUniform(STARFIELD_INDEX, "u_msTime");
+		this.timeScaleUniform = getUniform(STARFIELD_INDEX, "u_timeScale");
+		this.zoomUniform = getUniform(STARFIELD_INDEX, "u_zoom");
+		this.offsetXUniform = getUniform(STARFIELD_INDEX, "u_offsetX");
+		this.offsetYUniform = getUniform(STARFIELD_INDEX, "u_offsetY");
+		this.offsetZUniform = getUniform(STARFIELD_INDEX, "u_offsetZ");
+
+		// Get output target
+		//this.addTempTarget("output", width, height);
+		this.starfieldTexture = this.getTempTarget("output");
+		this.starfieldTexture.resize(width, height, Minecraft.ON_OSX);
 	}
 
 	public Starfield setTimeScale(float timeScale) {
@@ -41,30 +80,23 @@ public class Starfield extends PostProcessingEffect<Starfield> {
 		return this;
 	}
 
-	@Override
-	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {TheBetweenlands.prefix("shaders/postprocessing/starfield/starfield.vsh"),
-				this.faded ? TheBetweenlands.prefix("shaders/postprocessing/starfield/starfield_faded.fsh") : TheBetweenlands.prefix("shaders/postprocessing/starfield/starfield.fsh")};
-	}
-
-	@Override
-	protected boolean initEffect() {
-		this.timeUniformID = GlStateManager._glGetUniformLocation(this.getShaderProgram(), "u_msTime");
-		this.timeScaleUniformID = GlStateManager._glGetUniformLocation(this.getShaderProgram(), "u_timeScale");
-		this.zoomUniformID = GlStateManager._glGetUniformLocation(this.getShaderProgram(), "u_zoom");
-		this.offsetXUniformID = GlStateManager._glGetUniformLocation(this.getShaderProgram(), "u_offsetX");
-		this.offsetYUniformID = GlStateManager._glGetUniformLocation(this.getShaderProgram(), "u_offsetY");
-		this.offsetZUniformID = GlStateManager._glGetUniformLocation(this.getShaderProgram(), "u_offsetZ");
-		return true;
-	}
-
-	@Override
 	protected void uploadUniforms(float partialTicks) {
-		this.uploadFloat(this.timeUniformID, System.nanoTime() / 1000000.0F);
-		this.uploadFloat(this.timeScaleUniformID, this.timeScale);
-		this.uploadFloat(this.zoomUniformID, this.zoom);
-		this.uploadFloat(this.offsetXUniformID, this.offsetX);
-		this.uploadFloat(this.offsetYUniformID, this.offsetY);
-		this.uploadFloat(this.offsetZUniformID, this.offsetZ);
+		timeUniform.set(System.nanoTime() / 1000000.0F);
+		timeScaleUniform.set(this.timeScale);
+		zoomUniform.set(this.zoom);
+		offsetXUniform.set(this.offsetX);
+		offsetYUniform.set(this.offsetY);
+		offsetZUniform.set(this.offsetZ);
+	}
+
+	/**
+	 * Used to target a specific PostPass uniform value.
+	 * @param index
+	 * @param name
+	 * @return uniform in PostPass index (index) with key of (name)
+	 */
+	public Uniform getUniform(int index, String name) {
+		if (passes.isEmpty()) return null;
+		return this.passes.get(index).getEffect().getUniform(name);
 	}
 }

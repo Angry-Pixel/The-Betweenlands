@@ -12,8 +12,8 @@ import thebetweenlands.client.handler.*;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
-import thebetweenlands.common.item.tool.SlingshotItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
+import thebetweenlands.common.item.tool.SlingshotItem;
 import thebetweenlands.util.RenderUtils;
 
 public class ClientEvents {
@@ -34,6 +34,10 @@ public class ClientEvents {
 
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderMobsOnFrame);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::changeFOV);
+
+		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWorldLastHighest);
+
+		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderLevelStage);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

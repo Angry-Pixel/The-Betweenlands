@@ -309,6 +309,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.DARK_DRUID.get(), DarkDruidRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FROG.get(), FrogRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ROOT_SPRITE.get(), RootSpriteRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SHALLOWBREATH.get(), GasCloudRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SPLODESHROOM.get(), SplodeshroomRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SPORELING.get(), SporelingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TARMINION.get(), TarminionRenderer::new);
@@ -408,6 +409,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.TARMINION, TarminionModel::create);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE, SludgeModel::create);
 		event.registerLayerDefinition(BLModelLayers.SMOL_SLUDGE, SmolSludgeModel::create);
+		event.registerLayerDefinition(BLModelLayers.GAS_CLOUD, GasCloudModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -748,6 +750,8 @@ public class ClientRegistrationEvents {
 		event.registerSprite(ParticleRegistry.DRIPPING_TAR.get(), TarBeastDripParticle::createTarHangParticle);
 		event.registerSprite(ParticleRegistry.FALLING_TAR.get(), TarBeastDripParticle::createTarFallParticle);
 		event.registerSprite(ParticleRegistry.LANDING_TAR.get(), TarBeastDripParticle::createTarLandParticle);
+		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD.get(), GasCloudParticle.GasCloudFactory::new);
+		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD_HAZE.get(), GasCloudHazeParticle.GasCloudHazeFactory::new);
 
 	}
 

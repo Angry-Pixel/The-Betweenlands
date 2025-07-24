@@ -1,6 +1,5 @@
 package thebetweenlands.client.gui.menu;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -12,13 +11,13 @@ import net.minecraft.util.RandomSource;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.shader.ShaderHelper;
-import thebetweenlands.client.shader.postprocessing.Starfield;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+// NOTE: menu starfieldEffect has been moved to ShaderHelper
 public class BLTitleScreenBackground {
 
 	@Nullable
@@ -29,10 +28,6 @@ public class BLTitleScreenBackground {
 	public int height;
 
 	private final RandomSource random = RandomSource.create();
-	@Nullable
-	private Starfield starfieldEffect;
-	@Nullable
-	private RenderTarget starfieldTextureFBO = null;
 
 	public BLTitleScreenBackground(ResourceLocation texture, int layers) {
 		this.layerTextures = new ResourceLocation[layers];
@@ -50,13 +45,6 @@ public class BLTitleScreenBackground {
 		}
 
 		this.delete();
-
-		//FIXME figure out starfield shader
-//		if (ShaderHelper.INSTANCE.canUseShaders()) {
-//			this.starfieldTextureFBO = new TextureTarget(this.width, this.height, false, false);
-//			this.starfieldEffect = new Starfield(false).init();
-//			this.starfieldEffect.setTimeScale(0.00000000005F).setZoom(4.8F);
-//		}
 	}
 
 	public void onClose() {
@@ -92,14 +80,9 @@ public class BLTitleScreenBackground {
 	}
 
 	public void delete() {
-		if (this.starfieldTextureFBO != null) {
-			this.starfieldTextureFBO.destroyBuffers();
-			this.starfieldTextureFBO = null;
-		}
-
-		if (this.starfieldEffect != null) {
-			this.starfieldEffect.delete();
-			this.starfieldEffect = null;
+		if (ShaderHelper.INSTANCE.menuStarfieldEffect != null) {
+			ShaderHelper.INSTANCE.menuStarfieldEffect.close();
+			ShaderHelper.INSTANCE.menuStarfieldEffect = null;
 		}
 	}
 
@@ -140,15 +123,13 @@ public class BLTitleScreenBackground {
 	}
 
 	protected void drawStarfield(float partialTicks) {
-		if (ShaderHelper.INSTANCE.canUseShaders() && this.starfieldEffect != null && this.starfieldTextureFBO != null) {
-			this.starfieldEffect.setOffset((this.layerTick + partialTicks) / 8000.0F, 0, 0);
+		if (ShaderHelper.INSTANCE.canUseShaders() && ShaderHelper.INSTANCE.menuStarfieldEffect != null && ShaderHelper.INSTANCE.menuStarfieldEffect.starfieldTexture != null) {
+			ShaderHelper.INSTANCE.menuStarfieldEffect.setOffset((this.layerTick + partialTicks) / 8000.0F, 0, 0);
 			int renderDimension = Math.max(this.width, this.height);
-			this.starfieldEffect.create(this.starfieldTextureFBO)
-				.setPreviousFramebuffer(Minecraft.getInstance().getMainRenderTarget())
-				.setRenderDimensions(renderDimension, renderDimension)
-				.render(partialTicks);
+			ShaderHelper.INSTANCE.menuStarfieldEffect.process(partialTicks);
+			Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 
-			RenderSystem.bindTexture(this.starfieldTextureFBO.getColorTextureId());
+			RenderSystem.bindTexture(ShaderHelper.INSTANCE.menuStarfieldEffect.starfieldTexture.getColorTextureId());
 
 			GL11.glBegin(GL11.GL_TRIANGLES);
 			GL11.glTexCoord2d(0, 1);

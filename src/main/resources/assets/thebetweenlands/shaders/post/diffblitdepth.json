@@ -1,0 +1,45 @@
+{
+  "targets": [
+    {
+      "name": "beforeDepth",
+      "depth": true
+    },
+    {
+      "name": "afterDepth",
+      "depth": true
+    },
+    {
+      "name": "base",
+      "depth": true
+    },
+    {
+      "name": "output",
+      "depth": true
+    },
+    {
+      "name": "dummy"
+    }
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:diffblit/diffblitdepth",
+      "intarget": "dummy",
+      "outtarget": "output",
+      "auxtargets": [
+        {
+          "name": "beforeDepth",
+          "id": "beforeDepth:depth"
+        },
+        {
+          "name": "afterDepth",
+          "id": "afterDepth:depth"
+        },
+        {
+          "name": "base",
+          "id": "base:depth"
+        }
+      ],
+      "use_linear_filter": true
+    }
+  ]
+}

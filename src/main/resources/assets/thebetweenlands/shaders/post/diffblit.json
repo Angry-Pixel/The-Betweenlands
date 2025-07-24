@@ -1,0 +1,26 @@
+{
+  "targets": [
+    "beforeTarget",
+    "afterTarget",
+    "output",
+    "base"
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:diffblit/diffblit",
+      "intarget": "base",
+      "outtarget": "output",
+      "auxtargets": [
+        {
+          "name": "beforeTarget",
+          "id": "beforeTarget"
+        },
+        {
+          "name": "afterTarget",
+          "id": "afterTarget"
+        }
+      ],
+      "use_linear_filter": true
+    }
+  ]
+}

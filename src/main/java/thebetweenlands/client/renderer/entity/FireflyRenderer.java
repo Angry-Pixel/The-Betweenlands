@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -43,7 +42,7 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 		stack.pushPose();
 		stack.translate(0, Math.sin((entity.tickCount + partialTicks) / 10.0F) * 0.15F, 0);
 		super.render(entity, entityYaw, partialTicks, stack, buffer, light);
-		renderFireflyGlow(stack, buffer.getBuffer(RenderType.eyes(GLOW)), glowStrength);
+		//renderFireflyGlow(stack, buffer.getBuffer(RenderType.eyes(GLOW)), glowStrength * 0.4f);
 		stack.popPose();
 
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
@@ -76,6 +75,9 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 
 		Quaternionf angle = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
 
+		// Height adjustment
+		stack.translate(0.0, 1.3, 0.0);
+
 		float red = 0.4F;
 		float green = 0.2F;
 		float blue = 0.0F;
@@ -86,9 +88,12 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 
 		float currentScale = scale;
 
+		stack.mulPose(angle);
+		PoseStack.Pose pose = stack.last();
+
 		for (int i = 0; i < 10; i++) {
 			currentScale -= scale * 0.15F;
-			renderQuad(stack.last(), consumer, angle, currentScale, red, green, blue);
+			renderQuad(pose, consumer, currentScale, red, green, blue);
 		}
 
 		red = 0.6F;
@@ -98,7 +103,7 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 		currentScale = scale / 4.0F;
 		for (int i = 0; i < 10; i++) {
 			currentScale -= scale * 0.15F / 4.0F;
-			renderQuad(stack.last(), consumer, angle, currentScale, red, green, blue);
+			renderQuad(pose, consumer, currentScale, red, green, blue);
 		}
 
 		RenderSystem.depthMask(false);
@@ -107,16 +112,11 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 		RenderSystem.defaultBlendFunc();
 	}
 
-	private static void renderQuad(PoseStack.Pose pose, VertexConsumer consumer, Quaternionf angle, float scale, float red, float green, float blue) {
-		float rx = angle.x();
-		float rxz = angle.x() * angle.z();
-		float rz = angle.z();
-		float ryz = angle.y() * angle.z();
-		float rxy = angle.x() * angle.y();
-		consumer.addVertex(pose, rx * scale - ryz * scale, rxz * scale, rz * scale - rxy * scale).setUv(0.0F, 1.0F).setColor(red, green, blue, 0.3F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, 0.0F, 1.0F, 0.0F);
-		consumer.addVertex(pose, rx * scale + ryz * scale, rxz * scale, rz * scale + rxy * scale).setUv(1.0F, 1.0F).setColor(red, green, blue, 0.3F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, 0.0F, 1.0F, 0.0F);
-		consumer.addVertex(pose, rx * scale + ryz * scale, rxz * scale, rz * scale + rxy * scale).setUv(1.0F, 0.0F).setColor(red, green, blue, 0.3F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, 0.0F, 1.0F, 0.0F);
-		consumer.addVertex(pose, rx * scale - ryz * scale, rxz * scale, rz * scale - rxy * scale).setUv(0.0F, 0.0F).setColor(red, green, blue, 0.3F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, 0.0F, 1.0F, 0.0F);
+	private static void renderQuad(PoseStack.Pose pose, VertexConsumer consumer, float scale, float red, float green, float blue) {
+		consumer.addVertex(pose, -scale, scale, 0.0f).setUv(0.0F, 1.0F).setColor(red, green, blue, 0.3F).setNormal(pose, 0.0F, 1.0F, 0.0F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+		consumer.addVertex(pose, -scale, -scale, 0.0f).setUv(1.0F, 1.0F).setColor(red, green, blue, 0.3F).setNormal(pose, 0.0F, 1.0F, 0.0F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+		consumer.addVertex(pose, scale, -scale, 0.0f).setUv(1.0F, 0.0F).setColor(red, green, blue, 0.3F).setNormal(pose, 0.0F, 1.0F, 0.0F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+		consumer.addVertex(pose, scale, scale, 0.0f).setUv(0.0F, 0.0F).setColor(red, green, blue, 0.3F).setNormal(pose, 0.0F, 1.0F, 0.0F).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
 	}
 
 	@Override

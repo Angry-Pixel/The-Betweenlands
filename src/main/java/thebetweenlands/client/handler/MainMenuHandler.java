@@ -2,7 +2,6 @@ package thebetweenlands.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -12,7 +11,6 @@ import thebetweenlands.client.gui.menu.BLTitleScreen;
 import thebetweenlands.client.gui.menu.BLTitleScreenBackground;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.registries.SoundRegistry;
 
 public class MainMenuHandler {
 

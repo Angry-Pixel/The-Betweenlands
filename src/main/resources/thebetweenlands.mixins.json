@@ -4,8 +4,11 @@
   "package": "thebetweenlands.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "GameRendererMixin",
     "HumanoidArmorLayerMixin",
+    "LevelRendererMixin",
     "ModelBlockRendererMixin",
+    "ScreenEffectRendererMixin",
     "ScreenMixin"
   ],
   "injectors": {

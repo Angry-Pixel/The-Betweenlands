@@ -1,0 +1,18 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "thebetweenlands:diffblit/diffblit",
+  "fragment": "thebetweenlands:diffblit/diffblitdepth",
+  "samplers": [
+    { "name": "beforeDepth" },
+    { "name": "afterDepth" },
+    { "name": "base" }
+  ],
+  "uniforms": [
+    { "name": "ProjMat",    "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+    { "name": "OutSize",    "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] }
+  ]
+}

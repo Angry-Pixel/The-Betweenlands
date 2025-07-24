@@ -1,0 +1,35 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "thebetweenlands:world/world",
+  "fragment": "thebetweenlands:world/world",
+  "samplers": [
+    { "name": "DiffuseSampler" },
+    { "name": "s_diffuse_depth" },
+    { "name": "s_repellerShield" },
+    { "name": "s_repellerShield_depth" },
+    { "name": "s_gasParticles" },
+    { "name": "s_gasParticles_depth" }
+  ],
+  "attributes": [
+    "Position"
+  ],
+  "uniforms": [
+    { "name": "ProjMat",                  "type": "matrix4x4",  "count": 16, "values":  [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ] },
+    { "name": "Time",                     "type": "float",      "count": 1 , "values":  [ 0.0 ] },
+    { "name": "u_screenSize",             "type": "float",      "count": 2,  "values":  [ 0.0, 0.0 ] },
+    { "name": "OutSize",                  "type": "float",      "count": 2,  "values":  [ 0.0, 0.0 ] },
+    { "name": "u_viewPos",                "type": "float",      "count": 3,  "values":  [ 0.0, 0.0, 0.0 ] },
+    { "name": "u_renderPos",              "type": "float",      "count": 3,  "values":  [ 0.0, 0.0, 0.0 ] },
+    { "name": "u_fogMode",                "type": "int",        "count": 1 , "values":  [ 1 ] },
+    { "name": "u_lightSources_position",  "type": "float",      "count": 96, "values":  [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] },
+    { "name": "u_lightSources_color",     "type": "float",      "count": 96, "values":  [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] },
+    { "name": "u_lightSources_radius",    "type": "float",      "count": 32, "values":  [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]},
+    { "name": "u_lightSourcesAmount",     "type": "int",        "count": 1 , "values":  [ 1 ] },
+    { "name": "u_MVP",                    "type": "matrix4x4",  "count": 16 ,"values":  [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ] },
+    { "name": "u_INVMVP",                 "type": "matrix4x4",  "count": 16 ,"values":  [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ] }
+  ]
+}

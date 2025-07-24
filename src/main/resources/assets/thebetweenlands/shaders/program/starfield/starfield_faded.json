@@ -1,0 +1,21 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "thebetweenlands:starfield/starfield",
+  "fragment": "thebetweenlands:starfield/starfield_faded",
+  "samplers": [
+    { "name": "DiffuseSampler" }
+  ],
+  "uniforms": [
+    { "name": "OutSize",          "type": "float",      "count": 2,  "values":  [ 1.0, 1.0 ] },
+    { "name": "u_msTime",         "type": "float",      "count": 1,  "values":  [ 1.0 ] },
+    { "name": "u_timeScale",      "type": "float",      "count": 1,  "values":  [ 1.0 ] },
+    { "name": "u_zoom",           "type": "float",      "count": 1,  "values":  [ 1.0 ] },
+    { "name": "u_offsetX",        "type": "float",      "count": 1,  "values":  [ 0.0 ] },
+    { "name": "u_offsetY",        "type": "float",      "count": 1,  "values":  [ 0.0 ] },
+    { "name": "u_offsetZ",        "type": "float",      "count": 1,  "values":  [ 0.0 ] }
+  ]
+}

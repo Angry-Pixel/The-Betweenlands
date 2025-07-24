@@ -63,6 +63,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT = register("weedwood_rowboat");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT_LANTERN = register("weedwood_rowboat", "lantern");
+	public static final ModelLayerLocation GAS_CLOUD = register("gas_cloud");
 
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");
 	public static final ModelLayerLocation GECKO = register("gecko");

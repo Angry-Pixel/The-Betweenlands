@@ -1,49 +1,35 @@
 package thebetweenlands.client.shader.postprocessing;
 
-import java.nio.FloatBuffer;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.shaders.Uniform;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import thebetweenlands.client.renderer.GLTextureObjectWrapper;
+import thebetweenlands.client.shader.LightSource;
+import thebetweenlands.client.shader.postprocessing.GroundFog.GroundFogVolume;
+import thebetweenlands.common.TheBetweenlands;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.pipeline.TextureTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import thebetweenlands.client.shader.DepthBuffer;
-import thebetweenlands.client.shader.GeometryBuffer;
-import thebetweenlands.client.shader.LightSource;
-import thebetweenlands.client.shader.ResizableFramebuffer;
-import thebetweenlands.client.shader.postprocessing.GroundFog.GroundFogVolume;
-import thebetweenlands.client.renderer.GLTextureObjectWrapper;
-import thebetweenlands.client.sky.BLSkyRenderer;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.EnvironmentEventRegistry;
-import thebetweenlands.util.GLUProjection;
-import thebetweenlands.util.GLUProjection.ClampMode;
-import thebetweenlands.util.GLUProjection.Projection;
-import thebetweenlands.util.RenderUtils;
-
-import javax.annotation.Nullable;
-
 /**
- * TODO: Make lighting and other spacial effects use "correct" deferred rendering
+ * TODO: Finish and add Starfield, OcclusionExtractor, Godrays, and Swirl shaders.
  */
-public class WorldShader extends PostProcessingEffect<WorldShader> {
+public class WorldShader extends PostChain implements AutoCloseable {
 	public static final ResourceLocation WORLD_DEPTH_TEXTURE = TheBetweenlands.prefix("world_depth");
 	public static final ResourceLocation REPELLER_DIFFUSE_TEXTURE = TheBetweenlands.prefix("repeller_diffuse");
 	public static final ResourceLocation REPELLER_DEPTH_TEXTURE = TheBetweenlands.prefix("repeller_depth");
@@ -54,14 +40,11 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	public static final ResourceLocation GAS_PARTICLE_TEXTURE = TheBetweenlands.prefix("gas_particle");
 
-	private DepthBuffer depthBuffer;
-	private ResizableFramebuffer blitBuffer;
-	private ResizableFramebuffer occlusionBuffer;
-	private GeometryBuffer repellerShieldBuffer;
-	private GeometryBuffer gasParticlesBuffer;
-
-	private static final FloatBuffer MODELVIEW = BufferUtils.createFloatBuffer(16);
-	private static final FloatBuffer PROJECTION = BufferUtils.createFloatBuffer(16);
+	private RenderTarget depthBuffer;
+	private RenderTarget blitBuffer;
+	private RenderTarget occlusionBuffer;
+	private RenderTarget repellerShieldBuffer;
+	private RenderTarget gasParticlesBuffer;
 
 	private Matrix4f invertedModelviewProjectionMatrix;
 	private Matrix4f modelviewProjectionMatrix;
@@ -71,30 +54,34 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	public static final int MAX_LIGHT_SOURCES_PER_PASS = 32;
 	private final List<LightSource> lightSources = new ArrayList<>();
 	private final List<GroundFogVolume> groundFogVolumes = new ArrayList<>();
+	public Vector3f cameraPos = new Vector3f();
+
+	private static final int WORLD_INDEX = 0;	// The world shader pass index
+	private static final int BLIT_INDEX = 1;
 
 	//Uniforms
-	private int depthUniformID = -1;
-	private int repellerDiffuseUniformID = -1;
-	private int repellerDepthUniformID = -1;
-	private int gasParticlesDiffuseUniformID = -1;
-	private int gasParticlesDepthUniformID = -1;
-	private int invMVPUniformID = -1;
-	private final int[] lightSourcePositionUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
-	private final int[] lightSourceColorUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
-	private final int[] lightSourceRadiusUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
-	private int lightSourceAmountUniformID = -1;
-	private int msTimeUniformID = -1;
-	private int worldTimeUniformID = -1;
-	private int renderPosUniformID = -1;
-	private int viewPosUniformID = -1;
-
-	//Shader textures
 	@Nullable
-	private RenderTarget gasTextureBaseFramebuffer = null;
+	public Uniform MVPUniform;
 	@Nullable
-	private RenderTarget gasTextureFramebuffer = null;
+	public Uniform invMVPUniform;
 	@Nullable
-	private RenderTarget starfieldTextureFramebuffer = null;
+	public Uniform projectionUniform;
+	@Nullable
+	public  Uniform viewPosUniform;
+	@Nullable
+	public  Uniform renderPosUniform;
+	@Nullable
+	private  Uniform lightSourcePositionUniforms;
+	@Nullable
+	private  Uniform lightSourceColorUniforms;
+	@Nullable
+	private  Uniform lightSourceRadiusUniforms;
+	@Nullable
+	private  Uniform lightSourceAmountUniform;
+	@Nullable
+	private  Uniform screenSize;
+	@Nullable
+	public Uniform worldTimeUniform;
 
 	//Effects
 	@Nullable
@@ -114,42 +101,74 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	private int currentRenderPass = 0;
 
-	@Override
-	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[]{TheBetweenlands.prefix("shaders/postprocessing/world/world.vsh"), TheBetweenlands.prefix("shaders/postprocessing/world/world.fsh")};
+
+	public WorldShader(TextureManager textureManager, ResourceProvider resourceProvider, RenderTarget screenTarget) throws IOException, JsonSyntaxException {
+		super(textureManager, resourceProvider, screenTarget, ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "shaders/post/world.json"));
+
+		/* 	PostChain structure:
+		 * 		0 - 	World shader 		= WORLD_INDEX
+		 * 		1 -	 	Blit to screen		= BLIT_INDEX
+		 */
+
+		// Get Uniforms
+		this.invMVPUniform = this.getUniform(WORLD_INDEX, "u_INVMVP");
+		this.viewPosUniform = this.getUniform(WORLD_INDEX, "u_viewPos");
+		this.renderPosUniform = this.getUniform(WORLD_INDEX, "u_renderPos");
+		Uniform fogModeUniform = this.getUniform(WORLD_INDEX, "u_fogMode");	// temp
+		this.screenSize = this.getUniform(WORLD_INDEX, "u_screenSize");
+		this.MVPUniform = this.getUniform(WORLD_INDEX, "u_MVP");
+		this.worldTimeUniform = this.getUniform(WORLD_INDEX, "u_worldTime");
+
+		this.lightSourcePositionUniforms = this.getUniform(WORLD_INDEX, "u_lightSources_position");
+		this.lightSourceColorUniforms = this.getUniform(WORLD_INDEX, "u_lightSources_color");
+		this.lightSourceRadiusUniforms = this.getUniform(WORLD_INDEX, "u_lightSources_radius");
+		this.lightSourceAmountUniform = this.getUniform(WORLD_INDEX, "u_lightSourcesAmount");
+
+		// Set samplers
+		this.depthBuffer = this.getTempTarget("s_diffuse_depth");
+		this.repellerShieldBuffer = this.getTempTarget("s_repellerShield");
+		this.gasParticlesBuffer = this.getTempTarget("s_gasParticles");
+
+		// Setup additional effects
+		// TODO: consider separating from WorldShader into separate PostChain instances.
+		this.gasWarpEffect = new Warp(textureManager, resourceProvider, screenTarget);
+		this.starfieldEffect = new Starfield(textureManager, resourceProvider, screenTarget, true, 1024, 1024);	// TODO: config file manager to set height & width
+		//this.occlusionExtractor;
+		//this.godRayEffect;
+		//this.swirlEffect;
+		//this.groundFogEffect;
+
+		Minecraft.getInstance().getTextureManager().register(GAS_PARTICLE_TEXTURE, new GLTextureObjectWrapper(this.gasWarpEffect.gasTextureTarget.getColorTextureId()));
 	}
 
-	@Override
+	public void cleanUp() {
+		clearLights();
+	}
+
+	/**
+	 * TODO: cleanup
+	 */
 	protected void deleteEffect() {
 		if (this.depthBuffer != null)
-			this.depthBuffer.deleteBuffer();
+			this.depthBuffer.destroyBuffers();
 
 		if (this.blitBuffer != null)
-			this.blitBuffer.delete();
+			this.blitBuffer.destroyBuffers();
 
 		if (this.occlusionBuffer != null)
-			this.occlusionBuffer.delete();
+			this.occlusionBuffer.destroyBuffers();
 
 		if (this.repellerShieldBuffer != null)
-			this.repellerShieldBuffer.deleteBuffers();
+			this.repellerShieldBuffer.destroyBuffers();
 
 		if (this.gasParticlesBuffer != null)
-			this.gasParticlesBuffer.deleteBuffers();
-
-		if (this.gasTextureBaseFramebuffer != null)
-			this.gasTextureBaseFramebuffer.destroyBuffers();
-
-		if (this.gasTextureFramebuffer != null)
-			this.gasTextureFramebuffer.destroyBuffers();
-
-		if (this.starfieldTextureFramebuffer != null)
-			this.starfieldTextureFramebuffer.destroyBuffers();
+			this.gasParticlesBuffer.destroyBuffers();
 
 		if (this.gasWarpEffect != null)
-			this.gasWarpEffect.delete();
+			this.gasWarpEffect.close();
 
 		if (this.starfieldEffect != null)
-			this.starfieldEffect.delete();
+			this.starfieldEffect.close();
 
 		if (this.occlusionExtractor != null)
 			this.occlusionExtractor.delete();
@@ -161,53 +180,23 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			this.groundFogEffect.delete();
 	}
 
-	@Override
+
+	/**
+	 * TODO: move into constructor once additional effects are ported. <br>
+	 * DEV NOTE: Keep for reference.
+	 */
 	protected boolean initEffect() {
-		//Get uniforms
-		this.depthUniformID = this.getUniform("s_diffuse_depth");
-		this.repellerDiffuseUniformID = this.getUniform("s_repellerShield");
-		this.repellerDepthUniformID = this.getUniform("s_repellerShield_depth");
-		this.gasParticlesDiffuseUniformID = this.getUniform("s_gasParticles");
-		this.gasParticlesDepthUniformID = this.getUniform("s_gasParticles_depth");
-		this.invMVPUniformID = this.getUniform("u_INVMVP");
-		int fogModeUniformID = this.getUniform("u_fogMode");
-		this.msTimeUniformID = this.getUniform("u_msTime");
-		this.worldTimeUniformID = this.getUniform("u_worldTime");
-		this.viewPosUniformID = this.getUniform("u_viewPos");
-		this.renderPosUniformID = this.getUniform("u_renderPos");
-
-		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
-			this.lightSourcePositionUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].position");
-		}
-
-		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
-			this.lightSourceColorUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].color");
-		}
-
-		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
-			this.lightSourceRadiusUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].radius");
-		}
-
-		this.lightSourceAmountUniformID = this.getUniform("u_lightSourcesAmount");
-
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
-		//Initialize framebuffers
-		this.depthBuffer = new DepthBuffer(textureManager, WORLD_DEPTH_TEXTURE);
-		this.blitBuffer = new ResizableFramebuffer(false);
-		this.occlusionBuffer = new ResizableFramebuffer(false);
-		this.repellerShieldBuffer = new GeometryBuffer(textureManager, REPELLER_DIFFUSE_TEXTURE, REPELLER_DEPTH_TEXTURE, true);
-		this.gasParticlesBuffer = new GeometryBuffer(textureManager, GAS_PARTICLES_DIFFUSE_TEXTURE, GAS_PARTICLES_DEPTH_TEXTURE, true);
-
 		//Initialize gas textures and effect
-		this.gasTextureFramebuffer = new TextureTarget(64, 64, false, Minecraft.ON_OSX);
-		Minecraft.getInstance().getTextureManager().register(GAS_PARTICLE_TEXTURE, new GLTextureObjectWrapper(this.gasTextureFramebuffer.getColorTextureId()));
-		this.gasTextureBaseFramebuffer = new TextureTarget(64, 64, false, Minecraft.ON_OSX);
-		this.gasWarpEffect = new Warp().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F).init();
+		//this.gasTextureFramebuffer = new TextureTarget(64, 64, false, Minecraft.ON_OSX);
+		//Minecraft.getInstance().getTextureManager().register(GAS_PARTICLE_TEXTURE, new GLTextureObjectWrapper(this.gasTextureFramebuffer.getColorTextureId()));
+		//this.gasTextureBaseFramebuffer = new TextureTarget(64, 64, false, Minecraft.ON_OSX);
+		//this.gasWarpEffect = new Warp().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F).init();
 
 		//Initialize starfield texture and effect
-		this.starfieldTextureFramebuffer = new TextureTarget(BetweenlandsConfig.skyResolution, BetweenlandsConfig.skyResolution, false, Minecraft.ON_OSX);
-		this.starfieldEffect = new Starfield(true).init();
+		//this.starfieldTextureFramebuffer = new TextureTarget(BetweenlandsConfig.skyResolution, BetweenlandsConfig.skyResolution, false, Minecraft.ON_OSX);
+		//this.starfieldEffect = new Starfield(true).init();
 
 		//Initialize occlusion extractor and god's ray effect
 		this.occlusionExtractor = new OcclusionExtractor().init();
@@ -239,51 +228,35 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		return 0;
 	};
 
-	@Override
-	protected void uploadUniforms(float partialTicks) {
-		this.uploadSampler(this.depthUniformID, this.depthBuffer.getId(), 1);
-		this.uploadSampler(this.repellerDiffuseUniformID, this.repellerShieldBuffer.getDiffuseTexture(), 2);
-		this.uploadSampler(this.repellerDepthUniformID, this.repellerShieldBuffer.getDepthTexture(), 3);
-		this.uploadSampler(this.gasParticlesDiffuseUniformID, this.gasParticlesBuffer.getDiffuseTexture(), 4);
-		this.uploadSampler(this.gasParticlesDepthUniformID, this.gasParticlesBuffer.getDepthTexture(), 5);
+	public void uploadUniforms(float partialTicks) {
+		this.invMVPUniform.set(invertedModelviewProjectionMatrix);
+		//this.MVPUniform.set(modelviewProjectionMatrix);
+		this.viewPosUniform.set(this.cameraPos);
+		//this.screenSize.set((float)Minecraft.getInstance().getWindow().getWidth(), (float)Minecraft.getInstance().getWindow().getHeight());
 
-		this.uploadMatrix4f(this.invMVPUniformID, this.invertedModelviewProjectionMatrix);
-		//this.uploadInt(this.fogModeUniformID, FogHandler.getCurrentFogMode());
+		float[] positionBuff = new float[96];
+		float[] colorBuff = new float[96];
 
 		//Sort lights by distance
-		this.lightSources.sort(LIGHT_SOURCE_SORTER);
+		Collections.sort(this.lightSources, LIGHT_SOURCE_SORTER);
 
-		final int renderedLightSources = Math.min(MAX_LIGHT_SOURCES_PER_PASS, this.lightSources.size() - this.currentRenderPass * MAX_LIGHT_SOURCES_PER_PASS);
+		if (!lightSources.isEmpty()) {
+			for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS && i < lightSources.size(); i++) {
+				positionBuff[(i*3)] = ((float) this.lightSources.get(i).x - this.cameraPos.x);
+				positionBuff[(i*3)+1] = ((float) this.lightSources.get(i).y - this.cameraPos.y);
+				positionBuff[(i*3)+2] = ((float) this.lightSources.get(i).z - this.cameraPos.z);
+				colorBuff[(i*3)] = (this.lightSources.get(i).r);
+				colorBuff[(i*3)+1] = (this.lightSources.get(i).g);
+				colorBuff[(i*3)+2] = (this.lightSources.get(i).b);
 
-		final double renderPosX = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x();
-		final double renderPosY = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y();
-		final double renderPosZ = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z();
+				lightSourceRadiusUniforms.set(i, this.lightSources.get(i).radius);
+			}
 
-		for (int i = 0; i < renderedLightSources; i++) {
-			LightSource lightSource = this.lightSources.get(this.currentRenderPass * MAX_LIGHT_SOURCES_PER_PASS + i);
-			this.uploadFloat(this.lightSourcePositionUniformIDs[i], (float) (lightSource.x - renderPosX), (float) (lightSource.y - renderPosY), (float) (lightSource.z - renderPosZ));
-			this.uploadFloat(this.lightSourceColorUniformIDs[i], lightSource.r, lightSource.g, lightSource.b);
-			this.uploadFloat(this.lightSourceRadiusUniformIDs[i], lightSource.radius);
+			lightSourcePositionUniforms.set(positionBuff);
+			lightSourceColorUniforms.set(colorBuff);
 		}
 
-		this.uploadInt(this.lightSourceAmountUniformID, renderedLightSources);
-		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
-		this.uploadFloat(this.worldTimeUniformID, RenderUtils.getRenderTickCounter() + partialTicks);
-
-		Entity renderView = Minecraft.getInstance().getCameraEntity();
-		Vec3 camPos = renderView != null ? projectViewFromEntity(Minecraft.getInstance().getCameraEntity(), partialTicks) : Vec3.ZERO;
-		this.uploadFloat(this.viewPosUniformID, (float)(camPos.x - renderPosX), (float)(camPos.y - renderPosY), (float)(camPos.z - renderPosZ));
-
-		this.uploadFloat(this.renderPosUniformID, (float)renderPosX, (float)renderPosY, (float)renderPosZ);
-	}
-
-	/**
-	 * Updates the depth buffer
-	 */
-	public void updateDepthBuffer() {
-		this.depthBuffer.blitDepthBuffer(this.getMainFramebuffer());
-		this.getMainFramebuffer().bindWrite(false);
-		RenderSystem.bindTexture(0);
+		lightSourceAmountUniform.set(Math.min(this.lightSources.size(), 32));
 	}
 
 	/**
@@ -300,24 +273,23 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 *
 	 * @return
 	 */
-	public DepthBuffer getDepthBuffer() {
+	public RenderTarget getDepthBuffer() {
 		return this.depthBuffer;
 	}
 
 	/**
 	 * Updates following matrices: MV (Modelview), PM (Projection), MVP (Modelview x Projection), INVMVP (Inverted MVP)
 	 */
-	public void updateMatrices() {
-		GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, MODELVIEW);
-		GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, PROJECTION);
-		Matrix4f modelviewMatrix = new Matrix4f().set(MODELVIEW.asReadOnlyBuffer());
-		this.modelviewMatrix = modelviewMatrix;
-		Matrix4f projectionMatrix = new Matrix4f().set(PROJECTION.asReadOnlyBuffer());
-		this.projectionMatrix = projectionMatrix;
-		Matrix4f MVP = new Matrix4f();
-		MVP.mul(projectionMatrix, modelviewMatrix);
-		this.modelviewProjectionMatrix = MVP;
-		this.invertedModelviewProjectionMatrix = MVP.invert(new Matrix4f());
+	public void updateMatrices(final RenderLevelStageEvent event) {
+		this.cameraPos = event.getCamera().getPosition().toVector3f();
+		this.modelviewMatrix = event.getModelViewMatrix().transpose(new Matrix4f());
+		this.projectionMatrix = event.getProjectionMatrix().transpose(new Matrix4f());
+		this.invertedModelviewProjectionMatrix = new Matrix4f();
+
+		Matrix4f MVP = this.modelviewMatrix.mul(this.projectionMatrix);
+		MVP.invert(this.invertedModelviewProjectionMatrix);
+
+		this.invertedModelviewProjectionMatrix = invertedModelviewProjectionMatrix.assume(0);
 	}
 
 	/**
@@ -348,15 +320,6 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	}
 
 	/**
-	 * Returns the modelview buffer
-	 *
-	 * @return
-	 */
-	public FloatBuffer getModelviewBuffer() {
-		return MODELVIEW;
-	}
-
-	/**
 	 * Returns the projection matrix
 	 *
 	 * @return
@@ -366,19 +329,10 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	}
 
 	/**
-	 * Returns the projection buffer
-	 *
-	 * @return
-	 */
-	public FloatBuffer getProjectionBuffer() {
-		return PROJECTION;
-	}
-
-	/**
 	 * Returns the gas particle geometry buffer
 	 * @return
 	 */
-	public GeometryBuffer getGasParticleBuffer() {
+	public RenderTarget getGasParticleBuffer() {
 		return this.gasParticlesBuffer;
 	}
 
@@ -386,7 +340,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 * Returns the repeller shield geometry buffer
 	 * @return
 	 */
-	public GeometryBuffer getRepellerShieldBuffer() {
+	public RenderTarget getRepellerShieldBuffer() {
 		return this.repellerShieldBuffer;
 	}
 
@@ -455,7 +409,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 * @return
 	 */
 	public int getGasTexture() {
-		return this.gasTextureFramebuffer != null ? this.gasTextureFramebuffer.getColorTextureId() : -1;
+		return this.gasWarpEffect.gasTextureTarget != null ? this.gasWarpEffect.gasTextureTarget.getColorTextureId() : -1;
 	}
 
 	/**
@@ -464,7 +418,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 * @return
 	 */
 	public int getStarfieldTexture() {
-		return this.starfieldTextureFramebuffer != null ? this.starfieldTextureFramebuffer.getColorTextureId() : -1;
+		return this.starfieldEffect.starfieldTexture != null ? this.starfieldEffect.starfieldTexture.getColorTextureId() : -1;
 	}
 
 	/**
@@ -480,6 +434,9 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 			//Update starfield texture
 			this.updateStarfieldTexture(partialTicks);
+
+			// Reset main render target
+			Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 		}
 	}
 
@@ -489,6 +446,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 * @param partialTicks
 	 */
 	public void renderPostEffects(float partialTicks) {
+		/*
 		Window window = Minecraft.getInstance().getWindow();
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
@@ -497,12 +455,15 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		GL11.glLoadIdentity();
 		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
 
-		this.applyGroundFog(partialTicks);
-		this.applyBloodSky(partialTicks);
+		//this.applyGroundFog(partialTicks);
+		//this.applyBloodSky(partialTicks);
 		this.applySwirl(partialTicks);
+		*/
 	}
 
+
 	private void applyGroundFog(float partialTicks) {
+		/*
 		if(!this.groundFogVolumes.isEmpty()) {
 			RenderTarget mainFramebuffer = Minecraft.getInstance().getMainRenderTarget();
 			RenderTarget blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.viewWidth, mainFramebuffer.viewHeight);
@@ -515,9 +476,11 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			.setMirrorY(true)
 			.render(partialTicks);
 		}
+		*/
 	}
 
 	private void applyBloodSky(float partialTicks) {
+		/*
 		float skyTransparency = 0.0F;
 
 		boolean hasBeat = false;
@@ -632,6 +595,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		GL11.glVertex3f(0, 0, 0);
 		GL11.glEnd();
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		*/
 	}
 
 	/**
@@ -655,6 +619,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	}
 
 	private void applySwirl(float partialTicks) {
+		/*
 		float interpolatedSwirlAngle = this.getSwirlAngle(partialTicks);
 
 		if (interpolatedSwirlAngle != 0.0F) {
@@ -669,11 +634,13 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			.setPreviousFramebuffer(mainFramebuffer)
 			.render(partialTicks);
 		}
+		*/
 	}
 
 
 	private void updateGasParticlesTexture(ClientLevel level, float partialTicks) {
-		boolean hasCloud = false;//DefaultParticleBatches.GAS_CLOUDS_TEXTURED.getParticles().size() > 0 || DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.getParticles().size() > 0;
+		// No easy way to check for this yet sorry :(
+		boolean hasCloud = true;//DefaultParticleBatches.GAS_CLOUDS_TEXTURED.getParticles().size() > 0 || DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.getParticles().size() > 0;
 //		if(!hasCloud) {
 //			for (Entity entity : level.entitiesForRendering()) {
 //				if (entity instanceof EntityGasCloud) {
@@ -684,37 +651,20 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 //		}
 		if (hasCloud) {
 			//Update gas texture
-			float worldTimeInterp = RenderUtils.getRenderTickCounter() + partialTicks;
-			float offsetX = ((float) Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
-			float offsetY = ((float) Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
-			this.gasWarpEffect.setOffset(offsetX, offsetY)
-			.setWarpDir(0.75F, 0.75F).setScale(1.8F);
+			this.gasWarpEffect.uploadUniforms(partialTicks);
+			this.gasWarpEffect.process(partialTicks);
 
-			this.gasTextureFramebuffer.bindWrite(false);
-			RenderSystem.clearColor(1, 1, 1, 1);
-			RenderSystem.clear(GL11.GL_COLOR_BUFFER_BIT, Minecraft.ON_OSX);
-
-			this.gasTextureBaseFramebuffer.bindWrite(false);
-			RenderSystem.clearColor(1, 1, 1, 1);
-			RenderSystem.clear(GL11.GL_COLOR_BUFFER_BIT, Minecraft.ON_OSX);
-
-			this.gasWarpEffect.create(this.gasTextureFramebuffer)
-			.setSource(this.gasTextureBaseFramebuffer.getColorTextureId())
-			.setPreviousFramebuffer(Minecraft.getInstance().getMainRenderTarget())
-			.render(partialTicks);
+			// Retarget Minecraft MainRenderTarget
+			Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
 		}
 	}
 
 	private void updateStarfieldTexture(float partialTicks) {
 		float offX = (float) (Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x() / 8000.0D);
 		float offY = (float) (Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z() / 8000.0D);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 		this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, 0);
-		this.starfieldEffect.create(this.starfieldTextureFramebuffer)
-		.setPreviousFramebuffer(Minecraft.getInstance().getMainRenderTarget())
-		.setRenderDimensions(BetweenlandsConfig.skyResolution, BetweenlandsConfig.skyResolution)
-		.render(partialTicks);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		this.starfieldEffect.process(partialTicks);
+		Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 	}
 
 	public static Vec3 projectViewFromEntity(Entity entity, double partialTicks) {
@@ -722,5 +672,16 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		double d1 = entity.yo + (entity.getY() - entity.yo) * partialTicks;
 		double d2 = entity.zo + (entity.getZ() - entity.zo) * partialTicks;
 		return new Vec3(d0, d1, d2);
+	}
+
+	/**
+	 * Used to target a specific PostPass uniform value.
+	 * @param index
+	 * @param name
+	 * @return uniform in PostPass index (index) with key of (name)
+	 */
+	public Uniform getUniform(int index, String name) {
+		if (passes.isEmpty()) return null;
+		return this.passes.get(index).getEffect().getUniform(name);
 	}
 }

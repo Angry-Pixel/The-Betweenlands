@@ -1,43 +1,17 @@
 package thebetweenlands.client.sky;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Axis;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
-import org.joml.Vector2d;
-import org.joml.Vector4f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 import thebetweenlands.api.sky.BetweenlandsSky;
 import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.client.shader.GeometryBuffer;
-import thebetweenlands.client.shader.ShaderHelper;
-import thebetweenlands.client.shader.postprocessing.WorldShader;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.EnvironmentEventRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.Mesh;
-import thebetweenlands.util.Mesh.Triangle;
-import thebetweenlands.util.Mesh.Triangle.Vertex;
-import thebetweenlands.util.Mesh.Triangle.Vertex.Vector3D;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class BLSkyRenderer implements BetweenlandsSky {
+public abstract class BLSkyRenderer implements BetweenlandsSky {
 	public static final ResourceLocation SKY_TEXTURE = TheBetweenlands.prefix("textures/sky/sky_texture.png");
 	public static final ResourceLocation SKY_SPOOPY_TEXTURE = TheBetweenlands.prefix("textures/sky/spoopy.png");
 	public static final ResourceLocation FOG_TEXTURE = TheBetweenlands.prefix("textures/sky/fog_texture.png");
@@ -60,6 +34,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 	@Nullable
 	private static RiftRenderer blRiftRenderer;
 
+	/*
 	public BLSkyRenderer() {
 		if (clipPlaneBuffer == null) {
 			clipPlaneBuffer = new GeometryBuffer(Minecraft.getInstance().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
@@ -199,7 +174,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		RenderSystem.disableBlend();
 
-		if (true/*world.provider.isSkyColored()*/) {
+		if (true/*world.provider.isSkyColored()*//*) {
 			RenderSystem.setShaderColor(skyR * 0.2F + 0.04F, skyG * 0.2F + 0.04F, skyB * 0.6F + 0.1F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
 		} else {
 			RenderSystem.setShaderColor(skyR, skyG, skyB, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
@@ -440,7 +415,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 				 * 1-----4
 				 * |     |
 				 * 2-----3
-				 */
+				 *//*
 				Vec3 tp1 = new Vec3(tx * tileSize, 0, tz * tileSize);
 				tp1 = cp.add(tp1.subtract(cp).normalize().scale(radius)).add(yOffset);
 
@@ -601,4 +576,5 @@ public class BLSkyRenderer implements BetweenlandsSky {
 	public IRiftRenderer getRiftRenderer() {
 		return this.riftRenderer;
 	}
+	*/
 }

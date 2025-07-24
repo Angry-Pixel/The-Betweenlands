@@ -1,0 +1,18 @@
+{
+  "targets": [
+    {
+      "name": "dummy"
+    },
+    {
+      "name": "output"
+    }
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:starfield/starfield_faded",
+      "intarget": "dummy",
+      "outtarget": "output",
+      "use_linear_filter": true
+    }
+  ]
+}

@@ -84,7 +84,7 @@ public class EntityRegistry {
 	//pyrad
 	//rock snot
 	public static final DeferredHolder<EntityType<?>, EntityType<RootSprite>> ROOT_SPRITE = registerWithEgg("root_sprite", EntityType.Builder.of(RootSprite::new, MobCategory.CREATURE).sized(0.3F, 0.55F), 0x5D533D, 0x8F952B, RootSprite::registerAttributes);
-	//shallowbreath
+	public static final DeferredHolder<EntityType<?>, EntityType<GasCloud>> SHALLOWBREATH = registerWithEgg("shallowbreath", EntityType.Builder.of(GasCloud::new, MobCategory.MONSTER).sized(1.75F,1.75F), 0x61988D, 0x4C7F76, GasCloud::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Shambler>> SHAMBLER = registerWithEgg("shambler", EntityType.Builder.of(Shambler::new, MobCategory.MONSTER).sized(0.95F, 1.25F), 0x14331C, 0xCD5472, Shambler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<SiltCrab>> SILT_CRAB = registerWithEgg("silt_crab", EntityType.Builder.of(SiltCrab::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F), 0x468282, 0xBC4114, SiltCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Sludge>> SLUDGE = registerWithEgg("sludge", EntityType.Builder.of(Sludge::new, MobCategory.MONSTER).sized(1.1F, 1.2F).fireImmune(), 0x726459, 0x726459, Sludge::registerAttributes);

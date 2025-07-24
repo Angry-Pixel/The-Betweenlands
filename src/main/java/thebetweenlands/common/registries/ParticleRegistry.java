@@ -47,6 +47,8 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DRIPPING_TAR = PARTICLES.register("dripping_tar", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FALLING_TAR = PARTICLES.register("falling_tar", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LANDING_TAR = PARTICLES.register("landing_tar", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GAS_CLOUD = PARTICLES.register("gas_cloud", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GAS_CLOUD_HAZE = PARTICLES.register("gas_cloud_haze", () -> new SimpleParticleType(false));
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {

@@ -1,14 +1,12 @@
 package thebetweenlands.client.shader;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.util.Mth;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import org.lwjgl.opengl.*;
-
-import net.minecraft.client.Minecraft;
+import thebetweenlands.client.shader.postprocessing.Starfield;
 import thebetweenlands.client.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.shader.postprocessing.WorldShader;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -32,7 +30,7 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	@Nullable
 	private Tonemapper toneMappingShader = null;
 	@Nullable
-	private ResizableFramebuffer blitBuffer = null;
+	public Starfield menuStarfieldEffect = null;
 
 	private boolean shadersUpdated = false;
 	private boolean required = false;
@@ -70,6 +68,7 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	 * @return
 	 */
 	public boolean isWorldShaderActive() {
+		//return true;
 		return this.canUseShaders() && this.worldShader != null;
 	}
 
@@ -144,17 +143,19 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	/**
 	 * initializes the main shader if necessary
 	 */
-	public void initShaders() {
+	public void initShaders(ResourceProvider resourceProvider) {
 		if(this.canUseShaders()) {
 			try {
 				if(this.worldShader == null) {
-					this.worldShader = new WorldShader().init();
+					this.worldShader = new WorldShader(Minecraft.getInstance().getTextureManager(), resourceProvider, Minecraft.getInstance().getMainRenderTarget());
+					this.worldShader.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight());
 				}
-				if(this.blitBuffer == null) {
-					this.blitBuffer = new ResizableFramebuffer(false);
-				}
-				if(this.toneMappingShader == null && this.isHDRActive()) {
-					this.toneMappingShader = new Tonemapper().init();
+				//if(this.toneMappingShader == null && this.isHDRActive()) {
+				//	this.toneMappingShader = new Tonemapper().init();
+				//}
+				if (menuStarfieldEffect == null) {
+					this.menuStarfieldEffect = new Starfield(Minecraft.getInstance().getTextureManager(), resourceProvider, Minecraft.getInstance().getMainRenderTarget(), false, 1024, 1024);
+					this.menuStarfieldEffect.setTimeScale(0.00000000005F).setZoom(4.8F);
 				}
 			} catch(Exception ex) {
 				this.shaderError = ex;
@@ -170,8 +171,8 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 		if(this.canUseShaders()) {
 			try {
 				if(this.isRequired()) {
-					this.worldShader.updateDepthBuffer();
-					this.worldShader.updateMatrices();
+					//this.worldShader.updateDepthBuffer();
+					//this.worldShader.updateMatrices();
 					this.worldShader.updateTextures(partialTicks);
 
 					this.shadersUpdated = true;
@@ -187,6 +188,11 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	 * Renders the main shader to the screen
 	 */
 	public void renderShaders(float partialTicks) {
+		RenderSystem.depthMask(false);
+		ShaderHelper.INSTANCE.getWorldShader().uploadUniforms(partialTicks);
+		ShaderHelper.INSTANCE.getWorldShader().process(partialTicks);
+
+		/*
 		if(this.shadersUpdated && this.worldShader != null && this.isRequired() && this.canUseShaders()) {
 			RenderTarget mainFramebuffer = Minecraft.getInstance().getMainRenderTarget();
 
@@ -281,6 +287,7 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 			this.shadersUpdated = false;
 			this.required = false;
 		}
+		*/
 	}
 
 	/**
@@ -289,13 +296,13 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	public void deleteShaders() {
 		this.shaderError = null;
 
-		if(this.worldShader != null)
-			this.worldShader.delete();
-		this.worldShader = null;
+		//if(this.worldShader != null)
+		//	this.worldShader.delete();
+		//this.worldShader = null;
 
-		if(this.blitBuffer != null)
-			this.blitBuffer.delete();
-		this.blitBuffer = null;
+		//if(this.blitBuffer != null)
+		//	this.blitBuffer.delete();
+		//this.blitBuffer = null;
 
 		if(this.toneMappingShader != null)
 			this.toneMappingShader.delete();

@@ -1,7 +1,6 @@
 package thebetweenlands.common.datagen.loot;
 
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.EntitySubPredicates;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.EntityLootSubProvider;
@@ -14,7 +13,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
-import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
+import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -206,6 +208,8 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		this.add(EntityRegistry.TINY_SLUDGE_WORM.get(), LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
+
+		this.noLoot(EntityRegistry.SHALLOWBREATH);
 
 		this.noLoot(EntityRegistry.TINY_SLUDGE_WORM_HELPER);
 

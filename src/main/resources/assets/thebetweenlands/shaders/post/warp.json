@@ -1,0 +1,22 @@
+{
+  "targets": [
+    {
+      "name": "input",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "name": "output",
+      "width": 64,
+      "height": 64
+    }
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:warp/warp",
+      "intarget": "input",
+      "outtarget": "output",
+      "use_linear_filter": true
+    }
+  ]
+}

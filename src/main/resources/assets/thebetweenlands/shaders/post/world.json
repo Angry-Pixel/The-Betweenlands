@@ -1,0 +1,58 @@
+{
+  "targets": [
+    "swap"
+  ],
+  "targets": [
+    {
+      "name": "s_diffuse_depth",
+      "depth": true
+    },
+    {
+      "name": "s_repellerShield",
+      "depth": true
+    },
+    {
+      "name": "s_gasParticles",
+      "depth": true
+    },
+    {
+      "name": "swap"
+    }
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:world/world",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "s_diffuse_depth",
+          "id": "s_diffuse_depth:depth"
+        },
+        {
+          "name": "s_repellerShield",
+          "id": "s_repellerShield"
+        },
+        {
+          "name": "s_repellerShield_depth",
+          "id": "s_repellerShield:depth"
+        },
+        {
+          "name": "s_gasParticles",
+          "id": "s_gasParticles"
+        },
+        {
+          "name": "s_gasParticles_depth",
+          "id": "s_gasParticles:depth"
+        }
+      ],
+      "use_linear_filter": true
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main",
+      "use_linear_filter": true
+    }
+  ]
+}

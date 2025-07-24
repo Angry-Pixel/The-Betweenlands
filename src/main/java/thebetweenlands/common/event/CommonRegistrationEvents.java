@@ -12,7 +12,10 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,6 +23,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -33,11 +37,16 @@ import net.neoforged.neoforge.items.VanillaHopperItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import net.neoforged.neoforge.registries.*;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.client.handler.ShaderHandler;
+import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
@@ -48,17 +57,7 @@ import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BLLootProvider;
 import thebetweenlands.common.datagen.tags.*;
-import thebetweenlands.common.entity.boss.Barrishee;
-import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
-import thebetweenlands.common.entity.creature.Gecko;
-import thebetweenlands.common.entity.creature.Greebling;
-import thebetweenlands.common.entity.creature.GreeblingCoracle;
-import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.creature.frog.FrogVariant;
-import thebetweenlands.common.entity.fishing.BubblerCrab;
-import thebetweenlands.common.entity.fishing.SiltCrab;
-import thebetweenlands.common.entity.fishing.anadia.Anadia;
-import thebetweenlands.common.entity.monster.*;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.clientbound.attachment.*;
@@ -84,6 +83,7 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerPackets);
 		bus.addListener(CommonRegistrationEvents::registerDataMaps);
 		bus.addListener(CommonRegistrationEvents::registerCapabilities);
+		bus.addListener(CommonRegistrationEvents::registerShaders);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
 
@@ -295,5 +295,10 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new InvWrapper(tile));
 
 		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
+	}
+
+	private static void registerShaders(final RegisterShadersEvent event) {
+		ShaderHandler.loadWorldShader(event.getResourceProvider());
+		ShaderHelper.INSTANCE.initShaders(event.getResourceProvider());
 	}
 }
