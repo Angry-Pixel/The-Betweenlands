@@ -34,7 +34,6 @@ public class ShaderHandler {
 	 * Initializes depth composite helpers
 	 */
     public static void loadWorldShader(ResourceProvider resourceProvider) {
-		// TODO: split up into individual try/catch nests
         try {
             diffBlitDepth = new DiffBlitDepth(Minecraft.getInstance().getTextureManager(), resourceProvider, Minecraft.getInstance().getMainRenderTarget());
 		} catch (IOException ioexception) {
@@ -48,7 +47,7 @@ public class ShaderHandler {
 	 * - Copies depth buffer data before renderItemInHand clears main depth buffer (only on Fantastic graphics).<br>
 	 * - Collects viewport matrices for WorldShader.
 	 */
-	public static void onRenderLevelStage(final RenderLevelStageEvent event) {
+	public static void onRenderWeather(final RenderLevelStageEvent event) {
 
 		// Fetch depth and matrix data before debug elements render
 		if (event.getStage() == AFTER_WEATHER) {
@@ -105,22 +104,24 @@ public class ShaderHandler {
 		Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
 	}
 
-	// TODO: clean up
-    public static void onRenderWorldLastHighest(RenderLevelStageEvent event) {
+	/**
+	 * On render level stage AFTER_LEVEL call updateShaders
+	 */
+    public static void onRenderWorldLast(RenderLevelStageEvent event) {
         if (event.getStage() == AFTER_LEVEL) {
-            updateShaders(event);
+            updateShaders(event.getPartialTick().getRealtimeDeltaTicks());
         }
     }
 
-	// TODO: clean up
-    private static void updateShaders(RenderLevelStageEvent event) {
+	/**
+	 * Calls shader instance to update and redraw shader textures
+	 */
+    private static void updateShaders(float partialTick) {
         if(ShaderHelper.INSTANCE.canUseShaders()) {
             //Initialize and update shaders and textures
-            ShaderHelper.INSTANCE.updateShaders(event.getPartialTick().getRealtimeDeltaTicks());
+            ShaderHelper.INSTANCE.updateShaders(partialTick);
         }
     }
-
-	//	------------- Mixin hooks -------------
 
 	/**
 	 *  On GameRender.resize

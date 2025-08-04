@@ -35,9 +35,8 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderMobsOnFrame);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::changeFOV);
 
-		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWorldLastHighest);
-
-		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderLevelStage);
+		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWorldLast);
+		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWeather);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

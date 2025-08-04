@@ -23,7 +23,7 @@ public interface BLParticleRenderType extends ParticleRenderType {
 			// Dynamic gas texture
 
 			if (true) {
-				RenderSystem.setShaderTexture(0, ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture());
+				RenderSystem.setShaderTexture(0, ShaderHelper.INSTANCE.getWorldShader().getGasTexture());
 			}
 
 			RenderSystem.disableDepthTest();
