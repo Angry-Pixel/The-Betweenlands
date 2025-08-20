@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -49,12 +50,24 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	private final List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
-	public static BetweenlandsWorldStorage create(IAttachmentHolder attachmentHolder) {
-		if(!(attachmentHolder instanceof Level level)) throw new IllegalArgumentException("World storage attachments must be registered to a Level!");
+	public static BetweenlandsWorldStorage create(IAttachmentHolder holder) {
+		if(!(holder instanceof Level level)) {
+//			throw new IllegalArgumentException("World storage attachments must be registered to a Level!");
+			TheBetweenlands.LOGGER.warn("Tried to attach level-only world storage attachment to non-level {}", holder);
+			return null;
+		}
 		BetweenlandsWorldStorage worldStorage = new BetweenlandsWorldStorage();
 		worldStorage.setLevel(level);
-		worldStorage.init();
+//		worldStorage.init();
 		return worldStorage;
+	}
+	
+	public static BetweenlandsWorldStorage copy(BetweenlandsWorldStorage attachment, IAttachmentHolder holder, HolderLookup.Provider provider) {
+		if(!(holder instanceof Level)) {
+			TheBetweenlands.LOGGER.warn("Tried to copy level-only world storage attachment to non-level {}", holder);
+			return null;
+		}
+		return WorldStorageSerializer.deserialize(holder, WorldStorageSerializer.serialize(attachment, provider), provider);
 	}
 	
 //	@Override
@@ -191,7 +204,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	public static Optional<BetweenlandsWorldStorage> getForLevel(Level level) {
 		if(TheBetweenlands.isBetweenlands(level)) {
-			return Optional.of(getOrCreateForLevel(level));
+			return Optional.ofNullable(getOrCreateForLevel(level));
 		} else {
 			return getExistingForLevel(level);
 		}
@@ -212,7 +225,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	public static Optional<BetweenlandsWorldStorage> get(Level level) {
 		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
 		if(betweenlandsLevel != null) {
-			return Optional.of(getOrCreateForLevel(betweenlandsLevel));
+			return Optional.ofNullable(getOrCreateForLevel(betweenlandsLevel));
 		}
 		return Optional.empty();
 	}

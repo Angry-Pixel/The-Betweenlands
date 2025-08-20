@@ -19,6 +19,15 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 
 	@Override
 	public @Nullable CompoundTag write(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
+		return serialize(storage, registries);
+	}
+
+	@Override
+	public BetweenlandsWorldStorage read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
+		return deserialize(holder, tag, registries);
+	}
+	
+	public static @Nullable CompoundTag serialize(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
 		CompoundTag tag = new CompoundTag();
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
 			event.writeToNBT(tag, registries);
@@ -44,11 +53,11 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		return tag;
 	}
 
-	@Override
-	public BetweenlandsWorldStorage read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
-		if(!(holder instanceof Level level)) throw new IllegalArgumentException("World storage attachments must be registered to a Level!");
-		BetweenlandsWorldStorage storage = new BetweenlandsWorldStorage();
-		storage.setLevel(level);
+	public static BetweenlandsWorldStorage deserialize(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.create(holder);
+		if(storage == null) {
+			return null;
+		}
 		
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
 			event.readFromNBT(tag, registries);
