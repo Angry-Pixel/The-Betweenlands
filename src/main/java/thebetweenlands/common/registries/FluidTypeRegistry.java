@@ -8,6 +8,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.fluid.RubberFluidType;
+import thebetweenlands.common.fluid.TarFluidType;
 
 //TODO fluids have a LOT more flexibility nowadays. Perhaps we should look into making our fluids more unique
 public class FluidTypeRegistry {
@@ -41,7 +43,7 @@ public class FluidTypeRegistry {
 		.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
 		.canHydrate(true)));
 
-	public static final DeferredHolder<FluidType, FluidType> TAR = FLUID_TYPES.register("tar", () -> new FluidType(FluidType.Properties.create()
+	public static final DeferredHolder<FluidType, FluidType> TAR = FLUID_TYPES.register("tar", () -> new TarFluidType(FluidType.Properties.create()
 		.descriptionId("block.thebetweenlands.tar")
 		.canSwim(false)
 		.motionScale(0.002D)
@@ -54,7 +56,7 @@ public class FluidTypeRegistry {
 		.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 		.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)));
 
-	public static final DeferredHolder<FluidType, FluidType> RUBBER = FLUID_TYPES.register("rubber", () -> new FluidType(FluidType.Properties.create()
+	public static final DeferredHolder<FluidType, FluidType> RUBBER = FLUID_TYPES.register("rubber", () -> new RubberFluidType(FluidType.Properties.create()
 		.descriptionId("block.thebetweenlands.rubber")
 		.canSwim(false)
 		.motionScale(0.002D)

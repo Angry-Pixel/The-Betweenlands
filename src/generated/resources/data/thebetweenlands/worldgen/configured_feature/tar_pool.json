@@ -4,6 +4,7 @@
     "fluid": {
       "Name": "thebetweenlands:tar",
       "Properties": {
+        "boiling": "false",
         "level": "0"
       }
     },

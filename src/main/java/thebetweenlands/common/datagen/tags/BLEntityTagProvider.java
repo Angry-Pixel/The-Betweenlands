@@ -27,6 +27,12 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 	public static final TagKey<EntityType<?>> SPIKE_TRAP_IMMUNE = tag("spike_trap_immune");
 //	public static final TagKey<EntityType<?>> TRIGGER_SPIKE_TRAPS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("trigger_spike_traps"));
 
+	public static final TagKey<EntityType<?>> TAR_BEING = tag("tar_being"); // creature type tag for tar-based things, I guess
+	public static final TagKey<EntityType<?>> CAN_BREATHE_UNDER_TAR = tag("can_breathe_under_tar");
+	public static final TagKey<EntityType<?>> IMMUNE_TO_TAR_SLOWDOWN = tag("immune_to_tar_slowdown");
+	
+	public static final TagKey<EntityType<?>> IMMUNE_TO_RUBBER_SLOWDOWN = tag("immune_to_rubber_slowdown");
+	
 	public BLEntityTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
@@ -37,7 +43,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(WIGHTS_BANE_INSTAKILLS).add(EntityRegistry.WIGHT.get());
 		this.tag(HAG_HACKER_INSTAKILLS).add(EntityRegistry.SWAMP_HAG.get());
 		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.MIRE_SNAIL.get());
-		this.tag(Tags.EntityTypes.BOSSES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get());
+		this.tag(Tags.EntityTypes.BOSSES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get()); // TODO bosses
 		this.tag(EntityTypeTags.ARROWS).add(EntityRegistry.ANGLER_TOOTH_ARROW.get(), EntityRegistry.BASILISK_ARROW.get(), EntityRegistry.OCTINE_ARROW.get(), EntityRegistry.POISON_ANGLER_TOOTH_ARROW.get(), EntityRegistry.SHOCK_ARROW.get(), EntityRegistry.SLUDGE_WORM_ARROW.get());
 		this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get());
 		this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(EntityRegistry.STALKER.get(), EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.SPORELING.get());
@@ -45,7 +51,8 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get());
 		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get());
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get());
-
+		this.tag(TAR_BEING).add(/* EntityRegistry.TAR_BEAST.get(), */EntityRegistry.TARMINION.get());
+		
 		this.tag(BYPASSES_REPELLER)
 			.addTag(Tags.EntityTypes.BOSSES)
 			.add(EntityRegistry.WIGHT.get());
@@ -53,6 +60,19 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 			.addTag(Tags.EntityTypes.BOSSES)
 			.add(/* EntityRegistry.TAR_BEAST.get(), */EntityRegistry.WIGHT.get());
 //		this.tag(TRIGGER_SPIKE_TRAPS).add(EntityType.PLAYER);
+		
+		this.tag(CAN_BREATHE_UNDER_TAR)
+			.addTag(EntityTypeTags.UNDEAD) // do we want the undead to be immune to tar?
+			.addTag(TAR_BEING);
+//			.add(EntityRegistry.TARMINION.get())
+//			/* .add(EntityRegistry.TAR_BEAST.get()) */;
+		
+		this.tag(IMMUNE_TO_TAR_SLOWDOWN)
+			.addTag(TAR_BEING);
+//			.add(EntityRegistry.TARMINION.get())
+//			/* .add(EntityRegistry.TAR_BEAST.get()) */;
+
+		this.tag(IMMUNE_TO_RUBBER_SLOWDOWN);
 		
 		// TODO Pit of Decay Mechanism
 		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(

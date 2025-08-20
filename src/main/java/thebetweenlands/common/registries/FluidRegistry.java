@@ -6,6 +6,7 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.fluid.TarFlowingFluid;
 
 public class FluidRegistry {
 
@@ -15,8 +16,8 @@ public class FluidRegistry {
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> SWAMP_WATER_FLOW = FLUIDS.register("flowing_swamp_water", () -> new BaseFlowingFluid.Flowing(FluidRegistry.SWAMP_WATER_PROPERTIES));
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> STAGNANT_WATER_STILL = FLUIDS.register("stagnant_water", () -> new BaseFlowingFluid.Source(FluidRegistry.STAGNANT_WATER_PROPERTIES));
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> STAGNANT_WATER_FLOW = FLUIDS.register("flowing_stagnant_water", () -> new BaseFlowingFluid.Flowing(FluidRegistry.STAGNANT_WATER_PROPERTIES));
-	public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> TAR_STILL = FLUIDS.register("tar", () -> new BaseFlowingFluid.Source(FluidRegistry.TAR_PROPERTIES));
-	public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> TAR_FLOW = FLUIDS.register("flowing_tar", () -> new BaseFlowingFluid.Flowing(FluidRegistry.TAR_PROPERTIES));
+	public static final DeferredHolder<Fluid, TarFlowingFluid.Source> TAR_STILL = FLUIDS.register("tar", () -> new TarFlowingFluid.Source(FluidRegistry.TAR_PROPERTIES));
+	public static final DeferredHolder<Fluid, TarFlowingFluid.Flowing> TAR_FLOW = FLUIDS.register("flowing_tar", () -> new TarFlowingFluid.Flowing(FluidRegistry.TAR_PROPERTIES));
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> RUBBER_STILL = FLUIDS.register("rubber", () -> new BaseFlowingFluid.Source(FluidRegistry.RUBBER_PROPERTIES));
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> RUBBER_FLOW = FLUIDS.register("flowing_rubber", () -> new BaseFlowingFluid.Flowing(FluidRegistry.RUBBER_PROPERTIES));
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> FOG_STILL = FLUIDS.register("fog", () -> new BaseFlowingFluid.Source(FluidRegistry.FOG_PROPERTIES));

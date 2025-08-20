@@ -1,3 +1,5 @@
-// 1.21.1	2024-08-20T17:34:53.5650689	Tags for minecraft:dimension_type mod id thebetweenlands
+// 1.21.1	2025-08-15T10:48:16.8621598	Tags for minecraft:dimension_type mod id thebetweenlands
 9bedaeba084f4bc08f57419c46431373d728b9a6 data/thebetweenlands/tags/dimension_type/corroding_aura.json
 9bedaeba084f4bc08f57419c46431373d728b9a6 data/thebetweenlands/tags/dimension_type/decaying_aura.json
+df523267167127a53393a76e5f6adae0504c01a6 data/thebetweenlands/tags/dimension_type/tar_boils.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/dimension_type/tar_vaporizes.json

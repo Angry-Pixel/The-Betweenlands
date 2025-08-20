@@ -19,6 +19,9 @@ public class BLDimensionTypeTagProvider extends TagsProvider<DimensionType> {
 	public static final TagKey<DimensionType> DECAYING_AURA = TagKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("decaying_aura"));
 	public static final TagKey<DimensionType> CORRODING_AURA = TagKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("corroding_aura"));
 
+	public static final TagKey<DimensionType> TAR_BOILS = TagKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("tar_boils"));
+	public static final TagKey<DimensionType> TAR_VAPORIZES = TagKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("tar_vaporizes"));
+	
 	public BLDimensionTypeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, Registries.DIMENSION_TYPE, provider, TheBetweenlands.ID, existingFileHelper);
 	}
@@ -28,5 +31,8 @@ public class BLDimensionTypeTagProvider extends TagsProvider<DimensionType> {
 		//TODO REMOVE OVERWORLD AFTER TESTING
 		this.tag(DECAYING_AURA).add(BuiltinDimensionTypes.OVERWORLD);
 		this.tag(CORRODING_AURA).add(BuiltinDimensionTypes.OVERWORLD);
+
+		this.tag(TAR_BOILS).add(BuiltinDimensionTypes.NETHER);
+		this.tag(TAR_VAPORIZES);
 	}
 }
