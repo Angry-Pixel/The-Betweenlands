@@ -12,6 +12,7 @@ public class DamageTypeRegistry {
 	public static final ResourceKey<DamageType> SWARM = create("swarm");
 	public static final ResourceKey<DamageType> URCHIN_SPIKE = create("urchin_spike");
 	public static final ResourceKey<DamageType> VOODOO = create("voodoo");
+	public static final ResourceKey<DamageType> SUFFOCATION = create("suffocation");
 
 	public static ResourceKey<DamageType> create(String name) {
 		return ResourceKey.create(Registries.DAMAGE_TYPE, TheBetweenlands.prefix(name));
@@ -22,5 +23,6 @@ public class DamageTypeRegistry {
 		context.register(SWARM, new DamageType("thebetweenlands.swarm", 0.1F));
 		context.register(URCHIN_SPIKE, new DamageType("thebetweenlands.urchin_spike", 0.1F));
 		context.register(VOODOO, new DamageType("thebetweenlands.voodoo", 0.1F));
+		context.register(SUFFOCATION, new DamageType("thebetweenlands.suffocation", 0.1F));
 	}
 }
