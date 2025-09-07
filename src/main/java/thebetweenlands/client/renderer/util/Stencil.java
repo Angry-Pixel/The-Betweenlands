@@ -11,22 +11,22 @@ import net.neoforged.neoforge.client.StencilManager;
 public final class Stencil implements AutoCloseable {
 
 	public static final Stencil INVALID = new Stencil(-1);
-	
+
 	/**
 	 * Index of the bit this stencil represents
 	 */
 	private final int bit;
-	
+
 	/**
 	 * Bitmask of the bit this stencil represents
 	 */
 	private final int mask;
-	
+
 	public Stencil(int bit) {
 		this.bit = bit;
 		this.mask = this.isValid() ? (1 << this.bit) : 0;
 	}
-	
+
 	/**
 	 * @return whether this Stencil represents a valid bit
 	 */
@@ -48,21 +48,21 @@ public final class Stencil implements AutoCloseable {
 		RenderSystem.clearStencil(value ? this.mask : 0);
 		RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, false);
 	}
-	
+
 	/**
 	 * Fills the entire stencil with 0's
 	 */
 	public void setAllZeros() {
 		this.clear(false);
 	}
-	
+
 	/**
 	 * Fills the entire stencil with 1's
 	 */
 	public void setAllOnes() {
 		this.clear(true);
 	}
-	
+
 
 	/**
 	 * Applies stencil operation on reserved bit mask, see {@link GL11#glStencilOp(int, int, int)}
@@ -83,14 +83,14 @@ public final class Stencil implements AutoCloseable {
 	public void func(int func, boolean stencilBitPresent) {
 		RenderSystem.stencilFunc(func, stencilBitPresent ? this.mask : 0, this.mask);
 	}
-	
+
 	@Override
 	public void close() {
 		if(this.isValid()) {
 			StencilManager.releaseBit(this.bit);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("Stencil[bit=%d, mask=%d]", this.bit, this.mask);
@@ -114,26 +114,20 @@ public final class Stencil implements AutoCloseable {
 	 */
 	public static Stencil reserve(RenderTarget fbo) {
 		int bit = StencilManager.reserveBit();
-		
+
 		if(bit != -1) {
 			// Attempt to enable stencils if they're disabled
 			if(fbo != null && !fbo.isStencilEnabled()) {
 				fbo.enableStencil();
 			}
-			
+
 			if(fbo == null || fbo.isStencilEnabled()) {
 				return new Stencil(bit);
 			} else {
 				StencilManager.releaseBit(bit);
 			}
 		}
-		
+
 		return Stencil.INVALID;
-	}
-	
-	@Override
-	protected void finalize() throws Throwable {
-		this.close();
-		super.finalize();
 	}
 }

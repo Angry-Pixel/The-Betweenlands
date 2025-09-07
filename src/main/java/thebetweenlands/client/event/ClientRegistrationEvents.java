@@ -7,6 +7,7 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -26,15 +27,7 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -208,6 +201,8 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
 		ClientEvents.init();
+
+		eventbus.addListener(BetweenlandsShaders::registerShaders);
 	}
 
 	private static void clientSetup(FMLClientSetupEvent event) {
@@ -255,7 +250,7 @@ public class ClientRegistrationEvents {
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(EntityRegistry.SWAMP_HAG.get(), SwampHagRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GECKO.get(), GeckoRenderer::new);
-		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
+		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), WightRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrabRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SILT_CRAB.get(), SiltCrabRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ANADIA.get(), AnadiaRenderer::new);
@@ -317,6 +312,13 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SLUDGE.get(), SludgeRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SMOL_SLUDGE.get(), SmolSludgeRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GALLERY_FRAME.get(), GalleryFrameRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE.get(), PrimordialMalevolenceRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_BLOCKADE.get(), PrimordialMalevolenceBlockadeRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_PROJECTILE.get(), PrimordialMalevolenceProjectileRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_SPAWNER.get(), PrimordialMalevolenceSpawnerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TELEPORTER.get(), PrimordialMalevolenceTeleporterRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET.get(), PrimordialMalevolenceTurretRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.VOLATILE_SOUL.get(), VolatileSoulRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -369,7 +371,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_SHIELD, WeedwoodShieldModel::create);
 
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
-		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
+		event.registerLayerDefinition(BLModelLayers.WIGHT, WightModel::create);
 		event.registerLayerDefinition(BLModelLayers.BUBBLER_CRAB, BubblerCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
@@ -409,6 +411,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.TARMINION, TarminionModel::create);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE, SludgeModel::create);
 		event.registerLayerDefinition(BLModelLayers.SMOL_SLUDGE, SmolSludgeModel::create);
+		event.registerLayerDefinition(BLModelLayers.PRIMORDIAL_MALEVOLENCE, PrimordialMalevolenceModel::create);
+		event.registerLayerDefinition(BLModelLayers.SWORD_ENERGY, SwordEnergyModel::create);
 		event.registerLayerDefinition(BLModelLayers.GAS_CLOUD, GasCloudModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
@@ -725,6 +729,7 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerParticleSprites(final RegisterParticleProvidersEvent event) {
+		event.registerSpriteSet(ParticleRegistry.PORTAL_EFFECT.get(), PortalParticle.Provider::new);
 		event.registerSpriteSet(ParticleRegistry.ANIMATOR.get(), AnimatorParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.FLY.get(), BugParticle.FlyFactory::new);
 		event.registerSpriteSet(ParticleRegistry.MOSQUITO.get(), BugParticle.MosquitoFactory::new);

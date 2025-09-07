@@ -83,7 +83,6 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerPackets);
 		bus.addListener(CommonRegistrationEvents::registerDataMaps);
 		bus.addListener(CommonRegistrationEvents::registerCapabilities);
-		bus.addListener(CommonRegistrationEvents::registerShaders);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
 
@@ -234,6 +233,8 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(SoundRipplePacket.TYPE, SoundRipplePacket.STREAM_CODEC, SoundRipplePacket::handle);
 		registrar.playToClient(UpdateDecayDataPacket.TYPE, UpdateDecayDataPacket.STREAM_CODEC, UpdateDecayDataPacket::handle);
 		registrar.playToClient(UpdateMudWalkerPacket.TYPE, UpdateMudWalkerPacket.STREAM_CODEC, UpdateMudWalkerPacket::handle);
+		registrar.playToClient(UpdatePuppetPacket.TYPE, UpdatePuppetPacket.STREAM_CODEC, UpdatePuppetPacket::handle);
+		registrar.playToClient(UpdatePuppeteerPacket.TYPE, UpdatePuppeteerPacket.STREAM_CODEC, UpdatePuppeteerPacket::handle);
 //		registrar.playToClient(UpdateRotSmellPacket.TYPE, UpdateRotSmellPacket.STREAM_CODEC, UpdateRotSmellPacket::handle);
 		registrar.playToClient(UpdateFoodSicknessPacket.TYPE, UpdateFoodSicknessPacket.STREAM_CODEC, UpdateFoodSicknessPacket::handle);
 		registrar.playToClient(UpdateGemsPacket.TYPE, UpdateGemsPacket.STREAM_CODEC, UpdateGemsPacket::handle);
@@ -249,6 +250,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(SummonPeatMummyParticlesPacket.TYPE, SummonPeatMummyParticlesPacket.STREAM_CODEC, SummonPeatMummyParticlesPacket::handle);
 		registrar.playToClient(AddBetweenlandsBossBarPacket.TYPE, AddBetweenlandsBossBarPacket.STREAM_CODEC, AddBetweenlandsBossBarPacket::handle);
 		registrar.playToClient(WeedwoodBushRustlePacket.TYPE, WeedwoodBushRustlePacket.STREAM_CODEC, WeedwoodBushRustlePacket::handle);
+		registrar.playToClient(WightVolatileParticlesPacket.TYPE, WightVolatileParticlesPacket.STREAM_CODEC, WightVolatileParticlesPacket::handle);
 
 		registrar.playToClient(UpdateSynchedAttachmentPacket.TYPE, UpdateSynchedAttachmentPacket.STREAM_CODEC, UpdateSynchedAttachmentPacket::handle);
 
@@ -295,10 +297,5 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new InvWrapper(tile));
 
 		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
-	}
-
-	private static void registerShaders(final RegisterShadersEvent event) {
-		ShaderHandler.loadWorldShader(event.getResourceProvider());
-		ShaderHelper.INSTANCE.initShaders(event.getResourceProvider());
 	}
 }

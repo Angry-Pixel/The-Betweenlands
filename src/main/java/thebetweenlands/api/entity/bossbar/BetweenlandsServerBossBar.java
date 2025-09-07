@@ -14,6 +14,10 @@ public class BetweenlandsServerBossBar extends ServerBossEvent {
 		this.type = type;
 	}
 
+	public BetweenlandsBossBar.BossType getType() {
+		return this.type;
+	}
+
 	@Override
 	public void addPlayer(ServerPlayer player) {
 		if (this.players.add(player) && this.isVisible()) {

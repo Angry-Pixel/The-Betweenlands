@@ -2,10 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -15,6 +12,8 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.*;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
+import thebetweenlands.common.entity.boss.PrimordialMalevolence;
+import thebetweenlands.common.entity.boss.malevolence.*;
 import thebetweenlands.common.entity.creature.*;
 import thebetweenlands.common.entity.creature.frog.Frog;
 import thebetweenlands.common.entity.fishing.BLFishHook;
@@ -80,7 +79,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<MummyArm>> MUMMY_ARM = registerWithAttributes("mummy_arm", EntityType.Builder.<MummyArm>of(MummyArm::new, MobCategory.MISC).sized(0.7F, 0.7F).clientTrackingRange(10).noSummon().fireImmune(), MummyArm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Olm>> OLM = registerWithEgg("olm", EntityType.Builder.of(Olm::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.95F, 0.25F).eyeHeight(0.125F), 0xE8D8B8, 0xE79B7B, Olm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<PeatMummy>> PEAT_MUMMY = registerWithEgg("peat_mummy", EntityType.Builder.of(PeatMummy::new, MobCategory.MONSTER).sized(1.0F, 1.2F).passengerAttachments(0.35F).clientTrackingRange(10).canSpawnFarFromPlayer(), 0x524D3A, 0x69463F, PeatMummy::registerAttributes);
-	//primordial malevolence
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolence>> PRIMORDIAL_MALEVOLENCE = registerWithEgg("primordial_malevolence", EntityType.Builder.of(PrimordialMalevolence::new, MobCategory.MONSTER).sized(1.9F, 1.9F).canSpawnFarFromPlayer(), 0x000000, 0x00FFFA, PrimordialMalevolence::registerAttributes);
 	//pyrad
 	//rock snot
 	public static final DeferredHolder<EntityType<?>, EntityType<RootSprite>> ROOT_SPRITE = registerWithEgg("root_sprite", EntityType.Builder.of(RootSprite::new, MobCategory.CREATURE).sized(0.3F, 0.55F), 0x5D533D, 0x8F952B, RootSprite::registerAttributes);
@@ -140,6 +139,11 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<OctineArrow>> OCTINE_ARROW = ENTITY_TYPES.register("octine_arrow", () -> EntityType.Builder.<OctineArrow>of(OctineArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("octine_arrow")));
 	public static final DeferredHolder<EntityType<?>, EntityType<PoisonAnglerToothArrow>> POISON_ANGLER_TOOTH_ARROW = ENTITY_TYPES.register("poison_angler_tooth_arrow", () -> EntityType.Builder.<PoisonAnglerToothArrow>of(PoisonAnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("poison_angler_tooth_arrow")));
 	public static final DeferredHolder<EntityType<?>, EntityType<PredatorArrowGuide>> PREDATOR_ARROW_GUIDE = ENTITY_TYPES.register("predator_arrow_guide", () -> EntityType.Builder.of(PredatorArrowGuide::new, MobCategory.MISC).sized(0.1F, 0.1F).clientTrackingRange(4).updateInterval(20).build(prefix("predator_arrow_guide")));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceBlockade>> PRIMORDIAL_MALEVOLENCE_BLOCKADE = registerWithAttributes("primordial_malevolence_blockade", EntityType.Builder.<PrimordialMalevolenceBlockade>of(PrimordialMalevolenceBlockade::new, MobCategory.MISC).sized(1.0F, 0.2F), PrimordialMalevolenceBlockade::createAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceProjectile>> PRIMORDIAL_MALEVOLENCE_PROJECTILE = ENTITY_TYPES.register("primordial_malevolence_projectile", () -> EntityType.Builder.<PrimordialMalevolenceProjectile>of(PrimordialMalevolenceProjectile::new, MobCategory.MISC).sized(0.65F, 0.65F).build(prefix("primordial_malevolence_projectile")));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceSpawner>> PRIMORDIAL_MALEVOLENCE_SPAWNER = ENTITY_TYPES.register("primordial_malevolence_spawner", () -> EntityType.Builder.<PrimordialMalevolenceSpawner>of(PrimordialMalevolenceSpawner::new, MobCategory.MISC).sized(0.4F, 0.4F).build(prefix("primordial_malevolence_spawner")));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTeleporter>> PRIMORDIAL_MALEVOLENCE_TELEPORTER = ENTITY_TYPES.register("primordial_malevolence_teleporter", () -> EntityType.Builder.of(PrimordialMalevolenceTeleporter::new, MobCategory.MISC).sized(1.0F, 1.0F).build(prefix("primordial_malevolence_teleporter")));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTurret>> PRIMORDIAL_MALEVOLENCE_TURRET = registerWithAttributes("primordial_malevolence_turret", EntityType.Builder.<PrimordialMalevolenceTurret>of(PrimordialMalevolenceTurret::new, MobCategory.MISC).sized(0.4F, 0.4F), Mob::createMobAttributes);
 	//pyrad flame
 	//resurrection
 	//root grabber
@@ -159,6 +163,7 @@ public class EntityRegistry {
 	//tiny worm egg sac
 	public static final DeferredHolder<EntityType<?>, EntityType<UrchinSpike>> URCHIN_SPIKE = ENTITY_TYPES.register("urchin_spike", () -> EntityType.Builder.<UrchinSpike>of(UrchinSpike::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("urchin_spike")));
 	//volarkite
+	public static final DeferredHolder<EntityType<?>, EntityType<VolatileSoul>> VOLATILE_SOUL = ENTITY_TYPES.register("volatile_soul", () -> EntityType.Builder.<VolatileSoul>of(VolatileSoul::new, MobCategory.MISC).sized(0.3F, 0.3F).fireImmune().noSummon().build(prefix("volatile_soul")));
 	//weedwood rowboat
 
 	private static String prefix(String name) {

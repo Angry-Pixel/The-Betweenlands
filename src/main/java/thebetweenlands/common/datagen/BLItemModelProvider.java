@@ -381,7 +381,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.toolItem(ItemRegistry.VALONITE_AXE);
 		this.basicItem(ItemRegistry.SYRMORITE_SHEARS);
 		this.basicItem(ItemRegistry.SICKLE);
-		//shockwave sword
+		this.toolItem(ItemRegistry.SHOCKWAVE_SWORD);
 		this.basicItem(ItemRegistry.ANGLER_TOOTH_ARROW);
 		this.basicItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
 		this.basicItem(ItemRegistry.OCTINE_ARROW);

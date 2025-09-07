@@ -4,7 +4,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 
 public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 
@@ -46,7 +46,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	@Override
 	public void tick() {
 		MoveControl moveHelper = this.entity.getMoveControl();
-		if (moveHelper instanceof FlightMoveHelper flightMoveHelper) {
+		if (moveHelper instanceof BLFlightMoveControl flightMoveHelper) {
 
 			if (flightMoveHelper.isBlocked()) {
 				this.distanceMultiplier = Math.max(this.distanceMultiplier - 0.04F, 0.1D);

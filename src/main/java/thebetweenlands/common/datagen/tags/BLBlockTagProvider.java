@@ -34,7 +34,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 
 	// Blocks tagged with this can be broken even inside structure guards
 	public static final TagKey<Block> CAN_BREAK_WHEN_GUARDED = tag("can_break_when_guarded");
-	
+
 	public static final TagKey<Block> INCORRECT_FOR_WEEDWOOD_TOOL = tag("incorrect_for_weedwood_tool");
 	public static final TagKey<Block> INCORRECT_FOR_BONE_TOOL = tag("incorrect_for_bone_tool");
 	public static final TagKey<Block> INCORRECT_FOR_OCTINE_TOOL = tag("incorrect_for_octine_tool");
@@ -92,7 +92,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> STORAGE_BLOCKS_ANCIENT_REMNANT = commonTag("storage_blocks/ancient_remnant");
 	public static final TagKey<Block> STORAGE_BLOCKS_RUBBER = commonTag("storage_blocks/rubber");
 	public static final TagKey<Block> STORAGE_BLOCKS_COMPOST = commonTag("storage_blocks/compost");
-	
+
 	public BLBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
@@ -109,12 +109,12 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(INCORRECT_FOR_OCTINE_TOOL).addTag(BlockTags.INCORRECT_FOR_IRON_TOOL);
 		this.tag(INCORRECT_FOR_VALONITE_TOOL).addTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
 		this.tag(INCORRECT_FOR_WEEDWOOD_TOOL).addTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
-		
+
 		this.tag(CAN_BREAK_WHEN_GUARDED).addOptionalTag(commonTag("graves"));
-		
+
 		this.tag(SPIKE_TRAPS).add(BlockRegistry.SPIKE_TRAP.get(), BlockRegistry.MUD_BRICK_SPIKE_TRAP.get(), BlockRegistry.MUD_TILES_SPIKE_TRAP.get());
-		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(SPIKE_TRAPS);
-		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW);
+		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(SPIKE_TRAPS).addTag(BlockTags.WITHER_IMMUNE);
+		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW, Blocks.STRUCTURE_VOID);
 
 		this.tag(FILTERED_SILT_GLASS).add(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS.get(), BlockRegistry.MAROON_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS.get(), BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS.get(),

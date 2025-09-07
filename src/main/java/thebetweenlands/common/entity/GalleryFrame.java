@@ -55,6 +55,13 @@ public class GalleryFrame extends HangingEntity {
 	}
 
 	@Override
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+		if (TYPE.equals(key)) {
+			this.recalculateBoundingBox();
+		}
+	}
+
+	@Override
 	public Component getName() {
 		return Component.translatable("entity.thebetweenlands." + this.getFrameType().getSerializedName() + "_gallery_frame");
 	}

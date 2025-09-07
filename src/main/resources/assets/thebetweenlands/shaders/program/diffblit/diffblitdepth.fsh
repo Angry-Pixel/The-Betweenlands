@@ -8,7 +8,6 @@ uniform sampler2D base;
 in vec2 v_texCoord;
 
 out vec4 o_FragColor;
-out float gl_FragDepth;
 
 void main(){
     float before    = texture2D(beforeDepth, v_texCoord).r;

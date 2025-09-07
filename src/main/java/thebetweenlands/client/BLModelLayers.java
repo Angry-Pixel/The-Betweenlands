@@ -47,6 +47,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation MUMMY_ARM = register("mummy_arm");
 	public static final ModelLayerLocation OLM = register("olm");
 	public static final ModelLayerLocation PEAT_MUMMY = register("peat_mummy");
+	public static final ModelLayerLocation PRIMORDIAL_MALEVOLENCE = register("primordial_malevolence");
 	public static final ModelLayerLocation ROOT_SPRITE = register("root_sprite");
 	public static final ModelLayerLocation SHAMBLER = register("shambler");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
@@ -59,11 +60,13 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SPLODESHROOM = register("splodeshroom");
 	public static final ModelLayerLocation SPORELING = register("sporeling");
 	public static final ModelLayerLocation STALKER = register("stalker");
+	public static final ModelLayerLocation SWORD_ENERGY = register("sword_energy");
 	public static final ModelLayerLocation TARMINION = register("tarminion");
 	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT = register("weedwood_rowboat");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT_LANTERN = register("weedwood_rowboat", "lantern");
 	public static final ModelLayerLocation GAS_CLOUD = register("gas_cloud");
+	public static final ModelLayerLocation WIGHT = register("wight");
 
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");
 	public static final ModelLayerLocation GECKO = register("gecko");

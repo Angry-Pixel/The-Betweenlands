@@ -1047,6 +1047,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.SLUDGE, "Sludge");
 		this.addEntityAndEgg(EntityRegistry.SMOL_SLUDGE, "Smol Sludge");
 		this.addEntityAndEgg(EntityRegistry.SHALLOWBREATH, "Shallowbreath");
+		this.addEntityAndEgg(EntityRegistry.PRIMORDIAL_MALEVOLENCE, "Primordial Malevolence");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1064,6 +1065,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.CHIEF_CRYPT_CRAWLER, "Crypt Crawler");
 		this.addEntityType(EntityRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
 		this.addEntityType(EntityRegistry.THROWN_TARMINION, "Thrown Tarminion");
+		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_BLOCKADE, "Primordial Malevolence Blockade");
+		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_PROJECTILE, "Primordial Malevolence Projectile");
+		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_SPAWNER, "Primordial Malevolence Spawner");
+		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TELEPORTER, "Primordial Malevolence");
+		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET, "Primordial Malevolence Turret");
+		this.addEntityType(EntityRegistry.VOLATILE_SOUL, "Volatile Soul");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -1445,7 +1452,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItemWithDesc(ItemRegistry.LURKER_SKIN_SHIELD, "Lurker Skin Shield", "Can also be used as a raft");
 		this.addItem(ItemRegistry.SYRMORITE_SHEARS, "Syrmorite Shears");
 		this.addItem(ItemRegistry.SICKLE, "Sickle");
-		//shockwave sword
+		this.addItem(ItemRegistry.SHOCKWAVE_SWORD, "Shockwave Sword");
 		this.addItem(ItemRegistry.ANGLER_TOOTH_ARROW, "Angler Tooth Arrow");
 		this.addItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, "Poisoned Angler Tooth Arrow");
 		this.addItemWithDesc(ItemRegistry.OCTINE_ARROW, "Octine Arrow", "Use with caution!");

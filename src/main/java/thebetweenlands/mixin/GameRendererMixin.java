@@ -23,14 +23,21 @@ import thebetweenlands.client.shader.ShaderHelper;
 public abstract class GameRendererMixin {
 
 	@Final
-	@Shadow private RenderBuffers renderBuffers;
-	@Final
-	@Shadow public ItemInHandRenderer itemInHandRenderer;
-	@Final
-	@Shadow Minecraft minecraft;
+	@Shadow(remap = false)
+	private RenderBuffers renderBuffers;
 
-	@Shadow(remap = false) protected abstract void bobHurt(PoseStack poseStack, float partialTicks);
-	@Shadow(remap = false) protected abstract void bobView(PoseStack poseStack, float partialTicks);
+	@Final
+	@Shadow(remap = false)
+	public ItemInHandRenderer itemInHandRenderer;
+	@Final
+	@Shadow(remap = false)
+	Minecraft minecraft;
+
+	@Shadow(remap = false)
+	protected abstract void bobHurt(PoseStack poseStack, float partialTicks);
+
+	@Shadow(remap = false)
+	protected abstract void bobView(PoseStack poseStack, float partialTicks);
 
 	/**
 	 * Calls itemHandRender again drawing depth to world depth buffer
@@ -59,6 +66,7 @@ public abstract class GameRendererMixin {
 	}
 
 	// Inject into GameRender.resize to resize buffers
+
 	/**
 	 * Creates shader resize event
 	 */

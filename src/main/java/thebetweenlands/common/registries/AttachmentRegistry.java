@@ -23,6 +23,8 @@ public class AttachmentRegistry {
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<InfestationIgnoreData>> INFESTATION_IGNORE = ATTACHMENT_TYPES.register("infestation_ignore", () -> AttachmentType.builder(() -> new InfestationIgnoreData()).serialize(InfestationIgnoreData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<LastKilledData>> LAST_KILLED = ATTACHMENT_TYPES.register("last_killed", () -> AttachmentType.builder(() -> new LastKilledData()).serialize(LastKilledData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<MudWalkerData>> MUD_WALKER = ATTACHMENT_TYPES.register("mud_walker", () -> AttachmentType.builder(() -> new MudWalkerData()).serialize(MudWalkerData.CODEC).build());
+	public static final DeferredHolder<AttachmentType<?>, AttachmentType<PuppetData>> PUPPET = ATTACHMENT_TYPES.register("puppet", () -> AttachmentType.builder(() -> new PuppetData(null, 0, false, false, null, null, 0)).serialize(PuppetData.CODEC).build());
+	public static final DeferredHolder<AttachmentType<?>, AttachmentType<PuppeteerData>> PUPPETEER = ATTACHMENT_TYPES.register("puppeteer", () -> AttachmentType.builder(() -> new PuppeteerData(-1, 0, 0)).serialize(PuppeteerData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<RotSmellData>> ROT_SMELL = ATTACHMENT_TYPES.register("rot_smell", () -> AttachmentType.builder(RotSmellData::new).serialize(RotSmellData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<SwarmedData>> SWARMED = ATTACHMENT_TYPES.register("swarmed", () -> AttachmentType.builder(SwarmedData::new).serialize(SwarmedData.CODEC).build());
 

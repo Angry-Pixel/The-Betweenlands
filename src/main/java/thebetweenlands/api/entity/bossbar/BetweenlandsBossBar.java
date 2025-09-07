@@ -11,10 +11,6 @@ import net.minecraft.world.phys.Vec3;
 public interface BetweenlandsBossBar {
 	BetweenlandsServerBossBar getBar();
 
-	default BossType getBossType() {
-		return BossType.NORMAL_BOSS;
-	}
-
 	default float getMiniBossTagSize(float partialTicks) {
 		return 0.5F;
 	}

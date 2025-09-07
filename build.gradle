@@ -106,16 +106,17 @@ dependencies {
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
 	compileOnly "dev.emi:emi-neoforge:${project.emi_version}+${project.minecraft_version}"
     compileOnly "io.github.flemmli97:flan:${project.minecraft_version}-${project.flan_version}-neoforge:api"
-    
+
 	implementation "curse.maven:jade-324717:5706149"
 	runtimeOnly "curse.maven:atlasviewer-633577:5490697"
 	runtimeOnly "curse.maven:debug-utils-forge-783008:5607923"
-	
+	runtimeOnly "curse.maven:worldedit-225608:5830452"
+
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-	
+
 	compileOnly 'com.google.auto.service:auto-service:1.1.0'
 	annotationProcessor 'com.google.auto.service:auto-service:1.1.0'
-	
+
 }
 
 tasks.named('jar', Jar).configure {

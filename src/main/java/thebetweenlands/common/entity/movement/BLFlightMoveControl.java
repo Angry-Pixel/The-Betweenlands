@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.movement;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -10,18 +11,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
-public class FlightMoveHelper extends MoveControl {
+public class BLFlightMoveControl extends MoveControl {
 	protected int courseChangeCooldown;
 	protected boolean blocked = false;
 
-	public FlightMoveHelper(Mob p_24983_) {
-		super(p_24983_);
+	public BLFlightMoveControl(Mob mob) {
+		super(mob);
 	}
 
 	@Override
 	public void tick() {
-		AttributeInstance entityMoveSpeedAttribute = this.mob.getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
-		double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getValue() : 1.0D;
+		AttributeInstance speedAttribute = this.mob.getAttribute(Attributes.MOVEMENT_SPEED);
+		double entityMoveSpeed = speedAttribute != null ? speedAttribute.getValue() : 1.0D;
 		double speed = this.getFlightSpeed() * entityMoveSpeed;
 
 		if (this.operation == Operation.MOVE_TO) {
@@ -44,11 +45,9 @@ public class FlightMoveHelper extends MoveControl {
 						this.mob.setZza(0);
 						this.operation = Operation.WAIT;
 					} else {
-						this.mob.xxa += (float) (dy / dist * speed);
-						this.mob.yya += (float) (dx / dist * speed);
-						this.mob.zza += (float) (dz / dist * speed);
+						this.mob.setDeltaMovement(this.mob.getDeltaMovement().add((dx / dist * speed), (dy / dist * speed), (dz / dist * speed)));
 
-						float yaw = (float) (Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+						float yaw = (float) (Math.atan2(dz, dx) * Mth.RAD_TO_DEG) - 90.0F;
 						this.mob.setXRot(this.rotlerp(this.mob.getXRot(), yaw, 90.0F));
 
 						this.mob.setSpeed((float) speed);
@@ -66,15 +65,15 @@ public class FlightMoveHelper extends MoveControl {
 		} else if (this.operation == Operation.STRAFE) {
 			float forward = this.strafeForwards;
 			float strafe = this.strafeRight;
-			float dist = (float) Math.sqrt(forward * forward + strafe * strafe);
+			float dist = Mth.sqrt(forward * forward + strafe * strafe);
 
-			float rotX = (float) Math.sin(this.mob.getXRot() * 0.017453292F);
-			float rotZ = (float) Math.cos(this.mob.getXRot() * 0.017453292F);
+			float rotX = Mth.sin(this.mob.getXRot() * 0.017453292F);
+			float rotZ = Mth.cos(this.mob.getXRot() * 0.017453292F);
 			float strafeX = strafe * rotZ - forward * rotX;
 			float strafeZ = forward * rotZ + strafe * rotX;
 
-			this.mob.xxa += (float) (strafeX / dist * speed * 0.15D);
-			this.mob.zza += (float) (strafeZ / dist * speed * 0.15D);
+			this.mob.xxa += (float) (strafeX / dist * speed * 0.15F);
+			this.mob.zza += (float) (strafeZ / dist * speed * 0.15F);
 
 			this.mob.setSpeed((float) speed);
 			this.mob.setZza((float) speed * this.strafeForwards);

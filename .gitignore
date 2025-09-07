@@ -29,3 +29,4 @@ logs
 secrets.properties
 
 run-data/*
+.profileconfig.json

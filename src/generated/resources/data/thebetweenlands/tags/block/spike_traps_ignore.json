@@ -1,6 +1,7 @@
 {
   "values": [
     "thebetweenlands:sludge",
-    "minecraft:snow"
+    "minecraft:snow",
+    "minecraft:structure_void"
   ]
 }

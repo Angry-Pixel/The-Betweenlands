@@ -294,7 +294,7 @@ public class Barrishee extends Monster implements ScreenShaker, BLEntity, PathOb
 			List<Entity> entities = this.level().getEntities(this, collisionAABB);
 
 			for (Entity entity : entities) {
-				if (entity.canBeCollidedWith() && entity.isPushable()) {
+				if (entity.isPickable() && entity.isPushable()) {
 					AABB entityAABB = this.getCollisionBox(entity);
 
 					if (entityAABB != null) {

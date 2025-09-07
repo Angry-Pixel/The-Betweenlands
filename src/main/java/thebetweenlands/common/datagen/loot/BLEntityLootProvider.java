@@ -420,6 +420,9 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL)
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.add(EntityRegistry.SMOL_SLUDGE.get(), this.fromEntityLootTable(EntityRegistry.SLUDGE.get()));
+		this.add(EntityRegistry.PRIMORDIAL_MALEVOLENCE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_RECRUITMENT)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

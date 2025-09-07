@@ -150,7 +150,9 @@ public class AttackDamageHandler {
 			entity.hurt(entity.damageSources().thorns(attackedEntity), thornsCount + entity.level().getRandom().nextInt(4));
 		}
 
-		event.setNewDamage(damage);
+		if (event.getOriginalDamage() != damage) {
+			event.setNewDamage(damage);
+		}
 	}
 
 	private static boolean shouldHit(int amount, RandomSource random) {

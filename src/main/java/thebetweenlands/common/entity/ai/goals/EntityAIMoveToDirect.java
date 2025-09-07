@@ -4,7 +4,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
+
+import java.util.EnumSet;
 
 public abstract class EntityAIMoveToDirect<T extends Mob> extends Goal {
 	protected final T entity;
@@ -13,6 +16,7 @@ public abstract class EntityAIMoveToDirect<T extends Mob> extends Goal {
 	public EntityAIMoveToDirect(T entity, double speed) {
 		this.entity = entity;
 		this.speed = speed;
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.TARGET));
 	}
 
 	public void setSpeed(double speed) {
@@ -31,7 +35,7 @@ public abstract class EntityAIMoveToDirect<T extends Mob> extends Goal {
 
 	@Override
 	public void tick() {
-		Vector3d target = this.getTarget();
+		Vec3 target = this.getTarget();
 		if (target != null) {
 			this.entity.getMoveControl().setWantedPosition(target.x, target.y, target.z, this.speed);
 		}
@@ -43,5 +47,5 @@ public abstract class EntityAIMoveToDirect<T extends Mob> extends Goal {
 	 * @return
 	 */
 	@Nullable
-	protected abstract Vector3d getTarget();
+	protected abstract Vec3 getTarget();
 }

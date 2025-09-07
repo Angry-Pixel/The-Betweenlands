@@ -15,13 +15,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
-import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.pathfinder.PathType;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.ShelterFromRainGoal;
-import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class Firefly extends PathfinderMob implements BLEntity {
@@ -34,7 +33,7 @@ public class Firefly extends PathfinderMob implements BLEntity {
 	public Firefly(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 		this.noCulling = true;
-		this.moveControl = new FlightMoveHelper(this);
+		this.moveControl = new BLFlightMoveControl(this);
 		this.setPathfindingMalus(PathType.WATER, -1.0F);
 		this.setPathfindingMalus(PathType.BLOCKED, -1.0F);
 		this.setPathfindingMalus(PathType.OPEN, 0.0F);
