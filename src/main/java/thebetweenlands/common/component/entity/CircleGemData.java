@@ -2,10 +2,10 @@ package thebetweenlands.common.component.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import thebetweenlands.common.component.entity.circlegem.CircleGem;
-import thebetweenlands.common.network.clientbound.attachment.UpdateGemsPacket;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,11 +20,16 @@ public class CircleGemData {
 		CircleGem.CODEC.listOf().fieldOf("gems").forGetter(o -> o.gems)
 	).apply(instance, CircleGemData::new));
 
+	public static final StreamCodec<FriendlyByteBuf, CircleGemData> STREAM_CODEC = StreamCodec.composite(
+		CircleGem.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.gems,
+		CircleGemData::new
+	);
+
 	public CircleGemData() {
 		this(new ArrayList<>());
 	}
 
-	public CircleGemData(List<CircleGem> gems) {
+	private CircleGemData(List<CircleGem> gems) {
 		this.gems = new ArrayList<>(gems);
 	}
 
@@ -32,20 +37,18 @@ public class CircleGemData {
 		return true;
 	}
 
-	public void addGem(LivingEntity entity, CircleGem gem) {
-		if(this.canAdd(gem)) {
+	public void addGem(CircleGem gem) {
+		if (this.canAdd(gem)) {
 			this.gems.add(gem);
-			this.setChanged(entity);
 		}
 	}
 
-	public boolean removeGem(LivingEntity entity, CircleGem gem) {
+	public boolean removeGem(CircleGem gem) {
 		Iterator<CircleGem> gemIT = this.gems.iterator();
-		while(gemIT.hasNext()) {
+		while (gemIT.hasNext()) {
 			CircleGem currentGem = gemIT.next();
-			if(currentGem.gemType() == gem.gemType() && currentGem.combatType() == gem.combatType()) {
+			if (currentGem.gemType() == gem.gemType() && currentGem.combatType() == gem.combatType()) {
 				gemIT.remove();
-				this.setChanged(entity);
 				return true;
 			}
 		}
@@ -60,9 +63,5 @@ public class CircleGemData {
 		boolean hadGems = !this.gems.isEmpty();
 		this.gems.clear();
 		return hadGems;
-	}
-
-	private void setChanged(LivingEntity entity) {
-		PacketDistributor.sendToPlayersTrackingEntity(entity, new UpdateGemsPacket(this.gems));
 	}
 }

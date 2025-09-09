@@ -23,7 +23,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -45,8 +44,6 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
-import thebetweenlands.client.handler.ShaderHandler;
-import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
@@ -202,7 +199,6 @@ public class CommonRegistrationEvents {
 		event.register(BLRegistries.ENVIRONMENT_EVENTS);
 		event.register(BLRegistries.SIMULACRUM_EFFECTS);
 		event.register(BLRegistries.WORLD_STORAGE);
-		event.register(BLRegistries.SYNCHED_ATTACHMENT_TYPES);
 	}
 
 	private static void extraRegistration(RegisterEvent event) {
@@ -232,27 +228,16 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(ShockParticlePacket.TYPE, ShockParticlePacket.STREAM_CODEC, ShockParticlePacket::handle);
 		registrar.playToClient(SoundRipplePacket.TYPE, SoundRipplePacket.STREAM_CODEC, SoundRipplePacket::handle);
 		registrar.playToClient(UpdateDecayDataPacket.TYPE, UpdateDecayDataPacket.STREAM_CODEC, UpdateDecayDataPacket::handle);
-		registrar.playToClient(UpdateMudWalkerPacket.TYPE, UpdateMudWalkerPacket.STREAM_CODEC, UpdateMudWalkerPacket::handle);
-		registrar.playToClient(UpdatePuppetPacket.TYPE, UpdatePuppetPacket.STREAM_CODEC, UpdatePuppetPacket::handle);
-		registrar.playToClient(UpdatePuppeteerPacket.TYPE, UpdatePuppeteerPacket.STREAM_CODEC, UpdatePuppeteerPacket::handle);
-//		registrar.playToClient(UpdateRotSmellPacket.TYPE, UpdateRotSmellPacket.STREAM_CODEC, UpdateRotSmellPacket::handle);
-		registrar.playToClient(UpdateFoodSicknessPacket.TYPE, UpdateFoodSicknessPacket.STREAM_CODEC, UpdateFoodSicknessPacket::handle);
-		registrar.playToClient(UpdateGemsPacket.TYPE, UpdateGemsPacket.STREAM_CODEC, UpdateGemsPacket::handle);
 		registrar.playToClient(GemProtectionPacket.TYPE, GemProtectionPacket.STREAM_CODEC, GemProtectionPacket::handle);
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
-		registrar.playToClient(UpdateFallReductionPacket.TYPE, UpdateFallReductionPacket.STREAM_CODEC, UpdateFallReductionPacket::handle);
-		registrar.playToClient(UpdateInfestationPacket.TYPE, UpdateInfestationPacket.STREAM_CODEC, UpdateInfestationPacket::handle);
 		registrar.playToClient(OpenHerbloreBookPacket.TYPE, OpenHerbloreBookPacket.STREAM_CODEC, OpenHerbloreBookPacket::handle);
 		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, OpenRenameScreenPacket::handle);
 		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
 		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
-		registrar.playToClient(UpdateSwarmedPacket.TYPE, UpdateSwarmedPacket.STREAM_CODEC, UpdateSwarmedPacket::handle);
 		registrar.playToClient(SummonPeatMummyParticlesPacket.TYPE, SummonPeatMummyParticlesPacket.STREAM_CODEC, SummonPeatMummyParticlesPacket::handle);
 		registrar.playToClient(AddBetweenlandsBossBarPacket.TYPE, AddBetweenlandsBossBarPacket.STREAM_CODEC, AddBetweenlandsBossBarPacket::handle);
 		registrar.playToClient(WeedwoodBushRustlePacket.TYPE, WeedwoodBushRustlePacket.STREAM_CODEC, WeedwoodBushRustlePacket::handle);
 		registrar.playToClient(WightVolatileParticlesPacket.TYPE, WightVolatileParticlesPacket.STREAM_CODEC, WightVolatileParticlesPacket::handle);
-
-		registrar.playToClient(UpdateSynchedAttachmentPacket.TYPE, UpdateSynchedAttachmentPacket.STREAM_CODEC, UpdateSynchedAttachmentPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);

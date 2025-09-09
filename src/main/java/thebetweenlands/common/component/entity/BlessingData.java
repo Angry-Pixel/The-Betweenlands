@@ -23,7 +23,7 @@ public class BlessingData {
 		this(Optional.empty());
 	}
 
-	public BlessingData(Optional<GlobalPos> location) {
+	private BlessingData(Optional<GlobalPos> location) {
 		this.location = location;
 	}
 
@@ -44,15 +44,9 @@ public class BlessingData {
 
 	public void setBlessed(ResourceKey<Level> dimension, BlockPos location) {
 		this.location = Optional.of(GlobalPos.of(dimension, location));
-//		this.setChanged();
 	}
 
 	public void clearBlessed() {
 		this.location = Optional.empty();
-//		this.setChanged();
-	}
-
-	private void setChanged(LivingEntity entity) {
-//		PacketDistributor.sendToPlayersTrackingEntity(entity, new UpdateBlessedPacket(this.location));
 	}
 }

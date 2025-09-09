@@ -3,9 +3,12 @@ package thebetweenlands.common.world.storage;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import thebetweenlands.api.environment.EnvironmentEvent;
@@ -15,7 +18,7 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag, BetweenlandsWorldStorage> {
+public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag, BetweenlandsWorldStorage>, AttachmentSyncHandler<BetweenlandsWorldStorage> {
 
 	@Override
 	public @Nullable CompoundTag write(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
@@ -26,7 +29,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 	public BetweenlandsWorldStorage read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
 		return deserialize(holder, tag, registries);
 	}
-	
+
 	public static @Nullable CompoundTag serialize(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
 		CompoundTag tag = new CompoundTag();
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
@@ -58,7 +61,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		if(storage == null) {
 			return null;
 		}
-		
+
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
 			event.readFromNBT(tag, registries);
 		}
@@ -81,7 +84,17 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		for (int i = 0; i < spiritTreeKillTokensNbt.size(); i++) {
 			storage.getSpiritTreeKillTokens().add(SpiritTreeKillToken.readFromNBT(spiritTreeKillTokensNbt.getCompound(i)));
 		}
-		
+
 		return storage;
+	}
+
+	@Override
+	public void write(RegistryFriendlyByteBuf buf, BetweenlandsWorldStorage storage, boolean b) {
+		buf.writeNbt(serialize(storage, buf.registryAccess()));
+	}
+
+	@Override
+	public @Nullable BetweenlandsWorldStorage read(IAttachmentHolder holder, RegistryFriendlyByteBuf buf, @Nullable BetweenlandsWorldStorage storage) {
+		return deserialize(holder, buf.readNbt(), buf.registryAccess());
 	}
 }

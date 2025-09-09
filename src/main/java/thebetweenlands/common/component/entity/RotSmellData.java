@@ -9,14 +9,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.component.AttachmentHolderIdentifier;
-import thebetweenlands.common.component.ISynchedAttachment;
-import thebetweenlands.common.component.SynchedAttachmentType;
-import thebetweenlands.common.network.clientbound.attachment.UpdateSynchedAttachmentPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
-public class RotSmellData implements ISynchedAttachment<RotSmellData> {
+public class RotSmellData {
 
 	private long smellyTime;
 	private long immunityTime;
@@ -51,17 +46,15 @@ public class RotSmellData implements ISynchedAttachment<RotSmellData> {
 
 	public void setSmellingBad(LivingEntity entity, int duration) {
 		if(duration <= 0) {
-			this.setNotSmellingBad(entity);
+			this.setNotSmellingBad();
 		} else {
 			this.smellyTime = entity.level().getGameTime() + duration;
-			this.setChanged(entity);
 		}
 	}
 
-	public void setNotSmellingBad(LivingEntity entity) {
+	public void setNotSmellingBad() {
 		if(this.smellyTime != -1) {
 			this.smellyTime = -1;
-			this.setChanged(entity);
 		}
 	}
 
@@ -73,16 +66,10 @@ public class RotSmellData implements ISynchedAttachment<RotSmellData> {
 		if(duration <= 0) {
 			if(this.immunityTime != -1) {
 				this.immunityTime = -1;
-				this.setChanged(entity);
 			}
 		} else {
 			this.immunityTime = entity.level().getGameTime() + duration;
-			this.setChanged(entity);
 		}
-	}
-
-	private void setChanged(LivingEntity player) {
-		PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateSynchedAttachmentPacket<RotSmellData>(AttachmentHolderIdentifier.of(player), AttachmentRegistry.ROT_SMELL.get(), this));
 	}
 
 	public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -94,10 +81,4 @@ public class RotSmellData implements ISynchedAttachment<RotSmellData> {
 			}
 		}
 	}
-
-	@Override
-	public SynchedAttachmentType<RotSmellData> getSynchedAttachmentType(AttachmentHolderIdentifier<?> attachee) {
-		return AttachmentRegistry.ROT_SMELL_SYNCHER.get();
-	}
-
 }

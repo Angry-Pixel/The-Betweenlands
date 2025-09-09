@@ -37,7 +37,7 @@ public class FumigantCenserRecipe extends AbstractCenserRecipe<Void> {
 				RotSmellData cap = player.getData(AttachmentRegistry.ROT_SMELL);
 
 				if (cap.getRemainingSmellyTicks(player) > 0) {
-					cap.setNotSmellingBad(player);
+					cap.setNotSmellingBad();
 					cap.setImmune(player, Math.max(cap.getRemainingImmunityTicks(player), 600));
 					applied = true;
 				}

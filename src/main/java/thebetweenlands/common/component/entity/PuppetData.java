@@ -5,9 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.network.clientbound.attachment.UpdatePuppetPacket;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +33,9 @@ public class PuppetData {
 		Codec.INT.fieldOf("recruitment_cost").forGetter(o -> o.recruitmentCost)
 	).apply(instance, PuppetData::new));
 
+	public PuppetData() {
+		this(Optional.empty(), 0, false, false, Optional.empty(), Optional.empty(), 0);
+	}
 
 	public PuppetData(Optional<UUID> puppeteerUUID, int remainingTicks, boolean stay, boolean guard, Optional<BlockPos> guardHome, Optional<UUID> ringUUID, int recruitmentCost) {
 		this.puppeteerUUID = puppeteerUUID;
@@ -46,10 +47,9 @@ public class PuppetData {
 		this.recruitmentCost = recruitmentCost;
 	}
 
-	public void setPuppeteer(Entity puppet, @Nullable Entity puppeteer) {
+	public void setPuppeteer(@Nullable Entity puppeteer) {
 		this.puppeteerUUID = Optional.ofNullable(puppeteer == null ? null : puppeteer.getUUID());
 		this.puppeteer = puppeteer;
-		this.setChanged(puppet);
 	}
 
 	public boolean hasPuppeteer() {
@@ -80,19 +80,17 @@ public class PuppetData {
 		return this.remainingTicks;
 	}
 
-	public void setStay(Entity puppet, boolean stay) {
+	public void setStay(boolean stay) {
 		this.stay = stay;
-		this.setChanged(puppet);
 	}
 
 	public boolean getStay() {
 		return this.stay;
 	}
 
-	public void setGuard(Entity puppet, boolean guard, @Nullable BlockPos pos) {
+	public void setGuard(boolean guard, @Nullable BlockPos pos) {
 		this.guard = guard;
 		this.guardHome = Optional.ofNullable(pos);
-		this.setChanged(puppet);
 	}
 
 	public boolean getGuard() {
@@ -119,9 +117,5 @@ public class PuppetData {
 
 	public int getRecruitmentCost() {
 		return this.recruitmentCost;
-	}
-
-	private void setChanged(Entity puppet) {
-		PacketDistributor.sendToPlayersTrackingEntityAndSelf(puppet, new UpdatePuppetPacket(this.puppeteerUUID, this.remainingTicks, this.stay, this.guard, this.guardHome, this.ringUUID, this.recruitmentCost));
 	}
 }

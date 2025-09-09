@@ -2,10 +2,7 @@ package thebetweenlands.common.component.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.network.clientbound.attachment.UpdateMudWalkerPacket;
 
 public class MudWalkerData {
 	private long reductionTime;
@@ -18,7 +15,7 @@ public class MudWalkerData {
 		this(-1);
 	}
 
-	public MudWalkerData(long reductionTime) {
+	private MudWalkerData(long reductionTime) {
 		this.reductionTime = reductionTime;
 	}
 
@@ -32,23 +29,15 @@ public class MudWalkerData {
 
 	public void setActive(Player player, int duration) {
 		if(duration <= 0) {
-			this.setNotActive(player);
+			this.setNotActive();
 		} else {
 			this.reductionTime = player.level().getGameTime() + duration;
-			this.setChanged(player);
 		}
 	}
 
-	public void setNotActive(Player player) {
+	public void setNotActive() {
 		if(this.reductionTime != -1) {
 			this.reductionTime = -1;
-			this.setChanged(player);
-		}
-	}
-
-	private void setChanged(Player player) {
-		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayer((ServerPlayer) player, new UpdateMudWalkerPacket(this.reductionTime));
 		}
 	}
 }

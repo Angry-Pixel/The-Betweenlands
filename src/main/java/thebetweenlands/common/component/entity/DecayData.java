@@ -3,6 +3,9 @@ package thebetweenlands.common.component.entity;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -29,6 +32,14 @@ public class DecayData implements IDecayData {
 		Codec.FLOAT.fieldOf("decay_acceleration_level").forGetter(o -> o.decayAccelerationLevel)
 	).apply(instance, DecayData::new));
 
+	public static final StreamCodec<FriendlyByteBuf, DecayData> STREAM_CODEC = StreamCodec.composite(
+		ByteBufCodecs.INT, o -> o.decayLevel,
+		ByteBufCodecs.INT, o -> o.prevDecayLevel,
+		ByteBufCodecs.FLOAT, o -> o.decaySaturationLevel,
+		ByteBufCodecs.FLOAT, o -> o.decayAccelerationLevel,
+		DecayData::new
+	);
+
 	public DecayData() {
 		this(0, 0, 5.0F, 0.0F);
 	}
@@ -43,25 +54,26 @@ public class DecayData implements IDecayData {
 	/**
 	 * Adds or removes decay.
 	 * Negative decay increases "decay saturation" (a buffer before you lose decay levels) and decreases the decay level, while positive decay decreases decay saturation and increases the decay level.
-	 * @param decay Decay to be added
+	 *
+	 * @param decay           Decay to be added
 	 * @param decaySaturation Saturation
 	 */
 	@Override
 	public void addStats(Player player, int decay, float decaySaturation) {
 		this.decayLevel = Mth.clamp(this.decayLevel + decay, 0, 20);
-		this.decaySaturationLevel = Mth.clamp(this.decaySaturationLevel + (float)-decay * decaySaturation * 2.0F, 0.0F, (float)(20 - this.decayLevel) / 4.0F);
-		this.setChanged(player);
+		this.decaySaturationLevel = Mth.clamp(this.decaySaturationLevel + (float) -decay * decaySaturation * 2.0F, 0.0F, (float) (20 - this.decayLevel) / 4.0F);
 	}
 
 	/**
 	 * Updates the decay stats
+	 *
 	 * @param player
 	 */
 	@Override
 	public void tick(Player player) {
 		this.prevDecayLevel = this.getDecayLevel(player);
 
-		if(this.isDecayEnabled(player)) {
+		if (this.isDecayEnabled(player)) {
 			if (this.decayAccelerationLevel > 4.0F) {
 				this.decayAccelerationLevel -= 4.0F;
 
@@ -70,7 +82,6 @@ public class DecayData implements IDecayData {
 				} else {
 					this.decaySaturationLevel = 0.0F;
 					this.decayLevel = Math.min(this.decayLevel + 1, 20);
-					this.setChanged(player);
 				}
 			}
 		}
@@ -78,6 +89,7 @@ public class DecayData implements IDecayData {
 
 	/**
 	 * Returns the decay level (0 = no decay, 20 = maximum decay)
+	 *
 	 * @return
 	 */
 	@Override
@@ -87,6 +99,7 @@ public class DecayData implements IDecayData {
 
 	/**
 	 * Returns the decay level in the previous tick
+	 *
 	 * @return
 	 */
 	@Override
@@ -96,6 +109,7 @@ public class DecayData implements IDecayData {
 
 	/**
 	 * Returns the decay saturation level (higher = slower decay rate)
+	 *
 	 * @return
 	 */
 	@Override
@@ -105,6 +119,7 @@ public class DecayData implements IDecayData {
 
 	/**
 	 * Returns the decay acceleration level
+	 *
 	 * @return
 	 */
 	@Override
@@ -114,38 +129,32 @@ public class DecayData implements IDecayData {
 
 	/**
 	 * Sets the decay level
+	 *
 	 * @param decay
 	 */
 	@Override
 	public void setDecayLevel(Player player, int decay) {
 		this.decayLevel = decay;
-		this.setChanged(player);
 	}
 
 	/**
 	 * Sets the decay saturation level (higher = slower decay rate)
+	 *
 	 * @param saturation
 	 */
 	@Override
 	public void setDecaySaturationLevel(Player player, float saturation) {
 		this.decaySaturationLevel = saturation;
-		this.setChanged(player);
 	}
 
 	/**
 	 * Adds decay acceleration (once >= 4 is accumulated the decay level is increased by one)
+	 *
 	 * @param acceleration
 	 */
 	@Override
 	public void addDecayAcceleration(Player player, float acceleration) {
 		this.decayAccelerationLevel = Math.min(this.decayAccelerationLevel + acceleration, 40.0F);
-		this.setChanged(player);
-	}
-
-	private void setChanged(Player player) {
-		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayer((ServerPlayer) player, new UpdateDecayDataPacket(this.decayLevel, this.prevDecayLevel, this.decaySaturationLevel, this.decayAccelerationLevel));
-		}
 	}
 
 	@Override
@@ -158,15 +167,15 @@ public class DecayData implements IDecayData {
 
 	@Override
 	public float getPlayerMaxHealthPenalty(Player player, int decayLevel) {
-		if(BetweenlandsConfig.decayPercentual) return getPlayerMaxHealthPenaltyPercentage(player, decayLevel) * player.getMaxHealth();
-		return Math.max((float)decayLevel - BetweenlandsConfig.decayMinHealth, 0.0f);
+		if (BetweenlandsConfig.decayPercentual) return getPlayerMaxHealthPenaltyPercentage(player, decayLevel) * player.getMaxHealth();
+		return Math.max((float) decayLevel - BetweenlandsConfig.decayMinHealth, 0.0f);
 	}
 
 	@Override
 	public float getPlayerMaxHealthPenaltyPercentage(Player player, int decayLevel) {
-		if(!BetweenlandsConfig.decayPercentual) return getPlayerMaxHealthPenalty(player, decayLevel) / player.getMaxHealth();
+		if (!BetweenlandsConfig.decayPercentual) return getPlayerMaxHealthPenalty(player, decayLevel) / player.getMaxHealth();
 
-		return Math.max(((float)decayLevel / 20.0f - BetweenlandsConfig.decayMinHealthPercentage), 0);
+		return Math.max(((float) decayLevel / 20.0f - BetweenlandsConfig.decayMinHealthPercentage), 0);
 
 	}
 }

@@ -2,12 +2,11 @@ package thebetweenlands.common.component.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.network.clientbound.attachment.UpdateSwarmedPacket;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -32,22 +31,29 @@ public class SwarmedData {
 		Codec.FLOAT.fieldOf("damage").forGetter(o -> o.damage)
 	).apply(instance, SwarmedData::new));
 
+	public static final StreamCodec<FriendlyByteBuf, SwarmedData> STREAM_CODEC = StreamCodec.composite(
+		ByteBufCodecs.FLOAT, o -> o.strength,
+		ByteBufCodecs.INT, o -> o.hurtTimer,
+		ByteBufCodecs.INT, o -> o.damageTimer,
+		ByteBufCodecs.FLOAT, o -> o.damage,
+		SwarmedData::new
+	);
+
 	public SwarmedData() {
 		this(0.0F, 0, 0, 0.0F);
 	}
 
-	public SwarmedData(float strength, int hurtTimer, int damageTimer, float damage) {
+	private SwarmedData(float strength, int hurtTimer, int damageTimer, float damage) {
 		this.strength = strength;
 		this.hurtTimer = hurtTimer;
 		this.damageTimer = damageTimer;
 		this.damage = damage;
 	}
 
-	public void setSwarmedStrength(Player player, float strength) {
+	public void setSwarmedStrength(float strength) {
 		float newStrength = Mth.clamp(strength, 0, 1);
 		if (newStrength != this.strength) {
 			this.strength = newStrength;
-			this.setChanged(player);
 		}
 	}
 
@@ -55,10 +61,9 @@ public class SwarmedData {
 		return this.strength;
 	}
 
-	public void setHurtTimer(Player player, int timer) {
+	public void setHurtTimer(int timer) {
 		if (timer != this.hurtTimer) {
 			this.hurtTimer = timer;
-			this.setChanged(player);
 		}
 	}
 
@@ -119,11 +124,5 @@ public class SwarmedData {
 	@Nullable
 	public Entity getSwarmSource() {
 		return this.source == null ? null : this.source.get();
-	}
-
-	private void setChanged(Player player) {
-		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayer((ServerPlayer) player, new UpdateSwarmedPacket(this.strength, this.hurtTimer, this.damageTimer, this.damage));
-		}
 	}
 }

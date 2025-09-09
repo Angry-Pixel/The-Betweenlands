@@ -87,7 +87,7 @@ public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 
 		if (!level.isClientSide() && entity instanceof Player player) {
 			SwarmedData cap = entity.getData(AttachmentRegistry.SWARMED);
-			cap.setSwarmedStrength(player, cap.getSwarmedStrength() + 0.005f);
+			cap.setSwarmedStrength(cap.getSwarmedStrength() + 0.005f);
 		}
 	}
 

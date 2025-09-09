@@ -16,7 +16,6 @@ import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.component.SynchedAttachmentType;
 import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
@@ -29,7 +28,6 @@ public class BLRegistries {
 	public static final Registry<EnvironmentEvent> ENVIRONMENT_EVENTS = new RegistryBuilder<>(Keys.ENVIRONMENT_EVENTS).sync(true).create();
 	public static final Registry<SimulacrumEffect> SIMULACRUM_EFFECTS = new RegistryBuilder<>(Keys.SIMULACRUM_EFFECTS).sync(true).create();
 	public static final Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>> WORLD_STORAGE = new RegistryBuilder<>(Keys.WORLD_STORAGE).sync(true).create();
-	public static final Registry<SynchedAttachmentType<?>> SYNCHED_ATTACHMENT_TYPES = new RegistryBuilder<>(Keys.SYNCHED_ATTACHMENT_TYPES).sync(true).create();
 
 	public static final class Keys {
 
@@ -46,6 +44,5 @@ public class BLRegistries {
 		public static final ResourceKey<Registry<FrogVariant>> FROG_VARIANT = ResourceKey.createRegistryKey(TheBetweenlands.prefix("frog_variant"));
 		public static final ResourceKey<Registry<SimulacrumEffect>> SIMULACRUM_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("simulacrum_effect"));
 		public static final ResourceKey<Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>>> WORLD_STORAGE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("world_storage"));
-		public static final ResourceKey<Registry<SynchedAttachmentType<?>>> SYNCHED_ATTACHMENT_TYPES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("synched_attachment_types"));
 	}
 }

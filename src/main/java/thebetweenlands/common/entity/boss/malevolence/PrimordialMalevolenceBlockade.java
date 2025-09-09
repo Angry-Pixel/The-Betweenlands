@@ -13,7 +13,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -180,7 +179,7 @@ public class PrimordialMalevolenceBlockade extends Mob implements OwnableEntity,
 											Collections.shuffle(indices);
 
 											for (int index : indices) {
-												if (playerCap.get().checkAndActivateShield(index, player)) {
+												if (playerCap.get().checkAndActivateShield(index)) {
 													break;
 												}
 											}

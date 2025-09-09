@@ -2,12 +2,13 @@ package thebetweenlands.common.component.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.attachment.ProtectionShield;
-import thebetweenlands.common.network.clientbound.attachment.UpdatePuppeteerPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 import java.util.List;
@@ -30,7 +31,18 @@ public class PuppeteerData {
 		Codec.INT.fieldOf("shield_data").forGetter(o -> o.shield.packActiveData())
 	).apply(instance, PuppeteerData::new));
 
-	public PuppeteerData(int activatingEntityId, int shieldRotationTicks, int shieldData) {
+	public static final StreamCodec<FriendlyByteBuf, PuppeteerData> STREAM_CODEC = StreamCodec.composite(
+		ByteBufCodecs.INT, o -> o.activatingEntityId,
+		ByteBufCodecs.INT, o -> o.activatingTicks,
+		ByteBufCodecs.INT, o -> o.shield.packActiveData(),
+		PuppeteerData::new
+	);
+
+	public PuppeteerData() {
+		this(-1, 0, 0);
+	}
+
+	private PuppeteerData(int activatingEntityId, int shieldRotationTicks, int shieldData) {
 		this.activatingEntityId = activatingEntityId;
 		this.shieldRotationTicks = shieldRotationTicks;
 		this.shield.unpackActiveData(shieldData);
@@ -43,10 +55,9 @@ public class PuppeteerData {
 		});
 	}
 
-	public void setActivatingEntity(@Nullable Entity entity, Player player) {
+	public void setActivatingEntity(@Nullable Entity entity) {
 		this.activatingEntityId = entity == null ? -1 : entity.getId();
 		this.activatingEntity = entity;
-		this.setChanged(player);
 	}
 
 	@Nullable
@@ -67,10 +78,9 @@ public class PuppeteerData {
 		this.activatingTicks = ticks;
 	}
 
-	public boolean checkAndActivateShield(int index, Player player) {
+	public boolean checkAndActivateShield(int index) {
 		if (!this.shield.isActive(index)) {
 			this.shield.setActive(index, true);
-			this.setChanged(player);
 			return true;
 		}
 		return false;
@@ -91,7 +101,6 @@ public class PuppeteerData {
 		this.prevShieldRotationTicks = this.shieldRotationTicks;
 		if (this.shield.hasShield()) {
 			this.shieldRotationTicks++;
-			this.setChanged(player);
 		}
 	}
 
@@ -101,9 +110,5 @@ public class PuppeteerData {
 
 	public int getPrevShieldRotationTicks() {
 		return this.prevShieldRotationTicks;
-	}
-
-	private void setChanged(Player puppeteer) {
-		PacketDistributor.sendToPlayersTrackingEntityAndSelf(puppeteer, new UpdatePuppeteerPacket(this.activatingEntityId, this.shieldRotationTicks, this.shield.packActiveData()));
 	}
 }

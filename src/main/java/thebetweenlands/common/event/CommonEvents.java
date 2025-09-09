@@ -9,7 +9,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.component.SynchedAttachmentHandler;
 import thebetweenlands.common.component.entity.SwarmedData;
 import thebetweenlands.common.handler.*;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -29,7 +28,6 @@ public class CommonEvents {
 		ShieldHandler.init();
 		SimulacrumHandler.init();
 
-		NeoForge.EVENT_BUS.addListener(SynchedAttachmentHandler::onPlayerJoinWorld);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);
 	}
@@ -54,15 +52,15 @@ public class CommonEvents {
 			}
 
 			if (cap.getHurtTimer() > 0) {
-				cap.setHurtTimer(player, cap.getHurtTimer() - 1);
+				cap.setHurtTimer(cap.getHurtTimer() - 1);
 			}
 
 			if (cap.getSwarmedStrength() > 0) {
 				if (player.isInWater() || player.isOnFire()) {
-					cap.setSwarmedStrength(player, 0);
+					cap.setSwarmedStrength(0);
 				} else if (player.swinging || (player.getY() - player.yo) > 0.1f || player.isShiftKeyDown()) {
-					cap.setSwarmedStrength(player, cap.getSwarmedStrength() - 0.01f);
-					cap.setHurtTimer(player, 5);
+					cap.setSwarmedStrength(cap.getSwarmedStrength() - 0.01f);
+					cap.setHurtTimer(5);
 					player.setShiftKeyDown(false);
 				}
 
@@ -73,7 +71,7 @@ public class CommonEvents {
 				float ddRot = Mth.sqrt(ddYaw * ddYaw + ddPitch * ddPitch);
 
 				if (ddRot > 30) {
-					cap.setSwarmedStrength(player, cap.getSwarmedStrength() - (ddRot - 30) * 0.001f);
+					cap.setSwarmedStrength(cap.getSwarmedStrength() - (ddRot - 30) * 0.001f);
 				}
 
 				cap.setLastRotations(player.getYRot(), player.getXRot());
@@ -81,7 +79,7 @@ public class CommonEvents {
 			}
 
 			if (cap.getSwarmedStrength() < 0.1f) {
-				cap.setSwarmedStrength(player, cap.getSwarmedStrength() - 0.0005f);
+				cap.setSwarmedStrength(cap.getSwarmedStrength() - 0.0005f);
 			} else {
 				cap.setDamageTimer(cap.getDamageTimer() + 1);
 

@@ -24,9 +24,12 @@ import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.util.FoodSickness;
 
+import javax.annotation.Nullable;
+
 public class FoodSicknessHandler {
 	private static final InteractionHand lastHand = InteractionHand.MAIN_HAND;
 	private static ItemStack lastUsedItem = ItemStack.EMPTY;
+	@Nullable
 	private static FoodSickness lastSickness = null;
 
 	public static void init() {
@@ -55,7 +58,7 @@ public class FoodSicknessHandler {
 	}
 
 	protected static void addSicknessMessage(Player player, ItemStack item, FoodSickness sickness) {
-		if (lastUsedItem.isEmpty() || !ItemStack.isSameItem(lastUsedItem, item) || lastSickness == null || lastSickness != sickness) {
+		if (lastUsedItem.isEmpty() || !ItemStack.isSameItem(lastUsedItem, item) || lastSickness != sickness) {
 			player.displayClientMessage(sickness.getRandomLine(player.getRandom()), true);
 		}
 		lastUsedItem = item;

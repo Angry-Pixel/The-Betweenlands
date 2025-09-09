@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.network.clientbound.attachment.UpdateInfestationPacket;
 
 public class InfestationIgnoreData {
 
@@ -19,7 +18,7 @@ public class InfestationIgnoreData {
 		this(-1);
 	}
 
-	public InfestationIgnoreData(long immunityTime) {
+	private InfestationIgnoreData(long immunityTime) {
 		this.immunityTime = immunityTime;
 	}
 
@@ -36,20 +35,12 @@ public class InfestationIgnoreData {
 			this.setNotImmune(player);
 		} else {
 			this.immunityTime = player.level().getGameTime() + duration;
-			this.setChanged(player);
 		}
 	}
 
 	public void setNotImmune(Player player) {
 		if(this.immunityTime != -1) {
 			this.immunityTime = -1;
-			this.setChanged(player);
-		}
-	}
-
-	private void setChanged(Player player) {
-		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayer((ServerPlayer) player, new UpdateInfestationPacket(this.immunityTime));
 		}
 	}
 }

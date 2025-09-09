@@ -33,7 +33,7 @@ public class FumigantItem extends HoverTextItem {
 	public void removeSmell(Player player, ItemStack stack) {
 		RotSmellData data = player.getData(AttachmentRegistry.ROT_SMELL);
 		if (data.isSmellingBad(player)) {
-			data.setNotSmellingBad(player);
+			data.setNotSmellingBad();
 			data.setImmune(player, Math.max(data.getRemainingImmunityTicks(player), 600));
 			stack.consume(1, player);
 			if(player instanceof ServerPlayer sp)
