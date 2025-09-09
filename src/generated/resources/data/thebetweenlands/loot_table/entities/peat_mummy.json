@@ -78,6 +78,54 @@
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "active": true,
+          "condition": "thebetweenlands:event_active",
+          "event": "thebetweenlands:spoopy"
+        },
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:blue_candy"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:red_candy"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:yellow_candy"
+        }
+      ],
+      "rolls": 3.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "active": true,
+          "condition": "thebetweenlands:event_active",
+          "event": "thebetweenlands:winter"
+        },
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:mince_pie"
+        }
+      ],
+      "rolls": 3.0
     }
   ],
   "random_sequence": "thebetweenlands:entities/peat_mummy"

@@ -33,23 +33,34 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		super(FeatureFlags.REGISTRY.allFlags(), provider);
 	}
 
-	//TODO add seasonal drops
+	//TODO seasonal drops for unimplemented mobs:
+	//angler: 1, 8, 1, 4
+	//blood snail: 2, 8, 1, 4
+	//chiromaw: 2, 8, 1, 6
+	//chiromaw matriarch: 2, 6, 1, 1
+	//large sludge worm: 2, 6, 1, 1
+	//leech: 2, 8, 1, 3
+	//pyrad: 2, 3, 1, 1
+	//sludge menace: 8, 0, 6, 0
+	//termite: 2, 10, 1, 6
+	//consider seasonal drops for stalkers?
+	//why do shallowbreath have seasonal drops??? Theyre gas clouds??????
 	@Override
 	public void generate() {
-		this.add(EntityRegistry.WIGHT.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.WIGHT.get(), 2, 1, 1, 1, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.WIGHT_HEART)
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 				.add(EmptyLootItem.emptyItem().setWeight(2))
 				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
-		this.add(EntityRegistry.SWAMP_HAG.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.SWAMP_HAG.get(), 2, 3, 1, 2, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.noLoot(EntityRegistry.GECKO);
-		this.noLoot(EntityRegistry.BUBBLER_CRAB);
-		this.add(EntityRegistry.SILT_CRAB.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.BUBBLER_CRAB.get(), 2, 10, 1, 5, LootTable.lootTable());
+		this.addWithSeasonalDrops(EntityRegistry.SILT_CRAB.get(), 2, 10, 1, 5, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.SILT_CRAB_CLAW)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
@@ -196,31 +207,31 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.OCHRE_SNAIL_SHELL)
 				.when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.5F, 0.0625F)))));
 
-		this.add(EntityRegistry.SHAMBLER.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.SHAMBLER.get(), 2, 6, 1, 4, LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SHAMBLER_TONGUE))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
-		this.add(EntityRegistry.SLUDGE_WORM.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.SLUDGE_WORM.get(), 2, 8, 1, 3, LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
 		//TODO change this to use the squashed function for valonite shards and remove the sludgeballs
-		this.add(EntityRegistry.TINY_SLUDGE_WORM.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.TINY_SLUDGE_WORM.get(), 2, 8, 1, 3, LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
-		this.noLoot(EntityRegistry.SHALLOWBREATH);
+		this.addWithSeasonalDrops(EntityRegistry.SHALLOWBREATH.get(), 2, 6, 1, 4, LootTable.lootTable());
 
 		this.noLoot(EntityRegistry.TINY_SLUDGE_WORM_HELPER);
 
 		this.noLoot(EntityRegistry.STALKER);
 
-		this.add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), 8, 0, 6, 0, LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_SUMMONING)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SHIMMER_STONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))))));
 
-		this.add(EntityRegistry.PEAT_MUMMY.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.PEAT_MUMMY.get(), 3, 0, 3, 0, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
 					EntityPredicate.Builder.entity().subPredicate(new BossPeatMummyPredicate(false)).build()))
@@ -277,7 +288,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 //				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
 				.add(LootItem.lootTableItem(ItemRegistry.FABRICATED_SCROLL))));
 
-		this.add(EntityRegistry.CRYPT_CRAWLER.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.CRYPT_CRAWLER.get(), 1, 6, 1, 1, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.TAR_DRIP).setWeight(3))
 				.add(LootItem.lootTableItem(ItemRegistry.VALONITE_SPLINTER).setWeight(1))
@@ -295,7 +306,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		this.add(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
 		this.add(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), this.fromEntityLootTable(EntityRegistry.CRYPT_CRAWLER.get()));
 		this.noLoot(EntityRegistry.OLM);
-		this.add(EntityRegistry.EMBERLING.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.EMBERLING.get(), 2, 8, 1, 3, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.OCTINE_NUGGET)
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1, 3)))))
@@ -305,7 +316,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.when(LootItemKilledByPlayerCondition.killedByPlayer())
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
-		this.add(EntityRegistry.EMBERLING_SHAMAN.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.EMBERLING_SHAMAN.get(), 2, 8, 1, 3, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.setRolls(UniformGenerator.between(1, 2))
 				.add(LootItem.lootTableItem(ItemRegistry.UNDYING_EMBERS)
@@ -316,10 +327,11 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.setRolls(UniformGenerator.between(1, 2))
 				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
+				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
 		this.noLoot(EntityRegistry.FIREFLY);
 		this.noLoot(EntityRegistry.JELLYFISH);
-		this.add(EntityRegistry.LURKER.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.LURKER.get(), 2, 6, 1, 1, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN)
 					.when(LootItemKilledByPlayerCondition.killedByPlayer())
@@ -415,14 +427,19 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.INANIMATE_TARMINION))));
 		this.noLoot(EntityRegistry.SPLODESHROOM);
-		this.add(EntityRegistry.SLUDGE.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.SLUDGE.get(), 2, 8, 1, 5, LootTable.lootTable()
 			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(0, 2))
 				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL)
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 		this.add(EntityRegistry.SMOL_SLUDGE.get(), this.fromEntityLootTable(EntityRegistry.SLUDGE.get()));
-		this.add(EntityRegistry.PRIMORDIAL_MALEVOLENCE.get(), LootTable.lootTable()
+		this.addWithSeasonalDrops(EntityRegistry.PRIMORDIAL_MALEVOLENCE.get(), 8, 0, 6, 0, LootTable.lootTable()
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_RECRUITMENT)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT))));
+		this.addWithSeasonalDrops(EntityRegistry.TAR_BEAST.get(), 3, 0, 3, 0, LootTable.lootTable()
+				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_BEAST_HEART).when(LootItemKilledByPlayerCondition.killedByPlayer())))
+				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_DRIP).setWeight(8)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1, 2))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
@@ -434,6 +451,30 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool()
 				.setRolls(ConstantValue.exactly(1))
 				.add(NestedLootTable.lootTableReference(parent.getDefaultLootTable())));
+	}
+
+	public void addWithSeasonalDrops(EntityType<?> type, int spookRolls, int spookEmptyWeight, int winterRolls, int winterEmptyWeight, LootTable.Builder builder) {
+		var spookPool = LootPool.lootPool().setRolls(ConstantValue.exactly(spookRolls))
+			.when(EventActiveCondition.isEventActive(EnvironmentEventRegistry.SPOOPY))
+			.when(LootItemKilledByPlayerCondition.killedByPlayer())
+			.add(LootItem.lootTableItem(ItemRegistry.BLUE_CANDY))
+			.add(LootItem.lootTableItem(ItemRegistry.RED_CANDY))
+			.add(LootItem.lootTableItem(ItemRegistry.YELLOW_CANDY));
+
+		if (spookEmptyWeight > 0) {
+			spookPool.add(EmptyLootItem.emptyItem().setWeight(spookEmptyWeight));
+		}
+
+		var winterPool = LootPool.lootPool().setRolls(ConstantValue.exactly(winterRolls))
+			.when(EventActiveCondition.isEventActive(EnvironmentEventRegistry.WINTER))
+			.when(LootItemKilledByPlayerCondition.killedByPlayer())
+			.add(LootItem.lootTableItem(ItemRegistry.MINCE_PIE));
+
+		if (winterEmptyWeight > 0) {
+			winterPool.add(EmptyLootItem.emptyItem().setWeight(winterEmptyWeight));
+		}
+
+		this.add(type, builder.withPool(spookPool).withPool(winterPool));
 	}
 
 	@Override

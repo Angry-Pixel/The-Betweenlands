@@ -179,9 +179,9 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		private boolean motionSet = false;
 		private double motionX, motionY, motionZ;
 		private boolean scaleSet = false;
-		private float scale;
+		private float scale = 1.0F;
 		private boolean colorSet = false;
-		private float r, g, b, a;
+		private float r, g, b, a = 1.0F;
 		private Object[] data;
 		private boolean dataSet = false;
 

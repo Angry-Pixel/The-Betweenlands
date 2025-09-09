@@ -319,6 +319,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TELEPORTER.get(), PrimordialMalevolenceTeleporterRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET.get(), PrimordialMalevolenceTurretRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.VOLATILE_SOUL.get(), VolatileSoulRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.TAR_BEAST.get(), TarBeastRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -414,6 +415,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.PRIMORDIAL_MALEVOLENCE, PrimordialMalevolenceModel::create);
 		event.registerLayerDefinition(BLModelLayers.SWORD_ENERGY, SwordEnergyModel::create);
 		event.registerLayerDefinition(BLModelLayers.GAS_CLOUD, GasCloudModel::create);
+		event.registerLayerDefinition(BLModelLayers.TAR_BEAST, TarBeastModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -757,7 +759,6 @@ public class ClientRegistrationEvents {
 		event.registerSprite(ParticleRegistry.LANDING_TAR.get(), TarBeastDripParticle::createTarLandParticle);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD.get(), GasCloudParticle.GasCloudFactory::new);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD_HAZE.get(), GasCloudHazeParticle.GasCloudHazeFactory::new);
-
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

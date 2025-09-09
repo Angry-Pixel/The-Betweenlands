@@ -18,8 +18,6 @@ public record PlayerHasItemCondition(ItemStack stack) implements LootItemConditi
 			ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(PlayerHasItemCondition::stack))
 		.apply(instance, PlayerHasItemCondition::new));
 
-
-
 	@Override
 	public LootItemConditionType getType() {
 		return LootFunctionRegistry.HAS_ITEM.get();

@@ -16,4 +16,5 @@ public class LootFunctionRegistry {
 	public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SetAnadiaPropertiesFunction>> SET_ANADIA_PROPERTIES = FUNCTIONS.register("set_anadia_properties", () -> new LootItemFunctionType<>(SetAnadiaPropertiesFunction.CODEC));
 
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> HAS_ITEM = CONDITIONS.register("has_item", () -> new LootItemConditionType(PlayerHasItemCondition.CODEC));
+	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> EVENT_ACTIVE = CONDITIONS.register("event_active", () -> new LootItemConditionType(EventActiveCondition.CODEC));
 }

@@ -96,7 +96,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Sporeling>> SPORELING = registerWithEgg("sporeling", EntityType.Builder.of(Sporeling::new, MobCategory.CREATURE).sized(0.3F, 0.6F), 0x696144, 0xFFFB00, Sporeling::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Stalker>> STALKER = registerWithEgg("stalker", EntityType.Builder.of(Stalker::new, MobCategory.MONSTER).sized(0.85F, 0.85F).clientTrackingRange(10), 0xE4DCC9, 0xD58888, Stalker::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<SwampHag>> SWAMP_HAG = registerWithEgg("swamp_hag", EntityType.Builder.of(SwampHag::new, MobCategory.MONSTER).sized(0.6F, 1.8F), 0x6E5B36, 0x226124, SwampHag::registerAttributes);
-	//tar beast
+	public static final DeferredHolder<EntityType<?>, EntityType<TarBeast>> TAR_BEAST = registerWithEgg("tar_beast", EntityType.Builder.of(TarBeast::new, MobCategory.MONSTER).sized(1.5F, 2.0F), 0x000000, 0x202020, TarBeast::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Tarminion>> TARMINION = registerWithEgg("tarminion", EntityType.Builder.of(Tarminion::new, MobCategory.CREATURE).sized(0.3F, 0.5F), 0x000000, 0x2E2E2E, Tarminion::registerAttributes);
 	//termite
 	public static final DeferredHolder<EntityType<?>, EntityType<TinySludgeWorm>> TINY_SLUDGE_WORM = registerWithEgg("tiny_sludge_worm", EntityType.Builder.of(TinySludgeWorm::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F).fireImmune(), 0xDAC2A7, 0x5C4639, TinySludgeWorm::registerAttributes);

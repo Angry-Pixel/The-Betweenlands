@@ -134,8 +134,9 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.WEEDWOOD_SWORD.get(),
 			ItemRegistry.BONE_SWORD.get(),
 			ItemRegistry.OCTINE_SWORD.get(),
-			ItemRegistry.VALONITE_SWORD.get()
-			// TODO Shockwave, Ancient
+			ItemRegistry.VALONITE_SWORD.get(),
+			ItemRegistry.SHOCKWAVE_SWORD.get()
+			// TODO Ancient
 		);
 
 		this.tag(ItemTags.PICKAXES).add(
@@ -171,7 +172,8 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.CRITTER_CRUNCHER.get(),
 			ItemRegistry.WIGHTS_BANE.get(),
 			ItemRegistry.SLUDGE_SLICER.get(),
-			// TODO Shockwave, Ancient
+			ItemRegistry.SHOCKWAVE_SWORD.get(),
+			// TODO Ancient
 
 			// Pickaxes
 			ItemRegistry.WEEDWOOD_PICKAXE.get(),

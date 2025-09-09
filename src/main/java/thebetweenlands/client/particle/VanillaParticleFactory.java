@@ -24,7 +24,13 @@ public class VanillaParticleFactory<T extends ParticleOptions> extends ParticleF
 	@Nullable
 	@Override
 	protected Particle createParticle(T type, ImmutableParticleArgs args) {
-		return this.factory.createParticle(type, args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ);
+		var particle = this.factory.createParticle(type, args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ);
+		if (particle != null) {
+			particle.setColor(args.r, args.g, args.b);
+			particle.setAlpha(args.a);
+			particle.scale(args.scale);
+		}
+		return particle;
 	}
 
 	@Override

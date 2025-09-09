@@ -140,8 +140,7 @@ public class Wight extends Monster implements BLEntity {
                 if (this.getGrowTimer() > 0)
                     this.setGrowTimer(Math.max(0, this.getGrowTimer() - 1));
                 if (this.getGrowTimer() <= 0) {
-                    //TODO
-                    //this.convertTo(EntityRegistry.TAR_BEAST.get(), false);
+                    this.convertTo(EntityRegistry.TAR_BEAST.get(), false);
                 }
             }
 
