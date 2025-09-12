@@ -53,7 +53,7 @@ public class BLRenderTypes extends RenderType {
 			false,
 			true,
 			RenderType.CompositeState.builder()
-				.setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER)
+				.setShaderState(RenderStateShard.RENDERTYPE_BREEZE_WIND_SHADER)
 				.setTextureState(new RenderStateShard.TextureStateShard(location, false, false))
 				.setTexturingState(new RenderStateShard.OffsetTexturingStateShard(u, v))
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
