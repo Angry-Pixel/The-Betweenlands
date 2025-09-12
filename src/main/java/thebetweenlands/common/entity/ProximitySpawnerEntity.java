@@ -14,15 +14,16 @@ import net.minecraft.world.phys.AABB;
 
 public abstract class ProximitySpawnerEntity extends PathfinderMob implements BLEntity {
 
-	public static AttributeSupplier.Builder registerAttributes() {
-		return Mob.createMobAttributes()
-				.add(Attributes.MAX_HEALTH, 5.0D)
-				.add(Attributes.MOVEMENT_SPEED, 01D);
-	}
-
 	public ProximitySpawnerEntity(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
 	}
+
+	public static AttributeSupplier.Builder registerAttributes() {
+		return Mob.createMobAttributes()
+			.add(Attributes.MAX_HEALTH, 5.0D)
+			.add(Attributes.MOVEMENT_SPEED, 0.0D);
+	}
+
 	/**
 	 * Amount to extend proximity area in XZ axis
 	 *
@@ -82,75 +83,67 @@ public abstract class ProximitySpawnerEntity extends PathfinderMob implements BL
 
 	/**
 	 * Action to happen just before entity spawns
-	 *
+	 * <p>
 	 * Can be used for setting Spawned Entities' position or attributes etc
 	 * By default sets the spawned entity to the same pos as the proximity spawner was.
 	 * Override to change.
 	 */
-
 	protected void performPreSpawnaction(@Nullable Entity targetEntity, @Nullable Entity entitySpawned) {
-		if(entitySpawned != null)
+		if (entitySpawned != null)
 			entitySpawned.setPos(blockPosition().getX() + 0.5F, blockPosition().getY(), blockPosition().getZ() + 0.5F);
 	}
 
 	/**
 	 * Action to happen just after entity spawns
-	 *
+	 * <p>
 	 * Entity can be null
 	 */
-
-	protected void performPostSpawnaction(@Nullable Entity targetEntity, @Nullable Entity entitySpawned) { }
+	protected void performPostSpawnaction(@Nullable Entity targetEntity, @Nullable Entity entitySpawned, boolean firstSpawn) {
+	}
 
 	/**
 	 * The Proximity box used
 	 *
 	 * @return an AxisAlignedBB for the proximity area.
 	 */
-
 	protected AABB proximityBox() {
-		return new AABB(blockPosition()).inflate(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal());
+		return new AABB(this.blockPosition()).inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal());
 	}
 
 	/**
 	 * Generic area checking code and spawning.
-	 *
-	 * @return returns a null :( - bad modder.
 	 */
 	@SuppressWarnings("resource")
-	@Nullable
-	protected Entity checkArea() {
-		if (!level().isClientSide && level().getDifficulty() != Difficulty.PEACEFUL) {
-			List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, proximityBox());
-			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-				Entity entity = list.get(entityCount);
+	protected void checkArea() {
+		if (!this.level().isClientSide() && this.level().getDifficulty() != Difficulty.PEACEFUL) {
+			List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, this.proximityBox());
+			for (Entity entity : list) {
 				if (entity != null)
-					if (entity instanceof Player && !((Player) entity).isSpectator() && !((Player) entity).isCreative()) {
-						if (canSneakPast() && entity.isCrouching())
-							return null;
-						else if (checkSight() && !hasLineOfSight(entity))
-							return null;
+					if (entity instanceof Player player && !player.isSpectator() && !player.isCreative()) {
+						if (this.canSneakPast() && player.isSecondaryUseActive())
+							return;
+						else if (this.checkSight() && !this.hasLineOfSight(entity))
+							return;
 						else {
-							for (int count = 0; count < getEntitySpawnCount(); count++) {
-								Entity spawn = getEntitySpawned();
+							boolean spawnedAny = false;
+							for (int count = 0; count < this.getEntitySpawnCount(); count++) {
+								Entity spawn = this.getEntitySpawned();
 								if (spawn != null) {
-									performPreSpawnaction(entity, spawn);
-									if (!spawn.isRemoved()) // just in case of pre-emptive removal
-										level().addFreshEntity(entity);
-									performPostSpawnaction(entity, spawn);
+									this.performPreSpawnaction(entity, spawn);
+									if (!spawn.isRemoved()) { // just in case of pre-emptive removal
+										this.level().addFreshEntity(spawn);
+										this.performPostSpawnaction(entity, spawn, !spawnedAny);
+										spawnedAny = true;
+									}
 								}
 							}
-							if (!isRemoved() && isSingleUse())
-								discard();
+
+							if (!this.isRemoved() && this.isSingleUse())
+								this.discard();
 						}
 					}
 			}
 		}
-		return null;
-	}
-
-	@Override
-	protected boolean shouldDespawnInPeaceful() {
-		return false;
 	}
 
 	@Override

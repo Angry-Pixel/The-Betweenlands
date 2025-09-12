@@ -88,8 +88,7 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 	}
 
 	@Override
-	@Nullable
-	protected Entity checkArea() {
+	protected void checkArea() {
 		Entity entity = null;
 		if (!this.level().isClientSide() && this.level().getDifficulty() != Difficulty.PEACEFUL) {
 			List<Player> list = this.level().getEntitiesOfClass(Player.class, this.proximityBox());
@@ -99,9 +98,9 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 				if (player != null) {
 					if (!player.isSpectator() && !player.isCreative()) {
 						if (this.canSneakPast() && player.isShiftKeyDown())
-							return null;
+							return;
 						else if (this.checkSight() && !this.hasLineOfSight(entity))
-							return null;
+							return;
 						else {
 							if (!this.getSwelling())
 								this.setSwelling(true);
@@ -117,7 +116,6 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 					this.setSwelling(false);
 			}
 		}
-		return entity;
 	}
 
 	@Nullable
