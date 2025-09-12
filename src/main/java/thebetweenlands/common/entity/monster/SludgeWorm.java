@@ -1,19 +1,14 @@
 package thebetweenlands.common.entity.monster;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -25,24 +20,34 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class SludgeWorm extends Monster implements BLEntity {
 
 	public SludgeWormMultipart[] parts;
 
+	private AABB renderBoundingBox;
 	private int wallInvulnerabilityTicks = 40;
 	private boolean doSpawningAnimation = true;
 
 	public SludgeWorm(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
-		this.setPathfindingMalus(PathType.WATER, -1.0F);
+		this.setPathfindingMalus(PathType.WATER, -10.0F);
+		this.assignParts();
+		this.renderBoundingBox = this.getBoundingBox();
+	}
+
+	protected void assignParts() {
 		this.parts = new SludgeWormMultipart[]{
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
@@ -52,10 +57,10 @@ public class SludgeWorm extends Monster implements BLEntity {
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F),
 			new SludgeWormMultipart(this, 0.3125F, 0.3125F)
-			};
-		setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
+		};
+		this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
 	}
-	
+
 	@Override
 	public void setId(int id) {
 		super.setId(id);
@@ -94,7 +99,8 @@ public class SludgeWorm extends Monster implements BLEntity {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		setHitBoxes();
+		this.setZza(0.2F);
+		this.setHitBoxes();
 	}
 
 	protected float getHeadMotionYMultiplier() {
@@ -119,6 +125,11 @@ public class SludgeWorm extends Monster implements BLEntity {
 
 		Vec3 vec3 = this.getDeltaMovement();
 		this.setDeltaMovement(vec3.multiply(1.0D, this.getHeadMotionYMultiplier(), 1.0D));
+
+		this.renderBoundingBox = this.getBoundingBox();
+		for(SludgeWormMultipart part : this.parts) {
+			this.renderBoundingBox = this.renderBoundingBox.expandTowards(part.position());
+		}
 	}
 
 	public void spawnParticles(Level level, double x, double y, double z, RandomSource rand) {
@@ -126,38 +137,52 @@ public class SludgeWorm extends Monster implements BLEntity {
 			double a = Math.toRadians(this.yBodyRot);
 			double offSetX = -Math.sin(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
 			double offSetZ = Math.cos(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
-//			BLParticles.TAR_BEAST_DRIP.spawn(level , x + offSetX, y, z + offSetZ).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+			TheBetweenlands.createParticle(ParticleRegistry.DRIPPING_TAR.get(), level , x + offSetX, y, z + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0.4118F, 0.2745F, 0.1568F, 1.0F));
 		}
+	}
+
+	// can be set to any part(s) - dunno if we want this either
+	public boolean hurtSegment(SludgeWormMultipart part, DamageSource source, float dmg) {
+		this.damageWorm(source, dmg * 0.75F);
+		return true;
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.IN_WALL) && this.wallInvulnerabilityTicks > 0)
+		if (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.THORNS)) {
+			return this.damageWorm(source, amount);
+		} else if (source.is(DamageTypes.IN_WALL) && this.wallInvulnerabilityTicks > 0) {
 			return false;
+		}
+		return this.damageWorm(source, amount);
+	}
+
+	protected boolean damageWorm(DamageSource source, float amount) {
 		return super.hurt(source, amount);
 	}
 
 	@Override
-	public boolean canAttackType(EntityType<?> typeIn) {
-		return !(typeIn instanceof BLEntity); // && typeIn != EntityRegistry.TINY_WORM_EGG_SAC.get());
+	public boolean canAttackType(EntityType<?> type) {
+		return !(type instanceof BLEntity) && type != EntityRegistry.SLUDGE_WORM_EGG_SAC.get();
 	}
 
 	private void setHitBoxes() {
-		for (SludgeWormMultipart part : this.parts) {
-			part.yRotO = part.getYRot();
-			part.xRotO = part.getXRot();
-			part.xOld = part.xo;
-			part.yOld = part.yo;
-			part.zOld = part.zo;
-			Vec3 vec3 = part.getDeltaMovement();
-			if (part.yo < this.yo && level().collidesWithSuffocatingBlock(part, part.getBoundingBox()))
-				part.setDeltaMovement(vec3.add(0.0D, 0.1D, 0.0D));
+		if (this.tickCount == 1) {
+			for (SludgeWormMultipart part : this.parts) {
+				part.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0F);
+			}
+		}
 
-			double motionY = vec3.y;
-			motionY -= 0.08D;
-			part.setDeltaMovement(vec3.add(0D, motionY, 0D));
-			motionY *= 0.98D * this.getTailMotionYMultiplier();
-			part.setDeltaMovement(vec3.add(0D, motionY, 0D));
+		for (SludgeWormMultipart part : this.parts) {
+			part.setOldPosAndRot();
+			if (part.getY() < this.getY() && this.level().collidesWithSuffocatingBlock(part, part.getBoundingBox())) {
+				part.move(MoverType.SELF, new Vec3(0.0D, 0.1D, 0.0D));
+				part.setDeltaMovement(part.getDeltaMovement().x(), 0.0D, part.getDeltaMovement().z());
+			}
+
+			part.move(MoverType.SELF, new Vec3(0.0D, part.getDeltaMovement().y(), 0.0D));
+
+			part.setDeltaMovement(part.getDeltaMovement().subtract(0.0D, 0.08D, 0.0D).multiply(1.0D, 0.98D * this.getTailMotionYMultiplier(), 1.0D));
 		}
 
 		for (int i = 0; i < this.parts.length; i++) {
@@ -172,7 +197,7 @@ public class SludgeWorm extends Monster implements BLEntity {
 	public void movePiecePos(SludgeWorm sludgeWorm, SludgeWormMultipart targetPart, Entity destinationPart, float speed, float yawSpeed) {
 		//TODO make this better and use the parent entities motionY
 
-		if (destinationPart.yo - targetPart.yo < -0.5D)
+		if (destinationPart.getY() - targetPart.getY() < -0.5D)
 			speed = 1.5F;
 
 		double movementTolerance = 0.05D;
@@ -185,16 +210,12 @@ public class SludgeWorm extends Monster implements BLEntity {
 
 			if (len > maxDist) {
 				Vec3 correction = diff.scale(1.0D / len * (len - maxDist));
-				targetPart.xo += correction.x;
-				targetPart.yo += correction.y; // this?
-				targetPart.zo += correction.z;
-				targetPart.setPos(targetPart.xo, targetPart.yo, targetPart.zo);
+				targetPart.absMoveTo(targetPart.getX() + correction.x, targetPart.getY(), targetPart.getZ() + correction.z);
 
-				double cy = targetPart.yo;
-				Vec3 vec3 = targetPart.getDeltaMovement();
-				targetPart.setDeltaMovement(vec3.add(0D, correction.y, 0D));
+				double cy = targetPart.getY();
+				targetPart.move(MoverType.SELF, new Vec3(0D, correction.y, 0D));
 
-				if (Math.abs((targetPart.yo - cy) - correction.y) <= movementTolerance) {
+				if (Math.abs((targetPart.getY() - cy) - correction.y) <= movementTolerance) {
 					correctY = true;
 					break;
 				}
@@ -208,21 +229,17 @@ public class SludgeWorm extends Monster implements BLEntity {
 
 			if (len > maxDist) {
 				Vec3 correction = diff.scale(1.0D / len * (len - maxDist));
-				targetPart.xo += correction.x;
-				targetPart.yo += correction.y;
-				targetPart.zo += correction.z;
+				targetPart.absMoveTo(targetPart.getX() + correction.x, targetPart.getY() + correction.y, targetPart.getZ() + correction.z);
 			}
 		}
 
-		Vec3 diff = new Vec3(destinationPart.xo, 0, destinationPart.zo).subtract(new Vec3(targetPart.xo, 0, targetPart.zo));
+		Vec3 diff = new Vec3(destinationPart.getX(), 0, destinationPart.getZ()).subtract(new Vec3(targetPart.getX(), 0, targetPart.getZ()));
 		float destYaw = (float) Math.toDegrees(Math.atan2(diff.z, diff.x)) - 90;
-		double yawDiff = (destYaw - targetPart.getYRot()) % 360.0F;
-		double yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
-		double rotationYaw = targetPart.getYRot();
-		rotationYaw += yawInterpolant / yawSpeed;
-		targetPart.setYRot((float) rotationYaw);
-		targetPart.setXRot(0F);
-		targetPart.setPos(targetPart.xo, targetPart.yo, targetPart.zo);
+		float yawDiff = (destYaw - targetPart.getYRot()) % 360.0F;
+		float yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
+		targetPart.setYRot(targetPart.getYRot() + (yawInterpolant / yawSpeed));
+		targetPart.setXRot(0.0F);
+		targetPart.absMoveTo(targetPart.getX(), targetPart.getY(), targetPart.getZ());
 	}
 
 	@Override
@@ -245,14 +262,8 @@ public class SludgeWorm extends Monster implements BLEntity {
 		playSound(SoundRegistry.WORM_LIVING.get(), 0.5F, 1.0F);
 	}
 
-	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
-		for (SludgeWormMultipart part : this.parts) {
-			part.setPos(this.xo, this.yo, this.zo);
-			part.setYRot(this.getYRot());
-		}
-		return data;
+	public AABB getBoundingBoxForCulling() {
+		return this.renderBoundingBox;
 	}
-
 }
