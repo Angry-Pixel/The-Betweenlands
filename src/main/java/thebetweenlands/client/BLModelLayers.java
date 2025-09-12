@@ -43,6 +43,8 @@ public class BLModelLayers {
 	public static final ModelLayerLocation GREEBLING_CORACLE = register("greebling_coracle");
 	public static final ModelLayerLocation JELLYFISH = register("jellyfish");
 	public static final ModelLayerLocation LURKER = register("lurker");
+	public static final ModelLayerLocation LARGE_SLUDGE_WORM = register("large_sludge_worm");
+	public static final ModelLayerLocation LARGE_SLUDGE_WORM_OUTER = register("large_sludge_worm", "outer");
 	public static final ModelLayerLocation MIRE_SNAIL = register("mire_snail");
 	public static final ModelLayerLocation MUMMY_ARM = register("mummy_arm");
 	public static final ModelLayerLocation OLM = register("olm");
@@ -55,6 +57,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SLUDGE_BALL = register("sludge_ball");
 	public static final ModelLayerLocation SLUDGE_WORM = register("sludge_worm");
 	public static final ModelLayerLocation SLUDGE_WORM_ARROW = register("sludge_worm_arrow");
+	public static final ModelLayerLocation SLUDGE_WORM_EGG_SAC = register("sludge_worm_egg_sac");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_2 = register("small_spirit_tree_face_2");
 	public static final ModelLayerLocation SMOL_SLUDGE = register("smol_sludge");
 	public static final ModelLayerLocation SPLODESHROOM = register("splodeshroom");

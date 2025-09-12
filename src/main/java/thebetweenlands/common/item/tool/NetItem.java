@@ -14,6 +14,7 @@ import thebetweenlands.common.entity.creature.*;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
+import thebetweenlands.common.entity.monster.SludgeWormEggSac;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -33,7 +34,7 @@ public class NetItem extends Item {
 		register(Firefly.class, ItemRegistry.FIREFLY, (p, e) -> true);
 		register(Gecko.class, ItemRegistry.GECKO, (p, e) -> true);
 		register(Dragonfly.class, ItemRegistry.DRAGONFLY, (p, e) -> true);
-//		register(EntityTinyWormEggSac.class, ItemRegistry.SLUDGE_WORM_EGG_SAC, (p, e) -> true);
+		register(SludgeWormEggSac.class, ItemRegistry.SLUDGE_WORM_EGG_SAC, (p, e) -> true);
 //		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG, (p, e) -> !e.getHasHatched() && !e.getElectricBoogaloo());
 //		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
 //		register(EntityChiromawTame.class, ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());

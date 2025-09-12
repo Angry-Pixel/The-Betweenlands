@@ -1049,6 +1049,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.SHALLOWBREATH, "Shallowbreath");
 		this.addEntityAndEgg(EntityRegistry.PRIMORDIAL_MALEVOLENCE, "Primordial Malevolence");
 		this.addEntityAndEgg(EntityRegistry.TAR_BEAST, "Tar Beast");
+		this.addEntityAndEgg(EntityRegistry.LARGE_SLUDGE_WORM, "Large Sludge Worm");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1072,6 +1073,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TELEPORTER, "Primordial Malevolence");
 		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET, "Primordial Malevolence Turret");
 		this.addEntityType(EntityRegistry.VOLATILE_SOUL, "Volatile Soul");
+		this.addEntityType(EntityRegistry.SLUDGE_WORM_EGG_SAC, "Sludge Worm Egg Sac");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");

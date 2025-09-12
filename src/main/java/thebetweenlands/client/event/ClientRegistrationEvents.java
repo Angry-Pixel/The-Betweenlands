@@ -320,6 +320,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET.get(), PrimordialMalevolenceTurretRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.VOLATILE_SOUL.get(), VolatileSoulRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TAR_BEAST.get(), TarBeastRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.LARGE_SLUDGE_WORM.get(), LargeSludgeWormRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_EGG_SAC.get(), SludgeWormEggSacRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -416,6 +418,9 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SWORD_ENERGY, SwordEnergyModel::create);
 		event.registerLayerDefinition(BLModelLayers.GAS_CLOUD, GasCloudModel::create);
 		event.registerLayerDefinition(BLModelLayers.TAR_BEAST, TarBeastModel::create);
+		event.registerLayerDefinition(BLModelLayers.LARGE_SLUDGE_WORM, LargeSludgeWormModel::create);
+		event.registerLayerDefinition(BLModelLayers.LARGE_SLUDGE_WORM_OUTER, LargeSludgeWormModel::createSludgeLayer);
+		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_EGG_SAC, SludgeWormEggSacModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

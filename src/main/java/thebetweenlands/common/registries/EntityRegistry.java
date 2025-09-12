@@ -72,7 +72,7 @@ public class EntityRegistry {
 	//greebling volarpad floater
 	//infestation
 	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
-	//large sludge worm
+	public static final DeferredHolder<EntityType<?>, EntityType<LargeSludgeWorm>> LARGE_SLUDGE_WORM = registerWithEgg("large_sludge_worm", EntityType.Builder.of(LargeSludgeWorm::new, MobCategory.MONSTER).sized(0.8F, 0.8F).fireImmune(), 0x726459, 0xE2DED9, LargeSludgeWorm::registerAttributes);
 	//leech
 	public static final DeferredHolder<EntityType<?>, EntityType<Lurker>> LURKER = registerWithEgg("lurker", EntityType.Builder.of(Lurker::new, MobCategory.CREATURE).sized(1.6F, 0.9F).eyeHeight(0.45F), 0x283320, 0x827856, Lurker::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<MireSnail>> MIRE_SNAIL = registerWithEgg("mire_snail", EntityType.Builder.of(MireSnail::new, MobCategory.CREATURE).sized(0.75F, 0.6F), 0x8E9456, 0xF2FA96, MireSnail::registerAttributes);
@@ -104,82 +104,85 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B, Wight::registerAttributes);
 
 	//misc
-	public static final DeferredHolder<EntityType<?>, EntityType<AnglerToothArrow>> ANGLER_TOOTH_ARROW = ENTITY_TYPES.register("angler_tooth_arrow", () -> EntityType.Builder.<AnglerToothArrow>of(AnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("angler_tooth_arrow")));
-	public static final DeferredHolder<EntityType<?>, EntityType<AngryPebble>> ANGRY_PEBBLE = ENTITY_TYPES.register("angry_pebble", () -> EntityType.Builder.<AngryPebble>of(AngryPebble::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build(prefix("angry_pebble")));
-	public static final DeferredHolder<EntityType<?>, EntityType<BasiliskArrow>> BASILISK_ARROW = ENTITY_TYPES.register("basilisk_arrow", () -> EntityType.Builder.<BasiliskArrow>of(BasiliskArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("basilisk_arrow")));
-	public static final DeferredHolder<EntityType<?>, EntityType<BetweenstonePebble>> BETWEENSTONE_PEBBLE = ENTITY_TYPES.register("betweenstone_pebble", () -> EntityType.Builder.<BetweenstonePebble>of(BetweenstonePebble::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20).build(prefix("betweenstone_pebble")));
+	public static final DeferredHolder<EntityType<?>, EntityType<AnglerToothArrow>> ANGLER_TOOTH_ARROW = register("angler_tooth_arrow", EntityType.Builder.<AnglerToothArrow>of(AnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<AngryPebble>> ANGRY_PEBBLE = register("angry_pebble", EntityType.Builder.<AngryPebble>of(AngryPebble::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+	public static final DeferredHolder<EntityType<?>, EntityType<BasiliskArrow>> BASILISK_ARROW = register("basilisk_arrow", EntityType.Builder.<BasiliskArrow>of(BasiliskArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<BetweenstonePebble>> BETWEENSTONE_PEBBLE = register("betweenstone_pebble", EntityType.Builder.<BetweenstonePebble>of(BetweenstonePebble::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
 	//bubbler crab bubble
-	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawBarb>> CHIROMAW_BARB = ENTITY_TYPES.register("chiromaw_barb", () -> EntityType.Builder.<ChiromawBarb>of(ChiromawBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("chiromaw_barb")));
-	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawShockBarb>> CHIROMAW_SHOCK_BARB = ENTITY_TYPES.register("chiromaw_shock_barb", () -> EntityType.Builder.<ChiromawShockBarb>of(ChiromawShockBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("chiromaw_shock_barb")));
+	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawBarb>> CHIROMAW_BARB = register("chiromaw_barb", EntityType.Builder.<ChiromawBarb>of(ChiromawBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawShockBarb>> CHIROMAW_SHOCK_BARB = register("chiromaw_shock_barb", EntityType.Builder.<ChiromawShockBarb>of(ChiromawShockBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	//chiromaw droppings
 	//decay pit target
 	//draeton
 	//draeton chiromaw
 	//draeton dragonfly
 	//draeton firefly
-	public static final DeferredHolder<EntityType<?>, EntityType<ElectricShock>> ELECTRIC_SHOCK = ENTITY_TYPES.register("electric_shock", () -> EntityType.Builder.<ElectricShock>of(ElectricShock::new, MobCategory.MISC).sized(0.5F, 0.5F).fireImmune().noSave().noSummon().build(prefix("electric_shock")));
-	public static final DeferredHolder<EntityType<?>, EntityType<ThrownElixir>> ELIXIR = ENTITY_TYPES.register("elixir", () -> EntityType.Builder.<ThrownElixir>of(ThrownElixir::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build(prefix("elixir")));
+	public static final DeferredHolder<EntityType<?>, EntityType<ElectricShock>> ELECTRIC_SHOCK = register("electric_shock", EntityType.Builder.<ElectricShock>of(ElectricShock::new, MobCategory.MISC).sized(0.5F, 0.5F).fireImmune().noSave().noSummon());
+	public static final DeferredHolder<EntityType<?>, EntityType<ThrownElixir>> ELIXIR = register("elixir", EntityType.Builder.<ThrownElixir>of(ThrownElixir::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
 	//fake XP orb
 	//falling block
-	public static final DeferredHolder<EntityType<?>, EntityType<FishBait>> FISH_BAIT = ENTITY_TYPES.register("fish_bait", () -> EntityType.Builder.<FishBait>of(FishBait::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20).build(prefix("fish_bait")));
-	public static final DeferredHolder<EntityType<?>, EntityType<BLFishHook>> FISH_HOOK = ENTITY_TYPES.register("fish_hook", () -> EntityType.Builder.<BLFishHook>of(BLFishHook::new, MobCategory.MISC).sized(0.25F, 0.25F).build(prefix("fish_hook")));
-	public static final DeferredHolder<EntityType<?>, EntityType<FishVortex>> FISH_VORTEX = ENTITY_TYPES.register("fish_vortex", () -> EntityType.Builder.of(FishVortex::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("fish_vortex")));
+	public static final DeferredHolder<EntityType<?>, EntityType<FishBait>> FISH_BAIT = register("fish_bait", EntityType.Builder.<FishBait>of(FishBait::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<BLFishHook>> FISH_HOOK = register("fish_hook", EntityType.Builder.<BLFishHook>of(BLFishHook::new, MobCategory.MISC).sized(0.25F, 0.25F));
+	public static final DeferredHolder<EntityType<?>, EntityType<FishVortex>> FISH_VORTEX = register("fish_vortex", EntityType.Builder.of(FishVortex::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
 	//fishing spear
-	public static final DeferredHolder<EntityType<?>, EntityType<FlameJet>> FLAME_JET = ENTITY_TYPES.register("flame_jet", () -> EntityType.Builder.<FlameJet>of(FlameJet::new, MobCategory.MISC).sized(1.0F, 2.6F).fireImmune().noSummon().noSave().build(prefix("flame_jet")));
-	public static final DeferredHolder<EntityType<?>, EntityType<GalleryFrame>> GALLERY_FRAME = ENTITY_TYPES.register("gallery_frame", () -> EntityType.Builder.<GalleryFrame>of(GalleryFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE).build(prefix("gallery_frame")));
+	public static final DeferredHolder<EntityType<?>, EntityType<FlameJet>> FLAME_JET = register("flame_jet", EntityType.Builder.<FlameJet>of(FlameJet::new, MobCategory.MISC).sized(1.0F, 2.6F).fireImmune().noSummon().noSave());
+	public static final DeferredHolder<EntityType<?>, EntityType<GalleryFrame>> GALLERY_FRAME = register("gallery_frame", EntityType.Builder.<GalleryFrame>of(GalleryFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//glowing goop
 	//grappling hoke node
 	//greebling corpse
 	//ground spawner
-	public static final DeferredHolder<EntityType<?>, EntityType<BLItemFrame>> ITEM_FRAME = ENTITY_TYPES.register("item_frame", () -> EntityType.Builder.<BLItemFrame>of(BLItemFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE).build(prefix("item_frame")));
+	public static final DeferredHolder<EntityType<?>, EntityType<BLItemFrame>> ITEM_FRAME = register("item_frame", EntityType.Builder.<BLItemFrame>of(BLItemFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//lightning bolt
-	public static final DeferredHolder<EntityType<?>, EntityType<LurkerSkinRaft>> LURKER_SKIN_RAFT = ENTITY_TYPES.register("lurker_skin_raft", () -> EntityType.Builder.<LurkerSkinRaft>of(LurkerSkinRaft::new, MobCategory.MISC).sized(1.25F, 0.25F).clientTrackingRange(10).build(prefix("lurker_skin_raft")));
+	public static final DeferredHolder<EntityType<?>, EntityType<LurkerSkinRaft>> LURKER_SKIN_RAFT = register("lurker_skin_raft", EntityType.Builder.<LurkerSkinRaft>of(LurkerSkinRaft::new, MobCategory.MISC).sized(1.25F, 0.25F).clientTrackingRange(10));
 	//mist bridge
 	//moving wall
-	public static final DeferredHolder<EntityType<?>, EntityType<OctineArrow>> OCTINE_ARROW = ENTITY_TYPES.register("octine_arrow", () -> EntityType.Builder.<OctineArrow>of(OctineArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("octine_arrow")));
-	public static final DeferredHolder<EntityType<?>, EntityType<PoisonAnglerToothArrow>> POISON_ANGLER_TOOTH_ARROW = ENTITY_TYPES.register("poison_angler_tooth_arrow", () -> EntityType.Builder.<PoisonAnglerToothArrow>of(PoisonAnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("poison_angler_tooth_arrow")));
-	public static final DeferredHolder<EntityType<?>, EntityType<PredatorArrowGuide>> PREDATOR_ARROW_GUIDE = ENTITY_TYPES.register("predator_arrow_guide", () -> EntityType.Builder.of(PredatorArrowGuide::new, MobCategory.MISC).sized(0.1F, 0.1F).clientTrackingRange(4).updateInterval(20).build(prefix("predator_arrow_guide")));
+	public static final DeferredHolder<EntityType<?>, EntityType<OctineArrow>> OCTINE_ARROW = register("octine_arrow", EntityType.Builder.<OctineArrow>of(OctineArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<PoisonAnglerToothArrow>> POISON_ANGLER_TOOTH_ARROW = register("poison_angler_tooth_arrow", EntityType.Builder.<PoisonAnglerToothArrow>of(PoisonAnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<PredatorArrowGuide>> PREDATOR_ARROW_GUIDE = register("predator_arrow_guide", EntityType.Builder.of(PredatorArrowGuide::new, MobCategory.MISC).sized(0.1F, 0.1F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceBlockade>> PRIMORDIAL_MALEVOLENCE_BLOCKADE = registerWithAttributes("primordial_malevolence_blockade", EntityType.Builder.<PrimordialMalevolenceBlockade>of(PrimordialMalevolenceBlockade::new, MobCategory.MISC).sized(1.0F, 0.2F), PrimordialMalevolenceBlockade::createAttributes);
-	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceProjectile>> PRIMORDIAL_MALEVOLENCE_PROJECTILE = ENTITY_TYPES.register("primordial_malevolence_projectile", () -> EntityType.Builder.<PrimordialMalevolenceProjectile>of(PrimordialMalevolenceProjectile::new, MobCategory.MISC).sized(0.65F, 0.65F).build(prefix("primordial_malevolence_projectile")));
-	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceSpawner>> PRIMORDIAL_MALEVOLENCE_SPAWNER = ENTITY_TYPES.register("primordial_malevolence_spawner", () -> EntityType.Builder.<PrimordialMalevolenceSpawner>of(PrimordialMalevolenceSpawner::new, MobCategory.MISC).sized(0.4F, 0.4F).build(prefix("primordial_malevolence_spawner")));
-	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTeleporter>> PRIMORDIAL_MALEVOLENCE_TELEPORTER = ENTITY_TYPES.register("primordial_malevolence_teleporter", () -> EntityType.Builder.of(PrimordialMalevolenceTeleporter::new, MobCategory.MISC).sized(1.0F, 1.0F).build(prefix("primordial_malevolence_teleporter")));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceProjectile>> PRIMORDIAL_MALEVOLENCE_PROJECTILE = register("primordial_malevolence_projectile", EntityType.Builder.<PrimordialMalevolenceProjectile>of(PrimordialMalevolenceProjectile::new, MobCategory.MISC).sized(0.65F, 0.65F));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceSpawner>> PRIMORDIAL_MALEVOLENCE_SPAWNER = register("primordial_malevolence_spawner", EntityType.Builder.<PrimordialMalevolenceSpawner>of(PrimordialMalevolenceSpawner::new, MobCategory.MISC).sized(0.4F, 0.4F));
+	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTeleporter>> PRIMORDIAL_MALEVOLENCE_TELEPORTER = register("primordial_malevolence_teleporter", EntityType.Builder.of(PrimordialMalevolenceTeleporter::new, MobCategory.MISC).sized(1.0F, 1.0F));
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTurret>> PRIMORDIAL_MALEVOLENCE_TURRET = registerWithAttributes("primordial_malevolence_turret", EntityType.Builder.<PrimordialMalevolenceTurret>of(PrimordialMalevolenceTurret::new, MobCategory.MISC).sized(0.4F, 0.4F), Mob::createMobAttributes);
 	//pyrad flame
 	//resurrection
 	//root grabber
 	//rope node
-	public static final DeferredHolder<EntityType<?>, EntityType<SapSpit>> SAP_SPIT = ENTITY_TYPES.register("sap_spit", () -> EntityType.Builder.<SapSpit>of(SapSpit::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20).build(prefix("sap_spit")));
-	public static final DeferredHolder<EntityType<?>, EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () -> EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("seat")));
-	public static final DeferredHolder<EntityType<?>, EntityType<ShockArrow>> SHOCK_ARROW = ENTITY_TYPES.register("shock_arrow", () -> EntityType.Builder.<ShockArrow>of(ShockArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("shock_arrow")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SapSpit>> SAP_SPIT = register("sap_spit", EntityType.Builder.<SapSpit>of(SapSpit::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<Seat>> SEAT = register("seat", EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
+	public static final DeferredHolder<EntityType<?>, EntityType<ShockArrow>> SHOCK_ARROW = register("shock_arrow", EntityType.Builder.<ShockArrow>of(ShockArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	//shockwave block
 	//shockwave sword item
-	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = ENTITY_TYPES.register("sludge_ball", () -> EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20).build(prefix("sludge_ball")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = register("sludge_ball", EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20));
 	//sludge wall jet
-	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormArrow>> SLUDGE_WORM_ARROW = ENTITY_TYPES.register("sludge_worm_arrow", () -> EntityType.Builder.<SludgeWormArrow>of(SludgeWormArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20).build(prefix("sludge_worm_arrow")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormArrow>> SLUDGE_WORM_ARROW = register("sludge_worm_arrow", EntityType.Builder.<SludgeWormArrow>of(SludgeWormArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	//snail poison jet
 	//spike wave
 	//sword energy
-	public static final DeferredHolder<EntityType<?>, EntityType<ThrownTarminion>> THROWN_TARMINION = ENTITY_TYPES.register("thrown_tarminion", () -> EntityType.Builder.<ThrownTarminion>of(ThrownTarminion::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build(prefix("thrown_tarminion")));
-	//tiny worm egg sac
-	public static final DeferredHolder<EntityType<?>, EntityType<UrchinSpike>> URCHIN_SPIKE = ENTITY_TYPES.register("urchin_spike", () -> EntityType.Builder.<UrchinSpike>of(UrchinSpike::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("urchin_spike")));
+	public static final DeferredHolder<EntityType<?>, EntityType<ThrownTarminion>> THROWN_TARMINION = register("thrown_tarminion", EntityType.Builder.<ThrownTarminion>of(ThrownTarminion::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormEggSac>> SLUDGE_WORM_EGG_SAC = registerWithAttributes("sludge_worm_egg_sac", EntityType.Builder.of(SludgeWormEggSac::new, MobCategory.MISC).sized(1.0F, 0.5F), ProximitySpawnerEntity::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<UrchinSpike>> URCHIN_SPIKE = register("urchin_spike", EntityType.Builder.<UrchinSpike>of(UrchinSpike::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
 	//volarkite
-	public static final DeferredHolder<EntityType<?>, EntityType<VolatileSoul>> VOLATILE_SOUL = ENTITY_TYPES.register("volatile_soul", () -> EntityType.Builder.<VolatileSoul>of(VolatileSoul::new, MobCategory.MISC).sized(0.3F, 0.3F).fireImmune().noSummon().build(prefix("volatile_soul")));
+	public static final DeferredHolder<EntityType<?>, EntityType<VolatileSoul>> VOLATILE_SOUL = register("volatile_soul", EntityType.Builder.<VolatileSoul>of(VolatileSoul::new, MobCategory.MISC).sized(0.3F, 0.3F).fireImmune().noSummon());
 	//weedwood rowboat
 
-	private static String prefix(String name) {
-		return TheBetweenlands.prefix(name).toString();
+	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor, Supplier<AttributeSupplier.Builder> attributes) {
+		DeferredHolder<EntityType<?>, EntityType<E>> ret = registerWithAttributes(name, builder, attributes);
+		SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));
+		return ret;
 	}
 
 	public static <E extends LivingEntity> DeferredHolder<EntityType<?>, EntityType<E>> registerWithAttributes(String name, EntityType.Builder<E> builder, Supplier<AttributeSupplier.Builder> attributes) {
-		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(TheBetweenlands.prefix(name).toString()));
+		DeferredHolder<EntityType<?>, EntityType<E>> ret = register(name, builder);
 		ATTRIBUTES.put(ret, attributes);
 		return ret;
 	}
 
-	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor, Supplier<AttributeSupplier.Builder> attributes) {
-		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(TheBetweenlands.prefix(name).toString()));
-		SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));
-		ATTRIBUTES.put(ret, attributes);
-		return ret;
+	public static <E extends Entity> DeferredHolder<EntityType<?>, EntityType<E>> register(String name, EntityType.Builder<E> builder) {
+		return ENTITY_TYPES.register(name, () -> builder.build(prefix(name)));
+	}
+
+	private static String prefix(String name) {
+		return TheBetweenlands.prefix(name).toString();
 	}
 }

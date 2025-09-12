@@ -440,6 +440,11 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_DRIP).setWeight(8)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1, 2))))));
+		this.addWithSeasonalDrops(EntityRegistry.LARGE_SLUDGE_WORM.get(), 2, 6, 1, 1, LootTable.lootTable()
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(1, 3))
+				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_JELLO).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))).setWeight(6))
+				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).setWeight(8))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

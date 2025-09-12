@@ -23,6 +23,7 @@ import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
+import thebetweenlands.common.entity.monster.SludgeWormEggSac;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.item.armor.amphibious.UpgradeToggleItem;
@@ -205,7 +206,7 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem<Dragonfly>> DRAGONFLY = ITEMS.register("dragonfly", () -> new MobItem<>(new Item.Properties().stacksTo(1), 10.0D, EntityRegistry.DRAGONFLY.get(), null));
 	public static final DeferredItem<MobItem<Olm>> OLM = ITEMS.register("olm", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.OLM.get(), null));
 	public static final DeferredItem<MobItem<CaveFish>> CAVE_FISH = ITEMS.register("cave_fish", () -> new MobItem<>(new Item.Properties().stacksTo(1), 3.0D, EntityRegistry.CAVE_FISH.get(), null));
-	public static final DeferredItem<Item> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MobItem<SludgeWormEggSac>> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new MobItem<>(new Item.Properties().stacksTo(1), 5.0D, EntityRegistry.SLUDGE_WORM_EGG_SAC.get(), null));
 	public static final DeferredItem<MobItem<TinySludgeWorm>> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem<>(new Item.Properties().stacksTo(1), 4.0D, EntityRegistry.TINY_SLUDGE_WORM.get(), null));
 	public static final DeferredItem<MobItem<TinySludgeWormHelper>> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem<>(new Item.Properties().stacksTo(1), 30.0D, EntityRegistry.TINY_SLUDGE_WORM_HELPER.get(), null));
 	public static final DeferredItem<MobItem<Anadia>> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));

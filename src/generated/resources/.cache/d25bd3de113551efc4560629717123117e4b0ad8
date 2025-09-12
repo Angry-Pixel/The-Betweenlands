@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-08T21:21:53.034719861	Item Models: thebetweenlands
+// 1.21.1	2025-09-09T22:25:46.907027131	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -282,6 +282,7 @@ b05945461f2ce9480dc6dbec84821e8d32b4d335 assets/thebetweenlands/models/item/lake
 867724e21b587450a9ca79c8f412b8c0db45ad88 assets/thebetweenlands/models/item/lake_broth_bucket.json
 0032e26ab556dee88ee74ccfb56a1c8bdde93a82 assets/thebetweenlands/models/item/large_gallery_frame.json
 814748dec6173e81a555f3563e001b242c135f5c assets/thebetweenlands/models/item/large_lurker_skin_pouch.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/large_sludge_worm_spawn_egg.json
 30710e59c353551a817ed3ef87b898330efa4a43 assets/thebetweenlands/models/item/lavender_blue_dye.json
 c1ef0fdc9f0c99b8807b6f4ab622801aa088be7c assets/thebetweenlands/models/item/lavender_blue_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/lavender_blue_item_frame.json

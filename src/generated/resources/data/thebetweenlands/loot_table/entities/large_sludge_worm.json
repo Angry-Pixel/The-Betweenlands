@@ -1,0 +1,108 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:sludge_jello",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:slimy_bone",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:sludge_ball",
+          "weight": 8
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 1.0
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "active": true,
+          "condition": "thebetweenlands:event_active",
+          "event": "thebetweenlands:spoopy"
+        },
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:blue_candy"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:red_candy"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:yellow_candy"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 6
+        }
+      ],
+      "rolls": 2.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "active": true,
+          "condition": "thebetweenlands:event_active",
+          "event": "thebetweenlands:winter"
+        },
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:mince_pie"
+        },
+        {
+          "type": "minecraft:empty"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:entities/large_sludge_worm"
+}
