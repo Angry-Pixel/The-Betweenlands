@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import org.joml.Vector2d;
@@ -120,7 +121,7 @@ public class AuroraRenderer {
 	}
 
 	public float getAlpha(float partialTicks) {
-		return (this.lastFadeTicks + (this.fadeTicks - this.lastFadeTicks) * partialTicks) / 500.0F;
+		return Mth.lerp(partialTicks, this.lastFadeTicks, this.fadeTicks) / 500.0F;
 	}
 
 	public void render(float partialTicks, float alphaMultiplier, PoseStack stack) {

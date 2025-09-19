@@ -38,8 +38,8 @@ public class AnadiaRenderer extends MobRenderer<Anadia, AnadiaModel> {
 
 	@Override
 	protected void setupRotations(Anadia entity, PoseStack stack, float bob, float yBodyRot, float partialTicks, float scale) {
-		float smoothedPitch = entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks;
-		float smoothedYaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
+		float smoothedPitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
+		float smoothedYaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
 
 		stack.mulPose(Axis.YP.rotationDegrees(180 - smoothedYaw));
 

@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -474,12 +475,12 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 	}
 
 	public float getDungeonFogStrength(float partialTicks) {
-		return this.prevDungeonFogStrength + (this.dungeonFogStrength - this.prevDungeonFogStrength) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevDungeonFogStrength, this.dungeonFogStrength);
 	}
 
 	@Override
 	public float getEffectStrength(float partialTicks) {
-		return this.prevEffectStrength + (this.effectStrength - this.prevEffectStrength) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevEffectStrength, this.effectStrength);
 	}
 
 	@Override

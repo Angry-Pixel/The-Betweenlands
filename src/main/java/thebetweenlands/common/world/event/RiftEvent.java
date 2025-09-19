@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -200,7 +201,7 @@ public class RiftEvent extends TimedEnvironmentEvent {
 	 * @return
 	 */
 	public float getVisibility(float partialTicks) {
-		return (this.lastActivationTicks + (this.getActivationTicks() - this.lastActivationTicks) * partialTicks) / (float)MAX_ACTIVATION_TICKS;
+		return Mth.lerp(partialTicks, this.lastActivationTicks, this.getActivationTicks()) / (float)MAX_ACTIVATION_TICKS;
 	}
 
 	/**

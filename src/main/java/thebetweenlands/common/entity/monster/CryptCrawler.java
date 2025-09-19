@@ -131,7 +131,7 @@ public class CryptCrawler extends Monster implements BLEntity {
 	}
 
 	public float smoothedStandingAngle(float partialTicks) {
-		return this.prevStandingAngle + (this.standingAngle - this.prevStandingAngle) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevStandingAngle, this.standingAngle);
 	}
 
 	@Override

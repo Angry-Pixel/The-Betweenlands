@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -615,7 +616,7 @@ public class WorldShader extends PostChain implements AutoCloseable {
 	 * @return
 	 */
 	public float getSwirlAngle(float partialTicks) {
-		return this.lastSwirlAngle + (this.swirlAngle - this.lastSwirlAngle) * partialTicks;
+		return Mth.lerp(partialTicks, this.lastSwirlAngle, this.swirlAngle);
 	}
 
 	private void applySwirl(float partialTicks) {
@@ -668,9 +669,9 @@ public class WorldShader extends PostChain implements AutoCloseable {
 	}
 
 	public static Vec3 projectViewFromEntity(Entity entity, double partialTicks) {
-		double d0 = entity.xo + (entity.getX() - entity.xo) * partialTicks;
-		double d1 = entity.yo + (entity.getY() - entity.yo) * partialTicks;
-		double d2 = entity.zo + (entity.getZ() - entity.zo) * partialTicks;
+		double d0 = Mth.lerp(partialTicks, entity.xo, entity.getX());
+		double d1 = Mth.lerp(partialTicks, entity.yo, entity.getY());
+		double d2 = Mth.lerp(partialTicks, entity.zo, entity.getZ());
 		return new Vec3(d0, d1, d2);
 	}
 

@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.SpikeTrapBlock;
@@ -36,7 +37,7 @@ public class SpikeTrapRenderer implements BlockEntityRenderer<SpikeTrapBlockEnti
 
 		if (entity.extendingTicks > 0) {
 			stack.pushPose();
-			float interpolatedAnimationTicks = entity.prevExtendingTicks + (entity.extendingTicks - entity.prevExtendingTicks) * partialTick;
+			float interpolatedAnimationTicks = Mth.lerp(partialTick, entity.prevExtendingTicks, entity.extendingTicks);
 			if (entity.isExtending() || interpolatedAnimationTicks > 0) {
 				if (interpolatedAnimationTicks <= 5.0F) {
 					stack.translate(0.0F, 0.0F - 1.0F / 5.0F * interpolatedAnimationTicks, 0.0F);
@@ -49,7 +50,7 @@ public class SpikeTrapRenderer implements BlockEntityRenderer<SpikeTrapBlockEnti
 		}
 
 		if (entity.canSpook) {
-			float spoopTicks = entity.prevSpoopAnimationTicks + (entity.spoopAnimationTicks - entity.prevSpoopAnimationTicks) * partialTick;
+			float spoopTicks = Mth.lerp(partialTick, entity.prevSpoopAnimationTicks, entity.spoopAnimationTicks);
 			if (entity.activeSpoop || spoopTicks > 0) {
 				float alpha = 0.0375F * spoopTicks;
 				this.spoop.render(stack, source.getBuffer(SPOOP_TEXTURE), light, overlay, FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));

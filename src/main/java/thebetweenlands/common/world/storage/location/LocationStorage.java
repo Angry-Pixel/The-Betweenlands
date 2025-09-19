@@ -536,7 +536,7 @@ public class LocationStorage extends LocalStorageImpl {
 		}
 		return List.of();
 	}
-	
+
 	/**
 	 * Returns a list of all locations at the specified position
 	 *
@@ -654,6 +654,7 @@ public class LocationStorage extends LocalStorageImpl {
 		return false;
 	}
 
+	@Nullable
 	@Override
 	public AABB getBoundingBox() {
 		return this.enclosingBoundingBox;

@@ -99,9 +99,9 @@ public class Crawler {
 	}
 
 	public void drawCrawler(GuiGraphics graphics, float partialTicks) {
-		float interpX = this.prevPosX + (this.posX - this.prevPosX) * partialTicks;
-		float interpY = this.prevPosY + (this.posY - this.prevPosY) * partialTicks;
-		this.drawCrawler(graphics, interpX, interpY, 16 * this.scale, 16 * this.scale, this.rotation + this.hurtDir * (this.prevHurtRotation + (this.hurtRotation - this.prevHurtRotation) * partialTicks), this.alpha);
+		float interpX = Mth.lerp(partialTicks, this.prevPosX, this.posX);
+		float interpY = Mth.lerp(partialTicks, this.prevPosY, this.posY);
+		this.drawCrawler(graphics, interpX, interpY, 16 * this.scale, 16 * this.scale, this.rotation + this.hurtDir * (Mth.lerp(partialTicks, this.prevHurtRotation, this.hurtRotation)), this.alpha);
 	}
 
 	public void drawCrawler(GuiGraphics graphics, float x, float y, float width, float height, float rot, float alpha) {

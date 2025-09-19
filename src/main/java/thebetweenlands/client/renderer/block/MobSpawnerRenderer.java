@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.BLModelLayers;
@@ -28,7 +29,7 @@ public class MobSpawnerRenderer implements BlockEntityRenderer<MobSpawnerBlockEn
 
 	@Override
 	public void render(MobSpawnerBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
-		float interpolatedCounter = -(entity.lastCounter + (entity.counter - entity.lastCounter) * partialTicks);
+		float interpolatedCounter = -Mth.lerp(partialTicks, entity.lastCounter, entity.counter);
 
 		stack.pushPose();
 		stack.translate(0.475F, 0.38F + (float) Math.sin(interpolatedCounter) / 5.0F,  0.475F);

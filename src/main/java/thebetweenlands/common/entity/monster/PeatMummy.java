@@ -160,7 +160,7 @@ public class PeatMummy extends Monster implements BLEntity, ScreenShaker {
 	protected boolean isImmobile() {
 		return super.isImmobile() || this.getChargingState() == 1;
 	}
-	
+
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
@@ -380,7 +380,7 @@ public class PeatMummy extends Monster implements BLEntity, ScreenShaker {
 	 * Returns the interpolated spawning offset
 	 */
 	public float getInterpolatedSpawningOffset(float partialTicks) {
-		return this.prevSpawningOffset + (this.getSpawningOffset() - this.prevSpawningOffset) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevSpawningOffset, this.getSpawningOffset());
 	}
 
 	/**
@@ -450,7 +450,7 @@ public class PeatMummy extends Monster implements BLEntity, ScreenShaker {
 	 * Returns the interpolated relative spawning progress
 	 */
 	public float getInterpolatedSpawningProgress(float partialTicks) {
-		return this.prevSpawningProgress + (this.getSpawningProgress() - this.prevSpawningProgress) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevSpawningProgress, this.getSpawningProgress());
 	}
 
 	/**

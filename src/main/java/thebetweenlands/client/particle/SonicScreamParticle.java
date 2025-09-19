@@ -63,7 +63,7 @@ public class SonicScreamParticle extends TextureSheetParticle {
 		Vec3[] vertices = new Vec3[] {perpendicular.add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale)};
 
 		if (this.roll != 0.0F) {
-			float f8 = this.roll + (this.roll - this.oRoll) * partialTicks;
+			float f8 = Mth.lerp(partialTicks, this.roll, this.roll);
 			float f9 = Mth.cos(f8 * 0.5F);
 			float f10 = Mth.sin(f8 * 0.5F) * (float)this.dir.x;
 			float f11 = Mth.sin(f8 * 0.5F) * (float)this.dir.y;

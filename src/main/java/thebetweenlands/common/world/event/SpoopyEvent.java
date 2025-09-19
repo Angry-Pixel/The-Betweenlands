@@ -43,7 +43,7 @@ public class SpoopyEvent extends SeasonalEnvironmentEvent {
 	}
 
 	public float getSkyTransparency(float partialTicks) {
-		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 2.0F;
+		return (Mth.lerp(partialTicks, this.skyTransparency, this.skyTransparency)) / 2.0F;
 	}
 
 	@Override

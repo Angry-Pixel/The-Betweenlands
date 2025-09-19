@@ -158,7 +158,7 @@ public class EmberlingShaman extends Monster implements BLEntity {
 	}
 
 	public float smoothedAngle(float partialTicks) {
-		return this.prevAnimationTicks + (this.animationTicks - this.prevAnimationTicks) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevAnimationTicks, this.animationTicks);
 	}
 
 	public void flameParticles(Level level, double x, double y, double z, RandomSource rand) {

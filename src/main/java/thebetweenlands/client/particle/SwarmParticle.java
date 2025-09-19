@@ -154,7 +154,7 @@ public class SwarmParticle extends TextureSheetParticle {
 		float v4z = (pp1z + pp2z + pp1z * yOffset);
 
 		if(this.roll != 0.0F) {
-			float angle = this.roll + (this.roll - this.oRoll) * partialTicks;
+			float angle = Mth.lerp(partialTicks, this.roll, this.roll);
 			float cos = Mth.cos(angle * 0.5F);
 			float rdx = Mth.sin(angle * 0.5F) * this.face.getStepX();
 			float rdy = Mth.sin(angle * 0.5F) * this.face.getStepY();

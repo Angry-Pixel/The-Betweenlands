@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.ShamblerModel;
 import thebetweenlands.common.TheBetweenlands;
@@ -63,8 +64,8 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
 		double x = part.xOld + (part.getX() - part.xOld) * (double)partialTicks - rx;
         double y = part.yOld + (part.getY() - part.yOld) * (double)partialTicks - ry;
         double z = part.zOld + (part.getZ() - part.zOld) * (double)partialTicks - rz;
-        float yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
-        float pitch = entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks;
+        float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
+        float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
 		stack.pushPose();
 		stack.translate(x, y - 0.9375, z);
 		stack.scale(-1F, -1F, 1F);

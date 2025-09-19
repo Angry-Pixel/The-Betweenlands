@@ -144,7 +144,7 @@ public class Sporeling extends PathfinderMob implements BLEntity {
 	}
 
 	public float smoothedAngle(float partialTicks) {
-		return this.prevFloatingRotationTicks + (this.floatingRotationTicks - this.prevFloatingRotationTicks) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevFloatingRotationTicks, this.floatingRotationTicks);
 	}
 
 	private float updateRotation(float angle, float targetAngle, float maxIncrease) {

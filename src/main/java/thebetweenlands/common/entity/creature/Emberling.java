@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -224,7 +225,7 @@ public class Emberling extends TamableAnimal implements BLEntity, Enemy {
 	}
 
 	public float smoothedAngle(float partialTicks) {
-		return this.prevAnimationTicks + (this.animationTicks - this.prevAnimationTicks) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevAnimationTicks, this.animationTicks);
 	}
 
 	public void flameParticles(Level level, double x, double y, double z, RandomSource rand) {

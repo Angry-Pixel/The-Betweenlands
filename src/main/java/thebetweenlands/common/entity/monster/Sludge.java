@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -183,7 +184,7 @@ public class Sludge extends Monster implements BLEntity {
 	}
 
 	public float getSquishFactor(float partialTicks) {
-		return this.prevSquishFactor + (this.squishFactor - this.prevSquishFactor) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevSquishFactor, this.squishFactor);
 	}
 
 	protected void alterSquishAmount() {

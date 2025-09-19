@@ -8,6 +8,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -295,14 +296,14 @@ public class AmphibiousArmorModel extends BLArmorModel {
 
 	@Override
 	public void setupAnim(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		float blend1 = (float)Math.max(0, Math.pow(((float)Math.sin(ageInTicks * 0.0666F) + 1.0F) * 0.5F, 10.0F) - 0.95F) * 0.5F;
-		float blend2 = (float)Math.max(0, Math.pow(((float)Math.sin(ageInTicks * 0.0555F) + 1.0F) * 0.5F, 10.0F) - 0.95F) * 0.5F;
-		float blend3 = (float)Math.max(0, Math.pow(((float)Math.sin(ageInTicks * 0.0333F) + 1.0F) * 0.5F, 10.0F) - 0.95F) * 0.5F;
+		float blend1 = Math.max(0.0F, (float)Math.pow((Mth.sin(ageInTicks * 0.0666F) + 1.0F) * 0.5F, 10.0F) - 0.95F) * 0.5F;
+		float blend2 = Math.max(0.0F, (float)Math.pow((Mth.sin(ageInTicks * 0.0555F) + 1.0F) * 0.5F, 10.0F) - 0.95F) * 0.5F;
+		float blend3 = Math.max(0.0F, (float)Math.pow((Mth.sin(ageInTicks * 0.0333F) + 1.0F) * 0.5F, 10.0F) - 0.95F) * 0.5F;
 
-		float angle0 = (float)Math.sin(ageInTicks * 0.091F) * 0.025F;
-		float angle1 = ((float)Math.sin(ageInTicks * 0.05F) + 1.0F) * 0.15F + angle0;
-		float angle2 = ((float)Math.sin(ageInTicks * 0.05F + 0.35F) + 1.0F) * 0.15F + angle0;
-		float angle3 = ((float)Math.sin(ageInTicks * 3.0F) + 1.0F) + angle0;
+		float angle0 = Mth.sin(ageInTicks * 0.091F) * 0.025F;
+		float angle1 = (Mth.sin(ageInTicks * 0.05F) + 1.0F) * 0.15F + angle0;
+		float angle2 = (Mth.sin(ageInTicks * 0.05F + 0.35F) + 1.0F) * 0.15F + angle0;
+		float angle3 = (Mth.sin(ageInTicks * 3.0F) + 1.0F) + angle0;
 
 		float whisker1 = (1 - blend1) * angle1 + blend1 * angle3;
 		float whisker2 = (1 - blend2) * angle2 + blend2 * angle3;

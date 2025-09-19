@@ -132,7 +132,7 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 	}
 
 	public float getShieldExplosion(float partialTicks) {
-		return this.lastShieldExplosion + (this.shieldExplosion - this.lastShieldExplosion) * partialTicks;
+		return Mth.lerp(partialTicks, this.lastShieldExplosion, this.shieldExplosion);
 	}
 
 	public void setAnchor(BlockPos anchor, double radius) {
@@ -153,15 +153,15 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 	}
 
 	public float getShieldRotationYaw(float partialTicks) {
-		return this.lastShieldRotationYaw + (this.shieldRotationYaw - this.lastShieldRotationYaw) * partialTicks;
+		return Mth.lerp(partialTicks, this.lastShieldRotationYaw, this.shieldRotationYaw);
 	}
 
 	public float getShieldRotationPitch(float partialTicks) {
-		return this.lastShieldRotationPitch + (this.shieldRotationPitch - this.lastShieldRotationPitch) * partialTicks;
+		return Mth.lerp(partialTicks, this.lastShieldRotationPitch, this.shieldRotationPitch);
 	}
 
 	public float getShieldRotationRoll(float partialTicks) {
-		return this.lastShieldRotationRoll + (this.shieldRotationRoll - this.lastShieldRotationRoll) * partialTicks;
+		return Mth.lerp(partialTicks, this.lastShieldRotationRoll, this.shieldRotationRoll);
 	}
 
 	public static int rayTraceShield(ProtectionShield shield, Vec3 centerPos, float shieldRotationYaw, float shieldRotationPitch, float shieldRotationRoll, float shieldExplosion, Vec3 pos, Vec3 ray, boolean back) {

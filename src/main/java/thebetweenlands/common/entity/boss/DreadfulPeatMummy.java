@@ -913,7 +913,7 @@ public class DreadfulPeatMummy extends Monster implements BLEntity, Betweenlands
 	@Override
 	public boolean applyOffset(Entity view, float partialTicks) {
 		if (this.currentEatPrey == view) {
-			double direction = Math.toRadians(this.yBodyRotO + (this.yBodyRot - this.yBodyRotO) * partialTicks);
+			double direction = Math.toRadians(Mth.lerp(partialTicks, this.yBodyRotO, this.yBodyRot));
 			view.setYRot(view.yRotO = (float) (Math.toDegrees(direction) + 180));
 			view.setXRot(view.xRotO = 0);
 			view.setYHeadRot((float) (Math.toDegrees(direction) + 180));

@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 import thebetweenlands.common.TheBetweenlands;
 
@@ -55,8 +56,8 @@ public class Firefly {
 	}
 
 	public void render(GuiGraphics graphics, float partialTicks) {
-		float interpX = this.prevPosX + (this.posX - this.prevPosX) * partialTicks;
-		float interpY = this.prevPosY + (this.posY - this.prevPosY) * partialTicks;
+		float interpX = Mth.lerp(partialTicks, this.prevPosX, this.posX);
+		float interpY = Mth.lerp(partialTicks, this.prevPosY, this.posY);
 		float interpUpdateCounter = (this.updateCounter + partialTicks) / 15.0F;
 
 		graphics.pose().pushPose();

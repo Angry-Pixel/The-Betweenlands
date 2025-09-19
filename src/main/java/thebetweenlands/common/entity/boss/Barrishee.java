@@ -189,7 +189,7 @@ public class Barrishee extends Monster implements ScreenShaker, BLEntity, PathOb
 	}
 
 	public float getSmoothedStandingAngle(float partialTicks) {
-		return this.prevStandingAngle + (this.standingAngle - this.prevStandingAngle) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevStandingAngle, this.standingAngle);
 	}
 
 	@Override

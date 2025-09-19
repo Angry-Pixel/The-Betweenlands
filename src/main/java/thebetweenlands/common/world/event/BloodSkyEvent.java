@@ -3,6 +3,7 @@ package thebetweenlands.common.world.event;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import thebetweenlands.client.BetweenlandsClient;
@@ -23,7 +24,7 @@ public class BloodSkyEvent extends TimedEnvironmentEvent {
 	}
 
 	public float getSkyTransparency(float partialTicks) {
-		return this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks;
+		return Mth.lerp(partialTicks, this.skyTransparency, this.skyTransparency);
 	}
 
 	@Override

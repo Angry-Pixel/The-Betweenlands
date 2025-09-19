@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -281,7 +282,7 @@ public class PrimordialMalevolenceBlockade extends Mob implements OwnableEntity,
 
 	public Vec3[] getTriangleVertices(float partialTicks) {
 		Vec3[] vertices = new Vec3[3];
-		double rot = Math.toRadians(this.prevRotation + (this.rotation - this.prevRotation) * partialTicks);
+		double rot = Math.toRadians(Mth.lerp(partialTicks, this.prevRotation, this.rotation));
 		double angle = Math.PI * 2.0D / 3.0D;
 		for (int i = 0; i < 3; i++) {
 			double sin = Math.sin(angle * i + rot);

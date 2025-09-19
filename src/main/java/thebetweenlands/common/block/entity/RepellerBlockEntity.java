@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -283,7 +284,7 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 	}
 
 	public float getRadius(float partialTicks) {
-		return this.lastRadius + (this.radius - this.lastRadius) * partialTicks;
+		return Mth.lerp(partialTicks, this.lastRadius, this.radius);
 	}
 
 	protected Vec3 getClosestAABBCorner(AABB bb, double centerX, double centerY, double centerZ) {

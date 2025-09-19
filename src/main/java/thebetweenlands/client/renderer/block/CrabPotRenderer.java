@@ -73,7 +73,7 @@ public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> 
 						} else {
 							stack.mulPose(Axis.YP.rotationDegrees(-90.0F + entity.getBlockState().getValue(CrabPotBlock.FACING).toYRot()));
 						}
-						float animationTicks = entity.prevAnimationTicks + (entity.animationTicks - entity.prevAnimationTicks) * partialTicks;
+						float animationTicks = Mth.lerp(partialTicks, entity.prevAnimationTicks, entity.animationTicks);
 
 						EntityType<?> renderEntity = entity.getEntity();
 

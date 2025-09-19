@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.block.WindChimeModel;
 import thebetweenlands.common.TheBetweenlands;
@@ -24,7 +25,7 @@ public class WindChimeRenderer implements BlockEntityRenderer<WindChimeBlockEnti
 		stack.pushPose();
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.scale(1.0F, -1.0F, -1.0F);
-		this.chime.renderWithAnimation(stack, source.getBuffer(TEXTURE), light, overlay, entity.renderTicks + partialTicks, Math.min((entity.prevChimeTicks + (entity.chimeTicks - entity.prevChimeTicks) * partialTicks) / 100.0F, 1.25F));
+		this.chime.renderWithAnimation(stack, source.getBuffer(TEXTURE), light, overlay, entity.renderTicks + partialTicks, Math.min(Mth.lerp(partialTicks, entity.prevChimeTicks, entity.chimeTicks) / 100.0F, 1.25F));
 		stack.popPose();
 
 //		ParticleBatch batch = entity.getParticleBatch();

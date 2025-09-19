@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -132,7 +133,7 @@ public class Firefly extends PathfinderMob implements BLEntity {
 	}
 
 	public float getGlowTicks(float partialTicks) {
-		return this.prevGlowTicks + (this.glowTicks - this.prevGlowTicks) * partialTicks;
+		return Mth.lerp(partialTicks, this.prevGlowTicks, this.glowTicks);
 	}
 
 //	@Override

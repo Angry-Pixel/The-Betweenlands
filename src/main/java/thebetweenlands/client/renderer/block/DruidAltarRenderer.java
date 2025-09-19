@@ -47,7 +47,7 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 
 	@Override
 	public void render(DruidAltarBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
-		float renderRotation = entity.rotation + (entity.rotation - entity.prevRotation) * partialTicks;
+		float renderRotation = Mth.lerp(partialTicks, entity.rotation, entity.rotation);
 		//altar
 		int lighting = Math.min(150 + light, LightTexture.FULL_BLOCK);
 		if (entity.getLevel() == null) {
@@ -72,7 +72,7 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 		//Animate the 4 talisman pieces
 		double yOff = 1.2D;
 		if (entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) && entity.craftingProgress != 0) {
-			yOff = Math.min(entity.renderYOffset + (entity.renderYOffset - entity.prevRenderYOffset) * partialTicks, DruidAltarBlockEntity.FINAL_HEIGHT + 1.0D);
+			yOff = Math.min(Mth.lerp(partialTicks, entity.renderYOffset, entity.renderYOffset), DruidAltarBlockEntity.FINAL_HEIGHT + 1.0D);
 
 			stack.pushPose();
 			stack.translate(0.5D, 3.1D, 0.5D);

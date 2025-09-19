@@ -2,6 +2,7 @@ package thebetweenlands.common.world.event;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.TheBetweenlands;
@@ -49,7 +50,7 @@ public class DenseFogEvent extends TimedEnvironmentEvent {
 	}
 
 	public float getFade(float partialTicks) {
-		return this.fade + (this.fade - this.lastFade) * partialTicks;
+		return Mth.lerp(partialTicks, this.fade, this.fade);
 	}
 
 	public static boolean isDenseFog(Level level) {

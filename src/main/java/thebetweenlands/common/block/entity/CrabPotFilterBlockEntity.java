@@ -245,7 +245,7 @@ public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implement
 	}
 
 	public float getFilteringAnimationScaled(int count, float partialTicks) {
-		return (this.prevFilteringAnimationTicks + (this.filteringAnimationTicks - this.prevFilteringAnimationTicks) * partialTicks) * count / 200;
+		return (Mth.lerp(partialTicks, this.prevFilteringAnimationTicks, this.filteringAnimationTicks)) * count / 200;
 	}
 
 	@Override

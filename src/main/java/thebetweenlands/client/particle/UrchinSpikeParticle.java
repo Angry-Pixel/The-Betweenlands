@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.renderer.SpikeRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -91,9 +92,9 @@ public class UrchinSpikeParticle extends Particle {
 
 		stack.translate(rx, ry, rz);
 
-		double mx = this.prevMotionX + (this.xd - this.prevMotionX) * partialTicks;
-		double my = this.prevMotionY + (this.yd - this.prevMotionY) * partialTicks;
-		double mz = this.prevMotionZ + (this.zd - this.prevMotionZ) * partialTicks;
+		double mx = Mth.lerp(partialTicks, this.prevMotionX, this.xd);
+		double my = Mth.lerp(partialTicks, this.prevMotionY, this.yd);
+		double mz = Mth.lerp(partialTicks, this.prevMotionZ, this.zd);
 
 		stack.mulPose(Axis.YP.rotationDegrees(-(float) Math.toDegrees(Math.atan2(mz, mx))));
 		stack.mulPose(Axis.ZP.rotationDegrees((float) Math.toDegrees(Math.atan2(Math.sqrt(mx * mx + mz * mz), -my)) + 180));
