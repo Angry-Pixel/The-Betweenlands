@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-09T22:25:46.907027131	Item Models: thebetweenlands
+// 1.21.1	2025-09-17T08:58:01.572918147	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -116,7 +116,12 @@ dd9c4b8301c0482efbb3975432b3161218084cef assets/thebetweenlands/models/item/catt
 6b7fcf5bb9c99144a7aac611a7e55cf36200b4c7 assets/thebetweenlands/models/item/champagne_dye.json
 bd5c42df96811be6bde8e82926645271ec6dfef4 assets/thebetweenlands/models/item/champagne_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/champagne_item_frame.json
+d264294b45073bfaa7c9ea1055e57d2f51fdb3a3 assets/thebetweenlands/models/item/chirobarb_erupter.json
+d264294b45073bfaa7c9ea1055e57d2f51fdb3a3 assets/thebetweenlands/models/item/chirobarb_shock_erupter.json
 65b1851cda113bc29fe0e76e4f056dffc8736195 assets/thebetweenlands/models/item/chiromaw_barb.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/chiromaw_greebling_rider_spawn_egg.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/chiromaw_matriarch_spawn_egg.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/chiromaw_spawn_egg.json
 c9468e94ccf5e49f38fc7de0f678f3e580f8b0be assets/thebetweenlands/models/item/chiromaw_wing.json
 94bc5e2abd8df61044014e785a5e7e12a0ba3579 assets/thebetweenlands/models/item/christmas_pudding.json
 5db4d84de0740d479a793f4a042a2eef4eb3fab9 assets/thebetweenlands/models/item/clean_water_bucket.json

@@ -1050,6 +1050,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.PRIMORDIAL_MALEVOLENCE, "Primordial Malevolence");
 		this.addEntityAndEgg(EntityRegistry.TAR_BEAST, "Tar Beast");
 		this.addEntityAndEgg(EntityRegistry.LARGE_SLUDGE_WORM, "Large Sludge Worm");
+		this.addEntityAndEgg(EntityRegistry.CHIROMAW, "Chiromaw");
+		this.addEntityAndEgg(EntityRegistry.CHIROMAW_GREEBLING_RIDER, "Greebling Rider");
+		this.addEntityAndEgg(EntityRegistry.CHIROMAW_MATRIARCH, "Chiromaw Matriarch");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1074,6 +1077,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET, "Primordial Malevolence Turret");
 		this.addEntityType(EntityRegistry.VOLATILE_SOUL, "Volatile Soul");
 		this.addEntityType(EntityRegistry.SLUDGE_WORM_EGG_SAC, "Sludge Worm Egg Sac");
+		this.addEntityType(EntityRegistry.CHIROMAW_DROPPINGS, "Chiromaw Droppings");
+		this.addEntityType(EntityRegistry.GREEBLING_VOLARPAD_FLOATER, "Greebling Volarpad Floater");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -1527,7 +1532,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.HAG_HACKER, "Hag Hacker");
 		this.addItem(ItemRegistry.VOODOO_DOLL, "Voodoo Doll");
 		this.addItem(ItemRegistry.SWIFT_PICK, "Swift Pick");
-		//erupters
+		this.addItem(ItemRegistry.CHIROBARB_ERUPTER, "Chirobarb Erupter");
+		this.addItem(ItemRegistry.CHIROBARB_SHOCK_ERUPTER, "Chirobarb Shock Erupter");
 		this.addItem(ItemRegistry.MIST_STAFF, "Staff of the Mist Walker");
 		this.addItem(ItemRegistry.SHADOW_STAFF, "Staff of the Shadow Walker");
 		this.addDisc(ItemRegistry.RECORD_ANCIENT, "Temple Disc", "Voog2 - Ancient");

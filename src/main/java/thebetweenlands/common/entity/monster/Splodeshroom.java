@@ -118,24 +118,18 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 		}
 	}
 
-	@Nullable
-	protected Entity checkAreaOfEffect() {
-		Entity entity = null;
+	protected void checkAreaOfEffect() {
 		if (!this.level().isClientSide() && this.level().getDifficulty() != Difficulty.PEACEFUL) {
 			List<Player> list = this.level().getEntitiesOfClass(Player.class, this.getBoundingBox());
 			for (Player player : list) {
-				entity = player;
-				if (entity != null) {
-					if (!this.isWearingSilkMask(player)) {
-						if (!player.isSpectator() && !player.isCreative()) {
-							player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60));
-							player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(40, 1));
-						}
+				if (!this.isWearingSilkMask(player)) {
+					if (!player.isSpectator() && !player.isCreative()) {
+						player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60));
+						player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(40, 1));
 					}
 				}
 			}
 		}
-		return entity;
 	}
 
 	public boolean isWearingSilkMask(LivingEntity entity) {

@@ -46,7 +46,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		this(EntityRegistry.BETWEENSTONE_PEBBLE.get(), level);
 		this.setItem(stack);
 		this.setPos(x, y, z);
-		if (firedFromWeapon != null && level instanceof ServerLevel) {
+		if (firedFromWeapon != null && level instanceof ServerLevel serverLevel) {
 			if (firedFromWeapon.isEmpty()) {
 				throw new IllegalArgumentException("Invalid weapon firing an arrow");
 			}
@@ -64,6 +64,29 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		builder.define(FLAGS, (byte) 0);
 		builder.define(ITEM_STACK, this.getDefaultItem());
+	}
+
+	@Override
+	public boolean shouldRenderAtSqrDistance(double distance) {
+		double d0 = this.getBoundingBox().getSize() * 10.0;
+		if (Double.isNaN(d0)) {
+			d0 = 1.0;
+		}
+
+		d0 *= 64.0 * Entity.getViewScale();
+		return distance < d0 * d0;
+	}
+
+	@Override
+	public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+		super.shoot(x, y, z, velocity, inaccuracy);
+		this.life = 0;
+	}
+
+	@Override
+	public void lerpMotion(double x, double y, double z) {
+		super.lerpMotion(x, y, z);
+		this.life = 0;
 	}
 
 	public void setItem(ItemStack stack) {
@@ -98,43 +121,45 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 			vec33 = hitresult.getLocation();
 		}
 
-		while (!this.isRemoved()) {
-			EntityHitResult entityhitresult = this.findHitEntity(vec32, vec33);
-			if (entityhitresult != null) {
-				hitresult = entityhitresult;
-			}
-
-			if (hitresult != null && hitresult.getType() == HitResult.Type.ENTITY) {
-				Entity entity = ((EntityHitResult) hitresult).getEntity();
-				Entity entity1 = this.getOwner();
-				if (entity instanceof Player && entity1 instanceof Player && !((Player) entity1).canHarmPlayer((Player) entity)) {
-					hitresult = null;
-					entityhitresult = null;
+		if (!this.level().isClientSide()) {
+			while (!this.isRemoved()) {
+				EntityHitResult entityhitresult = this.findHitEntity(vec32, vec33);
+				if (entityhitresult != null) {
+					hitresult = entityhitresult;
 				}
-			}
 
-			if (hitresult != null && hitresult.getType() != HitResult.Type.MISS && !flag) {
-				if (EventHooks.onProjectileImpact(this, hitresult))
-					break;
-				ProjectileDeflection projectiledeflection = this.hitTargetOrDeflectSelf(hitresult);
-				this.hasImpulse = true;
-				if (projectiledeflection != ProjectileDeflection.NONE) {
+				if (hitresult != null && hitresult.getType() == HitResult.Type.ENTITY) {
+					Entity entity = ((EntityHitResult) hitresult).getEntity();
+					Entity entity1 = this.getOwner();
+					if (entity instanceof Player && entity1 instanceof Player && !((Player) entity1).canHarmPlayer((Player) entity)) {
+						hitresult = null;
+						entityhitresult = null;
+					}
+				}
+
+				if (hitresult != null && hitresult.getType() != HitResult.Type.MISS && !flag) {
+					if (EventHooks.onProjectileImpact(this, hitresult))
+						break;
+					ProjectileDeflection projectiledeflection = this.hitTargetOrDeflectSelf(hitresult);
+					this.hasImpulse = true;
+					if (projectiledeflection != ProjectileDeflection.NONE) {
+						break;
+					}
+				}
+
+				if (entityhitresult == null) {
 					break;
 				}
-			}
 
-			if (entityhitresult == null) {
-				break;
+				hitresult = null;
 			}
-
-			hitresult = null;
 		}
 
 		vec3 = this.getDeltaMovement();
 		double d5 = vec3.x;
 		double d6 = vec3.y;
 		double d1 = vec3.z;
-		if (this.isCritArrow()) {
+		if (this.isCrit()) {
 			for (int i = 0; i < 4; i++) {
 				this.level().addParticle(ParticleTypes.CRIT,
 					this.getX() + d5 * (double) i / 4.0,
@@ -171,7 +196,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 
 	@Override
 	protected double getDefaultGravity() {
-		return 0.05;
+		return 0.05D;
 	}
 
 	protected void tickDespawn() {
@@ -181,9 +206,6 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		}
 	}
 
-	/**
-	 * Called when the arrow hits an entity
-	 */
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
@@ -198,7 +220,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 
 		int j = Mth.ceil(Mth.clamp((double)f * d0, 0.0, 2.147483647E9));
 
-		if (this.isCritArrow()) {
+		if (this.isCrit()) {
 			long k = this.getRandom().nextInt(j / 2 + 2);
 			j = (int)Math.min(k + (long)j, 2147483647L);
 		}
@@ -230,7 +252,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		} else {
 			entity.setRemainingFireTicks(i);
 			this.deflect(ProjectileDeflection.REVERSE, entity, this.getOwner(), false);
-			this.setDeltaMovement(this.getDeltaMovement().scale(0.2));
+			this.setDeltaMovement(this.getDeltaMovement().scale(0.2D));
 			if (!this.level().isClientSide() && this.getDeltaMovement().lengthSqr() < 1.0E-7) {
 				this.discard();
 			}
@@ -240,10 +262,10 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 	protected void doKnockback(LivingEntity entity, DamageSource damageSource) {
 		double d0 = this.firedFromWeapon != null && this.level() instanceof ServerLevel serverlevel ? EnchantmentHelper.modifyKnockback(serverlevel, this.firedFromWeapon, entity, damageSource, 0.0F) : 0.0F;
 		if (d0 > 0.0) {
-			double d1 = Math.max(0.0, 1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-			Vec3 vec3 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale(d0 * 0.6 * d1);
-			if (vec3.lengthSqr() > 0.0) {
-				entity.push(vec3.x, 0.1, vec3.z);
+			double d1 = Math.max(0.0D, 1.0D - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+			Vec3 vec3 = this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D).normalize().scale(d0 * 0.6D * d1);
+			if (vec3.lengthSqr() > 0.0D) {
+				entity.push(vec3.x, 0.1D, vec3.z);
 			}
 		}
 	}
@@ -272,6 +294,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		);
 	}
 
+	@Nullable
 	@Override
 	public ItemStack getWeaponItem() {
 		return this.firedFromWeapon;
@@ -287,7 +310,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		compound.put("item", this.getItem().save(this.registryAccess()));
 		compound.putShort("life", (short)this.life);
 		compound.putDouble("damage", this.baseDamage);
-		compound.putBoolean("crit", this.isCritArrow());
+		compound.putBoolean("crit", this.isCrit());
 		if (this.firedFromWeapon != null) {
 			compound.put("weapon", this.firedFromWeapon.save(this.registryAccess(), new CompoundTag()));
 		}
@@ -304,7 +327,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		if (compound.contains("damage", Tag.TAG_ANY_NUMERIC)) {
 			this.baseDamage = compound.getDouble("damage");
 		}
-		this.setCritArrow(compound.getBoolean("crit"));
+		this.setCrit(compound.getBoolean("crit"));
 		if (compound.contains("weapon", Tag.TAG_COMPOUND)) {
 			this.firedFromWeapon = ItemStack.parse(this.registryAccess(), compound.getCompound("weapon")).orElse(null);
 		} else {
@@ -312,8 +335,8 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		}
 	}
 
-	public void setCritArrow(boolean critArrow) {
-		this.setFlag(1, critArrow);
+	public void setCrit(boolean crit) {
+		this.setFlag(1, crit);
 	}
 
 	private void setFlag(int id, boolean value) {
@@ -325,7 +348,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 		}
 	}
 
-	public boolean isCritArrow() {
+	public boolean isCrit() {
 		byte b0 = this.getEntityData().get(FLAGS);
 		return (b0 & 1) != 0;
 	}
@@ -336,7 +359,7 @@ public class BetweenstonePebble extends Projectile implements ItemSupplier {
 	}
 
 	public boolean isNoPhysics() {
-		return !this.level().isClientSide ? this.noPhysics : (this.entityData.get(FLAGS) & 2) != 0;
+		return !this.level().isClientSide() ? this.noPhysics : (this.getEntityData().get(FLAGS) & 2) != 0;
 	}
 
 	private ItemStack getDefaultItem() {

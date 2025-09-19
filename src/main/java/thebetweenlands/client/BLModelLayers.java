@@ -21,6 +21,10 @@ public class BLModelLayers {
 	public static final ModelLayerLocation BIPED_CRYPT_CRAWLER = register("biped_crypt_crawler");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
 	public static final ModelLayerLocation CAVE_FISH = register("cave_fish");
+	public static final ModelLayerLocation CHIROMAW = register("chiromaw");
+	public static final ModelLayerLocation CHIROMAW_DROPPINGS = register("chiromaw_droppings");
+	public static final ModelLayerLocation CHIROMAW_GREEBLING_RIDER = register("chiromaw_greebling_rider");
+	public static final ModelLayerLocation CHIROMAW_MATRIARCH = register("chiromaw_matriarch");
 	public static final ModelLayerLocation CRYPT_CRAWLER = register("crypt_crawler");
 	public static final ModelLayerLocation DARK_DRUID = register("dark_druid");
 	public static final ModelLayerLocation DRAETON_BALLOON = register("draeton", "balloon");
@@ -41,6 +45,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation GREEBLING_1 = register("greebling_1");
 	public static final ModelLayerLocation GREEBLING_2 = register("greebling_2");
 	public static final ModelLayerLocation GREEBLING_CORACLE = register("greebling_coracle");
+	public static final ModelLayerLocation GREEBLING_VOLARPAD_FLOATER = register("greebling_volarpad_floater");
 	public static final ModelLayerLocation JELLYFISH = register("jellyfish");
 	public static final ModelLayerLocation LURKER = register("lurker");
 	public static final ModelLayerLocation LARGE_SLUDGE_WORM = register("large_sludge_worm");

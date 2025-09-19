@@ -45,7 +45,7 @@ public class ThrownTarminion extends ThrowableProjectile {
 		super.tick();
 		if(!this.onGround()) {
 			if (this.level().isClientSide()) {
-				TheBetweenlands.createParticle(ParticleRegistry.DRIPPING_TAR.get(), this.level(), this.getX(), this.getY(), this.getZ(), ParticleFactory.ParticleArgs.get().withColor(0.0F, 0.0F, 0.0F, 1.0F));
+				TheBetweenlands.createParticle(ParticleRegistry.FALLING_FLUID.get(), this.level(), this.getX(), this.getY(), this.getZ(), ParticleFactory.ParticleArgs.get().withColor(0xFF000000));
 			}
 		}
 	}

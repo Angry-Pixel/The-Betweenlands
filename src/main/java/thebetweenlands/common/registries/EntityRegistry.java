@@ -22,6 +22,9 @@ import thebetweenlands.common.entity.fishing.FishBait;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.*;
+import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
+import thebetweenlands.common.entity.monster.chiromaw.ChiromawGreeblingRider;
+import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 import thebetweenlands.common.entity.projectile.*;
 import thebetweenlands.common.entity.projectile.arrow.AnglerToothArrow;
 import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
@@ -51,10 +54,10 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C, BubblerCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CaveFish>> CAVE_FISH = registerWithEgg("cave_fish", EntityType.Builder.of(CaveFish::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.3F, 0.2F), 0xFF8000, 0xE6E6E6, CaveFish::registerAttributes);
 	//cave jellyfish
-	//chiromaw
-	//chiromaw greebling rider
+	public static final DeferredHolder<EntityType<?>, EntityType<Chiromaw>> CHIROMAW = registerWithEgg("chiromaw", EntityType.Builder.of(Chiromaw::new, MobCategory.MONSTER).sized(0.7F, 0.9F), 0x142728, 0x7A4E42, Chiromaw::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawGreeblingRider>> CHIROMAW_GREEBLING_RIDER = registerWithEgg("chiromaw_greebling_rider", EntityType.Builder.of(ChiromawGreeblingRider::new, MobCategory.MONSTER).sized(0.7F, 0.9F), 0x142728, 0x7CB2AA, ChiromawGreeblingRider::registerAttributes);
 	//chiromaw hatchling
-	//chiromaw matriarch
+	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawMatriarch>> CHIROMAW_MATRIARCH = registerWithEgg("chiromaw_matriarch", EntityType.Builder.of(ChiromawMatriarch::new, MobCategory.MONSTER).sized(1.75F, 2.0F), 0x142728, 0x4A2120, ChiromawMatriarch::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiefCryptCrawler>> CHIEF_CRYPT_CRAWLER = registerWithAttributes("chief_crypt_crawler", EntityType.Builder.of(ChiefCryptCrawler::new, MobCategory.MONSTER).sized(0.98F, 1.9F), ChiefCryptCrawler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CryptCrawler>> CRYPT_CRAWLER = registerWithAttributes("crypt_crawler", EntityType.Builder.of(CryptCrawler::new, MobCategory.MONSTER).sized(0.95F, 1.0F), CryptCrawler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<DarkDruid>> DARK_DRUID = registerWithEgg("dark_druid", EntityType.Builder.of(DarkDruid::new, MobCategory.MONSTER).sized(0.9F, 1.9F), 0x000000, 0xFF0000, DarkDruid::registerAttributes);
@@ -69,7 +72,7 @@ public class EntityRegistry {
 	//giant toad
 	public static final DeferredHolder<EntityType<?>, EntityType<Greebling>> GREEBLING = registerWithEgg("greebling", EntityType.Builder.of(Greebling::new, MobCategory.AMBIENT).sized(1.0F, 0.75F).clientTrackingRange(16), 0x7CB2AA, 0xC3726C, Greebling::createMobAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingCoracle>> GREEBLING_CORACLE = registerWithEgg("greebling_coracle", EntityType.Builder.of(GreeblingCoracle::new, MobCategory.AMBIENT).sized(1.0F, 1.0F).clientTrackingRange(16), 0x7CB2AA, 0xC3726C, GreeblingCoracle::registerAttributes);
-	//greebling volarpad floater
+	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingVolarpadFloater>> GREEBLING_VOLARPAD_FLOATER = register("greebling_volarpad_floater", EntityType.Builder.<GreeblingVolarpadFloater>of(GreeblingVolarpadFloater::new, MobCategory.MISC).sized(1.0F, 1.0F).clientTrackingRange(16).noSave().fireImmune().noSummon().canSpawnFarFromPlayer());
 	//infestation
 	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<LargeSludgeWorm>> LARGE_SLUDGE_WORM = registerWithEgg("large_sludge_worm", EntityType.Builder.of(LargeSludgeWorm::new, MobCategory.MONSTER).sized(0.8F, 0.8F).fireImmune(), 0x726459, 0xE2DED9, LargeSludgeWorm::registerAttributes);
@@ -111,7 +114,7 @@ public class EntityRegistry {
 	//bubbler crab bubble
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawBarb>> CHIROMAW_BARB = register("chiromaw_barb", EntityType.Builder.<ChiromawBarb>of(ChiromawBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawShockBarb>> CHIROMAW_SHOCK_BARB = register("chiromaw_shock_barb", EntityType.Builder.<ChiromawShockBarb>of(ChiromawShockBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
-	//chiromaw droppings
+	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawDroppings>> CHIROMAW_DROPPINGS = register("chiromaw_droppings", EntityType.Builder.<ChiromawDroppings>of(ChiromawDroppings::new, MobCategory.MISC).sized(0.5F, 0.5F).noSave().noSummon().fireImmune());
 	//decay pit target
 	//draeton
 	//draeton chiromaw

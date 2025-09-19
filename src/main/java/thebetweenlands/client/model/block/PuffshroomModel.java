@@ -274,11 +274,11 @@ public class PuffshroomModel {
 	}
 
 	public void renderAndAnimate(PuffshroomBlockEntity entity, float partialTicks, PoseStack stack, VertexConsumer consumer, int light, int overlay) {
-		float interAnimationTicks_1 = entity.prev_animation_1 + (entity.animation_1 - entity.prev_animation_1) * partialTicks;
-		float interAnimationTicks_2 = entity.prev_animation_2 + (entity.animation_2 - entity.prev_animation_2) * partialTicks;
-		float interAnimationTicks_3 = entity.prev_animation_3 + (entity.animation_3 - entity.prev_animation_3) * partialTicks;
-		float interAnimationTicks_4 = entity.prev_animation_4 + (entity.animation_4 - entity.prev_animation_4) * partialTicks;
-		float smoothedTicks = entity.prev_renderTicks + (entity.renderTicks - entity.prev_renderTicks) * partialTicks;
+		float interAnimationTicks_1 = Mth.lerp(partialTicks, entity.prev_animation_1, entity.animation_1);
+		float interAnimationTicks_2 = Mth.lerp(partialTicks, entity.prev_animation_2, entity.animation_2);
+		float interAnimationTicks_3 = Mth.lerp(partialTicks, entity.prev_animation_3, entity.animation_3);
+		float interAnimationTicks_4 = Mth.lerp(partialTicks, entity.prev_animation_4, entity.animation_4);
+		float smoothedTicks = Mth.lerp(partialTicks, entity.prev_renderTicks, entity.renderTicks);
 		float flap = Mth.sin((smoothedTicks) * 0.325F) * 0.125F;
 		float flap2 = Mth.cos((smoothedTicks) * 0.325F) * 0.125F;
 

@@ -137,7 +137,7 @@ public class SludgeWorm extends Monster implements BLEntity {
 			double a = Math.toRadians(this.yBodyRot);
 			double offSetX = -Math.sin(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
 			double offSetZ = Math.cos(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
-			TheBetweenlands.createParticle(ParticleRegistry.DRIPPING_TAR.get(), level , x + offSetX, y, z + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0.4118F, 0.2745F, 0.1568F, 1.0F));
+			TheBetweenlands.createParticle(ParticleRegistry.FALLING_FLUID.get(), level , x + offSetX, y, z + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0xFF694628));
 		}
 	}
 

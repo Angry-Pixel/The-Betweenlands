@@ -151,6 +151,7 @@ import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.entity.monster.chiromaw.ChiromawGreeblingRider;
 import thebetweenlands.common.fluid.BasicFluidType;
 import thebetweenlands.common.fluid.ColoredFluidType;
 import thebetweenlands.common.fluid.SwampWaterFluidType;
@@ -322,6 +323,11 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.TAR_BEAST.get(), TarBeastRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.LARGE_SLUDGE_WORM.get(), LargeSludgeWormRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WORM_EGG_SAC.get(), SludgeWormEggSacRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW.get(), ChiromawRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_GREEBLING_RIDER.get(), ChiromawGreeblingRiderRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_MATRIARCH.get(), ChiromawMatriarchRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CHIROMAW_DROPPINGS.get(), ChiromawDroppingsRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.GREEBLING_VOLARPAD_FLOATER.get(), GreeblingVolarpadFloaterRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -421,6 +427,11 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.LARGE_SLUDGE_WORM, LargeSludgeWormModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SLUDGE_WORM_OUTER, LargeSludgeWormModel::createSludgeLayer);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_EGG_SAC, SludgeWormEggSacModel::create);
+		event.registerLayerDefinition(BLModelLayers.CHIROMAW, ChiromawModel::create);
+		event.registerLayerDefinition(BLModelLayers.CHIROMAW_GREEBLING_RIDER, ChiromawGreeblingRiderModel::create);
+		event.registerLayerDefinition(BLModelLayers.CHIROMAW_MATRIARCH, ChiromawMatriarchModel::create);
+		event.registerLayerDefinition(BLModelLayers.CHIROMAW_DROPPINGS, ChiromawDroppingsModel::create);
+		event.registerLayerDefinition(BLModelLayers.GREEBLING_VOLARPAD_FLOATER, GreeblingVolarpadFloaterModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -759,9 +770,9 @@ public class ClientRegistrationEvents {
 		event.registerSprite(ParticleRegistry.SLEEPING.get(), (type, level, x, y, z, xSpeed, ySpeed, zSpeed) -> new SleepingParticle(level, x, y, z, xSpeed, ySpeed, zSpeed));
 		event.registerSpriteSet(ParticleRegistry.EMBER_SWIRL.get(), EntitySwirlParticle.EmberSwirlFactory::new);
 		event.registerSpriteSet(ParticleRegistry.DRUID_CASTING.get(), DruidCastingParticle.Factory::new);
-		event.registerSprite(ParticleRegistry.DRIPPING_TAR.get(), TarBeastDripParticle::createTarHangParticle);
-		event.registerSprite(ParticleRegistry.FALLING_TAR.get(), TarBeastDripParticle::createTarFallParticle);
-		event.registerSprite(ParticleRegistry.LANDING_TAR.get(), TarBeastDripParticle::createTarLandParticle);
+		event.registerSprite(ParticleRegistry.DRIPPING_FLUID.get(), ColoredDripParticle::createFluidHangParticle);
+		event.registerSprite(ParticleRegistry.FALLING_FLUID.get(), ColoredDripParticle::createFluidFallParticle);
+		event.registerSprite(ParticleRegistry.LANDING_FLUID.get(), ColoredDripParticle::createFluidLandParticle);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD.get(), GasCloudParticle.GasCloudFactory::new);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD_HAZE.get(), GasCloudHazeParticle.GasCloudHazeFactory::new);
 	}

@@ -10,6 +10,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.*;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
@@ -37,6 +38,9 @@ public class ClientEvents {
 
 		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWorldLast);
 		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWeather);
+
+		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onRenderHUD);
+
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

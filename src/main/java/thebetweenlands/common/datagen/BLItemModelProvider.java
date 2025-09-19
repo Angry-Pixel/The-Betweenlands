@@ -444,7 +444,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.toolItem(ItemRegistry.HAG_HACKER);
 		this.toolItem(ItemRegistry.VOODOO_DOLL);
 		this.toolItem(ItemRegistry.SWIFT_PICK);
-		//erupters
+		this.basicItem(ItemRegistry.CHIROBARB_ERUPTER);
+		this.otherTextureItem(ItemRegistry.CHIROBARB_SHOCK_ERUPTER, this.modLoc("chirobarb_erupter"));
 		this.toolItem(ItemRegistry.MIST_STAFF);
 		this.toolItem(ItemRegistry.SHADOW_STAFF);
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);

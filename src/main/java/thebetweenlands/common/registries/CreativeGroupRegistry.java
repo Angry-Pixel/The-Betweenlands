@@ -971,8 +971,8 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.HAG_HACKER);
 			output.accept(ItemRegistry.VOODOO_DOLL);
 			output.accept(ItemRegistry.SWIFT_PICK);
-//			output.accept(ItemRegistry.CHIROBARB_ERUPTER);
-//			output.accept(ItemRegistry.CHIROBARB_SHOCK_ERUPTER);
+			output.accept(ItemRegistry.CHIROBARB_ERUPTER);
+			output.accept(ItemRegistry.CHIROBARB_SHOCK_ERUPTER);
 			output.accept(ItemRegistry.MIST_STAFF);
 			output.accept(ItemRegistry.SHADOW_STAFF);
 			output.accept(ItemRegistry.RECORD_ASTATOS);

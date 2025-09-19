@@ -32,7 +32,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -317,7 +316,7 @@ public class TarBeast extends Monster implements BLEntity {
 			double velZ = rand.nextFloat() * 0.5F * motionZ;
 			double velX = rand.nextFloat() * 0.5F * motionX;
 			TheBetweenlands.createParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.SLIME_BALL)), level, this.getX(), this.getY() + rand.nextDouble() * 1.9D, this.getZ(), ParticleFactory.ParticleArgs.get().withColor(0xFF000000).withMotion(velX * 0.15D, velY * 0.1D, velZ * 0.15D));
-			TheBetweenlands.createParticle(ParticleRegistry.FALLING_TAR.get(), level, this.getX() + offSetX, this.getY() + 1.2D, this.getZ() + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0xFF000000));
+			TheBetweenlands.createParticle(ParticleRegistry.FALLING_FLUID.get(), level, this.getX() + offSetX, this.getY() + 1.2D, this.getZ() + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0xFF000000));
 		}
 	}
 

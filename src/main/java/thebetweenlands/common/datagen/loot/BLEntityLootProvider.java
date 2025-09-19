@@ -36,8 +36,6 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 	//TODO seasonal drops for unimplemented mobs:
 	//angler: 1, 8, 1, 4
 	//blood snail: 2, 8, 1, 4
-	//chiromaw: 2, 8, 1, 6
-	//chiromaw matriarch: 2, 6, 1, 1
 	//large sludge worm: 2, 6, 1, 1
 	//leech: 2, 8, 1, 3
 	//pyrad: 2, 3, 1, 1
@@ -445,6 +443,20 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_JELLO).setWeight(2))
 				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))).setWeight(6))
 				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).setWeight(8))));
+
+		this.addWithSeasonalDrops(EntityRegistry.CHIROMAW.get(), 2, 8, 1, 6, LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.CHIROMAW_WING)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+
+		this.add(EntityRegistry.CHIROMAW_GREEBLING_RIDER.get(), this.fromEntityLootTable(EntityRegistry.CHIROMAW.get()));
+
+		this.addWithSeasonalDrops(EntityRegistry.CHIROMAW_MATRIARCH.get(), 2, 6, 1, 1, LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.CHIROMAW_BARB)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(5, 10)))))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.CHIROBARB_ERUPTER))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

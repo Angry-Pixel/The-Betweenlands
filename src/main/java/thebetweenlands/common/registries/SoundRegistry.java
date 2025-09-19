@@ -101,6 +101,7 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> CHIROMAW_MATRIARCH_RELEASE = register("entity.chiromaw_matriarch.release");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CHIROMAW_MATRIARCH_ROAR = register("entity.chiromaw_matriarch.roar");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CHIROMAW_MATRIARCH_SPLAT = register("entity.chiromaw_matriarch.splat");
+	public static final DeferredHolder<SoundEvent, SoundEvent> CHIROMAW_TAKE_OFF = register("entity.chiromaw.take_off");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_SNIP = register("entity.crab.snip");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CRYPT_CRAWLER_DEATH = register("entity.crypt_crawler.death");
 	public static final DeferredHolder<SoundEvent, SoundEvent> CRYPT_CRAWLER_DIG = register("entity.crypt_crawler.dig");

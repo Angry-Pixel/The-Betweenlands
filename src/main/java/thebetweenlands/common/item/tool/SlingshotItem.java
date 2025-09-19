@@ -136,7 +136,7 @@ public class SlingshotItem extends ProjectileWeaponItem {
 		if (ammo.is(ItemRegistry.BETWEENSTONE_PEBBLE)) {
 			var pebble = new BetweenstonePebble(shooter.getX(), shooter.getEyeY() - 0.15F, shooter.getZ(), level, ammo, weapon);
 			if (isCrit) {
-				pebble.setCritArrow(true);
+				pebble.setCrit(true);
 			}
 			return pebble;
 		}

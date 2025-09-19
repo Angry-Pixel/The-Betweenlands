@@ -232,7 +232,7 @@ public class Tarminion extends TamableAnimal implements BLEntity {
 			double a = Math.toRadians(this.getYRot());
 			double offSetX = -Math.sin(a) * 0D + rand.nextDouble() * 0.1D - rand.nextDouble() * 0.1D;
 			double offSetZ = Math.cos(a) * 0D + rand.nextDouble() * 0.1D - rand.nextDouble() * 0.1D;
-			TheBetweenlands.createParticle(ParticleRegistry.DRIPPING_TAR.get(), level, x + offSetX, y + 0.1D, z + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0.0F, 0.0F, 0.0F, 1.0F));
+			TheBetweenlands.createParticle(ParticleRegistry.DRIPPING_FLUID.get(), level, x + offSetX, y + 0.1D, z + offSetZ, ParticleFactory.ParticleArgs.get().withColor(0xFF000000));
 		}
 	}
 
