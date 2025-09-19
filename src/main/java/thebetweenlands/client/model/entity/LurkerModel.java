@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.creature.Lurker;
 
 public class LurkerModel extends MowzieModelBase<Lurker> {
 
-	private final ModelPart root;
 	private final ModelPart trunk;
 	private final ModelPart head;
 	private final ModelPart mandible;
@@ -25,7 +24,7 @@ public class LurkerModel extends MowzieModelBase<Lurker> {
 	private final ModelPart[] tail;
 
 	public LurkerModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.trunk = root.getChild("trunk");
 		this.head = this.trunk.getChild("head");
 		this.mandible = this.head.getChild("mandible");
@@ -162,19 +161,11 @@ public class LurkerModel extends MowzieModelBase<Lurker> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Lurker entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Lurker entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		netHeadYaw = Mth.clamp(netHeadYaw, -60, 60);
 		this.head.yRot = netHeadYaw * Mth.DEG_TO_RAD;
 		this.head.xRot += headPitch * Mth.DEG_TO_RAD;
-	}
 
-	@Override
-	public void prepareMobModel(Lurker entity, float limbSwing, float limbSwingAmount, float partialTick) {
 		float mouthOpen = entity.getMouthOpen(partialTick);
 		float yaw = entity.getTailYaw(partialTick) * Mth.DEG_TO_RAD * 0.2F;
 		float pitch = entity.getTailPitch(partialTick) * Mth.DEG_TO_RAD * 0.2F;

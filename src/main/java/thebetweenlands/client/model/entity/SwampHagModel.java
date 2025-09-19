@@ -10,12 +10,10 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entity.monster.PeatMummy;
 import thebetweenlands.common.entity.monster.SwampHag;
 
 public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implements HeadedModel {
 
-	private final ModelPart root;
 	private final ModelPart body_base;
 	private final ModelPart neck;
 	private final ModelPart body_top;
@@ -27,20 +25,15 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 	private final ModelPart head1;
 	private final ModelPart head2;
 	private final ModelPart jaw;
-	
-	private final ModelPart dat_detailed_hot_bod;
-	private final ModelPart dat_detailed_hot_bod_2;
-	private final ModelPart head;
-    private final ModelPart dat_detailed_hot_bod_3;
-    private final ModelPart cute_lil_butt;
-    private final ModelPart spoopy_stinger;
-    private final ModelPart beak_right;
-    private final ModelPart beak_left;
-    
-    ModelPart[] partsWormWiggle;
+
+	private final ModelPart wormBody;
+	private final ModelPart rightWormBeak;
+	private final ModelPart leftWormBeak;
+
+	private final ModelPart[] partsWormWiggle;
 
 	public SwampHagModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.body_base = root.getChild("body_base");
 		this.body_top = this.body_base.getChild("body_top");
 		this.armright = this.body_base.getChild("armright");
@@ -54,25 +47,23 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 		this.legleft2 = this.legleft1.getChild("legleft2");
 		this.legright2 = this.legright1.getChild("legright2");
 
-		dat_detailed_hot_bod = armright.getChild("dat_detailed_hot_bod");
-		head = dat_detailed_hot_bod.getChild("head");
-		dat_detailed_hot_bod_2 = dat_detailed_hot_bod.getChild("dat_detailed_hot_bod_2");
-		dat_detailed_hot_bod_3 = dat_detailed_hot_bod_2.getChild("dat_detailed_hot_bod_3");
-		cute_lil_butt = dat_detailed_hot_bod_3.getChild("cute_lil_butt");
-		spoopy_stinger = cute_lil_butt.getChild("spoopy_stinger");
-		beak_left = this.head.getChild("beak_left"); 
-		beak_right = this.head.getChild("beak_right");
+		this.wormBody = this.armright.getChild("dat_detailed_hot_bod");
+		ModelPart head = this.wormBody.getChild("head");
+		ModelPart body2 = this.wormBody.getChild("dat_detailed_hot_bod_2");
+		ModelPart body3 = body2.getChild("dat_detailed_hot_bod_3");
+		ModelPart cute_lil_butt = body3.getChild("cute_lil_butt");
+		ModelPart stinger = cute_lil_butt.getChild("spoopy_stinger");
+		this.leftWormBeak = head.getChild("beak_left");
+		this.rightWormBeak = head.getChild("beak_right");
 
-		partsWormWiggle = new ModelPart[] { 
-				head,
-				dat_detailed_hot_bod,
-				dat_detailed_hot_bod_3,
-				dat_detailed_hot_bod_2,
-				cute_lil_butt,
-				spoopy_stinger
-				};
-
-	        setInitPose();
+		this.partsWormWiggle = new ModelPart[]{
+			head,
+			this.wormBody,
+			body2,
+			body3,
+			cute_lil_butt,
+			stinger
+		};
 	}
 
 	public static LayerDefinition createModelLayer() {
@@ -120,14 +111,9 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		
-		this.dat_detailed_hot_bod.visible = false;
+		this.wormBody.visible = false;
 		limbSwingAmount = Math.min(limbSwingAmount, 0.25F);
 
 		this.jaw.xRot = 1.0016444577195458F + entity.jawFloat;
@@ -179,9 +165,8 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 		this.flap(this.head1, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0f, 0.1f, limbSwing, limbSwingAmount);
 		this.body_base.x -= (float) (Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAmount);
 
-		//TODO Fix this when peat mummies are added back
 		if (entity.isRidingMummy()) {
-			if (entity.isRidingMummy() && !((PeatMummy) entity.getMummyMount()).isSpawningFinished()) {
+			if (entity.isRidingMummy() && !entity.getMummyMount().isSpawningFinished()) {
 
 			} else {
 				this.legright1.xRot = -1.4137167F;
@@ -192,14 +177,14 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 				this.legleft1.zRot = -0.07853982F;
 			}
 
-			if (entity.isRidingMummy() && ((PeatMummy) entity.getMummyMount()).isSpawningFinished()) {
+			if (entity.isRidingMummy() && entity.getMummyMount().isSpawningFinished()) {
 				if (entity.getThrowTimer() < 90) {
 					this.armright.xRot += -(Mth.PI / 5F) - this.convertDegtoRad(entity.getThrowTimer()) * 0.35F;
 					this.armright.yRot = this.convertDegtoRad(entity.getThrowTimer());
 				}
 
 				if (entity.getThrowTimer() >= 10 && entity.getThrowTimer() <= 99) {
-					this.dat_detailed_hot_bod.visible = true;
+					this.wormBody.visible = true;
 				}
 
 				if (entity.getThrowTimer() >= 90) {
@@ -211,38 +196,28 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 				this.armright.xRot -= (Mth.PI / 5F);
 			}
 		}
-	}
 
-	public float convertDegtoRad(float angleIn) {
-		return angleIn * (Mth.PI / 180F);
-	}
+		this.body_top.xScale = ((float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
+		this.body_top.yScale = ((float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
+		this.body_top.zScale = ((float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
 
-	@Override
-	public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
-		setInitPose();
-		float frame = entity.tickCount + partialTick;
-		this.body_top.xScale = ((float) (1 + 0.08 * Math.sin(frame * 0.07)));
-		this.body_top.yScale = ((float) (1 + 0.08 * Math.sin(frame * 0.07)));
-		this.body_top.zScale = ((float) (1 + 0.08 * Math.sin(frame * 0.07)));
+		this.neck.xScale = (1 / (float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
+		this.neck.yScale = (1 / (float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
+		this.neck.zScale = (1 / (float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
 
-		this.neck.xScale = (1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
-		this.neck.yScale = (1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
-		this.neck.zScale = (1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
+		this.armright.xScale = (1 / (float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
+		this.armright.yScale = (1 / (float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
+		this.armright.zScale = (1 / (float) (1 + 0.08 * Math.sin(ageInTicks * 0.07)));
 
-		this.armright.xScale = (1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
-		this.armright.yScale = (1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
-		this.armright.zScale = (1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
-
-		this.walk(this.body_top, 0.07f, 0.05f, false, 1, 0, frame, 1);
-		this.walk(this.neck, 0.07f, 0.05f, false, 0.5f, 0, frame, 1);
-		this.walk(this.head1, 0.07f, 0.05f, false, 0f, 0, frame, 1);
-		this.walk(this.armright, 0.07f, 0.1f, false, 0.5f, -0.1f, frame, 1);
-		this.flap(this.armright, 0.07f, 0.1f, true, 0.5f, 0.15f, frame, 1);
-		this.chainWave(this.partsWormWiggle, 0.3f, 0.2f, 2f, frame, 1);
-		this.chainSwing(this.partsWormWiggle, 0.2f, 0.2f, 2f, frame, 1);
-		this.swing(this.beak_right, 0.5f, 0.3f, false, 1, 0, frame, 1);
-		this.swing(this.beak_left, 0.5f, 0.3f, true, 1, 0, frame, 1);
+		this.walk(this.body_top, 0.07f, 0.05f, false, 1, 0, ageInTicks, 1);
+		this.walk(this.neck, 0.07f, 0.05f, false, 0.5f, 0, ageInTicks, 1);
+		this.walk(this.head1, 0.07f, 0.05f, false, 0f, 0, ageInTicks, 1);
+		this.walk(this.armright, 0.07f, 0.1f, false, 0.5f, -0.1f, ageInTicks, 1);
+		this.flap(this.armright, 0.07f, 0.1f, true, 0.5f, 0.15f, ageInTicks, 1);
+		this.chainWave(this.partsWormWiggle, 0.3f, 0.2f, 2f, ageInTicks, 1);
+		this.chainSwing(this.partsWormWiggle, 0.2f, 0.2f, 2f, ageInTicks, 1);
+		this.swing(this.rightWormBeak, 0.5f, 0.3f, false, 1, 0, ageInTicks, 1);
+		this.swing(this.leftWormBeak, 0.5f, 0.3f, true, 1, 0, ageInTicks, 1);
 	}
 
 	@Override

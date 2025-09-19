@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 
 public class DreadfulPeatMummyModel extends MowzieModelBase<DreadfulPeatMummy> {
 
-	private final ModelPart root;
 	private final ModelPart shoulders;
 	private final ModelPart neck;
 	private final ModelPart bodyBase;
@@ -41,7 +40,7 @@ public class DreadfulPeatMummyModel extends MowzieModelBase<DreadfulPeatMummy> {
 
 
 	public DreadfulPeatMummyModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.shoulders = root.getChild("shoulders");
 		this.armright1 = this.shoulders.getChild("right_shoulder").getChild("right_arm");
 		this.armleft1 = this.shoulders.getChild("left_shoulder").getChild("left_arm_1");
@@ -229,23 +228,15 @@ public class DreadfulPeatMummyModel extends MowzieModelBase<DreadfulPeatMummy> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
+	public void setupAnim(DreadfulPeatMummy entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
+		this.faceTarget(this.neck, 1, Mth.clamp(Mth.wrapDegrees(netHeadYaw), -25, 25), Mth.clamp(Mth.wrapDegrees(headPitch), -35, 35));
 
-	@Override
-	public void setupAnim(DreadfulPeatMummy entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		float partialTicks = ageInTicks - entity.tickCount;
-
-		float spawningProgress = entity.getSpawningProgress(partialTicks);
+		float spawningProgress = entity.getSpawningProgress(partialTick);
 		this.bodyBase.xRot -= Math.min((1 - spawningProgress) * 1.5f, 0.7f);
 		this.head1.xRot -= Math.min((1 - spawningProgress) * 2.0f, 1.5f);
 
 		this.legleft1.xRot += (1 - spawningProgress) * 0.85f;
 		this.legright1.xRot += (1 - spawningProgress) * 0.85f;
-
-
-		this.faceTarget(this.neck, 1, Mth.clamp(Mth.wrapDegrees(netHeadYaw), -25, 25), Mth.clamp(Mth.wrapDegrees(headPitch), -35, 35));
 
 		if (entity.deathTicks > 0) {
 			float contractAngle = this.bodyBase.xRot - this.bodyBase.xRot / (entity.deathTicks / 120.0F + 1.0F);
@@ -294,40 +285,36 @@ public class DreadfulPeatMummyModel extends MowzieModelBase<DreadfulPeatMummy> {
 
 		this.chainWave(this.tentacle1, 2 * speed, height * 0.2f, -3, limbSwing, limbSwingAmount);
 		this.chainWave(this.tentacle2, 2 * speed, height * 0.2f, -2, limbSwing, limbSwingAmount);
-	}
 
-	@Override
-	public void prepareMobModel(DreadfulPeatMummy entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float frame = entity.tickCount + partialTick;
-		this.chainWave(this.tentacle1, 0.2f, 0.3f, -2, frame, 1);
-		this.chainWave(this.tentacle2, 0.3f, 0.3f, -2, frame, 1);
+
+		this.chainWave(this.tentacle1, 0.2f, 0.3f, -2, ageInTicks, 1);
+		this.chainWave(this.tentacle2, 0.3f, 0.3f, -2, ageInTicks, 1);
 
 		if (entity.currentEatPrey != null) {
-			this.walk(this.neck, 0.8f, 0.7f, false, 0, -0.2f, frame, 1);
-			this.walk(this.head1, 0.8f, 0.7f, true, 0, 0.2f, frame, 1);
-			this.walk(this.jaw, 0.8f, 0.8f, true, -0.7f, -0.6f, frame, 1);
-			this.walk(this.tongue1, 0.8f, 0.8f, true, -0.7f, -0.5f, frame, 1);
-			this.swing(this.neck, 0.4f, 0.3f, false, 0, 0, frame, 1);
-			this.swing(this.head1, 0.4f, 0.3f, false, 0, 0, frame, 1);
+			this.walk(this.neck, 0.8f, 0.7f, false, 0, -0.2f, ageInTicks, 1);
+			this.walk(this.head1, 0.8f, 0.7f, true, 0, 0.2f, ageInTicks, 1);
+			this.walk(this.jaw, 0.8f, 0.8f, true, -0.7f, -0.6f, ageInTicks, 1);
+			this.walk(this.tongue1, 0.8f, 0.8f, true, -0.7f, -0.5f, ageInTicks, 1);
+			this.swing(this.neck, 0.4f, 0.3f, false, 0, 0, ageInTicks, 1);
+			this.swing(this.head1, 0.4f, 0.3f, false, 0, 0, ageInTicks, 1);
 			this.tongue2.xRot += Mth.PI;
 			this.tongue3.xRot += Mth.PI;
 			this.tongue4.xRot += Mth.PI;
 			this.tongue5.xRot += Mth.PI;
 			this.armleft1.xRot -= 1.2F;
 		} else {
-			this.chainWave(this.tongue, 0.2f, -0.3f, -3, frame, 1);
-			this.walk(this.neck, 0.2f, 0.05f, true, 2, 0, frame, 1);
-			this.walk(this.head1, 0.2f, 0.05f, true, 1, 0, frame, 1);
+			this.chainWave(this.tongue, 0.2f, -0.3f, -3, ageInTicks, 1);
+			this.walk(this.neck, 0.2f, 0.05f, true, 2, 0, ageInTicks, 1);
+			this.walk(this.head1, 0.2f, 0.05f, true, 1, 0, ageInTicks, 1);
 			if (entity.deathTicks > 0) {
 				float rot = Math.min((entity.deathTicks) / 80.0F, (Mth.PI * 2.0F) / 7.0F);
 				this.head1.xRot += rot;
 				this.head1.yRot += rot;
 				this.tongue1.zRot -= rot;
 			}
-			this.walk(this.jaw, 0.2f, 0.2f, true, 0, 0.2f, frame, 1);
-			this.walk(this.armleft1, 0.15f, 0.2f, true, 2, 0, frame, 1);
-			this.walk(this.armleft2, 0.15f, 0.2f, true, 1, 0, frame, 1);
+			this.walk(this.jaw, 0.2f, 0.2f, true, 0, 0.2f, ageInTicks, 1);
+			this.walk(this.armleft1, 0.15f, 0.2f, true, 2, 0, ageInTicks, 1);
+			this.walk(this.armleft2, 0.15f, 0.2f, true, 1, 0, ageInTicks, 1);
 		}
 	}
 }

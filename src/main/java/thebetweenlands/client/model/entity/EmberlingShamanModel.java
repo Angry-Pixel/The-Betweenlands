@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.monster.EmberlingShaman;
 
 public class EmberlingShamanModel extends MowzieModelBase<EmberlingShaman> {
 
-	private final ModelPart root;
 	private final ModelPart bodyBase;
 	private final ModelPart body3;
 	private final ModelPart leftLeg1;
@@ -34,7 +33,7 @@ public class EmberlingShamanModel extends MowzieModelBase<EmberlingShaman> {
 	private final ModelPart jaw;
 
 	public EmberlingShamanModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.bodyBase = root.getChild("body_base");
 		this.body3 = this.bodyBase.getChild("body_2").getChild("body_3");
 		this.leftLeg1 = this.body3.getChild("left_leg_1");
@@ -190,24 +189,16 @@ public class EmberlingShamanModel extends MowzieModelBase<EmberlingShaman> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(EmberlingShaman entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(EmberlingShaman entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float heady = Mth.sin((netHeadYaw / Mth.RAD_TO_DEG) * 0.5F);
 		float headx = Mth.sin((headPitch / Mth.RAD_TO_DEG) * 0.5F);
 
 		this.head.yRot = heady;
 		this.head.xRot = 0.18203784098300857F + headx + entity.animationTicks;
-	}
 
-	@Override
-	public void prepareMobModel(EmberlingShaman entity, float limbSwing, float limbSwingAmount, float partialTick) {
 		float animation = Mth.sin(limbSwing * 0.6F) * limbSwingAmount * 0.5F;
 
-		float flap = Mth.sin((entity.tickCount + partialTick) * 0.2F) * 0.8F;
+		float flap = Mth.sin(ageInTicks * 0.2F) * 0.8F;
 
 		this.leftLeg1.xRot = 0.5009094953223726F + animation * 2F;
 		this.rightLeg1.xRot = 0.5009094953223726F - animation * 2F;

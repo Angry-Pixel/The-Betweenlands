@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.monster.AshSprite;
 
 public class AshSpriteModel extends MowzieModelBase<AshSprite> {
 
-	private final ModelPart root;
 	private final ModelPart cloth_left_front1;
 	private final ModelPart cloth_left_front2;
 	private final ModelPart cloth_right_front1;
@@ -26,7 +25,7 @@ public class AshSpriteModel extends MowzieModelBase<AshSprite> {
 	private final ModelPart cloth_left_back3;
 
 	public AshSpriteModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.jaw_lower = root.getChild("head_base").getChild("head_connection").getChild("jaw_lower");
 		this.cloth_left_front1 = root.getChild("head_base").getChild("cloth_left_front1");
 		this.cloth_left_front2 = this.cloth_left_front1.getChild("cloth_left_front2");
@@ -145,34 +144,29 @@ public class AshSpriteModel extends MowzieModelBase<AshSprite> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(AshSprite entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(AshSprite entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float flap = Mth.sin(ageInTicks * 0.6F) * 0.8F;
 		float flapJaw = Mth.sin(ageInTicks * 0.4F) * 0.75F;
-		jaw_lower.xRot = convertDegtoRad(26F) - flapJaw * 0.5F;
-		cloth_left_back1.zRot = convertDegtoRad(0F) - flap * 0.0625F;
-		cloth_left_back2.zRot = convertDegtoRad(-13F) + flap * 0.25F;
-		cloth_left_back3.zRot = convertDegtoRad(-13F) - flap * 0.5F;
+		this.jaw_lower.xRot = this.convertDegtoRad(26F) - flapJaw * 0.5F;
+		this.cloth_left_back1.zRot = -flap * 0.0625F;
+		this.cloth_left_back2.zRot = this.convertDegtoRad(-13F) + flap * 0.25F;
+		this.cloth_left_back3.zRot = this.convertDegtoRad(-13F) - flap * 0.5F;
 
-		cloth_right_back1.zRot = convertDegtoRad(0F) + flap * 0.0625F;
-		cloth_right_back2.zRot = convertDegtoRad(13F) - flap * 0.25F;
-		cloth_right_back3.zRot = convertDegtoRad(13F) + flap * 0.5F;
+		this.cloth_right_back1.zRot = flap * 0.0625F;
+		this.cloth_right_back2.zRot = this.convertDegtoRad(13F) - flap * 0.25F;
+		this.cloth_right_back3.zRot = this.convertDegtoRad(13F) + flap * 0.5F;
 
-		cloth_left_front1.zRot = convertDegtoRad(-16F) - flap * 0.0625F;
-		cloth_left_front2.zRot = convertDegtoRad(16F) + flap * 0.25F;
+		this.cloth_left_front1.zRot = this.convertDegtoRad(-16F) - flap * 0.0625F;
+		this.cloth_left_front2.zRot = this.convertDegtoRad(16F) + flap * 0.25F;
 
-		cloth_right_front1.zRot = convertDegtoRad(16F) + flap * 0.0625F;
-		cloth_right_front2.zRot = convertDegtoRad(-16F) - flap * 0.25F;
+		this.cloth_right_front1.zRot = this.convertDegtoRad(16F) + flap * 0.0625F;
+		this.cloth_right_front2.zRot = this.convertDegtoRad(-16F) - flap * 0.25F;
 
-		if(entity.getDeltaMovement().y() < 0) {
-			cloth_left_back1.zRot = (float) (convertDegtoRad(0F) - flap * 0.0625F + entity.getDeltaMovement().y() * 4F);
-			cloth_right_back1.zRot = (float) (convertDegtoRad(0F) + flap * 0.0625F - entity.getDeltaMovement().y() * 4F);
-			cloth_left_front1.zRot = (float) (convertDegtoRad(-16F) - flap * 0.0625F + entity.getDeltaMovement().y() * 4F);
-			cloth_right_front1.zRot = (float) (convertDegtoRad(16F) + flap * 0.0625F + entity.getDeltaMovement().y() * 4F);
+		if (entity.getDeltaMovement().y() < 0) {
+			this.cloth_left_back1.zRot = (float) (-flap * 0.0625F + entity.getDeltaMovement().y() * 4F);
+			this.cloth_right_back1.zRot = (float) (flap * 0.0625F - entity.getDeltaMovement().y() * 4F);
+			this.cloth_left_front1.zRot = (float) (this.convertDegtoRad(-16F) - flap * 0.0625F + entity.getDeltaMovement().y() * 4F);
+			this.cloth_right_front1.zRot = (float) (this.convertDegtoRad(16F) + flap * 0.0625F + entity.getDeltaMovement().y() * 4F);
 		}
 	}
 }

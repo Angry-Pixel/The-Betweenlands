@@ -13,12 +13,10 @@ import thebetweenlands.common.entity.monster.Splodeshroom;
 
 public class SplodeshroomModel extends MowzieModelBase<Splodeshroom> {
 
-	private final ModelPart root;
 	private final ModelPart hat;
 
 	public SplodeshroomModel(ModelPart root) {
-		super(RenderType::entityTranslucent);
-		this.root = root;
+		super(root, RenderType::entityTranslucent);
 		this.hat = root.getChild("hat_main");
 	}
 
@@ -53,13 +51,7 @@ public class SplodeshroomModel extends MowzieModelBase<Splodeshroom> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Splodeshroom entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.setInitPose();
+	public void setupAnim(Splodeshroom entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.root.visible = !entity.getHasExploded();
 		float swell = entity.getSwellCount() * 0.02F;
 		float shake = (entity.getRandom().nextFloat() - entity.getRandom().nextFloat() * 0.5F) * swell;

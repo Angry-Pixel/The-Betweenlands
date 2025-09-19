@@ -8,11 +8,10 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
 
-public class BubblerCrabModel extends HierarchicalModel<BubblerCrab> {
-
-	private final ModelPart root;
+public class BubblerCrabModel extends MowzieModelBase<BubblerCrab> {
 
 	private final ModelPart leftFrontLeg;
 	private final ModelPart leftMiddleLeg;
@@ -28,7 +27,7 @@ public class BubblerCrabModel extends HierarchicalModel<BubblerCrab> {
 	private final ModelPart rightClawBottom;
 
 	public BubblerCrabModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		var body = root.getChild("body_base").getChild("body");
 		this.rightArm = body.getChild("right_arm_1");
 		this.leftArm = body.getChild("left_arm_1");
@@ -211,11 +210,6 @@ public class BubblerCrabModel extends HierarchicalModel<BubblerCrab> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
 		stack.pushPose();
 		stack.mulPose(Axis.YN.rotationDegrees(90.0F));
@@ -243,7 +237,7 @@ public class BubblerCrabModel extends HierarchicalModel<BubblerCrab> {
 	}
 
 	@Override
-	public void setupAnim(BubblerCrab entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(BubblerCrab entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float movement = Mth.cos(limbSwing * 1.5F + Mth.PI) * 1.5F * limbSwingAmount * 0.5F;
 		this.rightArm.xRot = -movement * 0.2F - 0.9105382707654417F;
 		this.leftArm.xRot = movement * 0.2F - 0.9105382707654417F;

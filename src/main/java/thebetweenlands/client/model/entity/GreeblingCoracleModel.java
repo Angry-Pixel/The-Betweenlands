@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.creature.GreeblingCoracle;
 
 public class GreeblingCoracleModel extends MowzieModelBase<GreeblingCoracle> {
 
-	private final ModelPart root;
 	private final ModelPart coracle_base;
 	private final ModelPart body_base;
 	private final ModelPart chest;
@@ -37,7 +36,7 @@ public class GreeblingCoracleModel extends MowzieModelBase<GreeblingCoracle> {
 	private final ModelPart[] netting;
 
 	public GreeblingCoracleModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.coracle_base = root.getChild("coracle_base");
 		this.body_base = this.coracle_base.getChild("body_base");
 		this.chest = this.body_base.getChild("chest");
@@ -273,54 +272,43 @@ public class GreeblingCoracleModel extends MowzieModelBase<GreeblingCoracle> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(GreeblingCoracle entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(GreeblingCoracle entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.faceTarget(this.head_connect, 1.0F, netHeadYaw, headPitch);
-	}
-
-	@Override
-	public void prepareMobModel(GreeblingCoracle entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float frame = entity.tickCount + partialTick;
 
 		this.body_base.visible = entity.getSinkingTicks() <= 10;
 
 		if (entity.isGreeblingAboveWater()) {
 			// Boat idle
-			this.bob(this.coracle_base, 0.1f, 0.2f, false, frame, 1f);
-			this.walk(this.coracle_base, 0.06f, 0.05f, false, 0, 0, frame, 1f);
-			this.swing(this.coracle_base, 0.08f, 0.05f, false, 0.3f, 0, frame, 1f);
-			this.flap(this.coracle_base, 0.04f, 0.05f, false, 1.2f, 0, frame, 1f);
-			this.walk(this.netrope1a, 0.06f, 0.05f, true, 0, -0.025f, frame, 1f);
-			this.swing(this.netrope1a, 0.08f, 0.05f, true, 0.3f, 0, frame, 1f);
-			this.flap(this.netrope1a, 0.04f, 0.05f, true, 1.2f, 0, frame, 1f);
-			this.walk(this.body_base, 0.06f, 0.05f, true, 0, 0, frame, 1f);
-			this.swing(this.body_base, 0.08f, 0.05f, true, 0.3f, 0, frame, 1f);
-			this.flap(this.body_base, 0.04f, 0.05f, true, 1.2f, 0, frame, 1f);
+			this.bob(this.coracle_base, 0.1f, 0.2f, false, ageInTicks, 1f);
+			this.walk(this.coracle_base, 0.06f, 0.05f, false, 0, 0, ageInTicks, 1f);
+			this.swing(this.coracle_base, 0.08f, 0.05f, false, 0.3f, 0, ageInTicks, 1f);
+			this.flap(this.coracle_base, 0.04f, 0.05f, false, 1.2f, 0, ageInTicks, 1f);
+			this.walk(this.netrope1a, 0.06f, 0.05f, true, 0, -0.025f, ageInTicks, 1f);
+			this.swing(this.netrope1a, 0.08f, 0.05f, true, 0.3f, 0, ageInTicks, 1f);
+			this.flap(this.netrope1a, 0.04f, 0.05f, true, 1.2f, 0, ageInTicks, 1f);
+			this.walk(this.body_base, 0.06f, 0.05f, true, 0, 0, ageInTicks, 1f);
+			this.swing(this.body_base, 0.08f, 0.05f, true, 0.3f, 0, ageInTicks, 1f);
+			this.flap(this.body_base, 0.04f, 0.05f, true, 1.2f, 0, ageInTicks, 1f);
 
 			float offsetAmount = 1.2f;
 			for (int i = 0; i < this.netting.length; i++) {
-				this.walk(this.netting[i], 0.08f, 0.05f, false, 2 - offsetAmount * i, 0, frame, 1f);
-				this.swing(this.netting[i], 0.06f, 0.05f, false, 1.8f - offsetAmount * i, 0, frame, 1f);
-				this.flap(this.netting[i], 0.05f, 0.05f, false, 1.3f - offsetAmount * i, 0, frame, 1f);
+				this.walk(this.netting[i], 0.08f, 0.05f, false, 2 - offsetAmount * i, 0, ageInTicks, 1f);
+				this.swing(this.netting[i], 0.06f, 0.05f, false, 1.8f - offsetAmount * i, 0, ageInTicks, 1f);
+				this.flap(this.netting[i], 0.05f, 0.05f, false, 1.3f - offsetAmount * i, 0, ageInTicks, 1f);
 			}
-			this.walk(this.net_weightline, 0.08f, 0.15f, false, 2 - offsetAmount * 2, 0, frame, 1f);
-			this.swing(this.net_weightline, 0.06f, 0.15f, false, 1.8f - offsetAmount * 2, 0, frame, 1f);
-			this.flap(this.net_weightline, 0.05f, 0.15f, false, 1.3f - offsetAmount * 2, 0, frame, 1f);
+			this.walk(this.net_weightline, 0.08f, 0.15f, false, 2 - offsetAmount * 2, 0, ageInTicks, 1f);
+			this.swing(this.net_weightline, 0.06f, 0.15f, false, 1.8f - offsetAmount * 2, 0, ageInTicks, 1f);
+			this.flap(this.net_weightline, 0.05f, 0.15f, false, 1.3f - offsetAmount * 2, 0, ageInTicks, 1f);
 
-			this.walk(this.hook_front, 0.16f, 0.1f + (float) Math.sin(frame * 0.04f) * 0.1f, false, 0, 0, frame, 1f);
-			this.walk(this.hook_left, 0.16f, 0.1f + (float) Math.sin(frame * 0.04f + 0.6) * 0.1f, false, 1.7f, 0, frame, 1f);
-			this.flap(this.side_rope1, 0.08f, 0.15f, false, 2.3f, 0, frame, 1f);
+			this.walk(this.hook_front, 0.16f, 0.1f + (float) Math.sin(ageInTicks * 0.04f) * 0.1f, false, 0, 0, ageInTicks, 1f);
+			this.walk(this.hook_left, 0.16f, 0.1f + (float) Math.sin(ageInTicks * 0.04f + 0.6) * 0.1f, false, 1.7f, 0, ageInTicks, 1f);
+			this.flap(this.side_rope1, 0.08f, 0.15f, false, 2.3f, 0, ageInTicks, 1f);
 			// Greebling idle
-			this.walk(this.chest, 0.1f, 0.05f, false, 1, 0, frame, 1f);
-			this.walk(this.head_connect, 0.1f, 0.05f, true, 1, 0, frame, 1f);
-			this.walk(this.jaw, 0.1f, 0.05f, true, 1, -0.2f, frame, 1f);
-			this.walk(this.cloth1a, 0.1f, 0.05f, false, 1.5f, 0.025f, frame, 1f);
-			this.walk(this.cloth1b, 0.1f, 0.05f, false, 1f, 0.025f, frame, 1f);
+			this.walk(this.chest, 0.1f, 0.05f, false, 1, 0, ageInTicks, 1f);
+			this.walk(this.head_connect, 0.1f, 0.05f, true, 1, 0, ageInTicks, 1f);
+			this.walk(this.jaw, 0.1f, 0.05f, true, 1, -0.2f, ageInTicks, 1f);
+			this.walk(this.cloth1a, 0.1f, 0.05f, false, 1.5f, 0.025f, ageInTicks, 1f);
+			this.walk(this.cloth1b, 0.1f, 0.05f, false, 1f, 0.025f, ageInTicks, 1f);
 
 			// Paddling
 			float globalDegree = 0.6f;
@@ -346,8 +334,8 @@ public class GreeblingCoracleModel extends MowzieModelBase<GreeblingCoracle> {
 			this.flap(this.head_connect, 0.15f * globalSpeed, 0.4f * globalDegree, true, 2.5f - 1.3f + paddleDelay, 0f, limbSwing, limbSwingAmount);
 			this.swing(this.paddle_main, 0.15f * globalSpeed, 0.2f * globalDegree, true, -0.5f + paddleDelay, -0.2f, limbSwing, limbSwingAmount);
 
-			swing(this.chest, 0.15f * globalSpeed, 0.6f * globalDegree, false, 2.5f + paddleDelay, -0.2f, limbSwing, limbSwingAmount);
-			swing(this.head_connect, 0.15f * globalSpeed, 0.6f * globalDegree, true, 2.5f + paddleDelay, -0.2f, limbSwing, limbSwingAmount);
+			this.swing(this.chest, 0.15f * globalSpeed, 0.6f * globalDegree, false, 2.5f + paddleDelay, -0.2f, limbSwing, limbSwingAmount);
+			this.swing(this.head_connect, 0.15f * globalSpeed, 0.6f * globalDegree, true, 2.5f + paddleDelay, -0.2f, limbSwing, limbSwingAmount);
 
 			this.flap(this.body_base, 0.15f * globalSpeed, 0.1f * globalDegree, false, 2.5f + paddleDelay, -0.7f, limbSwing, limbSwingAmount);
 			this.flap(this.chest, 0.15f * globalSpeed, 0.1f * globalDegree, false, 2.5f + paddleDelay, 0.4f, limbSwing, limbSwingAmount);

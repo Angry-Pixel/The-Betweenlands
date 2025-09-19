@@ -12,12 +12,11 @@ import thebetweenlands.common.entity.monster.DarkDruid;
 
 public class DarkDruidModel extends MowzieModelBase<DarkDruid> {
 
-	private final ModelPart root;
 	private final ModelPart leftArm;
 	private final ModelPart rightArm;
 
 	public DarkDruidModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.leftArm = root.getChild("left_arm");
 		this.rightArm = root.getChild("right_arm");
 	}
@@ -82,17 +81,7 @@ public class DarkDruidModel extends MowzieModelBase<DarkDruid> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(DarkDruid entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(DarkDruid entity, float limbSwing, float limbSwingAmount, float partialTick) {
+	public void setupAnim(DarkDruid entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float attackAnimationTime = entity.getAttackAnimationTime(partialTick);
 		float pitch = -Mth.HALF_PI + Mth.lerp(partialTick, entity.xRotO, entity.getXRot()) * Mth.DEG_TO_RAD;
 		float ticksExisted = entity.tickCount + partialTick;

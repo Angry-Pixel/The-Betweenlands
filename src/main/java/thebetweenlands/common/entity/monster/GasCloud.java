@@ -12,12 +12,14 @@ import net.minecraft.world.damagesource.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,14 +37,14 @@ import thebetweenlands.common.registries.*;
 
 import java.util.List;
 
-public class GasCloud extends Monster implements BLEntity {
+public class GasCloud extends FlyingMonster {
 
 	private static final EntityDataAccessor<Integer> GAS_CLOUD_COLOR = SynchedEntityData.defineId(GasCloud.class, EntityDataSerializers.INT);
 
 	protected double aboveLayer = 6.0D;
 	protected int targetBlockedTicks = 0;
 
-	public GasCloud(EntityType<? extends Monster> entityType, Level level) {
+	public GasCloud(EntityType<? extends FlyingMonster> entityType, Level level) {
 		super(entityType, level);
 		this.noPhysics = false;
 		this.noCulling = true;
@@ -137,6 +139,7 @@ public class GasCloud extends Monster implements BLEntity {
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Mob.createMobAttributes()
 			.add(Attributes.MOVEMENT_SPEED, 0.065D)
+			.add(Attributes.FLYING_SPEED, 0.065D)
 			.add(Attributes.MAX_HEALTH, 16.0D)
 			.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
 			.add(Attributes.ATTACK_DAMAGE, 2.0D);
@@ -307,11 +310,6 @@ public class GasCloud extends Monster implements BLEntity {
 			this.level().broadcastEntityEvent(this, (byte) 60);
 			this.remove(RemovalReason.KILLED);
 		}
-	}
-
-	@Override
-	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-		return 0.5F;
 	}
 
 	@Override

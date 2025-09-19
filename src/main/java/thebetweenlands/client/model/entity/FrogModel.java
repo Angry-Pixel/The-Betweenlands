@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.creature.frog.Frog;
 
 public class FrogModel extends MowzieModelBase<Frog> {
 
-	private final ModelPart root;
 	private final ModelPart torso;
 	private final ModelPart head;
 	private final ModelPart legfrontleft1;
@@ -25,7 +24,7 @@ public class FrogModel extends MowzieModelBase<Frog> {
 	private final ModelPart legbackright2;
 
 	public FrogModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.torso = root.getChild("torso");
 		this.head = root.getChild("head");
 		this.legfrontleft1 = root.getChild("left_front_leg_1");
@@ -81,26 +80,16 @@ public class FrogModel extends MowzieModelBase<Frog> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Frog entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Frog entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.head.yRot = netHeadYaw / Mth.RAD_TO_DEG;
 		this.head.xRot = headPitch / Mth.RAD_TO_DEG - 0.07435719668865202F + Mth.sin(ageInTicks / 8.0F) / 15.0F;
-	}
 
-	@Override
-	public void prepareMobModel(Frog entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float leapProgress = entity.prevJumpAnimationTicks + (entity.jumpAnimationTicks - entity.prevJumpAnimationTicks) * partialTick;
-		float frame = entity.tickCount + partialTick;
+		float leapProgress = Mth.lerp(partialTick, entity.prevJumpAnimationTicks, entity.jumpAnimationTicks);
 
 		if (!entity.isInWater()) {
 			//Idle animation
-			this.torso.xRot = -0.55F - (float) (Math.sin(frame / 10.0F) + 1) / 35.0F;
-			this.torso.y = 19 + (float) Math.sin(frame / 8.0F) / 15.0F;
+			this.torso.xRot = -0.55F - (float) (Math.sin(ageInTicks / 10.0F) + 1) / 35.0F;
+			this.torso.y = 19 + (float) Math.sin(ageInTicks / 8.0F) / 15.0F;
 
 			this.legbackleft1.y = 22;
 			this.legbackright1.y = 22;
@@ -127,17 +116,17 @@ public class FrogModel extends MowzieModelBase<Frog> {
 			}
 		} else {
 			//Idle animation
-			this.torso.xRot = -0.1F - (float) (Math.sin(frame / 10.0F) + 1) / 35.0F;
+			this.torso.xRot = -0.1F - (float) (Math.sin(ageInTicks / 10.0F) + 1) / 35.0F;
 
 			//Water bobbing animation
-			this.torso.y = 19 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.legbackleft1.y = 21 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.legbackright1.y = 21 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.head.y = 19 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.legfrontleft1.y = 20 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.legfrontleft2.y = 20 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.legfrontright1.y = 20 + (float) Math.sin(frame / 8.0F) / 2.0F;
-			this.legfrontright2.y = 20 + (float) Math.sin(frame / 8.0F) / 2.0F;
+			this.torso.y = 19 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.legbackleft1.y = 21 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.legbackright1.y = 21 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.head.y = 19 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.legfrontleft1.y = 20 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.legfrontleft2.y = 20 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.legfrontright1.y = 20 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
+			this.legfrontright2.y = 20 + (float) Math.sin(ageInTicks / 8.0F) / 2.0F;
 
 			this.legbackleft2.xRot = 0.5F + 0.6F;
 			this.legbackright2.xRot = 0.5F + 0.6F;

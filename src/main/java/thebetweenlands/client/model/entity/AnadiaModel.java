@@ -20,10 +20,9 @@ public class AnadiaModel extends MowzieModelBase<Anadia> {
 		new Vec2(0.75F, 0.35F),
 		new Vec2(1.0F, 0.25F)
 	};
-	private final ModelPart root;
 
 	public AnadiaModel(ModelPart root) {
-		this.root = root;
+		super(root);
 	}
 
 	public static LayerDefinition create() {
@@ -424,11 +423,6 @@ public class AnadiaModel extends MowzieModelBase<Anadia> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
 		//render default fishe
 		this.getPartForType(AnadiaParts.AnadiaHeadParts.HEAD_1, "head").render(stack, consumer, light, overlay, color);
@@ -441,42 +435,34 @@ public class AnadiaModel extends MowzieModelBase<Anadia> {
 	}
 
 	@Override
-	public void prepareMobModel(Anadia entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float frame = entity.tickCount + partialTick;
-
+	public void setupAnim(Anadia entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 //		if (entity.isNoAi()) {
 //			limbSwingAmount = 0;
-//			frame = 0;
+//			ageInTicks = 0;
 //		}
 
-		this.walk(this.getPartForType(entity.getHeadType(), "head", "jaw"), (1.5F - entity.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - limbSwingAmount);
+		this.walk(this.getPartForType(entity.getHeadType(), "head", "jaw"), (1.5F - entity.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, ageInTicks, 1F - limbSwingAmount);
 
 		Vec2 tailAnims = TAIL_ANIMS[entity.getTailType().ordinal()];
-		this.swing(this.getPartForType(entity.getTailType(), "tail"), tailAnims.x, tailAnims.y, false, 0.0F, 0F, frame, 0.0625F + limbSwingAmount);
-		this.swing(this.getPartForType(entity.getTailType(), "tail", "back"), tailAnims.x, tailAnims.y, false, 1.0F, 0F, frame, 0.0625F + limbSwingAmount);
-		this.swing(this.getPartForType(entity.getTailType(), "tail", "back", "caudal_fin"), tailAnims.x, tailAnims.y, false, 2.0F, 0F, frame, 0.0625F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getTailType(), "tail"), tailAnims.x, tailAnims.y, false, 0.0F, 0F, ageInTicks, 0.0625F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getTailType(), "tail", "back"), tailAnims.x, tailAnims.y, false, 1.0F, 0F, ageInTicks, 0.0625F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getTailType(), "tail", "back", "caudal_fin"), tailAnims.x, tailAnims.y, false, 2.0F, 0F, ageInTicks, 0.0625F + limbSwingAmount);
 
 		float bodySpeed = entity.getBodyType().ordinal() == 0 ? 0.25F : 0.5F;
-		this.swing(this.getPartForType(entity.getBodyType(), "body", "back", "left_pelvic_fin"), bodySpeed, 0.5F, false, 2.0F, 0F, frame, 0.125F + limbSwingAmount);
-		this.swing(this.getPartForType(entity.getBodyType(), "body", "back", "right_pelvic_fin"), bodySpeed, 0.5F, true, 2.0F, 0F, frame, 0.125F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getBodyType(), "body", "back", "left_pelvic_fin"), bodySpeed, 0.5F, false, 2.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getBodyType(), "body", "back", "right_pelvic_fin"), bodySpeed, 0.5F, true, 2.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
 
-		this.swing(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin"), bodySpeed, 0.5F, true, 1.0F, 0F, frame, 0.125F + limbSwingAmount);
-		this.swing(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin", "left_pectoral_fin_2"), bodySpeed, 0.5F, true, 2.0F, 0F, frame, 0.125F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin"), bodySpeed, 0.5F, true, 1.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin", "left_pectoral_fin_2"), bodySpeed, 0.5F, true, 2.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
 
-		this.swing(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin"), bodySpeed, 0.5F, false, 1.0F, 0F, frame, 0.125F + limbSwingAmount);
-		this.swing(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin", "right_pectoral_fin_2"), bodySpeed, 0.5F, false, 2.0F, 0F, frame, 0.125F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin"), bodySpeed, 0.5F, false, 1.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
+		this.swing(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin", "right_pectoral_fin_2"), bodySpeed, 0.5F, false, 2.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
 
-		this.walk(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin"), bodySpeed, 0.5F, false, 0.0F, 0F, frame, 0.125F + limbSwingAmount);
-		this.walk(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin"), bodySpeed, 0.5F, false, 0.0F, 0F, frame, 0.125F + limbSwingAmount);
+		this.walk(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin"), bodySpeed, 0.5F, false, 0.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
+		this.walk(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin"), bodySpeed, 0.5F, false, 0.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
 
-		this.flap(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin"), bodySpeed, 0.5F, false, 0.0F, 0F, frame, 0.125F + limbSwingAmount);
-		this.flap(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin"), bodySpeed, 0.5F, true, 0.0F, 0F, frame, 0.125F + limbSwingAmount);
-	}
-
-	@Override
-	public void setupAnim(Anadia entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+		this.flap(this.getPartForType(entity.getBodyType(), "body", "left_pectoral_fin"), bodySpeed, 0.5F, false, 0.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
+		this.flap(this.getPartForType(entity.getBodyType(), "body", "right_pectoral_fin"), bodySpeed, 0.5F, true, 0.0F, 0F, ageInTicks, 0.125F + limbSwingAmount);
 	}
 
 	private ModelPart getPartForType(Enum<?> en, String partName, String... childParts) {

@@ -3,30 +3,28 @@ package thebetweenlands.client.model.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 
-public class TinySludgeWormModel extends HierarchicalModel<TinySludgeWorm> {
-	public ModelPart root;
-	public ModelPart head;
-	public ModelPart beak_right;
-	public ModelPart beak_left;
-	public ModelPart dat_detailed_hot_bod;
-	public ModelPart cute_lil_butt;
-	public ModelPart spoopy_stinger;
+public class TinySludgeWormModel extends MowzieModelBase<TinySludgeWorm> {
+
+	private final ModelPart head;
+	private final ModelPart rightBeak;
+	private final ModelPart leftBeak;
+	private final ModelPart body;
+	private final ModelPart butt;
 
 	public TinySludgeWormModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.head = root.getChild("head");
-		this.beak_right = head.getChild("beak_right");
-		this.beak_left = head.getChild("beak_left");
-		this.dat_detailed_hot_bod = root.getChild("body");
-		this.cute_lil_butt = root.getChild("butt");
-		this.spoopy_stinger = cute_lil_butt.getChild("stinger");
+		this.rightBeak = head.getChild("beak_right");
+		this.leftBeak = head.getChild("beak_left");
+		this.body = root.getChild("body");
+		this.butt = root.getChild("butt");
 	}
 
 	public static LayerDefinition create() {
@@ -70,8 +68,8 @@ public class TinySludgeWormModel extends HierarchicalModel<TinySludgeWorm> {
 		float jaw_wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.5F) * 0.5F);
 		stack.translate(0F, -0.0625F - wibble * 0.5F, 0F + wibble * 2F);
 		this.head.xRot = worm.getXRot() / Mth.RAD_TO_DEG;
-		this.beak_left.yRot = 0F - jaw_wibble;
-		this.beak_right.yRot = 0F + jaw_wibble;
+		this.leftBeak.yRot = 0F - jaw_wibble;
+		this.rightBeak.yRot = 0F + jaw_wibble;
 		this.head.render(stack, consumer, light, overlay, colour);
 	}
 
@@ -80,22 +78,13 @@ public class TinySludgeWormModel extends HierarchicalModel<TinySludgeWorm> {
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		stack.translate(0F, -0.125F - wibble, -0.125F - wibble * 2F);
 		stack.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
-		this.dat_detailed_hot_bod.render(stack, consumer, light, overlay, colour);
+		this.body.render(stack, consumer, light, overlay, colour);
 	}
 
 	public void renderTail(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, TinySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.tickCount + frame + (worm.tickCount + frame - (worm.tickCount + frame - 1)) * partialTicks;
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		stack.translate(0F, -0.0625F - wibble * 0.5F, -0.0625F + wibble * 2F);
-		this.cute_lil_butt.render(stack, consumer, light, overlay, colour);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(TinySludgeWorm entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.butt.render(stack, consumer, light, overlay, colour);
 	}
 }

@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.monster.PeatMummy;
 
 public class PeatMummyModel extends MowzieModelBase<PeatMummy> {
 
-	private final ModelPart root;
 	private final ModelPart bodyBase;
 	private final ModelPart butt;
 	private final ModelPart legleft;
@@ -30,7 +29,7 @@ public class PeatMummyModel extends MowzieModelBase<PeatMummy> {
 	private final ModelPart cheektissueleft;
 
 	public PeatMummyModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.bodyBase = root.getChild("body_base");
 		this.butt = this.bodyBase.getChild("butt_joint").getChild("butt");
 		this.legleft = this.butt.getChild("left_leg_1");
@@ -147,12 +146,7 @@ public class PeatMummyModel extends MowzieModelBase<PeatMummy> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(PeatMummy entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(PeatMummy entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.neck.yRot = Mth.sin((netHeadYaw / Mth.RAD_TO_DEG));
 		this.neck.xRot = 0.9105382707654417F + Mth.sin((headPitch / Mth.RAD_TO_DEG));
 		float newf1 = limbSwingAmount;
@@ -193,11 +187,7 @@ public class PeatMummyModel extends MowzieModelBase<PeatMummy> {
 		this.walk(this.armright, globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, limbSwing, newf12);
 		this.walk(this.armright2, globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, limbSwing, newf12);
 		this.swing(this.armright2, globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, limbSwing, newf12);
-	}
 
-	@Override
-	public void prepareMobModel(PeatMummy entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
 		float spawningProgress = entity.getInterpolatedSpawningProgress(partialTick);
 		this.bodyBase.xRot -= 1.0F - spawningProgress;
 		this.armleft.xRot -= 1.5F * (1.0F - spawningProgress);
@@ -205,10 +195,7 @@ public class PeatMummyModel extends MowzieModelBase<PeatMummy> {
 		this.root.z += 20.0F * (1.0F - spawningProgress);
 		this.root.y += 10.0F * (1.0F - spawningProgress);
 
-		float globalDegree = 1.5f;
-		float wiggleDegree = 1.5f;
-		float globalSpeed = 1.3f;
-		float globalHeight = 1.5f;
+		globalSpeed = 1.3f;
 
 		float f = spawningProgress * 10.0F;
 		float f1 = (float) (0.6F * (1.0F / (1.0F + Math.pow(2.0F, 100.0F * (spawningProgress - 0.9F)))));
@@ -267,10 +254,10 @@ public class PeatMummyModel extends MowzieModelBase<PeatMummy> {
 			this.armright.zRot -= 0.5F * controller;
 			this.armleft2.xRot += controller;
 			this.armright2.xRot += controller;
-			this.jaw.xRot += 2.4F * controller + controller2 * 0.5F * Mth.cos(4.0F * (entity.tickCount + partialTick));
-			this.cheektissueleft.xRot -= 2.4F * controller + controller2 * 0.5F * Mth.cos(4.0F * (entity.tickCount + partialTick));
+			this.jaw.xRot += 2.4F * controller + controller2 * 0.5F * Mth.cos(4.0F * ageInTicks);
+			this.cheektissueleft.xRot -= 2.4F * controller + controller2 * 0.5F * Mth.cos(4.0F * ageInTicks);
 			this.cheektissueleft.y += 10.0F * controller;
-			this.cheektissueright.xRot -= 2.4F * controller + controller2 * 0.5F * Mth.cos(4.0F * (entity.tickCount + partialTick));
+			this.cheektissueright.xRot -= 2.4F * controller + controller2 * 0.5F * Mth.cos(4.0F * ageInTicks);
 			this.cheektissueright.y += 10.0F * controller;
 		}
 	}

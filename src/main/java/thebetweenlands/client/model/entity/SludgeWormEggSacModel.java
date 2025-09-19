@@ -11,10 +11,8 @@ import thebetweenlands.common.entity.monster.SludgeWormEggSac;
 
 public class SludgeWormEggSacModel extends MowzieModelBase<SludgeWormEggSac> {
 
-	private final ModelPart root;
-
 	public SludgeWormEggSacModel(ModelPart root) {
-		this.root = root;
+		super(root);
 	}
 
 	public static LayerDefinition create() {
@@ -111,15 +109,5 @@ public class SludgeWormEggSacModel extends MowzieModelBase<SludgeWormEggSac> {
 			PartPose.offsetAndRotation(0.0F, -2.0F, 1.5F, 0.31869712141416456F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(definition, 128, 128);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(SludgeWormEggSac entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
 	}
 }

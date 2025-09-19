@@ -11,11 +11,10 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.fishing.SiltCrab;
 
-public class SiltCrabModel extends HierarchicalModel<SiltCrab> {
-
-	private final ModelPart root;
+public class SiltCrabModel extends MowzieModelBase<SiltCrab> {
 
 	private final ModelPart leftFrontLeg;
 	private final ModelPart leftMiddleLeg;
@@ -31,7 +30,7 @@ public class SiltCrabModel extends HierarchicalModel<SiltCrab> {
 	private final ModelPart rightClawBase;
 
 	public SiltCrabModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.rightArm = root.getChild("right_arm");
 		this.leftArm = root.getChild("left_arm");
 		this.rightClawBase = this.rightArm.getChild("right_claw_base");
@@ -188,11 +187,6 @@ public class SiltCrabModel extends HierarchicalModel<SiltCrab> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
 		stack.pushPose();
 		stack.mulPose(Axis.YN.rotationDegrees(90.0F));
@@ -220,7 +214,7 @@ public class SiltCrabModel extends HierarchicalModel<SiltCrab> {
 	}
 
 	@Override
-	public void setupAnim(SiltCrab entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(SiltCrab entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float movement = Mth.cos(limbSwing * 1.5F + Mth.PI) * 1.5F * limbSwingAmount * 0.5F;
 		this.rightArm.xRot = -movement * 0.2F - 1.5025539530419183F;
 		this.leftArm.xRot = movement * 0.2F - 1.5025539530419183F;

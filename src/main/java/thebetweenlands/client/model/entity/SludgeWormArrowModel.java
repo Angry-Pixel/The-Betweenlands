@@ -1,19 +1,24 @@
 package thebetweenlands.client.model.entity;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.RenderType;
 import thebetweenlands.common.entity.projectile.arrow.SludgeWormArrow;
 
-public class SludgeWormArrowModel extends HierarchicalModel<SludgeWormArrow> {
+public class SludgeWormArrowModel extends Model {
 
 	private final ModelPart root;
 
 	public SludgeWormArrowModel(ModelPart root) {
+		super(RenderType::entityCutoutNoCull);
 		this.root = root;
 	}
 
@@ -65,12 +70,7 @@ public class SludgeWormArrowModel extends HierarchicalModel<SludgeWormArrow> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(SludgeWormArrow entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
+		this.root.render(stack, consumer, light, overlay, color);
 	}
 }

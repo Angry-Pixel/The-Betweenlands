@@ -12,12 +12,11 @@ import thebetweenlands.common.entity.monster.MummyArm;
 
 public class MummyArmModel extends MowzieModelBase<MummyArm> {
 
-	private final ModelPart root;
 	private final ModelPart arm;
 	private final ModelPart arm2;
 
 	public MummyArmModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.arm = root.getChild("arm_1");
 		this.arm2 = this.arm.getChild("arm_2");
 	}
@@ -40,19 +39,7 @@ public class MummyArmModel extends MowzieModelBase<MummyArm> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(MummyArm entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(MummyArm entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-
+	public void setupAnim(MummyArm entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.arm.yRot = (float) Math.toRadians(limbSwing);
 		this.arm.zRot = -0.1F;
 		float offset = 0.0F;
@@ -63,11 +50,11 @@ public class MummyArmModel extends MowzieModelBase<MummyArm> {
 		if (entity.hurtTime > 0) {
 			this.bob(this.arm, 0.5F, -10.0F, true, (entity.hurtTime - partialTick) / 5.0F, 1.0F);
 		}
-		this.swing(this.arm, 1.0F, 0.4F, false, offset, 0.0F, (entity.tickCount + partialTick) / 10.0F, 1.0F);
-		this.walk(this.arm2, 1.0F, 0.4F, false, offset, 0.0F, (entity.tickCount + partialTick) / 8.0F, 1.0F);
-		this.swing(this.arm2, 1.0F, 0.1F, false, offset, 0.0F, (entity.tickCount + partialTick) / 4.0F, 1.0F);
-		this.walk(this.arm, 1.0F, 0.1F, false, offset, 0.0F, (entity.tickCount + partialTick) / 10.0F, 1.0F);
-		this.walk(this.arm, 2.0F, 0.3F, false, offset, 0.0F, (entity.tickCount + partialTick) / 15.0F, 1.0F);
-		this.bob(this.arm, 2.0F, 1.8F, false, (entity.tickCount + partialTick) / 15.0F, 1.0F);
+		this.swing(this.arm, 1.0F, 0.4F, false, offset, 0.0F, ageInTicks / 10.0F, 1.0F);
+		this.walk(this.arm2, 1.0F, 0.4F, false, offset, 0.0F, ageInTicks / 8.0F, 1.0F);
+		this.swing(this.arm2, 1.0F, 0.1F, false, offset, 0.0F, ageInTicks / 4.0F, 1.0F);
+		this.walk(this.arm, 1.0F, 0.1F, false, offset, 0.0F, ageInTicks / 10.0F, 1.0F);
+		this.walk(this.arm, 2.0F, 0.3F, false, offset, 0.0F, ageInTicks / 15.0F, 1.0F);
+		this.bob(this.arm, 2.0F, 1.8F, false, ageInTicks / 15.0F, 1.0F);
 	}
 }

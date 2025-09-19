@@ -18,7 +18,6 @@ import java.util.Arrays;
 
 public class FreshwaterUrchinModel extends MowzieModelBase<FreshwaterUrchin> {
 
-	private final ModelPart root;
 	private final ModelPart analSac;
 	private final ModelPart spikePoint;
 	private final ModelPart[] spikes;
@@ -26,7 +25,7 @@ public class FreshwaterUrchinModel extends MowzieModelBase<FreshwaterUrchin> {
 	private FreshwaterUrchin urchin;
 
 	public FreshwaterUrchinModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		var base = root.getChild("base");
 		this.analSac = base.getChild("anal_sac");
 		this.spikePoint = base.getChild("spike_rotationpoint");
@@ -120,11 +119,7 @@ public class FreshwaterUrchinModel extends MowzieModelBase<FreshwaterUrchin> {
 		return LayerDefinition.create(definition, 64, 64);
 	}
 
-	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
+	//FIXME move scaling and whatnot out of this method
 	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
 		if (this.urchin != null) {
@@ -159,8 +154,7 @@ public class FreshwaterUrchinModel extends MowzieModelBase<FreshwaterUrchin> {
 	}
 
 	@Override
-	public void setupAnim(FreshwaterUrchin entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.setInitPose();
+	public void setupAnim(FreshwaterUrchin entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.urchin = entity;
 		float pulse = Mth.sin(ageInTicks * 0.125F) * 0.03125F;
 		Arrays.stream(this.spikes).toList().forEach(modelPart -> {

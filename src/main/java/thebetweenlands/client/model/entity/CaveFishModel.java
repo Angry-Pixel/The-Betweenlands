@@ -11,7 +11,6 @@ import thebetweenlands.common.entity.creature.CaveFish;
 
 public class CaveFishModel extends MowzieModelBase<CaveFish> {
 
-	private final ModelPart root;
 	private final ModelPart head;
 	private final ModelPart leftVentralFin;
 	private final ModelPart rightVentralFin;
@@ -21,7 +20,7 @@ public class CaveFishModel extends MowzieModelBase<CaveFish> {
 	private final ModelPart tailFin;
 
 	public CaveFishModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.head = root.getChild("head_1").getChild("head_2");
 		this.leftVentralFin = root.getChild("body_1").getChild("left_ventral_fin");
 		this.rightVentralFin = root.getChild("body_1").getChild("right_ventral_fin");
@@ -103,13 +102,7 @@ public class CaveFishModel extends MowzieModelBase<CaveFish> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(CaveFish entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.setInitPose();
+	public void setupAnim(CaveFish entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.walk(this.head, 0.25F, 0.35F, false, 0.0F, 0.0F, ageInTicks, 1.0F - limbSwingAmount);
 
 		this.flap(this.tail, 0.75F, 0.5F, false, 0.0F, 0.0F, ageInTicks, 0.0625F + limbSwingAmount);

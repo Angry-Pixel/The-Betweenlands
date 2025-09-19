@@ -16,7 +16,6 @@ import thebetweenlands.common.entity.monster.BipedCryptCrawler;
 
 public class BipedCryptCrawlerModel<T extends BipedCryptCrawler> extends MowzieModelBase<T> implements ArmedModel {
 
-	private final ModelPart root;
 	private final ModelPart body_main;
 	private final ModelPart body_lower;
 	private final ModelPart head;
@@ -39,7 +38,7 @@ public class BipedCryptCrawlerModel<T extends BipedCryptCrawler> extends MowzieM
 	private final ModelPart tail4;
 
 	public BipedCryptCrawlerModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.body_main = root.getChild("body_main");
 		this.body_lower = this.body_main.getChild("body_lower");
 		this.head = this.body_main.getChild("neck").getChild("head");
@@ -175,19 +174,9 @@ public class BipedCryptCrawlerModel<T extends BipedCryptCrawler> extends MowzieM
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(BipedCryptCrawler entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(BipedCryptCrawler entity, float limbSwing, float limbSwingAmount, float partialTick) {
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float animation = Mth.sin(limbSwing * 0.4F) * limbSwingAmount * 0.2F;
-		float flap = Mth.sin((entity.tickCount + partialTick) * 0.3F) * 0.8F;
+		float flap = Mth.sin(ageInTicks * 0.3F) * 0.8F;
 		this.tail1.xRot = 0.36425021489121656F - animation * 0.25F;
 		this.tail2.xRot = 0.22759093446006054F - animation * 0.5F;
 		this.tail3.xRot = 0.22759093446006054F - animation * 0.75F;
@@ -294,6 +283,5 @@ public class BipedCryptCrawlerModel<T extends BipedCryptCrawler> extends MowzieM
 			this.leg_front_right2.translateAndRotate(stack);
 			stack.translate(0.0D, 0.25D, 0.05D);
 		}
-
 	}
 }

@@ -9,7 +9,6 @@ import thebetweenlands.common.entity.boss.Barrishee;
 
 public class BarrisheeModel extends MowzieModelBase<Barrishee> {
 
-	private final ModelPart root;
 	private final ModelPart neck;
 	private final ModelPart belly_1;
 	private final ModelPart shoulder_right;
@@ -43,7 +42,7 @@ public class BarrisheeModel extends MowzieModelBase<Barrishee> {
 	private final ModelPart cogbeam;
 
 	public BarrisheeModel(ModelPart root) {
-		this.root = root.getChild("base_rotation_bit");
+		super(root.getChild("base_rotation_bit"));
 		this.neck = this.root.getChild("neck");
 		this.head_main = this.neck.getChild("head_main");
 		this.jaw_back = this.head_main.getChild("jaw_back");
@@ -373,24 +372,14 @@ public class BarrisheeModel extends MowzieModelBase<Barrishee> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Barrishee entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(Barrishee entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
+	public void setupAnim(Barrishee entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
+		super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
 		float animation = limbSwing * 0.1F;
 		float animation2 = Mth.sin((limbSwing) * 0.5F) * 0.4F * limbSwingAmount * 2.5F;
 		float animation3 = Mth.sin((limbSwing) * 0.5F) * 0.4F * limbSwingAmount * 0.15707963267948966F* 0.5F;
 		float standingAngle = entity.getSmoothedStandingAngle(partialTick);
-		float flap = Mth.sin((entity.tickCount + partialTick) * 0.6F) * 0.8F;
-		float flap2 = Mth.sin((entity.tickCount + partialTick) * 0.3F) * 0.8F;
+		float flap = Mth.sin(ageInTicks * 0.6F) * 0.8F;
+		float flap2 = Mth.sin(ageInTicks * 0.3F) * 0.8F;
 
 		this.cog1.zRot = 0F + animation;
 		this.cog1.xRot = 0 + animation3;

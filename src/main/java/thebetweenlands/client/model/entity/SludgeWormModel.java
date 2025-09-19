@@ -3,7 +3,6 @@ package thebetweenlands.client.model.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -11,33 +10,28 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.SludgeWorm;
 
-public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
-	public ModelPart root;
-	public ModelPart head1;
-	public ModelPart mouth_left;
-	public ModelPart mouth_bottom;
-	public ModelPart jaw_bottom_left;
-	public ModelPart jaw_bottom_right;
-	public ModelPart butt;
-    public ModelPart pincer_thingy_i_guess_a;
-    public ModelPart pincer_thingy_i_guess_b;
+public class SludgeWormModel extends MowzieModelBase<SludgeWorm> {
 
-	public ModelPart body1;
+	public ModelPart head;
+	public ModelPart leftMouth;
+	public ModelPart rightMouth;
+	public ModelPart leftJaw;
+	public ModelPart rightJaw;
+	public ModelPart body;
+	public ModelPart butt;
 
 	public SludgeWormModel(ModelPart root) {
-
-		this.root = root;
-		this.head1 = root.getChild("head1");
-		this.mouth_left = head1.getChild("mouth_left");
-		this.mouth_bottom = head1.getChild("mouth_bottom");
-		this.jaw_bottom_left = head1.getChild("jaw_bottom_left");
-		this.jaw_bottom_right = head1.getChild("jaw_bottom_right");
+		super(root);
+		this.head = root.getChild("head1");
+		this.leftMouth = head.getChild("mouth_left");
+		this.rightMouth = head.getChild("mouth_bottom");
+		this.leftJaw = head.getChild("jaw_bottom_left");
+		this.rightJaw = head.getChild("jaw_bottom_right");
 		this.butt = root.getChild("butt");
-		this.pincer_thingy_i_guess_a = butt.getChild("pincer_thingy_i_guess_a");
-		this.pincer_thingy_i_guess_b = pincer_thingy_i_guess_a.getChild("pincer_thingy_i_guess_b");
-		this.body1 = root.getChild("body1");
+		this.body = root.getChild("body1");
 	}
 
 	public static LayerDefinition create() {
@@ -97,12 +91,12 @@ public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		float jaw_wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.5F) * 0.5F);
 		stack.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
-		this.head1.xRot = worm.getXRot() / Mth.RAD_TO_DEG;
-		this.jaw_bottom_left.yRot =  0F - jaw_wibble;
-		this.jaw_bottom_right.yRot = 0F + jaw_wibble;
-		this.mouth_bottom.yRot =  0F - jaw_wibble;
-		this.mouth_left.yRot = 0F + jaw_wibble;
-		this.head1.render(stack, consumer, light, overlay, colour);
+		this.head.xRot = worm.getXRot() / Mth.RAD_TO_DEG;
+		this.leftJaw.yRot =  0F - jaw_wibble;
+		this.rightJaw.yRot = 0F + jaw_wibble;
+		this.rightMouth.yRot =  0F - jaw_wibble;
+		this.leftMouth.yRot = 0F + jaw_wibble;
+		this.head.render(stack, consumer, light, overlay, colour);
 	}
 
 	public void renderBody(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
@@ -110,7 +104,7 @@ public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
 		float wibble = (float) (Math.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength);
 		stack.translate(0F, 0F - wibble, 0F - wibble * 2F);
 		stack.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
-		this.body1.render(stack, consumer, light, overlay, colour);
+		this.body.render(stack, consumer, light, overlay, colour);
 	}
 
 	public void renderTail(PoseStack stack, VertexConsumer consumer, int light, int overlay, int colour, SludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
@@ -119,14 +113,4 @@ public class SludgeWormModel extends HierarchicalModel<SludgeWorm> {
 		stack.translate(0F, - 0.0625F - wibble * 0.5F, - 0.0625F + wibble * 2F);
 		this.butt.render(stack, consumer, light, overlay, colour);
 	}
-
-	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(SludgeWorm entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-	}
-
 }

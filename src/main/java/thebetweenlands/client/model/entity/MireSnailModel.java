@@ -9,12 +9,11 @@ import thebetweenlands.common.entity.creature.MireSnail;
 
 public class MireSnailModel extends MowzieModelBase<MireSnail> {
 
-	private final ModelPart root;
 	private final ModelPart sensor1;
 	private final ModelPart sensor2;
 
 	public MireSnailModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.sensor1 = root.getChild("sensor_1");
 		this.sensor2 = root.getChild("sensor_2");
 	}
@@ -121,12 +120,7 @@ public class MireSnailModel extends MowzieModelBase<MireSnail> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(MireSnail entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(MireSnail entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.sensor1.xRot = Mth.cos(limbSwing + Mth.PI) * 1.5F * limbSwingAmount + 0.5F;
 		this.sensor2.xRot = Mth.cos(limbSwing) * 1.5F * limbSwingAmount + 0.5F;
 		this.sensor1.yRot = Mth.cos(limbSwing + Mth.PI) * 1.5F * limbSwingAmount - 0.2F;

@@ -16,15 +16,13 @@ import thebetweenlands.common.entity.creature.Jellyfish;
 
 public class JellyfishModel extends MowzieModelBase<Jellyfish> {
 
-	private final ModelPart root;
 	private final ModelPart frontTentacles;
 	private final ModelPart leftTentacles;
 	private final ModelPart rightTentacles;
 	private final ModelPart backTentacles;
 
 	public JellyfishModel(ModelPart root) {
-		super(RenderType::entityTranslucent);
-		this.root = root;
+		super(root, RenderType::entityTranslucent);
 		this.frontTentacles = root.getChild("mesogloea_base").getChild("front_tentacles_1");
 		this.backTentacles = root.getChild("mesogloea_base").getChild("back_tentacles_1");
 		this.leftTentacles = root.getChild("mesogloea_base").getChild("left_tentacles_1");
@@ -99,22 +97,12 @@ public class JellyfishModel extends MowzieModelBase<Jellyfish> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
 		super.renderToBuffer(stack, consumer, LightTexture.FULL_BRIGHT, overlay, color);
 	}
 
 	@Override
-	public void setupAnim(Jellyfish entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(Jellyfish entity, float limbSwing, float limbSwingAmount, float partialTick) {
+	public void setupAnim(Jellyfish entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float adjustedLimbSwingAmount = Math.min(limbSwingAmount, 0.2F);
 
 		this.leftTentacles.zRot = -0.136659280431156F + Mth.sin(limbSwing) * adjustedLimbSwingAmount;

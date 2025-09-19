@@ -13,7 +13,6 @@ import thebetweenlands.common.entity.monster.LargeSludgeWorm;
 
 public class LargeSludgeWormModel extends MowzieModelBase<LargeSludgeWorm> {
 
-	private final ModelPart root;
 	private final ModelPart body;
 	private final ModelPart tail;
 	private ModelPart head;
@@ -28,7 +27,7 @@ public class LargeSludgeWormModel extends MowzieModelBase<LargeSludgeWorm> {
 	private ModelPart spine9;
 
 	public LargeSludgeWormModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.body = root.getChild("body");
 		this.tail = root.getChild("tail");
 
@@ -177,16 +176,6 @@ public class LargeSludgeWormModel extends MowzieModelBase<LargeSludgeWorm> {
 			PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(definition, 256, 128);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(LargeSludgeWorm entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
 	}
 
 	public void renderHead(LargeSludgeWorm entity, PoseStack stack, VertexConsumer consumer, int light, int overlay, int color, float partialTicks, boolean renderSolid) {

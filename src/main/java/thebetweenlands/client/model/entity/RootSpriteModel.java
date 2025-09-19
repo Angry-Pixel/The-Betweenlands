@@ -12,14 +12,13 @@ import thebetweenlands.common.entity.creature.RootSprite;
 
 public class RootSpriteModel extends MowzieModelBase<RootSprite> {
 
-	private final ModelPart root;
 	private final ModelPart bodyBase;
 	private final ModelPart leftFoot;
 	private final ModelPart rightFoot;
 	private final ModelPart head;
 
 	public RootSpriteModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.bodyBase = root.getChild("body_base");
 		this.leftFoot = this.bodyBase.getChild("left_foot");
 		this.rightFoot = this.bodyBase.getChild("right_foot");
@@ -58,12 +57,7 @@ public class RootSpriteModel extends MowzieModelBase<RootSprite> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(RootSprite entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(RootSprite entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.head.yRot = (float) Math.toRadians(netHeadYaw);
 
 		float wobbleX = Mth.cos(ageInTicks / 11.0F) * 0.08F;

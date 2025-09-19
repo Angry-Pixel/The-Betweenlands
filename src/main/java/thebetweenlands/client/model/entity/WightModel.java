@@ -15,7 +15,6 @@ public class WightModel<T extends Entity> extends MowzieModelBase<T> {
 
 	public boolean renderHeadOnly = false;
 
-	private final ModelPart root;
 	private final ModelPart neck;
 	private final ModelPart rightArm;
 	private final ModelPart leftArm;
@@ -26,8 +25,7 @@ public class WightModel<T extends Entity> extends MowzieModelBase<T> {
 	private final ModelPart[] headPieces;
 
 	public WightModel(ModelPart root) {
-		super(RenderType::entityTranslucent);
-		this.root = root;
+		super(root, RenderType::entityTranslucent);
 		ModelPart body = root.getChild("body");
 		this.neck = root.getChild("neck");
 
@@ -118,11 +116,6 @@ public class WightModel<T extends Entity> extends MowzieModelBase<T> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
 		if (this.renderHeadOnly) {
 			for (ModelPart part : this.headPieces) {
@@ -134,15 +127,11 @@ public class WightModel<T extends Entity> extends MowzieModelBase<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.rightArm.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 		this.leftArm.xRot = -Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 		this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
 		this.rightLeg.xRot = -Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-	}
-
-	@Override
-	public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
 		if (entity instanceof Wight wight) {
 			this.neck.xRot = 0.4F + wight.getHidingAnimation(partialTick);
 			this.jaw.xRot = -0.4F + 1.0F - wight.getHidingAnimation(partialTick);

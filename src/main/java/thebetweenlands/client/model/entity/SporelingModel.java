@@ -9,7 +9,6 @@ import thebetweenlands.common.entity.creature.Sporeling;
 
 public class SporelingModel extends MowzieModelBase<Sporeling> {
 
-	private final ModelPart root;
 	private final ModelPart head;
 	private final ModelPart leftLeg;
 	private final ModelPart rightLeg;
@@ -17,7 +16,7 @@ public class SporelingModel extends MowzieModelBase<Sporeling> {
 	private final ModelPart rightArm;
 
 	public SporelingModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.head = root.getChild("head");
 		this.rightArm = root.getChild("right_arm");
 		this.leftArm = root.getChild("left_arm");
@@ -68,12 +67,7 @@ public class SporelingModel extends MowzieModelBase<Sporeling> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Sporeling entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Sporeling entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.leftArm.xRot = Mth.cos(limbSwing * 1.5F + Mth.PI) * 2.0F * limbSwingAmount * 0.5F - (Mth.cos(ageInTicks / 10.0F) + 0.7F) / 2.0F * 0.3F;
 		this.rightArm.xRot = Mth.cos(limbSwing * 1.5F) * 2.0F * limbSwingAmount * 0.5F - (Mth.cos(ageInTicks / 11.0F) + 0.7F) / 2.0F * 0.3F;
 

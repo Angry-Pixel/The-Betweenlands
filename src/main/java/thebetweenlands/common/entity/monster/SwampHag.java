@@ -197,7 +197,7 @@ public class SwampHag extends Monster implements BLEntity {
 	}
 
 	@Nullable
-	public Entity getMummyMount() {
+	public PeatMummy getMummyMount() {
 		return this.isRidingMummy() ? (PeatMummy) this.getVehicle() : null;
 	}
 

@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.monster.TarBeast;
 
 public class TarBeastModel extends MowzieModelBase<TarBeast> {
 
-	private final ModelPart root;
 	private final ModelPart waistJoint;
 	private final ModelPart waist;
 	public final ModelPart waistTar;
@@ -34,7 +33,7 @@ public class TarBeastModel extends MowzieModelBase<TarBeast> {
 	private final ModelPart rightLeg2;
 
 	public TarBeastModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.waistJoint = root.getChild("waist_joint");
 		this.waist = this.waistJoint.getChild("waist");
 		this.waistTar = this.waist.getChild("waist_tar");
@@ -151,13 +150,7 @@ public class TarBeastModel extends MowzieModelBase<TarBeast> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(TarBeast entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.setInitPose();
+	public void setupAnim(TarBeast entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float globalSpeed = 0.6F;
 		float globalDegree = 1.8F;
 		float globalHeight = 1.8F;

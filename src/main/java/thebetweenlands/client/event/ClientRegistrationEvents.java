@@ -305,7 +305,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.DARK_DRUID.get(), DarkDruidRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FROG.get(), FrogRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ROOT_SPRITE.get(), RootSpriteRenderer::new);
-		event.registerEntityRenderer(EntityRegistry.SHALLOWBREATH.get(), GasCloudRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SHALLOWBREATH.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SPLODESHROOM.get(), SplodeshroomRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SPORELING.get(), SporelingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TARMINION.get(), TarminionRenderer::new);

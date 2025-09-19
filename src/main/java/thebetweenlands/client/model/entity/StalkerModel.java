@@ -10,7 +10,6 @@ import thebetweenlands.common.entity.monster.Stalker;
 
 public class StalkerModel extends MowzieModelBase<Stalker> {
 
-	private final ModelPart root;
 	private final ModelPart bodyBase;
 	private final ModelPart bodyMain;
 	private final ModelPart abdomen;
@@ -42,7 +41,7 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 	private final ModelPart leg_left1b;
 
 	public StalkerModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.bodyBase = root.getChild("body_base");
 		this.bodyMain = this.bodyBase.getChild("body_main");
 		this.abdomen = this.bodyMain.getChild("abdomen");
@@ -408,17 +407,11 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 	}
 
 	@Override
-	public void setupAnim(Stalker entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Stalker entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.neck1a.zRot -= (netHeadYaw / Mth.RAD_TO_DEG) / 2.0F;
 		this.head_main.zRot -= (netHeadYaw / Mth.RAD_TO_DEG) / 2.0F;
 		this.neck1a.xRot += (headPitch / Mth.RAD_TO_DEG) / 2.0F;
 		this.head_main.xRot += (headPitch / Mth.RAD_TO_DEG) / 2.0F;
-	}
-
-	@Override
-	public void prepareMobModel(Stalker entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float frame = entity.tickCount + partialTick;
 
 		this.medEyelidTopRight.x += 0.07F;
 		this.medEyelidTopRight.z += 0.13F;
@@ -439,13 +432,13 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 		this.smallEyelidRight.z += 0.12F;
 		this.smallEyelidRight.y += 0.08F;
 
-		float blinkFrame = frame * Mth.TWO_PI;
+		float blinkFrame = ageInTicks * Mth.TWO_PI;
 		float blinkSmallRight = 0.0F;
 		float blinkSmallLeft = 0.0F;
 		float blinkMedRight = 0.0F;
 		float blinkMedLeft = 0.0F;
 		float blinkBig = 0.0F;
-		if ((int) (frame * 0.04F) % 5 == 0) {
+		if ((int) (ageInTicks * 0.04F) % 5 == 0) {
 			blinkSmallRight = (float) Math.pow(Math.sin(blinkFrame * 0.02F + 0.5F), 10.0F);
 			blinkSmallLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02F + 0.7F), 10.0F);
 			blinkMedRight = (float) Math.pow(Math.sin(blinkFrame * 0.02F - 0.2F), 10.0F);
@@ -475,7 +468,7 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 
 		this.root.y -= 2.2F;
 
-//        swing = frame;
+//        swing = ageInTicks;
 //        limbSwingAmount = 1.0F;
 
 		float newf1 = limbSwingAmount;
@@ -543,17 +536,17 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 		this.bigeye.yRot += (float) eyeRot.y;
 		this.bigeye.zRot += (float) eyeRot.z;
 
-		this.walk(this.head_main, 4.0F, 0.01F, false, 0.0F, 0.0F, frame, 1.0F);
-		this.swing(this.head_main, 3.0F, 0.01F, false, 0.0F, 0.0F, frame, 1.0F);
-		this.flap(this.head_main, 5.0F, 0.01F, false, 0.0F, 0.0F, frame, 1.0F);
+		this.walk(this.head_main, 4.0F, 0.01F, false, 0.0F, 0.0F, ageInTicks, 1.0F);
+		this.swing(this.head_main, 3.0F, 0.01F, false, 0.0F, 0.0F, ageInTicks, 1.0F);
+		this.flap(this.head_main, 5.0F, 0.01F, false, 0.0F, 0.0F, ageInTicks, 1.0F);
 
-		this.walk(this.jaw_lower_main, 0.4F, 0.2F, false, 0.0F, 0.0F, frame, 1.0F);
-		this.walk(this.jaw_lower_right1a, 0.4F, 0.1F, false, -0.35F, 0.0F, frame, 1.0F);
-		this.walk(this.jaw_lower_left1a, 0.4F, 0.1F, false, -0.35F, 0.0F, frame, 1.0F);
-		this.swing(this.jaw_lower_right1a, 0.4F, 0.1F, true, -0.7F, 0.0F, frame, 1.0F);
-		this.swing(this.jaw_lower_left1a, 0.4F, 0.1F, false, -0.7F, 0.0F, frame, 1.0F);
+		this.walk(this.jaw_lower_main, 0.4F, 0.2F, false, 0.0F, 0.0F, ageInTicks, 1.0F);
+		this.walk(this.jaw_lower_right1a, 0.4F, 0.1F, false, -0.35F, 0.0F, ageInTicks, 1.0F);
+		this.walk(this.jaw_lower_left1a, 0.4F, 0.1F, false, -0.35F, 0.0F, ageInTicks, 1.0F);
+		this.swing(this.jaw_lower_right1a, 0.4F, 0.1F, true, -0.7F, 0.0F, ageInTicks, 1.0F);
+		this.swing(this.jaw_lower_left1a, 0.4F, 0.1F, false, -0.7F, 0.0F, ageInTicks, 1.0F);
 
-		float screechTicks = entity.prevScreechingTicks + (entity.screechingTicks - entity.prevScreechingTicks) * partialTick;
+		float screechTicks = Mth.lerp(partialTick, entity.prevScreechingTicks, entity.screechingTicks);
 
 		float upright = easeInOutBack(Math.min(screechTicks / 40.0F, 1.0F));
 		this.bodyMain.xRot -= upright * 0.5F;
@@ -578,7 +571,7 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 		this.midarm_rightb.zRot += upright * 0.1F;
 
 		float screeching = easeInOutBack(Mth.clamp((screechTicks - 20.0F) / 30.0F, 0.0F, 1.0F));
-		float screechingHeadRotationStrength = Mth.sin(frame * 0.4F) * screeching;
+		float screechingHeadRotationStrength = Mth.sin(ageInTicks * 0.4F) * screeching;
 		this.head_main.yRot += screechingHeadRotationStrength * 0.13F;
 		this.head_main.zRot += screechingHeadRotationStrength * 0.13F;
 
@@ -596,7 +589,7 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 		this.midarm_righta.xRot += screechingHeadRotationStrength * 0.04F;
 		this.midarm_rightb.xRot -= screechingHeadRotationStrength * 0.075F;
 
-		float armShakeStrength = Mth.sin(frame * 4.0F) * screeching;
+		float armShakeStrength = Mth.sin(ageInTicks * 4.0F) * screeching;
 		this.arm_lefta.zRot += armShakeStrength * 0.025F;
 		this.arm_righta.zRot -= armShakeStrength * 0.025F;
 	}

@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.monster.CryptCrawler;
 
 public class CryptCrawlerModel extends MowzieModelBase<CryptCrawler> {
 
-	private final ModelPart root;
 	private final ModelPart body_main;
 	private final ModelPart body_lower;
 	private final ModelPart neck;
@@ -39,7 +38,7 @@ public class CryptCrawlerModel extends MowzieModelBase<CryptCrawler> {
 	private final ModelPart tinyurn3;
 
 	public CryptCrawlerModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.body_main = root.getChild("body_main");
 		this.body_lower = this.body_main.getChild("body_lower");
 		this.neck = this.body_main.getChild("neck");
@@ -179,22 +178,12 @@ public class CryptCrawlerModel extends MowzieModelBase<CryptCrawler> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(CryptCrawler entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(CryptCrawler entity, float limbSwing, float limbSwingAmount, float partialTick) {
+	public void setupAnim(CryptCrawler entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float animation = Mth.sin((limbSwing * 1.1F + 2) * 0.5F) * 0.3F * limbSwingAmount * 0.3F;
 		float animation2 = Mth.sin((limbSwing * 1.1F) * 0.5F) * 0.3F * limbSwingAmount * 0.3F;
 		float animation3 = Mth.sin((limbSwing * 1.1F + 4) * 0.5F) * 0.3F * limbSwingAmount * 0.3F;
 
-		float flap = Mth.sin((entity.tickCount + partialTick) * 0.3F) * 0.8F;
+		float flap = Mth.sin(ageInTicks * 0.3F) * 0.8F;
 		float standingAngle = entity.smoothedStandingAngle(partialTick);
 
 		this.tail1.xRot = -0.40980330836826856F + (standingAngle * 0.75F) - animation;

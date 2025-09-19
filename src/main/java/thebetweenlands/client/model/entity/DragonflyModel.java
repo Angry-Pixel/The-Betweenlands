@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.creature.Dragonfly;
 
 public class DragonflyModel extends MowzieModelBase<Dragonfly> {
 
-	private final ModelPart root;
 	private final ModelPart leftback2;
 	private final ModelPart rightback2;
 	private final ModelPart leftfront2;
@@ -30,7 +29,7 @@ public class DragonflyModel extends MowzieModelBase<Dragonfly> {
 	private final ModelPart stinger;
 
 	public DragonflyModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.leftback2 = root.getChild("left_back_leg_2");
 		this.rightback2 = root.getChild("right_back_leg_2");
 		this.leftmid2 = root.getChild("left_mid_leg_2");
@@ -166,59 +165,45 @@ public class DragonflyModel extends MowzieModelBase<Dragonfly> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Dragonfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(Dragonfly entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		float frame = entity.tickCount + partialTick;
-
-		this.setInitPose();
-
+	public void setupAnim(Dragonfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.wingright1.xRot = 0.1745329F;
 		this.wingleft1.xRot = 0.1745329F;
 		this.wingright2.xRot = -0.1745329F;
 		this.wingleft2.xRot = -0.1745329F;
 
 		if (entity.onGround()) {
-			float flap = Mth.sin(frame * 0.08F) * 0.05F;
+			float flap = Mth.sin(ageInTicks * 0.08F) * 0.05F;
 			this.wingright1.zRot = -1.570796F - flap;
 			this.wingleft1.zRot = 1.570796F + flap;
 			this.wingright2.zRot = -1.570796F - flap;
 			this.wingleft2.zRot = 1.570796F + flap;
 		}
 		if (entity.isFlying()) {
-			float flap = Mth.sin(frame * 1.6F) * 0.3F;
+			float flap = Mth.sin(ageInTicks * 1.6F) * 0.3F;
 			this.wingright1.zRot = -1.570796F - flap;
 			this.wingleft1.zRot = 1.570796F + flap;
 			this.wingright2.zRot = -1.570796F - flap;
 			this.wingleft2.zRot = 1.570796F + flap;
 		}
 
-		this.walk(this.tail1, 0.1f, -0.05f, false, 1.8f, 0, frame, 1);
-		this.walk(this.tail2, 0.1f, -0.05f, false, 1.8f, 0, frame, 1);
-		this.walk(this.tail3, 0.1f, -0.05f, false, 1.8f, 0, frame, 1);
-		this.walk(this.tail4, 0.1f, -0.05f, false, 1.8f, 0, frame, 1);
-		this.walk(this.stinger, 0.1f, -0.05f, false, 1.8f, 0, frame, 1);
+		this.walk(this.tail1, 0.1f, -0.05f, false, 1.8f, 0, ageInTicks, 1);
+		this.walk(this.tail2, 0.1f, -0.05f, false, 1.8f, 0, ageInTicks, 1);
+		this.walk(this.tail3, 0.1f, -0.05f, false, 1.8f, 0, ageInTicks, 1);
+		this.walk(this.tail4, 0.1f, -0.05f, false, 1.8f, 0, ageInTicks, 1);
+		this.walk(this.stinger, 0.1f, -0.05f, false, 1.8f, 0, ageInTicks, 1);
 
-		this.swing(this.tail1, 0.03f, -0.08f, false, 1.8f, 0, frame, 1);
-		this.swing(this.tail2, 0.04f, -0.08f, false, 1.8f, 0, frame, 1);
-		this.swing(this.tail3, 0.05f, -0.08f, false, 1.8f, 0, frame, 1);
-		this.swing(this.tail4, 0.06f, -0.08f, false, 1.8f, 0, frame, 1);
+		this.swing(this.tail1, 0.03f, -0.08f, false, 1.8f, 0, ageInTicks, 1);
+		this.swing(this.tail2, 0.04f, -0.08f, false, 1.8f, 0, ageInTicks, 1);
+		this.swing(this.tail3, 0.05f, -0.08f, false, 1.8f, 0, ageInTicks, 1);
+		this.swing(this.tail4, 0.06f, -0.08f, false, 1.8f, 0, ageInTicks, 1);
 
 		float legFlapSpeed = entity.onGround() ? 0.08F : 0.4F;
 		float legFlatDegree = entity.onGround() ? -0.05F : -0.1F;
-		this.flap(this.rightback2, legFlapSpeed, legFlatDegree, true, 0.0f, 0, frame, 1);
-		this.flap(this.leftback2, legFlapSpeed, legFlatDegree, false, 0.4f, 0, frame, 1);
-		this.flap(this.rightmid2, legFlapSpeed, legFlatDegree, true, 0.8f, 0, frame, 1);
-		this.flap(this.leftmid2, legFlapSpeed, legFlatDegree, false, 1.2f, 0, frame, 1);
-		this.flap(this.rightfront2, legFlapSpeed, legFlatDegree, true, 1.6f, 0, frame, 1);
-		this.flap(this.leftfront2, legFlapSpeed, legFlatDegree, false, 2.0f, 0, frame, 1);
+		this.flap(this.rightback2, legFlapSpeed, legFlatDegree, true, 0.0f, 0, ageInTicks, 1);
+		this.flap(this.leftback2, legFlapSpeed, legFlatDegree, false, 0.4f, 0, ageInTicks, 1);
+		this.flap(this.rightmid2, legFlapSpeed, legFlatDegree, true, 0.8f, 0, ageInTicks, 1);
+		this.flap(this.leftmid2, legFlapSpeed, legFlatDegree, false, 1.2f, 0, ageInTicks, 1);
+		this.flap(this.rightfront2, legFlapSpeed, legFlatDegree, true, 1.6f, 0, ageInTicks, 1);
+		this.flap(this.leftfront2, legFlapSpeed, legFlatDegree, false, 2.0f, 0, ageInTicks, 1);
 	}
 }

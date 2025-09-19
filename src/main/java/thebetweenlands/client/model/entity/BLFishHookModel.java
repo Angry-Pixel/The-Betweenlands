@@ -10,14 +10,13 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
+import thebetweenlands.client.model.MowzieModelBase;
+import thebetweenlands.common.entity.fishing.BLFishHook;
 
-public class BLFishHookModel extends Model {
-
-	private final ModelPart root;
+public class BLFishHookModel extends MowzieModelBase<BLFishHook> {
 
 	public BLFishHookModel(ModelPart root) {
-		super(RenderType::entityCutoutNoCull);
-		this.root = root;
+		super(root, RenderType::entityCutoutNoCull);
 	}
 
 	public static LayerDefinition create() {
@@ -75,10 +74,5 @@ public class BLFishHookModel extends Model {
 			PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0F, 0.0F, -0.36425021489121656F));
 
 		return LayerDefinition.create(definition, 32, 32);
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		this.root.render(stack, consumer, light, overlay, color);
 	}
 }

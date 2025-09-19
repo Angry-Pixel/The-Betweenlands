@@ -1,5 +1,6 @@
 package thebetweenlands.client.model;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
@@ -11,15 +12,23 @@ import java.util.function.Function;
 
 public abstract class MowzieModelBase<T extends Entity> extends HierarchicalModel<T> {
 
-	public MowzieModelBase() {
-		super();
+	protected final ModelPart root;
+
+	public MowzieModelBase(ModelPart root) {
+		this.root = root;
 	}
 
-	public MowzieModelBase(Function<ResourceLocation, RenderType> renderType) {
+	public MowzieModelBase(ModelPart root, Function<ResourceLocation, RenderType> renderType) {
 		super(renderType);
+		this.root = root;
 	}
 
-	protected void setInitPose() {
+	@Override
+	public ModelPart root() {
+		return this.root;
+	}
+
+	protected void resetPose() {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 	}
 
@@ -216,5 +225,20 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 
 	public float convertDegtoRad(float angle) {
 		return angle * Mth.DEG_TO_RAD;
+	}
+
+	@Override
+	public final void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
+		this.resetPose();
+	}
+
+	@Override
+	public final void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(!Minecraft.getInstance().level.tickRateManager().isEntityFrozen(entity));
+		this.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, partialTick, netHeadYaw, headPitch);
+	}
+
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
+
 	}
 }

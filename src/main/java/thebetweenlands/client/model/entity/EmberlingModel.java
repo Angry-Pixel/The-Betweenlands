@@ -12,7 +12,6 @@ import thebetweenlands.common.entity.creature.Emberling;
 
 public class EmberlingModel extends MowzieModelBase<Emberling> {
 
-	private final ModelPart root;
 	private final ModelPart body2;
 	private final ModelPart body3;
 	private final ModelPart body4;
@@ -41,7 +40,7 @@ public class EmberlingModel extends MowzieModelBase<Emberling> {
 	private final ModelPart tail7;
 
 	public EmberlingModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.body3 = root.getChild("body_3");
 		this.body2 = this.body3.getChild("body_2");
 		this.body4 = this.body3.getChild("body_4");
@@ -195,12 +194,7 @@ public class EmberlingModel extends MowzieModelBase<Emberling> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Emberling entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Emberling entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		float heady = Mth.sin((netHeadYaw / Mth.RAD_TO_DEG) * 0.5F);
 		float headx = Mth.sin((headPitch / Mth.RAD_TO_DEG) * 0.5F);
 		if (entity.isInSittingPose()) {
@@ -210,13 +204,10 @@ public class EmberlingModel extends MowzieModelBase<Emberling> {
 			this.head.yRot = heady;
 			this.head.xRot = 0.045553093477052F + headx + entity.animationTicks;
 		}
-	}
 
-	@Override
-	public void prepareMobModel(Emberling entity, float limbSwing, float limbSwingAmount, float partialTick) {
 		float animation = Mth.sin(limbSwing * 0.6F) * limbSwingAmount * 0.4F;
-		float flap = Mth.sin((entity.tickCount + partialTick) * 0.2F) * 0.8F;
-		float headFlap = Mth.sin((entity.tickCount + partialTick) * 0.6F) * 0.7F;
+		float flap = Mth.sin(ageInTicks * 0.2F) * 0.8F;
+		float headFlap = Mth.sin(ageInTicks * 0.6F) * 0.7F;
 		this.leftUpperGills1.yRot = 0.5918411493512771F - flap * 0.125F;
 		this.leftUpperGills2.yRot = 0.22759093446006054F - flap * 0.25F;
 

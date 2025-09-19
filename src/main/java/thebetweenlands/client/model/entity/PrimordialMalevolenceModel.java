@@ -1,22 +1,21 @@
 package thebetweenlands.client.model.entity;
 
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
 
-public class PrimordialMalevolenceModel extends HierarchicalModel<PrimordialMalevolence> {
+public class PrimordialMalevolenceModel extends MowzieModelBase<PrimordialMalevolence> {
 
-	private final ModelPart root;
 	public final ModelPart eye;
 	public final ModelPart clothes;
 
 	public PrimordialMalevolenceModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.eye = root.getChild("eye");
 		this.clothes = root.getChild("cap1");
 	}
@@ -73,15 +72,5 @@ public class PrimordialMalevolenceModel extends HierarchicalModel<PrimordialMale
 			PartPose.offsetAndRotation(5.0F, 0.0F, 0.0F, -0.27314402793711257F, 0.0F, -0.5009094953223726F));
 
 		return LayerDefinition.create(definition, 512, 256);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(PrimordialMalevolence entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
 	}
 }

@@ -19,6 +19,7 @@ public class SludgeModel extends MowzieModelBase<Sludge> {
 	private final ModelPart slime;
 
 	public SludgeModel(ModelPart root) {
+		super(root);
 		this.head = root.getChild("head2");
 		this.jaw = this.head.getChild("jaw");
 		this.spine = new ModelPart[]{this.head.getChild("spine"), this.head.getChild("spine").getChild("spinepiece")};
@@ -80,21 +81,14 @@ public class SludgeModel extends MowzieModelBase<Sludge> {
 	}
 
 	@Override
-	public void setupAnim(Sludge entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(Sludge entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float frame = entity.tickCount + partialTick;
-		float controller = (0.5F * Mth.sin(frame * 0.1F) * Mth.sin(frame * 0.1F)) + 0.5F;
+	public void setupAnim(Sludge entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
+		float controller = (0.5F * Mth.sin(ageInTicks * 0.1F) * Mth.sin(ageInTicks * 0.1F)) + 0.5F;
 		this.head.y += 1.5F;
-		this.walk(this.jaw, 1.0F, 0.3F * controller, false, 0.0F, -0.2F * controller, frame, 1.0F);
-		this.bob(this.head, 0.5F, controller, false, frame, 1.0F);
-		this.chainWave(this.spine, 0.5F, 0.2F * controller, -2.0F, frame, 1.0F);
-		this.chainFlap(this.spine, 0.25F, 0.4F * controller, -2.0F, frame, 1.0F);
-		this.head.x += 2.0F * Mth.sin(frame * 0.25F) * controller;
-		this.flap(this.head, 0.25F, 0.2F * controller, false, 0.0F, 0.0F, frame, 1.0F);
+		this.walk(this.jaw, 1.0F, 0.3F * controller, false, 0.0F, -0.2F * controller, ageInTicks, 1.0F);
+		this.bob(this.head, 0.5F, controller, false, ageInTicks, 1.0F);
+		this.chainWave(this.spine, 0.5F, 0.2F * controller, -2.0F, ageInTicks, 1.0F);
+		this.chainFlap(this.spine, 0.25F, 0.4F * controller, -2.0F, ageInTicks, 1.0F);
+		this.head.x += 2.0F * Mth.sin(ageInTicks * 0.25F) * controller;
+		this.flap(this.head, 0.25F, 0.2F * controller, false, 0.0F, 0.0F, ageInTicks, 1.0F);
 	}
 }

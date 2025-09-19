@@ -18,6 +18,7 @@ public class SmolSludgeModel extends MowzieModelBase<SmolSludge> {
 	private final ModelPart slime;
 
 	public SmolSludgeModel(ModelPart root) {
+		super(root);
 		this.head = root.getChild("skullbase");
 		this.jaw = this.head.getChild("skull2").getChild("jaw");
 		this.slime = root.getChild("sludge1");
@@ -67,20 +68,13 @@ public class SmolSludgeModel extends MowzieModelBase<SmolSludge> {
 	}
 
 	@Override
-	public void setupAnim(SmolSludge entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void prepareMobModel(SmolSludge entity, float limbSwing, float limbSwingAmount, float partialTick) {
-		this.setInitPose();
-		float frame = entity.tickCount + partialTick;
-		float controller = (0.5F * Mth.sin(frame * 0.1F) * Mth.sin(frame * 0.1F)) + 0.5F;
+	public void setupAnim(SmolSludge entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
+		float controller = (0.5F * Mth.sin(ageInTicks * 0.1F) * Mth.sin(ageInTicks * 0.1F)) + 0.5F;
 		this.head.y += 1.5F;
-		this.walk(this.jaw, 1.0F, 0.3f * controller, false, 0.0F, -0.2F * controller, frame, 1.0F);
-		this.bob(this.head, 0.25F, controller, false, frame, 1.0F);
-		this.head.x += 1.25F * Mth.sin(frame * 0.25F) * controller;
-		this.flap(this.head, 0.25F, 0.2F * controller, false, 0.0F, 0.0F, frame, 1.0F);
+		this.walk(this.jaw, 1.0F, 0.3f * controller, false, 0.0F, -0.2F * controller, ageInTicks, 1.0F);
+		this.bob(this.head, 0.25F, controller, false, ageInTicks, 1.0F);
+		this.head.x += 1.25F * Mth.sin(ageInTicks * 0.25F) * controller;
+		this.flap(this.head, 0.25F, 0.2F * controller, false, 0.0F, 0.0F, ageInTicks, 1.0F);
 		this.head.x += 0.15F;
 	}
 }

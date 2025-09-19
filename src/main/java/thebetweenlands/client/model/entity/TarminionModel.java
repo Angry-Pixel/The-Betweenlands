@@ -13,14 +13,13 @@ import thebetweenlands.common.entity.creature.Tarminion;
 
 public class TarminionModel extends MowzieModelBase<Tarminion> {
 
-	private final ModelPart root;
 	private final ModelPart leftArm;
 	private final ModelPart rightArm;
 	private final ModelPart leftLeg;
 	private final ModelPart rightLeg;
 
 	public TarminionModel(ModelPart root) {
-		this.root = root;
+		super(root);
 		this.leftArm = root.getChild("left_arm");
 		this.rightArm = root.getChild("right_arm");
 		this.leftLeg = root.getChild("left_leg");
@@ -56,12 +55,7 @@ public class TarminionModel extends MowzieModelBase<Tarminion> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
-	public void setupAnim(Tarminion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(Tarminion entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.leftArm.xRot = Mth.cos(limbSwing * 1.5F + Mth.PI) * 2.0F * limbSwingAmount * 0.5F;
 		this.rightArm.xRot = Mth.cos(limbSwing * 1.5F) * 2.0F * limbSwingAmount * 0.5F;
 
