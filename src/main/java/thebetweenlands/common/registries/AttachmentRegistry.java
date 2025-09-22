@@ -6,6 +6,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.*;
+import thebetweenlands.common.component.entity.equipment.EquipmentData;
+import thebetweenlands.common.component.entity.equipment.EquipmentDataSerializer;
+import thebetweenlands.common.inventory.EquipmentInventory;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageSerializer;
 
@@ -15,6 +18,7 @@ public class AttachmentRegistry {
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<BlessingData>> BLESSING = ATTACHMENT_TYPES.register("blessing", () -> AttachmentType.builder(BlessingData::new).serialize(BlessingData.CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<CircleGemData>> CIRCLE_GEM = ATTACHMENT_TYPES.register("circle_gem", () -> AttachmentType.builder(CircleGemData::new).serialize(CircleGemData.CODEC).sync(CircleGemData.STREAM_CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<DecayData>> DECAY = ATTACHMENT_TYPES.register("decay", () -> AttachmentType.builder(DecayData::new).serialize(DecayData.CODEC).sync(DecayData.STREAM_CODEC).build());
+	public static final DeferredHolder<AttachmentType<?>, AttachmentType<EquipmentData>> EQUIPMENT = ATTACHMENT_TYPES.register("equipment", () -> AttachmentType.builder(EquipmentData::new).serialize(new EquipmentDataSerializer()).sync(new EquipmentDataSerializer()).copyOnDeath().build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<FallDamageReductionData>> FALL_DAMAGE_REDUCTION = ATTACHMENT_TYPES.register("fall_damage_reduction", () -> AttachmentType.builder(FallDamageReductionData::new).serialize(FallDamageReductionData.CODEC).sync(FallDamageReductionData.STREAM_CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<FoodSicknessData>> FOOD_SICKNESS = ATTACHMENT_TYPES.register("food_sickness", () -> AttachmentType.builder(FoodSicknessData::new).serialize(FoodSicknessData.CODEC).sync(FoodSicknessData.STREAM_CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<InfestationIgnoreData>> INFESTATION_IGNORE = ATTACHMENT_TYPES.register("infestation_ignore", () -> AttachmentType.builder(InfestationIgnoreData::new).serialize(InfestationIgnoreData.CODEC).build());

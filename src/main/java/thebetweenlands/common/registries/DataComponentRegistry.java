@@ -20,17 +20,7 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
-import thebetweenlands.common.component.item.AmphibiousUpgrades;
-import thebetweenlands.common.component.item.AspectContents;
-import thebetweenlands.common.component.item.CorrosionData;
-import thebetweenlands.common.component.item.DiscoveryContainerData;
-import thebetweenlands.common.component.item.ElixirContents;
-import thebetweenlands.common.component.item.FishBaitStats;
-import thebetweenlands.common.component.item.InfusionBucketData;
-import thebetweenlands.common.component.item.OriginalItemData;
-import thebetweenlands.common.component.item.RenamableData;
-import thebetweenlands.common.component.item.ShieldSpitData;
-import thebetweenlands.common.component.item.UpgradeDamage;
+import thebetweenlands.common.component.item.*;
 
 public class DataComponentRegistry {
 
@@ -38,6 +28,7 @@ public class DataComponentRegistry {
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> AMPHIBIOUS_ARMOR_FILTERS = COMPONENTS.register("amphibious_armor_filters", () -> DataComponentType.<ItemContainerContents>builder().persistent(ItemContainerContents.CODEC).networkSynchronized(ItemContainerContents.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmphibiousUpgrades>> AMPHIBIOUS_UPGRADES = COMPONENTS.register("amphibious_upgrades", () -> DataComponentType.<AmphibiousUpgrades>builder().persistent(AmphibiousUpgrades.CODEC).networkSynchronized(AmphibiousUpgrades.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmuletData>> AMULET_DATA = COMPONENTS.register("amulet_data", () -> DataComponentType.<AmuletData>builder().persistent(AmuletData.CODEC).networkSynchronized(AmuletData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectContents>> ASPECT_CONTENTS = COMPONENTS.register("aspect_contents", () -> DataComponentType.<AspectContents>builder().persistent(AspectContents.CODEC).networkSynchronized(AspectContents.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BURN_TICKS = COMPONENTS.register("burn_ticks", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> CORROSIVE = COMPONENTS.register("corrosive", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());

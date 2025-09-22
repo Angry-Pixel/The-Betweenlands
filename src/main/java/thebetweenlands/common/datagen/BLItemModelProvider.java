@@ -463,7 +463,10 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.RECORD_WANDERING_WISPS);
 		this.basicItem(ItemRegistry.RECORD_WATERLOGGED);
 		this.basicItem(ItemRegistry.MYSTERIOUS_RECORD);
-		//amulets
+		this.basicItem(ItemRegistry.EMPTY_AMULET);
+		this.basicItem(ItemRegistry.CRIMSON_AMULET);
+		this.basicItem(ItemRegistry.GREEN_AMULET);
+		this.basicItem(ItemRegistry.AQUA_AMULET);
 		this.basicItem(ItemRegistry.AMULET_SLOT);
 		this.basicItem(ItemRegistry.RING_OF_POWER);
 		this.basicItem(ItemRegistry.RING_OF_ASCENT);

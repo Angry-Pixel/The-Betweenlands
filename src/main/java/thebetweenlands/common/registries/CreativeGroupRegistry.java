@@ -989,9 +989,10 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RECORD_STUCK_IN_THE_MUD);
 			output.accept(ItemRegistry.RECORD_WANDERING_WISPS);
 			output.accept(ItemRegistry.RECORD_WATERLOGGED);
-			//aqua amulet
-			//crimson amulet
-			//green amulet
+			output.accept(ItemRegistry.EMPTY_AMULET);
+			output.accept(ItemRegistry.CRIMSON_AMULET);
+			output.accept(ItemRegistry.GREEN_AMULET);
+			output.accept(ItemRegistry.AQUA_AMULET);
 			output.accept(ItemRegistry.AMULET_SLOT);
 			output.accept(ItemRegistry.RING_OF_POWER);
 			output.accept(ItemRegistry.RING_OF_ASCENT);

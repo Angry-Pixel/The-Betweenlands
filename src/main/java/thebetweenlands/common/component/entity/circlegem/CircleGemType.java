@@ -27,24 +27,22 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
 public enum CircleGemType implements StringRepresentable {
-	AQUA("aqua", 1, ChatFormatting.DARK_BLUE, GemSingerItem.GemSingerTarget.AQUA_MIDDLE_GEM),
-	CRIMSON("crimson", 2, ChatFormatting.DARK_RED, GemSingerItem.GemSingerTarget.CRIMSON_MIDDLE_GEM),
-	GREEN("green", 3, ChatFormatting.DARK_GREEN, GemSingerItem.GemSingerTarget.GREEN_MIDDLE_GEM),
-	NONE("none", 0, ChatFormatting.GRAY, null);
+	NONE("none", 11184810, null),
+	AQUA("aqua", 665468, GemSingerItem.GemSingerTarget.AQUA_MIDDLE_GEM),
+	CRIMSON("crimson", 8523049, GemSingerItem.GemSingerTarget.CRIMSON_MIDDLE_GEM),
+	GREEN("green", 2851341, GemSingerItem.GemSingerTarget.GREEN_MIDDLE_GEM);
 
 	public final String name;
-	public final int id;
-	public final ChatFormatting color;
+	public final int color;
 	@Nullable
 	public final GemSingerItem.GemSingerTarget gemSingerTarget;
 
 	public static final StringRepresentable.EnumCodec<CircleGemType> CODEC = StringRepresentable.fromEnum(CircleGemType::values);
-	public static final IntFunction<CircleGemType> BY_ID = ByIdMap.continuous(CircleGemType::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
-	public static final StreamCodec<ByteBuf, CircleGemType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, CircleGemType::getId);
+	public static final IntFunction<CircleGemType> BY_ID = ByIdMap.continuous(CircleGemType::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+	public static final StreamCodec<ByteBuf, CircleGemType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, CircleGemType::ordinal);
 
-	CircleGemType(String name, int id, ChatFormatting color, @Nullable GemSingerItem.GemSingerTarget gemSingerTarget) {
+	CircleGemType(String name, int color, @Nullable GemSingerItem.GemSingerTarget gemSingerTarget) {
 		this.name = name;
-		this.id = id;
 		this.color = color;
 		this.gemSingerTarget = gemSingerTarget;
 	}
@@ -52,10 +50,6 @@ public enum CircleGemType implements StringRepresentable {
 	@Override
 	public String getSerializedName() {
 		return this.name;
-	}
-
-	public int getId() {
-		return this.id;
 	}
 
 	/**
@@ -186,21 +180,6 @@ public enum CircleGemType implements StringRepresentable {
 	public static CircleGemType fromName(String name) {
 		for (CircleGemType gem : values()) {
 			if (gem.name.equals(name)) {
-				return gem;
-			}
-		}
-		return NONE;
-	}
-
-	/**
-	 * Returns the gem for the specified ID
-	 *
-	 * @param id
-	 * @return
-	 */
-	public static CircleGemType fromID(int id) {
-		for (CircleGemType gem : values()) {
-			if (gem.id == id) {
 				return gem;
 			}
 		}

@@ -44,6 +44,7 @@ import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
 import thebetweenlands.client.gui.overlay.AprilFoolsOverlay;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
+import thebetweenlands.client.gui.overlay.EquipmentOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.overlay.swarm.SwarmOverlay;
 import thebetweenlands.client.gui.screen.AmphibiousArmorScreen;
@@ -59,6 +60,7 @@ import thebetweenlands.client.gui.screen.MortarScreen;
 import thebetweenlands.client.gui.screen.PurifierScreen;
 import thebetweenlands.client.gui.screen.SilkBundleScreen;
 import thebetweenlands.client.gui.screen.SmokingRackScreen;
+import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
@@ -226,6 +228,8 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
+		event.registerAbove(VanillaGuiLayers.HOTBAR, TheBetweenlands.prefix("item_equipment"), EquipmentOverlay::renderEquipment);
+		event.registerAbove(VanillaGuiLayers.HOTBAR, TheBetweenlands.prefix("radial_equipment_menu"), RadialMenuHandler.INSTANCE::renderRadialMenu);
 		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 		event.registerAboveAll(TheBetweenlands.prefix("swarm"), SwarmOverlay.INSTANCE::renderSwarm);

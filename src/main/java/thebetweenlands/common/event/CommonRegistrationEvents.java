@@ -241,9 +241,12 @@ public class CommonRegistrationEvents {
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
+		registrar.playToServer(EquipItemPacket.TYPE, EquipItemPacket.STREAM_CODEC, EquipItemPacket::handle);
+		registrar.playToServer(OpenPouchPacket.TYPE, OpenPouchPacket.STREAM_CODEC, OpenPouchPacket::handle);
 		registrar.playToServer(RenameItemPacket.TYPE, RenameItemPacket.STREAM_CODEC, RenameItemPacket::handle);
 		registrar.playToServer(SetGalleryUrlPacket.TYPE, SetGalleryUrlPacket.STREAM_CODEC, SetGalleryUrlPacket::handle);
 		registrar.playToServer(SetLastPageDataPacket.TYPE, SetLastPageDataPacket.STREAM_CODEC, SetLastPageDataPacket::handle);
+		registrar.playToServer(UpdateRingStatePacket.TYPE, UpdateRingStatePacket.STREAM_CODEC, UpdateRingStatePacket::handle);
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {

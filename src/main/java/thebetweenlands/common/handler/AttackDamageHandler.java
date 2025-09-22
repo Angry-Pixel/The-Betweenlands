@@ -2,6 +2,7 @@ package thebetweenlands.common.handler;
 
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,9 +12,14 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.common.component.entity.equipment.EquipmentData;
+import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class AttackDamageHandler {
 
@@ -28,7 +34,7 @@ public class AttackDamageHandler {
 		LivingEntity attackedEntity = event.getEntity();
 		LivingEntity attacker = attackedEntity.getLastHurtByMob();
 
-		if(attackedEntity instanceof BLEntity && attacker != null) {
+		if (attackedEntity instanceof BLEntity && attacker != null) {
 			ItemStack heldItem = attacker.getUseItem();
 
 //			if (!heldItem.isEmpty() && OverworldItemHandler.isToolWeakened(heldItem)) {
@@ -43,16 +49,16 @@ public class AttackDamageHandler {
 
 		//Handle circle gem for blocking
 		//For BL shields this is handled in ItemBLShield#onAttackBlocked
-		if(canBlockDamageSource(attackedEntity, source)) {
+		if (canBlockDamageSource(attackedEntity, source)) {
 //			CircleGemHelper.handleAttack(source, attackedEntity, event.getAmount());
 		}
 	}
 
 	private static boolean canBlockDamageSource(LivingEntity entity, DamageSource source) {
-		if(!source.is(DamageTypeTags.BYPASSES_SHIELD) && entity.isBlocking() && source.getEntity() != null) {
+		if (!source.is(DamageTypeTags.BYPASSES_SHIELD) && entity.isBlocking() && source.getEntity() != null) {
 			Vec3 location = source.getSourcePosition();
 
-			if(location != null) {
+			if (location != null) {
 				Vec3 look = entity.getViewVector(1.0F);
 				Vec3 diff = location.vectorTo(entity.position()).normalize();
 				diff = new Vec3(diff.x, 0.0D, diff.z);
@@ -64,10 +70,10 @@ public class AttackDamageHandler {
 		return false;
 	}
 
-	private static void handleAttacks(LivingDamageEvent.Pre event) {
+	private static void handleAttacks(LivingIncomingDamageEvent event) {
 		LivingEntity attackedEntity = event.getEntity();
 		DamageSource source = event.getSource();
-		float damage = event.getOriginalDamage();
+		float damage = event.getAmount();
 
 		Entity entity = source.getEntity();
 //		if(attackedEntity instanceof BLEntity && entity instanceof LivingEntity living) {
@@ -114,26 +120,25 @@ public class AttackDamageHandler {
 //
 //		damage = CircleGemHelper.handleAttack(source, attackedEntity, damage);
 //
-//		if(entity instanceof LivingEntity) {
-//			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-//			if(cap != null) {
-//				Inventory inv = cap.getInventory(EquipmentInventory.RING);
-//				int rings = 0;
-//
-//				for(int i = 0; i < inv.getContainerSize(); i++) {
-//					ItemStack stack = inv.getItem(i);
-//					if(!stack.isEmpty() && stack.is(ItemRegistry.RING_OF_POWER) && stack.getDamageValue() < stack.getMaxDamage()) {
-//						rings++;
-//					}
-//				}
-//
-//				if(rings > 0) {
-//					PacketDistributor.sendToPlayersNear(attackedEntity.level(), null, attackedEntity.getX(), attackedEntity.getY(), attackedEntity.getZ(), 32.0D, new PowerRingParticlePacket(attackedEntity));
-//				}
-//
-//				damage *= 1.0F + 0.5F * rings;
-//			}
-//		}
+		if (entity instanceof LivingEntity) {
+			EquipmentData data = entity.getData(AttachmentRegistry.EQUIPMENT);
+			Container inv = data.getContainer(entity, EquipmentInventoryType.RING);
+			int rings = 0;
+
+			for (int i = 0; i < inv.getContainerSize(); i++) {
+				ItemStack stack = inv.getItem(i);
+				if (!stack.isEmpty() && stack.is(ItemRegistry.RING_OF_POWER) && stack.getDamageValue() < stack.getMaxDamage()) {
+					rings++;
+				}
+			}
+
+			//TODO
+			if (rings > 0) {
+				//PacketDistributor.sendToPlayersNear(attackedEntity.level(), null, attackedEntity.getX(), attackedEntity.getY(), attackedEntity.getZ(), 32.0D, new PowerRingParticlePacket(attackedEntity));
+			}
+
+			damage *= 1.0F + 0.5F * rings;
+		}
 
 		int thornsCount = 0;
 
@@ -145,13 +150,13 @@ public class AttackDamageHandler {
 			}
 		}
 
-		if(entity != null && thornsCount > 0 && shouldHit(thornsCount, entity.level().getRandom())) {
+		if (entity != null && thornsCount > 0 && shouldHit(thornsCount, entity.level().getRandom())) {
 			// Perhaps also damage armor like normal thorns would do? though thats usually really annoying
 			entity.hurt(entity.damageSources().thorns(attackedEntity), thornsCount + entity.level().getRandom().nextInt(4));
 		}
 
-		if (event.getOriginalDamage() != damage) {
-			event.setNewDamage(damage);
+		if (event.getAmount() != damage) {
+			event.setAmount(damage);
 		}
 	}
 
@@ -159,7 +164,7 @@ public class AttackDamageHandler {
 		if (amount <= 0) {
 			return false;
 		} else {
-			return random.nextFloat() < 0.15F * (float)amount;
+			return random.nextFloat() < 0.15F * (float) amount;
 		}
 	}
 

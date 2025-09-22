@@ -1551,14 +1551,20 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addDisc(ItemRegistry.RECORD_WANDERING_WISPS, "Music Disc", "Voog2 - Wandering Wisps");
 		this.addDisc(ItemRegistry.RECORD_WATERLOGGED, "Music Disc", "Voog2 - Waterlogged");
 		this.addDisc(ItemRegistry.MYSTERIOUS_RECORD, "Mysterious Disc", "...");
-		//amulets
+		this.addItemWithDesc(ItemRegistry.EMPTY_AMULET, "Amulet", "No effect.\nCan be combined with a Gem");
+		this.addItemWithDesc(ItemRegistry.CRIMSON_AMULET, "Amulet", "When equipped:\n §9- Chance to gain strength when attacking\n §9- Chance to hurt the enemy when attacked");
+		this.addItemWithDesc(ItemRegistry.GREEN_AMULET, "Amulet", "When equipped:\n §9- Chance to heal when attacking\n §9- Chance to absorb damage when attacked");
+		this.addItemWithDesc(ItemRegistry.AQUA_AMULET, "Amulet", "When equipped:\n §9- Chance to weaken the enemy when attacking\n §9- Chance to gain defense when attacked");
+		this.add("item.thebetweenlands.hold_shift", "Hold 'shift' to view more");
+		this.add("item.thebetweenlands.amulet.usage", "Equip using the radial menu [press '%s'] or by pressing '%s'");
 		this.addItem(ItemRegistry.AMULET_SLOT, "Amulet Slot");
 		this.addItemWithDesc(ItemRegistry.RING_OF_POWER, "Ring of Power", "Grants a bonus to attack damage and movement speed at the cost of XP");
-		this.addItemWithDesc(ItemRegistry.RING_OF_ASCENT, "Ring of Ascent", "Grants the gift of levitation at the cost of XP");
-		this.addItemWithDesc(ItemRegistry.RING_OF_RECRUITMENT, "Ring of Recruitment", "Grants the power to recruit and control entities at the cost of XP");
-		this.addItemWithDesc(ItemRegistry.RING_OF_SUMMONING, "Ring of Summoning", "Grants the ability to summon allies from the depths at the cost of XP");
-		this.addItemWithDesc(ItemRegistry.RING_OF_DISPERSION, "Ring of Dispersion", "Grants the ability to move through walls at the cost of XP");
-		this.addItemWithDesc(ItemRegistry.RING_OF_GATHERING, "Ring of Gathering", "Grants the ability to summon Betweenlands minions or pets lost while wearing this ring at the cost of XP. \nDead minions or pets need to be revived by animating the ring in an Animator.");
+		this.addRing(ItemRegistry.RING_OF_ASCENT, "Ring of Ascent", "Grants the gift of levitation at the cost of XP", "Double tap '%s' to activate");
+		this.addRing(ItemRegistry.RING_OF_RECRUITMENT, "Ring of Recruitment", "Grants the power to recruit and control entities at the cost of XP", "Hold '%s' on mobs to take control over them. Generate a shield by pressing '%s' when in primary slot, and '%s' when in secondary slot, to absorb recruited mobs' health.");
+		this.addRing(ItemRegistry.RING_OF_SUMMONING, "Ring of Summoning", "Grants the ability to summon allies from the depths at the cost of XP", "Scream by pressing '%s' when in primary slot, and '%s' when in secondary slot");
+		this.addRing(ItemRegistry.RING_OF_DISPERSION, "Ring of Dispersion", "Grants the ability to move through walls at the cost of XP", "Sneak [press '%s'] to activate");
+		this.addRing(ItemRegistry.RING_OF_GATHERING, "Ring of Gathering", "Grants the ability to summon Betweenlands minions or pets lost while wearing this ring at the cost of XP. \nDead minions or pets need to be revived by animating the ring in an Animator.", "Right-click to summon lost minions or pets or press '%s' when in primary slot, and '%s' when in secondary slot");
+		this.add("item.thebetweenlands.ring.equip", "Equip using the radial menu [press '%s']");
 		this.addItem(ItemRegistry.THEM_SCRAP, "Lurking Shadows");
 		this.addItem(ItemRegistry.MUTANTS_SCRAP, "Mutants of Terror");
 		this.addItem(ItemRegistry.SHADOWS_SCRAP, "Note from a Fallen Shadow");
@@ -1806,11 +1812,25 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		this.add("manual.thebetweenlands.herblore.aspect_info.title", "Aspect Info");
 		this.add("manual.thebetweenlands.herblore.ingredient_info.title", "Ingredient Info");
+
+		this.add("equipment.thebetweenlands.equipped", "Equipped %s");
+		this.add("equipment.thebetweenlands.unequipped", "Unequipped %s");
+		this.add("equipment.thebetweenlands.menu.equip", "Equip %s");
+		this.add("equipment.thebetweenlands.menu.unequip", "Unequip %s");
+		this.add("equipment.thebetweenlands.menu.page", "Page %d");
+		this.add("equipment.thebetweenlands.slot_added", "Added a new amulet slot");
+		this.add("equipment.thebetweenlands.slots_full", "Can't add any more amulet slots");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {
 		this.addItem(item, name);
 		this.add(item.get().getDescriptionId() + ".desc", desc);
+	}
+
+	private void addRing(DeferredItem<Item> item, String name, String desc, String usage) {
+		this.addItem(item, name);
+		this.add(item.get().getDescriptionId() + ".desc", desc);
+		this.add(item.get().getDescriptionId() + ".usage", usage);
 	}
 
 	private void addBlockWithDesc(DeferredBlock<Block> block, String name, String desc) {

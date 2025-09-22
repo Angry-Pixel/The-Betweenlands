@@ -10,11 +10,15 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.entity.equipment.EquipmentData;
+import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.util.ZeroCullingObject2IntHashMap;
 
@@ -36,13 +40,13 @@ public class SecureItemContainer extends ItemContainer {
 	}
 //	public static final ContainerTracker getTracker(boolean isClientSide) { return getTracker(); }
 	public static final ContainerTracker getTracker(Player player) { return getTracker(); }
-	
+
 	// For handling edgecases with modded compound containers
 	public static class ContainerTracker implements Iterable<SecureItemContainer> {
 		// Track number of containers opened on a single bag uuid, the map clears keys when their value is 0
 		public final ZeroCullingObject2IntHashMap<UUID> OPEN_CONTAINERS_BY_UUID = new ZeroCullingObject2IntHashMap<UUID>();
 		public final Set<SecureItemContainer> OPEN_CONTAINERS = new HashSet<>();
-	
+
 		/**
 		 * Adds the container to tracking.
 		 * @param container the SecureContainer to add to tracking.
@@ -74,7 +78,7 @@ public class SecureItemContainer extends ItemContainer {
 			if(OPEN_CONTAINERS.contains(container)) count--;
 			return count;
 		}
-		
+
 		/**
 		 * @param uuid the stack UUID to check the number of open containers for
 		 * @return the number of currently tracked containers for stack with the UUID
@@ -82,7 +86,7 @@ public class SecureItemContainer extends ItemContainer {
 		public int getOpenContainerCount(UUID uuid) {
 			return OPEN_CONTAINERS_BY_UUID.getInt(uuid);
 		}
-		
+
 		/**
 		 * @return the total number of currently tracked containers
 		 */
@@ -95,9 +99,9 @@ public class SecureItemContainer extends ItemContainer {
 			return OPEN_CONTAINERS.iterator();
 		}
 	}
-	
-	
-	
+
+
+
 	// Track multiple players accessing the same gui in case of fake (simulated) players or admin menu spectator tools
 	protected final Set<UUID> trackingPlayers = new HashSet<UUID>();
 	protected Map<UUID, ContainerListener> playerListeners = new HashMap<UUID, ContainerListener>();
@@ -107,11 +111,11 @@ public class SecureItemContainer extends ItemContainer {
 	protected UUID stackUUID;
 	// Used to inform whether or not to strip the UUID component from the item when the container closes
 	private boolean isTracked = false;
-	
+
 	public SecureItemContainer(ItemStack stack, int slots) {
 		this(stack, slots, getTracker());
 	}
-	
+
 	public SecureItemContainer(ItemStack stack, int slots, ContainerTracker tracker) {
 		super(stack, slots);
 		if(!stack.has(DataComponentRegistry.INVENTORY_ITEM_UUID)) {
@@ -120,7 +124,7 @@ public class SecureItemContainer extends ItemContainer {
 		this.stackUUID = stack.get(DataComponentRegistry.INVENTORY_ITEM_UUID);
 		this.tracker = tracker;
 	}
-	
+
 	@Nonnull
 	public UUID getContainerStackUUID() {
 		return this.stackUUID;
@@ -139,12 +143,12 @@ public class SecureItemContainer extends ItemContainer {
 		tracker.trackContainer(this);
 		isTracked = true;
 	}
-	
+
 	protected void stopTracking() {
 		tracker.untrackContainer(this);
 		isTracked = false;
 	}
-	
+
 	@Override
 	@Nonnull
 	public ItemStack getContainerStackFromPlayer(Player player) {
@@ -154,12 +158,12 @@ public class SecureItemContainer extends ItemContainer {
 	public boolean isStackOrCopyOfStack(ItemStack stack) {
 		return stack == this.stack || (stack.has(DataComponentRegistry.INVENTORY_ITEM_UUID) && stack.get(DataComponentRegistry.INVENTORY_ITEM_UUID).equals(this.getContainerStackUUID()));
 	}
-	
+
 	@Override
 	public boolean stillValid(Player player) {
 		return super.stillValid(player) && this.trackingPlayers.contains(player.getUUID()) && getContainerStackFromPlayerAndStackUUID(player, this.getContainerStackUUID(), null) != null;
 	}
-	
+
 	@Override
 	public void startOpen(final Player player) {
 		super.startOpen(player);
@@ -178,7 +182,7 @@ public class SecureItemContainer extends ItemContainer {
 	protected boolean canReleaseUUIDComponent() {
 		return this.trackingPlayers.isEmpty() && !this.isTracked && this.tracker.otherTrackingContainers(this) == 0;
 	}
-	
+
 	@Override
 	public void releaseStack(ItemStack stack, boolean force) {
 		super.releaseStack(stack, force);
@@ -186,7 +190,7 @@ public class SecureItemContainer extends ItemContainer {
 			stack.remove(DataComponentRegistry.INVENTORY_ITEM_UUID);
 		}
 	}
-	
+
 	@Override
 	public void stopOpen(Player player) {
 		// Has to go before the super.stopOpen(player)
@@ -206,7 +210,7 @@ public class SecureItemContainer extends ItemContainer {
 		final ItemStack stack = getContainerStackFromPlayerAndStackUUID(player, stackUUID, targetStack);
 		return stack == null ? targetStack : stack;
 	}
-	
+
 	/**
 	 * Tries to fetch the target stack from the player's inventory/equipment. Falls back to checking via stack UUID if the exact pointer isn't found
 	 * @param player
@@ -217,21 +221,21 @@ public class SecureItemContainer extends ItemContainer {
 	@Nullable
 	public static ItemStack getContainerStackFromPlayerAndStackUUID(Player player, UUID stackUUID, @Nullable ItemStack targetStack) {
 		if(player == null) return null;
-		
+
 		ItemStack foundStack = null;
-		
+
 //		//Check if pouch is in equipment
-//		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-//		if (cap != null) {
-//			Inventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
-//
-//			for (int i = 0; i < inv.getContainerSize(); i++) {
-//				if (inv.getItem(i) == this.pouch.getContainerStack()) {
-//					return true;
-//				}
-//			}
-//		}
-		
+		EquipmentData data = player.getData(AttachmentRegistry.EQUIPMENT);
+		Container inv = data.getContainer(player, EquipmentInventoryType.MISC);
+
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack stack = inv.getItem(i);
+			if (foundStack == null && stack.has(DataComponentRegistry.INVENTORY_ITEM_UUID) && stack.get(DataComponentRegistry.INVENTORY_ITEM_UUID).equals(stackUUID)) {
+				foundStack = stack;
+				if(targetStack == null) break;
+			}
+		}
+
 		Inventory inventory = player.getInventory();
 		for(int i = 0; i < inventory.getContainerSize(); ++i) {
 			ItemStack stack = inventory.getItem(i);
@@ -243,7 +247,7 @@ public class SecureItemContainer extends ItemContainer {
 		}
 		return foundStack;
 	}
-	
+
 	@Nullable
 	public static SecureItemContainer getOpenItemContainer(Player player) {
 //		if(player == null || !player.hasContainerOpen()) return null;

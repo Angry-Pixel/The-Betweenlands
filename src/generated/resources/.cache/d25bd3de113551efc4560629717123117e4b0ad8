@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-17T08:58:01.572918147	Item Models: thebetweenlands
+// 1.21.1	2025-09-20T12:43:26.313594005	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -57,6 +57,7 @@ adae83c4ab9b17891a1c3a6127bc41cf56e8cea0 assets/thebetweenlands/models/item/anci
 525e0de86418e2235fcb378e3786c5b42c25a833 assets/thebetweenlands/models/item/animated_small_spirit_tree_face_mask.json
 1c94cb0562b80618be671eedbf36537f854fc8db assets/thebetweenlands/models/item/animated_tar_beast_heart.json
 c4ea81227ad9a8bde80868084efcf8657a91c48a assets/thebetweenlands/models/item/apsectrus_fruit.json
+e0faff2f0a1b1afc859f647a2dd14024b77aba2e assets/thebetweenlands/models/item/aqua_amulet.json
 426e84873431f53cc1f144c30dc963774c8b958a assets/thebetweenlands/models/item/aqua_middle_gem.json
 77136e6856187afed3c675883b56467c47cf1e25 assets/thebetweenlands/models/item/arrow_arum_leaf.json
 2f9250158d47c91737afa3fecc874ec30a109a4f assets/thebetweenlands/models/item/ascent_upgrade.json
@@ -136,6 +137,7 @@ b08a61165312fa521de87aca4d906d5cf716915e assets/thebetweenlands/models/item/cook
 aeb75744b76057de08c81f2506920218af6af240 assets/thebetweenlands/models/item/crab_claw.json
 96062a708259aa11348e9ff1db189a1b3c70c362 assets/thebetweenlands/models/item/crab_stick.json
 33136ccd4fc798b34b3e1a95d655426f8fc0d9fe assets/thebetweenlands/models/item/cremains.json
+8bc864fe84e490470bd7f2c6f5e2b3edcf9b706e assets/thebetweenlands/models/item/crimson_amulet.json
 d0366e49eab489d94080dcb39b6df04e8f967bae assets/thebetweenlands/models/item/crimson_middle_gem.json
 d99b4f49d98d7da9d367fdd1242dcb2cace737df assets/thebetweenlands/models/item/crimson_snail_shell.json
 7305a6392a3fc12f9319255551b19bd41a7d9fac assets/thebetweenlands/models/item/critter_cruncher.json
@@ -172,6 +174,7 @@ cef39ea745081ebae4bf14016bb714a8ffa6b580 assets/thebetweenlands/models/item/elm_
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/elm_cyan_item_frame.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_shaman_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_spawn_egg.json
+53d8dd76227adbcaceade991d59b2692175c4e12 assets/thebetweenlands/models/item/empty_amulet.json
 f94da2497630fae1a4f23ab7b23fb8fb33cf9e79 assets/thebetweenlands/models/item/fabricated_scroll.json
 0f8fce75845dea8ecd855e954a21ff70c41c4554 assets/thebetweenlands/models/item/filled_amate_map.json
 d04657e81e3097966eef11e7e10a54fa7776ebb0 assets/thebetweenlands/models/item/firefly.json
@@ -199,6 +202,7 @@ d7cc1cba53b460bb8625f2b0751d66694f5108b3 assets/thebetweenlands/models/item/gert
 f3686d0e78227f9ae84295e06b77bc14e1a474c9 assets/thebetweenlands/models/item/golden_club_flowers.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/greebling_coracle_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/greebling_spawn_egg.json
+38013b293895ab5719152e1ae31fba7f26f64df9 assets/thebetweenlands/models/item/green_amulet.json
 fa5deefa828d8e31514448807dcf3af59d070cba assets/thebetweenlands/models/item/green_aspect_vial.json
 5ee34ddd5291318dc9ad545d3d33552fbe4274b2 assets/thebetweenlands/models/item/green_dentrothyst_shard.json
 3c4f83384174a0c3925a9479d939a4ff6b05a106 assets/thebetweenlands/models/item/green_dentrothyst_vial.json

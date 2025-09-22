@@ -32,7 +32,9 @@ import thebetweenlands.common.item.armor.AncientArmorItem;
 import thebetweenlands.common.item.armor.LurkerSkinArmorItem;
 import thebetweenlands.common.item.armor.MarshRunnerBootsItem;
 import thebetweenlands.common.item.armor.RubberBootsItem;
+import thebetweenlands.common.item.equipment.AmuletItem;
 import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
+import thebetweenlands.common.item.equipment.RingOfPowerItem;
 import thebetweenlands.common.item.food.*;
 import thebetweenlands.common.item.herblore.*;
 import thebetweenlands.common.item.misc.*;
@@ -397,9 +399,12 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> RECORD_WANDERING_WISPS = ITEMS.register("music_disc_wandering_wisps", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WANDERING_WISPS)));
 	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("music_disc_waterlogged", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WATERLOGGED)));
 	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
-	//amulets
-	public static final DeferredItem<Item> AMULET_SLOT = ITEMS.register("amulet_slot", () -> new Item(new Item.Properties().stacksTo(1).durability(30).setNoRepair().rarity(Rarity.EPIC)));
-	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> EMPTY_AMULET = ITEMS.register("empty_amulet", () -> new AmuletItem(CircleGemType.NONE, new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> CRIMSON_AMULET = ITEMS.register("crimson_amulet", () -> new AmuletItem(CircleGemType.CRIMSON, new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> GREEN_AMULET = ITEMS.register("green_amulet", () -> new AmuletItem(CircleGemType.GREEN, new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> AQUA_AMULET = ITEMS.register("aqua_amulet", () -> new AmuletItem(CircleGemType.AQUA, new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> AMULET_SLOT = ITEMS.register("amulet_slot", () -> new AmuletSlotItem(new Item.Properties().stacksTo(1).durability(30).setNoRepair().rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new RingOfPowerItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_ASCENT = ITEMS.register("ring_of_ascent", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));

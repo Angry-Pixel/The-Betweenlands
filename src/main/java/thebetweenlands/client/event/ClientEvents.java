@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.*;
+import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
@@ -23,9 +24,11 @@ public class ClientEvents {
 		BossHandler.init();
 		CameraPositionHandler.init();
 		ElixirClientHandler.init();
+		EquipmentRenderingHandler.init();
 		ItemTooltipHandler.init();
 		MainMenuHandler.init();
 		MusicHandler.init();
+		RadialMenuHandler.INSTANCE.init();
 		ScreenHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
@@ -40,7 +43,7 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWeather);
 
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onRenderHUD);
-
+		NeoForge.EVENT_BUS.addListener(InputHandler::handleKeybindInputs);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

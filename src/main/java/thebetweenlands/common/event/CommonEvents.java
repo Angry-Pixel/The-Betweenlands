@@ -24,6 +24,7 @@ public class CommonEvents {
 		CorrosionHandler.init();
 		ElixirCommonHandler.init();
 		FoodSicknessHandler.init();
+		ItemEquipmentHandler.init();
 		PlayerDecayHandler.init();
 		ShieldHandler.init();
 		SimulacrumHandler.init();

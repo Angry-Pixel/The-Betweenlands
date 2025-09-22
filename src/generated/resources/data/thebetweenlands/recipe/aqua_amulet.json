@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:empty_amulet"
+    },
+    {
+      "item": "thebetweenlands:aqua_middle_gem"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:aqua_amulet"
+  }
+}

@@ -1,12 +1,17 @@
 package thebetweenlands.common.inventory;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.extensions.IItemStackExtension;
+import thebetweenlands.common.component.entity.equipment.EquipmentData;
+import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.inventory.container.SecureItemContainer;
 import thebetweenlands.common.inventory.slot.FilteredSlot;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
 
 public class LurkerSkinPouchMenu extends SecureInventoryItemMenu {
@@ -24,7 +29,7 @@ public class LurkerSkinPouchMenu extends SecureInventoryItemMenu {
 
 		for (int row = 0; row < this.numRows; ++row) {
 			for (int column = 0; column < 9; ++column) {
-				this.addSlot(new FilteredSlot(pouch, column + row * 9, 8 + column * 18, 18 + row * 18, stack -> stack.getItem().canFitInsideContainerItems()));
+				this.addSlot(new FilteredSlot(pouch, column + row * 9, 8 + column * 18, 18 + row * 18, IItemStackExtension::canFitInsideContainerItems));
 			}
 		}
 
@@ -54,7 +59,7 @@ public class LurkerSkinPouchMenu extends SecureInventoryItemMenu {
 			ItemStack slotStack = slot.getItem();
 			stack = slotStack.copy();
 
-			if (!slotStack.getItem().canFitInsideContainerItems()) {
+			if (!slotStack.canFitInsideContainerItems()) {
 				return ItemStack.EMPTY;
 			}
 
@@ -81,24 +86,6 @@ public class LurkerSkinPouchMenu extends SecureInventoryItemMenu {
 		if (this.secureContainer == null) {
 			return true; //Renaming pouch
 		}
-		return super.stillValid(player) && secureContainer.stillValid(player);
-
-//		//Check if pouch is in equipment
-//		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-//		if (cap != null) {
-//			Inventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
-//
-//			for (int i = 0; i < inv.getContainerSize(); i++) {
-//				if (inv.getItem(i) == this.pouch.getContainerStack()) {
-//					return true;
-//				}
-//			}
-//		}
-
-		//Check if pouch is in main inventory
-//		if (player.getInventory().contains(this.pouch.getContainerStack())) {
-//			return pouch.stillValid(player);
-//		}
 
 //		//Check if pouch is in draeton
 //		List<Draeton> draetons = player.level().getEntitiesOfClass(Draeton.class, player.getBoundingBox().inflate(6));
@@ -113,9 +100,9 @@ public class LurkerSkinPouchMenu extends SecureInventoryItemMenu {
 //			}
 //		}
 
-//		return false;
+		return super.stillValid(player) && this.secureContainer.stillValid(player);
 	}
-	
+
 	@Override
 	public void removed(Player player) {
 		this.secureContainer.stopOpen(player);

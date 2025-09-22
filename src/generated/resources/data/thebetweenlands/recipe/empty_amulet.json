@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:amulet_socket"
+    }
+  },
+  "pattern": [
+    "rrr",
+    "r r",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:empty_amulet"
+  }
+}

@@ -51,4 +51,5 @@ public class AdvancementCriteriaRegistry {
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> MOTH_HOUSE_MAXED = TRIGGERS.register("moth_house_maxed", NoCriteriaTrigger::new);
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> ITEM_FRAME_INVISIBLE = TRIGGERS.register("item_frame_invisible", NoCriteriaTrigger::new);
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> ITEM_FRAME_GLOWING = TRIGGERS.register("item_frame_glowing", NoCriteriaTrigger::new);
+	public static final DeferredHolder<CriterionTrigger<?>, EquipTrigger> EQUIP = TRIGGERS.register("equip_item", EquipTrigger::new);
 }

@@ -234,7 +234,13 @@ public class BLItemRecipeProvider {
 			.pattern(" r ").pattern("s s").pattern(" s ").define('s', ItemRegistry.ORANGE_DENTROTHYST_SHARD).define('r', ItemRegistry.RUBBER_BALL)
 			.unlockedBy("has_rubber", has(ItemRegistry.RUBBER_BALL)).unlockedBy("has_shard", has(ItemRegistry.ORANGE_DENTROTHYST_SHARD)).save(output);
 
-		//TODO amulets
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.EMPTY_AMULET)
+			.pattern("rrr").pattern("r r").pattern(" s ").define('r', ItemRegistry.REED_ROPE).define('s', ItemRegistry.AMULET_SOCKET)
+			.unlockedBy("has_slot", has(ItemRegistry.AMULET_SOCKET)).save(output);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.CRIMSON_AMULET).requires(ItemRegistry.EMPTY_AMULET).requires(ItemRegistry.CRIMSON_MIDDLE_GEM).unlockedBy("has_gem", has(ItemRegistry.CRIMSON_MIDDLE_GEM)).save(output);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.GREEN_AMULET).requires(ItemRegistry.EMPTY_AMULET).requires(ItemRegistry.GREEN_MIDDLE_GEM).unlockedBy("has_gem", has(ItemRegistry.GREEN_MIDDLE_GEM)).save(output);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.AQUA_AMULET).requires(ItemRegistry.EMPTY_AMULET).requires(ItemRegistry.AQUA_MIDDLE_GEM).unlockedBy("has_gem", has(ItemRegistry.AQUA_MIDDLE_GEM)).save(output);
+
 		//TODO rope
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.MUMMY_BAIT)
 			.requires(ItemRegistry.SHIMMER_STONE).requires(ItemRegistry.ANIMATED_TAR_BEAST_HEART)

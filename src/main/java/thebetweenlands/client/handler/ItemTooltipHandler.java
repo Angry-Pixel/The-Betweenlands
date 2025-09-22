@@ -12,6 +12,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.RadialMenuEquippable;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
@@ -22,6 +23,7 @@ import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.item.datamaps.CompostableItem;
+import thebetweenlands.common.item.equipment.AmuletItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.FoodSickness;
 
@@ -58,7 +60,7 @@ public class ItemTooltipHandler {
 
 		CircleGemType circleGem = stack.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE);
 		if (circleGem != CircleGemType.NONE) {
-			toolTip.add(1, Component.translatable("item.thebetweenlands.circle_gem." + circleGem.name).withStyle(circleGem.color));
+			toolTip.add(Component.translatable("item.thebetweenlands.circle_gem." + circleGem.name).withColor(circleGem.color));
 		}
 
 		if (stack.getItem().builtInRegistryHolder().getData(DataMapRegistry.DECAY_FOOD) != null) {
@@ -73,9 +75,9 @@ public class ItemTooltipHandler {
 				getSicknessTooltip(sickness, hatred, event.getFlags().isAdvanced(), toolTip);
 			}
 
-//			if (stack.getItem() instanceof IEquippable equippable && equippable.canEquip(stack, player, player)) {
-//				toolTip.add(Component.translatable("item.thebetweenlands.equippable").withStyle(ChatFormatting.GRAY));
-//			}
+			if (stack.getItem() instanceof RadialMenuEquippable equippable && equippable.canEquip(stack, player, player)) {
+				toolTip.add(Component.translatable("item.thebetweenlands.equippable").withStyle(ChatFormatting.GRAY));
+			}
 		}
 
 		if (BetweenlandsConfig.itemUsageTooltip) {
@@ -171,7 +173,7 @@ public class ItemTooltipHandler {
 
 	private static void getSicknessTooltip(FoodSickness sickness, int hatred, boolean advancedTooltips, List<Component> toolTip) {
 		String debug = "";
-		if(advancedTooltips) {
+		if (advancedTooltips) {
 			debug = " (" + hatred + "/" + sickness.maxHatred + ")";
 		}
 		toolTip.add(Component.translatable("item.thebetweenlands.food_sickness.state." + sickness.name().toLowerCase()).append(debug).withStyle(ChatFormatting.GRAY));

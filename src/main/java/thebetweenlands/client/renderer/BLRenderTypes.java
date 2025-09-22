@@ -4,10 +4,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.event.BetweenlandsShaders;
+
+import java.util.OptionalDouble;
+import java.util.function.Function;
 
 public class BLRenderTypes extends RenderType {
 
@@ -43,6 +47,26 @@ public class BLRenderTypes extends RenderType {
 			.setTransparencyState(LIGHTNING_TRANSPARENCY)
 			.createCompositeState(false)
 	);
+
+	//DEBUG_LINE_STRIP but with transparency support
+	public static final Function<Double, RenderType.CompositeRenderType> EQUIPMENT_LINES = Util.memoize(
+		p_286162_ -> create(
+			"thebetweenlands:equipment_lines",
+			DefaultVertexFormat.POSITION_COLOR,
+			VertexFormat.Mode.DEBUG_LINE_STRIP,
+			1536,
+			RenderType.CompositeState.builder()
+				.setShaderState(POSITION_COLOR_SHADER)
+				.setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(p_286162_)))
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setCullState(NO_CULL)
+				.createCompositeState(false)
+		)
+	);
+
+	public static RenderType equipmentLines(double width) {
+		return EQUIPMENT_LINES.apply(width);
+	}
 
 	public static RenderType animatedLayer(ResourceLocation location, float u, float v) {
 		return create(
