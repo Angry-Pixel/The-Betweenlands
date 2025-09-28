@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_anadia_meat"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:crab_claw"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:dragonfly"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:dragonfly_wing"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:firefly"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_frog_legs"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:gecko"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:lurker_skin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:mire_snail_egg"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_snail_flesh"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/chiromaw_hatchling_feed_items"
+}

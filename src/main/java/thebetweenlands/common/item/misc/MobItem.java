@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import net.jodah.typetools.TypeResolver;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -45,7 +46,7 @@ public class MobItem<T extends Entity> extends Item {
 	private static final Map<EntityType<?>, Function<Entity, InteractionResult>> SPAWN_HANDLERS = new HashMap<>();
 
 	public static final Function<Entity, InteractionResult> DEFAULT_SPAWN_HANDLER = entity -> {
-		if ((entity.level().getDifficulty() != Difficulty.PEACEFUL || !(entity instanceof Enemy)) && entity.level().noBlockCollision(entity, entity.getBoundingBox())) {
+		if ((entity.level().getDifficulty() != Difficulty.PEACEFUL || !(entity instanceof Enemy)) && entity.level().noCollision(entity)) {
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.FAIL;
@@ -80,9 +81,11 @@ public class MobItem<T extends Entity> extends Item {
 
 	@Override
 	public String getDescriptionId(ItemStack stack) {
-		ResourceLocation id = this.getCapturedEntityId(stack);
-		if (id != null) {
-			return BuiltInRegistries.ENTITY_TYPE.get(id).getDescriptionId();
+		if (!I18n.exists(super.getDescriptionId(stack))) { //allow overrides if they exist in the lang file
+			ResourceLocation id = this.getCapturedEntityId(stack);
+			if (id != null) {
+				return BuiltInRegistries.ENTITY_TYPE.get(id).getDescriptionId();
+			}
 		}
 		return super.getDescriptionId(stack);
 	}
@@ -122,10 +125,10 @@ public class MobItem<T extends Entity> extends Item {
 
 			InteractionResult result = spawnHandler.apply(entity);
 
-			if (result == InteractionResult.SUCCESS) {
+			if (result.consumesAction()) {
 				result = this.spawnCapturedEntity(context.getPlayer(), level, context.getHand(), direction, hitVec, entity, isNewEntity.get());
 
-				if (result == InteractionResult.SUCCESS) {
+				if (result.indicateItemUse()) {
 					stack.shrink(1);
 				}
 			}

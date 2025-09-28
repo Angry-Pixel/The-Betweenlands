@@ -23,7 +23,7 @@ public class EquipmentOverlay {
 		Player player = gui.getCameraPlayer();
 		int width = graphics.guiWidth();
 		int height = graphics.guiHeight();
-		if (player != null && !player.isSpectator()) {
+		if (!minecraft.options.hideGui && player != null && !player.isSpectator()) {
 			if (BetweenlandsConfig.equipmentVisible) {
 				EquipmentData data = player.getData(AttachmentRegistry.EQUIPMENT);
 				HumanoidArm offhand = player.getMainArm().getOpposite();

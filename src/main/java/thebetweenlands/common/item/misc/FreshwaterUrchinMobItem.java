@@ -17,7 +17,8 @@ public class FreshwaterUrchinMobItem extends MobItem<FreshwaterUrchin> {
 		var result = JukeboxPlayable.tryInsertIntoJukebox(context.getLevel(), context.getClickedPos(), ItemRegistry.RECORD_DEEP_WATER_THEME.toStack(), context.getPlayer()).result();
 		if (result.consumesAction()) {
 			context.getItemInHand().consume(1, context.getPlayer());
+			return result;
 		}
-		return result;
+		return super.useOn(context);
 	}
 }

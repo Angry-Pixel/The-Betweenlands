@@ -250,10 +250,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);
 		this.basicItem(ItemRegistry.SILT_CRAB);
 		this.basicItem(ItemRegistry.FRESHWATER_URCHIN);
-		//chiromaw egg
-		//lightning chiromaw egg
-		//chiromaw
-		//lightning chiromaw
+		this.basicItem(ItemRegistry.TAME_CHIROMAW);
+		this.basicItem(ItemRegistry.TAME_LIGHTNING_CHIROMAW);
 		this.basicItem(ItemRegistry.SHIMMER_STONE);
 		this.basicItem(ItemRegistry.TARMINION);
 		this.basicItem(ItemRegistry.SLUDGE_BALL);

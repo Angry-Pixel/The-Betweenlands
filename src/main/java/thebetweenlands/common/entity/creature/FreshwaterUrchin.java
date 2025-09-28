@@ -20,15 +20,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.ProximitySpawnerEntity;
+import thebetweenlands.common.entity.ProximitySpawner;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.BasicProximitySpawner;
 import thebetweenlands.common.registries.DamageTypeRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
 
-public class FreshwaterUrchin extends ProximitySpawnerEntity {
+public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner {
 
 	private static final EntityDataAccessor<Integer> SPIKE_COOLDOWN = SynchedEntityData.defineId(FreshwaterUrchin.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> SPIKE_BOX_SIZE = SynchedEntityData.defineId(FreshwaterUrchin.class, EntityDataSerializers.INT);
@@ -113,8 +114,8 @@ public class FreshwaterUrchin extends ProximitySpawnerEntity {
 				this.setSpikeGrowTimer(this.getSpikeGrowTimer() + 1);
 
 			if (this.getSpikeGrowTimer() >= 80)
-				if (this.level().getGameTime() % 5 == 0)
-					this.checkAreaHere();
+				if (this.level().getGameTime() % 5 == 0 && this.isInWater())
+					this.checkArea(this, LivingEntity.class);
 
 			if (this.shootSpikes) {
 				if (this.getSpikeBoxTimer() < MAX_SPIKE_TIMER)
@@ -141,26 +142,8 @@ public class FreshwaterUrchin extends ProximitySpawnerEntity {
 		}
 	}
 
-	public void checkAreaHere() {
-		if (!this.level().isClientSide() && this.level().getDifficulty() != Difficulty.PEACEFUL && this.isInWater()) {
-			List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, this.proximityBox(), entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(entity1 -> !(entity1 instanceof Anadia) && !(entity1 instanceof FreshwaterUrchin)).test(entity));
-
-			if (!list.isEmpty()) {
-				LivingEntity entity = list.getFirst();
-
-				if (this.canSneakPast() && entity.isCrouching())
-					return;
-				else if (this.checkSight() && !this.hasLineOfSight(entity))
-					return;
-				else
-					this.shootSpikes();
-				if (!this.dead && this.isSingleUse())
-					this.discard();
-			}
-		}
-	}
-
-	private void shootSpikes() {
+	@Override
+	public <T extends LivingEntity> void performDetectionLogic(T detected) {
 		this.playSound(SoundRegistry.URCHIN_SHOOT.get(), 1.0F, 1.5F + (this.level().getRandom().nextFloat() - this.level().getRandom().nextFloat()) * 0.5F);
 		this.setSpikeGrowTimer(0);
 		this.shootSpikes = true;
@@ -209,21 +192,6 @@ public class FreshwaterUrchin extends ProximitySpawnerEntity {
 		}
 	}
 
-	@Override
-	protected float getProximityHorizontal() {
-		return 2.0F;
-	}
-
-	@Override
-	protected float getProximityVertical() {
-		return 1.0F;
-	}
-
-	@Override
-	public AABB proximityBox() {
-		return new AABB(this.getX() - 0.5D, this.getY(), this.getZ() - 0.5D, this.getX() + 0.5D, this.getY() + 1D, this.getZ() + 0.5D).inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal()).move(0.0D, this.getProximityVertical() + this.getBbHeight(), 0.0D);
-	}
-
 	public AABB spikesBox() {
 		float x = (this.getProximityHorizontal() / MAX_SPIKE_TIMER) * this.getSpikeBoxTimer();
 		float y = (this.getProximityVertical() / MAX_SPIKE_TIMER) * this.getSpikeBoxTimer();
@@ -232,32 +200,32 @@ public class FreshwaterUrchin extends ProximitySpawnerEntity {
 	}
 
 	@Override
-	protected boolean canSneakPast() {
+	public float getProximityHorizontal() {
+		return 2.0F;
+	}
+
+	@Override
+	public float getProximityVertical() {
+		return 1.0F;
+	}
+
+	@Override
+	public AABB proximityBox(BlockPos pos) {
+		return new AABB(pos.getX() - 0.5D, pos.getY(), pos.getZ() - 0.5D, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D).inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal()).move(0.0D, this.getProximityVertical() + this.getBbHeight(), 0.0D);
+	}
+
+	@Override
+	public boolean canSneakPast() {
 		return true;
 	}
 
 	@Override
-	protected boolean checkSight() {
+	public boolean checkSight() {
 		return true;
 	}
 
 	@Override
-	protected Entity getEntitySpawned() {
-		return null;
-	}
-
-	@Override
-	protected int getEntitySpawnCount() {
-		return 0;
-	}
-
-	@Override
-	protected boolean isSingleUse() {
+	public boolean isSingleUse() {
 		return false;
-	}
-
-	@Override
-	protected int maxUseCount() {
-		return 0;
 	}
 }

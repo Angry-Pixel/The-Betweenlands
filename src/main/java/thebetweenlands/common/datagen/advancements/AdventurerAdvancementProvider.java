@@ -111,7 +111,7 @@ public class AdventurerAdvancementProvider implements AdvancementGenerator {
 			.addCriterion("isles", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(registries.lookupOrThrow(Registries.STRUCTURE).getOrThrow(StructureRegistry.FLOATING_ISLAND))))
 			.save(consumer, "thebetweenlands:adventurer/flat_round_and_up_in_the_sky");
 
-		Advancement.Builder.advancement().parent(isles).display(ItemRegistry.CHIROMAW_EGG,
+		Advancement.Builder.advancement().parent(isles).display(ItemRegistry.CHIROMAW_HATCHLING,
 				Component.translatable("advancement.thebetweenlands.adventurer.queen_of_the_hill"),
 				Component.translatable("advancement.thebetweenlands.adventurer.queen_of_the_hill.desc"),
 				null, AdvancementType.TASK, true, true, false)

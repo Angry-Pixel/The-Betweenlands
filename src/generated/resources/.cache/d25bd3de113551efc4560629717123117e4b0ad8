@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-20T12:43:26.313594005	Item Models: thebetweenlands
+// 1.21.1	2025-09-28T08:28:29.023936106	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -552,6 +552,8 @@ f930ed1d850d4c560a61a3ed49c152eadf60d0dc assets/thebetweenlands/models/item/syrm
 6326cf747404f49c75f02dbaca0c0c4e46f429f3 assets/thebetweenlands/models/item/syrmorite_nugget.json
 14bfb2dfceefd83801dc1e5e67ef59b8d7f62c04 assets/thebetweenlands/models/item/syrmorite_shears.json
 7d650327003e4bfff81b30c00e35dc053e0d2e1e assets/thebetweenlands/models/item/tainted_potion.json
+451e5522aa48c0a50c2137ce751092cfb038ee9e assets/thebetweenlands/models/item/tame_chiromaw.json
+f0219ace5bff42159ea584d04a125ba28f722578 assets/thebetweenlands/models/item/tame_lightning_chiromaw.json
 c1b472a1de08eb15f4a598a890cbb373de6f3f0e assets/thebetweenlands/models/item/tangled_root.json
 a78e5e503a099b76a3cc25af3aeb36cc59ef83b6 assets/thebetweenlands/models/item/tar_beast_heart.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/tar_beast_spawn_egg.json

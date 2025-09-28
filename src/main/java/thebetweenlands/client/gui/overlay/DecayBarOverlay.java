@@ -22,7 +22,7 @@ public class DecayBarOverlay {
 		Minecraft minecraft = Minecraft.getInstance();
 		Gui gui = minecraft.gui;
 		Player player = gui.getCameraPlayer();
-		if (player != null && player.hasData(AttachmentRegistry.DECAY)) {
+		if (!minecraft.options.hideGui && player != null && player.hasData(AttachmentRegistry.DECAY)) {
 			IDecayData data = player.getData(AttachmentRegistry.DECAY);
 
 			if (!data.isDecayEnabled(player)) return;

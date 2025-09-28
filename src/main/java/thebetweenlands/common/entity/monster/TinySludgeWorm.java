@@ -85,16 +85,8 @@ public class TinySludgeWorm extends SludgeWorm {
 	@Override
 	public void playerTouch(Player player) {
 		if (!this.level().isClientSide()) {
-			// head
 			if (this.isPartJumpedOn(player, this.getBoundingBox()))
 				this.squashWorm(player);
-			// rest of worm
-			else
-				for (SludgeWormMultipart part : this.parts) {
-					if (this.isPartJumpedOn(player, part.getBoundingBox())) {
-						this.squashWorm(player);
-					}
-				}
 		}
 	}
 
@@ -115,8 +107,8 @@ public class TinySludgeWorm extends SludgeWorm {
 
 		this.isSquashed = true;
 		this.level().broadcastEntityEvent(this, EVENT_SQUASHED);
-		this.level().playSound(null, this.xo, this.yo, this.zo, this.getJumpedOnSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
-		this.level().playSound(null, this.xo, this.yo, this.zo, this.getDeathSound(), SoundSource.NEUTRAL, 1.0F, 0.5F);
+		this.playSound(this.getJumpedOnSound(), 1.0F, 0.5F);
+		this.playSound(this.getDeathSound(), 1.0F, 0.5F);
 		this.hurt(this.damageSources().playerAttack(player), this.getHealth());
 
 	}

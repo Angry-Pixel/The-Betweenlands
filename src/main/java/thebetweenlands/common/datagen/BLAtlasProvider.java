@@ -18,7 +18,11 @@ public class BLAtlasProvider extends SpriteSourceProvider {
 
 	@Override
 	protected void gather() {
-		this.atlas(BLOCKS_ATLAS).addSource(new DirectoryLister("fluid", "fluid/")).addSource(new SingleFile(TheBetweenlands.prefix("entity/block/censer_fog"), Optional.empty()));
+		this.atlas(BLOCKS_ATLAS)
+			.addSource(new SingleFile(TheBetweenlands.prefix("entity/chiromaw/chiromaw_egg"), Optional.empty()))
+			.addSource(new SingleFile(TheBetweenlands.prefix("entity/mire_snail_egg"), Optional.empty()))
+			.addSource(new DirectoryLister("fluid", "fluid/"))
+			.addSource(new SingleFile(TheBetweenlands.prefix("entity/block/censer_fog"), Optional.empty()));
 		this.atlas(TheBetweenlands.prefix("aspect_icons")).addSource(new DirectoryLister("aspect", ""));
 	}
 }

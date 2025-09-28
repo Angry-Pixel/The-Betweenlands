@@ -44,6 +44,7 @@ public class ClientEvents {
 
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onRenderHUD);
 		NeoForge.EVENT_BUS.addListener(InputHandler::handleKeybindInputs);
+		NeoForge.EVENT_BUS.addListener(InputHandler::performDoubleJump);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

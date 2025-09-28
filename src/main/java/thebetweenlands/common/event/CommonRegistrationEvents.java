@@ -239,6 +239,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(WeedwoodBushRustlePacket.TYPE, WeedwoodBushRustlePacket.STREAM_CODEC, WeedwoodBushRustlePacket::handle);
 		registrar.playToClient(WightVolatileParticlesPacket.TYPE, WightVolatileParticlesPacket.STREAM_CODEC, WightVolatileParticlesPacket::handle);
 
+		registrar.playToServer(ChiromawDoubleJumpPacket.TYPE, ChiromawDoubleJumpPacket.STREAM_CODEC, ChiromawDoubleJumpPacket::handle);
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
 		registrar.playToServer(EquipItemPacket.TYPE, EquipItemPacket.STREAM_CODEC, EquipItemPacket::handle);

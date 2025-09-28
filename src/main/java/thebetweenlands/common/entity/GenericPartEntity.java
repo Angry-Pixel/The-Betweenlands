@@ -40,6 +40,11 @@ public class GenericPartEntity<T extends Entity> extends PartEntity<T> {
 	}
 
 	@Override
+	public void playerTouch(Player player) {
+		this.getParent().playerTouch(player);
+	}
+
+	@Override
 	public boolean isCurrentlyGlowing() {
 		return this.getParent().isCurrentlyGlowing();
 	}

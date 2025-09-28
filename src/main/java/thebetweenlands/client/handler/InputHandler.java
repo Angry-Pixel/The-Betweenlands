@@ -1,13 +1,18 @@
 package thebetweenlands.client.handler;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.BetweenlandsKeybinds;
+import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.network.serverbound.OpenPouchPacket;
 import thebetweenlands.common.network.serverbound.UpdateRingStatePacket;
+
+import java.util.List;
 
 public class InputHandler {
 
@@ -30,6 +35,18 @@ public class InputHandler {
 			if (BetweenlandsKeybinds.USE_SECONDARY_RING.matches(event.getKey(), event.getScanCode()) && BetweenlandsKeybinds.USE_SECONDARY_RING.consumeClick()) {
 				lastSecondaryRingState = !lastSecondaryRingState;
 				PacketDistributor.sendToServer(new UpdateRingStatePacket(1, lastSecondaryRingState));
+			}
+		}
+	}
+
+	public static void performDoubleJump(MovementInputUpdateEvent event) {
+		if (event.getInput().jumping && !event.getEntity().jumping) {
+			List<Entity> passengers = event.getEntity().getPassengers();
+			for (Entity entity : passengers) {
+				if (entity instanceof TameChiromaw chiromaw) {
+					chiromaw.performDoubleJump(event.getEntity());
+					return;
+				}
 			}
 		}
 	}

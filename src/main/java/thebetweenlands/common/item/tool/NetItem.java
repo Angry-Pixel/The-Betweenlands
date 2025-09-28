@@ -15,6 +15,8 @@ import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
 import thebetweenlands.common.entity.monster.SludgeWormEggSac;
+import thebetweenlands.common.entity.monster.chiromaw.ChiromawHatchling;
+import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -26,7 +28,7 @@ public class NetItem extends Item {
 	public static final Multimap<Class<? extends Entity>, Pair<Supplier<? extends MobItem<?>>, BiPredicate<Player, Entity>>> CATCHABLE_ENTITIES = MultimapBuilder.hashKeys().arrayListValues().build();
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Entity> void register(Class<? extends Entity> cls, Supplier<? extends MobItem<T>> item, BiPredicate<Player, T> predicate) {
+	public static <T extends Entity> void register(Class<? extends T> cls, Supplier<? extends MobItem<T>> item, BiPredicate<Player, T> predicate) {
 		CATCHABLE_ENTITIES.put(cls, Pair.of(item, (BiPredicate<Player, Entity>) predicate));
 	}
 
@@ -35,10 +37,10 @@ public class NetItem extends Item {
 		register(Gecko.class, ItemRegistry.GECKO, (p, e) -> true);
 		register(Dragonfly.class, ItemRegistry.DRAGONFLY, (p, e) -> true);
 		register(SludgeWormEggSac.class, ItemRegistry.SLUDGE_WORM_EGG_SAC, (p, e) -> true);
-//		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG, (p, e) -> !e.getHasHatched() && !e.getElectricBoogaloo());
-//		register(EntityChiromawHatchling.class, ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
-//		register(EntityChiromawTame.class, ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
-//		register(EntityChiromawTame.class, ItemRegistry.CHIROMAW_TAME_LIGHTNING, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
+		register(ChiromawHatchling.class, ItemRegistry.CHIROMAW_HATCHLING, (p, e) -> !e.getHasHatched() && !e.getElectricBoogaloo());
+		register(ChiromawHatchling.class, ItemRegistry.LIGHTNING_CHIROMAW_HATCHLING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
+		register(TameChiromaw.class, ItemRegistry.TAME_CHIROMAW, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
+		register(TameChiromaw.class, ItemRegistry.TAME_LIGHTNING_CHIROMAW, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
 		register(TinySludgeWorm.class, ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
 		register(TinySludgeWormHelper.class, ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
 		register(MireSnail.class, ItemRegistry.MIRE_SNAIL, (p, e) -> true);
@@ -57,25 +59,23 @@ public class NetItem extends Item {
 	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
 		Collection<Pair<Supplier<? extends MobItem<?>>, BiPredicate<Player, Entity>>> entries = CATCHABLE_ENTITIES.get(target.getClass());
 
-		if (entries != null) {
-			for (Pair<Supplier<? extends MobItem<?>>, BiPredicate<Player, Entity>> entry : entries) {
-				if (entry.getSecond().test(player, target)) {
-					MobItem<?> item = entry.getFirst().get();
+		for (Pair<Supplier<? extends MobItem<?>>, BiPredicate<Player, Entity>> entry : entries) {
+			if (entry.getSecond().test(player, target)) {
+				MobItem<?> item = entry.getFirst().get();
 
-					if (!player.level().isClientSide()) {
-						ItemStack mobItemStack = item.capture(target);
+				if (!player.level().isClientSide()) {
+					ItemStack mobItemStack = item.capture(target);
 
-						if (!mobItemStack.isEmpty()) {
-							target.discard();
-							if (!player.getInventory().add(mobItemStack)) {
-								player.drop(mobItemStack, false);
-							}
-							stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-							item.onCapturedByPlayer(player, hand, mobItemStack, target);
+					if (!mobItemStack.isEmpty()) {
+						target.discard();
+						if (!player.getInventory().add(mobItemStack)) {
+							player.drop(mobItemStack, false);
 						}
+						stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+						item.onCapturedByPlayer(player, hand, mobItemStack, target);
 					}
-					return InteractionResult.sidedSuccess(player.level().isClientSide());
 				}
+				return InteractionResult.sidedSuccess(player.level().isClientSide());
 			}
 		}
 

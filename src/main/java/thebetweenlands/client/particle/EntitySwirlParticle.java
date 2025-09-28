@@ -2,7 +2,6 @@ package thebetweenlands.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
@@ -36,11 +35,11 @@ public class EntitySwirlParticle extends SwirlParticle {
 		super.tick();
 	}
 
-	public static final class EmberSwirlFactory extends ParticleFactory<EmberSwirlFactory, EntitySwirlParticleOptions> {
+	public static final class DefaultFactory extends ParticleFactory<DefaultFactory, EntitySwirlParticleOptions> {
 
 		private final SpriteSet spriteSet;
 
-		public EmberSwirlFactory(SpriteSet spriteSet) {
+		public DefaultFactory(SpriteSet spriteSet) {
 			this.spriteSet = spriteSet;
 		}
 

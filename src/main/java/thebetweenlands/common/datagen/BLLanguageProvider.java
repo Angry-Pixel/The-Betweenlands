@@ -1079,6 +1079,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.SLUDGE_WORM_EGG_SAC, "Sludge Worm Egg Sac");
 		this.addEntityType(EntityRegistry.CHIROMAW_DROPPINGS, "Chiromaw Droppings");
 		this.addEntityType(EntityRegistry.GREEBLING_VOLARPAD_FLOATER, "Greebling Volarpad Floater");
+		this.addEntityType(EntityRegistry.CHIROMAW_HATCHLING, "Chiromaw Hatchling");
+		this.add("entity.thebetweenlands.lightning_chiromaw_hatchling", "Lightning Chiromaw Hatchling");
+		this.add("item.thebetweenlands.lightning_chiromaw_hatchling", "Lightning Chiromaw Hatchling");
+		this.addEntityType(EntityRegistry.TAME_CHIROMAW, "Tamed Chiromaw");
+		this.add("entity.thebetweenlands.tame_lightning_chiromaw", "Tamed Lightning Chiromaw");
+		this.add("item.thebetweenlands.tame_lightning_chiromaw", "Tamed Lightning Chiromaw");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -1345,7 +1351,6 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.life_crystal.remaining", "%s%% remaining");
 		this.addItem(ItemRegistry.PYRAD_FLAME, "Pyrad Flame");
 		this.add("item.thebetweenlands.mob.health", "Health: %s/%s");
-		this.addItem(ItemRegistry.SLUDGE_WORM_EGG_SAC, "Sludge Worm Egg Sac");
 		this.addItem(ItemRegistry.SHIMMER_STONE, "Shimmerstone");
 		this.addItem(ItemRegistry.TARMINION, "Tarminion");
 		this.addItem(ItemRegistry.SLUDGE_BALL, "Sludge Ball");

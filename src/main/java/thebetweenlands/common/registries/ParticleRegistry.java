@@ -40,7 +40,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> TAR_BUBBLE = PARTICLES.register("tar_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_BUBBLE = PARTICLES.register("water_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SONIC_SCREAM = PARTICLES.register("sonic_scream", () -> new SimpleParticleType(false));
-	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WEEDWOOD_LEAF = PARTICLES.register("weedwood_leaf", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SCRAP = PARTICLES.register("scrap", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SLEEPING = PARTICLES.register("sleeping", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> EMBER_SWIRL = register("ember_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DRUID_CASTING = PARTICLES.register("druid_casting", () -> new SimpleParticleType(false));
@@ -49,6 +49,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LANDING_FLUID = PARTICLES.register("landing_fluid", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GAS_CLOUD = PARTICLES.register("gas_cloud", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GAS_CLOUD_HAZE = PARTICLES.register("gas_cloud_haze", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> CHIROMAW_TRANSFORM = register("chiromaw_transform", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {

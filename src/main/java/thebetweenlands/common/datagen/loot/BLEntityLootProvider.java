@@ -457,6 +457,9 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.CHIROMAW_BARB)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(5, 10)))))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.CHIROBARB_ERUPTER))));
+
+		this.noLoot(EntityRegistry.CHIROMAW_HATCHLING);
+		this.noLoot(EntityRegistry.TAME_CHIROMAW);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

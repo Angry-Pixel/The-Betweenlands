@@ -11,8 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.item.RadialMenuEquippable;
 import thebetweenlands.client.BetweenlandsKeybinds;
@@ -25,6 +23,7 @@ import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.component.item.AmuletData;
 import thebetweenlands.common.entity.creature.Emberling;
 import thebetweenlands.common.entity.creature.Tarminion;
+import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
@@ -43,7 +42,7 @@ public class AmuletItem extends Item implements RadialMenuEquippable {
 		//SUPPORTED_ENTITIES.add(EntityGiantToad.class);
 		//SUPPORTED_ENTITIES.add(EntityTamedSpiritTreeFace.class);
 		SUPPORTED_ENTITIES.add(Emberling.class);
-		//SUPPORTED_ENTITIES.add(EntityChiromawTame.class);
+		SUPPORTED_ENTITIES.add(TameChiromaw.class);
 	}
 
 	public AmuletItem(CircleGemType type, Properties properties) {

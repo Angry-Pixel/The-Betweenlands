@@ -2,6 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -24,6 +25,7 @@ import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
 import thebetweenlands.common.entity.monster.SludgeWormEggSac;
+import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.item.armor.amphibious.UpgradeToggleItem;
@@ -216,7 +218,10 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem<BubblerCrab>> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.BUBBLER_CRAB.get(), null));
 	public static final DeferredItem<MobItem<SiltCrab>> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem<>(new Item.Properties().stacksTo(1), 8.0D, EntityRegistry.SILT_CRAB.get(), null));
 	public static final DeferredItem<MobItem<FreshwaterUrchin>> FRESHWATER_URCHIN = ITEMS.register("freshwater_urchin", () -> new FreshwaterUrchinMobItem(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CHIROMAW_EGG = ITEMS.register("chiromaw_egg", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<ChiromawHatchlingItem> CHIROMAW_HATCHLING = ITEMS.register("chiromaw_hatchling", () -> new ChiromawHatchlingItem(new Item.Properties().stacksTo(1), false));
+	public static final DeferredItem<ChiromawHatchlingItem> LIGHTNING_CHIROMAW_HATCHLING = ITEMS.register("lightning_chiromaw_hatchling", () -> new ChiromawHatchlingItem(new Item.Properties().stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true), true));
+	public static final DeferredItem<MobItem<TameChiromaw>> TAME_CHIROMAW = ITEMS.register("tame_chiromaw", () -> new MobItem<>(new Item.Properties().stacksTo(1), 50.0D, EntityRegistry.TAME_CHIROMAW.get(), chiromaw -> chiromaw.setElectricBoogaloo(false)));
+	public static final DeferredItem<MobItem<TameChiromaw>> TAME_LIGHTNING_CHIROMAW = ITEMS.register("tame_lightning_chiromaw", () -> new MobItem<>(new Item.Properties().stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true), 50.0D, EntityRegistry.TAME_CHIROMAW.get(), chiromaw -> chiromaw.setElectricBoogaloo(true)));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new TarminionItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16)));
 	public static final DeferredItem<Item> SLUDGE_BALL = ITEMS.register("sludge_ball", () -> new Item(new Item.Properties()));

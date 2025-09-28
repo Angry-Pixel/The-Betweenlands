@@ -61,5 +61,18 @@ public class BLMiscLootProvider implements LootTableSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.RECORD_STUCK_IN_THE_MUD))
 				.add(LootItem.lootTableItem(ItemRegistry.RECORD_WANDERING_WISPS))
 				.add(LootItem.lootTableItem(ItemRegistry.RECORD_WATERLOGGED))));
+
+		output.accept(LootTableRegistry.CHIROMAW_HATCHLING_FEED_ITEMS, LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_ANADIA_MEAT))
+				.add(LootItem.lootTableItem(ItemRegistry.SILT_CRAB_CLAW))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING))
+				.add(LootItem.lootTableItem(ItemRegistry.FIREFLY))
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_FROG_LEGS))
+				.add(LootItem.lootTableItem(ItemRegistry.GECKO))
+				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN))
+				.add(LootItem.lootTableItem(ItemRegistry.MIRE_SNAIL_EGG))
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_SNAIL_FLESH))));
 	}
 }

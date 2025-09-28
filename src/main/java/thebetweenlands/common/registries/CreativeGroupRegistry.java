@@ -791,10 +791,10 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SILT_CRAB);
 			output.accept(ItemRegistry.BUBBLER_CRAB);
 			output.accept(ItemRegistry.FRESHWATER_URCHIN);
-			//chiromaw egg
-			//lightning chiromaw egg
-			//chiromaw
-			//lightning chiromaw
+			output.accept(ItemRegistry.CHIROMAW_HATCHLING);
+			output.accept(ItemRegistry.LIGHTNING_CHIROMAW_HATCHLING);
+			output.accept(ItemRegistry.TAME_CHIROMAW);
+			output.accept(ItemRegistry.TAME_LIGHTNING_CHIROMAW);
 			output.accept(ItemRegistry.SHIMMER_STONE);
 			output.accept(ItemRegistry.TARMINION);
 			output.accept(ItemRegistry.SLUDGE_BALL);

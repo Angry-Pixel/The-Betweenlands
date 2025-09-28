@@ -1,0 +1,66 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"particle": "thebetweenlands:entity/mire_snail_egg",
+		"egg": "thebetweenlands:entity/mire_snail_egg"
+	},
+	"elements": [
+		{
+			"from": [6, 0, 6],
+			"to": [10, 4, 10],
+			"faces": {
+				"north": {"uv": [4, 4, 8, 8], "texture": "#egg"},
+				"east": {"uv": [8, 4, 12, 8], "texture": "#egg"},
+				"south": {"uv": [12, 4, 16, 8], "texture": "#egg"},
+				"west": {"uv": [0, 4, 4, 8], "texture": "#egg"},
+				"up": {"uv": [4, 0, 8, 4], "texture": "#egg"},
+				"down": {"uv": [8, 0, 12, 4], "texture": "#egg"}
+			}
+		},
+		{
+			"from": [7, 1, 7],
+			"to": [9, 3, 9],
+			"faces": {
+				"north": {"uv": [2, 12, 4, 14], "texture": "#egg"},
+				"east": {"uv": [4, 12, 6, 14], "texture": "#egg"},
+				"south": {"uv": [6, 12, 8, 14], "texture": "#egg"},
+				"west": {"uv": [0, 12, 2, 14], "texture": "#egg"},
+				"up": {"uv": [2, 10, 4, 12], "texture": "#egg"},
+				"down": {"uv": [4, 10, 6, 12], "texture": "#egg"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2, 5],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"translation": [0, 6.25, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -135, 0],
+			"translation": [0, 6.25, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"translation": [0, 7, 0],
+			"scale": [1.5, 1.5, 1.5]
+		},
+		"head": {
+			"rotation": [0, -180, 0],
+			"translation": [0, 14.25, 0]
+		},
+		"fixed": {
+			"translation": [0, 6, 0]
+		}
+	}
+}

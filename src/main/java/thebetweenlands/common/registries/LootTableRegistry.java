@@ -45,6 +45,7 @@ public class LootTableRegistry {
 	public static final ResourceKey<LootTable> WIGHT_FORTRESS_CHEST = register("chests/wight_fortress_chest");
 	public static final ResourceKey<LootTable> WIGHT_FORTRESS_POT = register("pots/wight_fortress_pot");
 	//Chiromaw Nest
+	public static final ResourceKey<LootTable> CHIROMAW_HATCHLING_FEED_ITEMS = register("gameplay/chiromaw_hatchling_feed_items");
 	public static final ResourceKey<LootTable> CHIROMAW_NEST_SCATTERED_LOOT = register("gameplay/chiromaw_nest_scattered_loot");
 	//Water Filter
 	public static final ResourceKey<LootTable> FILTERED_STAGNANT_WATER = register("gameplay/filtered_stagnant_water");

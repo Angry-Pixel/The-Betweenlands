@@ -18,17 +18,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.ProximitySpawnerEntity;
+import thebetweenlands.common.entity.ProximitySpawner;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class Splodeshroom extends ProximitySpawnerEntity {
+public class Splodeshroom extends BasicProximitySpawner {
 
 	private static final byte EVENT_EXPLODE_PARTICLES = 100;
+	private static final byte EVENT_START_EXPLODE = 101;
+	private static final byte EVENT_STOP_EXPLODE = 102;
 
 	public final int MAX_SWELL = 40;
 	public final int MIN_SWELL = 0;
@@ -38,7 +39,7 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 	private static final EntityDataAccessor<Float> AOE_SIZE_XZ = SynchedEntityData.defineId(Splodeshroom.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> AOE_SIZE_Y = SynchedEntityData.defineId(Splodeshroom.class, EntityDataSerializers.FLOAT);
 
-	public Splodeshroom(EntityType<? extends ProximitySpawnerEntity> type, Level level) {
+	public Splodeshroom(EntityType<? extends BasicProximitySpawner> type, Level level) {
 		super(type, level);
 	}
 
@@ -54,10 +55,13 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 
 	@Override
 	public void tick() {
-		// super.tick();
 		if (!this.level().isClientSide() && this.level().getGameTime() % 5 == 0) {
-			if (!this.getHasExploded())
-				this.checkArea();
+			if (!this.getHasExploded()) {
+				this.checkArea(this, Player.class);
+				if (!this.isRemoved() && this.getSwellCount() >= MAX_SWELL) {
+					this.explode();
+				}
+			}
 			if (this.getHasExploded())
 				this.checkAreaOfEffect();
 		}
@@ -88,34 +92,15 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 	}
 
 	@Override
-	protected void checkArea() {
-		Entity entity = null;
-		if (!this.level().isClientSide() && this.level().getDifficulty() != Difficulty.PEACEFUL) {
-			List<Player> list = this.level().getEntitiesOfClass(Player.class, this.proximityBox());
-			for (Player player : list) {
-				entity = player;
+	public <T extends LivingEntity> void performDetectionLogic(T detected) {
+		if (!this.getSwelling())
+			this.setSwelling(true);
+	}
 
-				if (player != null) {
-					if (!player.isSpectator() && !player.isCreative()) {
-						if (this.canSneakPast() && player.isShiftKeyDown())
-							return;
-						else if (this.checkSight() && !this.hasLineOfSight(entity))
-							return;
-						else {
-							if (!this.getSwelling())
-								this.setSwelling(true);
-						}
-						if (!this.dead && this.isSingleUse() && this.getSwellCount() >= MAX_SWELL) {
-							this.explode();
-						}
-					}
-				}
-			}
-			if (entity == null) {
-				if (this.getSwelling())
-					this.setSwelling(false);
-			}
-		}
+	@Override
+	public void performIdlingLogic() {
+		if (this.getSwelling())
+			this.setSwelling(false);
 	}
 
 	protected void checkAreaOfEffect() {
@@ -154,6 +139,10 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 			for (int count = 0; count <= 200; ++count) {
 				TheBetweenlands.createParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.SNOWBALL)), this.level(), this.getX() + (this.getRandom().nextDouble() - 0.5D), this.getY() + 0.25f + this.getRandom().nextDouble(), this.getZ() + (this.getRandom().nextDouble() - 0.5D), ParticleFactory.ParticleArgs.get().withColor(199F / 255, 79F / 255, 123F / 255, 1.0F));
 			}
+		} else if (id == EVENT_START_EXPLODE) {
+			this.playSound(SoundRegistry.SPLODESHROOM_WINDUP.get(), 0.5F, 1.0F + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.8F);
+		} else if (id == EVENT_STOP_EXPLODE) {
+			this.playSound(SoundRegistry.SPLODESHROOM_WINDDOWN.get(), 0.5F, 1.0F + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.8F);
 		}
 	}
 
@@ -174,11 +163,6 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 
 	private void setSwelling(boolean swell) {
 		this.getEntityData().set(IS_SWELLING, swell);
-		//probably doesn't work
-		if (swell)
-			this.playSound(SoundRegistry.SPLODESHROOM_WINDUP.get(), 0.5F, 1.0F + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.8F);
-		else
-			this.playSound(SoundRegistry.SPLODESHROOM_WINDDOWN.get(), 0.5F, 1.0F + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.8F);
 	}
 
 	public boolean getSwelling() {
@@ -218,16 +202,6 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 	}
 
 	@Override
-	protected boolean isImmobile() {
-		return true;
-	}
-
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
-
-	@Override
 	public boolean isPickable() {
 		return !this.getHasExploded();
 	}
@@ -235,16 +209,6 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 	@Override
 	public void push(double x, double y, double z) {
 		this.setDeltaMovement(0, this.getDeltaMovement().y() + y, 0);
-	}
-
-	@Override
-	public boolean isInvulnerable() {
-		return true;
-	}
-
-	@Override
-	public void kill() {
-		this.discard();
 	}
 
 	@Override
@@ -271,43 +235,13 @@ public class Splodeshroom extends ProximitySpawnerEntity {
 	}
 
 	@Override
-	protected float getProximityHorizontal() {
+	public float getProximityHorizontal() {
 		return 3.0F;
 	}
 
 	@Override
-	protected float getProximityVertical() {
+	public float getProximityVertical() {
 		return 1.0F;
-	}
-
-	@Override
-	protected boolean canSneakPast() {
-		return true;
-	}
-
-	@Override
-	protected boolean checkSight() {
-		return true;
-	}
-
-	@Override
-	protected Entity getEntitySpawned() {
-		return null;
-	}
-
-	@Override
-	protected int getEntitySpawnCount() {
-		return 1;
-	}
-
-	@Override
-	protected boolean isSingleUse() {
-		return true;
-	}
-
-	@Override
-	protected int maxUseCount() {
-		return 0;
 	}
 
 	private void spawnCloudParticle() {

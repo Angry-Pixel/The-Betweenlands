@@ -1,6 +1,14 @@
 {
   "sources": [
     {
+      "type": "minecraft:single",
+      "resource": "thebetweenlands:entity/chiromaw/chiromaw_egg"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "thebetweenlands:entity/mire_snail_egg"
+    },
+    {
       "type": "minecraft:directory",
       "prefix": "fluid/",
       "source": "fluid"

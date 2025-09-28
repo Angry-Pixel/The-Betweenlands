@@ -19,6 +19,7 @@ import thebetweenlands.api.entity.MusicPlayer;
 import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.client.audio.GreeblingMusicInstance;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.ParticleRegistry;
@@ -140,7 +141,7 @@ public class Greebling extends Mob implements BLEntity, MusicPlayer {
 				float dy = this.level().getRandom().nextFloat() - 0.1F;
 				float dz = this.level().getRandom().nextFloat() - 0.5F;
 				float mag = 0.08F + this.level().getRandom().nextFloat() * 0.07F;
-				TheBetweenlands.createParticle(ParticleRegistry.WEEDWOOD_LEAF.get(), this.level(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				TheBetweenlands.createParticle(ParticleRegistry.SCRAP.get(), this.level(), x, y, z, ParticleFactory.ParticleArgs.get().withColor(ScrapParticle.LEAF_COLOR).withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}

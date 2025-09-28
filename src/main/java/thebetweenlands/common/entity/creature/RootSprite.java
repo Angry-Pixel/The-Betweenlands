@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.FollowTargetGoal;
@@ -123,8 +124,9 @@ public class RootSprite extends PathfinderMob implements BLEntity {
 
 	private void spawnLeafParticles() {
 		for(int i = 0; i < 1 + this.getRandom().nextInt(3); i++) {
-			TheBetweenlands.createParticle(ParticleRegistry.WEEDWOOD_LEAF.get(), this.level(), this.getX() + this.getDeltaMovement().x(), this.getY() + 0.1F + this.getRandom().nextFloat() * 0.3F, this.getZ() + this.getDeltaMovement().z(), ParticleFactory.ParticleArgs.get()
+			TheBetweenlands.createParticle(ParticleRegistry.SCRAP.get(), this.level(), this.getX() + this.getDeltaMovement().x(), this.getY() + 0.1F + this.getRandom().nextFloat() * 0.3F, this.getZ() + this.getDeltaMovement().z(), ParticleFactory.ParticleArgs.get()
 				.withMotion(this.getDeltaMovement().x() * 0.5F + this.getRandom().nextFloat() * 0.1F - 0.05F, 0.05F, this.getDeltaMovement().z() * 0.5F + this.getRandom().nextFloat() * 0.1F - 0.05F)
+				.withColor(ScrapParticle.LEAF_COLOR)
 				.withScale(0.5F));
 		}
 	}

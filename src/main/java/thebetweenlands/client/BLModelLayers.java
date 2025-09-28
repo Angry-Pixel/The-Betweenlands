@@ -23,7 +23,9 @@ public class BLModelLayers {
 	public static final ModelLayerLocation CAVE_FISH = register("cave_fish");
 	public static final ModelLayerLocation CHIROMAW = register("chiromaw");
 	public static final ModelLayerLocation CHIROMAW_DROPPINGS = register("chiromaw_droppings");
+	public static final ModelLayerLocation CHIROMAW_EGG = register("chiromaw_egg");
 	public static final ModelLayerLocation CHIROMAW_GREEBLING_RIDER = register("chiromaw_greebling_rider");
+	public static final ModelLayerLocation CHIROMAW_HATCHLING = register("chiromaw_hatchling");
 	public static final ModelLayerLocation CHIROMAW_MATRIARCH = register("chiromaw_matriarch");
 	public static final ModelLayerLocation CRYPT_CRAWLER = register("crypt_crawler");
 	public static final ModelLayerLocation DARK_DRUID = register("dark_druid");
