@@ -37,12 +37,12 @@ public class SwatShieldTrigger extends SimpleCriterionTrigger<SwatShieldTrigger.
 			return this.victim().isEmpty() || this.victim().get().matches(victim);
 		}
 
-		public static Criterion<SwatShieldTrigger.TriggerInstance> killWithShockwave(EntityPredicate victim) {
+		public static Criterion<SwatShieldTrigger.TriggerInstance> knockbackWithShield(EntityPredicate victim) {
 			return AdvancementCriteriaRegistry.SWAT_SHIELD.get().createCriterion(new SwatShieldTrigger.TriggerInstance(Optional.empty(), Optional.of(EntityPredicate.wrap(victim))));
 		}
 
-		public static Criterion<SwatShieldTrigger.TriggerInstance> killWithShockwave(EntityType<?> victim) {
-			return killWithShockwave(EntityPredicate.Builder.entity().of(victim).build());
+		public static Criterion<SwatShieldTrigger.TriggerInstance> knockbackWithShield(EntityType<?> victim) {
+			return knockbackWithShield(EntityPredicate.Builder.entity().of(victim).build());
 		}
 	}
 }

@@ -338,8 +338,7 @@ public class Barrishee extends Monster implements ScreenShaker, BLEntity, PathOb
 							if (state.getBlock() instanceof LootUrnBlock) {
 								this.spawnAshSpriteMinion(this.level(), pos, state);
 								this.level().destroyBlock(pos, true);
-								//TODO add back once LocalStorage or some other alternative exists
-							} else if (/*!LocationGuarded.isLocationGuarded(this.level(), this, pos) &&*/ EventHooks.onEntityDestroyBlock(this, pos, state)) {
+							} else if (!LocationGuarded.isLocationGuarded(this.level(), this, pos) && EventHooks.onEntityDestroyBlock(this, pos, state)) {
 								this.level().destroyBlock(pos, true);
 							}
 						}

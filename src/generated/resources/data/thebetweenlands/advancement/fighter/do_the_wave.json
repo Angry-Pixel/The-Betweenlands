@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:fighter/glorified_toothpick",
+  "criteria": {
+    "wave1": {
+      "trigger": "thebetweenlands:shockwave_kill"
+    },
+    "wave2": {
+      "trigger": "thebetweenlands:shockwave_kill"
+    },
+    "wave3": {
+      "trigger": "thebetweenlands:shockwave_kill"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.do_the_wave.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:shockwave_sword"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.do_the_wave"
+    }
+  },
+  "requirements": [
+    [
+      "wave1"
+    ],
+    [
+      "wave2"
+    ],
+    [
+      "wave3"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

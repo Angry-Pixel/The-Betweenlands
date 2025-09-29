@@ -66,6 +66,7 @@
     "description": {
       "translate": "advancement.thebetweenlands.adventurer.rule_them_all.desc"
     },
+    "frame": "challenge",
     "icon": {
       "count": 1,
       "id": "thebetweenlands:ring_of_power"

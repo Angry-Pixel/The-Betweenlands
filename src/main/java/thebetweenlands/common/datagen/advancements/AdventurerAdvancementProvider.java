@@ -149,7 +149,7 @@ public class AdventurerAdvancementProvider implements AdvancementGenerator {
 		Advancement.Builder.advancement().parent(dankWorld).display(ItemRegistry.RING_OF_POWER,
 				Component.translatable("advancement.thebetweenlands.adventurer.rule_them_all"),
 				Component.translatable("advancement.thebetweenlands.adventurer.rule_them_all.desc"),
-				null, AdvancementType.TASK, true, true, false)
+				null, AdvancementType.CHALLENGE, true, true, false)
 			.addCriterion("power", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.RING_OF_POWER))
 			.addCriterion("flight", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.RING_OF_ASCENT))
 			.addCriterion("recruitment", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.RING_OF_RECRUITMENT))

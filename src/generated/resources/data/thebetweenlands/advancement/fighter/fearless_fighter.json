@@ -1,0 +1,105 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "hag": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:swamp_hag"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "peat_mummy": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:peat_mummy"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "sludge": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:sludge"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "tar_beast": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:tar_beast"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "wight": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:wight"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.fearless_fighter.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:bone_helmet"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.fearless_fighter"
+    }
+  },
+  "requirements": [
+    [
+      "wight"
+    ],
+    [
+      "hag"
+    ],
+    [
+      "tar_beast"
+    ],
+    [
+      "sludge"
+    ],
+    [
+      "peat_mummy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

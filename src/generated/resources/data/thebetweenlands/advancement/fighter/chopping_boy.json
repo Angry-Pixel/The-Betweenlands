@@ -1,0 +1,82 @@
+{
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "bone_sword": {
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:bone_sword"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "octine_sword": {
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:octine_sword"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "valonite_sword": {
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:valonite_sword"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "weedwood_sword": {
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:weedwood_sword"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.chopping_boy.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:octine_sword"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.chopping_boy"
+    }
+  },
+  "requirements": [
+    [
+      "weedwood_sword",
+      "bone_sword",
+      "octine_sword",
+      "valonite_sword"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

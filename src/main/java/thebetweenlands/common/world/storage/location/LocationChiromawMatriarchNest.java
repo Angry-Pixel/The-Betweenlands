@@ -1,16 +1,22 @@
 package thebetweenlands.common.world.storage.location;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.entity.monster.chiromaw.ChiromawHatchling;
+import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 
 import javax.annotation.Nullable;
 
@@ -77,42 +83,41 @@ public class LocationChiromawMatriarchNest extends LocationGuarded {
 				}
 			}
 
-			//FIXME reimplement once chiromaws are added back
 			//Check for respawn
-//			if(level.getGameTime() % 200 == 0 && level.getEntitiesOfClass(EntityChiromawMatriarch.class, this.getBoundingBox().inflate(160)).isEmpty()) {
-//				this.respawnCounter++;
-//
-//				if(this.respawnCounter >= RESPAWN_TIME) {
-//					this.respawnCounter = 0;
-//
-//					EntityChiromawMatriarch matriarch = new EntityChiromawMatriarch(world);
-//					matriarch.setPosition(this.nest.getX() + 0.5D, this.nest.getY() + 0.01D, this.nest.getZ() + 0.5D);
-//
-//					if(matriarch.isNotColliding()) {
-//						matriarch.onInitialSpawn(level.getCurrentDifficultyAt(this.nest), null);
-//						level.addFreshEntity(matriarch);
-//					} else {
-//						matriarch.discard();
-//					}
-//
-//					if(level.getEntitiesOfClass(EntityChiromawHatchling.class, this.getBoundingBox()).isEmpty()) {
-//						for(Direction facing : Direction.Plane.HORIZONTAL) {
-//							if(level.getRandom().nextBoolean()) {
-//								BlockPos pos = this.nest.relative(facing).below();
-//
-//								EntityChiromawHatchling egg = new EntityChiromawHatchling(level);
-//								egg.setPosition(pos.getX() + 0.5D, pos.getY() + 0.01D, pos.getZ() + 0.5D);
-//
-//								if(egg.isNotColliding()) {
-//									level.addFreshEntity(egg);
-//								} else {
-//									egg.discard();
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
+			if (level.getGameTime() % 200 == 0 && level.getEntitiesOfClass(ChiromawMatriarch.class, this.getBoundingBox().inflate(160)).isEmpty()) {
+				this.respawnCounter++;
+
+				if (this.respawnCounter >= RESPAWN_TIME) {
+					this.respawnCounter = 0;
+
+					ChiromawMatriarch matriarch = new ChiromawMatriarch(EntityRegistry.CHIROMAW_MATRIARCH.get(), level);
+					matriarch.setPos(this.nest.getX() + 0.5D, this.nest.getY() + 0.01D, this.nest.getZ() + 0.5D);
+
+					if (matriarch.checkSpawnObstruction(level)) {
+						matriarch.finalizeSpawn((ServerLevelAccessor) level, level.getCurrentDifficultyAt(this.nest), MobSpawnType.STRUCTURE, null);
+						level.addFreshEntity(matriarch);
+					} else {
+						matriarch.discard();
+					}
+
+					if (level.getEntitiesOfClass(ChiromawHatchling.class, this.getBoundingBox()).isEmpty()) {
+						for (Direction facing : Direction.Plane.HORIZONTAL) {
+							if (level.getRandom().nextBoolean()) {
+								BlockPos pos = this.nest.relative(facing).below();
+
+								ChiromawHatchling egg = new ChiromawHatchling(EntityRegistry.CHIROMAW_HATCHLING.get(), level);
+								egg.setPos(pos.getX() + 0.5D, pos.getY() + 0.01D, pos.getZ() + 0.5D);
+
+								if (egg.checkSpawnObstruction(level)) {
+									level.addFreshEntity(egg);
+								} else {
+									egg.discard();
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

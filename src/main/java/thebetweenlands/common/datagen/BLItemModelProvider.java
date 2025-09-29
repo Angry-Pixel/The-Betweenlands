@@ -415,6 +415,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.multiLayerItem(ItemRegistry.WEEDWOOD_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/weedwood_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
 		this.multiLayerItem(ItemRegistry.SYRMORITE_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/syrmorite_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
 		this.basicItem(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET);
+		this.basicItem(ItemRegistry.WEEDWOOD_PLANT_TONIC_BUCKET);
+		this.basicItem(ItemRegistry.SYRMORITE_PLANT_TONIC_BUCKET);
 		this.basicItem(ItemRegistry.ASCENT_UPGRADE);
 		this.basicItem(ItemRegistry.ELECTRIC_UPGRADE);
 		this.basicItem(ItemRegistry.FISH_VORTEX_UPGRADE);

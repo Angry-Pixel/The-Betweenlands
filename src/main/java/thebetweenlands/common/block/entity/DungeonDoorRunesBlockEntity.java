@@ -6,19 +6,25 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
+import thebetweenlands.common.entity.boss.Barrishee;
+import thebetweenlands.common.entity.monster.ChiefCryptCrawler;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
@@ -267,27 +273,24 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 
 						Direction facing = state.getValue(DungeonDoorRunesBlock.FACING);
 
-						//TODO make this shit work properly
 						BlockPos offsetPos = pos.relative(facing.getOpposite());
-//						if (entity.barrishee) {
-//							Barrishee barishee = new Barrishee(level);
-//							barishee.moveTo(offsetPos.getX() + 0.5D, offsetPos.below().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
-//							barishee.rotationYawHead = barishee.rotationYaw;
-//							barishee.renderYawOffset = barishee.rotationYaw;
-//							barishee.setIsAmbushSpawn(true);
-//							barishee.setIsScreaming(true);
-//							barishee.setScreamTimer(0);
-//							level.addFreshEntity(barishee);
-//						} else {
-//							CryptCrawler crawler = new CryptCrawler(level);
-//							crawler.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.below().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
-//							crawler.rotationYawHead = crawler.rotationYaw;
-//							crawler.renderYawOffset = crawler.rotationYaw;
-//							crawler.setIsBiped(true);
-//							crawler.setIsChief(true);
-//							crawler.onInitialSpawn(level.getCurrentDifficultyAt(pos), null);
-//							level.addFreshEntity(crawler);
-//						}
+						if (entity.barrishee) {
+							Barrishee barishee = new Barrishee(EntityRegistry.BARRISHEE.get(), level);
+							barishee.moveTo(offsetPos.getX() + 0.5D, offsetPos.below().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
+							barishee.yHeadRot = barishee.getYRot();
+							barishee.yBodyRot = barishee.getYRot();
+							barishee.setIsAmbushSpawn(true);
+							barishee.setIsScreaming(true);
+							barishee.setScreamTimer(0);
+							level.addFreshEntity(barishee);
+						} else {
+							ChiefCryptCrawler crawler = new ChiefCryptCrawler(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), level);
+							crawler.moveTo(offsetPos.getX() + 0.5D, offsetPos.below().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
+							crawler.yHeadRot = crawler.getYRot();
+							crawler.yBodyRot = crawler.getYRot();
+							crawler.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(pos), MobSpawnType.TRIGGERED, null);
+							level.addFreshEntity(crawler);
+						}
 					}
 				entity.slate_1_rotate += 4 + (entity.last_tick_slate_1_rotate < 8 ? 0 : entity.last_tick_slate_1_rotate / 8);
 				entity.slate_2_rotate += 2 + (entity.last_tick_slate_2_rotate < 6 ? 0 : entity.last_tick_slate_2_rotate / 6);

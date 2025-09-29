@@ -1,0 +1,38 @@
+{
+  "parent": "thebetweenlands:fighter/fearless_fighter",
+  "criteria": {
+    "dreadful_mummy": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:dreadful_peat_mummy"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.beating_dead_meat.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:mummy_bait"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.beating_dead_meat"
+    }
+  },
+  "requirements": [
+    [
+      "dreadful_mummy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

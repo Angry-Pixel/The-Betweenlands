@@ -42,6 +42,7 @@ import thebetweenlands.common.item.herblore.*;
 import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.misc.bucket.BLBucketItem;
 import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
+import thebetweenlands.common.item.misc.bucket.PlantTonicBucketItem;
 import thebetweenlands.common.item.misc.bucket.RubberBucketItem;
 import thebetweenlands.common.item.shield.*;
 import thebetweenlands.common.item.tool.*;
@@ -362,6 +363,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> WEEDWOOD_INFUSION_BUCKET = ITEMS.register("weedwood_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(WEEDWOOD_BUCKET.get())));
 	public static final DeferredItem<Item> SYRMORITE_INFUSION_BUCKET = ITEMS.register("syrmorite_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(SYRMORITE_BUCKET.get())));
 	public static final DeferredItem<Item> SOLID_RUBBER_SYRMORITE_BUCKET = ITEMS.register("solid_rubber_syrmorite_bucket", () -> new RubberBucketItem(new Item.Properties().stacksTo(1).craftRemainder(SYRMORITE_BUCKET.get())));
+	public static final DeferredItem<Item> WEEDWOOD_PLANT_TONIC_BUCKET = ITEMS.register("weedwood_plant_tonic_bucket", () -> new PlantTonicBucketItem(new Item.Properties().stacksTo(1).durability(3).setNoRepair().craftRemainder(WEEDWOOD_BUCKET.get())));
+	public static final DeferredItem<Item> SYRMORITE_PLANT_TONIC_BUCKET = ITEMS.register("syrmorite_plant_tonic_bucket", () -> new PlantTonicBucketItem(new Item.Properties().stacksTo(1).durability(3).setNoRepair().craftRemainder(SYRMORITE_BUCKET.get())));
 	public static final DeferredItem<Item> ELECTRIC_UPGRADE = ITEMS.register("electric_upgrade", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GLIDE_UPGRADE = ITEMS.register("glide_upgrade", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties()));

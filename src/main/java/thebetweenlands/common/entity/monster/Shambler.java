@@ -38,6 +38,7 @@ import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.creature.Dragonfly;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.creature.frog.Frog;
+import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class Shambler extends Monster implements BLEntity {
@@ -49,7 +50,7 @@ public class Shambler extends Monster implements BLEntity {
 
 	private int prevJawAngle;
 	private int prevTongueLength;
-	
+
 	public ShamblerTongueMultipart[] tongue_array; // we may want to make more tongue parts
 
 	public ShamblerTongueMultipart tongue_end = new ShamblerTongueMultipart(this, 0.5F, 0.5F);
@@ -57,7 +58,7 @@ public class Shambler extends Monster implements BLEntity {
 	public Shambler(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
 		tongue_array = new ShamblerTongueMultipart[16];
-		for(int i = 0; i < tongue_array.length - 1; i++) 
+		for(int i = 0; i < tongue_array.length - 1; i++)
 			tongue_array[i] = new ShamblerTongueMultipart(this, 0.125F, 0.125F);
 		tongue_array[tongue_array.length - 1] = tongue_end;
 		setId(ENTITY_COUNTER.getAndAdd(this.tongue_array.length + 1) + 1);
@@ -92,7 +93,7 @@ public class Shambler extends Monster implements BLEntity {
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers(Shambler.class));
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Frog.class, 3, true, true, null).setUnseenMemoryTicks(120));
-		//this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, MireSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		//this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, BloodSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Dragonfly.class, 3, true, true, null).setUnseenMemoryTicks(120));

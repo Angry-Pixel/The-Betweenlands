@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "l": {
+      "item": "thebetweenlands:lurker_skin"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    }
+  },
+  "pattern": [
+    "sss",
+    "sls",
+    "sss"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:small_gallery_frame"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "parent": "thebetweenlands:fighter/fashionable_warrior",
+  "criteria": {
+    "wear_aqua_amulet": {
+      "conditions": {
+        "stack": {
+          "items": "thebetweenlands:aqua_amulet"
+        }
+      },
+      "trigger": "thebetweenlands:equip_item"
+    },
+    "wear_crimson_amulet": {
+      "conditions": {
+        "stack": {
+          "items": "thebetweenlands:crimson_amulet"
+        }
+      },
+      "trigger": "thebetweenlands:equip_item"
+    },
+    "wear_green_amulet": {
+      "conditions": {
+        "stack": {
+          "items": "thebetweenlands:green_amulet"
+        }
+      },
+      "trigger": "thebetweenlands:equip_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.cling_that_bling.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:crimson_middle_gem"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.cling_that_bling"
+    }
+  },
+  "requirements": [
+    [
+      "wear_crimson_amulet",
+      "wear_green_amulet",
+      "wear_aqua_amulet"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

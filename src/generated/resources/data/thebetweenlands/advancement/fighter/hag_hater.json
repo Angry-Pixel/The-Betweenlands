@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "hag_hacker_kill": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "#thebetweenlands:hag_hacker_instakills"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:hag_hacker"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.hag_hater.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:hag_hacker"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.hag_hater"
+    }
+  },
+  "requirements": [
+    [
+      "hag_hacker_kill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

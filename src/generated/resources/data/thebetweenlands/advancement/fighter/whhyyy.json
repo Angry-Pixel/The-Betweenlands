@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "wight_bane_kill": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "#thebetweenlands:wights_bane_instakills"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:wights_bane"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.whhyyy.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:wights_bane"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.whhyyy"
+    }
+  },
+  "requirements": [
+    [
+      "wight_bane_kill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

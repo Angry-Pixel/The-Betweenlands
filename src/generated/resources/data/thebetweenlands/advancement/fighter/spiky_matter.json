@@ -1,0 +1,38 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "matriarch": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:chiromaw_matriarch"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.spiky_matter.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:chirobarb_erupter"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.spiky_matter"
+    }
+  },
+  "requirements": [
+    [
+      "matriarch"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,126 @@
+{
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "barb": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:chiromaw_barb"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    },
+    "basilisk": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:basilisk_arrow"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    },
+    "default": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:angler_tooth_arrow"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    },
+    "octine": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:octine_arrow"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    },
+    "poison": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:poison_angler_tooth_arrow"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    },
+    "shock": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:shock_arrow"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    },
+    "worm": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:sludge_worm_arrow"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.arrow_arsenal.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:basilisk_arrow"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.arrow_arsenal"
+    }
+  },
+  "requirements": [
+    [
+      "default"
+    ],
+    [
+      "poison"
+    ],
+    [
+      "octine"
+    ],
+    [
+      "shock"
+    ],
+    [
+      "basilisk"
+    ],
+    [
+      "worm"
+    ],
+    [
+      "barb"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

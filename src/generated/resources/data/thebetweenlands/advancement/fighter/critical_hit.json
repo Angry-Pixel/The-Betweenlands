@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "critter_cruncher_kill": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "#thebetweenlands:critter_cruncher_instakills"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:critter_cruncher"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.critical_hit.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:critter_cruncher"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.critical_hit"
+    }
+  },
+  "requirements": [
+    [
+      "critter_cruncher_kill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

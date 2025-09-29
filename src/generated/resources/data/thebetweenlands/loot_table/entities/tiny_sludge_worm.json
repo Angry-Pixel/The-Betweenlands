@@ -3,21 +3,20 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "thebetweenlands:worm_squished",
+          "squished": true
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thebetweenlands:sludge_ball"
-        }
-      ],
-      "functions": [
+          "name": "thebetweenlands:valonite_shard"
+        },
         {
-          "count": {
-            "type": "minecraft:uniform",
-            "max": 1.0,
-            "min": 0.0
-          },
-          "enchantment": "minecraft:looting",
-          "function": "minecraft:enchanted_count_increase"
+          "type": "minecraft:empty",
+          "weight": 50
         }
       ],
       "rolls": 1.0

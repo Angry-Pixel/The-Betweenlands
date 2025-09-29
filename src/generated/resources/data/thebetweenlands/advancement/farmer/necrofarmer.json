@@ -1,0 +1,55 @@
+{
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "tonic": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "thebetweenlands:dug_swamp_dirt",
+                  "thebetweenlands:dug_swamp_grass",
+                  "thebetweenlands:purified_dug_swamp_dirt",
+                  "thebetweenlands:purified_dug_swamp_grass"
+                ],
+                "state": {
+                  "decayed": "true"
+                }
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": [
+                "thebetweenlands:weedwood_plant_tonic_bucket",
+                "thebetweenlands:syrmorite_plant_tonic_bucket"
+              ]
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.necrofarmer.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:weedwood_plant_tonic_bucket"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.necrofarmer"
+    }
+  },
+  "requirements": [
+    [
+      "tonic"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

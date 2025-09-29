@@ -1,0 +1,29 @@
+{
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "add_gem": {
+      "trigger": "thebetweenlands:middle_gem_upgrade"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.fashionable_warrior.desc"
+    },
+    "icon": {
+      "components": {
+        "thebetweenlands:circle_gem": "aqua"
+      },
+      "count": 1,
+      "id": "thebetweenlands:valonite_helmet"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.fashionable_warrior"
+    }
+  },
+  "requirements": [
+    [
+      "add_gem"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

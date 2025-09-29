@@ -216,7 +216,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			.remove(ItemRegistry.AMPHIBIOUS_LEGGINGS.get())
 			.remove(ItemRegistry.AMPHIBIOUS_BOOTS.get())
 			.addTag(Tags.Items.ARMORS).addTag(ItemTags.SWORDS).addTag(ItemTags.PICKAXES).addTag(ItemTags.AXES).addTag(ItemTags.SHOVELS).addTag(ItemTags.HOES)
-			.addTag(Tags.Items.TOOLS_SHIELD).addTag(Tags.Items.TOOLS_BOW).addTag(Tags.Items.TOOLS_CROSSBOW).addTag(Tags.Items.TOOLS_MACE).addTag(Tags.Items.TOOLS_SPEAR); //TODO amulets
+			.addTag(Tags.Items.TOOLS_SHIELD).addTag(Tags.Items.TOOLS_BOW).addTag(Tags.Items.TOOLS_CROSSBOW).addTag(Tags.Items.TOOLS_MACE).addTag(Tags.Items.TOOLS_SPEAR);
 	}
 
 	public static TagKey<Item> tag(String tagName) {

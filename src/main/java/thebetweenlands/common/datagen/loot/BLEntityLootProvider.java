@@ -213,10 +213,11 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
 
-		//TODO change this to use the squashed function for valonite shards and remove the sludgeballs
 		this.addWithSeasonalDrops(EntityRegistry.TINY_SLUDGE_WORM.get(), 2, 8, 1, 3, LootTable.lootTable()
-			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
-				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))));
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.VALONITE_SHARD))
+				.add(EmptyLootItem.emptyItem().setWeight(50))
+				.when(WormSquishedCondition.wormSquished())));
 
 		this.addWithSeasonalDrops(EntityRegistry.SHALLOWBREATH.get(), 2, 6, 1, 4, LootTable.lootTable());
 

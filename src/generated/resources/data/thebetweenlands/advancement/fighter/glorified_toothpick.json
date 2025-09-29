@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "sword": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:shockwave_sword"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.glorified_toothpick.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:shockwave_sword_piece_2"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.glorified_toothpick"
+    }
+  },
+  "requirements": [
+    [
+      "sword"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

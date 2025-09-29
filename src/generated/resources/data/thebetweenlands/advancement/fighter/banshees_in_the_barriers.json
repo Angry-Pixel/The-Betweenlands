@@ -1,0 +1,38 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "kill_barrishee": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:barrishee"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.banshees_in_the_barriers.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:rune_door_key"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.banshees_in_the_barriers"
+    }
+  },
+  "requirements": [
+    [
+      "kill_barrishee"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

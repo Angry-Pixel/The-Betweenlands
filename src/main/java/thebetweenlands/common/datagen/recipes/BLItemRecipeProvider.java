@@ -107,8 +107,16 @@ public class BLItemRecipeProvider {
 			.define('l', ItemRegistry.LURKER_SKIN_BOOTS).define('b', ItemRegistry.ANADIA_BONES)
 			.unlockedBy("has_scales", has(ItemRegistry.ANADIA_SCALES)).unlockedBy("has_fins", has(ItemRegistry.ANADIA_FINS))
 			.unlockedBy("has_bones", has(ItemRegistry.ANADIA_BONES)).save(output);
-		//TODO gallery frames
-		//TODO silk mask
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.SMALL_GALLERY_FRAME)
+			.pattern("sss").pattern("sls").pattern("sss")
+			.define('s', ItemRegistry.WEEDWOOD_STICK).define('l', ItemRegistry.LURKER_SKIN)
+			.unlockedBy("has_lurker_skin", has(ItemRegistry.LURKER_SKIN)).save(output);
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.LARGE_GALLERY_FRAME).pattern("ff").pattern("ff").define('f', ItemRegistry.SMALL_GALLERY_FRAME).unlockedBy("has_frame", has(ItemRegistry.SMALL_GALLERY_FRAME)).save(output);
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.VERY_LARGE_GALLERY_FRAME).pattern("ff").pattern("ff").define('f', ItemRegistry.LARGE_GALLERY_FRAME).unlockedBy("has_frame", has(ItemRegistry.LARGE_GALLERY_FRAME)).save(output);
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemRegistry.SILK_MASK)
+			.pattern(" r ").pattern("r r").pattern("sss")
+			.define('r', ItemRegistry.REED_ROPE).define('s', ItemRegistry.SILK_THREAD)
+			.unlockedBy("has_silk", has(ItemRegistry.SILK_THREAD)).save(output);
 		toolSet(output, ItemRegistry.WEEDWOOD_SWORD, ItemRegistry.WEEDWOOD_PICKAXE, ItemRegistry.WEEDWOOD_AXE, ItemRegistry.WEEDWOOD_SHOVEL, BlockRegistry.WEEDWOOD_PLANKS);
 		toolSet(output, ItemRegistry.BONE_SWORD, ItemRegistry.BONE_PICKAXE, ItemRegistry.BONE_AXE, ItemRegistry.BONE_SHOVEL, ItemRegistry.SLIMY_BONE);
 		toolSet(output, ItemRegistry.OCTINE_SWORD, ItemRegistry.OCTINE_PICKAXE, ItemRegistry.OCTINE_AXE, ItemRegistry.OCTINE_SHOVEL, ItemRegistry.OCTINE_INGOT);

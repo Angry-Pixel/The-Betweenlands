@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "sludge_slicer_kill": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "#thebetweenlands:sludge_slicer_instakills"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "thebetweenlands:sludge_slicer"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.sticky_situation.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:sludge_slicer"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.sticky_situation"
+    }
+  },
+  "requirements": [
+    [
+      "sludge_slicer_kill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

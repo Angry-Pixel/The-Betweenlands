@@ -31,6 +31,7 @@ import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.compat.flan.BetweenlandsFlanCompat;
 
 public class SpikeTrapBlockEntity extends SyncedBlockEntity {
@@ -226,10 +227,9 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 	}
 
 	public boolean isBlockHardProtected(Level level, BlockPos trapPos, BlockPos targetPos) {
-		// TODO enable once location storage is up again
-//		if(LocationStorage.isLocationGuarded(level, null, targetPos)) {
-//			return true;
-//		}
+		if(LocationStorage.isLocationGuarded(level, null, targetPos)) {
+			return true;
+		}
 
 		// *DO NOT* use BLClaimCompatHelper.restrictBlockBreak because that won't account for them both being in the same claim
 		if(BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {

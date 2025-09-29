@@ -1,0 +1,72 @@
+{
+  "parent": "thebetweenlands:fighter/shield_wall",
+  "criteria": {
+    "knockback_hag_1": {
+      "conditions": {
+        "victim": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:swamp_hag"
+            }
+          }
+        ]
+      },
+      "trigger": "thebetweenlands:swat_shield"
+    },
+    "knockback_hag_2": {
+      "conditions": {
+        "victim": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:swamp_hag"
+            }
+          }
+        ]
+      },
+      "trigger": "thebetweenlands:swat_shield"
+    },
+    "knockback_hag_3": {
+      "conditions": {
+        "victim": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:swamp_hag"
+            }
+          }
+        ]
+      },
+      "trigger": "thebetweenlands:swat_shield"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.crowd_control.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:syrmorite_shield"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.crowd_control"
+    }
+  },
+  "requirements": [
+    [
+      "knockback_hag_1"
+    ],
+    [
+      "knockback_hag_2"
+    ],
+    [
+      "knockback_hag_3"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

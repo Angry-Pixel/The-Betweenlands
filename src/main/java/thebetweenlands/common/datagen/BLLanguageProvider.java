@@ -161,6 +161,29 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addAdvancement("farmer.multicore_threading", "Multicore Threading", "Use lanterns to boost a Moth House's production speed");
 		this.addAdvancement("farmer.grubhub_inc", "Grubhub Inc.", "Awaken a Grub Hub using Pheromone Extract");
 
+		this.addAdvancement("fighter.root", "Fighter", "Fighting and defending yourself in the swamp");
+		this.addAdvancement("fighter.serious_business", "Serious Business", "Obtain a Betweenlands sword");
+		this.addAdvancement("fighter.shield_wall", "Shield Wall", "Equip yourself with a Betweenlands shield");
+		this.addAdvancement("fighter.chopping_boy", "Chopping Boy", "Slay an enemy with a sword");
+		this.addAdvancement("fighter.arrow_arsenal", "Arrow Arsenal", "Use all arrow types");
+		this.addAdvancement("fighter.fashionable_warrior", "Fashionable Warrior", "Upgrade a weapon or armor piece with a Middle Gem");
+		this.addAdvancement("fighter.crowd_control", "Crowd Control", "Knock back three Swamp Hags in a row with a Syrmorite Shield");
+		this.addAdvancement("fighter.cling_that_bling", "Cling That Bling", "Wear an Amulet");
+		this.addAdvancement("fighter.fearless_fighter", "Fearless Fighter", "Slay a Swamp Hag, a Wight, a Tar Beast, a Sludge, and a Peat Mummy");
+		this.addAdvancement("fighter.beating_dead_meat", "Beating Dead Meat", "Defeat a Dreadful Peat Mummy");
+		this.addAdvancement("fighter.hag_hater", "Hag Hater", "Slay a Swamp Hag with a Hag Hacker");
+		this.addAdvancement("fighter.critical_hit", "Critical Hit", "Slay a critter with a Critter Cruncher");
+		this.addAdvancement("fighter.whhyyy", "Whhyyy?", "Slay a Wight with a Wight's Bane");
+		this.addAdvancement("fighter.sticky_situation", "Sticky Situation", "Slay a Sludge with a Sludge Slicer");
+		this.addAdvancement("fighter.glorified_toothpick", "Glorified Toothpick", "Obtain the Shockwave Sword");
+		this.addAdvancement("fighter.do_the_wave", "Do the Wave!", "Slay three enemies using a shockwave");
+		this.addAdvancement("fighter.staring_contest", "Staring Contest", "Defeat the Primordial Malevolence");
+		this.addAdvancement("fighter.illegal_logging", "Illegal Logging", "Defeat a Spirit Tree");
+		this.addAdvancement("fighter.secret_of_the_crypt", "Secret of the Crypt", "Obtain the Ancient Greatsword");
+		this.addAdvancement("fighter.not_a_boss", "Not a Boss...?", "Seal the Pit of Decay and defeat the Sludge Menace");
+		this.addAdvancement("fighter.spiky_matter", "A Spiky Matter", "Defeat a Chiromaw Matriarch");
+		this.addAdvancement("fighter.banshees_in_the_barriers", "Banshees in the Barriers", "Defeat a Barrishee");
+
 		this.addAdvancement("herbalist.root", "Herbalist", "Herbal testing");
 		this.addAdvancement("herbalist.im_a_druid", "I'm a Druid", "Harvest ingredients using your Sickle");
 		this.addAdvancement("herbalist.screw_peta", "Screw PETA", "Test an ingredient on a caged Gecko");
@@ -1507,6 +1530,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.infusion_bucket.ingredient_amount", "%sx %s");
 		this.add("item.thebetweenlands.infusion_bucket.aspect", " - %s (%s)");
 		this.addItemWithDesc(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET, "Syrmorite Bucket with Solid Rubber", "Right click to extract the rubber from the bucket");
+		this.addItem(ItemRegistry.WEEDWOOD_PLANT_TONIC_BUCKET, "Weedwood Plant Tonic Bucket");
+		this.addItem(ItemRegistry.SYRMORITE_PLANT_TONIC_BUCKET, "Syrmorite Plant Tonic Bucket");
 		this.addItem(ItemRegistry.ASCENT_UPGRADE, "Ascent Upgrade");
 		this.addItem(ItemRegistry.ELECTRIC_UPGRADE, "Electric Upgrade");
 		this.addItem(ItemRegistry.FISH_VORTEX_UPGRADE, "Fish Vortex Upgrade");

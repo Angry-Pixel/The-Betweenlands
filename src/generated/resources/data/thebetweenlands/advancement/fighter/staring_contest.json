@@ -1,0 +1,38 @@
+{
+  "parent": "thebetweenlands:fighter/glorified_toothpick",
+  "criteria": {
+    "primordial_malevolence": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:primordial_malevolence"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.staring_contest.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:amulet_slot"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.staring_contest"
+    }
+  },
+  "requirements": [
+    [
+      "primordial_malevolence"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

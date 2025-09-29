@@ -84,7 +84,12 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 					BlockRegistry.TALL_SLUDGECREEP, BlockRegistry.PALE_GRASS, BlockRegistry.ROTBULB)))
 			.save(consumer, "thebetweenlands:farmer/flower_power");
 
-		//TODO necrofarmer
+		Advancement.Builder.advancement().parent(compost).display(ItemRegistry.WEEDWOOD_PLANT_TONIC_BUCKET,
+				Component.translatable("advancement.thebetweenlands.farmer.necrofarmer"),
+				Component.translatable("advancement.thebetweenlands.farmer.necrofarmer.desc"),
+				null, AdvancementType.TASK, true, true, false)
+			.addCriterion("tonic", ItemUsedOnLocationTrigger.TriggerInstance.itemUsedOnBlock(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(BlockRegistry.DUG_SWAMP_DIRT.get(), BlockRegistry.DUG_SWAMP_GRASS.get(), BlockRegistry.PURIFIED_DUG_SWAMP_DIRT.get(), BlockRegistry.PURIFIED_DUG_SWAMP_GRASS.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DugSoilBlock.DECAYED, true))), ItemPredicate.Builder.item().of(ItemRegistry.WEEDWOOD_PLANT_TONIC_BUCKET, ItemRegistry.SYRMORITE_PLANT_TONIC_BUCKET)))
+			.save(consumer, "thebetweenlands:farmer/necrofarmer");
 
 		Advancement.Builder.advancement().parent(compost).display(BlockRegistry.PURIFIED_SWAMP_DIRT,
 				Component.translatable("advancement.thebetweenlands.farmer.pure_and_dirty"),

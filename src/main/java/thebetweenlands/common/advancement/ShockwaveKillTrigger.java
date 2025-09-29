@@ -41,6 +41,10 @@ public class ShockwaveKillTrigger extends SimpleCriterionTrigger<ShockwaveKillTr
 			return AdvancementCriteriaRegistry.SHOCKWAVE_KILL.get().createCriterion(new ShockwaveKillTrigger.TriggerInstance(Optional.empty(), Optional.of(EntityPredicate.wrap(victim))));
 		}
 
+		public static Criterion<ShockwaveKillTrigger.TriggerInstance> killAnyWithShockwave() {
+			return AdvancementCriteriaRegistry.SHOCKWAVE_KILL.get().createCriterion(new ShockwaveKillTrigger.TriggerInstance(Optional.empty(), Optional.empty()));
+		}
+
 		public static Criterion<ShockwaveKillTrigger.TriggerInstance> killWithShockwave(EntityType<?> victim) {
 			return killWithShockwave(EntityPredicate.Builder.entity().of(victim).build());
 		}

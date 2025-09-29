@@ -937,7 +937,9 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.WEEDWOOD_BUCKET);
 			output.accept(ItemRegistry.SYRMORITE_BUCKET);
 			createBuckets(output, ItemRegistry.WEEDWOOD_BUCKET, true);
+			output.accept(ItemRegistry.WEEDWOOD_PLANT_TONIC_BUCKET);
 			createBuckets(output, ItemRegistry.SYRMORITE_BUCKET, false);
+			output.accept(ItemRegistry.SYRMORITE_PLANT_TONIC_BUCKET);
 			output.accept(ItemRegistry.SOLID_RUBBER_SYRMORITE_BUCKET);
 			output.accept(ItemRegistry.ELECTRIC_UPGRADE);
 			output.accept(ItemRegistry.GLIDE_UPGRADE);
