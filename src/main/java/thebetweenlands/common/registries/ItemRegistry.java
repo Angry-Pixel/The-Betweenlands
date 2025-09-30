@@ -335,7 +335,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> LURKER_SKIN_SHIELD = ITEMS.register("lurker_skin_shield", () -> new LurkerSkinShieldItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SYRMORITE_SHEARS = ITEMS.register("syrmorite_shears", () -> new ShearsItem(new Item.Properties().durability(238).component(DataComponents.TOOL, ShearsItem.createToolProperties())));
 	public static final DeferredItem<Item> SICKLE = ITEMS.register("sickle", () -> new SickleItem(new Item.Properties().durability(2500)));
-	public static final DeferredItem<Item> SHOCKWAVE_SWORD = ITEMS.register("shockwave_sword", () -> new Item(new Item.Properties().durability(2500).stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> SHOCKWAVE_SWORD = ITEMS.register("shockwave_sword", () -> new ShockwaveSwordItem(ToolMaterialRegistry.LEGEND, new Item.Properties().attributes(SwordItem.createAttributes(ToolMaterialRegistry.LEGEND, 0.0F, -2.4F)).rarity(Rarity.EPIC).component(DataComponentRegistry.SHOCKWAVE_DATA, ShockwaveSwordData.DEFAULT)));
 	public static final DeferredItem<Item> ANGLER_TOOTH_ARROW = ITEMS.register("angler_tooth_arrow", () -> new AnglerToothArrowItem(new Item.Properties()));
 	public static final DeferredItem<Item> POISONED_ANGLER_TOOTH_ARROW = ITEMS.register("poisoned_angler_tooth_arrow", () -> new PoisonAnglerToothArrowItem(new Item.Properties()));
 	public static final DeferredItem<Item> OCTINE_ARROW = ITEMS.register("octine_arrow", () -> new OctineArrowItem(new Item.Properties()));

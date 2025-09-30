@@ -1,5 +1,13 @@
 {
   "parent": "minecraft:item/handheld",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/shockwave_sword_charging",
+      "predicate": {
+        "thebetweenlands:cooldown": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "thebetweenlands:item/shockwave_sword"
   }

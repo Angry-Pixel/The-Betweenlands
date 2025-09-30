@@ -39,6 +39,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> INCORRECT_FOR_BONE_TOOL = tag("incorrect_for_bone_tool");
 	public static final TagKey<Block> INCORRECT_FOR_OCTINE_TOOL = tag("incorrect_for_octine_tool");
 	public static final TagKey<Block> INCORRECT_FOR_VALONITE_TOOL = tag("incorrect_for_valonite_tool");
+	public static final TagKey<Block> INCORRECT_FOR_LEGENDARY_TOOL = tag("incorrect_for_legendary_tool");
 
 	public static final TagKey<Block> SPIKE_TRAPS = tag("spike_traps");
 	public static final TagKey<Block> SPIKE_TRAPS_BLOCKED_BY = tag("spike_traps_blocked_by");
@@ -109,6 +110,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(INCORRECT_FOR_OCTINE_TOOL).addTag(BlockTags.INCORRECT_FOR_IRON_TOOL);
 		this.tag(INCORRECT_FOR_VALONITE_TOOL).addTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
 		this.tag(INCORRECT_FOR_WEEDWOOD_TOOL).addTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
+		this.tag(INCORRECT_FOR_LEGENDARY_TOOL);
 
 		this.tag(CAN_BREAK_WHEN_GUARDED).addOptionalTag(commonTag("graves"));
 

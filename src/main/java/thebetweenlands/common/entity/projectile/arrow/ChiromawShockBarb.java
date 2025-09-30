@@ -12,6 +12,7 @@ import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.common.entity.projectile.ElectricShock;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import javax.annotation.Nullable;
@@ -78,6 +79,6 @@ public class ChiromawShockBarb extends AbstractArrow {
 
 	@Override
 	protected ItemStack getDefaultPickupItem() {
-		return ItemStack.EMPTY;
+		return ItemRegistry.CHIROMAW_BARB.toStack();
 	}
 }

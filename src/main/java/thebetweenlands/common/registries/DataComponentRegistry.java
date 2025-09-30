@@ -12,6 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -45,7 +46,9 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> ROT_TIME = COMPONENTS.register("rot_time", () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AmphibiousArmorUpgrade>> SELECTED_UPGRADE = COMPONENTS.register("selected_upgrade", () -> DataComponentType.<AmphibiousArmorUpgrade>builder().persistent(BLRegistries.AMPHIBIOUS_ARMOR_UPGRADES.byNameCodec()).networkSynchronized(ByteBufCodecs.registry(BLRegistries.Keys.AMPHIBIOUS_ARMOR_UPGRADES)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ShieldSpitData>> SHIELD_SPIT = COMPONENTS.register("shield_spit", () -> DataComponentType.<ShieldSpitData>builder().persistent(ShieldSpitData.CODEC).networkSynchronized(ShieldSpitData.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ShockwaveSwordData>> SHOCKWAVE_DATA = COMPONENTS.register("shockwave_data", () -> DataComponentType.<ShockwaveSwordData>builder().persistent(ShockwaveSwordData.CODEC).networkSynchronized(ShockwaveSwordData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SimpleFluidContent>> STORED_FLUID = COMPONENTS.register("stored_fluid", () -> DataComponentType.<SimpleFluidContent>builder().persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemAttributeModifiers>> STORED_BROKEN_ATTRIBUTES = COMPONENTS.register("stored_broken_attributes", () -> DataComponentType.<ItemAttributeModifiers>builder().persistent(ItemAttributeModifiers.CODEC).networkSynchronized(ItemAttributeModifiers.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<GlobalPos>> TALISMAN_LINK = COMPONENTS.register("talisman_link", () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> THROWING = COMPONENTS.register("throwing", () -> DataComponentType.<Unit>builder().persistent(Codec.unit(Unit.INSTANCE)).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WALK_TICKS = COMPONENTS.register("walk_ticks", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());

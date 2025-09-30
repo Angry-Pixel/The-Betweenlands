@@ -152,6 +152,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
+import thebetweenlands.common.component.item.ShockwaveSwordData;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.BasicFluidType;
 import thebetweenlands.common.fluid.ColoredFluidType;
@@ -333,6 +334,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.GREEBLING_VOLARPAD_FLOATER.get(), GreeblingVolarpadFloaterRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.CHIROMAW_HATCHLING.get(), ChiromawHatchlingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TAME_CHIROMAW.get(), TameChiromawRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SHOCKWAVE_BLOCK.get(), ShockwaveBlockRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -525,6 +527,8 @@ public class ClientRegistrationEvents {
 		});
 
 		ItemProperties.register(ItemRegistry.PESTLE.get(), TheBetweenlands.prefix("active"), (stack, level, entity, idk) -> stack.has(DataComponentRegistry.PESTLE_ACTIVE) ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.SHOCKWAVE_SWORD.get(), TheBetweenlands.prefix("cooldown"), (stack, level, entity, seed) -> level != null && stack.getOrDefault(DataComponentRegistry.SHOCKWAVE_DATA, ShockwaveSwordData.DEFAULT).cooldownTimestamp() + 60L >= level.getGameTime() ? 1.0F : 0.0F);
 
 		ItemProperties.register(ItemRegistry.LIFE_CRYSTAL.get(), TheBetweenlands.prefix("remaining"), (stack, level, entity, seed) -> {
 			int damage = stack.getDamageValue();

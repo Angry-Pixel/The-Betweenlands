@@ -54,8 +54,11 @@ public class PlantTonicBucketItem extends Item {
 			}
 
 			if (cured) {
-				stack.hurtAndConvertOnBreak(1, this.getCraftingRemainingItem(stack).getItem(), context.getPlayer(), LivingEntity.getSlotForHand(context.getHand()));
+				ItemStack newStack = stack.hurtAndConvertOnBreak(1, this.getCraftingRemainingItem(stack).getItem(), context.getPlayer(), LivingEntity.getSlotForHand(context.getHand()));
 				level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1, 1);
+				if (!context.getPlayer().isCreative() && !newStack.is(stack.getItem())) {
+					context.getPlayer().setItemInHand(context.getHand(), newStack);
+				}
 				return InteractionResult.SUCCESS;
 			}
 		}

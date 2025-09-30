@@ -1488,7 +1488,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItemWithDesc(ItemRegistry.LURKER_SKIN_SHIELD, "Lurker Skin Shield", "Can also be used as a raft");
 		this.addItem(ItemRegistry.SYRMORITE_SHEARS, "Syrmorite Shears");
 		this.addItem(ItemRegistry.SICKLE, "Sickle");
-		this.addItem(ItemRegistry.SHOCKWAVE_SWORD, "Shockwave Sword");
+		this.addItemWithDesc(ItemRegistry.SHOCKWAVE_SWORD, "Shockwave Sword", "Right-click on the ground to create a shockwave");
+		this.add("item.thebetweenlands.broken", "Broken");
 		this.addItem(ItemRegistry.ANGLER_TOOTH_ARROW, "Angler Tooth Arrow");
 		this.addItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, "Poisoned Angler Tooth Arrow");
 		this.addItemWithDesc(ItemRegistry.OCTINE_ARROW, "Octine Arrow", "Use with caution!");

@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-29T15:08:15.462319785	Item Models: thebetweenlands
+// 1.21.1	2025-09-29T19:22:54.139057279	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -471,7 +471,8 @@ fc837f94ea6b852003da11c5b54dc7bdd5da8e88 assets/thebetweenlands/models/item/sham
 a0ca2afc95a40aac5411ab434cc67bde4c9ff8f1 assets/thebetweenlands/models/item/shell_stock_bucket.json
 2fc81eebff1f4a366c901e5e229e717023f8957b assets/thebetweenlands/models/item/shimmer_stone.json
 1ae7911fd07177bc7f0c6fd338c8af8110419966 assets/thebetweenlands/models/item/shock_arrow.json
-a33355288e9829e5201df1f7d5d3dbd07c8b8d55 assets/thebetweenlands/models/item/shockwave_sword.json
+d7fc6d8cca1dbd9937a450edfbf278d14df01296 assets/thebetweenlands/models/item/shockwave_sword.json
+e4a70400c1612a84097fb5f786b0e45fd675ffc5 assets/thebetweenlands/models/item/shockwave_sword_charging.json
 499969713930295a247c1335777f97c88b76a333 assets/thebetweenlands/models/item/shockwave_sword_piece_1.json
 8b498b80a7c5bfcbc487fe49bc85116d3ddb1912 assets/thebetweenlands/models/item/shockwave_sword_piece_2.json
 18e1273433794ba615c6a31f8f8fde075f558d8d assets/thebetweenlands/models/item/shockwave_sword_piece_3.json

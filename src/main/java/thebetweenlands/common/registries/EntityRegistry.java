@@ -153,7 +153,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<SapSpit>> SAP_SPIT = register("sap_spit", EntityType.Builder.<SapSpit>of(SapSpit::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<Seat>> SEAT = register("seat", EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<ShockArrow>> SHOCK_ARROW = register("shock_arrow", EntityType.Builder.<ShockArrow>of(ShockArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
-	//shockwave block
+	public static final DeferredHolder<EntityType<?>, EntityType<ShockwaveBlock>> SHOCKWAVE_BLOCK = register("shockwave_block", EntityType.Builder.of(ShockwaveBlock::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon());
 	//shockwave sword item
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = register("sludge_ball", EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20));
 	//sludge wall jet

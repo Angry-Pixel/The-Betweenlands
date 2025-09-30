@@ -1,4 +1,4 @@
-// 1.21.1	2025-06-14T20:56:48.818599404	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2025-09-29T19:22:54.113956365	Tags for minecraft:block mod id thebetweenlands
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
 3f5fad641908fbb7e303debf78e8c85a4afe96b5 data/c/tags/block/dyed/cadmium_green.json
@@ -108,6 +108,7 @@ e39599083a08fd0b74e2f8af9a0e617c34222b57 data/thebetweenlands/tags/block/filtere
 87185665d0f379d8b2efcd1f689a88ce128c58b9 data/thebetweenlands/tags/block/heats_infuser.json
 76c0c654b4fcada422fb7744e4322edccadcd650 data/thebetweenlands/tags/block/heats_smoking_rack.json
 b239e7b03736ed687b12fa515c9a1139f07cc1a8 data/thebetweenlands/tags/block/incorrect_for_bone_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/block/incorrect_for_legendary_tool.json
 950a086f855d118e00d3fc9697663c7721c42db1 data/thebetweenlands/tags/block/incorrect_for_octine_tool.json
 f57a1c0d935679dbbcab3f2e8a06cae2238a6735 data/thebetweenlands/tags/block/incorrect_for_valonite_tool.json
 692e5e8079060e4fa82d274ffd9cb805360b550a data/thebetweenlands/tags/block/incorrect_for_weedwood_tool.json

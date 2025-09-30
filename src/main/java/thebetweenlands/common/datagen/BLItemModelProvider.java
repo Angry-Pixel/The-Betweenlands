@@ -379,7 +379,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.toolItem(ItemRegistry.VALONITE_AXE);
 		this.basicItem(ItemRegistry.SYRMORITE_SHEARS);
 		this.basicItem(ItemRegistry.SICKLE);
-		this.toolItem(ItemRegistry.SHOCKWAVE_SWORD);
+		this.toolItem(ItemRegistry.SHOCKWAVE_SWORD)
+			.override().predicate(TheBetweenlands.prefix("cooldown"), 1).model(this.toolItem(this.modLoc("shockwave_sword_charging")));
 		this.basicItem(ItemRegistry.ANGLER_TOOTH_ARROW);
 		this.basicItem(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
 		this.basicItem(ItemRegistry.OCTINE_ARROW);
@@ -642,9 +643,13 @@ public class BLItemModelProvider extends ItemModelProvider {
 	}
 
 	public ItemModelBuilder toolItem(DeferredItem<? extends Item> item) {
-		return this.getBuilder(item.getId().toString())
+		return this.toolItem(item.getId());
+	}
+
+	public ItemModelBuilder toolItem(ResourceLocation item) {
+		return this.getBuilder(item.toString())
 			.parent(new ModelFile.UncheckedModelFile("item/handheld"))
-			.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.getId().getNamespace(), "item/" + item.getId().getPath()));
+			.texture("layer0", item.withPrefix("item/"));
 	}
 
 	public ItemModelBuilder itemFrame(DeferredItem<? extends Item> item) {
