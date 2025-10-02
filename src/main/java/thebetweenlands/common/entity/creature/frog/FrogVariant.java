@@ -26,7 +26,12 @@ public record FrogVariant(ResourceLocation texture, Optional<HolderSet<Biome>> b
 	}
 
 	public FrogVariant(ResourceLocation texture, ParticleOptions particle, MobEffectInstance touchEffect) {
-		this(texture, Optional.empty(), Optional.of(particle), Optional.of(touchEffect));
+		this(texture, Optional.empty(), Optional.of(particle), Optional.of(clearCures(touchEffect)));
+	}
+
+	private static MobEffectInstance clearCures(MobEffectInstance instance) {
+		instance.getCures().clear();
+		return instance;
 	}
 
 	public static final Codec<FrogVariant> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
