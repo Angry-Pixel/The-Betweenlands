@@ -43,3 +43,6 @@
 * All instakill weapons now define what mobs they kill with entity tags.
 * Biomes that the dreadful peat mummy can be summoned in are now controlled via the `thebetweenlands:dreadul_peat_mummy_summonable` biome tag
 * Some Betweenlands plants can now be put in flower pots. This includes all saplings and 12 other plants
+* Sickles can now properly be used as weapons. They are weak but can attack fast
+* Chiromaw Hatchlings can now request stacks of more than 1 food item if defined that way in their food loot table
+* Mobs that spawn with Amulets can now be defined via the `thebetweenlands:amulet_spawn` data map. The chance field is a 1 in x chance that a mob spawns with an amulet.
