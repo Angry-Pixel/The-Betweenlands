@@ -252,9 +252,4 @@ public class SwampHag extends Monster implements BLEntity {
 		if (source.is(DamageTypes.IN_WALL) && this.isRidingMummy()) return false;
 		return super.isInvulnerableTo(source);
 	}
-
-	@Override
-	public float getWalkTargetValue(BlockPos pos) {
-		return 0.5F;
-	}
 }

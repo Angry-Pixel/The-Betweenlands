@@ -74,6 +74,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SWORD_ENERGY = register("sword_energy");
 	public static final ModelLayerLocation TAR_BEAST = register("tar_beast");
 	public static final ModelLayerLocation TARMINION = register("tarminion");
+	public static final ModelLayerLocation TERMITE = register("termite");
 	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT = register("weedwood_rowboat");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT_LANTERN = register("weedwood_rowboat", "lantern");

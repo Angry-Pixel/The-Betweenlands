@@ -383,9 +383,4 @@ public class TarBeast extends Monster implements BLEntity {
 	public void setGrowTimer(int timer) {
 		this.getEntityData().set(GROW_TIMER, timer);
 	}
-
-	@Override
-	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-		return 0.5F;
-	}
 }

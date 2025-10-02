@@ -1,10 +1,7 @@
 package thebetweenlands.common.block.container;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,9 +17,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.entity.LootPotBlockEntity;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
+import thebetweenlands.common.entity.fishing.BubblerCrab;
+import thebetweenlands.common.entity.fishing.SiltCrab;
+import thebetweenlands.common.entity.monster.Termite;
+import thebetweenlands.common.registries.EntityRegistry;
 
 import javax.annotation.Nullable;
 
@@ -99,24 +101,21 @@ public class BuriedLootPotBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
-		//TODO
-		if (!level.isClientSide()) {
-//			LivingEntity entity;
-//			if (level.getRandom().nextInt(3) == 0) {
-//				if (!level.getFluidState(pos.above()).is(Tags.Fluids.WATER)) {
-//					entity = new Termite(level);
-//					entity.getAttribute(Termite.SMALL).setBaseValue(1);
-//				} else {
-//					if (level.getRandom().nextBoolean())
-//						entity = new BubblerCrab(level);
-//					else
-//						entity = new SiltCrab(level);
-//				}
-//				if (entity != null) {
-//					entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-//					level.addFreshEntity(entity);
-//				}
-//			}
+		if (!level.isClientSide() && level.getDifficulty() != Difficulty.PEACEFUL) {
+			LivingEntity entity;
+			if (level.getRandom().nextInt(3) == 0) {
+				if (!level.getFluidState(pos.above()).is(Tags.Fluids.WATER)) {
+					entity = new Termite(EntityRegistry.TERMITE.get(), level);
+					((Termite)entity).setSmall(true);
+				} else {
+					if (level.getRandom().nextBoolean())
+						entity = new BubblerCrab(EntityRegistry.BUBBLER_CRAB.get(), level);
+					else
+						entity = new SiltCrab(EntityRegistry.SILT_CRAB.get(), level);
+				}
+				entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+				level.addFreshEntity(entity);
+			}
 		}
 		super.playerDestroy(level, player, pos, state, blockEntity, tool);
 	}

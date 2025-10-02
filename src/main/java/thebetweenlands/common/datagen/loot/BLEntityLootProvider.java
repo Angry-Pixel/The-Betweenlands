@@ -40,7 +40,6 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 	//leech: 2, 8, 1, 3
 	//pyrad: 2, 3, 1, 1
 	//sludge menace: 8, 0, 6, 0
-	//termite: 2, 10, 1, 6
 	//consider seasonal drops for stalkers?
 	//why do shallowbreath have seasonal drops??? Theyre gas clouds??????
 	@Override
@@ -461,6 +460,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 
 		this.noLoot(EntityRegistry.CHIROMAW_HATCHLING);
 		this.noLoot(EntityRegistry.TAME_CHIROMAW);
+		this.addWithSeasonalDrops(EntityRegistry.TERMITE.get(), 2, 10, 1, 6, LootTable.lootTable());
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

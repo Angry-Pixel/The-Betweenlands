@@ -2,10 +2,7 @@ package thebetweenlands.common.block.container;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +24,8 @@ import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.LootUrnBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.entity.monster.Termite;
+import thebetweenlands.common.registries.EntityRegistry;
 
 import javax.annotation.Nullable;
 
@@ -106,14 +105,13 @@ public class LootUrnBlock extends HorizontalBaseEntityBlock implements SwampWate
 
 	@Override
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
-		//TODO
-		if (!level.isClientSide()) {
-//			if (level.getRandom().nextInt(3) == 0) {
-//				Termite entity = new Termite(level);
-//				entity.getAttribute(Termite.SMALL).setBaseValue(1);
-//				entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-//				level.addFreshEntity(entity);
-//			}
+		if (!level.isClientSide() && level.getDifficulty() != Difficulty.PEACEFUL) {
+			if (level.getRandom().nextInt(3) == 0) {
+				Termite entity = new Termite(EntityRegistry.TERMITE.get(), level);
+				entity.setSmall(true);
+				entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+				level.addFreshEntity(entity);
+			}
 		}
 		super.playerDestroy(level, player, pos, state, blockEntity, tool);
 	}

@@ -10,7 +10,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
+import thebetweenlands.common.entity.monster.Termite;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class SpreadingRottenLogBlock extends SpreadingDeathBlock {
 	public SpreadingRottenLogBlock(Properties properties) {
@@ -43,13 +45,12 @@ public class SpreadingRottenLogBlock extends SpreadingDeathBlock {
 
 		if (level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && level.getDifficulty() != Difficulty.PEACEFUL) {
 			if (level.getRandom().nextInt(6) == 0) {
-				//TODO
-//				Termite entity = new Termite(level);
-//				entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-//				if(!entity.isNotColliding()) {
-//					entity.setSmall(true);
-//				}
-//				level.addFreshEntity(entity);
+				Termite entity = new Termite(EntityRegistry.TERMITE.get(), level);
+				entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+				if (!entity.checkSpawnObstruction(level)) {
+					entity.setSmall(true);
+				}
+				level.addFreshEntity(entity);
 			}
 		}
 	}

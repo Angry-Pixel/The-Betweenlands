@@ -116,9 +116,9 @@ public class MobSpawnerBlock extends SpawnerBlock implements SwampWaterLoggable 
 
 	public enum RandomSpawnerMob {
 		SWAMP_HAG(EntityRegistry.SWAMP_HAG.get(), 200, 500, 4),
-		WIGHT(EntityRegistry.WIGHT.get(), 400, 800, 2);//,
+		WIGHT(EntityRegistry.WIGHT.get(), 400, 800, 2),
 //		BLOOD_SNAIL(EntityRegistry.BLOOD_SNAIL.get(), 100, 400, 4),
-//		TERMITE(EntityRegistry.TERMITE.get(), 100, 300, 6),
+		TERMITE(EntityRegistry.TERMITE.get(), 100, 300, 6);
 //		LEECH(EntityRegistry.LEECH.get(), 150, 500, 3);
 
 		private final EntityType<?> type;

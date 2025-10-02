@@ -601,11 +601,6 @@ public class PeatMummy extends Monster implements BLEntity, ScreenShaker {
 		}
 	}
 
-	@Override
-	public float getWalkTargetValue(BlockPos pos) {
-		return 0.5F;
-	}
-
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {

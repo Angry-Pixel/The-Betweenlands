@@ -393,11 +393,6 @@ public class ChiromawMatriarch extends FlyingMonster implements NonDismountable 
 	}
 
 	@Override
-	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-		return 0.5F;
-	}
-
-	@Override
 	public void checkDespawn() {
 	}
 

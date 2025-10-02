@@ -142,9 +142,4 @@ public class Chiromaw extends FlyingMonster {
 	public int getMaxSpawnClusterSize() {
 		return 3;
 	}
-
-	@Override
-	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-		return 0.5F;
-	}
 }

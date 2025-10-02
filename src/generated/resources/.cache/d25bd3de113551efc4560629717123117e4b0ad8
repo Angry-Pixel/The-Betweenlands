@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-29T19:22:54.139057279	Item Models: thebetweenlands
+// 1.21.1	2025-10-02T08:40:22.779351843	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -564,6 +564,7 @@ de9d9ed2d20a5dc4cfe6bc427a3cdf0feeff0c3e assets/thebetweenlands/models/item/tar_
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/tar_lore_scrap.json
 7cf7d72587d6e6ed2179f55bfa36dc3c7ed39604 assets/thebetweenlands/models/item/tarminion.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/tarminion_spawn_egg.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/termite_spawn_egg.json
 5590bf60ec8ab4c0f569897c9c5bbdb7090e5d50 assets/thebetweenlands/models/item/test_chimp.json
 cf3d900259ba59e04287d46eb4ea65bf19d01f75 assets/thebetweenlands/models/item/test_flag.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/them_lore_scrap.json

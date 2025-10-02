@@ -100,11 +100,6 @@ public class SiltCrab extends PathfinderMob implements BLEntity {
 	}
 
 	@Override
-	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-		return 0.5F;
-	}
-
-	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

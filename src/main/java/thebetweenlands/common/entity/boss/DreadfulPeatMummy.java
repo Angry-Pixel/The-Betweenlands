@@ -960,11 +960,6 @@ public class DreadfulPeatMummy extends Monster implements BLEntity, Betweenlands
 	}
 
 	@Override
-	public float getWalkTargetValue(BlockPos pos) {
-		return 0.5F;
-	}
-
-	@Override
 	public SoundEvent getMusicFile(Player listener) {
 		return SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP.get();
 	}

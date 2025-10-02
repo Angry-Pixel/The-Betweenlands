@@ -25,10 +25,14 @@ import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.DecayPitGearsSoundInstance;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.monster.*;
+import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class DecayPitControlBlockEntity extends SyncedBlockEntity implements ScreenShaker {
@@ -453,21 +457,20 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 		return this.spawnType;
 	}
 
+	@Nullable
 	protected Entity getEntitySpawned(Level level, BlockPos pos, int spawnType) {
 		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, this.getSpawningBoundingBox(pos));
 		if (list.stream().filter(e -> e instanceof Enemy).count() >= 5 && list.stream().filter(e -> e instanceof BLEntity).count() >= 5)
 			return null;
-		Entity spawned_entity = null;
 		RandomSource random = level.getRandom();
-		return null;
-//		return switch (spawnType) {
-//			case 0 -> random.nextBoolean() ? new EntityTinySludgeWorm(level) : random.nextBoolean() ? new EntitySmollSludge(level) : random.nextBoolean() ? new EntityTermite(level) : new EntityLargeSludgeWorm(level);
-//			case 1 -> random.nextBoolean() ? new EntitySludgeWorm(level) : random.nextBoolean() ? new EntityChiromaw(level) : new EntityLargeSludgeWorm(level);
-//			case 2 -> random.nextBoolean() ? new EntitySwampHag(level) : random.nextBoolean() ? new EntitySludge(level) : new EntityLargeSludgeWorm(level);
-//			case 3 -> random.nextBoolean() ? new EntityShambler(level) : random.nextBoolean() ? new EntityChiromaw(level) : new EntityLargeSludgeWorm(level);
-//			case 4 -> new EntityLargeSludgeWorm(level);
-//			default -> spawned_entity;
-//		};
+		return switch (spawnType) {
+			case 0 -> random.nextBoolean() ? new TinySludgeWorm(EntityRegistry.TINY_SLUDGE_WORM.get(), level) : random.nextBoolean() ? new SmolSludge(EntityRegistry.SMOL_SLUDGE.get(), level) : random.nextBoolean() ? new Termite(EntityRegistry.TERMITE.get(), level) : new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level);
+			case 1 -> random.nextBoolean() ? new SludgeWorm(EntityRegistry.SLUDGE_WORM.get(), level) : random.nextBoolean() ? new Chiromaw(EntityRegistry.CHIROMAW.get(), level) : new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level);
+			case 2 -> random.nextBoolean() ? new SwampHag(EntityRegistry.SWAMP_HAG.get(), level) : random.nextBoolean() ? new Sludge(EntityRegistry.SLUDGE.get(), level) : new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level);
+			case 3 -> random.nextBoolean() ? new Shambler(EntityRegistry.SHAMBLER.get(), level) : random.nextBoolean() ? new Chiromaw(EntityRegistry.CHIROMAW.get(), level) : new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level);
+			case 4 -> new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level);
+			default -> null;
+		};
 	}
 
 	public void setPlugged(boolean plugged) {
