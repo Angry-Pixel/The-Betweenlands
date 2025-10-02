@@ -300,6 +300,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.TAME_CHIROMAW.get(), TameChiromawRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SHOCKWAVE_BLOCK.get(), ShockwaveBlockRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TERMITE.get(), TermiteRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.LEECH.get(), LeechRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -408,6 +409,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.CHIROMAW_HATCHLING, ChiromawHatchlingModel::create);
 		event.registerLayerDefinition(BLModelLayers.CHIROMAW_EGG, ChiromawEggModel::create);
 		event.registerLayerDefinition(BLModelLayers.TERMITE, TermiteModel::create);
+		event.registerLayerDefinition(BLModelLayers.LEECH, LeechModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

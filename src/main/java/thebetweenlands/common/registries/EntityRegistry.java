@@ -74,7 +74,7 @@ public class EntityRegistry {
 	//infestation
 	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<LargeSludgeWorm>> LARGE_SLUDGE_WORM = registerWithEgg("large_sludge_worm", EntityType.Builder.of(LargeSludgeWorm::new, MobCategory.MONSTER).sized(0.8F, 0.8F).fireImmune(), 0x726459, 0xE2DED9, LargeSludgeWorm::registerAttributes);
-	//leech
+	public static final DeferredHolder<EntityType<?>, EntityType<Leech>> LEECH = registerWithEgg("leech", EntityType.Builder.of(Leech::new, MobCategory.MONSTER).sized(0.7F, 0.3F), 0x804E3D, 0x635940, Leech::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Lurker>> LURKER = registerWithEgg("lurker", EntityType.Builder.of(Lurker::new, MobCategory.CREATURE).sized(1.6F, 0.9F).eyeHeight(0.45F), 0x283320, 0x827856, Lurker::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<MireSnail>> MIRE_SNAIL = registerWithEgg("mire_snail", EntityType.Builder.of(MireSnail::new, MobCategory.CREATURE).sized(0.75F, 0.6F), 0x8E9456, 0xF2FA96, MireSnail::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<MummyArm>> MUMMY_ARM = registerWithAttributes("mummy_arm", EntityType.Builder.<MummyArm>of(MummyArm::new, MobCategory.MISC).sized(0.7F, 0.7F).clientTrackingRange(10).noSummon().fireImmune(), MummyArm::registerAttributes);

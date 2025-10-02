@@ -49,6 +49,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation GREEBLING_CORACLE = register("greebling_coracle");
 	public static final ModelLayerLocation GREEBLING_VOLARPAD_FLOATER = register("greebling_volarpad_floater");
 	public static final ModelLayerLocation JELLYFISH = register("jellyfish");
+	public static final ModelLayerLocation LEECH = register("leech");
 	public static final ModelLayerLocation LURKER = register("lurker");
 	public static final ModelLayerLocation LARGE_SLUDGE_WORM = register("large_sludge_worm");
 	public static final ModelLayerLocation LARGE_SLUDGE_WORM_OUTER = register("large_sludge_worm", "outer");

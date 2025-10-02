@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-02T08:40:22.779351843	Item Models: thebetweenlands
+// 1.21.1	2025-10-02T10:31:52.213258422	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -296,6 +296,7 @@ b05945461f2ce9480dc6dbec84821e8d32b4d335 assets/thebetweenlands/models/item/lake
 c1ef0fdc9f0c99b8807b6f4ab622801aa088be7c assets/thebetweenlands/models/item/lavender_blue_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/lavender_blue_item_frame.json
 9e8b90e485c2dc36b1728edd6196a493d7c293f3 assets/thebetweenlands/models/item/leaf.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/leech_spawn_egg.json
 c1dcae636e9f1531ce27c392906af7b44a996df2 assets/thebetweenlands/models/item/lichen_clump.json
 153be79381ef34b47aa90abaa8ee52e394e265c7 assets/thebetweenlands/models/item/life_crystal.json
 4ba87c5d0d650dcebf121de79fc546c43ab85850 assets/thebetweenlands/models/item/life_crystal_1.json

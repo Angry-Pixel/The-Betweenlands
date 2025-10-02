@@ -36,8 +36,6 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 	//TODO seasonal drops for unimplemented mobs:
 	//angler: 1, 8, 1, 4
 	//blood snail: 2, 8, 1, 4
-	//large sludge worm: 2, 6, 1, 1
-	//leech: 2, 8, 1, 3
 	//pyrad: 2, 3, 1, 1
 	//sludge menace: 8, 0, 6, 0
 	//consider seasonal drops for stalkers?
@@ -461,6 +459,10 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 		this.noLoot(EntityRegistry.CHIROMAW_HATCHLING);
 		this.noLoot(EntityRegistry.TAME_CHIROMAW);
 		this.addWithSeasonalDrops(EntityRegistry.TERMITE.get(), 2, 10, 1, 6, LootTable.lootTable());
+		this.addWithSeasonalDrops(EntityRegistry.LEECH.get(), 2, 8, 1, 3, LootTable.lootTable()
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(0, 1))
+				.add(LootItem.lootTableItem(ItemRegistry.SAP_BALL)
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
