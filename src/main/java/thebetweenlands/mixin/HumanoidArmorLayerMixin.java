@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thebetweenlands.client.CircleGemTextureManager;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
@@ -29,8 +30,8 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, A extends 
 	@Inject(method = "renderArmorPiece(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;FFFFFF)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/ItemStack;hasFoil()Z", shift = At.Shift.BEFORE), remap = false)
 	public void renderGems(PoseStack stack, MultiBufferSource source, T entity, EquipmentSlot slot, int light, A model, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
 		ItemStack itemstack = entity.getItemBySlot(slot);
-		CircleGemType gem = itemstack.get(DataComponentRegistry.CIRCLE_GEM);
-		if (gem != null) {
+		CircleGemType gem = CircleGemHelper.getGem(itemstack);
+		if (gem != CircleGemType.NONE) {
 			VertexConsumer vertexconsumer = source.getBuffer(RenderType.armorCutoutNoCull(CircleGemTextureManager.getForMaterial(((ArmorItem)itemstack.getItem()).getMaterial(), gem, this.usesInnerModel(slot))));
 			model.renderToBuffer(stack, vertexconsumer, light, OverlayTexture.NO_OVERLAY);
 		}

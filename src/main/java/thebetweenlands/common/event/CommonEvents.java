@@ -31,6 +31,7 @@ public class CommonEvents {
 
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);
+		NeoForge.EVENT_BUS.addListener(EntitySpawnHandler::handleAmuletSpawns);
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onEntityMountEvent);
 	}
 

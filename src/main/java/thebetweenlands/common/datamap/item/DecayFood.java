@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.datamaps;
+package thebetweenlands.common.datamap.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

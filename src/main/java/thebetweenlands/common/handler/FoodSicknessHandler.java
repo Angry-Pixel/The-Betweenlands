@@ -17,7 +17,7 @@ import thebetweenlands.common.component.entity.DecayData;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
-import thebetweenlands.common.item.datamaps.DecayFood;
+import thebetweenlands.common.datamap.item.DecayFood;
 import thebetweenlands.common.network.clientbound.ShowFoodSicknessPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;

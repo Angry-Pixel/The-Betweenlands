@@ -1,11 +1,10 @@
 package thebetweenlands.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.renderer.entity.layers.GenericEyesLayer;
 import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.common.TheBetweenlands;
@@ -13,11 +12,10 @@ import thebetweenlands.common.entity.monster.SwampHag;
 
 public class SwampHagRenderer<T extends SwampHag> extends MobRenderer<T, SwampHagModel<T>> {
 
-	private static final ResourceLocation SWAMP_HAG_TEXTURE = TheBetweenlands.prefix("textures/entity/swamp_hag.png");
-	public static final ModelLayerLocation SWAMP_HAG_MODEL_LAYER = new ModelLayerLocation(TheBetweenlands.prefix("main"), "swamp_hag");
+	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/swamp_hag.png");
 
 	public SwampHagRenderer(EntityRendererProvider.Context context) {
-		super(context, new SwampHagModel<>(context.bakeLayer(SWAMP_HAG_MODEL_LAYER)), 0.8F);
+		super(context, new SwampHagModel<>(context.bakeLayer(BLModelLayers.SWAMP_HAG)), 0.5F);
 		this.addLayer(new GenericEyesLayer<>(this, TheBetweenlands.prefix("textures/entity/swamp_hag_eyes.png")));
 	}
 
@@ -28,6 +26,6 @@ public class SwampHagRenderer<T extends SwampHag> extends MobRenderer<T, SwampHa
 
 	@Override
 	public ResourceLocation getTextureLocation(SwampHag entity) {
-		return SWAMP_HAG_TEXTURE;
+		return TEXTURE;
 	}
 }

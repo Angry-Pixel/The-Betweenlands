@@ -1,0 +1,22 @@
+{
+  "values": {
+    "thebetweenlands:biped_crypt_crawler": {
+      "chance": 40
+    },
+    "thebetweenlands:crypt_crawler": {
+      "chance": 40
+    },
+    "thebetweenlands:peat_mummy": {
+      "chance": 40
+    },
+    "thebetweenlands:swamp_hag": {
+      "chance": 40
+    },
+    "thebetweenlands:tar_beast": {
+      "chance": 40
+    },
+    "thebetweenlands:wight": {
+      "chance": 40
+    }
+  }
+}

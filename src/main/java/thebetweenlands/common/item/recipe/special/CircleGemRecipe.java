@@ -7,6 +7,7 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.item.misc.MiddleGemItem;
@@ -43,7 +44,7 @@ public class CircleGemRecipe extends CustomRecipe {
 				}
 			}
 		}
-		return (!tool.isEmpty() && !gem.isEmpty()) && (tool.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE) != ((MiddleGemItem) gem.getItem()).getType());
+		return (!tool.isEmpty() && !gem.isEmpty()) && (CircleGemHelper.getGem(tool) != ((MiddleGemItem) gem.getItem()).getType());
 	}
 
 	@Override
@@ -65,12 +66,12 @@ public class CircleGemRecipe extends CustomRecipe {
 		if (!tool.isEmpty() && !gem.isEmpty()) {
 			ItemStack result = tool.copy();
 			CircleGemType appliedGem = ((MiddleGemItem) gem.getItem()).getType();
-			CircleGemType toolGem = tool.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE);
+			CircleGemType toolGem = CircleGemHelper.getGem(tool);
 			int gemRelation = appliedGem.getRelation(toolGem);
 			if (gemRelation == -1) {
-				result.set(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE);
+				CircleGemHelper.setGem(result, CircleGemType.NONE);
 			} else {
-				result.set(DataComponentRegistry.CIRCLE_GEM, appliedGem);
+				CircleGemHelper.setGem(result, appliedGem);
 			}
 			return result;
 		}

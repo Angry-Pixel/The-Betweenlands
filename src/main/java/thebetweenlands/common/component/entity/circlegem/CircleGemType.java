@@ -199,7 +199,7 @@ public enum CircleGemType implements StringRepresentable {
 	public final Consumer<ItemStack> getAmphibiousArmorOnChangedHandler() {
 		return armor -> {
 			if (this.getAmphibiousArmorUpgrade() != null && armor.getOrDefault(DataComponentRegistry.AMPHIBIOUS_UPGRADES, AmphibiousUpgrades.EMPTY).getAllUniqueUpgradesWithCounts().containsKey(this.getAmphibiousArmorUpgrade())) {
-				armor.set(DataComponentRegistry.CIRCLE_GEM, this);
+				CircleGemHelper.setGem(armor, this);
 			} else {
 				armor.remove(DataComponentRegistry.CIRCLE_GEM);
 			}

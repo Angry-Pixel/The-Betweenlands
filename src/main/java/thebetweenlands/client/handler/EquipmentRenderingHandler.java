@@ -1,45 +1,27 @@
 package thebetweenlands.client.handler;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.mojang.math.MatrixUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HalfTransparentBlock;
-import net.minecraft.world.level.block.StainedGlassPaneBlock;
-import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.common.NeoForge;
-import thebetweenlands.client.renderer.BLRenderTypes;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.entity.equipment.EquipmentData;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
 import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
@@ -65,7 +47,7 @@ public class EquipmentRenderingHandler {
 
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
-			if (!stack.isEmpty() && stack.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE) != CircleGemType.NONE) {
+			if (!stack.isEmpty() && CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
 				items.add(stack);
 			}
 		}
@@ -81,7 +63,7 @@ public class EquipmentRenderingHandler {
 			for (ItemStack item : items) {
 				stack.mulPose(Axis.YP.rotationDegrees(degOffset));
 
-				CircleGemType gem = item.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE);
+				CircleGemType gem = CircleGemHelper.getGem(item);
 				ItemStack gemItem = null;
 
 				switch (gem) {

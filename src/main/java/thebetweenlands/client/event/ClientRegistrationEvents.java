@@ -351,7 +351,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.VALONITE_SHIELD, ValoniteShieldModel::create);
 		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_SHIELD, WeedwoodShieldModel::create);
 
-		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
+		event.registerLayerDefinition(BLModelLayers.SWAMP_HAG, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(BLModelLayers.WIGHT, WightModel::create);
 		event.registerLayerDefinition(BLModelLayers.BUBBLER_CRAB, BubblerCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);

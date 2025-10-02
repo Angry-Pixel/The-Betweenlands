@@ -17,6 +17,7 @@ import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.common.component.entity.CircleGemData;
 import thebetweenlands.common.component.entity.PuppetData;
 import thebetweenlands.common.component.entity.circlegem.CircleGem;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.entity.equipment.EquipmentHelper;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
@@ -98,8 +99,7 @@ public class AmuletItem extends Item implements RadialMenuEquippable {
 
 	@Override
 	public void onEquip(ItemStack stack, Entity entity, Container inventory) {
-		CircleGemData data = entity.getData(AttachmentRegistry.CIRCLE_GEM);
-		data.addGem(new CircleGem(this.type, CircleGem.CombatType.BOTH));
+		CircleGemHelper.addGem(entity, this.type, CircleGem.CombatType.BOTH);
 	}
 
 	@Override

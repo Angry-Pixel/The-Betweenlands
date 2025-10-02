@@ -14,6 +14,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.RadialMenuEquippable;
 import thebetweenlands.common.component.entity.FoodSicknessData;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.UpgradeDamage;
@@ -22,8 +23,7 @@ import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
-import thebetweenlands.common.item.datamaps.CompostableItem;
-import thebetweenlands.common.item.equipment.AmuletItem;
+import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.util.FoodSickness;
 
@@ -58,7 +58,7 @@ public class ItemTooltipHandler {
 			toolTip.add(Component.translatable("item.thebetweenlands.amphibious_upgrade.damaged", Math.max(0, damage.maxDamage() - damage.damage()), damage.maxDamage()));
 		}
 
-		CircleGemType circleGem = stack.getOrDefault(DataComponentRegistry.CIRCLE_GEM, CircleGemType.NONE);
+		CircleGemType circleGem = CircleGemHelper.getGem(stack);
 		if (circleGem != CircleGemType.NONE) {
 			toolTip.add(Component.translatable("item.thebetweenlands.circle_gem." + circleGem.name).withColor(circleGem.color));
 		}

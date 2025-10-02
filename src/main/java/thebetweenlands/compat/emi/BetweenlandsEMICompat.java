@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.item.datamaps.CompostableItem;
+import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
 import thebetweenlands.common.item.recipe.SiltCrabPotFilterRecipe;
 import thebetweenlands.common.registries.BlockRegistry;

@@ -8,11 +8,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.equipment.EquipmentData;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.entity.BLEntity;
@@ -27,7 +29,7 @@ public class AttackDamageHandler {
 
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleAttacks);
-		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleCircleGemDamageBlock);
+		NeoForge.EVENT_BUS.addListener(EventPriority.LOW, AttackDamageHandler::handleCircleGemDamageBlock);
 	}
 
 	private static void weakenKnockback(LivingKnockBackEvent event) {
@@ -50,7 +52,7 @@ public class AttackDamageHandler {
 		//Handle circle gem for blocking
 		//For BL shields this is handled in ItemBLShield#onAttackBlocked
 		if (canBlockDamageSource(attackedEntity, source)) {
-//			CircleGemHelper.handleAttack(source, attackedEntity, event.getAmount());
+			CircleGemHelper.handleAttack(source, attackedEntity, event.getAmount());
 		}
 	}
 
@@ -118,7 +120,7 @@ public class AttackDamageHandler {
 //			}
 //		}
 //
-//		damage = CircleGemHelper.handleAttack(source, attackedEntity, damage);
+		damage = CircleGemHelper.handleAttack(source, attackedEntity, damage);
 //
 		if (entity instanceof LivingEntity) {
 			EquipmentData data = entity.getData(AttachmentRegistry.EQUIPMENT);

@@ -23,12 +23,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
-import thebetweenlands.common.item.datamaps.CompostableItem;
+import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 

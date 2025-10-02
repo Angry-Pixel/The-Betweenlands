@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.ArrayUtils;
 import thebetweenlands.common.block.container.SulfurFurnaceBlock;
-import thebetweenlands.common.item.datamaps.FluxMultiplier;
+import thebetweenlands.common.datamap.item.FluxMultiplier;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.ItemRegistry;

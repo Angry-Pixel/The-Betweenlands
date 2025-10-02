@@ -17,6 +17,7 @@ import thebetweenlands.common.advancement.EquipTrigger;
 import thebetweenlands.common.advancement.NoCriteriaTrigger;
 import thebetweenlands.common.advancement.ShockwaveKillTrigger;
 import thebetweenlands.common.advancement.SwatShieldTrigger;
+import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.registries.*;
@@ -204,7 +205,7 @@ public class FighterAdvancementProvider implements AdvancementGenerator {
 
 	private ItemStack applyGemTo(Holder<Item> armor, CircleGemType gem) {
 		ItemStack stack = new ItemStack(armor);
-		stack.set(DataComponentRegistry.CIRCLE_GEM, gem);
+		CircleGemHelper.setGem(stack, gem);
 		return stack;
 	}
 }

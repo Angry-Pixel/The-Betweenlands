@@ -6,11 +6,13 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
-import thebetweenlands.common.item.datamaps.CompostableItem;
-import thebetweenlands.common.item.datamaps.DecayFood;
-import thebetweenlands.common.item.datamaps.FluxMultiplier;
+import thebetweenlands.common.datamap.entity.AmuletSpawn;
+import thebetweenlands.common.datamap.item.CompostableItem;
+import thebetweenlands.common.datamap.item.DecayFood;
+import thebetweenlands.common.datamap.item.FluxMultiplier;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.concurrent.CompletableFuture;
@@ -91,6 +93,14 @@ public class BLDataMapProvider extends DataMapProvider {
 		fuelMap.add(ItemRegistry.WEEDWOOD_BOWL, new FurnaceFuel(100), false);
 		fuelMap.add(ItemRegistry.WEEDWOOD_BOW, new FurnaceFuel(300), false);
 		fuelMap.add(BlockRegistry.WEEDWOOD_CHEST.getId(), new FurnaceFuel(300), false);
+
+		var amuletMap = this.builder(DataMapRegistry.AMULET_SPAWNS);
+		amuletMap.add(EntityRegistry.SWAMP_HAG, new AmuletSpawn(40), false);
+		amuletMap.add(EntityRegistry.PEAT_MUMMY, new AmuletSpawn(40), false);
+		amuletMap.add(EntityRegistry.TAR_BEAST, new AmuletSpawn(40), false);
+		amuletMap.add(EntityRegistry.WIGHT, new AmuletSpawn(40), false);
+		amuletMap.add(EntityRegistry.CRYPT_CRAWLER, new AmuletSpawn(40), false);
+		amuletMap.add(EntityRegistry.BIPED_CRYPT_CRAWLER, new AmuletSpawn(40), false);
 
 		var decayMap = this.builder(DataMapRegistry.DECAY_FOOD);
 		decayMap.add(ItemRegistry.SAP_BALL, new DecayFood(2, 0.0F), false);
