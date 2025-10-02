@@ -90,7 +90,7 @@ public class BLDataMapProvider extends DataMapProvider {
 		fuelMap.add(ItemRegistry.TANGLED_ROOT, new FurnaceFuel(400), false);
 		fuelMap.add(ItemRegistry.WEEDWOOD_BOWL, new FurnaceFuel(100), false);
 		fuelMap.add(ItemRegistry.WEEDWOOD_BOW, new FurnaceFuel(300), false);
-//		fuelMap.add(BlockRegistry.WEEDWOOD_CHEST, new FurnaceFuel(300), false);
+		fuelMap.add(BlockRegistry.WEEDWOOD_CHEST.getId(), new FurnaceFuel(300), false);
 
 		var decayMap = this.builder(DataMapRegistry.DECAY_FOOD);
 		decayMap.add(ItemRegistry.SAP_BALL, new DecayFood(2, 0.0F), false);

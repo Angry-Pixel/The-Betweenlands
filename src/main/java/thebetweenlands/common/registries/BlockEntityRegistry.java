@@ -12,6 +12,7 @@ import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 public class BlockEntityRegistry {
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, TheBetweenlands.ID);
 
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WeedwoodChestBlockEntity>> WEEDWOOD_CHEST = BLOCK_ENTITIES.register("weedwood_chest", () -> BlockEntityType.Builder.of(WeedwoodChestBlockEntity::new, BlockRegistry.WEEDWOOD_CHEST.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WispBlockEntity>> WISP = BLOCK_ENTITIES.register("wisp", () -> BlockEntityType.Builder.of(WispBlockEntity::new, BlockRegistry.WISP.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootPotBlockEntity>> LOOT_POT = BLOCK_ENTITIES.register("loot_pot", () -> BlockEntityType.Builder.of(LootPotBlockEntity::new, BlockRegistry.LOOT_POT_1.get(), BlockRegistry.LOOT_POT_2.get(), BlockRegistry.LOOT_POT_3.get(), BlockRegistry.MUD_LOOT_POT_1.get(), BlockRegistry.MUD_LOOT_POT_2.get(), BlockRegistry.MUD_LOOT_POT_3.get(), BlockRegistry.TAR_LOOT_POT_1.get(), BlockRegistry.TAR_LOOT_POT_2.get(), BlockRegistry.TAR_LOOT_POT_3.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MobSpawnerBlockEntity>> MOB_SPAWNER = BLOCK_ENTITIES.register("mob_spawner", () -> BlockEntityType.Builder.of(MobSpawnerBlockEntity::new, BlockRegistry.MOB_SPAWNER.get()).build(null));

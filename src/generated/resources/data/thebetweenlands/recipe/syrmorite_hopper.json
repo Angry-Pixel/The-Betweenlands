@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "c": {
+      "item": "thebetweenlands:weedwood_chest"
+    },
+    "s": {
+      "item": "thebetweenlands:syrmorite_ingot"
+    }
+  },
+  "pattern": [
+    "s s",
+    "scs",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:syrmorite_hopper"
+  }
+}

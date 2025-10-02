@@ -1,0 +1,20 @@
+{
+  "values": [
+    "thebetweenlands:white_present",
+    "thebetweenlands:light_gray_present",
+    "thebetweenlands:gray_present",
+    "thebetweenlands:black_present",
+    "thebetweenlands:red_present",
+    "thebetweenlands:orange_present",
+    "thebetweenlands:yellow_present",
+    "thebetweenlands:green_present",
+    "thebetweenlands:lime_present",
+    "thebetweenlands:blue_present",
+    "thebetweenlands:cyan_present",
+    "thebetweenlands:light_blue_present",
+    "thebetweenlands:purple_present",
+    "thebetweenlands:magenta_present",
+    "thebetweenlands:pink_present",
+    "thebetweenlands:brown_present"
+  ]
+}

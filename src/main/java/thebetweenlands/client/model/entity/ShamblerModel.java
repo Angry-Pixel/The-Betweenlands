@@ -281,9 +281,9 @@ public class ShamblerModel extends MowzieModelBase<Shambler> {
 
 	@Override
 	public void setupAnim(Shambler entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-		float animation = (float) (Math.cos((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F);
-		float animation2 = (float) (Math.sin((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F);
-		float flap = (float) (Math.sin(ageInTicks * 0.3F) * 0.8F);
+		float animation = Mth.cos((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
+		float animation2 = Mth.sin((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
+		float flap = Mth.sin(ageInTicks * 0.3F) * 0.8F;
 		float smoothedAngle = entity.smoothedAngle(partialTick);
 		float headX = entity.getXRot() / Mth.RAD_TO_DEG;
 

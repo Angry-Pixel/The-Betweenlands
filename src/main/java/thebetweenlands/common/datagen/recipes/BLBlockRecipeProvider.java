@@ -277,7 +277,9 @@ public class BLBlockRecipeProvider {
 			.pattern("ppp").pattern("pfp").pattern("ppp").define('p', BlockRegistry.BETWEENSTONE).define('f', BlockRegistry.SULFUR_FURNACE)
 			.unlockedBy("has_stone", has(BlockRegistry.BETWEENSTONE)).unlockedBy("has_furnace", has(BlockRegistry.SULFUR_FURNACE)).save(output);
 
-		//TODO weedwood chest
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlockRegistry.WEEDWOOD_CHEST)
+			.pattern("ppp").pattern("p p").pattern("ppp").define('p', BlockRegistry.WEEDWOOD_PLANKS)
+			.unlockedBy("has_planks", has(BlockRegistry.WEEDWOOD_PLANKS)).save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, BlockRegistry.SULFUR_TORCH, 4)
 			.pattern("s").pattern("r").define('s', ItemRegistry.SULFUR).define('r', ItemRegistry.WEEDWOOD_STICK)
@@ -297,7 +299,11 @@ public class BLBlockRecipeProvider {
 		doorAndTrapdoor(output, BlockRegistry.TREATED_NIBBLETWIG_DOOR, BlockRegistry.TREATED_NIBBLETWIG_TRAPDOOR, BlockRegistry.TREATED_NIBBLETWIG_PLANKS);
 		doorAndTrapdoor(output, BlockRegistry.TREATED_ROTTEN_DOOR, BlockRegistry.TREATED_ROTTEN_TRAPDOOR, BlockRegistry.TREATED_ROTTEN_PLANKS);
 		doorAndTrapdoor(output, BlockRegistry.SCABYST_DOOR, BlockRegistry.SCABYST_TRAPDOOR, ItemRegistry.SCABYST);
-		//TODO syrmorite hopper
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, BlockRegistry.SYRMORITE_HOPPER)
+			.pattern("s s").pattern("scs").pattern(" s ").define('s', ItemRegistry.SYRMORITE_INGOT).define('c', BlockRegistry.WEEDWOOD_CHEST)
+			.unlockedBy("has_syrmorite", has(ItemRegistry.SYRMORITE_INGOT)).save(output);
+
 		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, BlockRegistry.MUD_FLOWER_POT)
 			.pattern("b b").pattern(" b ").define('b', ItemRegistry.MUD_BRICK)
 			.unlockedBy("has_brick", has(ItemRegistry.MUD_BRICK)).save(output);
@@ -381,7 +387,10 @@ public class BLBlockRecipeProvider {
 			.define('f', ItemRegistry.FIREFLY).define('w', BlockRegistry.WEEDWOOD_PLANKS)
 			.unlockedBy("has_glass", has(BlockRegistry.SILT_GLASS_PANE)).unlockedBy("has_firefly", has(ItemRegistry.FIREFLY)).save(output);
 
-		//TODO fishing tackle box
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlockRegistry.FISHING_TACKLE_BOX)
+			.pattern(" m ").pattern("rcr").pattern("sss")
+			.define('m', BLItemTagProvider.REED_MATS).define('c', BlockRegistry.WEEDWOOD_CHEST).define('r', ItemRegistry.REED_ROPE).define('s', BlockRegistry.SWAMP_REED)
+			.unlockedBy("has_mat", has(BLItemTagProvider.REED_MATS)).unlockedBy("has_chest", has(BlockRegistry.WEEDWOOD_CHEST)).save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlockRegistry.SMOKING_RACK)
 			.pattern("srs").pattern("sts").pattern("s s").define('s', ItemRegistry.WEEDWOOD_STICK).define('t', ItemRegistry.ANGLER_TOOTH).define('r', ItemRegistry.REED_ROPE)
@@ -442,7 +451,9 @@ public class BLBlockRecipeProvider {
 			.unlockedBy("has_skin", has(ItemRegistry.LURKER_SKIN)).unlockedBy("has_rope", has(ItemRegistry.REED_ROPE)).unlockedBy("has_planks", has(BlockRegistry.WEEDWOOD_PLANKS)).save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlockRegistry.FILTERED_SILT_GLASS_JAR).pattern(" g ").pattern("g g").pattern("ggg").define('g', BlockRegistry.FILTERED_SILT_GLASS).unlockedBy("has_glass", has(BlockRegistry.FILTERED_SILT_GLASS)).save(output);
-		//TODO moth house
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlockRegistry.MOTH_HOUSE).pattern("ttt").pattern("srs").pattern("wcw")
+			.define('t', BlockRegistry.THATCH).define('s', ItemRegistry.WEEDWOOD_STICK).define('r', ItemRegistry.REED_ROPE).define('w', BlockRegistry.WEEDWOOD_SLAB).define('c', BlockRegistry.WEEDWOOD_CHEST)
+			.unlockedBy("has_thatch", has(BlockRegistry.THATCH)).unlockedBy("has_grub", has(ItemRegistry.SILK_GRUB)).unlockedBy("has_chest", has(BlockRegistry.WEEDWOOD_CHEST)).save(output);
 
 		dying(output, BlockRegistry.DULL_LAVENDER_SAMITE, BLItemTagProvider.SAMITE, ItemRegistry.DULL_LAVENDER_DYE);
 		dying(output, BlockRegistry.MAROON_SAMITE, BLItemTagProvider.SAMITE, ItemRegistry.MAROON_DYE);

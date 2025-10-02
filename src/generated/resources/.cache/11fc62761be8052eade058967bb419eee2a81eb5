@@ -1,4 +1,5 @@
-// 1.21.1	2025-09-29T19:22:54.113956365	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2025-10-01T20:28:31.865035687	Tags for minecraft:block mod id thebetweenlands
+8fa1aae501231e311bdf3374ba19975117ab887d data/c/tags/block/chests/wooden.json
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
 3f5fad641908fbb7e303debf78e8c85a4afe96b5 data/c/tags/block/dyed/cadmium_green.json
@@ -67,12 +68,12 @@ ba33b0a31b0f71ff6bd66a72f559150496e19fcc data/minecraft/tags/block/combination_s
 67f074a219a44463b2d5b41662a2e50b4c1a7cf8 data/minecraft/tags/block/fall_damage_resetting.json
 1dea2992eab201457315a6acd245e3f024858662 data/minecraft/tags/block/fence_gates.json
 d2836085f2af036cb19221241ddf0f59416ca774 data/minecraft/tags/block/flower_pots.json
-aada673eb7854f0035fb0cb426b108da2515299c data/minecraft/tags/block/guarded_by_piglins.json
+bb017942380cddd7b536aba298268d2908b5a4ea data/minecraft/tags/block/guarded_by_piglins.json
 9454a82892ac5a92e2e875d288b375433524adc4 data/minecraft/tags/block/ice.json
 fd19ad42f0c6dfd77ac5cb46771f5c3cb96b54ca data/minecraft/tags/block/infiniburn_overworld.json
 03b79d93bade4ca1cbd619f4c522b46981658ab1 data/minecraft/tags/block/leaves.json
 1f9ac7683d15c3d9f02bfed0caa621867e0941f1 data/minecraft/tags/block/logs_that_burn.json
-1284f2e6a39ec4ec39d0e781b6471b0425f79110 data/minecraft/tags/block/mineable/axe.json
+8f54e09c1fec52ac0a9290584ae0c567b0998a0a data/minecraft/tags/block/mineable/axe.json
 17b5ab5fb712851654be5be010a23df1048433e2 data/minecraft/tags/block/mineable/hoe.json
 0215fe5699dbf2931c85ed103163247598696c6d data/minecraft/tags/block/mineable/pickaxe.json
 5365777ece6dbc8c2000d825d1247469c964efd9 data/minecraft/tags/block/mineable/shovel.json
@@ -115,6 +116,7 @@ f57a1c0d935679dbbcab3f2e8a06cae2238a6735 data/thebetweenlands/tags/block/incorre
 dab1a03dad5eaa4505b23e07e83731aba7ec66c5 data/thebetweenlands/tags/block/mud_brick_shingles.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/block/octine_ignites.json
 9d2b82c32e7eb6fa9305623c015f7f8a65744a8f data/thebetweenlands/tags/block/peat_mummy_spawnable.json
+8f85514de10034e7bb568f0dd8c211106aab0722 data/thebetweenlands/tags/block/presents.json
 fd07d5cc7ab353f0d7c9ddb34b284da21abca8be data/thebetweenlands/tags/block/reed_mats.json
 e7acf1217e6b03bd758438ba0a0f0ee548b03bef data/thebetweenlands/tags/block/samite.json
 47c424da0debcdd6c4fee6808267c1e53747ff20 data/thebetweenlands/tags/block/samite_canvas_panels.json

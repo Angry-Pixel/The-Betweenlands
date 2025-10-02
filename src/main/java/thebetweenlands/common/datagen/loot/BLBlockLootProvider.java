@@ -497,7 +497,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.dropSelf(BlockRegistry.WEEDWOOD_JUKEBOX.get());
 		this.dropSelf(BlockRegistry.SULFUR_FURNACE.get());
 		this.dropSelf(BlockRegistry.DUAL_SULFUR_FURNACE.get());
-//		this.dropSelf(BlockRegistry.WEEDWOOD_CHEST.get());
+		this.dropSelf(BlockRegistry.WEEDWOOD_CHEST.get());
 		this.dropOther(BlockRegistry.WEEDWOOD_RUBBER_TAP.get(), ItemRegistry.WEEDWOOD_BUCKET);
 		this.dropOther(BlockRegistry.SYRMORITE_RUBBER_TAP.get(), ItemRegistry.SYRMORITE_BUCKET);
 		this.dropOther(BlockRegistry.SLUDGE.get(), ItemRegistry.SLUDGE_BALL);

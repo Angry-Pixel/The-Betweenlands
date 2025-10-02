@@ -944,12 +944,14 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("block.thebetweenlands.barrel.fluid", "%s (%sMb)");
 		this.addBlock(BlockRegistry.WEEDWOOD_BUSH, "Weedwood Bush");
 		this.addBlock(BlockRegistry.WEEDWOOD_BUTTON, "Weedwood Button");
+		this.addBlock(BlockRegistry.WEEDWOOD_CHEST, "Weedwood Chest");
 		this.addBlock(BlockRegistry.WEEDWOOD_CRAFTING_TABLE, "Weedwood Crafting Table");
 		this.addBlock(BlockRegistry.WEEDWOOD_DOOR, "Weedwood Door");
 		this.addBlock(BlockRegistry.WEEDWOOD_FENCE, "Weedwood Fence");
 		this.addBlock(BlockRegistry.WEEDWOOD_FENCE_GATE, "Weedwood Fence Gate");
 		this.addBlock(BlockRegistry.WEEDWOOD_JUKEBOX, "Weedwood Jukebox");
 		this.addBlock(BlockRegistry.WEEDWOOD_LADDER, "Weedwood Ladder");
+		this.addBlock(BlockRegistry.WEEDWOOD_LEAVES, "Weedwood Leaves");
 		this.addBlock(BlockRegistry.WEEDWOOD_LEVER, "Weedwood Lever");
 		this.addBlock(BlockRegistry.WEEDWOOD_LOG, "Weedwood Log");
 		this.addBlock(BlockRegistry.WEEDWOOD_LOG_FENCE, "Weedwood Log Fence");

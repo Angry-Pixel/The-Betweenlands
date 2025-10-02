@@ -100,6 +100,10 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 
 	@SuppressWarnings("unchecked")
 	protected void addTags(HolderLookup.Provider provider) {
+		this.tag(PRESENTS).add(BlockRegistry.WHITE_PRESENT.get(), BlockRegistry.LIGHT_GRAY_PRESENT.get(), BlockRegistry.GRAY_PRESENT.get(), BlockRegistry.BLACK_PRESENT.get(),
+			BlockRegistry.RED_PRESENT.get(), BlockRegistry.ORANGE_PRESENT.get(), BlockRegistry.YELLOW_PRESENT.get(), BlockRegistry.GREEN_PRESENT.get(),
+			BlockRegistry.LIME_PRESENT.get(), BlockRegistry.BLUE_PRESENT.get(), BlockRegistry.CYAN_PRESENT.get(), BlockRegistry.LIGHT_BLUE_PRESENT.get(),
+			BlockRegistry.PURPLE_PRESENT.get(), BlockRegistry.MAGENTA_PRESENT.get(), BlockRegistry.PINK_PRESENT.get(), BlockRegistry.BROWN_PRESENT.get());
 		this.tag(OCTINE_IGNITES).add(BlockRegistry.CAVE_MOSS.get(), BlockRegistry.MOSS.get(), BlockRegistry.LICHEN.get(), BlockRegistry.DEAD_MOSS.get(), BlockRegistry.DEAD_LICHEN.get(), BlockRegistry.THORNS.get());
 		this.tag(STALKER_IGNORED_LIGHT_SOURCES).add(BlockRegistry.OCTINE_ORE.get(), BlockRegistry.LIFE_CRYSTAL_STALACTITE.get(), BlockRegistry.MOB_SPAWNER.get());
 		this.tag(PEAT_MUMMY_SPAWNABLE).add(BlockRegistry.MUD.get(), BlockRegistry.PEAT.get());
@@ -290,7 +294,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 			BlockRegistry.LOOT_POT_1.get(), BlockRegistry.LOOT_POT_2.get(), BlockRegistry.LOOT_POT_3.get(),
 			BlockRegistry.MUD_LOOT_POT_1.get(), BlockRegistry.MUD_LOOT_POT_2.get(), BlockRegistry.MUD_LOOT_POT_3.get(),
 			BlockRegistry.TAR_LOOT_POT_1.get(), BlockRegistry.TAR_LOOT_POT_2.get(), BlockRegistry.TAR_LOOT_POT_3.get(),
-			BlockRegistry.LOOT_URN_1.get(), BlockRegistry.LOOT_URN_2.get(), BlockRegistry.LOOT_URN_3.get()); //TODO add weedwood chest
+			BlockRegistry.LOOT_URN_1.get(), BlockRegistry.LOOT_URN_2.get(), BlockRegistry.LOOT_URN_3.get(), BlockRegistry.WEEDWOOD_CHEST.get());
 		this.tag(BlockTags.FENCE_GATES).add(
 			BlockRegistry.WEEDWOOD_FENCE_GATE.get(), BlockRegistry.WEEDWOOD_LOG_FENCE_GATE.get(), BlockRegistry.RUBBER_TREE_FENCE_GATE.get(), BlockRegistry.GIANT_ROOT_FENCE_GATE.get(),
 			BlockRegistry.HEARTHGROVE_FENCE_GATE.get(), BlockRegistry.NIBBLETWIG_FENCE_GATE.get(), BlockRegistry.ROTTEN_FENCE_GATE.get(),
@@ -311,7 +315,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 			BlockRegistry.GIANT_ROOT.get(), BlockRegistry.HOLLOW_LOG.get(), BlockRegistry.PORTAL_FRAME_BOTTOM_LEFT.get(), BlockRegistry.PORTAL_FRAME_BOTTOM.get(),
 			BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT.get(), BlockRegistry.PORTAL_FRAME_LEFT.get(), BlockRegistry.PORTAL_FRAME_RIGHT.get(), BlockRegistry.PORTAL_FRAME_TOP_LEFT.get(),
 			BlockRegistry.PORTAL_FRAME_TOP.get(), BlockRegistry.PORTAL_FRAME_TOP_RIGHT.get(), BlockRegistry.WEEDWOOD_CRAFTING_TABLE.get(), BlockRegistry.COMPOST_BIN.get(),
-			BlockRegistry.WEEDWOOD_JUKEBOX.get(), /*TODO chest*/ BlockRegistry.GECKO_CAGE.get(), BlockRegistry.WEEDWOOD_BARREL.get(), BlockRegistry.WALKWAY.get(),
+			BlockRegistry.WEEDWOOD_JUKEBOX.get(), BlockRegistry.WEEDWOOD_CHEST.get(), BlockRegistry.GECKO_CAGE.get(), BlockRegistry.WEEDWOOD_BARREL.get(), BlockRegistry.WALKWAY.get(),
 			BlockRegistry.CHIP_PATH.get(), BlockRegistry.REPELLER.get(), BlockRegistry.ROOTMAN_SIMULACRUM_1.get(), BlockRegistry.ROOTMAN_SIMULACRUM_2.get(),
 			BlockRegistry.ROOTMAN_SIMULACRUM_3.get(), BlockRegistry.PAPER_LANTERN_1.get(), BlockRegistry.PAPER_LANTERN_2.get(), BlockRegistry.PAPER_LANTERN_3.get(),
 			BlockRegistry.FISHING_TACKLE_BOX.get(), BlockRegistry.SMOKING_RACK.get(), BlockRegistry.FISH_TRIMMING_TABLE.get(), BlockRegistry.CRAB_POT.get(),
@@ -500,6 +504,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 
 		//TODO rope tag once reed rope returns
 		this.tag(Tags.Blocks.STONES).add(BlockRegistry.BETWEENSTONE.get(), BlockRegistry.CRAGROCK.get(), BlockRegistry.PITSTONE.get());
+
+		this.tag(Tags.Blocks.CHESTS_WOODEN).add(BlockRegistry.WEEDWOOD_CHEST.get());
 
 		this.tag(Tags.Blocks.STORAGE_BLOCKS).addTags(STORAGE_BLOCKS_OCTINE, STORAGE_BLOCKS_VALONITE,
 			STORAGE_BLOCKS_SULFUR, STORAGE_BLOCKS_SLIMY_BONE, STORAGE_BLOCKS_SCABYST, STORAGE_BLOCKS_SYRMORITE,

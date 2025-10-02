@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-08T21:21:53.04258825	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2025-10-01T20:28:31.873501844	Tags for minecraft:entity_type mod id thebetweenlands
 d9818f127fb2f3b7b0ca483131f85efd1e0db10a data/c/tags/entity_type/bosses.json
 b01c677e7055b6e39b31637ef923e1a1bff66d2e data/c/tags/entity_type/capturing_not_supported.json
 713539d2eff717ed6ddadbba55828eb3a1f7e9b8 data/c/tags/entity_type/teleporting_not_supported.json
@@ -11,10 +11,11 @@ b4bf27e55ad67dcfdcac87ccda57df2038658651 data/minecraft/tags/entity_type/freeze_
 23cd27b2d3ccdf50a7c8e8693c905338fafdb51d data/minecraft/tags/entity_type/undead.json
 54e3d2e7949fe2355b18de94133a0e964a276a34 data/thebetweenlands/tags/entity_type/bypasses_repeller.json
 a704bf8f7ae2da3671c1667922957d1873999df9 data/thebetweenlands/tags/entity_type/can_breathe_under_tar.json
-dd437ef398b76d6a9452e7f01f41b5eaba76f0ae data/thebetweenlands/tags/entity_type/critter_cruncher_instakills.json
+7a10041acc7241633f68759377d1e661a222c29f data/thebetweenlands/tags/entity_type/critter_cruncher_instakills.json
 14cce96b27fee784266db8912b804acfb02fe7b8 data/thebetweenlands/tags/entity_type/hag_hacker_instakills.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/entity_type/immune_to_rubber_slowdown.json
 1792c753ba36e04fb8cd908bc730a5d8eb16c6f3 data/thebetweenlands/tags/entity_type/immune_to_tar_slowdown.json
+4cff35276f5cce4f45bed28d22b7c5344baa9116 data/thebetweenlands/tags/entity_type/sludge_slicer_instakills.json
 ad72fefb53af785cf3c5104aed5d0c489b45e47a data/thebetweenlands/tags/entity_type/spike_trap_immune.json
 749c09c24ef972a73ae22a5f183b6b2672cb6780 data/thebetweenlands/tags/entity_type/tar_being.json
 58b4a5a804ab53c1c5a60a5177f73eb453dd8c57 data/thebetweenlands/tags/entity_type/weedwood_bush_passable.json

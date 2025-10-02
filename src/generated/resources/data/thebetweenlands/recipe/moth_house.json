@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "c": {
+      "item": "thebetweenlands:weedwood_chest"
+    },
+    "r": {
+      "item": "thebetweenlands:reed_rope"
+    },
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "t": {
+      "item": "thebetweenlands:thatch"
+    },
+    "w": {
+      "item": "thebetweenlands:weedwood_slab"
+    }
+  },
+  "pattern": [
+    "ttt",
+    "srs",
+    "wcw"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:moth_house"
+  }
+}

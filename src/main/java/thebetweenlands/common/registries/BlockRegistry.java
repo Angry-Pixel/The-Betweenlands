@@ -606,7 +606,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> WEEDWOOD_JUKEBOX = register("weedwood_jukebox", () -> new WeedwoodJukeboxBlock(BlockBehaviour.Properties.of().strength(2.0F, 10.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SULFUR_FURNACE = register("sulfur_furnace", () -> new SulfurFurnaceBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> DUAL_SULFUR_FURNACE = register("dual_sulfur_furnace", () -> new DualSulfurFurnaceBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.STONE)));
-	//TODO weedwood chest, also look into shared loot mechanics for other inventory blocks
+	public static final DeferredBlock<Block> WEEDWOOD_CHEST = register("weedwood_chest", () -> new WeedwoodChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST)));
 	public static final DeferredBlock<Block> WEEDWOOD_RUBBER_TAP = BLOCKS.register("weedwood_rubber_tap", () -> new RubberTapBlock(540, BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SYRMORITE_RUBBER_TAP = BLOCKS.register("syrmorite_rubber_tap", () -> new RubberTapBlock(260, BlockBehaviour.Properties.of().strength(3.5F).sound(SoundType.METAL)));
 	public static final DeferredBlock<SludgeBlock> SLUDGE = register("sludge", () -> new SludgeBlock(BlockBehaviour.Properties.of().noOcclusion().forceSolidOff().replaceable().strength(0.1F).sound(SoundType.SLIME_BLOCK)));

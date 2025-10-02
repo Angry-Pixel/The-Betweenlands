@@ -26,10 +26,8 @@ public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
 
 	@Override
     protected void scale(Shambler entity, PoseStack stack, float partialTickTime) {
-		float flap = (float) (Math.sin(entity.tickCount * 0.3F) * 0.8F);
-		stack.pushPose();
-		stack.translate(0F, 0F - flap * 0.0625F, 0F);
-		stack.popPose();
+		float flap = Mth.sin((entity.tickCount + partialTickTime) * 0.3F) * 0.8F;
+		stack.translate(0.0F, 0.0F - flap * 0.055F, 0.0F);
     }
 
 	@Override

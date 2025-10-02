@@ -72,6 +72,13 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		this.copy(BLBlockTagProvider.OCTINE_IGNITES, OCTINE_IGNITES);
+		this.tag(BL_LOGS).add(
+			BlockRegistry.WEEDWOOD.asItem(), BlockRegistry.WEEDWOOD_LOG.asItem(), BlockRegistry.WEEDWOOD_BARK.asItem(),
+			BlockRegistry.ROTTEN_BARK.asItem(), BlockRegistry.RUBBER_LOG.asItem(),
+			BlockRegistry.HEARTHGROVE_LOG.asItem(), BlockRegistry.HEARTHGROVE_BARK.asItem(),
+			BlockRegistry.NIBBLETWIG_LOG.asItem(), BlockRegistry.NIBBLETWIG_BARK.asItem(),
+			BlockRegistry.SPIRIT_TREE_LOG.asItem(), BlockRegistry.SPIRIT_TREE_BARK.asItem(),
+			BlockRegistry.SAP_LOG.asItem(), BlockRegistry.SAP_BARK.asItem());
 		this.tag(SLINGSHOT_AMMO).add(ItemRegistry.FISH_BAIT.get(), BlockRegistry.BETWEENSTONE_PEBBLE.asItem());
 		this.tag(REPAIRS_BONE_TOOLS).add(ItemRegistry.SLIMY_BONE.get());
 		this.tag(REPAIRS_OCTINE_TOOLS).add(ItemRegistry.OCTINE_INGOT.get());

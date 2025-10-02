@@ -110,43 +110,7 @@ import thebetweenlands.client.model.item.ValoniteShieldModel;
 import thebetweenlands.client.model.item.WeedwoodShieldModel;
 import thebetweenlands.client.particle.*;
 import thebetweenlands.client.renderer.BLItemRenderer;
-import thebetweenlands.client.renderer.block.AlcoveRenderer;
-import thebetweenlands.client.renderer.block.AlembicRenderer;
-import thebetweenlands.client.renderer.block.AnimatorRenderer;
-import thebetweenlands.client.renderer.block.BarrelRenderer;
-import thebetweenlands.client.renderer.block.BeamOriginRenderer;
-import thebetweenlands.client.renderer.block.CenserRenderer;
-import thebetweenlands.client.renderer.block.CompostBinRenderer;
-import thebetweenlands.client.renderer.block.CrabPotFilterRenderer;
-import thebetweenlands.client.renderer.block.CrabPotRenderer;
-import thebetweenlands.client.renderer.block.DruidAltarRenderer;
-import thebetweenlands.client.renderer.block.FilteredSiltGlassJarRenderer;
-import thebetweenlands.client.renderer.block.FishTrimmingTableRenderer;
-import thebetweenlands.client.renderer.block.FishingTackleBoxRenderer;
-import thebetweenlands.client.renderer.block.GeckoCageRenderer;
-import thebetweenlands.client.renderer.block.InfuserRenderer;
-import thebetweenlands.client.renderer.block.ItemCageRenderer;
-import thebetweenlands.client.renderer.block.ItemShelfRenderer;
-import thebetweenlands.client.renderer.block.LootPotRenderer;
-import thebetweenlands.client.renderer.block.LootUrnRenderer;
-import thebetweenlands.client.renderer.block.MobSpawnerRenderer;
-import thebetweenlands.client.renderer.block.MortarRenderer;
-import thebetweenlands.client.renderer.block.MossBedRenderer;
-import thebetweenlands.client.renderer.block.MothHouseRenderer;
-import thebetweenlands.client.renderer.block.MudFlowerPotRenderer;
-import thebetweenlands.client.renderer.block.OfferingTableRenderer;
-import thebetweenlands.client.renderer.block.PuffshroomRenderer;
-import thebetweenlands.client.renderer.block.PurifierRenderer;
-import thebetweenlands.client.renderer.block.RepellerRenderer;
-import thebetweenlands.client.renderer.block.RubberTapRenderer;
-import thebetweenlands.client.renderer.block.SiltGlassJarRenderer;
-import thebetweenlands.client.renderer.block.SimulacrumRenderer;
-import thebetweenlands.client.renderer.block.SmokingRackRenderer;
-import thebetweenlands.client.renderer.block.SpikeTrapRenderer;
-import thebetweenlands.client.renderer.block.SteepingPotRenderer;
-import thebetweenlands.client.renderer.block.WaystoneRenderer;
-import thebetweenlands.client.renderer.block.WeedwoodCraftingTableRenderer;
-import thebetweenlands.client.renderer.block.WindChimeRenderer;
+import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.PresentBlock;
@@ -371,6 +335,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.STEEPING_POT.get(), SteepingPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WAYSTONE.get(), WaystoneRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CHEST.get(), WeedwoodChestRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), WeedwoodCraftingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
 	}
@@ -651,7 +616,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
 			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(), BlockRegistry.STEEPING_POT.asItem(),
 			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(), BlockRegistry.MOTH_HOUSE.asItem(),
-			BlockRegistry.INFUSER.asItem(), BlockRegistry.REPELLER.asItem(),
+			BlockRegistry.INFUSER.asItem(), BlockRegistry.REPELLER.asItem(), BlockRegistry.WEEDWOOD_CHEST.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

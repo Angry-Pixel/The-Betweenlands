@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_grub": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:silk_grub"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_thatch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:thatch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:moth_house"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_thatch",
+      "has_grub",
+      "has_chest"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:moth_house"
+    ]
+  }
+}

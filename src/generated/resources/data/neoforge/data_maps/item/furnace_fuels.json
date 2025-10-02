@@ -162,6 +162,9 @@
     "thebetweenlands:weedwood_bowl": {
       "burn_time": 100
     },
+    "thebetweenlands:weedwood_chest": {
+      "burn_time": 300
+    },
     "thebetweenlands:weedwood_crafting_table": {
       "burn_time": 300
     },

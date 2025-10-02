@@ -632,6 +632,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.SLUDGE.get(), this.models().withExistingParent(BlockRegistry.SLUDGE.getId().getPath(), this.modLoc("block/thin_block")).renderType("translucent").texture("texture", this.modLoc("block/sludge")));
 		this.getVariantBuilder(BlockRegistry.SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/sulfur_furnace" + (state.getValue(SulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(SulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
 		this.simpleBlockItem(BlockRegistry.SULFUR_FURNACE);
+		this.builtinEntity(BlockRegistry.WEEDWOOD_CHEST, this.modLoc("block/weedwood_planks"));
+		this.itemModels().getBuilder(BlockRegistry.WEEDWOOD_CHEST.getId().getPath()).parent(new ModelFile.UncheckedModelFile("item/chest")).texture("particle", this.modLoc("block/weedwood_planks"));
 		this.getVariantBuilder(BlockRegistry.DUAL_SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/dual_sulfur_furnace" + (state.getValue(DualSulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(DualSulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
 		this.simpleBlockItem(BlockRegistry.DUAL_SULFUR_FURNACE);
 		this.builtinEntity(BlockRegistry.WEEDWOOD_RUBBER_TAP, this.modLoc("block/particle/weedwood_rubber_tap_particle"));

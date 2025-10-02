@@ -463,7 +463,7 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.WEEDWOOD_JUKEBOX);
 			output.accept(BlockRegistry.SULFUR_FURNACE);
 			output.accept(BlockRegistry.DUAL_SULFUR_FURNACE);
-//			output.accept(BlockRegistry.WEEDWOOD_CHEST);
+			output.accept(BlockRegistry.WEEDWOOD_CHEST);
 			output.accept(BlockRegistry.SLUDGE);
 			output.accept(BlockRegistry.SULFUR_TORCH);
 			output.accept(BlockRegistry.EXTINGUISHED_SULFUR_TORCH);
