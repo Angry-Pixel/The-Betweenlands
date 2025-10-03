@@ -117,6 +117,7 @@ dependencies {
 	compileOnly 'com.google.auto.service:auto-service:1.1.0'
 	annotationProcessor 'com.google.auto.service:auto-service:1.1.0'
 
+	implementation 'org.codehaus.groovy:groovy-json:3.0.9'
 }
 
 tasks.named('jar', Jar).configure {
@@ -155,6 +156,20 @@ task serverJar(type: Jar, dependsOn: jar) {
 			"ModSide": "SERVER"
 		])
 	}
+}
+
+import org.apache.tools.ant.filters.TokenFilter;
+import groovy.json.JsonSlurper;
+import groovy.json.JsonOutput;
+
+tasks.named('processResources', ProcessResources).configure {
+	// I think this is technically better than the doLast {} method because this slurps the files as they're being copied,
+	//     instead of waiting for them to be copied first and then editing them all afterwards
+	def jsonSlurper = new JsonSlurper()
+	def fileTokenizer = new TokenFilter.FileTokenizer()
+    filesMatching(["**/*.json", "**/*.mcmeta"], { file ->
+    	filter (filterType: TokenFilter, addFileTokenizer: fileTokenizer, add: {fileText -> JsonOutput.toJson(jsonSlurper.parseText(fileText))})
+    })
 }
 
 assemble.dependsOn(serverJar)
