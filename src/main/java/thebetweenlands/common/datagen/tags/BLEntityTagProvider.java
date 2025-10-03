@@ -78,6 +78,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(
 //				EntityRegistry.DECAY_PIT_TARGET.get(),
 //				EntityRegistry.LIGHTNING_BOLT.get(),
+//				EntityRegistry.MOVING_WALL.get(),
 				EntityRegistry.SEAT.get(),
 				EntityRegistry.WIGHT.get(),
 				EntityRegistry.FLAME_JET.get(),
@@ -89,6 +90,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 
 		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(
 //				EntityRegistry.DECAY_PIT_TARGET.get(),
+//				EntityRegistry.MOVING_WALL.get(),
 				EntityRegistry.SEAT.get(),
 				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
 			);
