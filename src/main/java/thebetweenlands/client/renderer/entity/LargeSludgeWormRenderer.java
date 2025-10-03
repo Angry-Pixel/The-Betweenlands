@@ -174,12 +174,14 @@ public class LargeSludgeWormRenderer extends MobRenderer<LargeSludgeWorm, LargeS
 		}
 
 		protected void renderBodyHull(LargeSludgeWorm entity, PoseStack stack, VertexConsumer consumer, int light, int overlay, float partialTicks) {
+			if(entity.segments.length == 0) return;
+			
 			float uOffset = 0;
 
 			int i = 0;
 
 			float pos1X = 0, pos1Y = 0, pos1Z = 0;
-			LargeSludgeWorm.HullSegment segment1 = null;
+			LargeSludgeWorm.HullSegment segment1 = entity.segments[0]; // cheap hack until the actual root cause is figured out
 			for(LargeSludgeWorm.HullSegment segment2 : entity.segments) {
 				Vec3 pos = segment2.pos;
 				Vec3 prevPos = segment2.prevPos;
