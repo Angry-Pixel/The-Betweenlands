@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class LargeSludgeWorm extends SludgeWorm {
+public class LargeSludgeWorm extends SludgeWorm implements SludgeWormPartEntity {
 
 	private static final EntityDataAccessor<Float> EGG_SAC_PERCENTAGE = SynchedEntityData.defineId(LargeSludgeWorm.class, EntityDataSerializers.FLOAT);
 
@@ -149,7 +150,7 @@ public class LargeSludgeWorm extends SludgeWorm {
 	public LargeSludgeWorm(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
 		this.xpReward = 10;
-		final int numSegments = 3 * this.parts.length;
+		final int numSegments = 3 * (this.parts.length + 1);
 
 		this.segments = new HullSegment[numSegments];
 	}
@@ -279,15 +280,21 @@ public class LargeSludgeWorm extends SludgeWorm {
 		Vec3 look = this.getLookAngle();
 		Vec3 origin = this.position();
 
-		Vec3[] points = new Vec3[this.parts.length + 2];
+		final int totalSegmentCount = this.parts.length + 1; // + 1 to also include the parent
+		final SludgeWormPartEntity[] mixedParts = new SludgeWormPartEntity[totalSegmentCount];
+		mixedParts[0] = this;
+		System.arraycopy(this.parts, 0, mixedParts, 1, this.parts.length);
+		final SludgeWormPartEntity tailPart = mixedParts[totalSegmentCount - 1];
+		
+		Vec3[] points = new Vec3[totalSegmentCount + 2];
 
 		Vec3 partDir = null;
-		SludgeWormMultipart prevPart = null;
+		SludgeWormPartEntity prevPart = null;
 
-		points[0] = this.parts[0].position().add(-origin.x + look.x, -origin.y + look.y, -origin.z + look.z);
+		points[0] = mixedParts[0].position().add(-origin.x + look.x, -origin.y + look.y, -origin.z + look.z);
 
-		for (int i = 0; i < this.parts.length; i++) {
-			SludgeWormMultipart part = this.parts[i];
+		for (int i = 0; i < totalSegmentCount; i++) {
+			SludgeWormPartEntity part = mixedParts[i];
 
 			boolean isSamePos = false;
 
@@ -308,7 +315,7 @@ public class LargeSludgeWorm extends SludgeWorm {
 
 			if (isSamePos && partDir != null) {
 				//Adds a slight offset in part dir such that the two positions aren't the same
-				splineNode = splineNode.add(partDir.scale(0.1D / this.parts.length * i));
+				splineNode = splineNode.add(partDir.scale(0.1D / totalSegmentCount * i));
 			}
 
 			points[i + 1] = splineNode;
@@ -316,11 +323,11 @@ public class LargeSludgeWorm extends SludgeWorm {
 
 		Vec3 endPoint;
 		if (partDir != null) {
-			endPoint = this.parts[this.parts.length - 1].position().add(-origin.x + partDir.x, -origin.y + partDir.y, -origin.z + partDir.z);
+			endPoint = tailPart.position().add(-origin.x + partDir.x, -origin.y + partDir.y, -origin.z + partDir.z);
 		} else {
-			endPoint = this.parts[this.parts.length - 1].position().add(-origin.x, -origin.y - 0.0001D, -origin.z);
+			endPoint = tailPart.position().add(-origin.x, -origin.y - 0.0001D, -origin.z);
 		}
-		points[this.parts.length + 1] = endPoint;
+		points[totalSegmentCount + 1] = endPoint;
 
 		this.spineySpliney = new ReparameterizedSpline(new CatmullRomSpline(points));
 		this.spineySpliney.init(this.segments.length * 2, 3);
@@ -420,5 +427,10 @@ public class LargeSludgeWorm extends SludgeWorm {
 		public boolean canContinueToUse() {
 			return false;
 		}
+	}
+
+	@Override
+	public Entity entity() {
+		return this;
 	}
 }

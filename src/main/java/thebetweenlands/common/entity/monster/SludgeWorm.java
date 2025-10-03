@@ -128,7 +128,7 @@ public class SludgeWorm extends Monster implements BLEntity {
 
 		this.renderBoundingBox = this.getBoundingBox();
 		for(SludgeWormMultipart part : this.parts) {
-			this.renderBoundingBox = this.renderBoundingBox.expandTowards(part.position());
+			this.renderBoundingBox = this.renderBoundingBox.minmax(part.getBoundingBox());
 		}
 	}
 

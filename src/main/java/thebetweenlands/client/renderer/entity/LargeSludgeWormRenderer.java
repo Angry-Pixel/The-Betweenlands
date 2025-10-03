@@ -1,7 +1,10 @@
 package thebetweenlands.client.renderer.entity;
 
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,8 +23,6 @@ import thebetweenlands.client.model.entity.LargeSludgeWormModel;
 import thebetweenlands.client.model.entity.SludgeWormEggSacModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.monster.LargeSludgeWorm;
-
-import javax.annotation.Nullable;
 
 public class LargeSludgeWormRenderer extends MobRenderer<LargeSludgeWorm, LargeSludgeWormModel> {
 
@@ -178,11 +179,10 @@ public class LargeSludgeWormRenderer extends MobRenderer<LargeSludgeWorm, LargeS
 			
 			float uOffset = 0;
 
-			int i = 0;
-
 			float pos1X = 0, pos1Y = 0, pos1Z = 0;
-			LargeSludgeWorm.HullSegment segment1 = entity.segments[0]; // cheap hack until the actual root cause is figured out
-			for(LargeSludgeWorm.HullSegment segment2 : entity.segments) {
+			LargeSludgeWorm.HullSegment segment1 = null;
+			for(int i = 0; i < entity.segments.length; ++i) {
+				LargeSludgeWorm.HullSegment segment2 = entity.segments[i];
 				Vec3 pos = segment2.pos;
 				Vec3 prevPos = segment2.prevPos;
 
@@ -264,8 +264,6 @@ public class LargeSludgeWormRenderer extends MobRenderer<LargeSludgeWorm, LargeS
 				pos1X = pos2X;
 				pos1Y = pos2Y;
 				pos1Z = pos2Z;
-
-				i++;
 			}
 		}
 
