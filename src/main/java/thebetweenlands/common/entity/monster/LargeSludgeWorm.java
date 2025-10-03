@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class LargeSludgeWorm extends SludgeWorm implements SludgeWormPartEntity {
+public class LargeSludgeWorm extends SludgeWorm {
 
 	private static final EntityDataAccessor<Float> EGG_SAC_PERCENTAGE = SynchedEntityData.defineId(LargeSludgeWorm.class, EntityDataSerializers.FLOAT);
 
@@ -263,7 +263,7 @@ public class LargeSludgeWorm extends SludgeWorm implements SludgeWormPartEntity 
 		boolean hurt = super.damageWorm(source, amount);
 
 		if (hurt && !this.level().isClientSide() && source.getEntity() != null && this.getRandom().nextInt(6) == 0 && amount > 0.5F) {
-			SludgeWormMultipart spawnPart = this.parts[this.getRandom().nextInt(this.parts.length)];
+			Entity spawnPart = getPartOrSelf(this.getRandom().nextInt(this.parts.length + 1));
 
 			SmolSludge entity = new SmolSludge(EntityRegistry.SMOL_SLUDGE.get(), this.level());
 			entity.moveTo(spawnPart.position(), this.getRandom().nextFloat() * 360.0F, 0);
@@ -273,61 +273,55 @@ public class LargeSludgeWorm extends SludgeWorm implements SludgeWormPartEntity 
 		return hurt;
 	}
 
-	//TODO figure out why body segments are disconnected from the head. I suspect the positions are being set incorrectly in here
-	protected void updateSegmentPositions() {
-		this.segmentsAvailable = true;
-
+	protected Vec3[] calculateSplinePoints() {
 		Vec3 look = this.getLookAngle();
 		Vec3 origin = this.position();
 
 		final int totalSegmentCount = this.parts.length + 1; // + 1 to also include the parent
-		final SludgeWormPartEntity[] mixedParts = new SludgeWormPartEntity[totalSegmentCount];
-		mixedParts[0] = this;
-		System.arraycopy(this.parts, 0, mixedParts, 1, this.parts.length);
-		final SludgeWormPartEntity tailPart = mixedParts[totalSegmentCount - 1];
 		
+		// each point is the offset of one of the parts from the origin
 		Vec3[] points = new Vec3[totalSegmentCount + 2];
 
-		Vec3 partDir = null;
-		SludgeWormPartEntity prevPart = null;
+		// initial point is the look vector, so the spine adjusts based on the way the worm is looking
+		points[0] = look;
+		// point 1 is for segment 0, which is the root (i.e. the head of the worm), which is `this`
+		// this means `points[1] = this.position().subtract(origin)` which is always zero because `origin = this.position()`
+		points[1] = Vec3.ZERO;
+		
+		Vec3 lastValidDirection = look.reverse();
+		Vec3 prevSegmentPos = this.position();
+		
+		for (int i = 0; i < this.parts.length; i++) {
+			SludgeWormMultipart part = this.parts[i];
 
-		points[0] = mixedParts[0].position().add(-origin.x + look.x, -origin.y + look.y, -origin.z + look.z);
-
-		for (int i = 0; i < totalSegmentCount; i++) {
-			SludgeWormPartEntity part = mixedParts[i];
-
-			boolean isSamePos = false;
-
-			if (prevPart != null) {
-				Vec3 currPos = part.position();
-				Vec3 prevPos = prevPart.position();
-				Vec3 diff = currPos.subtract(prevPos);
-				if (diff.lengthSqr() > 0.01D) {
-					partDir = diff.normalize();
-				} else {
-					isSamePos = true;
-				}
+			Vec3 currSegmentPos = part.position();
+			Vec3 lastSegmentOffset = currSegmentPos.subtract(prevSegmentPos);
+			
+			// spline nodes are the offset from the head
+			Vec3 splineNode = currSegmentPos.subtract(origin);
+			
+			if (lastSegmentOffset.lengthSqr() > 0.01D) {
+				lastValidDirection = lastSegmentOffset.normalize();
+			} else {
+				// if it's closer than 0.1 blocks to the last segment, add a slight offset
+				//   to prevent them being too close and messing up our spline
+				splineNode = splineNode.add(lastValidDirection.scale(0.1D / totalSegmentCount * (i + 1)));
 			}
 
-			prevPart = part;
+			prevSegmentPos = currSegmentPos;
 
-			Vec3 splineNode = part.position().subtract(origin);
-
-			if (isSamePos && partDir != null) {
-				//Adds a slight offset in part dir such that the two positions aren't the same
-				splineNode = splineNode.add(partDir.scale(0.1D / totalSegmentCount * i));
-			}
-
-			points[i + 1] = splineNode;
+			points[i + 2] = splineNode;
 		}
 
-		Vec3 endPoint;
-		if (partDir != null) {
-			endPoint = tailPart.position().add(-origin.x + partDir.x, -origin.y + partDir.y, -origin.z + partDir.z);
-		} else {
-			endPoint = tailPart.position().add(-origin.x, -origin.y - 0.0001D, -origin.z);
-		}
-		points[totalSegmentCount + 1] = endPoint;
+		points[totalSegmentCount + 1] = prevSegmentPos.subtract(origin).add(lastValidDirection);
+		
+		return points;
+	}
+	
+	protected void updateSegmentPositions() {
+		this.segmentsAvailable = true;
+
+		Vec3[] points = calculateSplinePoints();
 
 		this.spineySpliney = new ReparameterizedSpline(new CatmullRomSpline(points));
 		this.spineySpliney.init(this.segments.length * 2, 3);
@@ -427,10 +421,5 @@ public class LargeSludgeWorm extends SludgeWorm implements SludgeWormPartEntity 
 		public boolean canContinueToUse() {
 			return false;
 		}
-	}
-
-	@Override
-	public Entity entity() {
-		return this;
 	}
 }

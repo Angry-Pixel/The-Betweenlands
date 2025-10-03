@@ -72,6 +72,18 @@ public class SludgeWorm extends Monster implements BLEntity {
 	public PartEntity<?>[] getParts() {
 		return parts;
 	}
+	
+	/*
+	 * Context for this function: in 1.12.2, there used to be one more subpart on every single
+	 * sludge worm, and it would always share the exact same position and orientation as the head.
+	 * This part would always be index 0 in the part array.
+	 * In the port, that part has been removed, instead opting to use the actual parent entity in
+	 * its place.
+	 */
+	public Entity getPartOrSelf(int i) {
+		if(i-- == 0) return this;
+		return this.parts[i];
+	}
 
 	@Override
 	public boolean isMultipartEntity() {
