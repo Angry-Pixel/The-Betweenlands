@@ -35,7 +35,6 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 
 	//TODO seasonal drops for unimplemented mobs:
 	//angler: 1, 8, 1, 4
-	//blood snail: 2, 8, 1, 4
 	//pyrad: 2, 3, 1, 1
 	//sludge menace: 8, 0, 6, 0
 	//consider seasonal drops for stalkers?
@@ -432,10 +431,10 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RING_OF_RECRUITMENT)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.AMULET_SLOT))));
 		this.addWithSeasonalDrops(EntityRegistry.TAR_BEAST.get(), 3, 0, 3, 0, LootTable.lootTable()
-				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_BEAST_HEART).when(LootItemKilledByPlayerCondition.killedByPlayer())))
-				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_DRIP).setWeight(8)
-					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1, 2))))));
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_BEAST_HEART).when(LootItemKilledByPlayerCondition.killedByPlayer())))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.TAR_DRIP).setWeight(8)
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1, 2))))));
 		this.addWithSeasonalDrops(EntityRegistry.LARGE_SLUDGE_WORM.get(), 2, 6, 1, 1, LootTable.lootTable()
 			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(1, 3))
 				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_JELLO).setWeight(2))
@@ -463,6 +462,18 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(0, 1))
 				.add(LootItem.lootTableItem(ItemRegistry.SAP_BALL)
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))));
+
+		this.addWithSeasonalDrops(EntityRegistry.BLOOD_SNAIL.get(), 2, 8, 1, 4, LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RAW_SNAIL_FLESH)
+				.apply(SmeltItemFunction.smelted()
+					.when(this.shouldSmeltLoot()))
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
+			.withPool(LootPool.lootPool()
+				.add(EmptyLootItem.emptyItem())
+				.add(LootItem.lootTableItem(ItemRegistry.CRIMSON_SNAIL_SHELL).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.POISON_GLAND)
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 2))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

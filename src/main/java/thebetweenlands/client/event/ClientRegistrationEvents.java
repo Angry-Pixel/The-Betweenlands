@@ -301,6 +301,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SHOCKWAVE_BLOCK.get(), ShockwaveBlockRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TERMITE.get(), TermiteRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.LEECH.get(), LeechRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BLOOD_SNAIL.get(), BloodSnailRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SNAIL_POISON_JET.get(), NoopRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -410,6 +412,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.CHIROMAW_EGG, ChiromawEggModel::create);
 		event.registerLayerDefinition(BLModelLayers.TERMITE, TermiteModel::create);
 		event.registerLayerDefinition(BLModelLayers.LEECH, LeechModel::create);
+		event.registerLayerDefinition(BLModelLayers.BLOOD_SNAIL, BloodSnailModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

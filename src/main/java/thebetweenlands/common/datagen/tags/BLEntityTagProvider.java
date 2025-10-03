@@ -43,7 +43,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(WEEDWOOD_BUSH_PASSABLE).add(EntityType.PLAYER, EntityRegistry.GECKO.get());
 		this.tag(WIGHTS_BANE_INSTAKILLS).add(EntityRegistry.WIGHT.get());
 		this.tag(HAG_HACKER_INSTAKILLS).add(EntityRegistry.SWAMP_HAG.get());
-		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.MIRE_SNAIL.get(), EntityRegistry.SPORELING.get(), EntityRegistry.LEECH.get(), EntityRegistry.TERMITE.get(), EntityRegistry.CHIROMAW.get()); //TODO blood snail, infestation
+		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.BLOOD_SNAIL.get(), EntityRegistry.MIRE_SNAIL.get(), EntityRegistry.SPORELING.get(), EntityRegistry.LEECH.get(), EntityRegistry.TERMITE.get(), EntityRegistry.CHIROMAW.get()); //TODO infestation
 		this.tag(SLUDGE_SLICER_INSTAKILLS).add(EntityRegistry.SLUDGE.get(), EntityRegistry.SMOL_SLUDGE.get());
 		this.tag(LEECH_ATTACKS).add(EntityRegistry.SWAMP_HAG.get(), EntityType.PLAYER);
 		this.tag(Tags.EntityTypes.BOSSES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.PRIMORDIAL_MALEVOLENCE.get()); // TODO bosses

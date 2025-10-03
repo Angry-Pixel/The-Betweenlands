@@ -47,7 +47,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<AshSprite>> ASH_SPRITE = registerWithEgg("ash_sprite", EntityType.Builder.of(AshSprite::new, MobCategory.MONSTER).sized(0.4F, 0.8F).fireImmune().eyeHeight(0.51875F).passengerAttachments(0.7375F).ridingOffset(0.04F).clientTrackingRange(8), 0x1B1F28, 0x721C16, AshSprite::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Barrishee>> BARRISHEE = registerWithEgg("barrishee", EntityType.Builder.of(Barrishee::new, MobCategory.MONSTER).sized(2.25F, 1.8F).clientTrackingRange(10), 0x604C30, 0xFFD92C, Barrishee::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BipedCryptCrawler>> BIPED_CRYPT_CRAWLER = registerWithAttributes("biped_crypt_crawler", EntityType.Builder.of(BipedCryptCrawler::new, MobCategory.MONSTER).sized(0.75F, 1.5F), BipedCryptCrawler::registerAttributes);
-	//blood snail
+	public static final DeferredHolder<EntityType<?>, EntityType<BloodSnail>> BLOOD_SNAIL = registerWithEgg("blood_snail", EntityType.Builder.of(BloodSnail::new, MobCategory.MONSTER).sized(0.7F, 0.5F), 0x8E9456, 0xB3261E, BloodSnail::registerAttributes);
 	//boulder sprite
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C, BubblerCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CaveFish>> CAVE_FISH = registerWithEgg("cave_fish", EntityType.Builder.of(CaveFish::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.3F, 0.2F), 0xFF8000, 0xE6E6E6, CaveFish::registerAttributes);
@@ -158,7 +158,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = register("sludge_ball", EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20));
 	//sludge wall jet
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormArrow>> SLUDGE_WORM_ARROW = register("sludge_worm_arrow", EntityType.Builder.<SludgeWormArrow>of(SludgeWormArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
-	//snail poison jet
+	public static final DeferredHolder<EntityType<?>, EntityType<SnailPoisonJet>> SNAIL_POISON_JET = register("snail_poison_jet", EntityType.Builder.<SnailPoisonJet>of(SnailPoisonJet::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
 	//spike wave
 	//sword energy
 	public static final DeferredHolder<EntityType<?>, EntityType<ThrownTarminion>> THROWN_TARMINION = register("thrown_tarminion", EntityType.Builder.<ThrownTarminion>of(ThrownTarminion::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20));

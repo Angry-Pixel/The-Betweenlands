@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-02T10:31:52.213258422	Item Models: thebetweenlands
+// 1.21.1	2025-10-02T11:56:08.516060838	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -75,6 +75,7 @@ d6df531a6d423dfe5bb39f81bbd41d05fc15782b assets/thebetweenlands/models/item/biop
 d29f7205657e48772892cf19459988fd63a62ce4 assets/thebetweenlands/models/item/black_hat_mushroom_item.json
 2b292d380946e9fbc379ed3e7e148a82759359a2 assets/thebetweenlands/models/item/bladderwort_flower_drop.json
 193b9d3cc76be58c6bcec3ae105899531f1f50f0 assets/thebetweenlands/models/item/bladderwort_stalk_drop.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/blood_snail_spawn_egg.json
 250c3bb713b79911e28b649aa18fe808be097e04 assets/thebetweenlands/models/item/blue_candy.json
 230e5c23d475e9e207200c9d56e04b9854cde604 assets/thebetweenlands/models/item/blue_eyed_grass_flowers.json
 20233623d2636947d551132585c8068aa2202d00 assets/thebetweenlands/models/item/blue_iris_petal.json

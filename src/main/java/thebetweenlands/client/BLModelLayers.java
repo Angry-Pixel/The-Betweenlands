@@ -19,6 +19,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation ASH_SPRITE = register("ash_sprite");
 	public static final ModelLayerLocation BARRISHEE = register("barrishee");
 	public static final ModelLayerLocation BIPED_CRYPT_CRAWLER = register("biped_crypt_crawler");
+	public static final ModelLayerLocation BLOOD_SNAIL = register("blood_snail");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
 	public static final ModelLayerLocation CAVE_FISH = register("cave_fish");
 	public static final ModelLayerLocation CHIROMAW = register("chiromaw");
