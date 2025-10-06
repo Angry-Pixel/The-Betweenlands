@@ -3,6 +3,7 @@ package thebetweenlands.common.block.container;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -21,7 +22,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 import javax.annotation.Nullable;
 
@@ -60,32 +63,31 @@ public class ItemCageBlock extends BaseEntityBlock implements SwampWaterLoggable
 	}
 
 	@Override
-	public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		if (!level.isClientSide()) {
 			ItemCageBlockEntity swordStone = (ItemCageBlockEntity) level.getBlockEntity(pos);
 			if (swordStone != null) {
-				//TODO
-//				EnergySword energyBall = swordStone.isSwordEnergyBelow(level, pos, state);
-//				if (energyBall != null) {
-//					level.playSound(null, pos, SoundRegistry.FORTRESS_PUZZLE_CAGE_BREAK.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
-//					switch (swordStone.type) {
-//						case 0:
-//							energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
-//							break;
-//						case 1:
-//							energyBall.setSwordPart2Pos(energyBall.getSwordPart2Pos() - 0.05F);
-//							break;
-//						case 2:
-//							energyBall.setSwordPart3Pos(energyBall.getSwordPart3Pos() - 0.05F);
-//							break;
-//						case 3:
-//							energyBall.setSwordPart4Pos(energyBall.getSwordPart4Pos() - 0.05F);
-//							break;
-//					}
-//				}
+				SwordEnergy energyBall = swordStone.isSwordEnergyBelow(level, pos, state);
+				if (energyBall != null) {
+					level.playSound(null, pos, SoundRegistry.ITEM_CAGE_BREAK.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+					switch (swordStone.type) {
+						case 0:
+							energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
+							break;
+						case 1:
+							energyBall.setSwordPart2Pos(energyBall.getSwordPart2Pos() - 0.05F);
+							break;
+						case 2:
+							energyBall.setSwordPart3Pos(energyBall.getSwordPart3Pos() - 0.05F);
+							break;
+						case 3:
+							energyBall.setSwordPart4Pos(energyBall.getSwordPart4Pos() - 0.05F);
+							break;
+					}
+				}
 			}
 		}
-		super.destroy(level, pos, state);
+		return super.playerWillDestroy(level, pos, state, player);
 	}
 
 	@Nullable

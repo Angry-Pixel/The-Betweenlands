@@ -12,9 +12,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.entity.ItemCageBlockEntity;
+import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.monster.MummyArm;
 import thebetweenlands.common.entity.monster.Stalker;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 
 import java.util.List;
 
@@ -37,10 +41,18 @@ public class TestFlagItem extends Item {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		BlockState state = context.getLevel().getBlockState(context.getClickedPos());
-		MummyArm arm = new MummyArm(context.getLevel(), context.getPlayer());
-		arm.moveTo(context.getClickLocation());
-		context.getLevel().addFreshEntity(arm);
+		int offset = 4;
+		SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
+
+		energy.setPos(context.getClickedPos().above(offset - 1).getCenter());
+
+		context.getLevel().addFreshEntity(energy);
+
+		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
+		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
+		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
+		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
+
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
 	}
 

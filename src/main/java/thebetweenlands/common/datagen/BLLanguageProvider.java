@@ -1114,6 +1114,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("entity.thebetweenlands.tame_lightning_chiromaw", "Tamed Lightning Chiromaw");
 		this.add("item.thebetweenlands.tame_lightning_chiromaw", "Tamed Lightning Chiromaw");
 		this.addEntityType(EntityRegistry.SNAIL_POISON_JET, "Snail Poison Jet");
+		this.addEntityType(EntityRegistry.SWORD_ENERGY, "Shockwave Sword Energy Ball");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");

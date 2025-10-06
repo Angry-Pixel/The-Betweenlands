@@ -9,7 +9,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
 import javax.annotation.Nullable;
+
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -76,24 +78,26 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 
 		// TODO Pit of Decay Mechanism
 		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(
-//				EntityRegistry.DECAY_PIT_TARGET.get(),
-//				EntityRegistry.LIGHTNING_BOLT.get(),
-//				EntityRegistry.MOVING_WALL.get(),
-				EntityRegistry.SEAT.get(),
-				EntityRegistry.WIGHT.get(),
-				EntityRegistry.FLAME_JET.get(),
-				EntityRegistry.FISH_HOOK.get(),
-				EntityRegistry.FISH_VORTEX.get(),
-				EntityRegistry.ELECTRIC_SHOCK.get(),
-				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
-			);
+//			EntityRegistry.DECAY_PIT_TARGET.get(),
+//			EntityRegistry.LIGHTNING_BOLT.get(),
+//			EntityRegistry.MOVING_WALL.get(),
+			EntityRegistry.SWORD_ENERGY.get(),
+			EntityRegistry.SEAT.get(),
+			EntityRegistry.WIGHT.get(),
+			EntityRegistry.FLAME_JET.get(),
+			EntityRegistry.FISH_HOOK.get(),
+			EntityRegistry.FISH_VORTEX.get(),
+			EntityRegistry.ELECTRIC_SHOCK.get(),
+			EntityRegistry.PREDATOR_ARROW_GUIDE.get()
+		);
 
 		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(
-//				EntityRegistry.DECAY_PIT_TARGET.get(),
-//				EntityRegistry.MOVING_WALL.get(),
-				EntityRegistry.SEAT.get(),
-				EntityRegistry.PREDATOR_ARROW_GUIDE.get()
-			);
+//			EntityRegistry.DECAY_PIT_TARGET.get(),
+//			EntityRegistry.MOVING_WALL.get(),
+			EntityRegistry.SWORD_ENERGY.get(),
+			EntityRegistry.SEAT.get(),
+			EntityRegistry.PREDATOR_ARROW_GUIDE.get()
+		);
 
 	}
 

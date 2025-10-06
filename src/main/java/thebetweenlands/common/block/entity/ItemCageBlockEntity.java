@@ -5,10 +5,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemCageBlockEntity extends SyncedBlockEntity {
@@ -37,9 +40,10 @@ public class ItemCageBlockEntity extends SyncedBlockEntity {
 		level.sendBlockUpdated(pos, state, state, 3);
 	}
 
-	public void setType(Level level, BlockPos pos, BlockState state, byte blockType) {
-		this.type = blockType;
-		level.sendBlockUpdated(pos, state, state, 3);
+	public static void setBlockWithType(Level level, BlockPos pos, BlockState state, int blockType) {
+		level.setBlockAndUpdate(pos, state);
+		((ItemCageBlockEntity)level.getBlockEntity(pos)).type = (byte) blockType;
+		level.sendBlockUpdated(pos, state, state, 2);
 	}
 
 	protected boolean isBlockOccupied(Level level, BlockPos pos, BlockState state) {
@@ -47,14 +51,14 @@ public class ItemCageBlockEntity extends SyncedBlockEntity {
 		return !list.isEmpty();
 	}
 
-//	@Nullable
-//	public EnergySword isSwordEnergyBelow(LevelAccessor level, BlockPos pos, BlockState state) {
-//		List<EnergySword> list = level.getEntitiesOfClass(EnergySword.class, new AABB(pos.getX() - 9D, pos.getY() - 2D, pos.getZ() - 9D, pos.getX() + 10D, pos.getY() + 3D, pos.getZ() + 10D));
-//		if (!list.isEmpty()) {
-//			return list.getFirst();
-//		}
-//		return null;
-//	}
+	@Nullable
+	public SwordEnergy isSwordEnergyBelow(LevelAccessor level, BlockPos pos, BlockState state) {
+		List<SwordEnergy> list = level.getEntitiesOfClass(SwordEnergy.class, new AABB(pos.getX() - 9D, pos.getY() - 2D, pos.getZ() - 9D, pos.getX() + 10D, pos.getY() + 3D, pos.getZ() + 10D));
+		if (!list.isEmpty()) {
+			return list.getFirst();
+		}
+		return null;
+	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {

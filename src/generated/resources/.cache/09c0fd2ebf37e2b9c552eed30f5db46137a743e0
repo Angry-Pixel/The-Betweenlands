@@ -1,7 +1,7 @@
-// 1.21.1	2025-10-02T11:56:08.52347548	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2025-10-05T20:14:42.155728643	Tags for minecraft:entity_type mod id thebetweenlands
 d9818f127fb2f3b7b0ca483131f85efd1e0db10a data/c/tags/entity_type/bosses.json
-b01c677e7055b6e39b31637ef923e1a1bff66d2e data/c/tags/entity_type/capturing_not_supported.json
-713539d2eff717ed6ddadbba55828eb3a1f7e9b8 data/c/tags/entity_type/teleporting_not_supported.json
+0401645ac55f590a2f245883223a94be6dbdcdb4 data/c/tags/entity_type/capturing_not_supported.json
+02f946b3c1e59d21ae252931f8ba7f680eafc188 data/c/tags/entity_type/teleporting_not_supported.json
 90e461cea0cecc929d799a332015986950687a92 data/minecraft/tags/entity_type/aquatic.json
 0084f2bd1c5387196454f0ebd96935a107155ebe data/minecraft/tags/entity_type/arrows.json
 5d267692b4bb8a58f0342e303773e4859d3938cf data/minecraft/tags/entity_type/arthropod.json

@@ -303,6 +303,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.LEECH.get(), LeechRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BLOOD_SNAIL.get(), BloodSnailRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SNAIL_POISON_JET.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SHOCKWAVE_SWORD_ITEM.get(), ShockwaveSwordItemEntityRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SWORD_ENERGY.get(), SwordEnergyRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
