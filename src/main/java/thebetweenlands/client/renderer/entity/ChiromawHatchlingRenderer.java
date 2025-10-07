@@ -38,55 +38,53 @@ public class ChiromawHatchlingRenderer extends MultiPieceMobModelRenderer<Chirom
 	}
 
 	@Override
-	protected void renderModel(ChiromawHatchling entity, PoseStack stack, MultiBufferSource buffer, float partialTicks, float yaw, int light, boolean visible, boolean translucent, boolean glowing) {
-		RenderType type = this.getRenderType(entity, visible, translucent, glowing);
+	protected void renderModel(ChiromawHatchling entity, PoseStack stack, MultiBufferSource buffer, int packedLight, int overlay, int color, RenderState state) {
+		RenderType type = this.getRenderType(entity, state.visible(), state.translucent(), state.glowing());
 		if (type != null) {
-			int overlay = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
-			int color = translucent ? 654311423 : -1;
 			if (entity.getHasHatched()) {
-				float eggFade = Mth.lerp(partialTicks, entity.prevTransformTick, entity.getTransformCount());
+				float eggFade = Mth.lerp(state.partialTick(), entity.prevTransformTick, entity.getTransformCount());
 
 				if (entity.getTransformCount() > 0) {
 					RenderSystem.depthMask(false);
 				}
 
-				this.getModel().renderEgg(stack, buffer.getBuffer(type), light, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(FastColor.as8BitChannel(1F - eggFade * 0.02F), color));
+				this.getModel().renderEgg(stack, buffer.getBuffer(type), packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(FastColor.as8BitChannel(1F - eggFade * 0.02F), color));
 
 				RenderSystem.depthMask(true);
 
-				float smootherRise = Mth.lerp(partialTicks, entity.prevRise, entity.getRiseCount());
-				float flap = Mth.sin((entity.tickCount + partialTicks) * 0.5F) * 0.15F;
+				float smootherRise = Mth.lerp(state.partialTick(), entity.prevRise, entity.getRiseCount());
+				float flap = Mth.sin(state.ageInTicks() * 0.5F) * 0.15F;
 				if (!entity.getIsTransforming())
 					flap = 0F;
 
 				stack.pushPose();
 				stack.translate(0.0F, 0.5F - smootherRise * 0.0125F - eggFade * 0.01F - flap * 0.5F, 0.0F);
 				stack.translate(0.0F, 0.0F, 0.2F - smootherRise * 0.00625F);
-				this.getModel().renderBaby(stack, buffer.getBuffer(type), light, overlay, color);
+				this.getModel().renderBaby(stack, buffer.getBuffer(type), packedLight, overlay, color);
 				stack.popPose();
 			} else {
-				float flap = Mth.sin((entity.hatchAnimation + partialTicks) * 0.125F) * 0.03125F * 1F / 60F * entity.getHatchTick();
+				float flap = Mth.sin((entity.hatchAnimation + state.partialTick()) * 0.125F) * 0.03125F * 1F / 60F * entity.getHatchTick();
 				if (entity.getHatchTick() < 1)
 					flap = 0F;
 				stack.pushPose();
 				stack.scale(1.0F + flap, 1F - flap, 1.0F + flap);
 				stack.translate(0.0D, flap * 2.0D, 0.0D);
-				this.egg.renderToBuffer(stack, buffer.getBuffer(type), light, OverlayTexture.NO_OVERLAY, color);
+				this.egg.renderToBuffer(stack, buffer.getBuffer(type), packedLight, OverlayTexture.NO_OVERLAY, color);
 				stack.popPose();
 			}
 
 			if (entity.getIsHungry() && entity.getRiseCount() > 0) {
 				stack.pushPose();
 
-				float smoothRise = Mth.lerp(partialTicks, entity.prevRise, entity.getRiseCount());
-				float scale = (0.25F + (Mth.sin((entity.tickCount + partialTicks) * 0.125F) * 0.0625F)) * smoothRise / ChiromawHatchling.MAX_RISE;
+				float smoothRise = Mth.lerp(state.partialTick(), entity.prevRise, entity.getRiseCount());
+				float scale = (0.25F + (Mth.sin(state.ageInTicks() * 0.125F) * 0.0625F)) * smoothRise / ChiromawHatchling.MAX_RISE;
 				if (!entity.getFoodCraved().isEmpty()) {
-					stack.mulPose(Axis.YP.rotationDegrees(-yaw + 180));
+					stack.mulPose(Axis.YP.rotationDegrees(-state.yRot() + 180));
 					stack.translate(0.0D, 1.0D - smoothRise * 0.025D, 0.0D);
 					stack.scale(scale, -scale, -scale);
 					Quaternionf camera = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
 					stack.mulPose(new Quaternionf(0.0F, camera.y, 0.0F, camera.w));
-					Minecraft.getInstance().getItemRenderer().renderStatic(entity.getFoodCraved(), ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, stack, buffer, null, entity.getId());
+					Minecraft.getInstance().getItemRenderer().renderStatic(entity.getFoodCraved(), ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, stack, buffer, null, entity.getId());
 
 					if (entity.getFoodCraved().getCount() != 1) {
 						stack.pushPose();
@@ -94,7 +92,7 @@ public class ChiromawHatchlingRenderer extends MultiPieceMobModelRenderer<Chirom
 						stack.translate(0.1D, 0.1D, 0.0D);
 						stack.scale(-0.05F, -0.05F, 0.05F);
 
-						Minecraft.getInstance().font.drawInBatch(s, 17.0F - Minecraft.getInstance().font.width(s), 9.0F, -1, false, stack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
+						Minecraft.getInstance().font.drawInBatch(s, 17.0F - Minecraft.getInstance().font.width(s), 9.0F, -1, false, stack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, packedLight);
 						stack.popPose();
 					}
 				}

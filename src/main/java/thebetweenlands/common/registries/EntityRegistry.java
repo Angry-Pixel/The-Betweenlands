@@ -23,6 +23,7 @@ import thebetweenlands.common.entity.fishing.SiltCrab;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.entity.monster.*;
 import thebetweenlands.common.entity.monster.chiromaw.*;
+import thebetweenlands.common.entity.monster.infestation.Infestation;
 import thebetweenlands.common.entity.projectile.*;
 import thebetweenlands.common.entity.projectile.arrow.AnglerToothArrow;
 import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
@@ -71,7 +72,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Greebling>> GREEBLING = registerWithEgg("greebling", EntityType.Builder.of(Greebling::new, MobCategory.AMBIENT).sized(1.0F, 0.75F).clientTrackingRange(16), 0x7CB2AA, 0xC3726C, Greebling::createMobAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingCoracle>> GREEBLING_CORACLE = registerWithEgg("greebling_coracle", EntityType.Builder.of(GreeblingCoracle::new, MobCategory.AMBIENT).sized(1.0F, 1.0F).clientTrackingRange(16), 0x7CB2AA, 0xC3726C, GreeblingCoracle::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingVolarpadFloater>> GREEBLING_VOLARPAD_FLOATER = register("greebling_volarpad_floater", EntityType.Builder.<GreeblingVolarpadFloater>of(GreeblingVolarpadFloater::new, MobCategory.MISC).sized(1.0F, 1.0F).clientTrackingRange(16).noSave().fireImmune().noSummon().canSpawnFarFromPlayer());
-	//infestation
+	public static final DeferredHolder<EntityType<?>, EntityType<Infestation>> INFESTATION = registerWithEgg("infestation", EntityType.Builder.<Infestation>of(Infestation::new, MobCategory.MONSTER).sized(0.85F, 0.85F), 0x292B3B, 0xE2D698, Infestation::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<LargeSludgeWorm>> LARGE_SLUDGE_WORM = registerWithEgg("large_sludge_worm", EntityType.Builder.of(LargeSludgeWorm::new, MobCategory.MONSTER).sized(0.8F, 0.8F).fireImmune(), 0x726459, 0xE2DED9, LargeSludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Leech>> LEECH = registerWithEgg("leech", EntityType.Builder.of(Leech::new, MobCategory.MONSTER).sized(0.7F, 0.3F), 0x804E3D, 0x635940, Leech::registerAttributes);

@@ -50,6 +50,7 @@ public class RotSmellData {
 		} else {
 			this.smellyTime = entity.level().getGameTime() + duration;
 		}
+		entity.syncData(AttachmentRegistry.ROT_SMELL);
 	}
 
 	public void setNotSmellingBad() {

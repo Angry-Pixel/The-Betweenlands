@@ -96,6 +96,7 @@ public class CommonEvents {
 					}
 				}
 			}
+			player.syncData(AttachmentRegistry.SWARMED);
 		}
 	}
 }

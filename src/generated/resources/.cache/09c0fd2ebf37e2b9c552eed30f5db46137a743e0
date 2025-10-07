@@ -1,10 +1,10 @@
-// 1.21.1	2025-10-05T20:14:42.155728643	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2025-10-06T19:42:56.665572581	Tags for minecraft:entity_type mod id thebetweenlands
 d9818f127fb2f3b7b0ca483131f85efd1e0db10a data/c/tags/entity_type/bosses.json
 0401645ac55f590a2f245883223a94be6dbdcdb4 data/c/tags/entity_type/capturing_not_supported.json
 02f946b3c1e59d21ae252931f8ba7f680eafc188 data/c/tags/entity_type/teleporting_not_supported.json
 90e461cea0cecc929d799a332015986950687a92 data/minecraft/tags/entity_type/aquatic.json
 0084f2bd1c5387196454f0ebd96935a107155ebe data/minecraft/tags/entity_type/arrows.json
-5d267692b4bb8a58f0342e303773e4859d3938cf data/minecraft/tags/entity_type/arthropod.json
+a30a4477fafbac57ef550f4b68bba72f4179b268 data/minecraft/tags/entity_type/arthropod.json
 e45d8da180362c3694c51c3c64245e5b025601c0 data/minecraft/tags/entity_type/can_breathe_under_water.json
 3113bbcb6dcc9eef95edddbf3a3293271fd941f3 data/minecraft/tags/entity_type/fall_damage_immune.json
 b4bf27e55ad67dcfdcac87ccda57df2038658651 data/minecraft/tags/entity_type/freeze_hurts_extra_types.json
@@ -12,7 +12,7 @@ b4bf27e55ad67dcfdcac87ccda57df2038658651 data/minecraft/tags/entity_type/freeze_
 23cd27b2d3ccdf50a7c8e8693c905338fafdb51d data/minecraft/tags/entity_type/undead.json
 54e3d2e7949fe2355b18de94133a0e964a276a34 data/thebetweenlands/tags/entity_type/bypasses_repeller.json
 a704bf8f7ae2da3671c1667922957d1873999df9 data/thebetweenlands/tags/entity_type/can_breathe_under_tar.json
-1d452049d3da1247781ca4793e69fdeeda1716de data/thebetweenlands/tags/entity_type/critter_cruncher_instakills.json
+a78ac4204ef1d8891f03f1efb23c26fd015fe0f1 data/thebetweenlands/tags/entity_type/critter_cruncher_instakills.json
 14cce96b27fee784266db8912b804acfb02fe7b8 data/thebetweenlands/tags/entity_type/hag_hacker_instakills.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/entity_type/immune_to_rubber_slowdown.json
 1792c753ba36e04fb8cd908bc730a5d8eb16c6f3 data/thebetweenlands/tags/entity_type/immune_to_tar_slowdown.json

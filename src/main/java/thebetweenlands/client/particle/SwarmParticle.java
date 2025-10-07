@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 import java.util.function.Supplier;
 
@@ -115,99 +116,14 @@ public class SwarmParticle extends TextureSheetParticle {
 
 	@Override
 	public void render(VertexConsumer consumer, Camera camera, float partialTicks) {
-		float rpx = (float)(Mth.lerp(partialTicks, this.xo, this.x) - camera.getPosition().x());
-		float rpy = (float)(Mth.lerp(partialTicks, this.yo, this.y) - camera.getPosition().y());
-		float rpz = (float)(Mth.lerp(partialTicks, this.zo, this.z) - camera.getPosition().z());
-
-		Vec3i normal = this.face.getNormal();
-
-		float pp1x = 0, pp1y = 0, pp1z = 0;
-		switch(this.face) {
-			case UP:
-				pp1x = 1;
-				break;
-			case DOWN:
-				pp1x = -1;
-				break;
-			default:
-				pp1y = 1;
-				break;
+		Quaternionf quaternionf = new Quaternionf();
+		quaternionf.set(this.face.getRotation());
+		quaternionf.rotateX(-Mth.HALF_PI);
+		if (this.roll != 0.0F) {
+			quaternionf.rotateZ(Mth.lerp(partialTicks, this.oRoll, this.roll) + (this.face.getAxis() == Direction.Axis.Y ? Mth.HALF_PI : Mth.PI));
 		}
 
-		float pp2x = crossX(pp1x, pp1y, pp1z, (float) normal.getX(), (float) normal.getY(), (float) normal.getZ());
-		float pp2y = crossY(pp1x, pp1y, pp1z, (float) normal.getX(), (float) normal.getY(), (float) normal.getZ());
-		float pp2z = crossZ(pp1x, pp1y, pp1z, (float) normal.getX(), (float) normal.getY(), (float) normal.getZ());
-
-		float yOffset = 0.125f;
-
-		float v1x = (pp1x - pp2x + pp1x * yOffset);
-		float v1y = (pp1y - pp2y + pp1y * yOffset);
-		float v1z = (pp1z - pp2z + pp1z * yOffset);
-		float v2x = (-pp1x - pp2x + pp1x * yOffset);
-		float v2y = (-pp1y - pp2y + pp1y * yOffset);
-		float v2z = (-pp1z - pp2z + pp1z * yOffset);
-		float v3x = (-pp1x + pp2x + pp1x * yOffset);
-		float v3y = (-pp1y + pp2y + pp1y * yOffset);
-		float v3z = (-pp1z + pp2z + pp1z * yOffset);
-		float v4x = (pp1x + pp2x + pp1x * yOffset);
-		float v4y = (pp1y + pp2y + pp1y * yOffset);
-		float v4z = (pp1z + pp2z + pp1z * yOffset);
-
-		if(this.roll != 0.0F) {
-			float angle = Mth.lerp(partialTicks, this.roll, this.roll);
-			float cos = Mth.cos(angle * 0.5F);
-			float rdx = Mth.sin(angle * 0.5F) * this.face.getStepX();
-			float rdy = Mth.sin(angle * 0.5F) * this.face.getStepY();
-			float rdz = Mth.sin(angle * 0.5F) * this.face.getStepZ();
-
-			float dotrdrd = cos * cos - dot(rdx, rdy, rdz, rdx, rdy, rdz);
-
-			float dotvrd = 2 * dot(v1x, v1y, v1z, rdx, rdy, rdz);
-			float nx = rdx * dotvrd + v1x * dotrdrd + crossX(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
-			float ny = rdy * dotvrd + v1y * dotrdrd + crossY(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
-			float nz = rdz * dotvrd + v1z * dotrdrd + crossZ(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
-			v1x = nx;
-			v1y = ny;
-			v1z = nz;
-
-			dotvrd = 2 * dot(v2x, v2y, v2z, rdx, rdy, rdz);
-			nx = rdx * dotvrd + v2x * dotrdrd + crossX(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
-			ny = rdy * dotvrd + v2y * dotrdrd + crossY(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
-			nz = rdz * dotvrd + v2z * dotrdrd + crossZ(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
-			v2x = nx;
-			v2y = ny;
-			v2z = nz;
-
-			dotvrd = 2 * dot(v3x, v3y, v3z, rdx, rdy, rdz);
-			nx = rdx * dotvrd + v3x * dotrdrd + crossX(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
-			ny = rdy * dotvrd + v3y * dotrdrd + crossY(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
-			nz = rdz * dotvrd + v3z * dotrdrd + crossZ(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
-			v3x = nx;
-			v3y = ny;
-			v3z = nz;
-
-			dotvrd = 2 * dot(v4x, v4y, v4z, rdx, rdy, rdz);
-			nx = rdx * dotvrd + v4x * dotrdrd + crossX(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
-			ny = rdy * dotvrd + v4y * dotrdrd + crossY(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
-			nz = rdz * dotvrd + v4z * dotrdrd + crossZ(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
-			v4x = nx;
-			v4y = ny;
-			v4z = nz;
-		}
-
-		float alpha;
-		if(this.age >= this.lifetime - 5) {
-			alpha = this.alpha * (this.lifetime - this.age) / 5.0f;
-		} else if(this.age <= 5) {
-			alpha = this.alpha * this.age / 5.0f;
-		} else {
-			alpha = this.alpha;
-		}
-
-		consumer.addVertex(rpx + v1x, rpy + v1y, rpz + v1z).setUv(this.getU1(), this.getV1()).setColor(this.rCol, this.gCol, this.bCol, alpha).setUv2(this.lightmapX, this.lightmapY);
-		consumer.addVertex(rpx + v2x, rpy + v2y, rpz + v2z).setUv(this.getU1(), this.getV0()).setColor(this.rCol, this.gCol, this.bCol, alpha).setUv2(this.lightmapX, this.lightmapY);
-		consumer.addVertex(rpx + v3x, rpy + v3y, rpz + v3z).setUv(this.getU0(), this.getV0()).setColor(this.rCol, this.gCol, this.bCol, alpha).setUv2(this.lightmapX, this.lightmapY);
-		consumer.addVertex(rpx + v4x, rpy + v4y, rpz + v4z).setUv(this.getU0(), this.getV1()).setColor(this.rCol, this.gCol, this.bCol, alpha).setUv2(this.lightmapX, this.lightmapY);
+		this.renderRotatedQuad(consumer, camera, quaternionf, partialTicks);
 	}
 
 	private static float crossX(float x1, float y1, float z1, float x2, float y2, float z2) {

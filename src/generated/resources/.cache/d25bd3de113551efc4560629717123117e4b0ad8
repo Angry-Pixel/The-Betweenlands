@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-02T11:56:08.516060838	Item Models: thebetweenlands
+// 1.21.1	2025-10-06T19:42:56.659198085	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -278,6 +278,7 @@ ae66563f9144f39b744476deccdf7c337ce4237d assets/thebetweenlands/models/item/hag_
 870e8ceef0a62a889a6db5ceb8c2dbd2a57456db assets/thebetweenlands/models/item/herblore_book.json
 b3d571d7d45fd881166f72cf28d14406694113a5 assets/thebetweenlands/models/item/inanimate_angry_pebble.json
 1804017058d5e2152ad233f6553e6014d377520e assets/thebetweenlands/models/item/inanimate_tarminion.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/infestation_spawn_egg.json
 873598eebe30890f94351b9b7c4a72db0309895a assets/thebetweenlands/models/item/item_scroll.json
 72882522f0f8d49f6f540d7d9bc4f45d2105548b assets/thebetweenlands/models/item/jam_donut.json
 77e635f7138864a4e4a9177b7a32fa4b09cd52e3 assets/thebetweenlands/models/item/jellyfish.json

@@ -48,26 +48,23 @@ public class AnadiaRenderer extends MultiPieceMobModelRenderer<Anadia, AnadiaMod
 	}
 
 	@Override
-	protected void renderModel(Anadia entity, PoseStack stack, MultiBufferSource buffer, float partialTicks, float yaw, int light, boolean visible, boolean translucent, boolean glowing) {
-		int overlay = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
-		int color = translucent ? 654311423 : -1;
-
-		RenderType rendertype = this.getRenderType(entity.getHeadType(), entity, visible, translucent, glowing);
+	protected void renderModel(Anadia entity, PoseStack stack, MultiBufferSource buffer, int packedLight, int overlay, int color, RenderState state) {
+		RenderType rendertype = this.getRenderType(entity.getHeadType(), entity, state.visible(), state.translucent(), state.glowing());
 		if (rendertype != null) {
 			VertexConsumer vertexconsumer = buffer.getBuffer(rendertype);
-			this.model.renderPart(entity.getHeadType(), "head", stack, vertexconsumer, light, overlay, color);
+			this.model.renderPart(entity.getHeadType(), "head", stack, vertexconsumer, packedLight, overlay, color);
 		}
 
-		rendertype = this.getRenderType(entity.getBodyType(), entity, visible, translucent, glowing);
+		rendertype = this.getRenderType(entity.getBodyType(), entity, state.visible(), state.translucent(), state.glowing());
 		if (rendertype != null) {
 			VertexConsumer vertexconsumer = buffer.getBuffer(rendertype);
-			this.model.renderPart(entity.getBodyType(), "body", stack, vertexconsumer, light, overlay, color);
+			this.model.renderPart(entity.getBodyType(), "body", stack, vertexconsumer, packedLight, overlay, color);
 		}
 
-		rendertype = this.getRenderType(entity.getTailType(), entity, visible, translucent, glowing);
+		rendertype = this.getRenderType(entity.getTailType(), entity, state.visible(), state.translucent(), state.glowing());
 		if (rendertype != null) {
 			VertexConsumer vertexconsumer = buffer.getBuffer(rendertype);
-			this.model.renderPart(entity.getTailType(), "tail", stack, vertexconsumer, light, overlay, color);
+			this.model.renderPart(entity.getTailType(), "tail", stack, vertexconsumer, packedLight, overlay, color);
 		}
 	}
 

@@ -17,10 +17,8 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.SwarmedData;
-import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.ParticleRegistry;
+import thebetweenlands.common.entity.monster.infestation.Infestation;
+import thebetweenlands.common.registries.*;
 
 public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 
@@ -42,10 +40,9 @@ public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 			case 3 -> level.setBlock(pos, BlockRegistry.DECAY_INFESTED_WEEDWOOD_BUSH.get().defaultBlockState(), 2);
 			case 4 -> {
 				level.setBlock(pos, BlockRegistry.DEAD_WEEDWOOD_BUSH.get().defaultBlockState(), 2);
-				//TODO
-//				Swarm swarm = new Swarm(level);
-//				swarm.setPos(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
-//				level.addFreshEntity(swarm);
+				Infestation infestation = new Infestation(EntityRegistry.INFESTATION.get(), level);
+				infestation.setPos(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				level.addFreshEntity(infestation);
 			}
 		}
 	}
@@ -86,8 +83,9 @@ public class InfestedWeedwoodBushBlock extends WeedwoodBushBlock {
 		super.entityInside(state, level, pos, entity);
 
 		if (!level.isClientSide() && entity instanceof Player player) {
-			SwarmedData cap = entity.getData(AttachmentRegistry.SWARMED);
+			SwarmedData cap = player.getData(AttachmentRegistry.SWARMED);
 			cap.setSwarmedStrength(cap.getSwarmedStrength() + 0.005f);
+			player.syncData(AttachmentRegistry.SWARMED);
 		}
 	}
 

@@ -31,76 +31,78 @@ public abstract class MultiPieceMobModelRenderer<T extends Mob, M extends Entity
 		boolean shouldSit = entity.isPassenger() && (entity.getVehicle() != null && entity.getVehicle().shouldRiderSit());
 		this.model.riding = shouldSit;
 		this.model.young = entity.isBaby();
-		float f = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
-		float f1 = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
-		float f2 = f1 - f;
+		float yBodyRot = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
+		float yHeadRot = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
+		float yRot = yHeadRot - yBodyRot;
 		if (shouldSit && entity.getVehicle() instanceof LivingEntity livingentity) {
-			f = Mth.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
-			f2 = f1 - f;
-			float f7 = Mth.wrapDegrees(f2);
-			if (f7 < -85.0F) {
-				f7 = -85.0F;
+			yBodyRot = Mth.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
+			yRot = yHeadRot - yBodyRot;
+			float wrappedYRot = Mth.wrapDegrees(yRot);
+			if (wrappedYRot < -85.0F) {
+				wrappedYRot = -85.0F;
 			}
 
-			if (f7 >= 85.0F) {
-				f7 = 85.0F;
+			if (wrappedYRot >= 85.0F) {
+				wrappedYRot = 85.0F;
 			}
 
-			f = f1 - f7;
-			if (f7 * f7 > 2500.0F) {
-				f += f7 * 0.2F;
+			yBodyRot = yHeadRot - wrappedYRot;
+			if (wrappedYRot * wrappedYRot > 2500.0F) {
+				yBodyRot += wrappedYRot * 0.2F;
 			}
 
-			f2 = f1 - f;
+			yRot = yHeadRot - yBodyRot;
 		}
 
-		float f6 = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
+		float xRot = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
 		if (isEntityUpsideDown(entity)) {
-			f6 *= -1.0F;
-			f2 *= -1.0F;
+			xRot *= -1.0F;
+			yRot *= -1.0F;
 		}
 
-		f2 = Mth.wrapDegrees(f2);
+		yRot = Mth.wrapDegrees(yRot);
 		if (entity.hasPose(Pose.SLEEPING)) {
 			Direction direction = entity.getBedOrientation();
 			if (direction != null) {
-				float f3 = entity.getEyeHeight(Pose.STANDING) - 0.1F;
-				stack.translate((float) (-direction.getStepX()) * f3, 0.0F, (float) (-direction.getStepZ()) * f3);
+				float eyeHeight = entity.getEyeHeight(Pose.STANDING) - 0.1F;
+				stack.translate((float) (-direction.getStepX()) * eyeHeight, 0.0F, (float) (-direction.getStepZ()) * eyeHeight);
 			}
 		}
 
-		float f8 = entity.getScale();
-		stack.scale(f8, f8, f8);
-		float f9 = this.getBob(entity, partialTicks);
-		this.setupRotations(entity, stack, f9, f, partialTicks, f8);
+		float scale = entity.getScale();
+		stack.scale(scale, scale, scale);
+		float ageInTicks = this.getBob(entity, partialTicks);
+		this.setupRotations(entity, stack, ageInTicks, yBodyRot, partialTicks, scale);
 		stack.scale(-1.0F, -1.0F, 1.0F);
 		this.scale(entity, stack, partialTicks);
 		stack.translate(0.0F, -1.501F, 0.0F);
-		float f4 = 0.0F;
-		float f5 = 0.0F;
+		float limbSwingAmount = 0.0F;
+		float limbSwing = 0.0F;
 		if (!shouldSit && entity.isAlive()) {
-			f4 = entity.walkAnimation.speed(partialTicks);
-			f5 = entity.walkAnimation.position(partialTicks);
+			limbSwingAmount = entity.walkAnimation.speed(partialTicks);
+			limbSwing = entity.walkAnimation.position(partialTicks);
 			if (entity.isBaby()) {
-				f5 *= 3.0F;
+				limbSwing *= 3.0F;
 			}
 
-			if (f4 > 1.0F) {
-				f4 = 1.0F;
+			if (limbSwingAmount > 1.0F) {
+				limbSwingAmount = 1.0F;
 			}
 		}
 
-		this.model.prepareMobModel(entity, f5, f4, partialTicks);
-		this.model.setupAnim(entity, f5, f4, f9, f2, f6);
+		this.model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+		this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, yRot, xRot);
 		Minecraft minecraft = Minecraft.getInstance();
-		boolean flag = this.isBodyVisible(entity);
-		boolean flag1 = !flag && !entity.isInvisibleTo(minecraft.player);
-		boolean flag2 = minecraft.shouldEntityAppearGlowing(entity);
-		this.renderModel(entity, stack, buffer, partialTicks, entityYaw, packedLight, flag, flag1, flag2);
+		boolean visible = this.isBodyVisible(entity);
+		boolean translucent = !visible && !entity.isInvisibleTo(minecraft.player);
+		boolean glowing = minecraft.shouldEntityAppearGlowing(entity);
+		int overlay = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
+		int color = translucent ? 654311423 : -1;
+		this.renderModel(entity, stack, buffer, packedLight, overlay, color, new RenderState(partialTicks, visible, translucent, glowing, limbSwing, limbSwingAmount, ageInTicks, xRot, yRot));
 
 		if (!entity.isSpectator()) {
 			for (RenderLayer<T, M> renderlayer : this.layers) {
-				renderlayer.render(stack, buffer, packedLight, entity, f5, f4, partialTicks, f9, f2, f6);
+				renderlayer.render(stack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, yRot, xRot);
 			}
 		}
 
@@ -113,5 +115,8 @@ public abstract class MultiPieceMobModelRenderer<T extends Mob, M extends Entity
 		NeoForge.EVENT_BUS.post(new RenderLivingEvent.Post<>(entity, this, partialTicks, stack, buffer, packedLight));
 	}
 
-	protected abstract void renderModel(T entity, PoseStack stack, MultiBufferSource buffer, float partialTick, float yaw, int packedLight, boolean visible, boolean translucent, boolean glowing);
+	protected abstract void renderModel(T entity, PoseStack stack, MultiBufferSource buffer, int packedLight, int overlay, int color, RenderState state);
+
+	public record RenderState(float partialTick, boolean visible, boolean translucent, boolean glowing, float limbSwing, float limbSwingAmount, float ageInTicks, float xRot, float yRot) {}
+
 }

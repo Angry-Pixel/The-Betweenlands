@@ -305,6 +305,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SNAIL_POISON_JET.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SHOCKWAVE_SWORD_ITEM.get(), ShockwaveSwordItemEntityRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SWORD_ENERGY.get(), SwordEnergyRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.INFESTATION.get(), InfestationRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -415,6 +416,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.TERMITE, TermiteModel::create);
 		event.registerLayerDefinition(BLModelLayers.LEECH, LeechModel::create);
 		event.registerLayerDefinition(BLModelLayers.BLOOD_SNAIL, BloodSnailModel::create);
+		event.registerLayerDefinition(BLModelLayers.INFESTATION, InfestationModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -739,7 +741,9 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.MOTH.get(), BugParticle.MothFactory::new);
 		event.registerSpriteSet(ParticleRegistry.SILK_MOTH.get(), BugParticle.SilkMothFactory::new);
 		event.registerSpriteSet(ParticleRegistry.SPIRIT_BUTTERFLY.get(), SpiritButterflyParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.FLYING_SWARM.get(), EmissiveBugParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SWARM.get(), SwarmParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.EMISSIVE_SWARM.get(), EmissiveSwarmParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_BUG.get(), BugParticle.WaterBugFactory::new);
 		event.registerSpriteSet(ParticleRegistry.FANCY_BUBBLE.get(), FancyBubbleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.FANCY_DRIP.get(), FancyDripParticle.Factory::new);

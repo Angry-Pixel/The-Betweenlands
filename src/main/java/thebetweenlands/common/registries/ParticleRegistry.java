@@ -26,9 +26,11 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOSQUITO = PARTICLES.register("mosquito", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOTH = PARTICLES.register("moth", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SWARM = PARTICLES.register("swarm", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EMISSIVE_SWARM = PARTICLES.register("emissive_swarm", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SILK_MOTH = PARTICLES.register("silk_moth", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPIRIT_BUTTERFLY = PARTICLES.register("spirit_butterfly", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_BUG = PARTICLES.register("water_bug", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FLYING_SWARM = PARTICLES.register("flying_swarm", () -> new SimpleParticleType(false));
 
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FANCY_BUBBLE = PARTICLES.register("fancy_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<DripParticleOptions>> FANCY_DRIP = register("fancy_drip", false, type -> DripParticleOptions.CODEC, type -> DripParticleOptions.STREAM_CODEC);

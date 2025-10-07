@@ -10,6 +10,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.DamageTypeRegistry;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
@@ -25,5 +26,6 @@ public class BLDamageTagProvider extends TagsProvider<DamageType> {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		this.tag(DREADFUL_PEAT_MUMMY_IMMUNE).add(DamageTypes.FALLING_BLOCK, DamageTypes.IN_WALL).addTag(DamageTypeTags.IS_FIRE).addTag(DamageTypeTags.IS_DROWNING);
+		this.tag(DamageTypeTags.NO_KNOCKBACK).add(DamageTypeRegistry.SWARM);
 	}
 }

@@ -1081,6 +1081,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.TERMITE, "Termite");
 		this.addEntityAndEgg(EntityRegistry.LEECH, "Leech");
 		this.addEntityAndEgg(EntityRegistry.BLOOD_SNAIL, "Blood Snail");
+		this.addEntityAndEgg(EntityRegistry.INFESTATION, "Infestation");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1858,6 +1859,14 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("equipment.thebetweenlands.menu.page", "Page %d");
 		this.add("equipment.thebetweenlands.slot_added", "Added a new amulet slot");
 		this.add("equipment.thebetweenlands.slots_full", "Can't add any more amulet slots");
+
+		this.add("death.attack.thebetweenlands.flame_jet", "%s was turned to ashes");
+		this.add("death.attack.thebetweenlands.shockwave", "%s was killed by a shockwave");
+		this.add("death.attack.thebetweenlands.swarm", "%s was decomposed by infestation");
+		this.add("death.attack.thebetweenlands.urchin_spike", "%s was impaled by urchin spikes");
+		this.add("death.attack.thebetweenlands.suffocation", "%s was suffocated by a Shallowbreath");
+		this.add("death.attack.thebetweenlands.spikewave", "%s was impaled by roots");
+		this.add("death.attack.thebetweenlands.voodoo", "%s was taken out by Voodoo magic");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {

@@ -45,7 +45,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(WEEDWOOD_BUSH_PASSABLE).add(EntityType.PLAYER, EntityRegistry.GECKO.get());
 		this.tag(WIGHTS_BANE_INSTAKILLS).add(EntityRegistry.WIGHT.get());
 		this.tag(HAG_HACKER_INSTAKILLS).add(EntityRegistry.SWAMP_HAG.get());
-		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.BLOOD_SNAIL.get(), EntityRegistry.MIRE_SNAIL.get(), EntityRegistry.SPORELING.get(), EntityRegistry.LEECH.get(), EntityRegistry.TERMITE.get(), EntityRegistry.CHIROMAW.get()); //TODO infestation
+		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.BLOOD_SNAIL.get(), EntityRegistry.MIRE_SNAIL.get(), EntityRegistry.SPORELING.get(), EntityRegistry.LEECH.get(), EntityRegistry.TERMITE.get(), EntityRegistry.INFESTATION.get(), EntityRegistry.CHIROMAW.get());
 		this.tag(SLUDGE_SLICER_INSTAKILLS).add(EntityRegistry.SLUDGE.get(), EntityRegistry.SMOL_SLUDGE.get());
 		this.tag(LEECH_ATTACKS).add(EntityRegistry.SWAMP_HAG.get(), EntityType.PLAYER);
 		this.tag(Tags.EntityTypes.BOSSES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.PRIMORDIAL_MALEVOLENCE.get()); // TODO bosses
@@ -56,7 +56,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get());
 		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get());
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get(), EntityRegistry.OLM.get());
-		this.tag(EntityTypeTags.ARTHROPOD).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.TERMITE.get(), EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get());
+		this.tag(EntityTypeTags.ARTHROPOD).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.TERMITE.get(), EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.INFESTATION.get());
 		this.tag(TAR_BEING).add(EntityRegistry.TAR_BEAST.get(), EntityRegistry.TARMINION.get());
 
 		this.tag(BYPASSES_REPELLER)

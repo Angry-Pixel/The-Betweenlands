@@ -37,7 +37,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 	//angler: 1, 8, 1, 4
 	//pyrad: 2, 3, 1, 1
 	//sludge menace: 8, 0, 6, 0
-	//consider seasonal drops for stalkers?
+	//consider seasonal drops for stalkers and infestations?
 	//why do shallowbreath have seasonal drops??? Theyre gas clouds??????
 	@Override
 	public void generate() {
@@ -474,6 +474,12 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.CRIMSON_SNAIL_SHELL).setWeight(2))
 				.add(LootItem.lootTableItem(ItemRegistry.POISON_GLAND)
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 2))))));
+
+		this.add(EntityRegistry.INFESTATION.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.PHEROMONE_THORAX)
+				.when(LootItemKilledByPlayerCondition.killedByPlayer())
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
