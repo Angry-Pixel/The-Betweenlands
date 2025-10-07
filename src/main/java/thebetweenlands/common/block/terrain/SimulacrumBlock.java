@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.terrain;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -29,6 +30,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.block.SimulacrumEffect;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
@@ -128,8 +130,11 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock implements SwampW
 
 	@Override
 	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		if (flag.isCreative()) {
-			tooltip.add(Component.translatable("block.thebetweenlands.simulacrum.effect", Component.translatable(BLRegistries.SIMULACRUM_EFFECTS.get(stack.getOrDefault(DataComponentRegistry.SIMULACRUM_EFFECT, BLRegistries.SIMULACRUM_EFFECTS.getKey(SimulacrumEffectRegistry.NONE.get()))).getDescriptionId())));
+		if (context.level() != null && context.level().isClientSide()) {
+			Player player = BetweenlandsClient.getClientPlayer();
+			if (player != null && player.isCreative()) {
+				tooltip.add(Component.translatable("block.thebetweenlands.simulacrum.effect", Component.translatable(BLRegistries.SIMULACRUM_EFFECTS.get(stack.getOrDefault(DataComponentRegistry.SIMULACRUM_EFFECT, BLRegistries.SIMULACRUM_EFFECTS.getKey(SimulacrumEffectRegistry.NONE.get()))).getDescriptionId())).withStyle(ChatFormatting.GRAY));
+			}
 		}
 	}
 

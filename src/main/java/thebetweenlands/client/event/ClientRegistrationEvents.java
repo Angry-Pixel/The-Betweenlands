@@ -11,6 +11,7 @@ import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ExperienceOrbRenderer;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -306,6 +307,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SHOCKWAVE_SWORD_ITEM.get(), ShockwaveSwordItemEntityRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SWORD_ENERGY.get(), SwordEnergyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.INFESTATION.get(), InfestationRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FALSE_XP.get(), ExperienceOrbRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);

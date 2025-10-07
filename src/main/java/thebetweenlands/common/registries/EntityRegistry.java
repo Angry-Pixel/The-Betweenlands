@@ -122,7 +122,7 @@ public class EntityRegistry {
 	//draeton firefly
 	public static final DeferredHolder<EntityType<?>, EntityType<ElectricShock>> ELECTRIC_SHOCK = register("electric_shock", EntityType.Builder.<ElectricShock>of(ElectricShock::new, MobCategory.MISC).sized(0.5F, 0.5F).fireImmune().noSave().noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<ThrownElixir>> ELIXIR = register("elixir", EntityType.Builder.<ThrownElixir>of(ThrownElixir::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
-	//fake XP orb
+	public static final DeferredHolder<EntityType<?>, EntityType<FalseExperienceOrb>> FALSE_XP = register("false_xp", EntityType.Builder.<FalseExperienceOrb>of(FalseExperienceOrb::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(6).updateInterval(20).noSummon());
 	//falling block
 	public static final DeferredHolder<EntityType<?>, EntityType<FishBait>> FISH_BAIT = register("fish_bait", EntityType.Builder.<FishBait>of(FishBait::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<BLFishHook>> FISH_HOOK = register("fish_hook", EntityType.Builder.<BLFishHook>of(BLFishHook::new, MobCategory.MISC).sized(0.25F, 0.25F));
