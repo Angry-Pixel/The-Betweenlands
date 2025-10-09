@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "s": {
+      "item": "thebetweenlands:weedwood_stick"
+    },
+    "t": {
+      "item": "thebetweenlands:angler_tooth"
+    }
+  },
+  "pattern": [
+    "t",
+    "s",
+    "s"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:fishing_spear"
+  }
+}

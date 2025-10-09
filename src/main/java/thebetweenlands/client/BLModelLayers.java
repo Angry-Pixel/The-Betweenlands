@@ -15,6 +15,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation VALONITE_SHIELD = register("valonite_shield");
 	public static final ModelLayerLocation WEEDWOOD_SHIELD = register("weedwood_shield");
 
+	public static final ModelLayerLocation AMPHIBIOUS_FISHING_SPEAR = register("amphibious_fishing_spear");
 	public static final ModelLayerLocation ANADIA = register("anadia");
 	public static final ModelLayerLocation ASH_SPRITE = register("ash_sprite");
 	public static final ModelLayerLocation BARRISHEE = register("barrishee");
@@ -43,6 +44,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation EMBERLING_SHAMAN = register("emberling_shaman");
 	public static final ModelLayerLocation FIREFLY = register("firefly");
 	public static final ModelLayerLocation FISH_HOOK = register("fish_hook");
+	public static final ModelLayerLocation FISHING_SPEAR = register("fishing_spear");
 	public static final ModelLayerLocation FRESHWATER_URCHIN = register("freshwater_urchin");
 	public static final ModelLayerLocation FROG = register("frog");
 	public static final ModelLayerLocation GREEBLING_1 = register("greebling_1");
@@ -60,6 +62,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation OLM = register("olm");
 	public static final ModelLayerLocation PEAT_MUMMY = register("peat_mummy");
 	public static final ModelLayerLocation PRIMORDIAL_MALEVOLENCE = register("primordial_malevolence");
+	public static final ModelLayerLocation ROBUST_FISHING_SPEAR = register("robust_fishing_spear");
 	public static final ModelLayerLocation ROOT_SPRITE = register("root_sprite");
 	public static final ModelLayerLocation SHAMBLER = register("shambler");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
@@ -81,7 +84,6 @@ public class BLModelLayers {
 	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT = register("weedwood_rowboat");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT_LANTERN = register("weedwood_rowboat", "lantern");
-	public static final ModelLayerLocation GAS_CLOUD = register("gas_cloud");
 	public static final ModelLayerLocation WIGHT = register("wight");
 
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");

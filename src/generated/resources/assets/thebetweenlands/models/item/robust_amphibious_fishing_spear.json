@@ -1,0 +1,14 @@
+{
+  "parent": "thebetweenlands:item/spear",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/robust_amphibious_fishing_spear_throwing",
+      "predicate": {
+        "thebetweenlands:throwing": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/robust_amphibious_fishing_spear"
+  }
+}

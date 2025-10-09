@@ -33,6 +33,9 @@ import thebetweenlands.common.entity.projectile.arrow.OctineArrow;
 import thebetweenlands.common.entity.projectile.arrow.PoisonAnglerToothArrow;
 import thebetweenlands.common.entity.projectile.arrow.ShockArrow;
 import thebetweenlands.common.entity.projectile.arrow.SludgeWormArrow;
+import thebetweenlands.common.entity.projectile.spear.AmphibiousFishingSpear;
+import thebetweenlands.common.entity.projectile.spear.FishingSpear;
+import thebetweenlands.common.entity.projectile.spear.RobustFishingSpear;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -107,6 +110,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B, Wight::registerAttributes);
 
 	//misc
+	public static final DeferredHolder<EntityType<?>, EntityType<AmphibiousFishingSpear>> AMPHIBIOUS_FISHING_SPEAR = register("amphibious_fishing_spear", EntityType.Builder.of(AmphibiousFishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
 	public static final DeferredHolder<EntityType<?>, EntityType<AnglerToothArrow>> ANGLER_TOOTH_ARROW = register("angler_tooth_arrow", EntityType.Builder.<AnglerToothArrow>of(AnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<AngryPebble>> ANGRY_PEBBLE = register("angry_pebble", EntityType.Builder.<AngryPebble>of(AngryPebble::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
 	public static final DeferredHolder<EntityType<?>, EntityType<BasiliskArrow>> BASILISK_ARROW = register("basilisk_arrow", EntityType.Builder.<BasiliskArrow>of(BasiliskArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
@@ -127,7 +131,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<FishBait>> FISH_BAIT = register("fish_bait", EntityType.Builder.<FishBait>of(FishBait::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<BLFishHook>> FISH_HOOK = register("fish_hook", EntityType.Builder.<BLFishHook>of(BLFishHook::new, MobCategory.MISC).sized(0.25F, 0.25F));
 	public static final DeferredHolder<EntityType<?>, EntityType<FishVortex>> FISH_VORTEX = register("fish_vortex", EntityType.Builder.of(FishVortex::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
-	//fishing spear
+	public static final DeferredHolder<EntityType<?>, EntityType<FishingSpear>> FISHING_SPEAR = register("fishing_spear", EntityType.Builder.of(FishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
 	public static final DeferredHolder<EntityType<?>, EntityType<FlameJet>> FLAME_JET = register("flame_jet", EntityType.Builder.<FlameJet>of(FlameJet::new, MobCategory.MISC).sized(1.0F, 2.6F).fireImmune().noSummon().noSave());
 	public static final DeferredHolder<EntityType<?>, EntityType<GalleryFrame>> GALLERY_FRAME = register("gallery_frame", EntityType.Builder.<GalleryFrame>of(GalleryFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//glowing goop
@@ -149,6 +153,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTurret>> PRIMORDIAL_MALEVOLENCE_TURRET = registerWithAttributes("primordial_malevolence_turret", EntityType.Builder.<PrimordialMalevolenceTurret>of(PrimordialMalevolenceTurret::new, MobCategory.MISC).sized(0.4F, 0.4F), Mob::createMobAttributes);
 	//pyrad flame
 	//resurrection
+	public static final DeferredHolder<EntityType<?>, EntityType<RobustFishingSpear>> ROBUST_FISHING_SPEAR = register("robust_fishing_spear", EntityType.Builder.of(RobustFishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
 	//root grabber
 	//rope node
 	public static final DeferredHolder<EntityType<?>, EntityType<SapSpit>> SAP_SPIT = register("sap_spit", EntityType.Builder.<SapSpit>of(SapSpit::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));

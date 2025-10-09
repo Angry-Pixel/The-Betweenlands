@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_spear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:fishing_spear"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thebetweenlands:amphibious_fishing_spear"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_spear"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thebetweenlands:amphibious_fishing_spear"
+    ]
+  }
+}

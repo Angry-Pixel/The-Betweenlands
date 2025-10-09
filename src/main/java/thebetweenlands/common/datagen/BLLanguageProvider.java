@@ -1117,6 +1117,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.SNAIL_POISON_JET, "Snail Poison Jet");
 		this.addEntityType(EntityRegistry.SWORD_ENERGY, "Shockwave Sword Energy Ball");
 		this.addEntityType(EntityRegistry.FALSE_XP, "Experience Orb");
+		this.addEntityType(EntityRegistry.FISHING_SPEAR, "Fishing Spear");
+		this.addEntityType(EntityRegistry.AMPHIBIOUS_FISHING_SPEAR, "Amphibious Fishing Spear");
+		this.addEntityType(EntityRegistry.ROBUST_FISHING_SPEAR, "Robust Amphibious Fishing Spear");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -1525,9 +1528,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.VOLARKITE, "Volarkite");
 		this.addItemWithDesc(ItemRegistry.SLINGSHOT, "Simple Slingshot", "Shoots Betweenstone Pebbles");
 		this.addItem(ItemRegistry.WEEDWOOD_FISHING_ROD, "Weedwood Fishing Rod");
-		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken\nand needs a new line and float.");
+		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken and needs a new line and float.");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.baited", "Has Worm: %s");
-		//spears
+		this.addItem(ItemRegistry.FISHING_SPEAR, "Fishing Spear");
+		this.addItem(ItemRegistry.AMPHIBIOUS_FISHING_SPEAR, "Amphibious Fishing Spear");
+		this.addItem(ItemRegistry.ROBUST_AMPHIBIOUS_FISHING_SPEAR, "Robust Amphibious Fishing Spear");
+		this.add("item.thebetweenlands.fishing_spear.animated", "Animated");
 		this.addItem(ItemRegistry.WEEDWOOD_BUCKET, "Weedwood Bucket");
 		this.add(ItemRegistry.WEEDWOOD_BUCKET.get().getDescriptionId() + ".fluid", "Weedwood Bucket (%s)");
 		this.addItem(ItemRegistry.SYRMORITE_BUCKET, "Syrmorite Bucket");

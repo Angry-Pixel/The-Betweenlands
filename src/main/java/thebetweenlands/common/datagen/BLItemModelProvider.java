@@ -410,7 +410,9 @@ public class BLItemModelProvider extends ItemModelProvider {
 				.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(5.0F, 0.0F, -35.0F).translation(1.13F, 1.5F, 1.13F).scale(0.55F, 0.55F, 0.55F).end()
 				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0.0F, 180.0F, 45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end()
 				.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0.0F, 0.0F, -45.0F).translation(0.0F, 2.0F, 1.0F).scale(0.55F, 0.55F, 0.55F).end().end());
-		//spears
+		this.spear(ItemRegistry.FISHING_SPEAR);
+		this.spear(ItemRegistry.AMPHIBIOUS_FISHING_SPEAR);
+		this.spear(ItemRegistry.ROBUST_AMPHIBIOUS_FISHING_SPEAR);
 		this.bucket(ItemRegistry.WEEDWOOD_BUCKET);
 		this.bucket(ItemRegistry.SYRMORITE_BUCKET);
 		this.multiLayerItem(ItemRegistry.WEEDWOOD_INFUSION_BUCKET.getId().getPath(), TheBetweenlands.prefix("item/weedwood_bucket"), TheBetweenlands.prefix("item/infusion_liquid"));
@@ -671,6 +673,11 @@ public class BLItemModelProvider extends ItemModelProvider {
 			builder = builder.texture("layer" + i, layers[i]);
 		}
 		return builder;
+	}
+
+	public ItemModelBuilder spear(DeferredItem<? extends Item> spear) {
+		return this.getBuilder(spear.getId().getPath()).parent(new ModelFile.ExistingModelFile(this.modLoc("item/spear"), this.existingFileHelper)).texture("layer0", this.modLoc("item/").withSuffix(spear.getId().getPath()))
+			.override().predicate(TheBetweenlands.prefix("throwing"), 1).model(this.getBuilder(spear.getId().getPath() + "_throwing").parent(new ModelFile.ExistingModelFile(this.modLoc("item/spear_throwing"), this.existingFileHelper)).texture("layer0", this.modLoc("item/").withSuffix(spear.getId().getPath()))).end();
 	}
 
 	public ResourceLocation itemTexture(DeferredItem<?> item) {

@@ -2,7 +2,6 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -44,6 +43,7 @@ import thebetweenlands.common.item.misc.bucket.RubberBucketItem;
 import thebetweenlands.common.item.shield.*;
 import thebetweenlands.common.item.tool.*;
 import thebetweenlands.common.item.tool.arrow.*;
+import thebetweenlands.common.item.tool.FishingSpearItem;
 import thebetweenlands.util.BLDyeColor;
 
 import java.util.ArrayList;
@@ -353,7 +353,9 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SLINGSHOT = ITEMS.register("simple_slingshot", () -> new SlingshotItem(new Item.Properties().durability(64)));
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().durability(256)));
-	//spears
+	public static final DeferredItem<Item> FISHING_SPEAR = ITEMS.register("fishing_spear", () -> new FishingSpearItem(EntityRegistry.FISHING_SPEAR::get, 2, new Item.Properties().durability(64)));
+	public static final DeferredItem<Item> AMPHIBIOUS_FISHING_SPEAR = ITEMS.register("amphibious_fishing_spear", () -> new FishingSpearItem(EntityRegistry.AMPHIBIOUS_FISHING_SPEAR::get, 3, new Item.Properties().durability(64)));
+	public static final DeferredItem<Item> ROBUST_AMPHIBIOUS_FISHING_SPEAR = ITEMS.register("robust_amphibious_fishing_spear", () -> new FishingSpearItem(EntityRegistry.ROBUST_FISHING_SPEAR::get, 4, new Item.Properties().durability(128)));
 	public static final DeferredItem<Item> WEEDWOOD_BUCKET = ITEMS.register("weedwood_bucket", () -> new BLBucketItem(false, BlockRegistry.WEEDWOOD_RUBBER_TAP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> SYRMORITE_BUCKET = ITEMS.register("syrmorite_bucket", () -> new BLBucketItem(true, BlockRegistry.SYRMORITE_RUBBER_TAP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> WEEDWOOD_INFUSION_BUCKET = ITEMS.register("weedwood_infusion_bucket", () -> new InfusionBucketItem(new Item.Properties().stacksTo(1).craftRemainder(WEEDWOOD_BUCKET.get())));

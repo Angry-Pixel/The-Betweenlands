@@ -222,7 +222,16 @@ public class BLItemRecipeProvider {
 			.unlockedBy("has_thread", has(ItemRegistry.SILK_THREAD)).unlockedBy("has_hook", has(ItemRegistry.FISHING_FLOAT_AND_HOOK))
 			.unlockedBy("has_ingot", has(ItemRegistry.SYRMORITE_INGOT)).save(output);
 
-		//TODO spears
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ItemRegistry.FISHING_SPEAR)
+			.pattern("t").pattern("s").pattern("s").define('t', ItemRegistry.ANGLER_TOOTH).define('s', ItemRegistry.WEEDWOOD_STICK)
+			.unlockedBy("has_tooth", has(ItemRegistry.ANGLER_TOOTH)).save(output);
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ItemRegistry.AMPHIBIOUS_FISHING_SPEAR)
+			.pattern(" f ").pattern("fsf").define('f', ItemRegistry.ANADIA_FINS).define('s', ItemRegistry.FISHING_SPEAR)
+			.unlockedBy("has_spear", has(ItemRegistry.FISHING_SPEAR)).save(output);
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ItemRegistry.ROBUST_AMPHIBIOUS_FISHING_SPEAR)
+			.pattern(" u ").pattern("tst").pattern(" t ").define('t', ItemRegistry.SHAMBLER_TONGUE).define('u', ItemRegistry.URCHIN_SPIKE).define('s', ItemRegistry.AMPHIBIOUS_FISHING_SPEAR)
+			.unlockedBy("has_spear", has(ItemRegistry.AMPHIBIOUS_FISHING_SPEAR)).save(output);
+
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ItemRegistry.WEEDWOOD_BUCKET)
 			.pattern(" r ").pattern("w w").pattern(" w ").define('w', BlockRegistry.WEEDWOOD_PLANKS).define('r', ItemRegistry.REED_ROPE)
 			.unlockedBy("has_rope", has(ItemRegistry.REED_ROPE)).unlockedBy("has_planks", has(BlockRegistry.WEEDWOOD_PLANKS)).save(output);

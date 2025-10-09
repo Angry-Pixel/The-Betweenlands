@@ -1,0 +1,8 @@
+{
+  "type": "thebetweenlands:animator_marker",
+  "input": {
+    "item": "thebetweenlands:robust_amphibious_fishing_spear"
+  },
+  "required_fuel": 2,
+  "required_life": 1
+}

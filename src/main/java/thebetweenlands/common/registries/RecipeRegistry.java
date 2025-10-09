@@ -25,6 +25,7 @@ public class RecipeRegistry {
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AnadiaSmokingRecipe>> ANADIA_SMOKING_SERIALIZER = RECIPE_SERIALIZERS.register("anadia_smoking", AnadiaSmokingRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AnadiaTrimmingRecipe>> ANADIA_TRIMMING_SERIALIZER = RECIPE_SERIALIZERS.register("anadia_trimming", AnadiaTrimmingRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BasicAnimatorRecipe>> ANIMATOR_SERIALIZER = RECIPE_SERIALIZERS.register("animator", BasicAnimatorRecipe.Serializer::new);
+	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AnimatorMarkerRecipe>> ANIMATOR_MARKER_SERIALIZER = RECIPE_SERIALIZERS.register("animator_marker", AnimatorMarkerRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolRepairAnimatorRecipe>> ANIMATOR_TOOL_SERIALIZER = RECIPE_SERIALIZERS.register("animator_tool", ToolRepairAnimatorRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BubblerCrabPotFilterRecipe>> BUBBLER_CRAB_POT_FILTER_SERIALIZER = RECIPE_SERIALIZERS.register("bubbler_crab_pot_filter", BubblerCrabPotFilterRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DruidAltarAssemblyRecipe>> DRUID_ALTAR_ASSEMBLY_SERIALIZER = RECIPE_SERIALIZERS.register("druid_altar_assembly", DruidAltarAssemblyRecipe.Serializer::new);

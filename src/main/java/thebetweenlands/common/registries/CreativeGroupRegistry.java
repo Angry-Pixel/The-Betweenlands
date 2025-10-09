@@ -934,6 +934,9 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.VOLARKITE);
 			output.accept(ItemRegistry.SLINGSHOT);
 			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);
+			output.accept(ItemRegistry.FISHING_SPEAR);
+			output.accept(ItemRegistry.AMPHIBIOUS_FISHING_SPEAR);
+			output.accept(ItemRegistry.ROBUST_AMPHIBIOUS_FISHING_SPEAR);
 			output.accept(ItemRegistry.WEEDWOOD_BUCKET);
 			output.accept(ItemRegistry.SYRMORITE_BUCKET);
 			createBuckets(output, ItemRegistry.WEEDWOOD_BUCKET, true);

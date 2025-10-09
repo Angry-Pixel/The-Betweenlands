@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "s": {
+      "item": "thebetweenlands:amphibious_fishing_spear"
+    },
+    "t": {
+      "item": "thebetweenlands:shambler_tongue"
+    },
+    "u": {
+      "item": "thebetweenlands:urchin_spike"
+    }
+  },
+  "pattern": [
+    " u ",
+    "tst",
+    " t "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:robust_amphibious_fishing_spear"
+  }
+}

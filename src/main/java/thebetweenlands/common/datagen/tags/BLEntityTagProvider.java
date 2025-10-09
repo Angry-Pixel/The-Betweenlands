@@ -25,6 +25,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 	public static final TagKey<EntityType<?>> CRITTER_CRUNCHER_INSTAKILLS = tag("critter_cruncher_instakills");
 	public static final TagKey<EntityType<?>> SLUDGE_SLICER_INSTAKILLS = tag("sludge_slicer_instakills");
 	public static final TagKey<EntityType<?>> LEECH_ATTACKS = tag("leech_attacks");
+	public static final TagKey<EntityType<?>> FISHING_SPEAR_ONE_SHOTS = tag("fishing_spear_one_shots");
 
 	public static final TagKey<EntityType<?>> BYPASSES_REPELLER = tag("bypasses_repeller");
 	public static final TagKey<EntityType<?>> SPIKE_TRAP_IMMUNE = tag("spike_trap_immune");
@@ -48,6 +49,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(CRITTER_CRUNCHER_INSTAKILLS).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.BLOOD_SNAIL.get(), EntityRegistry.MIRE_SNAIL.get(), EntityRegistry.SPORELING.get(), EntityRegistry.LEECH.get(), EntityRegistry.TERMITE.get(), EntityRegistry.INFESTATION.get(), EntityRegistry.CHIROMAW.get());
 		this.tag(SLUDGE_SLICER_INSTAKILLS).add(EntityRegistry.SLUDGE.get(), EntityRegistry.SMOL_SLUDGE.get());
 		this.tag(LEECH_ATTACKS).add(EntityRegistry.SWAMP_HAG.get(), EntityType.PLAYER);
+		this.tag(FISHING_SPEAR_ONE_SHOTS).add(EntityRegistry.ANADIA.get(), EntityType.COD, EntityType.SALMON, EntityType.PUFFERFISH, EntityType.TROPICAL_FISH);
 		this.tag(Tags.EntityTypes.BOSSES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.PRIMORDIAL_MALEVOLENCE.get()); // TODO bosses
 		this.tag(EntityTypeTags.ARROWS).add(EntityRegistry.ANGLER_TOOTH_ARROW.get(), EntityRegistry.BASILISK_ARROW.get(), EntityRegistry.OCTINE_ARROW.get(), EntityRegistry.POISON_ANGLER_TOOTH_ARROW.get(), EntityRegistry.SHOCK_ARROW.get(), EntityRegistry.SLUDGE_WORM_ARROW.get());
 		this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get(), EntityRegistry.OLM.get());

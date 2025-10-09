@@ -45,6 +45,8 @@ public class BLCustomRecipeProvider {
 
 		output.accept(TheBetweenlands.prefix("trimming/anadia"), new AnadiaTrimmingRecipe(), null);
 
+		AnimatorMarkerRecipeBuilder.animator(ItemRegistry.ROBUST_AMPHIBIOUS_FISHING_SPEAR).requiredFuel(2).requiredLife(1).save(output);
+
 		AnimatorRecipeBuilder.animator(ItemRegistry.TAR_BEAST_HEART)
 			.setResultStack(ItemRegistry.ANIMATED_TAR_BEAST_HEART)
 			.requiredFuel(32)

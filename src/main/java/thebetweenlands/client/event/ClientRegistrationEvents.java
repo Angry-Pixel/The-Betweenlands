@@ -308,6 +308,9 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SWORD_ENERGY.get(), SwordEnergyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.INFESTATION.get(), InfestationRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FALSE_XP.get(), ExperienceOrbRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.FISHING_SPEAR))));
+		event.registerEntityRenderer(EntityRegistry.AMPHIBIOUS_FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.AMPHIBIOUS_FISHING_SPEAR))));
+		event.registerEntityRenderer(EntityRegistry.ROBUST_FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.ROBUST_FISHING_SPEAR))));
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -403,7 +406,6 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SMOL_SLUDGE, SmolSludgeModel::create);
 		event.registerLayerDefinition(BLModelLayers.PRIMORDIAL_MALEVOLENCE, PrimordialMalevolenceModel::create);
 		event.registerLayerDefinition(BLModelLayers.SWORD_ENERGY, SwordEnergyModel::create);
-		event.registerLayerDefinition(BLModelLayers.GAS_CLOUD, GasCloudModel::create);
 		event.registerLayerDefinition(BLModelLayers.TAR_BEAST, TarBeastModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SLUDGE_WORM, LargeSludgeWormModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SLUDGE_WORM_OUTER, LargeSludgeWormModel::createSludgeLayer);
@@ -419,6 +421,9 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.LEECH, LeechModel::create);
 		event.registerLayerDefinition(BLModelLayers.BLOOD_SNAIL, BloodSnailModel::create);
 		event.registerLayerDefinition(BLModelLayers.INFESTATION, InfestationModel::create);
+		event.registerLayerDefinition(BLModelLayers.FISHING_SPEAR, FishingSpearModel::create);
+		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_FISHING_SPEAR, FishingSpearModel::createFinned);
+		event.registerLayerDefinition(BLModelLayers.ROBUST_FISHING_SPEAR, RobustFishingSpearModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -545,6 +550,10 @@ public class ClientRegistrationEvents {
 			}
 		});
 		ItemProperties.register(ItemRegistry.SLINGSHOT.get(), TheBetweenlands.prefix("pulling"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.FISHING_SPEAR.get(), TheBetweenlands.prefix("throwing"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.AMPHIBIOUS_FISHING_SPEAR.get(), TheBetweenlands.prefix("throwing"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemProperties.register(ItemRegistry.ROBUST_AMPHIBIOUS_FISHING_SPEAR.get(), TheBetweenlands.prefix("throwing"), (stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 
 		ItemProperties.register(ItemRegistry.BIOPATHIC_TRIGGERSTONE.get(), TheBetweenlands.prefix("effect"), (stack, level, entity, seed) -> {
 			var upgrade = stack.getOrDefault(DataComponentRegistry.SELECTED_UPGRADE, AmphibiousArmorUpgradeRegistry.NONE.get());

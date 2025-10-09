@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:item/spear_throwing",
+  "textures": {
+    "layer0": "thebetweenlands:item/fishing_spear"
+  }
+}
