@@ -4,19 +4,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.EventHooks;
 import thebetweenlands.common.block.structure.BeamOriginBlock;
 import thebetweenlands.common.block.structure.BeamRelayBlock;
 import thebetweenlands.common.block.structure.DiagonalEnergyBarrierBlock;
+import thebetweenlands.common.entity.monster.EmberlingShaman;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class BeamOriginBlockEntity extends SyncedBlockEntity {
@@ -46,11 +51,11 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 		if (litBraziers == 4) {
 			if (!entity.active) {
 				entity.setActive(level, pos, state, true);
-				if (!level.isClientSide()) {
-					entity.spawnEmberling(level, pos.offset(3, -1, 3));
-					entity.spawnEmberling(level, pos.offset(3, -1, -3));
-					entity.spawnEmberling(level, pos.offset(-3, -1, 3));
-					entity.spawnEmberling(level, pos.offset(-3, -1, -3));
+				if (level instanceof ServerLevel serverLevel) {
+					entity.spawnEmberling(serverLevel, pos.offset(3, -1, 3));
+					entity.spawnEmberling(serverLevel, pos.offset(3, -1, -3));
+					entity.spawnEmberling(serverLevel, pos.offset(-3, -1, 3));
+					entity.spawnEmberling(serverLevel, pos.offset(-3, -1, -3));
 				}
 			}
 		} else {
@@ -143,12 +148,12 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
-	private void spawnEmberling(Level level, BlockPos pos) {
-//		EmberlingShaman entity = new EmberlingShaman (level);
-//		entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-//		//entity.setBoundOrigin(pos); // may use this dunno yet...
-//		entity.onInitialSpawn(level.getCurrentDifficultyAt(pos), null);
-//		level.addFreshEntity(entity);
+	private void spawnEmberling(ServerLevel level, BlockPos pos) {
+		EmberlingShaman entity = new EmberlingShaman(EntityRegistry.EMBERLING_SHAMAN.get(), level);
+		entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+		//entity.setBoundOrigin(pos); // may use this dunno yet...
+		EventHooks.finalizeMobSpawn(entity, level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null);
+		level.addFreshEntity(entity);
 	}
 
 	public int checkForLitBraziers(Level level, BlockPos pos) {

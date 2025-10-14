@@ -36,6 +36,8 @@ import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
+import javax.annotation.Nullable;
+
 public class WeedwoodBushBlock extends Block implements FarmablePlant {
 
 	public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
@@ -58,7 +60,7 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false).setValue(DOWN, false));
 	}
 
-	public static boolean isPassable(BlockGetter level, BlockPos pos, Entity entity) {
+	public static boolean isPassable(BlockGetter level, BlockPos pos, @Nullable Entity entity) {
 		return entity != null && entity.getType().is(BLEntityTagProvider.WEEDWOOD_BUSH_PASSABLE) || entity instanceof WeedwoodBushPassableEntity passable && passable.canPassThroughBush(level, pos);
 	}
 

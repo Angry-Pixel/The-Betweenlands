@@ -73,7 +73,7 @@ public interface CustomCorrodible {
 
 	/**
 	 * Sets the amount of coating of the specified item stack
-	 * @param itemStack
+	 * @param stack
 	 * @param coating
 	 */
 	default void setCoating(ItemStack stack, int coating) {

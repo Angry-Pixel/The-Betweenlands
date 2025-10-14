@@ -2,9 +2,9 @@ package thebetweenlands.api.attachment;
 
 public class ProtectionShield {
 
-	private boolean[] activeShields = new boolean[20];
+	private final boolean[] activeShields = new boolean[20];
 
-	private int[] shieldAnimationTicks = new int[20];
+	private final int[] shieldAnimationTicks = new int[20];
 
 	private int numActiveShields = 0;
 

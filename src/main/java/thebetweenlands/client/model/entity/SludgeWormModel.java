@@ -15,13 +15,13 @@ import thebetweenlands.common.entity.monster.SludgeWorm;
 
 public class SludgeWormModel extends MowzieModelBase<SludgeWorm> {
 
-	public ModelPart head;
-	public ModelPart leftMouth;
-	public ModelPart rightMouth;
-	public ModelPart leftJaw;
-	public ModelPart rightJaw;
-	public ModelPart body;
-	public ModelPart butt;
+	public final ModelPart head;
+	public final ModelPart leftMouth;
+	public final ModelPart rightMouth;
+	public final ModelPart leftJaw;
+	public final ModelPart rightJaw;
+	public final ModelPart body;
+	public final ModelPart butt;
 
 	public SludgeWormModel(ModelPart root) {
 		super(root);

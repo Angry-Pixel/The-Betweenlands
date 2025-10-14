@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class AspectWidget extends BookWidget {
 
-	public Holder<AspectType> aspect;
-	public float scale = 1.0F;
+	public final Holder<AspectType> aspect;
+	public final float scale = 1.0F;
 
 	public AspectWidget(int x, int y, Holder<AspectType> aspect, float scale) {
 		super(x, y, (int) (16 * scale), (int) (16 * scale));

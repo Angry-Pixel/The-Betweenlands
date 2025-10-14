@@ -50,7 +50,7 @@ public class ChiromawMatriarch extends FlyingMonster implements NonDismountable 
 	private GlobalPos boundOrigin;
 	public float previousSpinAngle, spinAngle;
 	public float animTime, prevAnimTime;
-	public float flapSpeed = 0.5f;
+	public final float flapSpeed = 0.5f;
 	public int flapTicks;
 	public int landingAbortTime;
 	public boolean returnFast; //whether matriarch should return to nest fast, e.g. when player is near it

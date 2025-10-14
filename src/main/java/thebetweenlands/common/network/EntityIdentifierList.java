@@ -23,9 +23,10 @@ public class EntityIdentifierList {
 	private static class EntityIdentifier {
 		private final int entityID;
 		private final ResourceKey<Level> dimensionId;
+		@Nullable
 		private Entity entity;
 
-		private EntityIdentifier(int id, ResourceKey<Level> dim, Entity entity) {
+		private EntityIdentifier(int id, ResourceKey<Level> dim, @Nullable Entity entity) {
 			this.entityID = id;
 			this.dimensionId = dim;
 			this.entity = entity;
@@ -129,6 +130,7 @@ public class EntityIdentifierList {
 		return entities;
 	}
 
+	@Nullable
 	private Entity tryGetEntity(EntityIdentifier id) {
 		if(id.entity == null) {
 			Level level = TheBetweenlands.getLevelWorkaround(id.dimensionId);

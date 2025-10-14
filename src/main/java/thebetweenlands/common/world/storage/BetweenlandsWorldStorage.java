@@ -119,7 +119,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 	}
 
-	protected void updateAmbientCaveSounds(Level level, Player player) {
+	protected void updateAmbientCaveSounds(Level level, @Nullable Player player) {
 		if (player != null) {
 			Set<ChunkPos> closeChunks = new HashSet<>();
 
@@ -190,7 +190,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	/**
-	 * Gets any existing Betweenlands World Storage for the Level (regardless of whether or not that level is The Betweenlands)
+	 * Gets any existing Betweenlands World Storage for the Level (regardless of whether that level is The Betweenlands)
 	 * @param level
 	 * @return
 	 */
@@ -204,7 +204,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	public static Optional<BetweenlandsWorldStorage> getForLevel(Level level) {
 		if(TheBetweenlands.isBetweenlands(level)) {
-			return Optional.ofNullable(getOrCreateForLevel(level));
+			return Optional.of(getOrCreateForLevel(level));
 		} else {
 			return getExistingForLevel(level);
 		}
@@ -226,7 +226,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	public static Optional<BetweenlandsWorldStorage> get(Level level) {
 		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
 		if(betweenlandsLevel != null) {
-			return Optional.ofNullable(getOrCreateForLevel(betweenlandsLevel));
+			return Optional.of(getOrCreateForLevel(betweenlandsLevel));
 		}
 		return Optional.empty();
 	}

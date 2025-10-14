@@ -45,19 +45,13 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 
 	public static void tick(Level level, BlockPos pos, BlockState state, RepellerBlockEntity entity) {
 		if (!level.isClientSide()) {
-			if (entity.fuel > 0) {
-				if (entity.fuel <= 0) {
-					entity.fuel = 0;
-					entity.setChanged();
-				}
-			}
 			if (entity.fuel > 0 && entity.hasShimmerstone) {
 				if (!entity.running) {
 					entity.running = true;
 					level.sendBlockUpdated(pos, state, state, 2);
 					entity.setChanged();
 				}
-			} else if (entity.fuel <= 0 || !entity.hasShimmerstone) {
+			} else {
 				if (entity.running) {
 					entity.running = false;
 					level.sendBlockUpdated(pos, state, state, 2);
@@ -187,7 +181,7 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		this.accumulatedCost = tag.getFloat("accumulated_cost");
 	}
 
-	public void setRadiusState(int state) {
+	public void setRadiusState(Level level, int state) {
 		state = state % 4;
 		if (state != this.radiusState) {
 			if (this.running) {
@@ -195,7 +189,7 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 			}
 			this.radiusState = state;
 			this.setChanged();
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 	}
 
@@ -203,19 +197,19 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		return this.radiusState;
 	}
 
-	public void cycleRadiusState() {
+	public void cycleRadiusState(Level level) {
 		this.radiusState = (this.radiusState + 1) % 4;
 		if (this.running)
 			this.deployTicks = 0;
 		this.setChanged();
-		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 	}
 
-	public void addShimmerstone() {
+	public void addShimmerstone(Level level) {
 		if (!this.hasShimmerstone) {
 			this.hasShimmerstone = true;
 			this.setChanged();
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 	}
 
@@ -227,11 +221,11 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		this.hasShimmerstone = shimmerstone;
 	}
 
-	public void removeShimmerstone() {
+	public void removeShimmerstone(Level level) {
 		if (this.hasShimmerstone) {
 			this.hasShimmerstone = false;
 			this.setChanged();
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 	}
 
@@ -239,13 +233,13 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		return 10000;
 	}
 
-	public int addFuel(int amount) {
+	public int addFuel(Level level, int amount) {
 		if (amount != 0) {
 			int canAdd = this.getMaxFuel() - this.fuel;
 			if (canAdd > 0) {
 				int added = Math.min(canAdd, amount);
 				this.fuel += added;
-				this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+				level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 				this.setChanged();
 				return added;
 			}
@@ -253,11 +247,11 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		return 0;
 	}
 
-	public int removeFuel(int amount) {
+	public int removeFuel(Level level, int amount) {
 		int removed = Math.min(this.fuel, amount);
 		if (amount != 0) {
 			this.fuel -= amount;
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 			this.setChanged();
 		}
 		return removed;

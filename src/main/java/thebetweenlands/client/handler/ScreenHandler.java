@@ -35,7 +35,7 @@ public class ScreenHandler {
 
 	private static double obstructionPercentage = 0;
 	private static double prevObstructionPercentage = 0;
-	private static double dispersionIndicatorPercentage = 0;
+	private static final double dispersionIndicatorPercentage = 0;
 	private static double prevDispersionIndicatorPercentage = 0;
 
 //	private static final ResizableFramebuffer ringOfDispersionWorldFramebuffer = new ResizableFramebuffer(true);

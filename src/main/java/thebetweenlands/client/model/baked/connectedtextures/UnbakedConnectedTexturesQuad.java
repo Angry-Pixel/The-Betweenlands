@@ -29,7 +29,9 @@ public class UnbakedConnectedTexturesQuad {
 	public final String[] indexNames;
 	public final int[] indices;
 	public final ConnectedTexturesVertex[] verts;
+	@Nullable
 	public final Direction cullface;
+	@Nullable
 	public final String cullfaceName;
 	public final int tintIndex;
 	public final float minU, minV, maxU, maxV;

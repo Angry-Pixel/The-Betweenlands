@@ -19,12 +19,12 @@ import java.util.function.Supplier;
 
 public class SwarmParticle extends TextureSheetParticle {
 
-	protected Direction face;
+	protected final Direction face;
 
 	protected float rotateBias;
 
-	protected Vec3 start;
-	protected Supplier<Vec3> end;
+	protected final Vec3 start;
+	protected final Supplier<Vec3> end;
 
 	protected int lightmapX, lightmapY;
 

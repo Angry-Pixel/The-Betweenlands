@@ -50,7 +50,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	@Override
 	public void setDefaults() {
 		//Chunk is new and all gem targets will already be marked during world gen
-		for (GemSingerItem.GemSingerTarget target : GemSingerItem.GemSingerTarget.values()) {
+		for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
 			this.savedGemTargets.add(target.getId());
 		}
 	}
@@ -86,7 +86,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 				this.savedGemTargets.add(target);
 			}
 
-			for (GemSingerItem.GemSingerTarget target : GemSingerItem.GemSingerTarget.values()) {
+			for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
 				if (!this.savedGemTargets.contains(target.getId())) {
 					//A new gem singer target was added -> chunk needs to be rescanned
 					this.rescanGemSingerTargets = true;
@@ -122,7 +122,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 					for (int z = 0; z < 16; z++) {
 						BlockState state = chunk.getBlockState(BlockPos.containing(x, y, z));
 
-						for (GemSingerItem.GemSingerTarget target : GemSingerItem.GemSingerTarget.values()) {
+						for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
 							if (target.test(state)) {
 								IntSet indices = this.gemToPositions.get(target.getId());
 								if (indices == null) {
@@ -136,7 +136,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 				}
 			}
 
-			for (GemSingerItem.GemSingerTarget target : GemSingerItem.GemSingerTarget.values()) {
+			for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
 				this.savedGemTargets.add(target.getId());
 			}
 
@@ -145,7 +145,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	}
 
 	/**
-	 * Encodes a position into an index that might be contained in {@link #findGems(GemSingerItem.GemSingerTarget)}
+	 * Encodes a position into an index that might be contained in {@link #findGems(GemSingerItem.Target)}
 	 *
 	 * @param x X
 	 * @param y Y
@@ -157,7 +157,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	}
 
 	/**
-	 * Decodes a position index retrieved from {@link #findGems(GemSingerItem.GemSingerTarget)}
+	 * Decodes a position index retrieved from {@link #findGems(GemSingerItem.Target)}
 	 * into a block position <b>relative to the chunk it was retrieved from</b>
 	 *
 	 * @param index index to decode
@@ -176,7 +176,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param target Gem target type
 	 * @return true if successfully marked
 	 */
-	public boolean markGem(int x, int y, int z, GemSingerItem.GemSingerTarget target) {
+	public boolean markGem(int x, int y, int z, GemSingerItem.Target target) {
 		IntSet indices = this.gemToPositions.get(target.getId());
 		if (indices == null) {
 			this.gemToPositions.put(target.getId(), indices = new IntArraySet());
@@ -194,7 +194,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param target Gem target type
 	 * @return true if successfully unmarked
 	 */
-	public boolean unmarkGem(int x, int y, int z, GemSingerItem.GemSingerTarget target) {
+	public boolean unmarkGem(int x, int y, int z, GemSingerItem.Target target) {
 		IntSet indices = this.gemToPositions.get(target.getId());
 		if (indices != null) {
 			if (indices.remove(getGemSingerTargetIndex(x & 15, y, z & 15))) {
@@ -213,7 +213,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param target Gem target type
 	 * @return an unmodifiable set of all gem positions which can be decoded by {@link #getGemSingerTargetPosition(int)}
 	 */
-	public IntSet findGems(GemSingerItem.GemSingerTarget target) {
+	public IntSet findGems(GemSingerItem.Target target) {
 		IntSet indices = this.gemToPositions.get(target.getId());
 		if (indices != null) {
 			return IntSets.unmodifiable(indices);
@@ -231,7 +231,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return position of a gem <b>in world coordinates</b>, or null if none was found
 	 */
 	@Nullable
-	public BlockPos findRandomGem(GemSingerItem.GemSingerTarget target, RandomSource rand, BlockPos pos, float range) {
+	public BlockPos findRandomGem(GemSingerItem.Target target, RandomSource rand, BlockPos pos, float range) {
 		BlockPos relPos = pos.offset(-this.getChunk().getPos().x * 16, 0, -this.getChunk().getPos().z * 16);
 		IntSet indices = this.gemToPositions.get(target.getId());
 		if (indices != null) {
@@ -254,9 +254,9 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param pos    World coordinate
 	 * @param target Gem target type
 	 * @return
-	 * @see #markGem(int, int, int, GemSingerItem.GemSingerTarget)
+	 * @see #markGem(int, int, int, GemSingerItem.Target)
 	 */
-	public static boolean markGem(Level level, BlockPos pos, GemSingerItem.GemSingerTarget target) {
+	public static boolean markGem(Level level, BlockPos pos, GemSingerItem.Target target) {
 		BetweenlandsChunkStorage storage = forChunk(level, level.getChunk(pos));
 		if (storage != null) {
 			return storage.markGem(pos.getX(), pos.getY(), pos.getZ(), target);
@@ -269,9 +269,9 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @param pos    World coordinate
 	 * @param target Gem target type
 	 * @return
-	 * @see #unmarkGem(int, int, int, GemSingerItem.GemSingerTarget)
+	 * @see #unmarkGem(int, int, int, GemSingerItem.Target)
 	 */
-	public static boolean unmarkGem(Level level, BlockPos pos, GemSingerItem.GemSingerTarget target) {
+	public static boolean unmarkGem(Level level, BlockPos pos, GemSingerItem.Target target) {
 		BetweenlandsChunkStorage storage = forChunk(level, level.getChunk(pos));
 		if (storage != null) {
 			return storage.unmarkGem(pos.getX(), pos.getY(), pos.getZ(), target);
@@ -290,7 +290,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return position of a gem <b>in world coordinates</b>, or null if none was found
 	 */
 	@Nullable
-	public static BlockPos findRandomGem(Level level, GemSingerItem.GemSingerTarget target, RandomSource rand, BlockPos pos, float range) {
+	public static BlockPos findRandomGem(Level level, GemSingerItem.Target target, RandomSource rand, BlockPos pos, float range) {
 		BetweenlandsChunkStorage storage = forChunk(level, level.getChunk(pos));
 		if (storage != null) {
 			return storage.findRandomGem(target, rand, pos, range);

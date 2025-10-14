@@ -113,7 +113,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		try {
 			return this.loadOfflinePlayerData(playerUuid);
 		} catch (IOException ex) {
-			TheBetweenlands.LOGGER.error(String.format("Failed loading offline player data for UUID %s", playerUuid), ex);
+			TheBetweenlands.LOGGER.error("Failed loading offline player data for UUID {}", playerUuid, ex);
 		}
 		return null;
 	}
@@ -148,7 +148,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 			this.saveOfflinePlayerData(playerUuid, nbt);
 			return true;
 		} catch (IOException ex) {
-			TheBetweenlands.LOGGER.error(String.format("Failed saving offline player data for UUID %s", playerUuid), ex);
+			TheBetweenlands.LOGGER.error("Failed saving offline player data for UUID {}", playerUuid, ex);
 		}
 		return false;
 	}
@@ -181,6 +181,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		}
 	}
 
+	@Nullable
 	private static OfflinePlayerHandlerImpl handler = null;
 
 	@Nullable
@@ -188,6 +189,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		return handler;
 	}
 
+	@Nullable
 	private static ServerLevel getMainWorld(LevelAccessor level) {
 		if (level instanceof ServerLevel server && level == server.getLevel()) {
 			return server;

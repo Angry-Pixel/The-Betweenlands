@@ -1,10 +1,15 @@
 package thebetweenlands.common.item.tool;
 
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -17,49 +22,42 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
 
+import thebetweenlands.common.component.item.GemSingerTarget;
 import thebetweenlands.common.network.clientbound.SoundRipplePacket;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
 public class GemSingerItem extends Item {
-	public enum GemSingerTarget implements Predicate<BlockState> {
-		AQUA_MIDDLE_GEM(0, state -> state.is(BlockRegistry.AQUA_MIDDLE_GEM_ORE)),
-		CRIMSON_MIDDLE_GEM(1, state -> state.is(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE)),
-		GREEN_MIDDLE_GEM(2, state -> state.is(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
-		//LIFE_CRYSTAL(3, state -> state.is(BlockRegistry.LIFE_CRYSTAL_STALACTITE) && state.getValue(BlockLifeCrystalStalactite.VARIANT) == EnumLifeCrystalType.ORE);
+	public enum Target implements Predicate<BlockState>, StringRepresentable {
+		AQUA_MIDDLE_GEM(state -> state.is(BlockRegistry.AQUA_MIDDLE_GEM_ORE)),
+		CRIMSON_MIDDLE_GEM(state -> state.is(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE)),
+		GREEN_MIDDLE_GEM(state -> state.is(BlockRegistry.GREEN_MIDDLE_GEM_ORE)),
+		LIFE_CRYSTAL(state -> state.is(BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE));
 
-		private final int id;
+		public static final StringRepresentable.EnumCodec<Target> CODEC = StringRepresentable.fromEnum(Target::values);
+		public static final IntFunction<Target> BY_ID = ByIdMap.continuous(Target::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+		public static final StreamCodec<ByteBuf, Target> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Target::ordinal);
+
 		private final Predicate<BlockState> predicate;
 
-		GemSingerTarget(int id, Predicate<BlockState> predicate) {
-			this.id = id;
+		Target(Predicate<BlockState> predicate) {
 			this.predicate = predicate;
-		}
-
-		public int getId() {
-			return this.id;
-		}
-
-		@Nullable
-		public static GemSingerTarget byId(int id) {
-			for(GemSingerTarget target : values()) {
-				if(target.id == id) {
-					return target;
-				}
-			}
-			return null;
 		}
 
 		@Override
 		public boolean test(BlockState state) {
 			return this.predicate.test(state);
+		}
+
+		@Override
+		public String getSerializedName() {
+			return this.name().toLowerCase(Locale.ROOT);
 		}
 	}
 
@@ -81,7 +79,7 @@ public class GemSingerItem extends Item {
 				BlockPos gem = this.getTargetPosition(stack);
 
 				if(gem != null) {
-					GemSingerTarget target = this.getTargetType(stack);
+					Target target = this.getTargetType(stack);
 
 					boolean valid = false;
 
@@ -112,9 +110,9 @@ public class GemSingerItem extends Item {
 							BetweenlandsChunkStorage storage = BetweenlandsChunkStorage.forChunk(level, chunk);
 
 							if(storage != null) {
-								EnumMap<GemSingerTarget, BlockPos> foundGems = new EnumMap<>(GemSingerTarget.class);
+								EnumMap<Target, BlockPos> foundGems = new EnumMap<>(Target.class);
 
-								for(GemSingerTarget target : GemSingerTarget.values()) {
+								for(Target target : Target.values()) {
 									BlockPos foundGem = storage.findRandomGem(target, level.getRandom(), player.blockPosition(), chunkRange * 16);
 
 									if(foundGem != null) {
@@ -123,8 +121,8 @@ public class GemSingerItem extends Item {
 								}
 
 								if(!foundGems.isEmpty()) {
-									List<Map.Entry<GemSingerTarget, BlockPos>> foundGemEntries = new ArrayList<>(foundGems.entrySet());
-									Map.Entry<GemSingerTarget, BlockPos> picked = foundGemEntries.get(level.getRandom().nextInt(foundGemEntries.size()));
+									List<Map.Entry<Target, BlockPos>> foundGemEntries = new ArrayList<>(foundGems.entrySet());
+									Map.Entry<Target, BlockPos> picked = foundGemEntries.get(level.getRandom().nextInt(foundGemEntries.size()));
 
 									gem = picked.getValue();
 									this.setTarget(stack, gem, picked.getKey());
@@ -159,31 +157,27 @@ public class GemSingerItem extends Item {
 		}
 	}
 
-	//TODO data component
-	protected void setTarget(ItemStack stack, @Nullable BlockPos pos, @Nullable GemSingerTarget target) {
-//		if(pos != null && target != null) {
-//			CompoundTag nbt = NBTHelper.getStackNBTSafe(stack);
-//			nbt.setLong("targetPos", pos.toLong());
-//			nbt.setInteger("targetType", target.getId());
-//		} else if(stack.getTagCompound() != null) {
-//			stack.getTagCompound().removeTag("targetPos");
-//			stack.getTagCompound().removeTag("targetType");
-//		}
+	protected void setTarget(ItemStack stack, @Nullable BlockPos pos, @Nullable Target target) {
+		if(pos != null && target != null) {
+			stack.set(DataComponentRegistry.GEM_SINGER_TARGET, new GemSingerTarget(pos, target));
+		} else if(stack.has(DataComponentRegistry.GEM_SINGER_TARGET)) {
+			stack.remove(DataComponentRegistry.GEM_SINGER_TARGET);
+		}
 	}
 
 	@Nullable
 	protected BlockPos getTargetPosition(ItemStack stack) {
-//		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("targetPos", Constants.NBT.TAG_LONG)) {
-//			return BlockPos.fromLong(stack.getTagCompound().getLong("targetPos"));
-//		}
+		if(stack.has(DataComponentRegistry.GEM_SINGER_TARGET)) {
+			return stack.get(DataComponentRegistry.GEM_SINGER_TARGET).pos();
+		}
 		return null;
 	}
 
 	@Nullable
-	protected GemSingerTarget getTargetType(ItemStack stack) {
-//		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("targetType", Constants.NBT.TAG_INT)) {
-//			return GemSingerTarget.byId(stack.getTagCompound().getInteger("targetType"));
-//		}
+	protected Target getTargetType(ItemStack stack) {
+		if(stack.has(DataComponentRegistry.GEM_SINGER_TARGET)) {
+			return stack.get(DataComponentRegistry.GEM_SINGER_TARGET).target();
+		}
 		return null;
 	}
 }

@@ -980,9 +980,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	private static class TuftPart {
-		ModelFile model;
-		int weight;
-		boolean variate;
+		final ModelFile model;
+		final int weight;
+		final boolean variate;
 
 		public TuftPart(ModelFile model, int weight, boolean variate) {
 			this.model = model;

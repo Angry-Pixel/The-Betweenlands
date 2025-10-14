@@ -162,8 +162,8 @@ public class GalleryFrame extends HangingEntity {
 		LARGE(2, ItemRegistry.LARGE_GALLERY_FRAME),
 		SMALL(1, ItemRegistry.SMALL_GALLERY_FRAME);
 
-		private int blockSize;
-		private DeferredItem<Item> item;
+		private final int blockSize;
+		private final DeferredItem<Item> item;
 
 		Type(int blockSize, DeferredItem<Item> item) {
 			this.blockSize = blockSize;

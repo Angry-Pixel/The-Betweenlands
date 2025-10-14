@@ -12,29 +12,31 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 
+import javax.annotation.Nullable;
+
 public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	private static final long serialVersionUID = -8588233762092841277L;
-	
+
 	private final Object2IntOpenHashMap<K> internalMap;
 	private final int cullValue;
 	private final Integer boxedCullValue;
-	
+
 	public CustomCullingObject2IntHashMap(int expected, int value) {
 		internalMap = new Object2IntOpenHashMap<K>(expected);
 		internalMap.defaultReturnValue(value);
 		cullValue = value;
 		boxedCullValue = Integer.valueOf(value);
 	}
-	
+
 	public CustomCullingObject2IntHashMap(int value) {
 		this(Hash.DEFAULT_INITIAL_SIZE, value);
 	}
-	
+
 	public CustomCullingObject2IntHashMap() {
 		this(0);
 	}
 
-	
+
 	@Override
 	public int size() {
 		return internalMap.size();
@@ -55,7 +57,7 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	public boolean containsValue(Object value) {
 		return internalMap.containsValue(value);
 	}
-	
+
 	public boolean containsValue(int value) {
 		return internalMap.containsValue(value);
 	}
@@ -71,17 +73,18 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 		return internalMap.getInt(key);
 	}
 
+	@Nullable
 	@Override
 	@Deprecated
 	public Integer put(K key, Integer value) {
 		final boolean containsKey = containsKey(key);
-		if(value == boxedCullValue) {
+		if(value.equals(boxedCullValue)) {
 			return containsKey ? internalMap.remove(key) : boxedCullValue;
 		}
 		final Integer out = internalMap.put(key, value);
 		return containsKey ? out : boxedCullValue;
 	}
-	
+
 	public int put(K key, int value) {
 		return value == cullValue ? internalMap.removeInt(key) : internalMap.put(key, value);
 	}
@@ -119,7 +122,7 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Decreases the value of the key by 1 and returns the new value
 	 * @param key the key.
@@ -140,7 +143,7 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	public Integer remove(Object key) {
 		return containsKey(key) ? internalMap.remove(key) : boxedCullValue;
 	}
-	
+
 	public Integer removeInt(Object key) {
 		return internalMap.removeInt(key);
 	}
@@ -149,7 +152,7 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	@Override
 	public void putAll(Map<? extends K, ? extends Integer> m) {
 		final Object2IntOpenHashMap<K> internalMap = this.internalMap;
-		
+
 		if (m instanceof Object2IntMap) {
 			final int cullValue = this.cullValue;
 			final ObjectIterator<Object2IntMap.Entry<K>> i = Object2IntMaps.fastIterator((Object2IntMap<K>)m);
@@ -203,5 +206,5 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	public Object2IntMap.FastEntrySet<K> object2IntEntrySet() {
 		return internalMap.object2IntEntrySet();
 	}
-	
+
 }

@@ -29,7 +29,7 @@ public class SwordEnergy extends Entity implements IEntityWithComplexSpawn {
 
 	public float pulseFloat;
 	public float pos1, pos2, pos3, pos4, lastPos1, lastPos2, lastPos3, lastPos4;
-	AnimationMathHelper pulse = new AnimationMathHelper();
+	final AnimationMathHelper pulse = new AnimationMathHelper();
 
 	public SwordEnergy(EntityType<? extends Entity> type, Level level) {
 		super(type, level);

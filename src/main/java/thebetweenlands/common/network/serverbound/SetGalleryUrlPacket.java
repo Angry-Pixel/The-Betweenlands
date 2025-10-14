@@ -29,7 +29,7 @@ public record SetGalleryUrlPacket(int frameID, String url) implements CustomPack
 	public static void handle(SetGalleryUrlPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Entity targetEntity = context.player().level().getEntity(packet.frameID());
-			if (targetEntity instanceof GalleryFrame frame && context.player().distanceTo(frame) < 6.0D && !packet.url().isEmpty() && packet.url().length() <= 256) {
+			if (!packet.url().isBlank() && targetEntity instanceof GalleryFrame frame && context.player().distanceTo(frame) < 6.0D && !packet.url().isEmpty() && packet.url().length() <= 256) {
 				if (!packet.url().startsWith("https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery")) {
 					TheBetweenlands.LOGGER.warn("Malicious Packet detected: SetGalleryUrlPacket was sent with the following link by {} ({}): {}", context.player().getDisplayName(), context.player().getStringUUID(), packet.url());
 					return;

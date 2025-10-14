@@ -73,7 +73,7 @@ public class CremainsCenserRecipe extends AbstractCenserRecipe<Void> {
 
 		boolean isDeathFromCenser = false;
 
-		if(entity != null && entity.isOnFire() && event.getSource().is(DamageTypeTags.IS_FIRE)) {
+		if(entity.isOnFire() && event.getSource().is(DamageTypeTags.IS_FIRE)) {
 			int sx = Mth.floor(entity.getX() - 6) >> 4;
 			int sz = Mth.floor(entity.getZ() - 6) >> 4;
 			int ex = Mth.floor(entity.getX() + 6) >> 4;

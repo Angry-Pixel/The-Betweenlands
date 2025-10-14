@@ -27,7 +27,7 @@ public class Layer {
             if (SharedConstants.IS_RUNNING_IN_IDE) {
                 throw Util.pauseInIde(new IllegalStateException("Unknown biome id: " + i));
             } else {
-                TheBetweenlands.LOGGER.warn("Unknown biome id: " + i);
+				TheBetweenlands.LOGGER.warn("Unknown biome id: {}", i);
                 return registry.getOrThrow(Biomes.OCEAN);
             }
         } else {

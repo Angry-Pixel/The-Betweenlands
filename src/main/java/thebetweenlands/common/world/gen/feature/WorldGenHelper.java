@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -22,20 +23,21 @@ public abstract class WorldGenHelper<T extends FeatureConfiguration> extends Fea
 	}
 
 	/**
-	 * @see #rotatedCubeVolume(WorldGenLevel, Predicate, int, int, int, int, int, int, BlockState, int, int, int, Direction, Consumer...)
-	 * @param level
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param offsetX
-	 * @param offsetY
-	 * @param offsetZ
-	 * @param state
-	 * @param sizeWidth
-	 * @param sizeHeight
-	 * @param sizeDepth
-	 * @param direction
-	 * @param callbacks
+	 * Generates cube volumes and rotates them depending on the given rotation
+	 *
+	 * @param level      The world
+	 * @param x          x to generate relative from
+	 * @param y          y to generate relative from
+	 * @param z          z to generate relative from
+	 * @param offsetX    Where to generate relative from the x
+	 * @param offsetY    Where to generate relative from the y
+	 * @param offsetZ    Where to generate relative from the z
+	 * @param state      The block to generate
+	 * @param sizeWidth  The width of the cube volume
+	 * @param sizeHeight The height of the cube volume
+	 * @param sizeDepth  The depth of the cube volume
+	 * @param direction  The direction the cube generates in
+	 * @param callbacks  All callbacks are called once a block is placed
 	 */
 	@SafeVarargs
 	public final void rotatedCubeVolume(WorldGenLevel level, int x, int y, int z, int offsetX, int offsetY, int offsetZ, BlockState state, int sizeWidth, int sizeHeight, int sizeDepth, Direction direction, Consumer<BlockPos>... callbacks) {
@@ -57,12 +59,12 @@ public abstract class WorldGenHelper<T extends FeatureConfiguration> extends Fea
 	 * @param sizeWidth  The width of the cube volume
 	 * @param sizeHeight The height of the cube volume
 	 * @param sizeDepth  The depth of the cube volume
-	 * @param rotation   The rotation for the cube volume (0 to 3)
+	 * @param rotation   The direction the cube generates in
 	 * @param callbacks  All callbacks are called once a block is placed
 	 */
 	@SafeVarargs
 	@SuppressWarnings("fallthrough")
-	public final void rotatedCubeVolume(WorldGenLevel level, Predicate<BlockPos> pred, int x, int y, int z, int offsetX, int offsetY, int offsetZ, BlockState state, int sizeWidth, int sizeHeight, int sizeDepth, Direction rotation, Consumer<BlockPos>... callbacks) {
+	public final void rotatedCubeVolume(WorldGenLevel level, @Nullable Predicate<BlockPos> pred, int x, int y, int z, int offsetX, int offsetY, int offsetZ, BlockState state, int sizeWidth, int sizeHeight, int sizeDepth, Direction rotation, Consumer<BlockPos>... callbacks) {
 		x -= width / 2;
 		z -= depth / 2;
 

@@ -14,7 +14,7 @@ public class SonicScreamParticle extends TextureSheetParticle {
 	protected final Vec3 dir;
 	protected final Vec3 up;
 
-	protected float initialAlpha = 1.0F;
+	protected final float initialAlpha = 1.0F;
 
 	protected SonicScreamParticle(ClientLevel level, double x, double y, double z, double mx, double my, double mz, float scale, int maxAge, int initialFrame) {
 		super(level, x, y, z, 0, 0, 0);

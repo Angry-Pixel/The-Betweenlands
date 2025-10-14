@@ -32,8 +32,7 @@ public class BlockEntitySoundInstance<T extends BlockEntity> extends AbstractSou
 
 	@Override
 	public void tick() {
-		if(this.fadeOut || this.entity == null || this.entity.getLevel() == null || !this.entity.getLevel().isLoaded(this.entity.getBlockPos())
-			|| this.entity.getLevel().getBlockEntity(this.entity.getBlockPos()) != this.entity || !this.isPlaying.test(this.entity)) {
+		if(this.fadeOut || this.entity.getLevel() == null || !this.entity.getLevel().isLoaded(this.entity.getBlockPos()) || this.entity.getLevel().getBlockEntity(this.entity.getBlockPos()) != this.entity || !this.isPlaying.test(this.entity)) {
 			this.looping = false;
 			this.fadeOut = true;
 

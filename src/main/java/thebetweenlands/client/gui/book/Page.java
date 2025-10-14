@@ -14,13 +14,13 @@ import java.util.List;
 public class Page {
 
 	public int pageNumber;
-	public List<ItemStack> pageItems = NonNullList.create();
-	public List<Holder<AspectType>> pageAspects = new ArrayList<>();
+	public final List<ItemStack> pageItems = NonNullList.create();
+	public final List<Holder<AspectType>> pageAspects = new ArrayList<>();
 
-	public boolean isHidden;
+	public final boolean isHidden;
 
 	public Component pageName;
-	public String unlocalizedPageName;
+	public final String unlocalizedPageName;
 
 	public List<BookWidget> widgets = new ArrayList<>();
 	public boolean rightPage = false;

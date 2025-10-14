@@ -142,7 +142,7 @@ public class WightRenderer<T extends Wight> extends MobRenderer<T, WightModel<T>
 		boolean flag2 = minecraft.shouldEntityAppearGlowing(entity);
 		int i = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
 		if (flag) {
-			this.model.renderToBuffer(stack, buffer.getBuffer(BLRenderTypes.translucentCulling(this.getTextureLocation(entity))), light, i, flag1 ? 654311423 : -1);
+			this.model.renderToBuffer(stack, buffer.getBuffer(BLRenderTypes.translucentCulling(this.getTextureLocation(entity))), light, i, -1);
 		}
 		RenderType rendertype = this.getRenderType(entity, flag, flag1, flag2);
 		if (rendertype != null) {

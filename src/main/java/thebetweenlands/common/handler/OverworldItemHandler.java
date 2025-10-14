@@ -8,7 +8,6 @@ import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,18 +20,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
-import net.minecraft.world.item.FlintAndSteelItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseTorchBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
@@ -52,7 +43,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.OriginalItemData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
-import thebetweenlands.common.item.herblore.ElixirItem;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -61,7 +51,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class OverworldItemHandler {
 
-	public static interface ITorchPlaceHandler {
+	public interface ITorchPlaceHandler {
 		/**
 		 * @return the ID of this handler
 		 */
@@ -125,30 +115,29 @@ public class OverworldItemHandler {
 	public static final Map<ResourceLocation, ITorchPlaceHandler> TORCH_PLACE_HANDLERS = new HashMap<>();
 
 	static {
-		ROTTING_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), stack -> BetweenlandsConfig.Overworld.rottenFoodWhitelist.isListed(stack));
-		ROTTING_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), stack -> BetweenlandsConfig.Overworld.rottenFoodBlacklist.isListed(stack));
+		ROTTING_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), BetweenlandsConfig.Overworld.rottenFoodWhitelist::isListed);
+		ROTTING_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), BetweenlandsConfig.Overworld.rottenFoodBlacklist::isListed);
 		ROTTING_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> {
-			final Item item = stack.getItem();
-			if (item == Items.CAKE || Block.byItem(item) == Blocks.CAKE) {
+			if (stack.is(Items.CAKE)) {
 				return true;
 			}
 			return stack.has(DataComponents.FOOD) && !stack.is(BLItemTagProvider.DOES_NOT_ROT) && !isInRegister(ItemRegistry.ITEMS, stack.getItemHolder());
 		});
 
-		TAINTING_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), stack -> BetweenlandsConfig.Overworld.taintingWhitelist.isListed(stack));
-		TAINTING_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), stack -> BetweenlandsConfig.Overworld.taintingBlacklist.isListed(stack));
+		TAINTING_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), BetweenlandsConfig.Overworld.taintingWhitelist::isListed);
+		TAINTING_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), BetweenlandsConfig.Overworld.taintingBlacklist::isListed);
 		TAINTING_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> stack.getItem() instanceof PotionItem);
 
-		FIRE_TOOL_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), stack -> BetweenlandsConfig.Overworld.fireToolWhitelist.isListed(stack));
-		FIRE_TOOL_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), stack -> BetweenlandsConfig.Overworld.fireToolBlacklist.isListed(stack));
+		FIRE_TOOL_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), BetweenlandsConfig.Overworld.fireToolWhitelist::isListed);
+		FIRE_TOOL_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), BetweenlandsConfig.Overworld.fireToolBlacklist::isListed);
 		FIRE_TOOL_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> stack.getItem() instanceof FlintAndSteelItem);
 
-		FERTILIZER_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), stack -> BetweenlandsConfig.Overworld.fertilizerWhitelist.isListed(stack));
-		FERTILIZER_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), stack -> BetweenlandsConfig.Overworld.fertilizerBlacklist.isListed(stack));
-		FERTILIZER_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> stack.getItem() == Items.BONE_MEAL);
+		FERTILIZER_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), BetweenlandsConfig.Overworld.fertilizerWhitelist::isListed);
+		FERTILIZER_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), BetweenlandsConfig.Overworld.fertilizerBlacklist::isListed);
+		FERTILIZER_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> stack.is(Items.BONE_MEAL));
 
-		TOOL_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), stack -> BetweenlandsConfig.Overworld.toolWeaknessWhitelist.isListed(stack));
-		TOOL_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), stack -> BetweenlandsConfig.Overworld.toolWeaknessBlacklist.isListed(stack));
+		TOOL_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), BetweenlandsConfig.Overworld.toolWeaknessWhitelist::isListed);
+		TOOL_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), BetweenlandsConfig.Overworld.toolWeaknessBlacklist::isListed);
 		TOOL_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> {
 			final Item item = stack.getItem();
 			return (stack.has(DataComponents.TOOL) || item instanceof SwordItem || item instanceof ProjectileWeaponItem) &&
@@ -156,12 +145,10 @@ public class OverworldItemHandler {
 				!isInRegister(ItemRegistry.ITEMS, stack.getItemHolder());
 		});
 
-		TORCH_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), stack -> BetweenlandsConfig.Overworld.torchWhitelist.isListed(stack));
-		TORCH_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), stack -> BetweenlandsConfig.Overworld.torchBlacklist.isListed(stack));
-		TORCH_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack -> {
-			Block block = Block.byItem(stack.getItem());
-			return block instanceof BaseTorchBlock && !isInRegister(BlockRegistry.BLOCKS, block.builtInRegistryHolder());
-		});
+		TORCH_WHITELIST.put(TheBetweenlands.prefix("config_whitelist"), BetweenlandsConfig.Overworld.torchWhitelist::isListed);
+		TORCH_BLACKLIST.put(TheBetweenlands.prefix("config_blacklist"), BetweenlandsConfig.Overworld.torchBlacklist::isListed);
+		TORCH_BLACKLIST.put(TheBetweenlands.prefix("default_blacklist"), stack ->
+			stack.getItem() instanceof StandingAndWallBlockItem standing && standing.getBlock() instanceof BaseTorchBlock);
 
 		ITorchPlaceHandler vanillaTorchPlaceHandler = new ITorchPlaceHandler() {
 			@Override
@@ -357,7 +344,7 @@ public class OverworldItemHandler {
 	// Tool Weakness
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		final Player player = event.getEntity();
-		if (player != null && isToolWeaknessEnabled(player.level()) && isToolWeakened(player.getMainHandItem())) {
+		if (isToolWeaknessEnabled(player.level()) && isToolWeakened(player.getMainHandItem())) {
 			event.setNewSpeed(event.getNewSpeed() * 0.3F);
 		}
 	}
@@ -367,7 +354,7 @@ public class OverworldItemHandler {
 	public static void updateArmSwingSpeed(PlayerTickEvent.Post event) {
 		final Player player = event.getEntity();
 //		if(player != null && isToolWeaknessEnabled(player.level())&& player.swinging && isToolWeakened(player.getItemInHand(player.swingingArm))) {
-		if (player != null && isToolWeaknessEnabled(player.level()) && isToolWeakened(player.getMainHandItem())) {
+		if (isToolWeaknessEnabled(player.level()) && isToolWeakened(player.getMainHandItem())) {
 			float delta = player.attackAnim - player.oAttackAnim;
 			if (delta < 0) {
 				delta++;
@@ -418,8 +405,8 @@ public class OverworldItemHandler {
 	public static void onItemPickup(ItemEntityPickupEvent.Pre event) {
 		final Player player = event.getPlayer();
 		final ItemEntity itemEntity = event.getItemEntity();
-		final Level level;
-		if (player != null && itemEntity != null && !(level = player.level()).isClientSide()) {
+		final Level level = player.level();
+		if (!level.isClientSide()) {
 			final ItemStack stack = itemEntity.getItem();
 			if (!stack.isEmpty()) {
 				if (!isBetweenlands(level) || player.isCreative()) {
@@ -428,28 +415,25 @@ public class OverworldItemHandler {
 						itemEntity.setItem(originalStack);
 					}
 				} else {
-					final Item item = stack.getItem();
-					final Item ROTTEN_FOOD = ItemRegistry.ROTTEN_FOOD.get();
-					final Item TAINTED_POTION = ItemRegistry.TAINTED_POTION.get();
 					final boolean checkRotting = isRotEnabled(level);
 					final boolean checkTainting = isPotionTaintingEnabled(level);
 
-					if (item == ROTTEN_FOOD) {
+					if (stack.is(ItemRegistry.ROTTEN_FOOD)) {
 						final ItemStack originalStack = getOriginalStackScaled(stack);
 						if (!originalStack.isEmpty() && (!checkRotting || !isRotting(originalStack))) {
 							itemEntity.setItem(originalStack);
 						}
-					} else if (stack.getItem() == TAINTED_POTION) {
+					} else if (stack.is(ItemRegistry.TAINTED_POTION)) {
 						final ItemStack originalStack = getOriginalStackScaled(stack);
 						if (!originalStack.isEmpty() && (!checkTainting || !isTainting(originalStack))) {
 							itemEntity.setItem(originalStack);
 						}
 					} else if (isRotting(stack)) {
-						ItemStack rottenFoodStack = new ItemStack(ROTTEN_FOOD, stack.getCount());
+						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD.get(), stack.getCount());
 						setOriginalStack(rottenFoodStack, stack);
 						itemEntity.setItem(rottenFoodStack);
 					} else if (isTainting(stack)) {
-						ItemStack taintedPotionStack = new ItemStack(TAINTED_POTION, stack.getCount());
+						ItemStack taintedPotionStack = new ItemStack(ItemRegistry.TAINTED_POTION.get(), stack.getCount());
 						setOriginalStack(taintedPotionStack, stack);
 						itemEntity.setItem(taintedPotionStack);
 					}
@@ -497,37 +481,32 @@ public class OverworldItemHandler {
 	 */
 	private static void rotInventoryContents(Container container, Level level) {
 		// Optimize by using final (there are some very large containers we could be iterating over)
-		final DataComponentType<OriginalItemData> ROTTEN_FOOD_COMPONENT = DataComponentRegistry.ROTTEN_FOOD.get();
-		final Item ROTTEN_FOOD = ItemRegistry.ROTTEN_FOOD.get();
-		final Item TAINTED_POTION = ItemRegistry.TAINTED_POTION.get();
-		final int containerSize = container.getContainerSize();
 		final boolean checkRotting = isRotEnabled(level);
 		final boolean checkTainting = isPotionTaintingEnabled(level);
 
-		for (int slot = 0; slot < containerSize; ++slot) {
+		for (int slot = 0; slot <  container.getContainerSize(); ++slot) {
 			final ItemStack stack = container.getItem(slot);
-			if (stack != null && !stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				final int count = stack.getCount();
-				final Item item = stack.getItem();
 				// Revert items that shouldn't be rotted any more (most likely due to a config change)
-				if (item == ROTTEN_FOOD) {
+				if (stack.is(ItemRegistry.ROTTEN_FOOD)) {
 					final ItemStack originalStack = getOriginalStackScaled(stack);
 					if (!originalStack.isEmpty() && (!checkRotting || !isRotting(originalStack))) {
 						container.setItem(slot, originalStack);
 					}
-				} else if (item == TAINTED_POTION) {
+				} else if (stack.is(ItemRegistry.TAINTED_POTION)) {
 					final ItemStack originalStack = getOriginalStackScaled(stack);
 					if (!originalStack.isEmpty() && (!checkTainting || !isTainting(originalStack))) {
 						container.setItem(slot, originalStack);
 					}
 				} // else so rotten food/tainted potions don't stack inside themselves forever
 				else if (checkRotting && isRotting(stack)) {
-					final ItemStack rottenFoodStack = new ItemStack(ROTTEN_FOOD, count);
-					rottenFoodStack.set(ROTTEN_FOOD_COMPONENT, new OriginalItemData(stack.copyWithCount(1)));
+					final ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD.get(), count);
+					rottenFoodStack.set(DataComponentRegistry.ROTTEN_FOOD, new OriginalItemData(stack.copyWithCount(1)));
 					container.setItem(slot, rottenFoodStack);
 				} else if (checkTainting && isTainting(stack)) {
-					final ItemStack taintedPotionStack = new ItemStack(TAINTED_POTION, count);
-					taintedPotionStack.set(ROTTEN_FOOD_COMPONENT, new OriginalItemData(stack.copyWithCount(1)));
+					final ItemStack taintedPotionStack = new ItemStack(ItemRegistry.TAINTED_POTION.get(), count);
+					taintedPotionStack.set(DataComponentRegistry.ROTTEN_FOOD, new OriginalItemData(stack.copyWithCount(1)));
 					container.setItem(slot, taintedPotionStack);
 				}
 			}
@@ -540,11 +519,10 @@ public class OverworldItemHandler {
 	 * @param container
 	 */
 	private static void revertInventoryContents(Container container) {
-		final DataComponentType<OriginalItemData> ROTTEN_FOOD_COMPONENT = DataComponentRegistry.ROTTEN_FOOD.get();
 		final int containerSize = container.getContainerSize();
 		for (int slot = 0; slot < containerSize; ++slot) {
 			final ItemStack stack = container.getItem(slot);
-			if (stack != null && !stack.isEmpty() && stack.has(ROTTEN_FOOD_COMPONENT)) {
+			if (!stack.isEmpty() && stack.has(DataComponentRegistry.ROTTEN_FOOD)) {
 				container.setItem(slot, getOriginalStackScaled(stack));
 			}
 		}

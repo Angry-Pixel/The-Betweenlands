@@ -13,23 +13,26 @@ import thebetweenlands.client.audio.EntityMusicSoundInstance;
 public interface MusicPlayer {
 
 	@Nullable
-	SoundEvent getMusicFile(Player listener);
+	SoundEvent getMusicFile(@Nullable Player listener);
 
-	double getMusicRange(Player listener);
+	double getMusicRange(@Nullable Player listener);
 
-	boolean isMusicActive(Player listener);
+	boolean isMusicActive(@Nullable Player listener);
 
 	@Nullable
-	default EntitySoundInstance getMusicSound(Player listener) {
+	default EntitySoundInstance getMusicSound(@Nullable Player listener) {
 		SoundEvent sound = this.getMusicFile(listener);
-		return new EntityMusicSoundInstance<>(sound, SoundSource.MUSIC, (Entity) this, this, 1, SoundInstance.Attenuation.NONE);
+		if (sound != null) {
+			return new EntityMusicSoundInstance<>(sound, SoundSource.MUSIC, (Entity) this, this, 1, SoundInstance.Attenuation.NONE);
+		}
+		return null;
 	}
 
-	default int getMusicLayer(Player listener) {
+	default int getMusicLayer(@Nullable Player listener) {
 		return 0;
 	}
 
-	default boolean canInterruptOtherEntityMusic(Player listener) {
+	default boolean canInterruptOtherEntityMusic(@Nullable Player listener) {
 		return true;
 	}
 }

@@ -24,7 +24,7 @@ import thebetweenlands.common.registries.FluidTypeRegistry;
 
 public class TarBlock extends LiquidBlock {
 	public static final BooleanProperty BOILING = TarFlowingFluid.BOILING;
-	
+
 	public TarBlock(FlowingFluid fluid, Properties properties) {
 		super(fluid, properties);
 		registerDefaultState(defaultBlockState().setValue(BOILING, false));
@@ -41,12 +41,12 @@ public class TarBlock extends LiquidBlock {
 			}
 		}
 	}
-	
+
 	@Override
 	protected FluidState getFluidState(BlockState state) {
 		return super.getFluidState(state).setValue(BOILING, state.getValue(BOILING));
 	}
-	
+
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
@@ -57,7 +57,7 @@ public class TarBlock extends LiquidBlock {
 	public static boolean shouldFloorCauseBoiling(BlockAndTintGetter level, BlockPos pos) {
 		return shouldFloorCauseBoiling(level.getBlockState(pos), level, pos);
 	}
-	
+
 	/**
 	 * Checks if a specific {@code state} in a specific {@code level} at
 	 * a specific {@code pos}ition should cause tar above it to boil
@@ -71,7 +71,7 @@ public class TarBlock extends LiquidBlock {
 			return true;
 		} else {
 			FluidState fluidState = state.getFluidState();
-			return fluidState != null && fluidState.getOptionalValue(TarFlowingFluid.BOILING).orElse(false);
+			return fluidState.getOptionalValue(TarFlowingFluid.BOILING).orElse(false);
 		}
 	}
 
@@ -91,15 +91,15 @@ public class TarBlock extends LiquidBlock {
 		}
 		return false;
 	}
-	
+
 	public static boolean shouldBeBoiling(LevelReader level, BlockPos pos) {
 		return shouldBeBoiling(level, pos, level.getBlockState(pos), level.getBlockState(pos.below()));
 	}
-	
+
 	public static boolean shouldBeBoiling(LevelReader level, BlockPos pos, BlockState state, BlockState belowState) {
 		return shouldLocationCauseBoiling(level, pos) || shouldFloorCauseBoiling(belowState, level, pos.below());
 	}
-	
+
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState state = super.getStateForPlacement(context);
@@ -119,7 +119,7 @@ public class TarBlock extends LiquidBlock {
 		}
 		return newState;
 	}
-	
+
 //	// Fix: always defaults to default state when placed via bucket
 //	@Override
 //	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
@@ -127,7 +127,7 @@ public class TarBlock extends LiquidBlock {
 //		if(state.getValue(BOILING) != shouldBoil) {
 //			level.setBlock(pos, state.setValue(BOILING, shouldBoil), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 //		}
-//		
+//
 //		super.onPlace(state, level, pos, oldState, isMoving);
 //	}
 }

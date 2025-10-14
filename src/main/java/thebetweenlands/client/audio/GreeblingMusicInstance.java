@@ -32,7 +32,7 @@ public class GreeblingMusicInstance extends EntityMusicSoundInstance<Greebling> 
 		if (!this.synced) {
 			SoundEngine engine = Minecraft.getInstance().getSoundManager().soundEngine;
 			if (this.isSoundReady) {
-				final EntitySoundInstance otherSound = MusicHandler.getEntityMusic(this.type == 0 ? EntityMusicLayers.GREEBLING_2 : EntityMusicLayers.GREEBLING_1);
+				final EntitySoundInstance otherSound = MusicHandler.INSTANCE.getEntityMusic(this.type == 0 ? EntityMusicLayers.GREEBLING_2 : EntityMusicLayers.GREEBLING_1);
 
 				if (otherSound instanceof GreeblingMusicInstance) {
 					var channel = engine.instanceToChannel.get(this).channel;

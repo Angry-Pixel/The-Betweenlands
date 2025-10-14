@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 
 public class ChiromawRiderTargetPullerGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 
-	protected double minHeight;
+	protected final double minHeight;
 
 	public ChiromawRiderTargetPullerGoal(PathfinderMob creature, Class<T> targetType, boolean checkSight, double minHeight) {
 		super(creature, targetType, 10, checkSight, false, entity -> entity instanceof DraetonPuller);

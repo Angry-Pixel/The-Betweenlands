@@ -28,6 +28,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.util.ItemComponentTagParser;
 import thebetweenlands.util.ItemComponentTagParser.ComponentVisitor;
@@ -46,42 +47,44 @@ public class ItemListProperty {
 	// Note: behaviour is different to that of DataComponentPredicate
 	public static class DataComponentTagPredicate implements Predicate<DataComponentMap> {
 
-		public static record TypedDataComponentTag<T>(DataComponentType<T> type, Tag value) {}
+		public record TypedDataComponentTag<T>(DataComponentType<T> type, @Nullable Tag value) {
+		}
 
 		public static class Builder {
-	        private final List<TypedDataComponentTag<?>> expectedComponents = new ArrayList<>();
+			private final List<TypedDataComponentTag<?>> expectedComponents = new ArrayList<>();
 
-	        public Builder() {}
+			public Builder() {
+			}
 
-	        public <T> DataComponentTagPredicate.Builder expect(DataComponentType<? super T> component, Tag value) {
-	            for (TypedDataComponentTag<?> typeddatacomponent : this.expectedComponents) {
-	                if (typeddatacomponent.type() == component) {
-	                    throw new IllegalArgumentException("Predicate already has component of type: '" + component + "'");
-	                }
-	            }
+			public <T> DataComponentTagPredicate.Builder expect(DataComponentType<? super T> component, Tag value) {
+				for (TypedDataComponentTag<?> typeddatacomponent : this.expectedComponents) {
+					if (typeddatacomponent.type() == component) {
+						throw new IllegalArgumentException("Predicate already has component of type: '" + component + "'");
+					}
+				}
 
-	            this.expectedComponents.add(new TypedDataComponentTag<>(component, value));
-	            return this;
-	        }
+				this.expectedComponents.add(new TypedDataComponentTag<>(component, value));
+				return this;
+			}
 
-	        public <T> DataComponentTagPredicate.Builder without(DataComponentType<? super T> component) {
-	            this.expectedComponents.add(new TypedDataComponentTag<>(component, null));
-	            return this;
-	        }
+			public <T> DataComponentTagPredicate.Builder without(DataComponentType<? super T> component) {
+				this.expectedComponents.add(new TypedDataComponentTag<>(component, null));
+				return this;
+			}
 
-	        public DataComponentTagPredicate build(HolderLookup.Provider registries) {
-	        	if(registries == null) {
-		            return new DataComponentTagPredicate(ImmutableList.copyOf(this.expectedComponents));
-	        	} else {
-		            return new DataComponentTagPredicate(ImmutableList.copyOf(this.expectedComponents), registries);
-	        	}
-	        }
+			public DataComponentTagPredicate build(@Nullable HolderLookup.Provider registries) {
+				if (registries == null) {
+					return new DataComponentTagPredicate(ImmutableList.copyOf(this.expectedComponents));
+				} else {
+					return new DataComponentTagPredicate(ImmutableList.copyOf(this.expectedComponents), registries);
+				}
+			}
 		}
 
 		public static final DataComponentTagPredicate EMPTY = new DataComponentTagPredicate(List.of());
-	    private final List<TypedDataComponentTag<?>> expectedComponents;
-	    private DynamicOps<Tag> dynamicOps = null;
-	    private HolderLookup.Provider registries;
+		private final List<TypedDataComponentTag<?>> expectedComponents;
+		private DynamicOps<Tag> dynamicOps;
+		private HolderLookup.Provider registries;
 
 		public DataComponentTagPredicate(List<TypedDataComponentTag<?>> expectedComponents) {
 			this(expectedComponents, HolderLookup.Provider.create(Stream.of(BuiltInRegistries.DATA_COMPONENT_TYPE.asLookup())));
@@ -93,43 +96,39 @@ public class ItemListProperty {
 			this.dynamicOps = registries.createSerializationContext(NbtOps.INSTANCE);
 		}
 
-	    @Override
-	    public boolean equals(Object other) {
-	        if (other instanceof DataComponentTagPredicate datacomponentpredicate && this.expectedComponents.equals(datacomponentpredicate.expectedComponents)) {
-	            return true;
-	        }
+		@Override
+		public boolean equals(Object other) {
+			return other instanceof DataComponentTagPredicate datacomponentpredicate && this.expectedComponents.equals(datacomponentpredicate.expectedComponents);
+		}
 
-	        return false;
-	    }
+		@Override
+		public int hashCode() {
+			return this.expectedComponents.hashCode();
+		}
 
-	    @Override
-	    public int hashCode() {
-	        return this.expectedComponents.hashCode();
-	    }
+		@Override
+		public String toString() {
+			return this.expectedComponents.toString();
+		}
 
-	    @Override
-	    public String toString() {
-	        return this.expectedComponents.toString();
-	    }
-
-	    public boolean alwaysMatches() {
-	        return this.expectedComponents.isEmpty();
-	    }
+		public boolean alwaysMatches() {
+			return this.expectedComponents.isEmpty();
+		}
 
 		@Override
 		public boolean test(DataComponentMap tagMap) {
-			if(!this.alwaysMatches()) {
+			if (!this.alwaysMatches()) {
 				Preconditions.checkNotNull(this.dynamicOps);
-				for(TypedDataComponentTag<?> entry : this.expectedComponents) {
+				for (TypedDataComponentTag<?> entry : this.expectedComponents) {
 					final DataComponentType<?> componentType = entry.type();
 					final Tag expectedValue = entry.value();
 					final boolean mapHasValue = tagMap.has(componentType);
-					if(mapHasValue && expectedValue == null) {
+					if (mapHasValue && expectedValue == null) {
 						return false;
 					}
 
-					if(!mapHasValue) {
-						if(expectedValue != null) {
+					if (!mapHasValue) {
+						if (expectedValue != null) {
 							return false;
 						} else {
 							continue;
@@ -139,7 +138,7 @@ public class ItemListProperty {
 					TypedDataComponent<?> typed = tagMap.getTyped(componentType);
 					Tag componentData = typed.encodeValue(this.dynamicOps).getOrThrow();
 
-					if(!compareTags(expectedValue, componentData)) return false;
+					if (!compareTags(expectedValue, componentData)) return false;
 				}
 			}
 			return true;
@@ -150,7 +149,7 @@ public class ItemListProperty {
 		}
 
 		public boolean setRegistries(HolderLookup.Provider registries) {
-			if(this.registries != registries) {
+			if (this.registries != registries) {
 				this.registries = registries;
 				this.dynamicOps = registries.createSerializationContext(NbtOps.INSTANCE);
 				return true;
@@ -175,6 +174,7 @@ public class ItemListProperty {
 		 * </ul>
 		 * <br/>
 		 * Note: <strong>NOT</strong> identical to {@link net.minecraft.nbt.NbtUtils#compareNbt(Tag, Tag, boolean)}  NbtUtils.compareNbt(Tag, Tag, boolean)}
+		 *
 		 * @param tagA
 		 * @param tagB
 		 * @return
@@ -182,20 +182,20 @@ public class ItemListProperty {
 		protected static boolean compareTags(Tag tagA, Tag tagB) {
 			final byte typeId = tagA.getId();
 			final TagType<?> tagType = tagA.getType();
-			if(typeId != tagB.getId() || !tagType.equals(tagB.getType())) { // Different types
-				if(isNumericTag(typeId) && isNumericTag(tagB.getId()) && tagA instanceof NumericTag numA && tagB instanceof NumericTag numB) {
+			if (typeId != tagB.getId() || !tagType.equals(tagB.getType())) { // Different types
+				if (isNumericTag(typeId) && isNumericTag(tagB.getId()) && tagA instanceof NumericTag numA && tagB instanceof NumericTag numB) {
 //					TheBetweenlands.LOGGER.info("Two different tag types: {} {}", tagA, tagB);
 					return compareMixedNumbers(numA, numB);
 				}
 				return false;
 			}
 
-			if(tagType.isValue() || typeId == Tag.TAG_BYTE_ARRAY || typeId == Tag.TAG_INT_ARRAY || typeId == Tag.TAG_LONG_ARRAY) { // Primitives
+			if (tagType.isValue() || typeId == Tag.TAG_BYTE_ARRAY || typeId == Tag.TAG_INT_ARRAY || typeId == Tag.TAG_LONG_ARRAY) { // Primitives
 				return tagA.equals(tagB);
 			}
 
-			if(typeId == Tag.TAG_COMPOUND) {
-				return compareCompoundTags((CompoundTag)tagA, (CompoundTag)tagB);
+			if (typeId == Tag.TAG_COMPOUND) {
+				return compareCompoundTags((CompoundTag) tagA, (CompoundTag) tagB);
 			}
 
 			// TODO lists & NbtPath support
@@ -218,30 +218,27 @@ public class ItemListProperty {
 			final boolean isAIntegral = isIntegral(numberA);
 			final boolean isBIntegral = isIntegral(numberB);
 
-			if(isAIntegral && isBIntegral) {
+			if (isAIntegral && isBIntegral) {
 				return numberA.longValue() == numberB.longValue();
-			} else if(!isAIntegral && !isBIntegral) {
+			} else if (!isAIntegral && !isBIntegral) {
 				return numberA.doubleValue() == numberB.doubleValue();
-			} else if(isAIntegral && !isBIntegral) {
+			} else if (isAIntegral) {
 				return numberA.longValue() == numberB.doubleValue();
-			} else if(!isAIntegral && isBIntegral) {
-				return numberA.doubleValue() == numberB.longValue();
 			} else {
-				// This should never happen
-				return false;
+				return numberA.doubleValue() == numberB.longValue();
 			}
 		}
 
 		protected static boolean compareCompoundTags(CompoundTag tagA, CompoundTag tagB) {
-			for(String key : tagA.getAllKeys()) {
+			for (String key : tagA.getAllKeys()) {
 				Tag tag = tagA.get(key);
 				final byte tagId = tag.getId();
-				if(tagId == Tag.TAG_COMPOUND) {
-					if(!tagB.contains(key, tagId)) return false;
-					if(!compareCompoundTags((CompoundTag) tag, tagB.getCompound(key))) return false;
+				if (tagId == Tag.TAG_COMPOUND) {
+					if (!tagB.contains(key, tagId)) return false;
+					if (!compareCompoundTags((CompoundTag) tag, tagB.getCompound(key))) return false;
 				} else {
-					if(!tagB.contains(key)) return false;
-					if(!compareTags(tag, tagB.get(key))) return false;
+					if (!tagB.contains(key)) return false;
+					if (!compareTags(tag, tagB.get(key))) return false;
 				}
 			}
 			return true;
@@ -251,6 +248,7 @@ public class ItemListProperty {
 	public static class ComparableItemStack {
 		public final ResourceLocation item;
 		public final int meta;
+		@Nullable
 		public final DataComponentTagPredicate components;
 
 		public ComparableItemStack(ResourceLocation item) {
@@ -261,19 +259,18 @@ public class ItemListProperty {
 			this(item, meta, null);
 		}
 
-		public ComparableItemStack(ResourceLocation item, int meta, DataComponentTagPredicate components) {
+		public ComparableItemStack(ResourceLocation item, int meta, @Nullable DataComponentTagPredicate components) {
 			this.item = item;
 			this.meta = meta;
 			this.components = components;
 		}
 
 //		public ComparableItemStack(ItemStack stack) {
-////			stack.getItemHolder().getDelegate().createSerializationContext(NbtOps.INSTANCE);
+
+		/// /			stack.getItemHolder().getDelegate().createSerializationContext(NbtOps.INSTANCE);
 //			this.item = stack.getItemHolder().getKey().location();
 //			this.meta = stack.getDamageValue();
 //		}
-
-
 		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
@@ -288,14 +285,14 @@ public class ItemListProperty {
 		}
 
 		public boolean equalsNonWildcard(Object other) {
-			if(this == other) return true;
+			if (this == other) return true;
 
 			return other instanceof ComparableItemStack comparable && this.item.equals(comparable.item) && this.meta == comparable.meta && Objects.equals(this.components, comparable.components);
 		}
 
 
 		public boolean equalsWildcard(Object other) {
-			if(this == other) return true;
+			if (this == other) return true;
 
 			return other instanceof ComparableItemStack comparable && this.item.equals(comparable.item) && (this.meta == comparable.meta || this.meta == WILDCARD_VALUE || comparable.meta == WILDCARD_VALUE) && Objects.equals(this.components, comparable.components);
 		}
@@ -307,20 +304,21 @@ public class ItemListProperty {
 
 	private final Supplier<String[]> unparsed;
 
-	private Map<ResourceLocation, Set<ComparableItemStack>> itemList;
+	private final Map<ResourceLocation, Set<ComparableItemStack>> itemList;
 
-	private Set<ResourceLocation> itemTags;
-	private Set<DataComponentTagPredicate> itemComponents;
+	private final Set<ResourceLocation> itemTags;
+	private final Set<DataComponentTagPredicate> itemComponents;
 
 	private boolean cacheBuilt = false;
+	@Nullable
 	private HolderLookup.Provider registryAccessCache;
-	private Set<TagKey<Item>> itemTagCache;
+	private final Set<TagKey<Item>> itemTagCache;
 
 	public ItemListProperty(Supplier<String[]> unparsed) {
-		this.itemList = new HashMap<ResourceLocation, Set<ComparableItemStack>>();
-		this.itemTags = new HashSet<ResourceLocation>();
-		this.itemComponents = new HashSet<DataComponentTagPredicate>();
-		this.itemTagCache = new HashSet<TagKey<Item>>();
+		this.itemList = new HashMap<>();
+		this.itemTags = new HashSet<>();
+		this.itemComponents = new HashSet<>();
+		this.itemTagCache = new HashSet<>();
 		this.unparsed = unparsed;
 	}
 
@@ -329,26 +327,26 @@ public class ItemListProperty {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void buildCache(HolderLookup.Provider registryAccess) {
-		if(registryAccess == null) {
+	public void buildCache(@Nullable HolderLookup.Provider registryAccess) {
+		if (registryAccess == null) {
 			registryAccess = HolderLookup.Provider.create(Stream.of(BuiltInRegistries.ITEM.asLookup(), BuiltInRegistries.BLOCK.asLookup(), BuiltInRegistries.DATA_COMPONENT_TYPE.asLookup()));
 		}
 
 		this.registryAccessCache = registryAccess;
 		this.itemTagCache.clear();
 
-		for(ResourceLocation location : this.itemTags) {
+		for (ResourceLocation location : this.itemTags) {
 			this.itemTagCache.add(new TagKey<Item>(Registries.ITEM, location));
 		}
 
-		for(DataComponentTagPredicate predicate : itemComponents) {
+		for (DataComponentTagPredicate predicate : itemComponents) {
 			predicate.setRegistries(registryAccess);
 		}
 
-		for(final Set<ComparableItemStack> set : this.itemList.values()) {
-			for(final ComparableItemStack stack : set) {
+		for (final Set<ComparableItemStack> set : this.itemList.values()) {
+			for (final ComparableItemStack stack : set) {
 				final DataComponentTagPredicate predicate = stack.components;
-				if(predicate != null)
+				if (predicate != null)
 					predicate.setRegistries(registryAccess);
 			}
 		}
@@ -371,12 +369,12 @@ public class ItemListProperty {
 
 		String[] items = unparsed.get();
 
-		for(String string : items) {
+		for (String string : items) {
 			string = string.trim();
-			if(string.length() == 0) continue;
-			if(string.charAt(0) == '#')
+			if (string.isEmpty()) continue;
+			if (string.charAt(0) == '#')
 				processTag(string);
-			else if(string.charAt(0) == '[')
+			else if (string.charAt(0) == '[')
 				processComponents(string);
 			else
 				processItem(string);
@@ -388,7 +386,7 @@ public class ItemListProperty {
 			ResourceLocation parsed = ResourceLocation.tryParse(string.substring(1));
 			Preconditions.checkNotNull(parsed);
 			itemTags.add(parsed);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			TheBetweenlands.LOGGER.warn("Failed to parse tag string {}", string);
 		}
 	}
@@ -412,8 +410,7 @@ public class ItemListProperty {
 		try {
 			parser.visitComponents();
 		} catch (CommandSyntaxException e) {
-			TheBetweenlands.LOGGER.warn("Failed to process components from string {}", string);
-			e.printStackTrace();
+			TheBetweenlands.LOGGER.warn("Failed to process components from string {}", string, e);
 		}
 
 		this.itemComponents.add(builder.build(this.registryAccessCache));
@@ -429,7 +426,7 @@ public class ItemListProperty {
 			final int lastColonIndex = string.lastIndexOf(':');
 
 			final boolean hasComponents = bracketIndex != -1;
-			if(hasComponents && closingBracketIndex == -1) {
+			if (hasComponents && closingBracketIndex == -1) {
 				reader.setCursor(string.length() - 1);
 				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedSymbol().createWithContext(reader, ']');
 			}
@@ -440,10 +437,10 @@ public class ItemListProperty {
 			// For Debugging
 			// TheBetweenlands.LOGGER.info("Processing Item String: {}. Values: {} {} {} {} {} {} {} {}", string, bracketIndex, closingBracketIndex, firstColonIndex, lastColonIndex, hasComponents, hasFirstColon, hasLastColon, onlyOneColon);
 
-			ResourceLocation location = null;
+			ResourceLocation location;
 			int meta = WILDCARD_VALUE;
 			DataComponentTagPredicate componentPredicate = null;
-			if(hasComponents) {
+			if (hasComponents) {
 				location = ResourceLocation.read(reader);
 
 				DataComponentTagPredicate.Builder builder = new DataComponentTagPredicate.Builder();
@@ -461,23 +458,22 @@ public class ItemListProperty {
 				try {
 					parser.visitComponents();
 				} catch (CommandSyntaxException e) {
-					TheBetweenlands.LOGGER.warn("Failed to process components of string {}", string);
-					e.printStackTrace();
+					TheBetweenlands.LOGGER.warn("Failed to process components of string {}", string, e);
 				}
 				componentPredicate = builder.build(this.registryAccessCache);
 
-				if(hasLastColon && reader.canRead() && reader.peek() == ':') {
+				if (hasLastColon && reader.canRead() && reader.peek() == ':') {
 					reader.skip();
-					if(reader.peek() != '*') {
+					if (reader.peek() != '*') {
 						meta = reader.readInt();
 					}
 				}
 
 			} else {
-				if(onlyOneColon) {  // steak:1, but could also be thebetweenlands:16612, maybe check somehow?
+				if (onlyOneColon) {  // steak:1, but could also be thebetweenlands:16612, maybe check somehow?
 					int i = reader.getCursor();
 					// Resource locations don't read '*', so we have a separate check
-					if(string.charAt(firstColonIndex + 1) == '*') {
+					if (string.charAt(firstColonIndex + 1) == '*') {
 						location = ResourceLocation.withDefaultNamespace(string.substring(i, firstColonIndex));
 						reader.setCursor(firstColonIndex + 2);
 					} else {
@@ -485,19 +481,18 @@ public class ItemListProperty {
 						try {
 							meta = Integer.parseInt(location.getPath());
 							location = ResourceLocation.withDefaultNamespace(string.substring(i, firstColonIndex));
-						} catch(NumberFormatException e) {
+						} catch (NumberFormatException e) {
 							meta = WILDCARD_VALUE;
 						}
 					}
-				} else if(hasFirstColon) { // minecraft:steak
+				} else if (hasFirstColon) { // minecraft:steak
 					location = readResourceLocationSmart(reader);
 					reader.skipWhitespace();
-					if(hasLastColon && reader.canRead() && reader.peek() == ':') { // minecraft:steak:1
+					if (hasLastColon && reader.canRead() && reader.peek() == ':') { // minecraft:steak:1
 						reader.skip();
 						reader.skipWhitespace();
-						if(reader.peek() == '*') {
+						if (reader.peek() == '*') {
 							reader.skip();
-							meta = WILDCARD_VALUE;
 						} else {
 							meta = reader.readInt();
 						}
@@ -507,7 +502,7 @@ public class ItemListProperty {
 				}
 			}
 
-			if(!itemList.containsKey(location)) {
+			if (!itemList.containsKey(location)) {
 				itemList.put(location, new HashSet<>());
 			}
 			ComparableItemStack stack = new ComparableItemStack(location, meta, componentPredicate);
@@ -527,9 +522,9 @@ public class ItemListProperty {
 		final int i = reader.getCursor();
 
 		char c;
-		while(reader.canRead() && ((c = reader.peek()) == delimiter || ResourceLocation.isAllowedInResourceLocation(c))) {
-			if(c == delimiter) {
-				if(hasBeenDelimited) break;
+		while (reader.canRead() && ((c = reader.peek()) == delimiter || ResourceLocation.isAllowedInResourceLocation(c))) {
+			if (c == delimiter) {
+				if (hasBeenDelimited) break;
 				else hasBeenDelimited = true;
 			}
 			reader.skip();
@@ -607,29 +602,29 @@ public class ItemListProperty {
 //	}
 
 	private void addToSet(ComparableItemStack comparable, Set<ComparableItemStack> set) {
-		if(comparable.meta == WILDCARD_VALUE) {
+		if (comparable.meta == WILDCARD_VALUE) {
 			set.removeIf(comparable::equalsWildcard);
 		}
 		set.add(comparable);
 	}
 
 	public boolean isListed(ItemStack stack) {
-		for(TagKey<Item> tag : itemTagCache) {
-			if(stack.is(tag)) return true;
+		for (TagKey<Item> tag : itemTagCache) {
+			if (stack.is(tag)) return true;
 		}
 
-		for(DataComponentTagPredicate predicate : itemComponents) {
-			if(predicate.test(stack)) return true;
+		for (DataComponentTagPredicate predicate : itemComponents) {
+			if (predicate.test(stack)) return true;
 		}
 
 		ResourceLocation location = stack.getItemHolder().getKey().location();
 //		return itemList.containsKey(location) && itemList.get(location).contains(new ComparableItemStack(stack));
-		if(!itemList.containsKey(location))
+		if (!itemList.containsKey(location))
 			return false;
 
 		Set<ComparableItemStack> set = itemList.get(location);
-		for(ComparableItemStack comparable : set) {
-			if(comparable.test(stack)) {
+		for (ComparableItemStack comparable : set) {
+			if (comparable.test(stack)) {
 				return true;
 			}
 		}
@@ -638,20 +633,19 @@ public class ItemListProperty {
 	}
 
 	public static boolean isValidString(Object object) {
-		if(!(object instanceof String string)) {
+		if (!(object instanceof String string)) {
 			return false;
 		}
 
-		if(string.isEmpty()) return false;
+		if (string.isEmpty()) return false;
 
-		if(string.charAt(0) == '#') {
+		if (string.charAt(0) == '#') {
 			return ResourceLocation.tryParse(string.substring(1)) != null;
 		} else {
 			// TODO finish, is temp true for testing
 			return true;
 		}
 	}
-
 
 
 //	// Used when making changes to the ItemListProperty comparator

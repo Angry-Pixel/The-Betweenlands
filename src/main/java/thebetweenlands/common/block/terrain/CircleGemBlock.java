@@ -19,14 +19,14 @@ public class CircleGemBlock extends Block {
 	@Override
 	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
 		if (!oldState.is(state.getBlock())) {
-			BetweenlandsChunkStorage.markGem(level, pos, this.type.gemSingerTarget);
+			BetweenlandsChunkStorage.markGem(level, pos, this.type.target);
 		}
 	}
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		if (!newState.is(state.getBlock())) {
-			BetweenlandsChunkStorage.unmarkGem(level, pos, this.type.gemSingerTarget);
+			BetweenlandsChunkStorage.unmarkGem(level, pos, this.type.target);
 		}
 	}
 }

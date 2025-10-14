@@ -22,7 +22,7 @@ public class CorrosionHandler {
 		ItemStack stack = event.getItemStack();
 		ItemAttributeModifiers modifiers = event.build();
 
-		if (stack == null || stack.isEmpty()) return;
+		if (stack.isEmpty()) return;
 
 		if (CorrosionHelper.isCorrodible(stack)) {
 			float corrosionModifier = CorrosionHelper.getModifier(stack);

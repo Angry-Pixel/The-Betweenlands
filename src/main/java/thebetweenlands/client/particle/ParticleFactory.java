@@ -182,7 +182,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		private float scale = 1.0F;
 		private boolean colorSet = false;
 		private float r, g, b, a = 1.0F;
-		private Object[] data;
+		private Object[] data = NO_DATA;
 		private boolean dataSet = false;
 
 		@Nullable
@@ -197,8 +197,6 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		private ParticleArgs(ParticleArgs<?> args) {
-			if (args == null)
-				throw new NullPointerException("Particle args to copy must not be null");
 			this.motionSet = args.motionSet;
 			this.motionX = args.motionX;
 			this.motionY = args.motionY;
@@ -210,13 +208,12 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.g = args.g;
 			this.b = args.b;
 			this.a = args.a;
-			if (args.data == NO_DATA || args.data.length == 0) {
-				this.data = NO_DATA;
-			} else {
+			if (args.data != NO_DATA || args.data.length != 0) {
 				this.data = new Object[args.data.length];
 				System.arraycopy(args.data, 0, this.data, 0, this.data.length);
 			}
 			this.dataSet = args.dataSet;
+			this.container = args.container;
 		}
 
 		public static <F extends ParticleArgs<?>> ParticleArgs<F> copy(ParticleArgs<?> args) {
@@ -296,7 +293,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		@SuppressWarnings("unchecked")
-		public final T withData(Object... data) {
+		public final T withData(@Nullable Object... data) {
 			if (data == null || data.length == 0)
 				data = NO_DATA;
 			this.data = data;

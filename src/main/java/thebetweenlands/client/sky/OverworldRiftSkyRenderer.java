@@ -22,12 +22,17 @@ import net.minecraft.client.Minecraft;
 import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
+import javax.annotation.Nullable;
+
 public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 	private static final ResourceLocation MOON_PHASES_TEXTURES = ResourceLocation.withDefaultNamespace("textures/environment/moon_phases.png");
 	private static final ResourceLocation SUN_TEXTURES = ResourceLocation.withDefaultNamespace("textures/environment/sun.png");
 
+	@Nullable
 	private VertexBuffer starBuffer;
+	@Nullable
 	private VertexBuffer skyBuffer;
+	@Nullable
 	private VertexBuffer darkBuffer;
 
 	public OverworldRiftSkyRenderer() {

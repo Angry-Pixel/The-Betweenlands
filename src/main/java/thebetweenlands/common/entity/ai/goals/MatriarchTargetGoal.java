@@ -8,7 +8,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class MatriarchTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 
-	protected double baseRange;
+	protected final double baseRange;
 	protected double revengeRange;
 
 	public MatriarchTargetGoal(ChiromawMatriarch creature, Class<T> classTarget, boolean checkSight, double range) {

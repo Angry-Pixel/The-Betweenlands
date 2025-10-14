@@ -22,7 +22,7 @@ public class MatriarchChangeNestGoal extends Goal {
 
 	private final ChiromawMatriarch matriarch;
 
-	protected float maxRangeSq = 180 * 180;
+	protected final float maxRangeSq = 180 * 180;
 
 	private int checkTimer = 0;
 

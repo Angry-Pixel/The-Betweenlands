@@ -10,7 +10,7 @@ import java.util.List;
 public class ItemWidget extends BookWidget {
 
 	public List<ItemStack> stacks = new ArrayList<>();
-	public float scale;
+	public final float scale;
 	private int currentDisplayItem = 0;
 	private long lastCycleTimestamp = System.currentTimeMillis();
 

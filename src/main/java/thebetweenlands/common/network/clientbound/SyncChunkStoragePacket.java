@@ -35,7 +35,7 @@ public record SyncChunkStoragePacket(CompoundTag tag, ChunkPos pos) implements C
 	public static void handle(SyncChunkStoragePacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Level level = context.player().level();
-			ChunkAccess chunk = level.getChunk(packet.pos().x, packet.pos().z);
+			ChunkAccess chunk = level.getChunkSource().getChunkNow(packet.pos().x, packet.pos().z);
 			if(chunk != null) {
 				IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
 				if (worldStorage != null) {

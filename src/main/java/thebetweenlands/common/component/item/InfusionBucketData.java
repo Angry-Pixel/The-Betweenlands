@@ -22,7 +22,7 @@ import java.util.Map;
 
 public record InfusionBucketData(List<ItemStack> ingredients, int infusionTime) {
 
-	public static InfusionBucketData EMPTY = new InfusionBucketData(List.of(), 0);
+	public static final InfusionBucketData EMPTY = new InfusionBucketData(List.of(), 0);
 
 	public static final Codec<InfusionBucketData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		ItemStack.OPTIONAL_CODEC.listOf().fieldOf("ingredients").forGetter(InfusionBucketData::ingredients),

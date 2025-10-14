@@ -33,7 +33,7 @@ import thebetweenlands.common.registries.StorageRegistry;
 public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	private final IWorldStorage worldStorage;
 	private final Level level;
-	
+
 	private final Map<StorageID, ILocalStorage> localStorage = new HashMap<>();
 	private final List<ILocalStorage> tickableLocalStorage = new ArrayList<>();
 	private final List<ILocalStorage> pendingUnreferencedStorages = new ArrayList<>();
@@ -44,12 +44,12 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 //
 //	private final LocalStorageSaveHandler saveHandler = new LocalStorageSaveHandler();
 
-	
+
 	public LocalStorageHandlerImpl(IWorldStorage master) {
 		this.worldStorage = master;
 		this.level = master.getLevel();
 	}
-	
+
 	@Override
 	public IWorldStorage getWorldStorage() {
 		return this.worldStorage;
@@ -67,6 +67,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		return false;
 	}
 
+	@Nullable
 	@Override
 	public ILocalStorage getLocalStorage(StorageID id) {
 		return this.localStorage.get(id);

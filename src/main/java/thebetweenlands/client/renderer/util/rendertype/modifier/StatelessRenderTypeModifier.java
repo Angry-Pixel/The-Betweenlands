@@ -21,7 +21,7 @@ public interface StatelessRenderTypeModifier extends RenderTypeModifier<Void> {
 	/**
 	 * <p>Called <em>before</em> the default {@link RenderType#clearRenderState()} method is called</p>
 	 * @param originalRenderType The original render type that is being modified
-	 * @see RenderTypeModifier#clearSetupRenderState(RenderType, Object)
+	 * @see RenderTypeModifier#clearRenderState(RenderType, Object)
 	 */
 	public void clearRenderState(RenderType originalRenderType);
 
@@ -31,7 +31,7 @@ public interface StatelessRenderTypeModifier extends RenderTypeModifier<Void> {
 	 * @see RenderTypeModifier#afterClearRenderState(RenderType, Object)
 	 */
 	public void afterClearRenderState(RenderType originalRenderType);
-	
+
 	@Deprecated
 	@Override
 	public default void beforeSetupRenderState(RenderType originalRenderType, Void context) {

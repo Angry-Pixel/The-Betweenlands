@@ -22,7 +22,7 @@ public class GalleryTexture extends AbstractTexture {
 
 		try (FileInputStream fio = new FileInputStream(this.entry.getPictureFile())) {
 			NativeImage image = NativeImage.read(fio);
-			if (image != null && image.getWidth() > 0 && image.getHeight() > 0) {
+			if (image.getWidth() > 0 && image.getHeight() > 0) {
 				TextureUtil.prepareImage(this.getId(), image.getWidth(), image.getHeight());
 				this.entry.setUploaded(image.getWidth(), image.getHeight());
 				image.upload(0, 0, 0, true);

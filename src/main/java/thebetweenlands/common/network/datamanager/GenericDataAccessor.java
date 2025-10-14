@@ -163,10 +163,6 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 	public <T> EntityDataAccessor<T> setTrackingTime(EntityDataAccessor<T> key, int time) {
 		DataEntry<?> entry = this.getEntry(key);
 
-		if(entry == null) {
-			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
-		}
-
 		entry.trackingTime = time;
 
 		if(time > 0) {
@@ -222,21 +218,11 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 	@Override
 	public <T> T get(EntityDataAccessor<T> key) {
-		GenericDataAccessor.DataEntry<T> entry = this.getEntry(key);
-
-		if(entry == null) {
-			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
-		}
-
-		return entry.getValue();
+		return this.getEntry(key).getValue();
 	}
 
 	public <T> EntryAccess<T> set(EntityDataAccessor<T> key, T value) {
 		GenericDataAccessor.DataEntry<T> entry = this.getEntry(key);
-
-		if(entry == null) {
-			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
-		}
 
 		if (ObjectUtils.notEqual(value, entry.getValue())) {
 			if(!(this.owner instanceof IDataManagedObject) || !((IDataManagedObject)this.owner).onParameterChange(key, value, false)) {
@@ -250,10 +236,6 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 	public <T> EntryAccess<T> setDirty(EntityDataAccessor<T> key) {
 		DataEntry<T> entry = this.getEntry(key);
-
-		if(entry == null) {
-			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
-		}
 
 		entry.setDirty(true);
 
@@ -341,7 +323,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 	}
 
 	public static void writeEntries(List<? extends IDataEntry<?>> entriesIn, RegistryFriendlyByteBuf buf) {
-		if (entriesIn != null) {
+		if (!entriesIn.isEmpty()) {
 			int i = 0;
 
 			for (int j = entriesIn.size(); i < j; ++i) {

@@ -22,7 +22,7 @@ public class AspectSlideshowWidget extends BookWidget {
 	@Nullable
 	public ItemStack itemStack;
 	public List<ResourceKey<AspectType>> rawList = new ArrayList<>();
-	public ArrayList<Holder<AspectType>> aspects = new ArrayList<>();
+	public final ArrayList<Holder<AspectType>> aspects = new ArrayList<>();
 
 	private int currentDisplayItem = 0;
 	private long lastCycleTimestamp = System.currentTimeMillis();

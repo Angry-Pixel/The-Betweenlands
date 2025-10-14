@@ -71,7 +71,7 @@ public class GalleryEntry {
 	public boolean loadTexture() {
 		TextureManager manager = Minecraft.getInstance().getTextureManager();
 
-		var texture = manager.getTexture(this.getLocation(), null);
+		@Nullable var texture = manager.getTexture(this.getLocation(), null);
 
 		if (texture == null) {
 			TheBetweenlands.LOGGER.info("Loading gallery picture '{}'/'{}'/'{}'", this.getSha256(), this.getUrl(), this.getLocation());
@@ -101,7 +101,7 @@ public class GalleryEntry {
 			try (FileInputStream fio = new FileInputStream(this.pictureFile)) {
 				this.localSha256 = DigestUtils.sha256Hex(fio).toLowerCase();
 			} catch (Exception ex) {
-				if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.info(String.format("Failed computing SHA256 hash of gallery picture: %s", this.pictureFile.toString()), ex);
+				if (BetweenlandsConfig.debug) TheBetweenlands.LOGGER.info("Failed computing SHA256 hash of gallery picture: {}", this.pictureFile.toString(), ex);
 			}
 		}
 	}

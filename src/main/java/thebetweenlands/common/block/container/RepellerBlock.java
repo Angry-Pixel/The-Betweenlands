@@ -69,7 +69,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 		} else if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
 			if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
 				if (stack.is(ItemRegistry.SHIMMER_STONE) && !repeller.hasShimmerstone()) {
-					repeller.addShimmerstone();
+					repeller.addShimmerstone(level);
 					stack.consume(1, player);
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				} else if (stack.getItem() instanceof AspectVialItem) {
@@ -81,7 +81,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 								int loss = 10; //Loss when adding
 								if (amount >= loss) {
 									if (!level.isClientSide()) {
-										int added = repeller.addFuel(amount - loss);
+										int added = repeller.addFuel(level, amount - loss);
 										if (!player.isCreative()) {
 											int leftAmount = amount - added - loss;
 											if (leftAmount > 0) {
@@ -101,7 +101,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 						}
 					}
 				} else if (stack.getItem() instanceof DentrothystVialItem vial && repeller.getFuel() > 0) {
-					ItemStack newStack = AspectContents.createItemStack(vial.getFullAspectBottle().value(), level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECT_TYPES).getHolderOrThrow(AspectTypeRegistry.BYARIIS), repeller.removeFuel(Amounts.VIAL));
+					ItemStack newStack = AspectContents.createItemStack(vial.getFullAspectBottle().value(), level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECT_TYPES).getHolderOrThrow(AspectTypeRegistry.BYARIIS), repeller.removeFuel(level, Amounts.VIAL));
 					stack.shrink(1);
 					if (!player.getInventory().add(newStack)) {
 						player.drop(newStack, false);
@@ -119,7 +119,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 			this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(), player, hitResult);
 		} else if (state.getValue(HALF) == DoubleBlockHalf.LOWER && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
 			if (player.isShiftKeyDown() && repeller.hasShimmerstone()) {
-				repeller.removeShimmerstone();
+				repeller.removeShimmerstone(level);
 				ItemStack stack = new ItemStack(ItemRegistry.SHIMMER_STONE.get());
 				if (!player.getInventory().add(stack)) {
 					player.drop(stack, false);
@@ -127,7 +127,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 				return InteractionResult.sidedSuccess(level.isClientSide());
 			} else if (!player.isShiftKeyDown()) {
 				if (!level.isClientSide()) {
-					repeller.cycleRadiusState();
+					repeller.cycleRadiusState(level);
 				}
 				return InteractionResult.sidedSuccess(level.isClientSide());
 			}

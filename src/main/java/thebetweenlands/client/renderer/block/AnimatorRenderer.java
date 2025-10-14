@@ -126,7 +126,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 	}
 
 	@Nullable
-	private Entity fetchEntityForRendering(AnimatorBlockEntity entity, RecipeHolder<AnimatorRecipe> holder, SingleRecipeInput input) {
+	private Entity fetchEntityForRendering(AnimatorBlockEntity entity, @Nullable RecipeHolder<AnimatorRecipe> holder, SingleRecipeInput input) {
 		Entity renderEntity = null;
 		if (holder != null && holder.value().getRenderEntity(input, entity.getLevel()) != null) {
 			renderEntity = holder.value().getRenderEntity(input, entity.getLevel());

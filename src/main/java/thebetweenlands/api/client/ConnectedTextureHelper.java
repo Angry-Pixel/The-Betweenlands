@@ -69,18 +69,19 @@ public class ConnectedTextureHelper {
 
 	/**
 	 * Register a new {@link ConnectedTexturesPropertyProvider} to apply properties to model data
+	 *
 	 * @param name
-	 * @param property
+	 * @param provider
 	 */
 	public static void registerPropertyProvider(ResourceLocation name, ConnectedTexturesPropertyProvider provider) {
-		assert(!PROPERTY_PROVIDERS.containsKey(name));
+		assert (!PROPERTY_PROVIDERS.containsKey(name));
 		PROPERTY_PROVIDERS.put(name, provider);
 	}
 
 	/**
 	 * Removes and returns the {@link ConnectedTexturesPropertyProvider} with the provided name
+	 *
 	 * @param name
-	 * @param property
 	 * @return the {@link ConnectedTexturesPropertyProvider}, or {@code null} if there was none registered under that name
 	 */
 	public static ConnectedTexturesPropertyProvider removePropertyProvider(ResourceLocation name) {
@@ -97,40 +98,42 @@ public class ConnectedTextureHelper {
 
 	/**
 	 * Register a {@link ModelProperty} as an index that can be used in connected texture models
+	 *
 	 * @param name
 	 * @param property
 	 */
 	public static void registerIndexProperty(ResourceLocation name, ModelProperty<Integer> property) {
-		if(INDEX_REGISTRY.containsKey(name))
+		if (INDEX_REGISTRY.containsKey(name))
 			TheBetweenlands.LOGGER.warn("Index property {} is being overwritten", name);
 		INDEX_REGISTRY.put(name, property);
 	}
 
 	/**
 	 * Register a {@link ModelProperty} as a cullface that can be used in connected texture models
+	 *
 	 * @param name
 	 * @param property
 	 */
 	public static void registerCullfaceProperty(ResourceLocation name, ModelProperty<Boolean> property) {
-		if(CULLFACE_REGISTRY.containsKey(name))
+		if (CULLFACE_REGISTRY.containsKey(name))
 			TheBetweenlands.LOGGER.warn("Cullface property {} is being overwritten", name);
 		CULLFACE_REGISTRY.put(name, property);
 	}
 
 	@Nullable
-	public static ModelProperty<Integer> getIndexPropertyNullable(ResourceLocation name) {
+	public static ModelProperty<Integer> getIndexPropertyNullable(@Nullable ResourceLocation name) {
 		return INDEX_REGISTRY.getOrDefault(name, null);
 	}
 
 	@Nullable
-	public static ModelProperty<Boolean> getCullfacePropertyNullable(ResourceLocation name) {
+	public static ModelProperty<Boolean> getCullfacePropertyNullable(@Nullable ResourceLocation name) {
 		return CULLFACE_REGISTRY.getOrDefault(name, null);
 	}
 
 	@Nonnull
 	public static ModelProperty<Integer> getIndexPropertyOrThrow(ResourceLocation name) {
 		ModelProperty<Integer> property = getIndexPropertyNullable(name);
-		if(property == null) {
+		if (property == null) {
 			throw new RuntimeException();
 		}
 		return property;
@@ -139,28 +142,26 @@ public class ConnectedTextureHelper {
 	@Nonnull
 	public static ModelProperty<Boolean> getCullfacePropertyOrThrow(ResourceLocation name) {
 		ModelProperty<Boolean> property = getCullfacePropertyNullable(name);
-		if(property == null) {
+		if (property == null) {
 			throw new RuntimeException();
 		}
 		return property;
 	}
 
 	public static ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
-		if(state.getBlock() instanceof ConnectedTextureBlock ctblock) {
+		if (state.getBlock() instanceof ConnectedTextureBlock ctblock) {
 			modelData = ctblock.getModelData(level, pos, state, modelData);
 		}
 
-		if(PROPERTY_PROVIDERS.isEmpty()) return modelData;
+		if (PROPERTY_PROVIDERS.isEmpty()) return modelData;
 
 		ModelData.Builder builder = modelData.derive();
-		for(ConnectedTexturesPropertyProvider provider : PROPERTY_PROVIDERS.values()) {
+		for (ConnectedTexturesPropertyProvider provider : PROPERTY_PROVIDERS.values()) {
 			provider.applyModelData(level, pos, state, modelData, builder);
 		}
 
 		return builder.build();
 	}
-
-
 
 
 	public static ConnectionRules createDefaultConnectionRules(BlockAndTintGetter level, BlockPos pos, BlockState state, Predicate<BlockPos> canConnectTo, boolean connectToSelf) {
@@ -172,8 +173,8 @@ public class ConnectedTextureHelper {
 
 			@Override
 			public boolean canConnectThrough(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
-				if(connectToSelf) {
-				//	return ConnectionRules.super.canConnectThrough(world, pos, face, to);
+				if (connectToSelf) {
+					//	return ConnectionRules.super.canConnectThrough(world, pos, face, to);
 				}
 				Axis axis = face.getAxis();
 				//Tries to connect through the block that is next to the connected texture face. This should always be true
@@ -184,19 +185,18 @@ public class ConnectedTextureHelper {
 	}
 
 
-
 	/**
 	 * Returns the quadrant indices<p>
 	 * <p>
 	 *
 	 * @param connectionArray <p>Connection states, index 4 is the center:
 	 *                        <pre>
-	 *                                                -------
-	 *                                               | 0 1 2 |
-	 *                                               | 3 4 5 |
-	 *                                               | 6 7 8 |
-	 *                                                ------- </pre>
-	 * @param flipXZ Flips the X and Z axis, used for EAST, WEST and DOWN face
+	 *                                                                       -------
+	 *                                                                      | 0 1 2 |
+	 *                                                                      | 3 4 5 |
+	 *                                                                      | 6 7 8 |
+	 *                                                                       ------- </pre>
+	 * @param flipXZ          Flips the X and Z axis, used for EAST, WEST and DOWN face
 	 * @return <p>Returned index positions:
 	 * <pre>
 	 *  ------->
@@ -232,7 +232,7 @@ public class ConnectedTextureHelper {
 				boolean currentNeighbourState = connectionArray[getIndex(xo, zo, 3)];
 				int segXPath = 1;
 				int segZPath = 2;
-				if(flipXZ) {
+				if (flipXZ) {
 					segXPath = 2;
 					segZPath = 1;
 				}
@@ -266,9 +266,9 @@ public class ConnectedTextureHelper {
 						}
 						if (xo == 2 && zo == 0) {
 							trs = segment;
-						} else if (xo == 2 && zo == 2) {
+						} else if (xo == 2) {
 							brs = segment;
-						} else if (xo == 0 && zo == 2) {
+						} else if (zo == 2) {
 							bls = segment;
 						} else {
 							tls = segment;
@@ -284,9 +284,8 @@ public class ConnectedTextureHelper {
 	 * Creates the connection array
 	 *
 	 * @param pos
-	 * @param dir         Face
-	 * @param canConnectTo Returns whether this block can connect to the specified block pos
-	 * @param canConnectThrough Returns whether this block can connect through the specified block pos;
+	 * @param dir             Face
+	 * @param connectionRules Returns whether this block can connect to the specified block pos
 	 * @return Connection array
 	 */
 	@SuppressWarnings("fallthrough")
@@ -330,14 +329,14 @@ public class ConnectedTextureHelper {
 					int my = (zr ? zo : (xr ? yo : zo)) + 1;
 					int blockIndex = getIndex(xp ? mx : 2 - mx, yp ? my : 2 - my, 3);
 
-					if(connectionRules.canConnectThrough(world, pos, dir, checkPos.set(x + dir.getStepX(), y + dir.getStepY(), z + dir.getStepZ()))) {
+					if (connectionRules.canConnectThrough(world, pos, dir, checkPos.set(x + dir.getStepX(), y + dir.getStepY(), z + dir.getStepZ()))) {
 						Axis axis = dir.getAxis();
-						if((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
+						if ((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
 							MutableBlockPos diagPos = checkPos.set(axis == Axis.X ? (x + dir.getStepX()) : (x + xo), axis == Axis.Y ? (y + dir.getStepY()) : (y + yo), axis == Axis.Z ? (z + dir.getStepZ()) : (z + zo));
 							boolean isDiagConnectable = connectionRules.canTextureConnectTo(world, pos, dir, diagPos);
-							if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
+							if (isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
 								MutableBlockPos obstructionPos = checkPos.set(axis == Axis.X ? x : (x + xo), axis == Axis.Y ? y : (y + yo), axis == Axis.Z ? z : (z + zo));
-								if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, obstructionPos)) {
+								if (isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, obstructionPos)) {
 									connectionArray[blockIndex] = true;
 								} else {
 									connectionArray[blockIndex] = connectionRules.canTextureConnectTo(world, pos, dir, checkPos.set(x + xo, y + yo, z + zo));

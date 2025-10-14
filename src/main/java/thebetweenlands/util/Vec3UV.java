@@ -4,7 +4,13 @@ import javax.annotation.Nullable;
 
 public class Vec3UV {
 
-	public double x, y, z, u, v, uw, vw;
+	public double x;
+	public double y;
+	public double z;
+	public final double u;
+	public final double v;
+	public final double uw;
+	public final double vw;
 	public boolean maxU, maxV;
 	@Nullable
 	public TextureQuad packedQuad;

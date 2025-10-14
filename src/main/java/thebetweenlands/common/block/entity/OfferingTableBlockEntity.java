@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.ticks.ContainerSingleItem;
+import thebetweenlands.common.item.equipment.RingItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -75,6 +76,7 @@ public class OfferingTableBlockEntity extends SyncedBlockEntity implements Conta
 	private boolean updateTeleport(Player player, Level level, BlockPos pos, int ticks, ItemStack stack) {
 		if (ticks >= 100) {
 			if (!level.isClientSide() && stack.getDamageValue() < stack.getMaxDamage()) {
+				//TODO port when bone wayfinder is added
 //				BlockPos waystone = ((BoneWayfinderItem) stack.getItem()).getBoundWaystone(stack);
 //				if (waystone != null) {
 //					BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(level, waystone, 8, false, 4, 0);
@@ -107,11 +109,11 @@ public class OfferingTableBlockEntity extends SyncedBlockEntity implements Conta
 						}
 
 						if (player instanceof Player && !player.isCreative() && count < 60 && player.tickCount % 3 == 0) {
-//							int removed = RingItem.removeXp(player, 1);
-//							if (removed == 0) {
-//								level.playSound(null, player.blockPosition(), SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1, 1);
-//								return false;
-//							}
+							int removed = RingItem.removeXp(player, 1);
+							if (removed == 0) {
+								level.playSound(null, player.blockPosition(), SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1, 1);
+								return false;
+							}
 						}
 					}
 
@@ -143,7 +145,7 @@ public class OfferingTableBlockEntity extends SyncedBlockEntity implements Conta
 	}
 
 	private void spawnChargingParticles(Level level, float rot, float x, float y, float z) {
-		float step = (float) Math.PI * 2 / 20;
+		float step = Mth.PI * 2 / 20;
 		for (int i = 0; i < 20; i++) {
 			float dx = (float) Math.cos(rot + step * i);
 			float dz = (float) Math.sin(rot + step * i);

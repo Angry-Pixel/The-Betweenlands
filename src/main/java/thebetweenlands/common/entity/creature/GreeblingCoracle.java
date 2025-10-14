@@ -57,7 +57,7 @@ public class GreeblingCoracle extends PathfinderMob implements BLEntity {
 	private NonNullList<ItemStack> loot = NonNullList.create();
 	private int shutUpFFSTime;
 	public int rowTicks;
-	public float rowSpeed = 0.5F;
+	public final float rowSpeed = 0.5F;
 
 	public GreeblingCoracle(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);

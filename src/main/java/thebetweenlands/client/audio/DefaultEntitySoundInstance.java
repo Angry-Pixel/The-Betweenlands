@@ -42,8 +42,7 @@ public class DefaultEntitySoundInstance<T extends Entity> extends AbstractSoundI
 
 		Entity view = Minecraft.getInstance().getCameraEntity();
 
-		if(this.fadeOut || this.entity == null || !this.entity.isAlive() || !this.entity.level().isLoaded(this.entity.blockPosition())
-				|| !this.isPlaying.test(this.entity) || view == null || this.entity.distanceTo(view) > Math.max(16, this.volume * 16)) {
+		if(this.fadeOut || !this.entity.isAlive() || !this.entity.level().isLoaded(this.entity.blockPosition()) || !this.isPlaying.test(this.entity) || view == null || this.entity.distanceTo(view) > Math.max(16, this.volume * 16)) {
 			this.fadeOut = true;
 
 			this.volume -= 0.05F;

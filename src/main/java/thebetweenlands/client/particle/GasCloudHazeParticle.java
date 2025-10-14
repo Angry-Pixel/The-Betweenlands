@@ -6,6 +6,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.renderer.BLParticleRenderType;
 import thebetweenlands.client.shader.ShaderHelper;
 
@@ -45,7 +46,7 @@ public class GasCloudHazeParticle extends GasCloudParticle {
 
 		@Override
 		protected void setDefaultArguments(ClientLevel level, double x, double y, double z, ParticleArgs<?> args) {
-			args.withData(level, (level.random.nextFloat() * 2.0F * (float)Math.PI) * 2.0F - 2.0F * (float)Math.PI).withScale((level.random.nextFloat() * 0.75F + 0.6F) * 1.0F);
+			args.withData(level, (level.random.nextFloat() * 2.0F * Mth.PI) * 2.0F - 2.0F * Mth.PI).withScale((level.random.nextFloat() * 0.75F + 0.6F));
 		}
 	}
 }

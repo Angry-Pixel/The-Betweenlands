@@ -30,12 +30,12 @@ public class GalleryFrameScreen extends Screen {
 	protected int xStart;
 	protected int yStart;
 
-	protected GalleryFrame frame;
+	protected final GalleryFrame frame;
 
 	protected EditBox searchBox;
 
-	protected Component discordName = Component.literal("Discord").withStyle(ChatFormatting.UNDERLINE, ChatFormatting.BLUE).withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/5RwFZgT57p")));
-	protected Component twitterName = Component.literal("@BetweenlandsDev").withStyle(ChatFormatting.UNDERLINE, ChatFormatting.BLUE).withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://twitter.com/BetweenlandsDev")));
+	protected final Component discordName = Component.literal("Discord").withStyle(ChatFormatting.UNDERLINE, ChatFormatting.BLUE).withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/5RwFZgT57p")));
+	protected final Component twitterName = Component.literal("@BetweenlandsDev").withStyle(ChatFormatting.UNDERLINE, ChatFormatting.BLUE).withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://twitter.com/BetweenlandsDev")));
 
 	@Nullable
 	private StylePoint submissionText;
@@ -63,7 +63,7 @@ public class GalleryFrameScreen extends Screen {
 			Map<String, GalleryEntry> available = GalleryManager.INSTANCE.getEntries();
 
 			if (!available.isEmpty()) {
-				PacketDistributor.sendToServer(new SetGalleryUrlPacket(this.frame, available.values().stream().skip(this.frame.getRandom().nextInt(available.size())).findFirst().get().getUrl()));
+				PacketDistributor.sendToServer(new SetGalleryUrlPacket(this.frame, available.values().stream().skip(this.frame.getRandom().nextInt(available.size())).findFirst().map(GalleryEntry::getUrl).orElse("")));
 				this.sourceUrl = null;
 			}
 		}).pos(this.xStart + WIDTH + 30, this.yStart + 26 + 14).build();

@@ -36,7 +36,7 @@ public class VolatileSoul extends Projectile implements BLEntity {
 	private int strikes = 0;
 	private int ticksInAir;
 
-	protected Deque<Vec3> trail = new LinkedList<>();
+	protected final Deque<Vec3> trail = new LinkedList<>();
 
 	public VolatileSoul(EntityType<? extends Projectile> type, Level level) {
 		super(type, level);

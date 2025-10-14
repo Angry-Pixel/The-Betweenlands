@@ -17,11 +17,11 @@ public class SwirlParticle extends TextureSheetParticle {
 	protected final float endRadius;
 	protected Vec3 drag = Vec3.ZERO;
 
-	protected Vec3 offset;
+	protected final Vec3 offset;
 	protected Vec3 target;
 	protected Vec3 targetMotion;
 
-	protected boolean rotate3D;
+	protected final boolean rotate3D;
 
 	protected static final float VELOCITY_OFFSET_MULTIPLIER = 4.0F;
 
@@ -30,7 +30,7 @@ public class SwirlParticle extends TextureSheetParticle {
 	protected double rotSinX;
 	protected double rotCosZ;
 
-	protected double rotationSpeed;
+	protected final double rotationSpeed;
 	private boolean firstUpdate = true;
 
 	public SwirlParticle(SwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress) {

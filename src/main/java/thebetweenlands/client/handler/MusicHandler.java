@@ -41,33 +41,50 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class MusicHandler {
 
+	public static final MusicHandler INSTANCE = new MusicHandler();
 	public static final Music BL_DIMENSION = new Music(SoundRegistry.BL_MUSIC_DIMENSION, 3000, 6000, false);
 	public static final Music BL_MAIN_MENU = new Music(SoundRegistry.BL_MUSIC_MENU, 20, 600, false);
 
-	private static final Map<Class<? extends Entity>, EntityMusicProvider> entityMusicProviders = new HashMap<>();
+	private final Map<Class<? extends Entity>, EntityMusicProvider> entityMusicProviders = new HashMap<>();
 
 	@Nullable
-	private static List<Sound> musicDimTrackAccessors;
+	private List<Sound> musicDimTrackAccessors;
 	@Nullable
-	private static List<Sound> musicMenuTrackAccessors;
-	private static final RandomSource RANDOM = RandomSource.create();
-	private static int timeUntilMusic = 100;
+	private List<Sound> musicMenuTrackAccessors;
+	private final RandomSource RANDOM = RandomSource.create();
+	private int timeUntilMusic = 100;
 	@Nullable
-	private static SoundInstance currentSound;
+	private SoundInstance currentSound;
 	@Nullable
-	private static Sound previousSound;
-	private static final IntSet playingEntityMusicLayers = new IntOpenHashSet();
-	private static final Int2ObjectMap<Pair<EntitySoundInstance, MusicPlayer>> entityMusicMap = new Int2ObjectOpenHashMap<>();
+	private Sound previousSound;
+	private final IntSet playingEntityMusicLayers = new IntOpenHashSet();
+	private final Int2ObjectMap<Pair<EntitySoundInstance, MusicPlayer>> entityMusicMap = new Int2ObjectOpenHashMap<>();
 
-	private static boolean hasBlMainMenu = false;
-	private static boolean isInBlMainMenu = false;
+	private boolean hasBlMainMenu = false;
+	private boolean isInBlMainMenu = false;
 
-	public static void init() {
-		NeoForge.EVENT_BUS.addListener(MusicHandler::tickMusic);
-		NeoForge.EVENT_BUS.addListener(MusicHandler::cancelVanillaMusic);
+	public void init() {
+		NeoForge.EVENT_BUS.addListener(MusicHandler.INSTANCE::tickMusic);
+		NeoForge.EVENT_BUS.addListener(MusicHandler.INSTANCE::cancelVanillaMusic);
 	}
 
-	private static void tickMusic(ClientTickEvent.Pre event) {
+	public boolean registerEntityMusicProvider(Class<? extends Entity> entityCls, EntityMusicProvider musicProvider) {
+		if(!this.entityMusicProviders.containsKey(entityCls)) {
+			this.entityMusicProviders.put(entityCls, musicProvider);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean unregisterEntityMusicProvider(Class<? extends Entity> entityCls, EntityMusicProvider musicProvider) {
+		if(this.entityMusicProviders.get(entityCls) == musicProvider) {
+			this.entityMusicProviders.remove(entityCls);
+			return true;
+		}
+		return false;
+	}
+
+	private void tickMusic(ClientTickEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		SoundManager manager = Minecraft.getInstance().getSoundManager();
 		if (Minecraft.getInstance().isPaused()) return;
@@ -75,12 +92,12 @@ public class MusicHandler {
 		boolean isInMainMenu = (!(Minecraft.getInstance().screen instanceof WinScreen) && player == null) && BetweenlandsConfig.blMainMenu;
 
 		if (Minecraft.getInstance().screen instanceof BLTitleScreen) {
-			hasBlMainMenu = true;
+			this.hasBlMainMenu = true;
 		}
 
-		isInBlMainMenu = isInMainMenu && hasBlMainMenu;
+		this.isInBlMainMenu = isInMainMenu && this.hasBlMainMenu;
 
-		if ((isInBlMainMenu || (player != null && player.level().dimension() == DimensionRegistries.DIMENSION_KEY))) {
+		if ((this.isInBlMainMenu || (player != null && player.level().dimension() == DimensionRegistries.DIMENSION_KEY))) {
 
 			Int2ObjectMap<Pair<MusicPlayer, Entity>> closestMusicEntityMap = new Int2ObjectOpenHashMap<>();
 
@@ -88,14 +105,14 @@ public class MusicHandler {
 				for (Entity entity : Minecraft.getInstance().level.entitiesForRendering()) {
 					MusicPlayer entityMusic = null;
 
-					EntityMusicProvider entityMusicProvider = entityMusicProviders.get(entity.getClass());
+					EntityMusicProvider entityMusicProvider = this.entityMusicProviders.get(entity.getClass());
 					if (entityMusicProvider != null) {
 						entityMusic = entityMusicProvider.getEntityMusic(entity);
 					} else if (entity instanceof MusicPlayer musicPlayer) {
 						entityMusic = musicPlayer;
 					}
 
-					if (entityMusic != null) {
+					if (entityMusic != null && player != null) {
 						int layer = entityMusic.getMusicLayer(player);
 
 						Pair<MusicPlayer, Entity> closestPair = closestMusicEntityMap.get(layer);
@@ -110,15 +127,15 @@ public class MusicHandler {
 				}
 			}
 
-			IntIterator it = playingEntityMusicLayers.iterator();
+			IntIterator it = this.playingEntityMusicLayers.iterator();
 			while (it.hasNext()) {
 				int layer = it.nextInt();
-				Pair<EntitySoundInstance, MusicPlayer> pair = entityMusicMap.get(layer);
+				Pair<EntitySoundInstance, MusicPlayer> pair = this.entityMusicMap.get(layer);
 				EntitySoundInstance sound = pair.getLeft();
 				MusicPlayer music = pair.getRight();
 				if (!manager.isActive(sound)) {
 					it.remove();
-					entityMusicMap.remove(layer);
+					this.entityMusicMap.remove(layer);
 				} else if (!music.isMusicActive(player)) {
 					sound.stopEntityMusic();
 				}
@@ -126,7 +143,7 @@ public class MusicHandler {
 
 			if (!closestMusicEntityMap.isEmpty()) {
 				for (Int2ObjectMap.Entry<Pair<MusicPlayer, Entity>> entry : closestMusicEntityMap.int2ObjectEntrySet()) {
-					Pair<EntitySoundInstance, MusicPlayer> currentlyPlayingPair = entityMusicMap.get(entry.getIntKey());
+					Pair<EntitySoundInstance, MusicPlayer> currentlyPlayingPair = this.entityMusicMap.get(entry.getIntKey());
 					EntitySoundInstance currentlyPlaying = currentlyPlayingPair != null ? currentlyPlayingPair.getKey() : null;
 
 					MusicPlayer closestEntityMusic = entry.getValue().getLeft();
@@ -136,8 +153,8 @@ public class MusicHandler {
 						EntitySoundInstance newSound = closestEntityMusic.getMusicSound(player);
 
 						if (newSound != null) {
-							entityMusicMap.put(entry.getIntKey(), Pair.of(newSound, closestEntityMusic));
-							playingEntityMusicLayers.add(entry.getIntKey());
+							this.entityMusicMap.put(entry.getIntKey(), Pair.of(newSound, closestEntityMusic));
+							this.playingEntityMusicLayers.add(entry.getIntKey());
 
 							manager.play(newSound);
 						}
@@ -148,41 +165,41 @@ public class MusicHandler {
 			}
 
 			//TODO
-			if (!entityMusicMap.isEmpty() /*|| AmbienceManager.INSTANCE.shouldStopMusic()*/) {
-				if (manager.isActive(currentSound)) {
-					manager.stop(currentSound);
-					currentSound = null;
-					timeUntilMusic = Math.min(Mth.nextInt(RANDOM, BL_DIMENSION.getMinDelay(), BL_DIMENSION.getMaxDelay()), timeUntilMusic);
+			if (!this.entityMusicMap.isEmpty() /*|| AmbienceManager.INSTANCE.shouldStopMusic()*/) {
+				if (this.currentSound != null && manager.isActive(this.currentSound)) {
+					manager.stop(this.currentSound);
+					this.currentSound = null;
+					this.timeUntilMusic = Math.min(Mth.nextInt(RANDOM, BL_DIMENSION.getMinDelay(), BL_DIMENSION.getMaxDelay()), this.timeUntilMusic);
 				}
 			} else if (Minecraft.getInstance().options.getSoundSourceVolume(SoundSource.MUSIC) > 0.0F) {
-				if (currentSound != null) {
-					if ((!isInBlMainMenu && SoundRegistry.BL_MUSIC_MENU.getId().equals(currentSound.getLocation())) || (isInBlMainMenu && SoundRegistry.BL_MUSIC_DIMENSION.getId().equals(currentSound.getLocation()))) {
+				if (this.currentSound != null) {
+					if ((!this.isInBlMainMenu && SoundRegistry.BL_MUSIC_MENU.getId().equals(this.currentSound.getLocation())) || (this.isInBlMainMenu && SoundRegistry.BL_MUSIC_DIMENSION.getId().equals(this.currentSound.getLocation()))) {
 						manager.stop(currentSound);
-						timeUntilMusic = Mth.nextInt(RANDOM, 0, (isInBlMainMenu ? BL_MAIN_MENU.getMinDelay() : BL_DIMENSION.getMinDelay()) / 2);
+						this.timeUntilMusic = Mth.nextInt(RANDOM, 0, (isInBlMainMenu ? BL_MAIN_MENU.getMinDelay() : BL_DIMENSION.getMinDelay()) / 2);
 					}
 					//Wait for sound track to finish
-					if (!manager.isActive(currentSound)) {
-						currentSound = null;
-						timeUntilMusic = Math.min(Mth.nextInt(RANDOM, (isInBlMainMenu ? BL_MAIN_MENU.getMinDelay() : BL_DIMENSION.getMinDelay()), (isInBlMainMenu ? BL_MAIN_MENU.getMaxDelay() : BL_DIMENSION.getMaxDelay())), timeUntilMusic);
+					if (!manager.isActive(this.currentSound)) {
+						this.currentSound = null;
+						this.timeUntilMusic = Math.min(Mth.nextInt(RANDOM, (this.isInBlMainMenu ? BL_MAIN_MENU.getMinDelay() : BL_DIMENSION.getMinDelay()), (this.isInBlMainMenu ? BL_MAIN_MENU.getMaxDelay() : BL_DIMENSION.getMaxDelay())), this.timeUntilMusic);
 					}
 				}
 
-				timeUntilMusic = Math.min(timeUntilMusic, (isInBlMainMenu ? BL_MAIN_MENU.getMaxDelay() : BL_MAIN_MENU.getMaxDelay()));
+				this.timeUntilMusic = Math.min(this.timeUntilMusic, (this.isInBlMainMenu ? BL_MAIN_MENU.getMaxDelay() : BL_DIMENSION.getMaxDelay()));
 
-				if (currentSound == null && timeUntilMusic-- <= 0) {
+				if (this.currentSound == null && this.timeUntilMusic-- <= 0) {
 					//Start new sound track
-					timeUntilMusic = Integer.MAX_VALUE;
-					playRandomSoundTrack();
+					this.timeUntilMusic = Integer.MAX_VALUE;
+					this.playRandomSoundTrack();
 				}
 			}
 		}
 	}
 
-	private static void cancelVanillaMusic(PlaySoundEvent event) {
+	private void cancelVanillaMusic(PlaySoundEvent event) {
 		Player player = Minecraft.getInstance().player;
 
 		if (event.getSound() != null) {
-			if ((isInBlMainMenu || (player != null && player.level().dimension() == DimensionRegistries.DIMENSION_KEY)) && event.getSound().getSource() == SoundSource.MUSIC && isVanillaMusic(event.getSound())) {
+			if ((this.isInBlMainMenu || (player != null && player.level().dimension() == DimensionRegistries.DIMENSION_KEY)) && event.getSound().getSource() == SoundSource.MUSIC && isVanillaMusic(event.getSound())) {
 				//Cancel non Betweenlands music
 				event.setSound(null);
 			}
@@ -199,14 +216,12 @@ public class MusicHandler {
 			return true;
 		}
 		Sound soundInstance = sound.getSound();
-		if(soundInstance != null) {
-			WeighedSoundEvents soundEventAccessor = Minecraft.getInstance().getSoundManager().getSoundEvent(track.getKey().location());
-			if (soundEventAccessor != null) {
-				List<Weighted<Sound>> soundAccessors = soundEventAccessor.list;
-				for (Weighted<Sound> accessor : soundAccessors) {
-					if (accessor instanceof Sound accessedSound && Objects.equals(accessedSound.getLocation(), soundInstance.getLocation())) {
-						return true;
-					}
+		WeighedSoundEvents soundEventAccessor = Minecraft.getInstance().getSoundManager().getSoundEvent(track.getKey().location());
+		if (soundEventAccessor != null) {
+			List<Weighted<Sound>> soundAccessors = soundEventAccessor.list;
+			for (Weighted<Sound> accessor : soundAccessors) {
+				if (accessor instanceof Sound accessedSound && Objects.equals(accessedSound.getLocation(), soundInstance.getLocation())) {
+					return true;
 				}
 			}
 		}
@@ -218,16 +233,16 @@ public class MusicHandler {
 	 *
 	 * @return A list with menu music
 	 */
-	private static List<Sound> getBetweenlandsMenuMusicTracks() {
-		if (musicMenuTrackAccessors == null) {
+	private List<Sound> getBetweenlandsMenuMusicTracks() {
+		if (this.musicMenuTrackAccessors == null) {
 			try {
-				musicMenuTrackAccessors = new ArrayList<>();
+				this.musicMenuTrackAccessors = new ArrayList<>();
 				WeighedSoundEvents soundEventAccessor = Minecraft.getInstance().getSoundManager().getSoundEvent(SoundRegistry.BL_MUSIC_MENU.getId());
 				if (soundEventAccessor != null) {
 					List<Weighted<Sound>> soundAccessors = soundEventAccessor.list;
 					for (Weighted<Sound> accessor : soundAccessors) {
 						if (accessor instanceof Sound) {
-							musicMenuTrackAccessors.add((Sound) accessor);
+							this.musicMenuTrackAccessors.add((Sound) accessor);
 						}
 					}
 				}
@@ -235,7 +250,7 @@ public class MusicHandler {
 				throw new RuntimeException(ex);
 			}
 		}
-		return musicMenuTrackAccessors;
+		return this.musicMenuTrackAccessors;
 	}
 
 	/**
@@ -243,16 +258,16 @@ public class MusicHandler {
 	 *
 	 * @return A list of dimension music
 	 */
-	private static List<Sound> getBetweenlandsMusicTracks() {
-		if (musicDimTrackAccessors == null) {
+	private List<Sound> getBetweenlandsMusicTracks() {
+		if (this.musicDimTrackAccessors == null) {
 			try {
-				musicDimTrackAccessors = new ArrayList<>();
+				this.musicDimTrackAccessors = new ArrayList<>();
 				WeighedSoundEvents soundEventAccessor = Minecraft.getInstance().getSoundManager().getSoundEvent(SoundRegistry.BL_MUSIC_DIMENSION.getId());
 				if (soundEventAccessor != null) {
 					List<Weighted<Sound>> soundAccessors = soundEventAccessor.list;
 					for (Weighted<Sound> accessor : soundAccessors) {
 						if (accessor instanceof Sound) {
-							musicDimTrackAccessors.add((Sound) accessor);
+							this.musicDimTrackAccessors.add((Sound) accessor);
 						}
 					}
 				}
@@ -260,18 +275,18 @@ public class MusicHandler {
 				throw new RuntimeException(ex);
 			}
 		}
-		return musicDimTrackAccessors;
+		return this.musicDimTrackAccessors;
 	}
 
 	/**
-	 * Plays a random Betweenlands sound track.
-	 * The previously played sound track will be excluded.
+	 * Plays a random Betweenlands soundtrack.
+	 * The previously played soundtrack will be excluded.
 	 */
-	private static void playRandomSoundTrack() {
-		List<Sound> availableSounds = new ArrayList<>(isInBlMainMenu ? getBetweenlandsMenuMusicTracks() : getBetweenlandsMusicTracks());
+	private void playRandomSoundTrack() {
+		List<Sound> availableSounds = new ArrayList<>(this.isInBlMainMenu ? getBetweenlandsMenuMusicTracks() : getBetweenlandsMusicTracks());
 		if (!availableSounds.isEmpty()) {
-			if (availableSounds.size() > 1 && previousSound != null) {
-				availableSounds.remove(previousSound);
+			if (availableSounds.size() > 1 && this.previousSound != null) {
+				availableSounds.remove(this.previousSound);
 			}
 			int weight = 0;
 			for (Sound sound : availableSounds) {
@@ -285,18 +300,18 @@ public class MusicHandler {
 					sound = entryIter.next();
 					choice -= sound.getWeight();
 				} while (choice >= 0);
-				previousSound = sound;
-				SoundInstance parentSound = SimpleSoundInstance.forMusic(isInBlMainMenu ? SoundRegistry.BL_MUSIC_MENU.get() : SoundRegistry.BL_MUSIC_DIMENSION.get());
+				this.previousSound = sound;
+				SoundInstance parentSound = SimpleSoundInstance.forMusic(this.isInBlMainMenu ? SoundRegistry.BL_MUSIC_MENU.get() : SoundRegistry.BL_MUSIC_DIMENSION.get());
 				SoundInstance playingSound = SoundWrapper.wrap(parentSound, sound);
-				currentSound = playingSound;
+				this.currentSound = playingSound;
 				Minecraft.getInstance().getSoundManager().play(playingSound);
 			}
 		}
 	}
 
 	@Nullable
-	public static EntitySoundInstance getEntityMusic(int layer) {
-		Pair<EntitySoundInstance, MusicPlayer> pair = entityMusicMap.get(layer);
+	public EntitySoundInstance getEntityMusic(int layer) {
+		Pair<EntitySoundInstance, MusicPlayer> pair = this.entityMusicMap.get(layer);
 		return pair != null ? pair.getKey() : null;
 	}
 

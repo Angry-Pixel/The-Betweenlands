@@ -41,7 +41,7 @@ public class Sludge extends Monster implements BLEntity {
 	private float prevSquishFactor;
 	private boolean wasOnGround;
 
-	public ControlledAnimation scale = new ControlledAnimation(5);
+	public final ControlledAnimation scale = new ControlledAnimation(5);
 
 	protected int attackCooldown = 0;
 
@@ -92,11 +92,6 @@ public class Sludge extends Monster implements BLEntity {
 	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		this.setActive(this.level().getRandom().nextInt(5) == 0 || !this.canHideIn(this.level().getBlockState(this.blockPosition().below())));
 		return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
-	}
-
-	@Override
-	public boolean isInvisible() {
-		return super.isInvisible();
 	}
 
 	@Override

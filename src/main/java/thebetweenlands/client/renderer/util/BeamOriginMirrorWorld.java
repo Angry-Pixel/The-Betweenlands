@@ -28,12 +28,12 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 	protected float ambientOcclusionLightValue = 0.9f;
 	protected int modelLightValue = 255;
 
-	protected MirrorWorldLightEngine lightEngine = new MirrorWorldLightEngine(this);
+	protected final MirrorWorldLightEngine lightEngine = new MirrorWorldLightEngine(this);
 
 	public float getAOLightValue() {
 		return this.ambientOcclusionLightValue;
 	}
-	
+
 	public void setAOLightValue(float value) {
 		if(Float.isNaN(value)) {
 			throw new IllegalArgumentException("'value' cannot be NaN");
@@ -44,11 +44,11 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 	public int getModelLightValue() {
 		return this.modelLightValue;
 	}
-	
+
 	public void setModelLightValue(int value) {
 		this.modelLightValue = value & 0xFFFF;
 	}
-	
+
 	@Override
 	public BlockEntity getBlockEntity(BlockPos pos) {
 		return null;
@@ -112,7 +112,7 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 	public int getBlockTint(BlockPos blockPos, ColorResolver colorResolver) {
 		return 0xFFFFFF;
 	}
-	
+
 	@Override
 	public int getBrightness(LightLayer lightType, BlockPos blockPos) {
 		switch(lightType) {
@@ -126,13 +126,13 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 
 	public static class MirrorWorldLightEngine extends LevelLightEngine {
 
-		protected BeamOriginMirrorWorld mirrorWorld;
-		
+		protected final BeamOriginMirrorWorld mirrorWorld;
+
 		public MirrorWorldLightEngine(BeamOriginMirrorWorld mirrorWorld) {
 			super(mirrorWorld, false, false);
 			this.mirrorWorld = mirrorWorld;
 		}
-		
+
 		@Override
 		public int getRawBrightness(BlockPos blockPos, int amount) {
 			int brightness = this.mirrorWorld.getModelLightValue();

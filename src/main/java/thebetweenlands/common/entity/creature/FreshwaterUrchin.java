@@ -32,7 +32,7 @@ public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner 
 	private static final EntityDataAccessor<Integer> SPIKE_COOLDOWN = SynchedEntityData.defineId(FreshwaterUrchin.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> SPIKE_BOX_SIZE = SynchedEntityData.defineId(FreshwaterUrchin.class, EntityDataSerializers.INT);
 	private boolean shootSpikes;
-	public int MAX_SPIKE_TIMER = 10;
+	public final int MAX_SPIKE_TIMER = 10;
 	public static final byte EVENT_ATTACK = 66;
 
 	public FreshwaterUrchin(EntityType<? extends PathfinderMob> type, Level level) {

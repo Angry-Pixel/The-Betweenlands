@@ -88,7 +88,7 @@ public class ReparameterizedSpline implements ISpline {
 
 	/**
 	 * Approximates the arc length of the spline by subdividing it
-	 * @param t
+	 * @param subdivs
 	 * @return
 	 */
 	private double getArcLength(double start, double end, int subdivs) {
@@ -111,7 +111,7 @@ public class ReparameterizedSpline implements ISpline {
 
 	/**
 	 * Approximates the interpolation parameter to get to the specified length of the spline
-	 * https://www.geometrictools.com/Documentation/MovingAlongCurveSpecifiedSpeed.pdf
+	 * <a href="https://www.geometrictools.com/Documentation/MovingAlongCurveSpecifiedSpeed.pdf">...</a>
 	 * @param s
 	 * @return
 	 */

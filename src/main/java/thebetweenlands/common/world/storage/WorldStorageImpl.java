@@ -18,6 +18,8 @@ import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
+import javax.annotation.Nullable;
+
 public abstract class WorldStorageImpl implements IWorldStorage {
 	private final Map<ChunkPos, ChunkStorageImpl> storageMap = new HashMap<>();
 	private final List<TickableStorage> tickableStorages = new ArrayList<>();
@@ -26,25 +28,25 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	private Level level;
 	private ResourceKey<Level> dimension;
-	
+
 	public void setLevel(Level level) {
 		this.level = level;
 		this.dimension = level.dimension();
 		this.localStorageHandler = new LocalStorageHandlerImpl(this);
 	}
-	
+
 	/**
 	 * Called after the world is set
 	 */
 	protected void init() {
-		
+
 	}
 
 	@Override
 	public Level getLevel() {
 		return this.level;
 	}
-	
+
 	@Override
 	public ResourceKey<Level> getDimension() {
 		return this.dimension;
@@ -66,7 +68,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 				//Makes sure that the default values are saved
 				chunk.setUnsaved(true);
 			} catch (Exception ex) {
-				TheBetweenlands.LOGGER.error(String.format("Failed creating chunk storage at %s", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"), ex);
+				TheBetweenlands.LOGGER.error("Failed creating chunk storage at {}", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]", ex);
 			}
 		}
 	}
@@ -86,7 +88,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 					this.tickableStorages.add(storage);
 				}
 			} catch (Exception ex) {
-				TheBetweenlands.LOGGER.error(String.format("Failed reading chunk storage at %s", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"), ex);
+				TheBetweenlands.LOGGER.error("Failed reading chunk storage at {}", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]", ex);
 			}
 		}
 	}
@@ -104,6 +106,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 		}
 	}
 
+	@Nullable
 	@Override
 	public CompoundTag saveChunk(ChunkAccess chunk) {
 		if (!this.storageMap.containsKey(chunk.getPos())) {
@@ -115,7 +118,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 				storage.setDirty(false);
 				return nbt;
 			} catch (Exception ex) {
-				TheBetweenlands.LOGGER.error(String.format("Failed saving chunk storage at %s", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"), ex);
+				TheBetweenlands.LOGGER.error("Failed saving chunk storage at {}", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]", ex);
 			}
 		}
 		return null;
@@ -137,6 +140,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 		}
 	}
 
+	@Nullable
 	@Override
 	public ChunkStorageImpl getChunkStorage(ChunkAccess chunk) {
 		return this.storageMap.get(chunk.getPos());

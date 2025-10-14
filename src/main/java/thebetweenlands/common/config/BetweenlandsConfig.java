@@ -37,26 +37,26 @@ public class BetweenlandsConfig {
 	public static final boolean useFoodSicknessInBetweenlands = true;
 	public static final boolean useFoodSicknessOutsideBetweenlands = false;
 	public static boolean reverseRottenFood = true;
-	public static boolean useRottenFood = true;
-	public static boolean usePotionBlacklist = true;
-	public static boolean useFireToolBlacklist = true;
-	public static boolean useFertilizerBlacklist = true;
-	public static boolean useToolWeakness = true;
-	public static boolean useTorchBlacklist = true;
+	public static final boolean useRottenFood = true;
+	public static final boolean usePotionBlacklist = true;
+	public static final boolean useFireToolBlacklist = true;
+	public static final boolean useFertilizerBlacklist = true;
+	public static final boolean useToolWeakness = true;
+	public static final boolean useTorchBlacklist = true;
 	public static final boolean useDecay = true;
 	public static final List<ResourceKey<Level>> decayDimensionList = new ArrayList<>();
 	public static final boolean useCorrosion = true;
-	public static boolean cavingRopeIndicator = true;
+	public static final boolean cavingRopeIndicator = true;
 
 	public static int cavingRopeDespawnTime = 1200;
 
-	public static int equipmentHotbarSide = 0;
-	public static boolean equipmentVisible = true;
-	public static int equipmentHorizontalSpacing = 8;
-	public static int equipmentVerticalSpacing = -13;
-	public static int equipmentZone = 0;
-	public static int equipmentOffsetX = 0;
-	public static int equipmentOffsetY = 0;
+	public static final int equipmentHotbarSide = 0;
+	public static final boolean equipmentVisible = true;
+	public static final int equipmentHorizontalSpacing = 8;
+	public static final int equipmentVerticalSpacing = -13;
+	public static final int equipmentZone = 0;
+	public static final int equipmentOffsetX = 0;
+	public static final int equipmentOffsetY = 0;
 	public static int decayBarZone = 0;
 	public static int decayBarOffsetX = 0;
 	public static int decayBarOffsetY = 0;
@@ -64,7 +64,7 @@ public class BetweenlandsConfig {
 	public static final float decayMinHealth = 6.0f;
 	public static final float decayMinHealthPercentage = 0.15f;
 	public static final boolean itemUsageTooltip = true;
-	public static boolean onlineGallery = true;
+	public static final boolean onlineGallery = true;
 
 	public static int maxEntitiesPerLoadedArea = 250;
 	public static final int hardEntityLimit = 600;
@@ -80,7 +80,7 @@ public class BetweenlandsConfig {
 	public static boolean dumpPackedTextures = false;
 
 //	public static final OverworldItemLists OVERWORLD = new OverworldItemLists();
-//	
+//
 //	public static final class OverworldItemLists {
 	public static final class Overworld {
 		public static List<String> rottenFoodWhitelistUnparsed = new ArrayList<>();
@@ -89,8 +89,8 @@ public class BetweenlandsConfig {
 		public static List<String> taintingWhitelistUnparsed = new ArrayList<>();
 		public static List<String> taintingBlacklistUnparsed = new ArrayList<>();
 
-		public static List<String> corrosionWhitelistUnparsed = new ArrayList<>();
-		public static List<String> corrosionBlacklistUnparsed = new ArrayList<>();
+		public static final List<String> corrosionWhitelistUnparsed = new ArrayList<>();
+		public static final List<String> corrosionBlacklistUnparsed = new ArrayList<>();
 
 		public static List<String> fireToolWhitelistUnparsed = new ArrayList<>();
 		public static List<String> fireToolBlacklistUnparsed = new ArrayList<>();
@@ -103,28 +103,28 @@ public class BetweenlandsConfig {
 
 		public static List<String> torchWhitelistUnparsed = new ArrayList<>();
 		public static List<String> torchBlacklistUnparsed = new ArrayList<>();
-		
 
-		public static ItemListProperty rottenFoodWhitelist = new ItemListProperty(() -> rottenFoodWhitelistUnparsed.toArray(new String[0]));
-		public static ItemListProperty rottenFoodBlacklist = new ItemListProperty(() -> rottenFoodBlacklistUnparsed.toArray(new String[0]));
 
-		public static ItemListProperty taintingWhitelist = new ItemListProperty(() -> taintingWhitelistUnparsed.toArray(new String[0]));
-		public static ItemListProperty taintingBlacklist = new ItemListProperty(() -> taintingBlacklistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty rottenFoodWhitelist = new ItemListProperty(() -> rottenFoodWhitelistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty rottenFoodBlacklist = new ItemListProperty(() -> rottenFoodBlacklistUnparsed.toArray(new String[0]));
+
+		public static final ItemListProperty taintingWhitelist = new ItemListProperty(() -> taintingWhitelistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty taintingBlacklist = new ItemListProperty(() -> taintingBlacklistUnparsed.toArray(new String[0]));
 
 		public static ItemListProperty corrosionWhitelist = new ItemListProperty(() -> corrosionWhitelistUnparsed.toArray(new String[0]));
 		public static ItemListProperty corrosionBlacklist = new ItemListProperty(() -> corrosionBlacklistUnparsed.toArray(new String[0]));
 
-		public static ItemListProperty fireToolWhitelist = new ItemListProperty(() -> fireToolWhitelistUnparsed.toArray(new String[0]));
-		public static ItemListProperty fireToolBlacklist = new ItemListProperty(() -> fireToolBlacklistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty fireToolWhitelist = new ItemListProperty(() -> fireToolWhitelistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty fireToolBlacklist = new ItemListProperty(() -> fireToolBlacklistUnparsed.toArray(new String[0]));
 
-		public static ItemListProperty fertilizerWhitelist = new ItemListProperty(() -> fertilizerWhitelistUnparsed.toArray(new String[0]));
-		public static ItemListProperty fertilizerBlacklist = new ItemListProperty(() -> fertilizerBlacklistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty fertilizerWhitelist = new ItemListProperty(() -> fertilizerWhitelistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty fertilizerBlacklist = new ItemListProperty(() -> fertilizerBlacklistUnparsed.toArray(new String[0]));
 
-		public static ItemListProperty toolWeaknessWhitelist = new ItemListProperty(() -> toolWeaknessWhitelistUnparsed.toArray(new String[0]));
-		public static ItemListProperty toolWeaknessBlacklist = new ItemListProperty(() -> toolWeaknessBlacklistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty toolWeaknessWhitelist = new ItemListProperty(() -> toolWeaknessWhitelistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty toolWeaknessBlacklist = new ItemListProperty(() -> toolWeaknessBlacklistUnparsed.toArray(new String[0]));
 
-		public static ItemListProperty torchWhitelist = new ItemListProperty(() -> torchWhitelistUnparsed.toArray(new String[0]));
-		public static ItemListProperty torchBlacklist = new ItemListProperty(() -> torchBlacklistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty torchWhitelist = new ItemListProperty(() -> torchWhitelistUnparsed.toArray(new String[0]));
+		public static final ItemListProperty torchBlacklist = new ItemListProperty(() -> torchBlacklistUnparsed.toArray(new String[0]));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -134,12 +134,12 @@ public class BetweenlandsConfig {
 		Overworld.rottenFoodBlacklistUnparsed = (List<String>) commonConfig.OVERWORLD.rottenFoodBlacklist.get();
 		Overworld.taintingWhitelistUnparsed = (List<String>) commonConfig.OVERWORLD.taintingWhitelist.get();
 		Overworld.taintingBlacklistUnparsed = (List<String>) commonConfig.OVERWORLD.taintingBlacklist.get();
-		
+
 		Overworld.fireToolWhitelistUnparsed = (List<String>) commonConfig.OVERWORLD.fireToolWhitelist.get();
 		Overworld.fireToolBlacklistUnparsed = (List<String>) commonConfig.OVERWORLD.fireToolBlacklist.get();
 		Overworld.fertilizerWhitelistUnparsed = (List<String>) commonConfig.OVERWORLD.fertilizerWhitelist.get();
 		Overworld.fertilizerBlacklistUnparsed = (List<String>) commonConfig.OVERWORLD.fertilizerBlacklist.get();
-		
+
 		Overworld.toolWeaknessWhitelistUnparsed = (List<String>) commonConfig.OVERWORLD.toolWeaknessWhitelist.get();
 		Overworld.toolWeaknessBlacklistUnparsed = (List<String>) commonConfig.OVERWORLD.toolWeaknessBlacklist.get();
 		Overworld.torchWhitelistUnparsed = (List<String>) commonConfig.OVERWORLD.torchWhitelist.get();
@@ -158,7 +158,7 @@ public class BetweenlandsConfig {
 		Overworld.toolWeaknessBlacklist.parseData();
 		Overworld.torchWhitelist.parseData();
 		Overworld.torchBlacklist.parseData();
-		
+
 		// Try to update the cache
 		HolderLookup.Provider registryAccess = TheBetweenlands.tryGetRegistryAccess();
 		if(registryAccess != null) {
@@ -176,5 +176,5 @@ public class BetweenlandsConfig {
 			Overworld.torchBlacklist.buildCache(registryAccess);
 		}
 	}
-	
+
 }

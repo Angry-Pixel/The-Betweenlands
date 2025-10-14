@@ -170,7 +170,7 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 	protected BeamOriginMirrorWorld mirrorWorld;
 	// only used for immediate rendering
-	protected Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
+	protected final Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
     protected final ByteBufferBuilder sharedBuffer;
 
 	public BeamOriginRenderer(BlockEntityRendererProvider.Context context) {
@@ -625,8 +625,8 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 	/**
 	 * Renders a vertex buffer immediately with a modified view matrix
-	 * @param poseStack
-	 * @param renderType
+	 * @param pose
+	 * @param vertexBuffer
 	 */
 	public static void renderVboWithPose(Matrix4f pose, VertexBuffer vertexBuffer) {
 		if(!Objects.requireNonNull(vertexBuffer).isInvalid()) {

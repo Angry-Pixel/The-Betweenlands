@@ -23,7 +23,7 @@ public class ObstructionAwareClimberNavigation<T extends ClimbingMob> extends Ob
 
 	protected Direction verticalFacing = Direction.DOWN;
 
-	protected boolean findDirectPathPoints = false;
+	protected final boolean findDirectPathPoints = false;
 
 	public ObstructionAwareClimberNavigation(T entity, Level level, boolean checkObstructions, boolean canPathWalls, boolean canPathCeiling) {
 		super(entity, level, checkObstructions);

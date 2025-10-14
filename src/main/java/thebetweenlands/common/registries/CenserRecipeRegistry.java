@@ -52,7 +52,7 @@ public class CenserRecipeRegistry {
 
 	@Nullable
 	public static CenserRecipe<?> getRecipe(FluidStack input) {
-		if (input != null && input.getAmount() > 0) {
+		if (!input.isEmpty() && input.getAmount() > 0) {
 			for (CenserRecipe<?> recipe : BLRegistries.CENSER_RECIPES) {
 				if (recipe.matchesInput(input)) {
 					return recipe;

@@ -53,14 +53,14 @@ public class ObstructionAwareNodeEvaluator extends WalkNodeEvaluator {
 	protected boolean startFromGround = true;
 	protected boolean checkObstructions;
 	protected int pathingSizeOffsetX, pathingSizeOffsetY, pathingSizeOffsetZ;
-	protected EnumSet<Direction> pathableFacings = EnumSet.of(Direction.DOWN);
+	protected final EnumSet<Direction> pathableFacings = EnumSet.of(Direction.DOWN);
 	protected Direction[] pathableFacingsArray;
 
 	private final Long2LongMap pathNodeTypeCache = new Long2LongOpenHashMap();
 	private final Long2ObjectMap<PathType> rawPathNodeTypeCache = new Long2ObjectOpenHashMap<>();
 	private final Object2BooleanMap<AABB> aabbCollisionCache = new Object2BooleanOpenHashMap<>();
 
-	protected boolean alwaysAllowDiagonals = true;
+	protected final boolean alwaysAllowDiagonals = true;
 
 	public void setStartPathOnGround(boolean startFromGround) {
 		this.startFromGround = startFromGround;

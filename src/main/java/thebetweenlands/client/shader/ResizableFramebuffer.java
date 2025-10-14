@@ -2,8 +2,11 @@ package thebetweenlands.client.shader;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 
+import javax.annotation.Nullable;
+
 public class ResizableFramebuffer {
 	private final boolean depth;
+	@Nullable
 	private RenderTarget framebuffer;
 
 	public ResizableFramebuffer(boolean depth) {

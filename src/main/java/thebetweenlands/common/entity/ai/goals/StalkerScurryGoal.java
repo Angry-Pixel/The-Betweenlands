@@ -20,7 +20,7 @@ public class StalkerScurryGoal extends Goal {
 
 	private final float speed;
 
-	private int maxPathMemory = 32;
+	private final int maxPathMemory = 32;
 	private final LinkedHashMap<Pair<Path, Integer>, BlockPos> pathMemory = new LinkedHashMap<>();
 
 	@Nullable

@@ -27,7 +27,7 @@ public class EntityMusicSoundInstance<T extends Entity> extends DefaultEntitySou
 
 	@Override
 	public void tick() {
-		if(this.entity != null && !this.entity.isRemoved()) {
+		if(!this.entity.isRemoved()) {
 			if(this.mustFadeOut) {
 				if(this.volume > 0) {
 					this.volume -= 0.1F;

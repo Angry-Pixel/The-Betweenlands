@@ -65,9 +65,9 @@ public class PortalTree {
 					double dSq = i * i + j * j;
 					if (Math.round(Math.sqrt(dSq)) < radius && yy <= 1)
 						level.setBlock(pos.offset(i, yy, j), WOOD, 18);
-					if (Math.round(Math.sqrt(dSq)) == radius && yy == 0 || Math.round(Math.sqrt(dSq)) == radius && yy <= height - 1)
+					if (Math.round(Math.sqrt(dSq)) == radius)
 						level.setBlock(pos.offset(i, yy, j), BARK, 18);
-					if (Math.round(Math.sqrt(dSq)) < radius && yy <= height - 1 && yy > 1 && yy <= 10)
+					if (Math.round(Math.sqrt(dSq)) < radius && yy > 1 && yy <= 10)
 						level.setBlock(pos.offset(i, yy, j), Blocks.AIR.defaultBlockState(), 18);
 				}
 
@@ -137,7 +137,7 @@ public class PortalTree {
 			}
 			location.setDirty(true);
 			location.setVisible(false);
-//			worldStorage.getLocalStorageHandler().addLocalStorage(location);
+			worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		}
 		return true;
 	}

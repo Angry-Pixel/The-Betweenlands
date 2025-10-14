@@ -33,14 +33,14 @@ public class Leech extends Monster implements BLEntity {
 	private static final int MAX_BLOOD_LEVEL = 5;
 	private static final int TIME_TO_FLEE = 600;
 
-	public int attackCountDown = 20;
+	public final int attackCountDown = 20;
 	public int hungerCoolDown;
 	private int drainage;
 	public float moveProgress;
-	public boolean firstTickCheck;
+	public final boolean firstTickCheck;
 	public int fleeingTick;
 
-	AnimationMathHelper mathSucking = new AnimationMathHelper();
+	final AnimationMathHelper mathSucking = new AnimationMathHelper();
 
 	private NearestAttackableTargetGoal<LivingEntity> targetGoal;
 	private WaterAvoidingRandomStrollGoal wanderGoal;

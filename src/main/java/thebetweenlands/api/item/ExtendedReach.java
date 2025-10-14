@@ -29,7 +29,7 @@ public interface ExtendedReach {
     		return player.entityInteractionRange() + this.getReachModifier(player, stack);
     	} else {
     		// 4.5 was assumed previously, maintain parity here
-    		return 4.5 + this.getReachModifier(player, stack);
+    		return 4.5 + this.getReachModifier(null, stack);
     	}
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 public class WightBuffSwampHagGoal extends Goal {
 
 	protected final Wight wight;
-	protected Level level;
+	protected final Level level;
 	protected final PathNavigation navigation;
 
 	protected int cooldown;

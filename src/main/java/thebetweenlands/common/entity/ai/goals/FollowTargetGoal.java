@@ -56,14 +56,14 @@ public class FollowTargetGoal<T extends LivingEntity> extends Goal {
 
 	protected final Mob taskOwner;
 	protected final Supplier<T> target;
-	protected Level level;
+	protected final Level level;
 	protected final double speed;
 	protected final PathNavigation navigator;
 	protected int timeToRecalcPath;
-	protected float maxDist;
-	protected float minDist;
+	protected final float maxDist;
+	protected final float minDist;
 	protected float oldWaterCost;
-	protected boolean teleport;
+	protected final boolean teleport;
 
 	public FollowTargetGoal(Mob taskOwner, Supplier<T> target, double speed, float minDist, float maxDist, boolean teleport) {
 		this.taskOwner = taskOwner;

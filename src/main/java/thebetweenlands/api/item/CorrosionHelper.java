@@ -174,7 +174,7 @@ public class CorrosionHelper {
 	}
 
 	public static boolean isCorrodible(ItemStack stack) {
-		return stack != null && !stack.isEmpty() && stack.is(BLItemTagProvider.CORRODIBLE);
+		return !stack.isEmpty() && stack.is(BLItemTagProvider.CORRODIBLE);
 	}
 
 	/**
@@ -203,8 +203,6 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static boolean shouldEntityCorrode(Entity entity) {
-		if(entity == null) return isCorrosionEnabled();
-
 		// If corrosion is disabled: false
 		Level level = entity.level();
 		if(!(BetweenlandsConfig.useCorrosion && level.getGameRules().getBoolean(TheBetweenlands.CORROSION_GAMERULE)))
@@ -215,15 +213,13 @@ public class CorrosionHelper {
 			return false;
 
 		Holder<Biome> biome = level.getBiome(entity.blockPosition());
-		if(biome != null) {
-			// If the biome disables corrosion: false
-			if(biome.is(BLBiomeTagProvider.DISABLE_CORROSION))
-				return false;
+		// If the biome disables corrosion: false
+		if(biome.is(BLBiomeTagProvider.DISABLE_CORROSION))
+			return false;
 
-			// If the biome enables corrosion (outside of the Betweenlands): true
-			if(biome.is(BLBiomeTagProvider.CORRODING_AURA))
-				return true;
-		}
+		// If the biome enables corrosion (outside of the Betweenlands): true
+		if(biome.is(BLBiomeTagProvider.CORRODING_AURA))
+			return true;
 
 		// If the dimension enables corrosion: true
 		return level.dimensionTypeRegistration().is(BLDimensionTypeTagProvider.CORRODING_AURA);
@@ -257,10 +253,8 @@ public class CorrosionHelper {
 				if (holder instanceof Player player) {
 					probability *= (isHeldItem && !player.getMainHandItem().isEmpty() ? 2.8F : 1.0F);
 					IDecayData cap = player.getData(AttachmentRegistry.DECAY);
-					if(cap != null) {
-						float playerCorruption = cap.getDecayLevel(player) / 20.0F;
-						probability *= (float) (1 - Math.pow(playerCorruption, 2) * 0.9F);
-					}
+					float playerCorruption = cap.getDecayLevel(player) / 20.0F;
+					probability *= (float) (1 - Math.pow(playerCorruption, 2) * 0.9F);
 				}
 				if (world.getRandom().nextFloat() < probability) {
 					int coating = getCoating(stack);

@@ -137,7 +137,7 @@ public class AmphibiousArmorContainer implements Container {
 			for (int i = 0; i < this.getContainerSize(); i++) {
 				ItemStack otherStack = this.getItem(i);
 
-				if (otherStack != null) {
+				if (!otherStack.isEmpty()) {
 					Holder<AmphibiousArmorUpgrade> otherUpgrade = ArmorEffectHelper.getUpgrade(this.armorType.getSlot(), otherStack);
 
 					if (otherUpgrade != AmphibiousArmorUpgradeRegistry.NONE && (otherUpgrade.value().isBlacklisted(upgrade) || upgrade.value().isBlacklisted(otherUpgrade))) {

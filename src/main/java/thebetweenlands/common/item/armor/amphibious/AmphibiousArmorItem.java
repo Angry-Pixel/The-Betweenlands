@@ -57,6 +57,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 	public static final String NBT_ELECTRIC_COOLDOWN = "thebetweenlands.electric_cooldown";
 	public static final String AUTO_TOGGLES_KEY = "thebetweenlands.auto_toggles";
 
+	@Nullable
 	private ServerPlayer serverPlayer;
 
 	public AmphibiousArmorItem(Type type, Properties properties) {
@@ -221,7 +222,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 				for (int i = 0; i < inv.getContainerSize(); i++) {
 					ItemStack upgradeItem = inv.getItem(i).copy();
 
-					if (!upgradeItem.isEmpty()) {
+					if (!upgradeItem.isEmpty() && this.serverPlayer != null) {
 						if (!this.serverPlayer.getInventory().add(upgradeItem))
 							this.serverPlayer.drop(upgradeItem, false);
 					}
@@ -232,20 +233,7 @@ public class AmphibiousArmorItem extends ArmorItem {
 		super.setDamage(stack, damage);
 	}
 
-	public static boolean damageUpgrade(Player player, AmphibiousArmorUpgrade upgrade, int amount, AmphibiousArmorUpgrade.DamageEvent damageEvent, boolean damageAll) {
-		boolean damaged = false;
-		for (ItemStack stack : player.getArmorAndBodyArmorSlots()) {
-			if (!stack.isEmpty() && stack.getItem() instanceof AmphibiousArmorItem) {
-				damaged |= damageUpgrade(stack, player, upgrade, amount, damageEvent, damageAll);
-				if (damaged && !damageAll) {
-					break;
-				}
-			}
-		}
-		return damaged;
-	}
-
-	public static boolean damageUpgrade(ItemStack stack, Player player, AmphibiousArmorUpgrade upgrade, int amount, AmphibiousArmorUpgrade.DamageEvent damageEvent, boolean damageAll) {
+	public static boolean damageUpgrade(ItemStack stack, @Nullable Player player, AmphibiousArmorUpgrade upgrade, int amount, AmphibiousArmorUpgrade.DamageEvent damageEvent, boolean damageAll) {
 		if (damageEvent == AmphibiousArmorUpgrade.DamageEvent.NONE) {
 			return false;
 		}

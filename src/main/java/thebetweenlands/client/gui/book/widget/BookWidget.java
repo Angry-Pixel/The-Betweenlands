@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public abstract class BookWidget extends AbstractWidget {
 
-	public ArrayList<PageLink> pageLinks = new ArrayList<>();
+	public final ArrayList<PageLink> pageLinks = new ArrayList<>();
 	public boolean isPageRight = false;
 	private HerbloreManualScreen screen;
 

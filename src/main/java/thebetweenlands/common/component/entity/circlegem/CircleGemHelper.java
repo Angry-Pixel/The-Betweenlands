@@ -178,7 +178,7 @@ public class CircleGemHelper {
 				}
 				attackerGemCounts.merge(attackerItemGem, 1, Integer::sum);
 				for (CircleGemType gem : attackerGemCounts.keySet()) {
-					if (gem != CircleGemType.NONE && applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage), damageSource, damage)) {
+					if (gem != CircleGemType.NONE && applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.getInt(gem), damage), damageSource, damage)) {
 						attackerProcd = true;
 						if (!attackerProcdGems.contains(gem)) {
 							attackerProcdGems.add(gem);
@@ -245,15 +245,15 @@ public class CircleGemHelper {
 		return ItemStack.EMPTY;
 	}
 
-	private static float getMultipleProcStrength(int procs, float strength) {
-		float ret = 0;
+	private static double getMultipleProcStrength(int procs, double strength) {
+		double ret = 0;
 		for (int i = 0; i < procs; i++) {
 			ret += strength / Math.pow(1.4F, i);
 		}
 		return ret;
 	}
 
-	private static boolean applyProc(CircleGemType gem, Entity owner, Entity source, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength, DamageSource damageSource, float damage) {
+	private static boolean applyProc(CircleGemType gem, Entity owner, Entity source, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, double strength, DamageSource damageSource, float damage) {
 		boolean isAttacker = owner == attacker;
 		if ((isAttacker && attackerProc) || (!isAttacker && defenderProc)) {
 			return gem.applyProc(isAttacker, source, attacker, defender, strength, damageSource, damage);

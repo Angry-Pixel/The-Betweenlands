@@ -1,9 +1,7 @@
 package thebetweenlands.common.item.recipe.censer;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -46,21 +44,20 @@ public class ElixirCenserRecipe extends AbstractCenserRecipe<ElixirCenserRecipe.
 		Level level = censer.getLevel();
 
 		if (level.getGameTime() % 100 == 0) {
-			Holder<MobEffect> potion = context.elixir.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).elixir().get().value().getElixirEffect();
+			MobEffectInstance potion = context.elixir.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).tryCreateEffect(duration -> Math.min(duration, 300), 0, true, false);
 
-			int maxDuration = context.elixir.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).duration();
+			if (potion != null) {
+				BlockPos pos = censer.getBlockPos();
+				List<LivingEntity> affected = this.getAffectedEntities(level, pos, context);
 
-			BlockPos pos = censer.getBlockPos();
-
-			List<LivingEntity> affected = this.getAffectedEntities(level, pos, context);
-
-			if (!level.isClientSide()) {
-				for (LivingEntity living : affected) {
-					living.addEffect(new MobEffectInstance(potion, Math.min(maxDuration, 300), 0, true, false));
+				if (!level.isClientSide()) {
+					for (LivingEntity living : affected) {
+						living.addEffect(potion);
+					}
 				}
-			}
 
-			context.setConsuming(!affected.isEmpty());
+				context.setConsuming(!affected.isEmpty());
+			}
 		}
 
 		return 0;

@@ -10,7 +10,7 @@ import java.util.EnumSet;
 public class StalkerDropAttackGoal extends Goal {
 	private final Stalker entity;
 
-	private float dropRadius = 5.0f;
+	private final float dropRadius = 5.0f;
 
 	private int dropTimer = 0;
 

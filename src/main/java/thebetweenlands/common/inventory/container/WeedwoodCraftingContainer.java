@@ -69,10 +69,8 @@ public class WeedwoodCraftingContainer implements CraftingContainer {
 	public ItemStack removeItem(int slot, int amount) {
         ItemStack itemstack = ContainerHelper.removeItem(this.getItemsMutable(), slot, amount);
         if (!itemstack.isEmpty()) {
-        	if(this.menu != null)
-        		this.menu.slotsChanged(this);
-        	if(this.tile != null)
-        		this.tile.slotChangedCraftingGrid();
+			this.menu.slotsChanged(this);
+        	this.tile.slotChangedCraftingGrid();
         }
 
 		return itemstack;

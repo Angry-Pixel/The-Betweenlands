@@ -31,7 +31,6 @@ public class AboveWaterPathNavigation extends PathNavigation {
 	protected void followThePath() {
 		Vec3 vec3d = this.getTempMobPos();
 		float f = this.mob.getBbWidth() * this.mob.getBbWidth();
-		int i = 6;
 
 		if (vec3d.distanceToSqr(this.path.getEntityPosAtNode(this.mob, this.path.getNextNodeIndex())) < (double) f) {
 			this.path.advance();

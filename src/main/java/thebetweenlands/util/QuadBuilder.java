@@ -66,6 +66,7 @@ public class QuadBuilder {
 	private float[] color = new float[]{1f, 1f, 1f, 1f};
 	private Vec3 normal;
 	private int tintIndex = -1;
+	@Nullable
 	private Direction cullFace, orientation;
 	private boolean diffuseLighting = true;
 
@@ -344,6 +345,7 @@ public class QuadBuilder {
 	public static final class Quads {
 		public final Map<Direction, ImmutableList<BakedQuad>> culledQuads;
 		public final ImmutableList<BakedQuad> nonCulledQuads;
+		@Nullable
 		private ImmutableList<BakedQuad> allQuads;
 
 		private Quads(Map<Direction, ImmutableList<BakedQuad>> culledQuads, ImmutableList<BakedQuad> nonCulledQuads) {

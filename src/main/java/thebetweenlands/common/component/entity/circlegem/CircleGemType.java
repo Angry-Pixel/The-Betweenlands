@@ -27,23 +27,23 @@ import java.util.function.IntFunction;
 
 public enum CircleGemType implements StringRepresentable {
 	NONE("none", 11184810, null),
-	AQUA("aqua", 665468, GemSingerItem.GemSingerTarget.AQUA_MIDDLE_GEM),
-	CRIMSON("crimson", 8523049, GemSingerItem.GemSingerTarget.CRIMSON_MIDDLE_GEM),
-	GREEN("green", 2851341, GemSingerItem.GemSingerTarget.GREEN_MIDDLE_GEM);
+	AQUA("aqua", 665468, GemSingerItem.Target.AQUA_MIDDLE_GEM),
+	CRIMSON("crimson", 8523049, GemSingerItem.Target.CRIMSON_MIDDLE_GEM),
+	GREEN("green", 2851341, GemSingerItem.Target.GREEN_MIDDLE_GEM);
 
 	public final String name;
 	public final int color;
 	@Nullable
-	public final GemSingerItem.GemSingerTarget gemSingerTarget;
+	public final GemSingerItem.Target target;
 
 	public static final StringRepresentable.EnumCodec<CircleGemType> CODEC = StringRepresentable.fromEnum(CircleGemType::values);
 	public static final IntFunction<CircleGemType> BY_ID = ByIdMap.continuous(CircleGemType::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
 	public static final StreamCodec<ByteBuf, CircleGemType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, CircleGemType::ordinal);
 
-	CircleGemType(String name, int color, @Nullable GemSingerItem.GemSingerTarget gemSingerTarget) {
+	CircleGemType(String name, int color, @Nullable GemSingerItem.Target target) {
 		this.name = name;
 		this.color = color;
-		this.gemSingerTarget = gemSingerTarget;
+		this.target = target;
 	}
 
 	@Override

@@ -26,9 +26,11 @@ import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public record ElixirContents(Optional<Holder<ElixirEffect>> elixir, int duration, int strength, Optional<Integer> customColor) {
 	public static final ElixirContents EMPTY = new ElixirContents(Optional.empty(), 0, 0, Optional.empty());
@@ -66,6 +68,11 @@ public record ElixirContents(Optional<Holder<ElixirEffect>> elixir, int duration
 
 	public MobEffectInstance createEffect(Holder<ElixirEffect> effect, double modifier) {
 		return effect.value().createEffect((int) (this.duration() * modifier), this.strength());
+	}
+
+	@Nullable
+	public MobEffectInstance tryCreateEffect(Function<Integer, Integer> duration, int ampifier, boolean ambient, boolean visible) {
+		return this.elixir.map(holder -> new MobEffectInstance(holder.value().getElixirEffect(), duration.apply(this.duration()), ampifier, ambient, visible)).orElse(null);
 	}
 
 	public void addElixirTooltip(Consumer<Component> tooltip, HolderLookup.Provider provider, float durationFactor, float ticksPerSecond) {

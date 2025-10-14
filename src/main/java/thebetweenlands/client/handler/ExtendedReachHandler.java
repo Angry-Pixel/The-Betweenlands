@@ -43,6 +43,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.item.ExtendedReach;
 import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
 
+import javax.annotation.Nullable;
+
 public class ExtendedReachHandler {
 
     public static void onAttackEvent(InputEvent.InteractionKeyMappingTriggered event) {
@@ -102,8 +104,7 @@ public class ExtendedReachHandler {
             	return;
 
             // Check that we can render our own crosshair
-            flag = false;
-            if (trace.getEntity() != null && trace.getEntity() instanceof LivingEntity) {
+			if (trace.getEntity() instanceof LivingEntity) {
                 flag = mc.player.getCurrentItemAttackStrengthDelay() > 5.0F;
                 flag &= trace.getEntity().isAlive();
             }
@@ -152,7 +153,7 @@ public class ExtendedReachHandler {
         // Assume player is view entity (IExtendedReach.getReach() requires a player argument)
         Player player = mc.player;
 
-        if (player == null || !player.isAddedToLevel() || player.level() == null) {
+        if (player == null || !player.isAddedToLevel()) {
             return false;
         }
 
@@ -217,7 +218,7 @@ public class ExtendedReachHandler {
 
             for(Pair<Double, EntityHitResult> pair : results) {
                 EntityHitResult trace = pair.getSecond();
-                if (trace != null && trace.getType() != Type.MISS && trace.getEntity() != null && (ignoreInvulnerability || trace.getEntity().invulnerableTime == 0) && trace.getEntity() != player) {
+                if (trace != null && trace.getType() != Type.MISS && (ignoreInvulnerability || trace.getEntity().invulnerableTime == 0) && trace.getEntity() != player) {
                 	consumer.accept(pair.getSecond());
                 }
             }
@@ -227,7 +228,7 @@ public class ExtendedReachHandler {
         return false;
     }
 
-
+	@Nullable
     private static EntityHitResult extendedRayTrace(boolean ignoreInvulnerability) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
@@ -243,20 +244,20 @@ public class ExtendedReachHandler {
         if (stack.getItem() instanceof ExtendedReach extendedReach) {
             double reach = extendedReach.getReach(player, stack);
             EntityHitResult trace = getExtendedRayTrace(reach);
-            if (trace != null && trace.getType() != Type.MISS && trace.getEntity() != null && (ignoreInvulnerability || trace.getEntity().invulnerableTime == 0) && trace.getEntity() != player) {
+            if (trace != null && trace.getType() != Type.MISS && (ignoreInvulnerability || trace.getEntity().invulnerableTime == 0) && trace.getEntity() != player) {
                 return trace;
             }
         }
         return null;
     }
 
-
+	@Nullable
     public static EntityHitResult getExtendedRayTrace(double dist) {
         Minecraft mc = Minecraft.getInstance();
         Entity viewEntity = mc.getCameraEntity();
 
         EntityHitResult result = null;
-        if (viewEntity != null && viewEntity.isAddedToLevel() && viewEntity.level() != null) {
+        if (viewEntity != null && viewEntity.isAddedToLevel()) {
         	Level level = viewEntity.level();
 
             Vec3 dirVec = viewEntity.getViewVector(0.0F);

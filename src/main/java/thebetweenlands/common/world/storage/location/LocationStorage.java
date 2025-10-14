@@ -69,10 +69,6 @@ public class LocationStorage extends LocalStorageImpl {
 		this.dataManager.register(NAME, name);
 		this.dataManager.register(VISIBLE, false);
 
-		if (type == null) {
-			type = EnumLocationType.NONE;
-		}
-
 		this.type = type;
 	}
 

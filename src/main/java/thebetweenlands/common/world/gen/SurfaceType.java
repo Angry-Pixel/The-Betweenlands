@@ -72,9 +72,10 @@ public enum SurfaceType implements Predicate<BlockState> {
 
 	@Nullable
 	private final List<Predicate<BlockState>> matchers;
+	@Nullable
 	private final SurfaceType[] types;
 
-	SurfaceType(@Nullable List<Predicate<BlockState>> matchers, SurfaceType... types) {
+	SurfaceType(@Nullable List<Predicate<BlockState>> matchers, @Nullable SurfaceType... types) {
 		this.matchers = matchers;
 		this.types = types;
 	}
@@ -85,8 +86,6 @@ public enum SurfaceType implements Predicate<BlockState> {
 
 	@Override
 	public boolean apply(BlockState input) {
-		if (input == null)
-			return false;
 		if (this.types != null) {
 			for (SurfaceType type : this.types) {
 				if (type.apply(input))

@@ -13,6 +13,7 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ElixirClientHandler {
@@ -27,7 +28,7 @@ public class ElixirClientHandler {
 		}
 
 		private void update(int strength) {
-			if (this.entity != null && !this.entity.isRemoved()) {
+			if (!this.entity.isRemoved()) {
 				Vec3 newPos = this.entity.position();
 				if (!this.cachedPositions.isEmpty()) {
 					Vec3 lastPos = this.cachedPositions.getLast();
@@ -57,6 +58,7 @@ public class ElixirClientHandler {
 
 	private static class TrailPos {
 		private final Vec3 pos;
+		@Nullable
 		private Vec3 nextPos;
 		private final int index;
 
@@ -155,7 +157,7 @@ public class ElixirClientHandler {
 				Map.Entry<Entity, EntityTrail> entry;
 				while (it.hasNext() && (entry = it.next()) != null) {
 					EntityTrail trail = entry.getValue();
-					if (trail.entity == null || trail.entity.isRemoved() || !entityList.contains(entry.getKey())) {
+					if (trail.entity.isRemoved() || !entityList.contains(entry.getKey())) {
 						it.remove();
 					}
 				}
@@ -169,7 +171,7 @@ public class ElixirClientHandler {
 						HitResult target = Minecraft.getInstance().hitResult;
 						if (target == null || target.getType() == HitResult.Type.MISS) {
 							Minecraft.getInstance().startAttack();
-						} else if (target != null) {
+						} else {
 							if (!player.swinging) {
 								Minecraft.getInstance().continueAttack(true);
 							}
@@ -190,14 +192,12 @@ public class ElixirClientHandler {
 
 	private static void changePlayerRotation(RenderPlayerEvent.Pre event) {
 		Player player = event.getEntity();
-		if (player != null) {
-			CompoundTag nbt = player.getPersistentData();
+		CompoundTag nbt = player.getPersistentData();
 
-			if (ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(player) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(player)) {
-				player.setXRot(player.xRotO = nbt.getFloat("thebetweenlands.petrify.pitch"));
-				player.setYRot(player.yRotO = nbt.getFloat("thebetweenlands.petrify.yaw"));
-				player.setYHeadRot(player.yHeadRotO = nbt.getFloat("thebetweenlands.petrify.yawHead"));
-			}
+		if (ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(player) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(player)) {
+			player.setXRot(player.xRotO = nbt.getFloat("thebetweenlands.petrify.pitch"));
+			player.setYRot(player.yRotO = nbt.getFloat("thebetweenlands.petrify.yaw"));
+			player.setYHeadRot(player.yHeadRotO = nbt.getFloat("thebetweenlands.petrify.yawHead"));
 		}
 	}
 

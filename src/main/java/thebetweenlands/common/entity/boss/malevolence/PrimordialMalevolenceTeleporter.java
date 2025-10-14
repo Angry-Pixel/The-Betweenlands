@@ -16,6 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.entity.ScreenShaker;
+import thebetweenlands.client.BetweenlandsClient;
+import thebetweenlands.client.audio.TeleporterSoundInstance;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -166,7 +169,7 @@ public class PrimordialMalevolenceTeleporter extends Entity implements BLEntity,
 	}
 
 	private void playTeleportSound() {
-//		Minecraft.getMinecraft().getSoundHandler().playSound(new TeleporterSound(this, this.getTarget()));
+		BetweenlandsClient.playLocalSound(new TeleporterSoundInstance(this, this.getTarget()));
 	}
 
 	public void lookAt(Entity target, float maxYRotIncrease, float maxXRotIncrease) {

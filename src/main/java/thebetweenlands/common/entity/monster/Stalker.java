@@ -57,19 +57,19 @@ public class Stalker extends ClimbingMob implements Enemy {
 
 	protected boolean restrictToPitstone = false;
 
-	protected int maxPathingTargetHeight;
+	protected final int maxPathingTargetHeight;
 
 	public boolean isStalking = true;
 
-	protected float farAnglePathingPenalty = 1.0f;
-	public float farAngle = 90.0f;
+	protected final float farAnglePathingPenalty = 1.0f;
+	public final float farAngle = 90.0f;
 
-	protected float nearAnglePathingPenalty = 2.0f;
-	protected float nearAngle = 65.0f;
+	protected final float nearAnglePathingPenalty = 2.0f;
+	protected final float nearAngle = 65.0f;
 
-	protected float stalkingDistanceNear = 4.0f;
-	public float stalkingDistanceFar = 8.0f;
-	protected float stalkingDistancePenalty = 4.0f;
+	protected final float stalkingDistanceNear = 4.0f;
+	public final float stalkingDistanceFar = 8.0f;
+	protected final float stalkingDistancePenalty = 4.0f;
 
 	protected boolean isFleeingFromView;
 
@@ -83,7 +83,7 @@ public class Stalker extends ClimbingMob implements Enemy {
 	public Vec3 eyeRotationTarget;
 	private int nextEyeRotate;
 
-	public int animationOffset;
+	public final int animationOffset;
 
 	private boolean canCallAllies = true;
 

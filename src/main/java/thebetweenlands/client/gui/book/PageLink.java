@@ -7,10 +7,10 @@ import thebetweenlands.api.aspect.registry.AspectType;
 import javax.annotation.Nullable;
 
 public class PageLink {
-	public int x;
-	public int y;
-	public int width;
-	public int height;
+	public final int x;
+	public final int y;
+	public final int width;
+	public final int height;
 	public int pageNumber;
 	@Nullable
 	public ManualCategory category;

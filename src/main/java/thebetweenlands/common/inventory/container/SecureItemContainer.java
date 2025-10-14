@@ -104,7 +104,7 @@ public class SecureItemContainer extends ItemContainer {
 
 	// Track multiple players accessing the same gui in case of fake (simulated) players or admin menu spectator tools
 	protected final Set<UUID> trackingPlayers = new HashSet<UUID>();
-	protected Map<UUID, ContainerListener> playerListeners = new HashMap<UUID, ContainerListener>();
+	protected final Map<UUID, ContainerListener> playerListeners = new HashMap<UUID, ContainerListener>();
 	// The ContainerTracker
 	protected final ContainerTracker tracker;
 	// UUID of the ItemStack, used to identify any copies (ItemStack#copy()) in the player's inventory

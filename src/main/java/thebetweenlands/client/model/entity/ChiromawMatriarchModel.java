@@ -313,15 +313,15 @@ public class ChiromawMatriarchModel extends MowzieModelBase<ChiromawMatriarch> {
 				swing(model.leftArm2, entity.flapSpeed, globalDegree * 1.5f, true, 2.8f, -0.5f, flapFrame, 1F);
 				flap(model.leftArm3, entity.flapSpeed, globalDegree * 2.5f, true, 2.0f, 0f, flapFrame, 1F);
 
-				walk(model.rightArm2, entity.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
+				walk(model.rightArm2, entity.flapSpeed, globalDegree, true, 1.2f, 0.15f, flapFrame, 1F);
 				walk(model.rightArm3, entity.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
-				walk(model.leftArm2, entity.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
+				walk(model.leftArm2, entity.flapSpeed, globalDegree, true, 1.2f, 0.15f, flapFrame, 1F);
 				walk(model.leftArm3, entity.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
 
 				chainWave(model.bodyAndTailParts, rippleSpeed * 0.5f, globalDegree * 0.25f, 2f, frame, 1F);
 				swing(model.head, rippleSpeed * 0.5f, globalDegree * 0.25f, false, 2.0f, 0f, frame, 1F);
 				walk(model.head, rippleSpeed * 0.5f, globalDegree * 0.25f, true, 2.0f, 0f, frame, 1F);
-				walk(model.jaw, rippleSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);
+				walk(model.jaw, rippleSpeed * 0.5f, globalDegree, true, 2.0f, 0f, frame, 1F);
 			}
 		}
 

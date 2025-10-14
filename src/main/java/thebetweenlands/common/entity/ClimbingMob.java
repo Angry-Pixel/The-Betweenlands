@@ -139,6 +139,39 @@ public abstract class ClimbingMob extends PathfinderMob implements BLEntity, Pat
 	private void updateWalkingSide() {
 		Direction avoidPathingFacing = null;
 
+		Path path = this.getNavigation().getPath();
+		if(path != null) {
+			int index = path.getNextNodeIndex();
+
+			if(index < path.getNodeCount()) {
+				Node point = path.getNode(index);
+
+				double maxDist = 0;
+
+				for(Direction facing : Direction.values()) {
+					double posEntity = Math.abs(facing.getStepX()) * this.getX() + Math.abs(facing.getStepY()) * this.getY() + Math.abs(facing.getStepZ()) * this.getZ();
+					double posPath = Math.abs(facing.getStepX()) * point.x + Math.abs(facing.getStepY()) * point.y + Math.abs(facing.getStepZ()) * point.z;
+
+					double distSigned = posPath + 0.5f - posEntity;
+					if(distSigned * (facing.getStepX() + facing.getStepY() + facing.getStepZ()) > 0) {
+						double dist = Math.abs(distSigned) - (facing.getAxis().isHorizontal() ? this.getBbWidth() / 2 : (facing == Direction.DOWN ? 0 : this.getBbHeight()));
+
+						if(dist > maxDist) {
+							maxDist = dist;
+
+							if(dist < 1.732f) {
+								avoidPathingFacing = facing.getOpposite();
+							} else {
+								//Don't avoid facing if further away than 1 block diagonal, otherwise it could start floating around
+								//if next path point is still too far away
+								avoidPathingFacing = null;
+							}
+						}
+					}
+				}
+			}
+		}
+
 		AABB entityBox = this.getBoundingBox();
 
 		double closestFacingDst = Double.MAX_VALUE;
@@ -158,20 +191,11 @@ public abstract class ClimbingMob extends PathfinderMob implements BLEntity, Pat
 			double closestDst = Double.MAX_VALUE;
 
 			for (AABB collisionBox : collisionBoxes) {
-				switch (facing) {
-					case EAST:
-					case WEST:
-						closestDst = Math.min(closestDst, Math.abs(AABBUtil.calculateXOffset(entityBox, collisionBox, -facing.getStepX() * stickingDistance)));
-						break;
-					case UP:
-					case DOWN:
-						closestDst = Math.min(closestDst, Math.abs(AABBUtil.calculateYOffset(entityBox, collisionBox, -facing.getStepY() * stickingDistance)));
-						break;
-					case NORTH:
-					case SOUTH:
-						closestDst = Math.min(closestDst, Math.abs(AABBUtil.calculateZOffset(entityBox, collisionBox, -facing.getStepZ() * stickingDistance)));
-						break;
-				}
+				closestDst = switch (facing) {
+					case EAST, WEST -> Math.min(closestDst, Math.abs(AABBUtil.calculateXOffset(entityBox, collisionBox, -facing.getStepX() * stickingDistance)));
+					case UP, DOWN -> Math.min(closestDst, Math.abs(AABBUtil.calculateYOffset(entityBox, collisionBox, -facing.getStepY() * stickingDistance)));
+					case NORTH, SOUTH -> Math.min(closestDst, Math.abs(AABBUtil.calculateZOffset(entityBox, collisionBox, -facing.getStepZ() * stickingDistance)));
+				};
 			}
 
 			if (closestDst < closestFacingDst) {
@@ -227,7 +251,7 @@ public abstract class ClimbingMob extends PathfinderMob implements BLEntity, Pat
 		Vec3 orientationNormal = this.prevAttachmentNormal.add(this.attachmentNormal.subtract(this.prevAttachmentNormal).scale(partialTicks));
 
 		Vec3 localZ = new Vec3(0, 0, 1);
-		Vec3 localY = new Vec3(0, 1, 0);
+		Vec3 localY;
 		Vec3 localX = new Vec3(1, 0, 0);
 
 		float componentZ = (float) localZ.dot(orientationNormal);

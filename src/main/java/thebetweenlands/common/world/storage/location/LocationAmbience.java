@@ -3,6 +3,8 @@ package thebetweenlands.common.world.storage.location;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
+import javax.annotation.Nullable;
+
 public class LocationAmbience {
 	public enum EnumLocationAmbience {
 		NONE("none"),
@@ -27,10 +29,12 @@ public class LocationAmbience {
 		}
 	}
 
+	@Nullable
 	private LocationStorage location;
 	public final EnumLocationAmbience type;
 	private float fogStart = -1, fogEnd = -1;
 	private float fogRangeMultiplier = -1;
+	@Nullable
 	private int[] fogColor = null;
 	private int fogBrightness = -1;
 	private float fogColorMultiplier = -1;
@@ -45,6 +49,7 @@ public class LocationAmbience {
 		return this;
 	}
 
+	@Nullable
 	public LocationStorage getLocation() {
 		return this.location;
 	}
@@ -89,6 +94,7 @@ public class LocationAmbience {
 		return this.fogColor != null && this.fogColor.length == 3;
 	}
 
+	@Nullable
 	public int[] getFogColor() {
 		return this.fogColor;
 	}
@@ -128,6 +134,7 @@ public class LocationAmbience {
 		return this.caveFog;
 	}
 
+	@Nullable
 	public static LocationAmbience readFromNBT(LocationStorage location, CompoundTag tag) {
 		EnumLocationAmbience type = EnumLocationAmbience.fromName(tag.getString("type"));
 		if (type != EnumLocationAmbience.NONE) {
@@ -159,7 +166,7 @@ public class LocationAmbience {
 	}
 
 	public void writeToNBT(CompoundTag tag) {
-		tag.putString("type", this.type != null ? this.type.name : EnumLocationAmbience.NONE.name);
+		tag.putString("type", this.type.name);
 		if (this.hasFogRange()) {
 			tag.putFloat("fogStart", this.fogStart);
 			tag.putFloat("fogEnd", this.fogEnd);

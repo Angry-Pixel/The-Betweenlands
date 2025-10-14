@@ -38,7 +38,7 @@ public class SludgeWorm extends Monster implements BLEntity {
 
 	private AABB renderBoundingBox;
 	private int wallInvulnerabilityTicks = 40;
-	private boolean doSpawningAnimation = true;
+	private final boolean doSpawningAnimation = true;
 
 	public SludgeWorm(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
@@ -72,7 +72,7 @@ public class SludgeWorm extends Monster implements BLEntity {
 	public PartEntity<?>[] getParts() {
 		return parts;
 	}
-	
+
 	/*
 	 * Context for this function: in 1.12.2, there used to be one more subpart on every single
 	 * sludge worm, and it would always share the exact same position and orientation as the head.

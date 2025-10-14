@@ -41,7 +41,7 @@ public class LargeSludgeWorm extends SludgeWorm {
 	@Nullable
 	public ReparameterizedSpline spineySpliney;
 
-	public HullSegment[] segments;
+	public final HullSegment[] segments;
 	public final List<SpineBone> bones = new ArrayList<>();
 
 	@Nullable

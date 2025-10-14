@@ -39,7 +39,7 @@ public class BoxSmoothingUtil {
 			//float k1 = MathHelper.sqrt(prx * prx + pry * pry + prz * prz);
 			//float ellipsoidDst = (k1 - 1.0f) * Math.min(Math.min(erx[i], ery[i]), erz[i]);
 			float k1 = invSqrt(prx * prx + pry * pry + prz * prz);
-			float ellipsoidDst = Mth.sqrt(rsx * rsx + rsy * rsy + rsz * rsz) * (1.0f - 1.0f * k1);
+			float ellipsoidDst = Mth.sqrt(rsx * rsx + rsy * rsy + rsz * rsz) * (1.0f - k1);
 			/*float prx2 = rsx * erx[i] * erx[i];
 			float pry2 = rsy * ery[i] * ery[i];
 			float prz2 = rsz * erz[i] * erz[i];

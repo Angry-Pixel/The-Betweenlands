@@ -20,7 +20,7 @@ import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
 
 public class WeedwoodCraftingTableRenderer implements BlockEntityRenderer<WeedwoodCraftingTableBlockEntity> {
 
-	private ItemRenderer itemRenderer;
+	private final ItemRenderer itemRenderer;
 
 	public WeedwoodCraftingTableRenderer(BlockEntityRendererProvider.Context context) {
 		itemRenderer = context.getItemRenderer();

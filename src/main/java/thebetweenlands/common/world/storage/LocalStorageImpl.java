@@ -229,7 +229,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData == null || !chunkData.unlinkLocalStorage(this)) {
 				allUnlinked = false;
-			} else if (chunkData != null) {
+			} else {
 				changed = true;
 			}
 		}

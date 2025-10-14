@@ -24,8 +24,6 @@ public class BarrisheeNodeEvaluator extends WalkNodeEvaluator {
 	public PathType getPathType(PathfindingContext context, int x, int y, int z) {
 		PathType type = super.getPathType(context, x, y, z);
 
-		if (this.barrishee == null) return type;
-
 		if(type == PathType.OPEN || type == PathType.WALKABLE) {
 			return type;
 		}

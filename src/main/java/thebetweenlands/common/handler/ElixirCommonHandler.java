@@ -214,7 +214,7 @@ public class ElixirCommonHandler {
 		}
 		AttributeModifier tempRangeMod = getFollowRangeModifier(strength);
 		followRangeAttrib.addOrReplacePermanentModifier(tempRangeMod);
-		double spottingRange = followRangeAttrib == null ? (16.0D + FOLLOW_RANGE_MODIFIER.amount() / 4.0D * Math.min(strength, 4)) : followRangeAttrib.getValue();
+		double spottingRange = followRangeAttrib.getValue();
 		followRangeAttrib.removeModifier(tempRangeMod);
 		if (rangeMod != null) {
 			followRangeAttrib.addOrReplacePermanentModifier(rangeMod);

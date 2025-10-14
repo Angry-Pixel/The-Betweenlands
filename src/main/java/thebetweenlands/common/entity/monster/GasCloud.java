@@ -37,7 +37,7 @@ public class GasCloud extends FlyingMonster {
 
 	private static final EntityDataAccessor<Integer> GAS_CLOUD_COLOR = SynchedEntityData.defineId(GasCloud.class, EntityDataSerializers.INT);
 
-	protected double aboveLayer = 6.0D;
+	protected final double aboveLayer = 6.0D;
 	protected int targetBlockedTicks = 0;
 
 	public GasCloud(EntityType<? extends FlyingMonster> entityType, Level level) {

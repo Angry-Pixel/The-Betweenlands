@@ -39,9 +39,7 @@ public class AnadiaSmokingRecipe implements SmokingRackRecipe {
 		if (entityNbt.isEmpty()) {
 			entityNbt = new CompoundTag();
 			ResourceLocation id = EntityRegistry.ANADIA.getId();
-			if (id != null) {
-				entityNbt.putString("id", id.toString());
-			}
+			entityNbt.putString("id", id.toString());
 		}
 
 		if (entityNbt.getByte("fish_color") != 0) {

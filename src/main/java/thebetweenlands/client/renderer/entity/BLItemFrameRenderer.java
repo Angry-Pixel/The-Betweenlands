@@ -93,14 +93,11 @@ public class BLItemFrameRenderer extends ItemFrameRenderer<BLItemFrame> {
 			if (!NeoForge.EVENT_BUS.post(new RenderItemInFrameEvent(entity, this, poseStack, buffer, packedLight)).isCanceled()) {
 				if (mapitemsaveddata != null) {
 					poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-					float f = 0.0078125F;
 					poseStack.scale(0.0078125F, 0.0078125F, 0.0078125F);
 					poseStack.translate(-64.0F, -64.0F, 0.0F);
 					poseStack.translate(0.0F, 0.0F, -1.0F);
-					if (mapitemsaveddata != null) {
-						int i = entity.isFrameGlowing() ? 15728850 : packedLight;
-						Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, entity.getFramedMapId(itemstack), mapitemsaveddata, true, i);
-					}
+					int i = entity.isFrameGlowing() ? 15728850 : packedLight;
+					Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, entity.getFramedMapId(itemstack), mapitemsaveddata, true, i);
 				} else {
 					int k = entity.isFrameGlowing() ? 15728880 : packedLight;
 					poseStack.scale(0.5F, 0.5F, 0.5F);

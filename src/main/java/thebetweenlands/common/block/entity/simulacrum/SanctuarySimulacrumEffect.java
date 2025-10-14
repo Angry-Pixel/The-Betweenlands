@@ -9,7 +9,7 @@ import thebetweenlands.common.block.entity.RepellerBlockEntity;
 public class SanctuarySimulacrumEffect implements SimulacrumEffect {
 	@Override
 	public void executeEffect(Level level, BlockPos pos, BlockState state, SimulacrumBlockEntity entity) {
-		entity.setRadiusState(3);
+		entity.setRadiusState(level, 3);
 
 		RepellerBlockEntity repeller = SimulacrumBlockEntity.getClosestActiveTile(RepellerBlockEntity.class, entity, level, pos.getX(), pos.getY(), pos.getZ(), 18.0D, null, null);
 
@@ -25,10 +25,6 @@ public class SanctuarySimulacrumEffect implements SimulacrumEffect {
 
 		if (entity.sourceRepeller != null && (entity.sourceRepeller.isRemoved() || !level.isLoaded(entity.sourceRepeller.getBlockPos()))) {
 			entity.sourceRepeller = null;
-
-			if (repeller == entity.sourceRepeller) {
-				repeller = null;
-			}
 		}
 
 		int prevFuel = 0;
@@ -48,7 +44,7 @@ public class SanctuarySimulacrumEffect implements SimulacrumEffect {
 
 		if (repeller != null) {
 			if (entity.getFuel() < prevFuel) {
-				repeller.removeFuel(prevFuel - entity.getFuel());
+				repeller.removeFuel(level, prevFuel - entity.getFuel());
 				repeller.setChanged();
 				entity.setChanged();
 			}

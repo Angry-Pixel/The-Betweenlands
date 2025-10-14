@@ -11,7 +11,7 @@ import thebetweenlands.client.gui.book.widget.BookWidget;
 public class TextWidget extends BookWidget {
 	private TextContainer textContainer;
 	private final Component text;
-	private float scale = 1.0F;
+	private final float scale = 1.0F;
 	private int pageNumber = 0;
 	private ResourceLocation font = Style.DEFAULT_FONT;
 

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 public class HerbloreEntryCategory {
 
-	public static ArrayList<ManualCategory> CATEGORIES = new ArrayList<>();
+	public static final ArrayList<ManualCategory> CATEGORIES = new ArrayList<>();
 	public static ManualCategory aspectCategory;
-	public static ArrayList<Page> aspectPages = new ArrayList<>();
-	public static ArrayList<Page> itemPages = new ArrayList<>();
-	public static ArrayList<Page> elixirPages = new ArrayList<>();
+	public static final ArrayList<Page> aspectPages = new ArrayList<>();
+	public static final ArrayList<Page> itemPages = new ArrayList<>();
+	public static final ArrayList<Page> elixirPages = new ArrayList<>();
 
 	public static ManualCategory elixirCategory;
 
