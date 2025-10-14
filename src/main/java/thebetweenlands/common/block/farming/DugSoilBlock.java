@@ -28,7 +28,6 @@ import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.api.block.DungeonFogBlock;
 import thebetweenlands.api.block.FarmablePlant;
 import thebetweenlands.api.client.ConnectedTextureBlock;
-import thebetweenlands.api.client.ConnectedTextureHelper;
 import thebetweenlands.api.client.ConnectionRules;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 import thebetweenlands.common.registries.ItemRegistry;

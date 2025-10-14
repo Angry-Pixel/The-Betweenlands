@@ -34,6 +34,7 @@ public class BiomeRegistry {
 		return ResourceKey.create(Registries.BIOME, TheBetweenlands.prefix(name));
 	}
 
+	// TODO figure out how to do spawns
 	public static void bootstrap(BootstrapContext<Biome> context) {
 		HolderGetter<PlacedFeature> featureGetter = context.lookup(Registries.PLACED_FEATURE);
 		HolderGetter<ConfiguredWorldCarver<?>> carverGetter = context.lookup(Registries.CONFIGURED_CARVER);
@@ -46,12 +47,12 @@ public class BiomeRegistry {
 				.foliageColorOverride(0x00AD7C)
 				//2nd grass color: 0x1fC63D
 				.grassColorOverride(0x1FC66D)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(SWAMPLANDS, new Biome.BiomeBuilder()
@@ -63,12 +64,12 @@ public class BiomeRegistry {
 				.foliageColorOverride(0x52AF5A)
 				//2nd grass color: 0x50A040
 				.grassColorOverride(0x2AFF00)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(DEEP_WATERS, new Biome.BiomeBuilder()
@@ -78,12 +79,12 @@ public class BiomeRegistry {
 				.waterColor(0x1B3944)
 				.foliageColorOverride(0xE5F745)
 				.grassColorOverride(0xE5F745)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(COARSE_ISLANDS, new Biome.BiomeBuilder()
@@ -93,12 +94,12 @@ public class BiomeRegistry {
 				.waterColor(0x1b3944)
 				//2nd foliage color: 0xA87800
 				.foliageColorOverride(0xA8A800)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(RAISED_ISLES, new Biome.BiomeBuilder()
@@ -108,12 +109,12 @@ public class BiomeRegistry {
 				.waterColor(0x1b3944)
 				//2nd foliage color: 0xA87800
 				.foliageColorOverride(0xA8A800)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(SLUDGE_PLAINS, new Biome.BiomeBuilder()
@@ -123,12 +124,12 @@ public class BiomeRegistry {
 				.waterColor(0x3A2F0B)
 				.grassColorOverride(0x5B3522)
 				.foliageColorOverride(0xD36423)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(ERODED_MARSH, new Biome.BiomeBuilder()
@@ -138,12 +139,12 @@ public class BiomeRegistry {
 				.waterColor(0x485E18)
 				.grassColorOverride(0x627017)
 				.foliageColorOverride(0x63B581)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(MARSH, new Biome.BiomeBuilder()
@@ -153,12 +154,12 @@ public class BiomeRegistry {
 				.waterColor(0x485E18)
 				.grassColorOverride(0x627017)
 				.foliageColorOverride(0x63B581)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(SWAMPLANDS_CLEARING, new Biome.BiomeBuilder()
@@ -167,12 +168,12 @@ public class BiomeRegistry {
 			.specialEffects(new BiomeSpecialEffects.Builder()
 				.waterColor(0x184220)
 				.foliageColorOverride(0x52AF5A)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 
 		context.register(SLUDGE_PLAINS_CLEARING, new Biome.BiomeBuilder()
@@ -182,12 +183,12 @@ public class BiomeRegistry {
 				.waterColor(0x3A2F0B)
 				.grassColorOverride(0x5B3522)
 				.foliageColorOverride(0xD36423)
-				.waterFogColor(0x184220) // TODO Upgrade to BetweenlandsSpecialEffects?
-				.fogColor(0xC0D8FF) // TODO Upgrade to BetweenlandsSpecialEffects?
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
 				.skyColor(0)
 				.build())
-			.mobSpawnSettings(MobSpawnSettings.EMPTY) // TODO do biomes differently??
-			.generationSettings(BiomeGenerationSettings.EMPTY) // TODO do biomes differently??
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build());
 	}
 

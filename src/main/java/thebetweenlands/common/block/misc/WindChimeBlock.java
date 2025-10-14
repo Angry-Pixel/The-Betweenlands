@@ -81,9 +81,9 @@ public class WindChimeBlock extends BaseEntityBlock {
 				}
 
 				if (newAttunement != null) {
-					player.displayClientMessage(Component.translatable("chat.wind_chime.changed_attunement", Component.translatable(attunedEvent.getDescriptionId())), true);
+					player.displayClientMessage(Component.translatable("block.thebetweenlands.wind_chime.changed_attunement", Component.translatable(attunedEvent.getDescriptionId())), true);
 				} else {
-					player.displayClientMessage(Component.translatable("chat.wind_chime.removed_attunement"), true);
+					player.displayClientMessage(Component.translatable("block.thebetweenlands.wind_chime.removed_attunement"), true);
 				}
 			}
 

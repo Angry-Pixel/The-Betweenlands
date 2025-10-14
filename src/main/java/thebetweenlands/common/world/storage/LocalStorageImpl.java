@@ -247,7 +247,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData != null && chunkData.linkLocalStorage(this)) {
 				if (this.linkedChunks.add(chunkPos)) {
-					//TODO Send packet
+					//TODO Send packet (1.12)
 					this.setDirty(true);
 					return true;
 				}
@@ -272,7 +272,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 			if (chunkData != null) {
 				chunkData.unlinkLocalStorage(this);
 				if (this.linkedChunks.remove(chunkPos)) {
-					//TODO Send packet
+					//TODO Send packet (1.12)
 					this.setDirty(true);
 					return true;
 				}

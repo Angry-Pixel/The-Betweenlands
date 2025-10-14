@@ -76,7 +76,7 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock implements SwampW
 					SimulacrumEffect nextEffect = BLRegistries.SIMULACRUM_EFFECTS.byId(BLRegistries.SIMULACRUM_EFFECTS.getId(simulacrum.getEffect()) + 1 % BLRegistries.SIMULACRUM_EFFECTS.size());
 
 					simulacrum.setEffect(nextEffect);
-					player.displayClientMessage(Component.translatable("chat.simulacrum.changed_effect", Component.translatable(nextEffect.getDescriptionId())), true);
+					player.displayClientMessage(Component.translatable("block.thebetweenlands.simulacrum.changed_effect", Component.translatable(nextEffect.getDescriptionId())), true);
 				}
 			}
 

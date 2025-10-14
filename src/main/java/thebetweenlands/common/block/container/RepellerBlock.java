@@ -97,7 +97,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 						}
 					} else {
 						if (!level.isClientSide()) {
-							player.displayClientMessage(Component.translatable("chat.repeller.shimmerstone_missing"), true);
+							player.displayClientMessage(Component.translatable("block.thebetweenlands.repeller.shimmerstone_missing"), true);
 						}
 					}
 				} else if (stack.getItem() instanceof DentrothystVialItem vial && repeller.getFuel() > 0) {

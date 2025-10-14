@@ -2,17 +2,11 @@ package thebetweenlands.common.registries;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.EntitySubPredicates;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import thebetweenlands.api.BLRegistries;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.creature.frog.Frog;
-import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.loot.*;
-
-import java.util.Optional;
 
 public class EntityPredicateRegistry {
 

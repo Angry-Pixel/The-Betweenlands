@@ -3,13 +3,9 @@ package thebetweenlands.compat.emi.recipes;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
-import thebetweenlands.common.item.recipe.PurifierRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.compat.emi.BetweenlandsEMICompat;
 

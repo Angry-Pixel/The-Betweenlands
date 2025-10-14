@@ -1,6 +1,5 @@
 package thebetweenlands.common.item.armor.amphibious.upgrades;
 
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;

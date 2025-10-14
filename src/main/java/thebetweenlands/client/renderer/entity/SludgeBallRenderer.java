@@ -1,22 +1,16 @@
 package thebetweenlands.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.MummyArmModel;
 import thebetweenlands.client.model.entity.SludgeBallModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.container.AnimatorBlock;
-import thebetweenlands.common.entity.monster.MummyArm;
 import thebetweenlands.common.entity.projectile.SludgeBall;
-import thebetweenlands.common.registries.BlockRegistry;
 
 public class SludgeBallRenderer extends EntityRenderer<SludgeBall> {
 	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/sludge.png");

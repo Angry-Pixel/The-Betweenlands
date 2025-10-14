@@ -2,8 +2,6 @@ package thebetweenlands.common.block.plant;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -14,7 +12,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -65,12 +61,12 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 	public static boolean isPassable(BlockGetter level, BlockPos pos, Entity entity) {
 		return entity != null && entity.getType().is(BLEntityTagProvider.WEEDWOOD_BUSH_PASSABLE) || entity instanceof WeedwoodBushPassableEntity passable && passable.canPassThroughBush(level, pos);
 	}
-	
+
 //	@Override
 //	public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
 //		return isPassable(level, pos, mob) ? PathType.OPEN : super.getBlockPathType(state, level, pos, mob);
 //	}
-	
+
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.getStateWithConnections(context.getLevel(), context.getClickedPos(), this.defaultBlockState());

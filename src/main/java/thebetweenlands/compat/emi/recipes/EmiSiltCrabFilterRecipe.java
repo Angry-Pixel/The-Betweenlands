@@ -5,7 +5,6 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import thebetweenlands.common.item.recipe.BubblerCrabPotFilterRecipe;
 import thebetweenlands.common.item.recipe.SiltCrabPotFilterRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.compat.emi.BetweenlandsEMICompat;

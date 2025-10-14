@@ -8,7 +8,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.*;
 import thebetweenlands.common.component.entity.equipment.EquipmentData;
 import thebetweenlands.common.component.entity.equipment.EquipmentDataSerializer;
-import thebetweenlands.common.inventory.EquipmentInventory;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageSerializer;
 

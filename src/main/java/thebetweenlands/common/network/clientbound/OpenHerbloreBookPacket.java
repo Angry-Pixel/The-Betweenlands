@@ -2,13 +2,11 @@ package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.client.gui.book.HerbloreManualScreen;
-import thebetweenlands.client.gui.screen.ItemRenameScreen;
 import thebetweenlands.common.TheBetweenlands;
 
 public record OpenHerbloreBookPacket(ItemStack book) implements CustomPacketPayload {

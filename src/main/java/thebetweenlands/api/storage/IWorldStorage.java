@@ -16,13 +16,13 @@ public interface IWorldStorage {
 	 * @return
 	 */
 	ResourceKey<Level> getDimension();
-	
+
 	/**
 	 * Get the level this world storage is registered for
 	 * @return
 	 */
 	Level getLevel();
-	
+
 	/**
 	 * Called when a chunk storage needs to be read from the specified NBT and loaded
 	 * @param chunk
@@ -70,6 +70,7 @@ public interface IWorldStorage {
 	 * @param chunk
 	 * @return
 	 */
+	@Nullable
 	IChunkStorage getChunkStorage(ChunkAccess chunk);
 
 	/**

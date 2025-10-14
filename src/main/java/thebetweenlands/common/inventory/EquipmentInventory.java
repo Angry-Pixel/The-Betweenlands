@@ -36,7 +36,7 @@ public class EquipmentInventory implements Container, Nameable {
 
 	@Override
 	public Component getName() {
-		return Component.translatable("container.betweenlands.equipment");
+		return Component.translatable("container.thebetweenlands.equipment");
 	}
 
 	@Override

@@ -20,7 +20,6 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.SteepingPotBlock;
 import thebetweenlands.common.block.entity.SteepingPotBlockEntity;
-import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.util.RenderUtils;
 
 public class SteepingPotRenderer implements BlockEntityRenderer<SteepingPotBlockEntity> {

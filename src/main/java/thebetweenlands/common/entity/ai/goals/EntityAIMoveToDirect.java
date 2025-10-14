@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3d;
 
 import java.util.EnumSet;
 

@@ -2,11 +2,9 @@ package thebetweenlands.compat.jei.interpreter;
 
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class BucketSubtypeInterpreter implements ISubtypeInterpreter<ItemStack> {

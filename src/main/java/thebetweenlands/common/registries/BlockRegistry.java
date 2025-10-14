@@ -15,7 +15,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.container.BuriedLootPotBlock;
 import thebetweenlands.common.block.container.*;
 import thebetweenlands.common.block.container.BarrelBlock;
 import thebetweenlands.common.block.farming.BarnacleBlock;

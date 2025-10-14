@@ -16,7 +16,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
@@ -278,7 +277,7 @@ public class LargeSludgeWorm extends SludgeWorm {
 		Vec3 origin = this.position();
 
 		final int totalSegmentCount = this.parts.length + 1; // + 1 to also include the parent
-		
+
 		// each point is the offset of one of the parts from the origin
 		Vec3[] points = new Vec3[totalSegmentCount + 2];
 
@@ -287,19 +286,19 @@ public class LargeSludgeWorm extends SludgeWorm {
 		// point 1 is for segment 0, which is the root (i.e. the head of the worm), which is `this`
 		// this means `points[1] = this.position().subtract(origin)` which is always zero because `origin = this.position()`
 		points[1] = Vec3.ZERO;
-		
+
 		Vec3 lastValidDirection = look.reverse();
 		Vec3 prevSegmentPos = this.position();
-		
+
 		for (int i = 0; i < this.parts.length; i++) {
 			SludgeWormMultipart part = this.parts[i];
 
 			Vec3 currSegmentPos = part.position();
 			Vec3 lastSegmentOffset = currSegmentPos.subtract(prevSegmentPos);
-			
+
 			// spline nodes are the offset from the head
 			Vec3 splineNode = currSegmentPos.subtract(origin);
-			
+
 			if (lastSegmentOffset.lengthSqr() > 0.01D) {
 				lastValidDirection = lastSegmentOffset.normalize();
 			} else {
@@ -314,10 +313,10 @@ public class LargeSludgeWorm extends SludgeWorm {
 		}
 
 		points[totalSegmentCount + 1] = prevSegmentPos.subtract(origin).add(lastValidDirection);
-		
+
 		return points;
 	}
-	
+
 	protected void updateSegmentPositions() {
 		this.segmentsAvailable = true;
 

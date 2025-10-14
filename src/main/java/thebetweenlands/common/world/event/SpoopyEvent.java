@@ -100,6 +100,6 @@ public class SpoopyEvent extends SeasonalEnvironmentEvent {
 
 	@Override
 	protected void showStatusMessage(Player player) {
-		player.displayClientMessage(Component.translatable("chat.event.spook"), true);
+		player.displayClientMessage(Component.translatable("event.thebetweenlands.spook.message"), true);
 	}
 }

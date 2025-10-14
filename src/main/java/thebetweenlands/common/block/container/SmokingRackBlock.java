@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +32,6 @@ import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
 
 public class SmokingRackBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 

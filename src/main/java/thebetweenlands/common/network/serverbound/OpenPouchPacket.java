@@ -1,25 +1,13 @@
 package thebetweenlands.common.network.serverbound;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.component.entity.equipment.EquipmentHelper;
-import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
-import thebetweenlands.common.inventory.LurkerSkinPouchMenu;
-import thebetweenlands.common.inventory.container.SecureItemContainer;
 import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
-import thebetweenlands.common.registries.AttachmentRegistry;
 
 public class OpenPouchPacket implements CustomPacketPayload {
 

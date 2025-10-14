@@ -6,11 +6,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.RootSpriteModel;
 import thebetweenlands.client.model.entity.SporelingModel;
 import thebetweenlands.client.renderer.entity.layers.GenericEyesLayer;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.creature.RootSprite;
 import thebetweenlands.common.entity.creature.Sporeling;
 
 public class SporelingRenderer extends MobRenderer<Sporeling, SporelingModel> {

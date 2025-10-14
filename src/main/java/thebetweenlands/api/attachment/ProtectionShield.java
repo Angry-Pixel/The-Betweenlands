@@ -1,7 +1,5 @@
 package thebetweenlands.api.attachment;
 
-import com.mojang.serialization.Codec;
-
 public class ProtectionShield {
 
 	private boolean[] activeShields = new boolean[20];

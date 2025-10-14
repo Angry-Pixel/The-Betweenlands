@@ -145,17 +145,17 @@ public class ScreenHandler {
 					if (locations.isEmpty()) {
 						Component location;
 						if (player.getY() < TheBetweenlands.CAVE_START - 10) {
-							Component wildernessName = Component.translatable("location.wilderness.name");
+							Component wildernessName = Component.translatable("location.thebetweenlands.wilderness");
 							if (currentLocation.equals(wildernessName)) {
 								prevLocation = Component.empty();
 							}
-							location = Component.translatable("location.caverns.name");
+							location = Component.translatable("location.thebetweenlands.caverns");
 						} else {
-							Component cavernsName = Component.translatable("location.caverns.name");
+							Component cavernsName = Component.translatable("location.thebetweenlands.caverns");
 							if (currentLocation.equals(cavernsName)) {
 								prevLocation = Component.empty();
 							}
-							location = Component.translatable("location.wilderness.name");
+							location = Component.translatable("location.thebetweenlands.wilderness");
 						}
 						currentLocation = location;
 					} else {

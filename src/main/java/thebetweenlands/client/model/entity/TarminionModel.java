@@ -8,7 +8,6 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entity.creature.RootSprite;
 import thebetweenlands.common.entity.creature.Tarminion;
 
 public class TarminionModel extends MowzieModelBase<Tarminion> {

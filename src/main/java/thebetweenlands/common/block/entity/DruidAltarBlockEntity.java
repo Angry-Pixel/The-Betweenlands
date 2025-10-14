@@ -176,7 +176,7 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 
 	@Override
 	protected Component getDefaultName() {
-		return Component.translatable("menu.thebetweenlands.druid_altar");
+		return Component.translatable("container.thebetweenlands.druid_altar");
 	}
 
 	@Override

@@ -8,8 +8,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.phys.AABB;
 
-import javax.annotation.Nullable;
-
 public interface ProximitySpawner extends BLEntity {
 
 	/**

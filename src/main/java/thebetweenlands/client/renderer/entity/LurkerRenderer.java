@@ -2,7 +2,6 @@ package thebetweenlands.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -10,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.LurkerModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.creature.Dragonfly;
 import thebetweenlands.common.entity.creature.Lurker;
 
 public class LurkerRenderer extends MobRenderer<Lurker, LurkerModel> {

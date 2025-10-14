@@ -17,10 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.SludgeModel;
 import thebetweenlands.client.model.entity.SmolSludgeModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.monster.Sludge;
 import thebetweenlands.common.entity.monster.SmolSludge;
 import thebetweenlands.common.world.event.SpoopyEvent;
 

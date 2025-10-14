@@ -2,21 +2,16 @@ package thebetweenlands.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 import thebetweenlands.client.model.entity.FishingSpearModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectile.spear.FishingSpear;
 import thebetweenlands.common.entity.projectile.spear.RobustFishingSpear;
-
-import java.util.Optional;
 
 public class FishingSpearRenderer<T extends FishingSpear, M extends FishingSpearModel<T>> extends EntityRenderer<T> {
 

@@ -1,7 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -23,7 +21,7 @@ import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
 public class WeedwoodCraftingTableRenderer implements BlockEntityRenderer<WeedwoodCraftingTableBlockEntity> {
 
 	private ItemRenderer itemRenderer;
-	
+
 	public WeedwoodCraftingTableRenderer(BlockEntityRendererProvider.Context context) {
 		itemRenderer = context.getItemRenderer();
 	}
@@ -38,7 +36,7 @@ public class WeedwoodCraftingTableRenderer implements BlockEntityRenderer<Weedwo
 		poseStack.translate(-1.5F, -0.0F, -1.0F);
 		RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
-		
+
 		final Level level = table.getLevel();
 		final BlockPos pos = table.getBlockPos().above();
 		final int lightValue = LightTexture.pack(level.getBrightness(LightLayer.BLOCK, pos), level.getBrightness(LightLayer.SKY, pos));
@@ -57,7 +55,7 @@ public class WeedwoodCraftingTableRenderer implements BlockEntityRenderer<Weedwo
 				}
 			}
 		}
-		
+
 		poseStack.popPose();
 	}
 }

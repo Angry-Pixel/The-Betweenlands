@@ -12,7 +12,6 @@ import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EntityRegistry;
 
 public class SnailPoisonJet extends ThrowableProjectile {

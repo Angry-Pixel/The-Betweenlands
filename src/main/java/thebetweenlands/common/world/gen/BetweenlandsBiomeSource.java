@@ -14,7 +14,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.gen.layer.*;
 import thebetweenlands.common.world.gen.layer.util.*;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;

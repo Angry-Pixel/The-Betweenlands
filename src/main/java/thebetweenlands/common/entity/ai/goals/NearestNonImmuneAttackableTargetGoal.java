@@ -6,10 +6,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.component.entity.InfestationIgnoreData;
 import thebetweenlands.common.registries.AttachmentRegistry;
-
-import java.util.function.Predicate;
 
 public class NearestNonImmuneAttackableTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 

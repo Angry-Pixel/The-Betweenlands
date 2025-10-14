@@ -7,8 +7,6 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public interface MortarRecipe extends Recipe<SingleRecipeInput> {

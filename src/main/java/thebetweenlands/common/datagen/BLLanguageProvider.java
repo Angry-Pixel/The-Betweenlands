@@ -51,11 +51,19 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("itemGroup.thebetweenlands.plants", "The Betweenlands Plants");
 		this.add("itemGroup.thebetweenlands.herblore", "The Betweenlands Herblore");
 
+		this.add("container.thebetweenlands.animator", "Animator");
+		this.add("container.thebetweenlands.censer", "Censer");
 		this.add("container.thebetweenlands.crab_pot_filter", "Crab Pot Filter");
+		this.add("container.thebetweenlands.druid_altar", "Druid Altar");
+		this.add("container.thebetweenlands.equipment", "Equipment");
 		this.add("container.thebetweenlands.fishing_tackle_box", "Fishing Tackle Box");
 		this.add("container.thebetweenlands.fish_trimming_table", "Trimming Table");
 		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
+		this.add("container.thebetweenlands.mortar", "Pestle and Mortar");
+		this.add("container.thebetweenlands.purifier", "Purifier");
 		this.add("container.thebetweenlands.smoking_rack", "Smoking Rack");
+		this.add("container.thebetweenlands.sulfur_furnace", "Sulfur Furnace");
+		this.add("container.thebetweenlands.syrmorite_hopper", "Symorite Hopper");
 
 		this.add("jei.thebetweenlands.recipe.animator", "Animator");
 		this.add("jei.thebetweenlands.animator.life", "Life amount: %d");
@@ -321,6 +329,18 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.CAVE_MOSS_PLANT, "Cave Moss Plant");
 		this.addBlock(BlockRegistry.CAVING_ROPE_LIGHT, "Caving Rope Light");
 		this.addBlock(BlockRegistry.CENSER, "Censer");
+		this.add("block.thebetweenlands.censer.current_effect", "Current Effect:");
+		this.add("block.thebetweenlands.censer.remaining_duration", "Remaining Duration: ca. %5$s");
+		this.add("block.thebetweenlands.censer.effect.sap_ball", "Gradually heals decay in a large area.");
+		this.add("block.thebetweenlands.censer.effect.weeping_blue_petal", "Gradually heals decay in a large area.");
+		this.add("block.thebetweenlands.censer.effect.plant_tonic", "Prevents crops from decaying in a medium area.");
+		this.add("block.thebetweenlands.censer.effect.elixir", "Continuously applies a weak version of the elixir in a large area.\nPotency affects range.");
+		this.add("block.thebetweenlands.censer.effect.stagnant_water", "Causes decay to be accelerated in a small area.");
+		this.add("block.thebetweenlands.censer.effect.dungeon_fog", "Increases crop growth and allows sludge dungeon plants to grow in a small area.");
+		this.add("block.thebetweenlands.censer.effect.aspect", "Infuses Aspectrus crops with the aspect and enables the crops to grow in a small area.");
+		this.add("block.thebetweenlands.censer.effect.cremains", "Incinerates any living creature in a small area and turns them into cremains.");
+		this.add("block.thebetweenlands.censer.effect.swamp_water", "Spreads steam in a large area that carries the effect of the item it is imbued with.\nCan be imbued with a Bark Amulet.");
+		this.add("block.thebetweenlands.censer.effect.fumigant", "Removes the stench of rot in a large area.");
 		this.addBlock(BlockRegistry.CHAMPAGNE_FILTERED_SILT_GLASS, "Champagne Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_SLAB, "Champagne Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_STAIRS, "Champagne Mud Brick Shingle Stairs");
@@ -343,6 +363,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.COMPACTED_MUD_SLAB, "Compacted Mud Slab");
 		this.addBlock(BlockRegistry.COMPACTED_MUD_SLOPE, "Compacted Mud Slope");
 		this.addBlock(BlockRegistry.COMPOST_BIN, "Compost Bin");
+		this.add("block.thebetweenlands.compost_bin.full", "The compost bin is full");
+		this.add("block.thebetweenlands.compost_bin.not_compostable", "This item is not compostable");
 		this.addBlock(BlockRegistry.COMPOST_BLOCK, "Compost Block");
 		this.addBlock(BlockRegistry.CONNECTED_AMATE_PAPER_PANE, "Connected Amate Paper Pane");
 		this.addBlock(BlockRegistry.COPPER_IRIS, "Copper Iris");
@@ -695,6 +717,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.RED_PRESENT, "Red Present");
 		this.addBlock(BlockRegistry.REED_MAT, "Reed Mat");
 		this.addBlock(BlockRegistry.REPELLER, "Repeller");
+		this.add("block.thebetweenlands.repeller.shimmerstone_missing", "The repeller needs a Shimmerstone to run");
 		this.addBlock(BlockRegistry.ROOT, "Root");
 		this.addBlock(BlockRegistry.ROOT_POD, "Root Pod");
 		this.addBlock(BlockRegistry.ROOTMAN_SIMULACRUM_1, "Rootman Simulacrum");
@@ -967,6 +990,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.WEEPING_BLUE, "Weeping Blue");
 		this.addBlock(BlockRegistry.WHITE_PRESENT, "White Present");
 		this.addBlock(BlockRegistry.WIND_CHIME, "Wind Chime");
+		this.add("block.thebetweenlands.wind_chime.changed_attunement", "Attuned to '%s'");
+		this.add("block.thebetweenlands.wind_chime.removed_attunement", "Attuned to any event");
 		this.addBlock(BlockRegistry.WISP, "Wisp");
 		this.addBlock(BlockRegistry.WOODEN_SUPPORT_BEAM_1, "Rotten Support Beam");
 		this.addBlock(BlockRegistry.WOODEN_SUPPORT_BEAM_2, "Rotten Support Beam");
@@ -981,6 +1006,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("block.thebetweenlands.tarrable", "Can be tarred");
 		this.add("block.thebetweenlands.mist", "This plant can only grow in Sludgeon mist.");
 		this.add("block.thebetweenlands.simulacrum.effect", "Effect: %s");
+		this.add("block.thebetweenlands.simulacrum.obstructed", "Simulacrum is obstructed");
+		this.add("block.thebetweenlands.simulacrum.blessed", "You feel blessed");
+		this.add("block.thebetweenlands.simulacrum.changed_effect", "Changed effect to '%s'");
 		this.add("simulacrum_effect.thebetweenlands.none", "None");
 		this.add("simulacrum_effect.thebetweenlands.random", "Random");
 		this.add("simulacrum_effect.thebetweenlands.them", "Them");
@@ -1113,6 +1141,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.lightning_chiromaw_hatchling", "Lightning Chiromaw Hatchling");
 		this.addEntityType(EntityRegistry.TAME_CHIROMAW, "Tamed Chiromaw");
 		this.add("entity.thebetweenlands.tame_lightning_chiromaw", "Tamed Lightning Chiromaw");
+		this.add("entity.thebetweenlands.tame_chiromaw.obstructed", "You can't unmount your Chiromaw here");
 		this.add("item.thebetweenlands.tame_lightning_chiromaw", "Tamed Lightning Chiromaw");
 		this.addEntityType(EntityRegistry.SNAIL_POISON_JET, "Snail Poison Jet");
 		this.addEntityType(EntityRegistry.SWORD_ENERGY, "Shockwave Sword Energy Ball");
@@ -1284,6 +1313,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.DIRTY_SILK_BUNDLE, "Dirty Silk Bundle");
 		this.addItem(ItemRegistry.PHEROMONE_THORAXES, "Clutch of Pheromone Thoraxes");
 		this.addItem(ItemRegistry.SWAMP_TALISMAN, "Swamp Talisman");
+		this.add("item.thebetweenlands.talisman.no_space", "There is not enough space for the portal");
+		this.add("item.thebetweenlands.talisman.wrong_dimension", "You cannot create a portal in this dimension");
+		this.add("item.thebetweenlands.talisman.linked", "The Swamp Talisman is now linked to this portal");
+		this.add("item.thebetweenlands.talisman.cant_link", "These portals can't be linked together");
+		this.add("item.thebetweenlands.talisman.too_far", "This portal is too far away to be linked");
+		this.add("item.thebetweenlands.talisman.portal_linked", "The portals are now linked together");
 		this.addItem(ItemRegistry.SWAMP_TALISMAN_PIECE_1, "Swamp Talisman Piece");
 		this.addItem(ItemRegistry.SWAMP_TALISMAN_PIECE_2, "Swamp Talisman Piece");
 		this.addItem(ItemRegistry.SWAMP_TALISMAN_PIECE_3, "Swamp Talisman Piece");
@@ -1329,6 +1364,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.BULB_CAPPED_MUSHROOM, "Bulb-Capped Mushroom");
 		this.addItem(ItemRegistry.FRIED_SWAMP_KELP, "Fried Swamp Kelp");
 		this.addItemWithDesc(ItemRegistry.FORBIDDEN_FIG, "Forbidden Fig", "Looks tempting...");
+		this.add("item.thebetweenlands.forbidden_fig.eat", "Cursed are those who eat the Forbidden Fig!");
 		this.addItem(ItemRegistry.BLUE_CANDY, "Blue Candy");
 		this.addItem(ItemRegistry.RED_CANDY, "Red Candy");
 		this.addItem(ItemRegistry.YELLOW_CANDY, "Yellow Candy");
@@ -1390,6 +1426,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.TARMINION, "Tarminion");
 		this.addItem(ItemRegistry.SLUDGE_BALL, "Sludge Ball");
 		//rope
+		this.add("item.thebetweenlands.caving_rope.already_connected", "Already connected to another caving rope");
+		this.add("item.thebetweenlands.caving_rope.disconnected", "You were disconnected from the caving rope");
+		this.add("item.thebetweenlands.caving_rope.too_far", "You're too far away from the last anchor point");
 		this.addItem(ItemRegistry.ANGRY_PEBBLE, "Angry Pebble");
 		this.addItemWithDesc(ItemRegistry.OCTINE_INGOT, "Octine Ingot", "Hot enough to set moss on fire");
 		this.addItem(ItemRegistry.SHAMBLER_TONGUE, "Shambler Tongue");
@@ -1634,6 +1673,64 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.TEST_CHIMP, "Test Chimp");
 		this.addItem(ItemRegistry.TEST_FLAG, "Flag");
 
+		this.add("item.thebetweenlands.fertilizer.blocked", "This %s fertilizer does not seem to work here");
+		this.add("item.thebetweenlands.lighter.blocked", "It's too damp to set something on fire with %s");
+
+		this.add("item.thebetweenlands.food_sickness.no_lines", "There are no registered food sickness lines in the localization file");
+		this.addFoodSicknessMessages("fine",
+			"Ah, that was refreshing",
+			"Finally, something different to eat",
+			"Finally, something new",
+			"Finally, something that isn't just brown slime",
+			"That actually tasted alright",
+			"Well at least it doesn't taste like mud",
+			"Slimy, yet satisfying",
+			"Mmm... not bad",
+			"I could get used to eating this",
+			"I suppose it beats eating moss",
+			"It's great to have something different for a change",
+			"At last, I was getting sick of that other stuff",
+			"This is kinda tasty",
+			"It's not quite golden apples, but it'll do",
+			"That tasted good",
+			"Tastes alright, hopefully it's not poisonous");
+
+		this.addFoodSicknessMessages("half",
+			"I'm getting a bit sick of eating this",
+			"Isn't there anything else to eat around here?",
+			"It's edible I suppose",
+			"I don't think I can eat much more of this",
+			"This stuff tastes pretty terrible",
+			"Hopefully there is more food around here",
+			"I should probably try finding something different to eat",
+			"I think I need a more varied diet",
+			"I'm feeling a bit off, maybe I should find another food source",
+			"This food is getting pretty repetitive",
+			"I wish I had more food options",
+			"I should find something else to eat soon",
+			"This food is starting to make me ill",
+			"I don't feel too good, is there anything else to eat?",
+			"This food is bland, I need some more variety",
+			"Eating the same thing all the time can't be good for me");
+
+		this.addFoodSicknessMessages("sick",
+			"I can't eat any more of this",
+			"I feel terrible, I can't eat this",
+			"Ugh, I'm not eating that",
+			"I'm not eating any more of that",
+			"I'm sick of eating this, I need to find something else",
+			"I'm not putting that anywhere near my mouth",
+			"I think I'll be ill if I eat any more of that, I need something different",
+			"I don't think I can face any more of that, I'll have to find something else",
+			"No way am I eating any more of that",
+			"That stuff can't be good for me, I need something different",
+			"I need a more varied diet, I can't eat more of that",
+			"I think I'll need a rest before I eat more of that",
+			"No thanks, I'll have something else for a change",
+			"It smells even worse than it looks, I'll find something else to eat",
+			"", //TODO line 14 never existed. I dont know if this was intentional but it caused the line below to never appear. Old behavior is restored for now, but if we want the line below to show up just remove the blank one here
+			"I can't bring myself to eat any more of that, there must surely be some other food around here");
+
 		this.addAspectItem(ItemRegistry.GROUND_LEAF, "Ground Leaf", "Leaves are dropped by the small leafy Swamp Plants that grow in Swamplands biomes, as well as from the Fallen Leaves that gather under trees there.");
 		this.addAspectItem(ItemRegistry.GROUND_CATTAIL, "Ground Cattail", "Cattails are very common plants that grow in Swamplands, Patchy Islands, and Coarse Islands biomes.");
 		this.addAspectItem(ItemRegistry.GROUND_SWAMP_GRASS, "Ground Swamp Grass", "Swamp Grass is a common plant found in Swamplands, Patchy Islands, Coarse Islands, and Marsh biomes, and in Underground Oases.");
@@ -1874,6 +1971,32 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("death.attack.thebetweenlands.suffocation", "%s was suffocated by a Shallowbreath");
 		this.add("death.attack.thebetweenlands.spikewave", "%s was impaled by roots");
 		this.add("death.attack.thebetweenlands.voodoo", "%s was taken out by Voodoo magic");
+
+		this.add("event.thebetweenlands.winter.message", "You hear the sound of sleigh bells in the distance...");
+		this.add("event.thebetweenlands.spook.message", "You feel a chill in the air... the haunting season has begun!");
+
+		this.add("location.thebetweenlands.wilderness", "Wilderness");
+		this.add("location.thebetweenlands.caverns", "Caverns");
+		this.add("location.thebetweenlands.ruins", "Ruins");
+		this.add("location.thebetweenlands.shrine", "Shrine");
+		this.add("location.thebetweenlands.tar_pool_dungeon", "Tar Pool Dungeon");
+		this.add("location.thebetweenlands.cragrock_tower", "Cragrock Tower");
+		this.add("location.thebetweenlands.wight_fortress", "Wight Fortress");
+		this.add("location.thebetweenlands.wight_fortress.puzzle", "Armory");
+		this.add("location.thebetweenlands.wight_fortress.teleporter", "Beware that, when fighting monsters, you yourself do not become a monster... \nfor when you gaze long into the abyss. The abyss gazes also into you.");
+		this.add("location.thebetweenlands.wight_fortress.boss", "Primordial Malevolence");
+		this.add("location.thebetweenlands.underground_ruins", "Underground Ruins");
+		this.add("location.thebetweenlands.spirit_tree", "Spirit Tree");
+		this.add("location.thebetweenlands.sludge_worm_dungeon.winding_walkways", "Winding Walkways");
+		this.add("location.thebetweenlands.sludge_worm_dungeon.barrishee_lair", "Barrishee Lair");
+		this.add("location.thebetweenlands.sludge_worm_dungeon.crypt_tunnels", "Crypt Tunnels");
+		this.add("location.thebetweenlands.sludge_worm_dungeon.crypt", "Crypt");
+		this.add("location.thebetweenlands.sludge_worm_dungeon.maze", "Labyrinthine Vaults");
+		this.add("location.thebetweenlands.sludge_worm_dungeon", "Sludgeon Tower");
+		this.add("location.thebetweenlands.sludge_worm_dungeon.pit", "Pit of Decay");
+		this.add("location.thebetweenlands.chiromaw_matriarch_nest", "Chiromaw Matriarch Nest");
+		this.add("location.thebetweenlands.chiromaw_matriarch_nest.tainted", "The scent of you has tainted this nest forever - Chiromaws will no longer abide here");
+		this.add("location.thebetweenlands.underwater_ruins", "Underwater Ruins");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {
@@ -1930,6 +2053,16 @@ public class BLLanguageProvider extends LanguageProvider {
 	public void addEntityAndEgg(DeferredHolder<EntityType<?>, ? extends EntityType<?>> entity, String name) {
 		this.addEntityType(entity, name);
 		this.add("item.thebetweenlands." + entity.getId().getPath() + "_spawn_egg", name + " Spawn Egg");
+	}
+
+	private void addFoodSicknessMessages(String type, String... messages) {
+		int idx = 0;
+		for (String message : messages) {
+			if (!message.isBlank()) {
+				this.add("item.thebetweenlands.food_sickness." + type + "." + idx, message);
+			}
+			idx++;
+		}
 	}
 
 	public void addAmphibiousUpgrade(DeferredHolder<AmphibiousArmorUpgrade, ? extends AmphibiousArmorUpgrade> upgrade, String name) {

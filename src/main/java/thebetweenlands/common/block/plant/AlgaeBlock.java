@@ -8,16 +8,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.api.client.ConnectedTextureBlock;
 import thebetweenlands.api.client.ConnectionRules;
-import thebetweenlands.common.block.farming.DugSoilBlock;
 import thebetweenlands.common.datagen.tags.BLFluidTagGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
 
 public class AlgaeBlock extends PlantBlock implements ConnectedTextureBlock {
 

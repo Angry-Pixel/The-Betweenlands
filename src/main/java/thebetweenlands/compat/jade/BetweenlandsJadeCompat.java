@@ -1,7 +1,6 @@
 package thebetweenlands.compat.jade;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.SpawnerBlock;
 import net.minecraft.world.phys.HitResult;
 import snownee.jade.addon.vanilla.MobSpawnerProvider;
 import snownee.jade.addon.vanilla.VanillaPlugin;

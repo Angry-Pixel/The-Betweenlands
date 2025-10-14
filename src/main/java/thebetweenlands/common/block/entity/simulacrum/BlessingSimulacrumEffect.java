@@ -35,7 +35,7 @@ public class BlessingSimulacrumEffect implements SimulacrumEffect {
 						stack.shrink(1);
 						offering.setTheItem(stack);
 						cap.setBlessed(player.level().dimension(), pos);
-						player.displayClientMessage(Component.translatable("chat.simulacrum.blessed"), true);
+						player.displayClientMessage(Component.translatable("block.thebetweenlands.simulacrum.blessed"), true);
 					} else if (level.isClientSide()) {
 						this.spawnBlessingParticles(level.getGameTime() * 0.025f, offering.getBlockPos().getX() + 0.5f, offering.getBlockPos().getY() + 0.4f, offering.getBlockPos().getZ() + 0.5f);
 					}

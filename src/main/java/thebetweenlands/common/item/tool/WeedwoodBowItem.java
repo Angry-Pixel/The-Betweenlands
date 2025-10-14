@@ -11,9 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.EventHooks;
 import thebetweenlands.api.item.CorrosionHelper;
-import thebetweenlands.common.item.misc.OctineIngotItem;
 import thebetweenlands.common.item.tool.arrow.*;
-import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 

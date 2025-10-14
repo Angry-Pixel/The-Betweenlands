@@ -10,13 +10,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.boss.Barrishee;
-import thebetweenlands.common.entity.monster.MummyArm;
-import thebetweenlands.common.entity.monster.Stalker;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 

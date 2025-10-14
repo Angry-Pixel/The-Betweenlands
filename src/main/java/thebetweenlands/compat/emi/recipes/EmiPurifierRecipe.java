@@ -2,17 +2,12 @@ package thebetweenlands.compat.emi.recipes;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Unit;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import thebetweenlands.api.recipes.MortarRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.recipe.PurifierRecipe;
-import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.compat.emi.BetweenlandsEMICompat;
 

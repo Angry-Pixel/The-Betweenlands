@@ -77,7 +77,7 @@ public class LocationChiromawMatriarchNest extends LocationGuarded {
 				this.setVisible(false);
 
 				for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox())) {
-					player.displayClientMessage(Component.translatable("chat.chiromaw_matriarch_nest.tainted"), false);
+					player.displayClientMessage(Component.translatable("location.thebetweenlands.chiromaw_matriarch_nest.tainted"), false);
 
 					AdvancementCriteriaRegistry.CHIROMAW_MATRIARCH_NEST_CLAIMED.get().trigger(player);
 				}

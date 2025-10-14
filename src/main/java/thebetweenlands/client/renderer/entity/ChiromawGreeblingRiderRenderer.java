@@ -9,10 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.ChiromawGreeblingRiderModel;
-import thebetweenlands.client.model.entity.ChiromawModel;
 import thebetweenlands.client.renderer.entity.layers.GenericEyesLayer;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
 import thebetweenlands.common.entity.monster.chiromaw.ChiromawGreeblingRider;
 
 public class ChiromawGreeblingRiderRenderer extends MobRenderer<ChiromawGreeblingRider, ChiromawGreeblingRiderModel> {

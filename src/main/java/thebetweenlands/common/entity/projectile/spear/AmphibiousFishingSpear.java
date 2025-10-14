@@ -3,7 +3,6 @@ package thebetweenlands.common.entity.projectile.spear;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.registries.EntityRegistry;
 
 public class AmphibiousFishingSpear extends FishingSpear {
 

@@ -8,10 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.ChiromawMatriarchModel;
-import thebetweenlands.client.model.entity.ChiromawModel;
 import thebetweenlands.client.renderer.entity.layers.GenericEyesLayer;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
 import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 
 public class ChiromawMatriarchRenderer extends MobRenderer<ChiromawMatriarch, ChiromawMatriarchModel> {

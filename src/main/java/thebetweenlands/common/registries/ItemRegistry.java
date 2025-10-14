@@ -43,7 +43,6 @@ import thebetweenlands.common.item.misc.bucket.RubberBucketItem;
 import thebetweenlands.common.item.shield.*;
 import thebetweenlands.common.item.tool.*;
 import thebetweenlands.common.item.tool.arrow.*;
-import thebetweenlands.common.item.tool.FishingSpearItem;
 import thebetweenlands.util.BLDyeColor;
 
 import java.util.ArrayList;
@@ -156,7 +155,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> BLACK_HAT_MUSHROOM = ITEMS.register("black_hat_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> BULB_CAPPED_MUSHROOM = ITEMS.register("bulb_capped_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> FRIED_SWAMP_KELP = ITEMS.register("fried_swamp_kelp", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6F).build())));
-	public static final DeferredItem<Item> FORBIDDEN_FIG = ITEMS.register("forbidden_fig", () -> new HoverTextItem(new Item.Properties().rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(20).saturationModifier(0.6F).effect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 1200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 1200, 1), 1.0F).build())));
+	public static final DeferredItem<Item> FORBIDDEN_FIG = ITEMS.register("forbidden_fig", () -> new ForbiddenFigItem(new Item.Properties().rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(20).saturationModifier(0.6F).effect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 1200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 1200, 1), 1.0F).build())));
 	public static final DeferredItem<Item> BLUE_CANDY = ITEMS.register("blue_candy", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RED_CANDY = ITEMS.register("red_candy", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> YELLOW_CANDY = ITEMS.register("yellow_candy", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.0F).build())));

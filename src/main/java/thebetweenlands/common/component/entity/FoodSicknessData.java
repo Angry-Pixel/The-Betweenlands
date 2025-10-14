@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.Item;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.util.FoodSickness;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 

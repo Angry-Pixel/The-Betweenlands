@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity.ai.goals;
 
 import java.util.EnumSet;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 

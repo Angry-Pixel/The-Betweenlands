@@ -40,8 +40,8 @@ public enum FoodSickness implements StringRepresentable {
 	public void updateLines() {
 		this.lines.clear();
 		int index = 0;
-		while (I18n.exists("chat.foodSickness." + name().toLowerCase() + "." + index)) {
-			this.lines.add(Component.translatable("chat.foodSickness." + name().toLowerCase() + "." + index));
+		while (I18n.exists("item.thebetweenlands.food_sickness." + name().toLowerCase() + "." + index)) {
+			this.lines.add(Component.translatable("item.thebetweenlands.food_sickness." + name().toLowerCase() + "." + index));
 			index++;
 		}
 	}
@@ -53,7 +53,7 @@ public enum FoodSickness implements StringRepresentable {
 	public Component getRandomLine(RandomSource rnd) {
 		List<Component> lines = this.getLines();
 		if (lines.isEmpty()) {
-			return Component.translatable("chat.foodSickness.nolines");
+			return Component.translatable("item.thebetweenlands.food_sickness.no_lines");
 		}
 		return lines.get(rnd.nextInt(lines.size()));
 	}

@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.container.CenserBlock;
 import thebetweenlands.common.block.container.MothHouseBlock;
 import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;

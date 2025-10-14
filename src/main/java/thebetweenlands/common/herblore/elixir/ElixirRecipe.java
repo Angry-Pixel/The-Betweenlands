@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime,
 						   int infusionTimeVariation, int baseDuration, int durationModifier, int negativeBaseDuration, int negativeDurationModifier,

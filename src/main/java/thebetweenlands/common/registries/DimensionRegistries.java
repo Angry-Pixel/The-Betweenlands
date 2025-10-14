@@ -14,7 +14,6 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;

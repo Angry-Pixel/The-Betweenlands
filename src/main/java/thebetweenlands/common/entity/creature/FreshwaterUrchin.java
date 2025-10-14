@@ -21,8 +21,6 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ProximitySpawner;
-import thebetweenlands.common.entity.fishing.anadia.Anadia;
-import thebetweenlands.common.entity.monster.BasicProximitySpawner;
 import thebetweenlands.common.registries.DamageTypeRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

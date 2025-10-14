@@ -94,7 +94,7 @@ public class SwampTalismanItem extends Item {
 
 			if (state.is(BlockTags.SAPLINGS)) {
 				if (BetweenlandsConfig.returnDimension != player.level().dimension() && player.level().dimension() != DimensionRegistries.DIMENSION_KEY) {
-					player.displayClientMessage(Component.translatable("chat.talisman.wrongdimension"), true);
+					player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.wrong_dimension"), true);
 				} else {
 					if (PortalTree.place(level, level.getRandom(), pos, null)) {
 						level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.4F + 0.8F);
@@ -103,7 +103,7 @@ public class SwampTalismanItem extends Item {
 							sp.connection.teleport(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, player.getYRot(), player.getXRot());
 						}
 					} else {
-						player.displayClientMessage(Component.translatable("chat.talisman.noplace"), true);
+						player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.no_space"), true);
 					}
 				}
 				return InteractionResult.SUCCESS;
@@ -113,7 +113,7 @@ public class SwampTalismanItem extends Item {
 					if (!level.isClientSide()) {
 						stack.set(DataComponentRegistry.TALISMAN_LINK, new GlobalPos(level.dimension(), portal.getPortalPosition()));
 
-						player.displayClientMessage(Component.translatable("chat.talisman.linked"), true);
+						player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.linked"), true);
 
 						level.playSound(null, player.blockPosition(), SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 0.8F, 0.7F);
 					}
@@ -141,16 +141,16 @@ public class SwampTalismanItem extends Item {
 									if (linkPortal != null) {
 										linkPortal.setOtherPortalPosition(level.dimension(), portal.getPortalPosition());
 										portal.setOtherPortalPosition(linkDim, linkPortal.getPortalPosition());
-										player.displayClientMessage(Component.translatable("chat.talisman.portal_linked"), true);
+										player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.portal_linked"), true);
 									} else {
-										player.displayClientMessage(Component.translatable("chat.talisman.cant_link"), true);
+										player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.cant_link"), true);
 									}
 								} else {
-									player.displayClientMessage(Component.translatable("chat.talisman.too_far", String.valueOf(BetweenlandsConfig.portalMaxLinkDist)), true);
+									player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.too_far", String.valueOf(BetweenlandsConfig.portalMaxLinkDist)), true);
 								}
 							}
 						} else {
-							player.displayClientMessage(Component.translatable("chat.talisman.cant_link"), true);
+							player.displayClientMessage(Component.translatable("item.thebetweenlands.talisman.cant_link"), true);
 						}
 					}
 				}

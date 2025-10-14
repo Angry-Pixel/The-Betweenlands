@@ -1,7 +1,5 @@
 package thebetweenlands.client.audio;
 
-import com.mojang.blaze3d.audio.Channel;
-import com.mojang.blaze3d.audio.OpenAlUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundEngine;

@@ -19,7 +19,6 @@ import net.minecraft.world.entity.Pose;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.WightModel;
 import thebetweenlands.client.renderer.BLRenderTypes;

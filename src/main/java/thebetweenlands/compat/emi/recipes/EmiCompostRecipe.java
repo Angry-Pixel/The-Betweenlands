@@ -6,25 +6,15 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.item.recipe.BasicAnimatorRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.compat.CompostRecipe;
 import thebetweenlands.compat.emi.BetweenlandsEMICompat;
-import thebetweenlands.compat.jei.recipes.CompostRecipeCategory;
-import thebetweenlands.util.LootTableFetcher;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

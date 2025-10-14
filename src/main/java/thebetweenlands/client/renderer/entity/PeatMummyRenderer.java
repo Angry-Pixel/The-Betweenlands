@@ -6,10 +6,8 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.DreadfulPeatMummyModel;
 import thebetweenlands.client.model.entity.PeatMummyModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.monster.PeatMummy;
 
 public class PeatMummyRenderer extends MobRenderer<PeatMummy, PeatMummyModel> {

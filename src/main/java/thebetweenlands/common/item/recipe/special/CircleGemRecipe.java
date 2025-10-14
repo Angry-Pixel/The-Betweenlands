@@ -11,7 +11,6 @@ import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.item.misc.MiddleGemItem;
-import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 public class CircleGemRecipe extends CustomRecipe {

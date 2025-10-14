@@ -22,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.SmokingRackRecipe;
-import thebetweenlands.common.block.container.CenserBlock;
 import thebetweenlands.common.block.container.SmokingRackBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.inventory.SmokingRackMenu;

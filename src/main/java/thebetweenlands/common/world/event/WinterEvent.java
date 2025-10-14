@@ -143,7 +143,7 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 
 	@Override
 	protected void showStatusMessage(Player player) {
-		player.displayClientMessage(Component.translatable("chat.event.winter"), true);
+		player.displayClientMessage(Component.translatable("event.thebetweenlands.winter.message"), true);
 	}
 
 //	public static void onClientTick(ClientTickEvent event) {

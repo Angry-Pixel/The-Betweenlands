@@ -14,8 +14,6 @@ import net.minecraft.world.level.Level;
 import thebetweenlands.api.recipes.SmokingRackRecipe;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-import java.util.List;
-
 public record BasicSmokingRackRecipe(Ingredient input, ItemStack result, int smokingTime) implements SmokingRackRecipe {
 
 	@Override
