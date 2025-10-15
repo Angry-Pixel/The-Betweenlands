@@ -27,7 +27,7 @@ public class ClientEvents {
 		EquipmentRenderingHandler.init();
 		ItemTooltipHandler.init();
 		MainMenuHandler.init();
-		MusicHandler.init();
+		MusicHandler.INSTANCE.init();
 		RadialMenuHandler.INSTANCE.init();
 		ScreenHandler.init();
 

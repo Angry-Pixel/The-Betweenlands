@@ -51,7 +51,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	public void setDefaults() {
 		//Chunk is new and all gem targets will already be marked during world gen
 		for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
-			this.savedGemTargets.add(target.getId());
+			this.savedGemTargets.add(target.ordinal());
 		}
 	}
 
@@ -87,7 +87,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 			}
 
 			for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
-				if (!this.savedGemTargets.contains(target.getId())) {
+				if (!this.savedGemTargets.contains(target.ordinal())) {
 					//A new gem singer target was added -> chunk needs to be rescanned
 					this.rescanGemSingerTargets = true;
 					break;
@@ -124,9 +124,9 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 
 						for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
 							if (target.test(state)) {
-								IntSet indices = this.gemToPositions.get(target.getId());
+								IntSet indices = this.gemToPositions.get(target.ordinal());
 								if (indices == null) {
-									this.gemToPositions.put(target.getId(), indices = new IntArraySet());
+									this.gemToPositions.put(target.ordinal(), indices = new IntArraySet());
 								}
 								indices.add(getGemSingerTargetIndex(x, y, z));
 								break;
@@ -137,7 +137,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 			}
 
 			for (GemSingerItem.Target target : GemSingerItem.Target.values()) {
-				this.savedGemTargets.add(target.getId());
+				this.savedGemTargets.add(target.ordinal());
 			}
 
 			this.markDirty();
@@ -177,9 +177,9 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return true if successfully marked
 	 */
 	public boolean markGem(int x, int y, int z, GemSingerItem.Target target) {
-		IntSet indices = this.gemToPositions.get(target.getId());
+		IntSet indices = this.gemToPositions.get(target.ordinal());
 		if (indices == null) {
-			this.gemToPositions.put(target.getId(), indices = new IntArraySet());
+			this.gemToPositions.put(target.ordinal(), indices = new IntArraySet());
 		}
 		int index = getGemSingerTargetIndex(x & 15, y, z & 15);
 		return indices.add(index);
@@ -195,11 +195,11 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return true if successfully unmarked
 	 */
 	public boolean unmarkGem(int x, int y, int z, GemSingerItem.Target target) {
-		IntSet indices = this.gemToPositions.get(target.getId());
+		IntSet indices = this.gemToPositions.get(target.ordinal());
 		if (indices != null) {
 			if (indices.remove(getGemSingerTargetIndex(x & 15, y, z & 15))) {
 				if (indices.isEmpty()) {
-					this.gemToPositions.remove(target.getId());
+					this.gemToPositions.remove(target.ordinal());
 				}
 				return true;
 			}
@@ -214,7 +214,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return an unmodifiable set of all gem positions which can be decoded by {@link #getGemSingerTargetPosition(int)}
 	 */
 	public IntSet findGems(GemSingerItem.Target target) {
-		IntSet indices = this.gemToPositions.get(target.getId());
+		IntSet indices = this.gemToPositions.get(target.ordinal());
 		if (indices != null) {
 			return IntSets.unmodifiable(indices);
 		}
@@ -233,7 +233,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	@Nullable
 	public BlockPos findRandomGem(GemSingerItem.Target target, RandomSource rand, BlockPos pos, float range) {
 		BlockPos relPos = pos.offset(-this.getChunk().getPos().x * 16, 0, -this.getChunk().getPos().z * 16);
-		IntSet indices = this.gemToPositions.get(target.getId());
+		IntSet indices = this.gemToPositions.get(target.ordinal());
 		if (indices != null) {
 			List<BlockPos> found = new ArrayList<>();
 			for (int index : indices) {
