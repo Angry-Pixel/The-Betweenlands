@@ -216,12 +216,15 @@ public class MusicHandler {
 			return true;
 		}
 		Sound soundInstance = sound.getSound();
-		WeighedSoundEvents soundEventAccessor = Minecraft.getInstance().getSoundManager().getSoundEvent(track.getKey().location());
-		if (soundEventAccessor != null) {
-			List<Weighted<Sound>> soundAccessors = soundEventAccessor.list;
-			for (Weighted<Sound> accessor : soundAccessors) {
-				if (accessor instanceof Sound accessedSound && Objects.equals(accessedSound.getLocation(), soundInstance.getLocation())) {
-					return true;
+		//this can actually be null, dont listen to the warning.
+		if (soundInstance != null) {
+			WeighedSoundEvents soundEventAccessor = Minecraft.getInstance().getSoundManager().getSoundEvent(track.getKey().location());
+			if (soundEventAccessor != null) {
+				List<Weighted<Sound>> soundAccessors = soundEventAccessor.list;
+				for (Weighted<Sound> accessor : soundAccessors) {
+					if (accessor instanceof Sound accessedSound && Objects.equals(accessedSound.getLocation(), soundInstance.getLocation())) {
+						return true;
+					}
 				}
 			}
 		}
