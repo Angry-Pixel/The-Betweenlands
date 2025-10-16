@@ -13,16 +13,21 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
+import javax.annotation.Nullable;
+
 public class BarrisheeNodeEvaluator extends WalkNodeEvaluator {
+	@Nullable
 	private final Barrishee barrishee;
 
-	public BarrisheeNodeEvaluator(Barrishee barrishee) {
+	public BarrisheeNodeEvaluator(@Nullable Barrishee barrishee) {
 		this.barrishee = barrishee;
 	}
 
 	@Override
 	public PathType getPathType(PathfindingContext context, int x, int y, int z) {
 		PathType type = super.getPathType(context, x, y, z);
+
+		if (this.barrishee == null) return type;
 
 		if(type == PathType.OPEN || type == PathType.WALKABLE) {
 			return type;
