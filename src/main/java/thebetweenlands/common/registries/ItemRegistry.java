@@ -429,7 +429,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new BoneWayfinderItem(new Item.Properties().durability(10).setNoRepair().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1)));

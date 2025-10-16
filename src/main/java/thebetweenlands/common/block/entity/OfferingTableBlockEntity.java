@@ -5,20 +5,32 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.ContainerSingleItem;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.handler.PlayerRespawnHandler;
+import thebetweenlands.common.item.UnbreakableItem;
 import thebetweenlands.common.item.equipment.RingItem;
+import thebetweenlands.common.item.misc.BoneWayfinderItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.*;
@@ -76,27 +88,22 @@ public class OfferingTableBlockEntity extends SyncedBlockEntity implements Conta
 	private boolean updateTeleport(Player player, Level level, BlockPos pos, int ticks, ItemStack stack) {
 		if (ticks >= 100) {
 			if (!level.isClientSide() && stack.getDamageValue() < stack.getMaxDamage()) {
-				//TODO port when bone wayfinder is added
-//				BlockPos waystone = ((BoneWayfinderItem) stack.getItem()).getBoundWaystone(stack);
-//				if (waystone != null) {
-//					BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(level, waystone, 8, false, 4, 0);
-//
-//					if (spawnPoint != null) {
-//						if (player.distanceToSqr(Vec3.atCenterOf(spawnPoint)) > 24) {
-//							this.playThunderSounds(level, player.blockPosition());
-//						}
-//
-//						PlayerUtil.teleport(player, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
-//
-//						this.playThunderSounds(level, player.blockPosition());
-//
-//						player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
-//
-//						stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
-//					} else if (player instanceof ServerPlayer) {
-//						player.displayClientMessage(Component.translatable("chat.waystone.obstructed"), true);
-//					}
-//				}
+				BlockPos waystone = ((BoneWayfinderItem) stack.getItem()).getBoundWaystone(stack);
+				if (waystone != null) {
+					BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos((ServerLevel) level, waystone, 8, false, 4, 0, true);
+
+					if (spawnPoint != null) {
+						if (player.distanceToSqr(Vec3.atCenterOf(spawnPoint)) > 24) {
+							this.playThunderSounds(level, player.blockPosition());
+						}
+						player.teleportTo(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
+						this.playThunderSounds(level, player.blockPosition());
+						player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
+						UnbreakableItem.hurtButDontBreak(stack, 1, player);
+					} else if (player instanceof ServerPlayer) {
+						player.displayClientMessage(Component.translatable("item.thebetweenlands.bone_wayfinder.obstructed"), true);
+					}
+				}
 			}
 		} else {
 			if (stack.getDamageValue() < stack.getMaxDamage()) {

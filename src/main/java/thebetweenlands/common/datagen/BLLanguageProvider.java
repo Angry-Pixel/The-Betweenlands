@@ -1666,6 +1666,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.amate_map.invalid", "Can't create an Amate Map outside of The Betweenlands");
 		this.addItem(ItemRegistry.FILLED_AMATE_MAP, "Amate Map");
 		this.addItemWithDesc(ItemRegistry.BONE_WAYFINDER, "Bone Wayfinder", "Must be linked to a Menhir");
+		this.add("item.thebetweenlands.bone_wayfinder.linked", "Requires sufficient XP to use.\nLinked to Menhir at %s");
+		this.add("item.thebetweenlands.bone_wayfinder.obstructed", "Menhir is obstructed");
+		this.add("item.thebetweenlands.bone_wayfinder.sky_obstructed", "Sky is obstructed");
 		this.addItem(ItemRegistry.MAGIC_ITEM_MAGNET, "Magic Item Magnet");
 		this.addItem(ItemRegistry.GEM_SINGER, "Gem Singer");
 		this.addItem(ItemRegistry.SNOT_POD, "Rocksnot Pod");
