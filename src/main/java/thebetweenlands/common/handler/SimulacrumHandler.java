@@ -133,11 +133,11 @@ public class SimulacrumHandler {
 	}
 
 	private static void addBlessingEffect(PlayerTickEvent.Pre event) {
-		if(!event.getEntity().level().isClientSide()) {
+		if (!event.getEntity().level().isClientSide()) {
 			BlessingData data = event.getEntity().getData(AttachmentRegistry.BLESSING);
 
-			if(data.isBlessed() && data.getBlessingLocation() != null && event.getEntity().level().dimension() == data.getBlessingDimension()) {
-				event.getEntity().addEffect(ElixirEffectRegistry.EFFECT_BLESSED.get().createEffect(205, 0));
+			if (data.isBlessed() && data.getBlessingLocation() != null && event.getEntity().level().dimension() == data.getBlessingDimension()) {
+				event.getEntity().addEffect(new MobEffectInstance(MobEffectRegistry.BLESSED, 205, 0, true, false));
 			}
 		}
 	}

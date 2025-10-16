@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.entity.CameraOffsetter;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 
@@ -70,7 +71,7 @@ public class CameraPositionHandler {
 
 			//Shock
 			if (renderViewEntity instanceof LivingEntity living) {
-				MobEffectInstance effect = ElixirEffectRegistry.EFFECT_SHOCKED.get().getPotionEffect(living);
+				MobEffectInstance effect = living.getEffect(MobEffectRegistry.SHOCKED);
 				if (effect != null) {
 					screenShake += Math.min(0.1f, effect.getDuration() / 30.0f * 0.1f);
 				}

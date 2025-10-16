@@ -131,17 +131,7 @@ import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.misc.bucket.InfusionBucketItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.WeedwoodBowItem;
-import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.common.registries.DimensionRegistries;
-import thebetweenlands.common.registries.EntityRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.registries.FluidTypeRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.MenuRegistry;
-import thebetweenlands.common.registries.ParticleRegistry;
+import thebetweenlands.common.registries.*;
 import thebetweenlands.util.BLDyeColor;
 import thebetweenlands.util.DrinkableBrew;
 
@@ -666,9 +656,9 @@ public class ClientRegistrationEvents {
 			public boolean isVisibleInGui(MobEffectInstance instance) {
 				return false;
 			}
-		}, ElixirEffectRegistry.ENLIGHTENED.get(), ElixirEffectRegistry.ROOT_BOUND.get());
+		}, MobEffectRegistry.ENLIGHTENED.get(), MobEffectRegistry.ROOT_BOUND.get());
 
-		for (DeferredHolder<MobEffect, ?> effect : ElixirEffectRegistry.EFFECTS.getEntries().stream().filter(holder -> holder.get() instanceof ElixirEffect.ElixirPotionEffect).toList()) {
+		for (DeferredHolder<MobEffect, ?> effect : MobEffectRegistry.EFFECTS.getEntries().stream().filter(holder -> holder.get() instanceof ElixirEffect.ElixirPotionEffect).toList()) {
 			ElixirEffect.ElixirPotionEffect potEffect = (ElixirEffect.ElixirPotionEffect) effect.get();
 			event.registerMobEffect(new IClientMobEffectExtensions() {
 				@Override

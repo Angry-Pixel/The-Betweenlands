@@ -1997,6 +1997,12 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("location.thebetweenlands.chiromaw_matriarch_nest", "Chiromaw Matriarch Nest");
 		this.add("location.thebetweenlands.chiromaw_matriarch_nest.tainted", "The scent of you has tainted this nest forever - Chiromaws will no longer abide here");
 		this.add("location.thebetweenlands.underwater_ruins", "Underwater Ruins");
+
+		this.addEffect(MobEffectRegistry.BLESSED, "Blessed");
+		this.addEffect(MobEffectRegistry.PETRIFY, "Petrified");
+		this.addEffect(MobEffectRegistry.ROOT_BOUND, "Root Bound");
+		this.addEffect(MobEffectRegistry.ENLIGHTENED, "Enlightened");
+		this.addEffect(MobEffectRegistry.SHOCKED, "Shocked");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {

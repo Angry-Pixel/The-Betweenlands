@@ -44,6 +44,7 @@ import thebetweenlands.common.entity.ai.goals.StalkerScurryGoal;
 import thebetweenlands.common.entity.movement.climb.*;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -511,7 +512,7 @@ public class Stalker extends ClimbingMob implements Enemy {
 
 	public void useParalysisAttack(LivingEntity target) {
 		target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 3));
-		target.addEffect(new MobEffectInstance(ElixirEffectRegistry.ROOT_BOUND, 80, 10));
+		target.addEffect(new MobEffectInstance(MobEffectRegistry.ROOT_BOUND, 80, 10, true, false, false));
 
 		this.playSound(SoundRegistry.STALKER_SCREAM.get(), 0.6f, 1.0f);
 	}

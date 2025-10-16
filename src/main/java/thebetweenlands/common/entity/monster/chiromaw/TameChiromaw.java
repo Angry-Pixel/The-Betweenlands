@@ -47,6 +47,7 @@ import thebetweenlands.common.entity.projectile.arrow.ChiromawShockBarb;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.serverbound.ChiromawDoubleJumpPacket;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.*;
@@ -252,7 +253,7 @@ public class TameChiromaw extends TamableAnimal implements RingOfGatheringMinion
 
 	@Override
 	public boolean isEffectiveAi() {
-		return super.isEffectiveAi() && !this.hasEffect(ElixirEffectRegistry.EFFECT_SHOCKED.get().getElixirEffect());
+		return super.isEffectiveAi() && !this.hasEffect(MobEffectRegistry.SHOCKED);
 	}
 
 	@Override

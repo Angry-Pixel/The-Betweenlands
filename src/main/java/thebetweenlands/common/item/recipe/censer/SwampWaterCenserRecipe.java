@@ -11,6 +11,7 @@ import thebetweenlands.api.block.Censer;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class SwampWaterCenserRecipe extends AbstractCenserRecipe<SwampWaterCense
 
 				if(!level.isClientSide()) {
 					for(Player player : affected) {
-						player.addEffect(new MobEffectInstance(ElixirEffectRegistry.ENLIGHTENED, 200, 0, true, false));
+						player.addEffect(new MobEffectInstance(MobEffectRegistry.ENLIGHTENED, 200, 0, true, false, false));
 					}
 				}
 

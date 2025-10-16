@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.projectile.arrow;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,7 @@ import thebetweenlands.common.entity.projectile.ElectricShock;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import javax.annotation.Nullable;
@@ -68,7 +70,7 @@ public class ChiromawShockBarb extends AbstractArrow {
 			this.level().addFreshEntity(new ElectricShock(this.level(), this, target, 0, this.isInWaterOrRain()));
 		}
 		if (!target.getType().is(Tags.EntityTypes.BOSSES)) {
-			target.addEffect(ElixirEffectRegistry.EFFECT_PETRIFY.get().createEffect(40, 1), this.getEffectSource());
+			target.addEffect(new MobEffectInstance(MobEffectRegistry.PETRIFY, 40, 1, true, false, false), this.getEffectSource());
 		}
 	}
 

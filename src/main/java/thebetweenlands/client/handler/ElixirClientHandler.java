@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -194,7 +195,7 @@ public class ElixirClientHandler {
 		Player player = event.getEntity();
 		CompoundTag nbt = player.getPersistentData();
 
-		if (ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(player) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(player)) {
+		if (ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(player) || player.hasEffect(MobEffectRegistry.PETRIFY)) {
 			player.setXRot(player.xRotO = nbt.getFloat("thebetweenlands.petrify.pitch"));
 			player.setYRot(player.yRotO = nbt.getFloat("thebetweenlands.petrify.yaw"));
 			player.setYHeadRot(player.yHeadRotO = nbt.getFloat("thebetweenlands.petrify.yawHead"));
@@ -219,7 +220,7 @@ public class ElixirClientHandler {
 
 	private static void updatePlayerRootboundTicks(LivingEntity entity) {
 		CompoundTag nbt = entity.getPersistentData();
-		if (entity.hasEffect(ElixirEffectRegistry.EFFECT_SHOCKED.get().getElixirEffect()) || entity.hasEffect(ElixirEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(entity)) {
+		if (entity.hasEffect(MobEffectRegistry.SHOCKED) || entity.hasEffect(MobEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || entity.hasEffect(MobEffectRegistry.PETRIFY)) {
 			nbt.putInt("thebetweenlands.stuckTicks", 5);
 		} else {
 			int rootBoundTicks = nbt.getInt("thebetweenlands.stuckTicks");
@@ -237,7 +238,7 @@ public class ElixirClientHandler {
 
 		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
 		//TODO is this even necessary? It currently obliterates the player's FOV so I commented it out for now
-		if (entity.hasEffect(ElixirEffectRegistry.EFFECT_SHOCKED.get().getElixirEffect()) || entity.hasEffect(ElixirEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(entity) || nbt.contains("thebetweenlands.stuckTicks")) {
+		if (entity.hasEffect(MobEffectRegistry.SHOCKED) || entity.hasEffect(MobEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || entity.hasEffect(MobEffectRegistry.PETRIFY) || nbt.contains("thebetweenlands.stuckTicks")) {
 //			event.setFOV(1);
 		}
 	}

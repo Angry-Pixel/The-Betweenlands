@@ -24,6 +24,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirMasking;
+import thebetweenlands.common.registries.MobEffectRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,13 +178,13 @@ public class ElixirCommonHandler {
 				}
 			}
 
-			if (entity.hasEffect(ElixirEffectRegistry.ROOT_BOUND)) {
+			if (entity.hasEffect(MobEffectRegistry.ROOT_BOUND)) {
 				entity.resetFallDistance();
-				entity.setDeltaMovement(0.0D, 0.05D, 0.0D);
+				entity.setDeltaMovement(0.0D, -0.05D, 0.0D);
 			}
 
-			if (ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(entity)) {
-				entity.setDeltaMovement(0.0D, 0.0D, 0.0D);
+			if (ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || entity.hasEffect(MobEffectRegistry.PETRIFY)) {
+				entity.setDeltaMovement(Vec3.ZERO);
 			}
 		}
 	}
@@ -251,7 +252,7 @@ public class ElixirCommonHandler {
 			entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0F, 1.0F + relStrength, 1.0F));
 		}
 
-		if (entity.hasEffect(ElixirEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.get().isActive(entity)) {
+		if (entity.hasEffect(MobEffectRegistry.ROOT_BOUND) || ElixirEffectRegistry.EFFECT_BASILISK.get().isActive(entity) || entity.hasEffect(MobEffectRegistry.PETRIFY)) {
 			entity.setDeltaMovement(0.0D, entity.getDeltaMovement().y(), 0.0D);
 			if (entity.getDeltaMovement().y() > -0.1D) {
 				entity.setDeltaMovement(entity.getDeltaMovement().x(), -0.1D, entity.getDeltaMovement().z());

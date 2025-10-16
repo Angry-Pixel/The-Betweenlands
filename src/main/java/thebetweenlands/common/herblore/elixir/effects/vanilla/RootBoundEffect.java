@@ -1,4 +1,4 @@
-package thebetweenlands.common.herblore.elixir;
+package thebetweenlands.common.herblore.elixir.effects.vanilla;
 
 import java.util.Set;
 

@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.armor.RubberBootsItem;
 import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -161,7 +163,7 @@ public class ElectricShock extends Entity {
 										}
 
 										if (!wasShocked) {
-											newTarget.addEffect(ElixirEffectRegistry.EFFECT_SHOCKED.get().createEffect(newTarget instanceof Player ? 30 : 80, 0, true, true));
+											newTarget.addEffect(new MobEffectInstance(MobEffectRegistry.SHOCKED, newTarget instanceof Player ? 30 : 80, 0, true, true));
 										}
 
 										continue entityLoop;

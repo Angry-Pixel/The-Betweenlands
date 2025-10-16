@@ -1,7 +1,6 @@
 package thebetweenlands.common.herblore.elixir;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -19,15 +18,14 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirHealing;
 import thebetweenlands.common.herblore.elixir.effects.ElixirMasking;
 import thebetweenlands.common.herblore.elixir.effects.ElixirPetrify;
 import thebetweenlands.common.herblore.elixir.effects.ElixirRipening;
-import thebetweenlands.common.herblore.elixir.effects.ElixirShocked;
 import thebetweenlands.common.herblore.elixir.effects.ElixirStarvation;
 import thebetweenlands.common.herblore.elixir.effects.ElixirSwiftarm;
+import thebetweenlands.common.registries.MobEffectRegistry;
 
 import java.util.Map;
 
 public class ElixirEffectRegistry {
 
-	public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, TheBetweenlands.ID);
 	public static final DeferredRegister<ElixirEffect> ELIXIRS = DeferredRegister.create(BLRegistries.Keys.ELIXIR_EFFECTS, TheBetweenlands.ID);
 
 	//Elixirs
@@ -66,18 +64,9 @@ public class ElixirEffectRegistry {
 	public static final DeferredHolder<ElixirEffect, ElixirEffect> EFFECT_DEFORMED = registerElixir("deformed", new ElixirEffect(TheBetweenlands.prefix("textures/item/green_dentrothyst_vial.png")).setAntiInfusion());
 	public static final DeferredHolder<ElixirEffect, ElixirEffect> EFFECT_LIMBLESS = registerElixir("limbless", new ElixirEffect(TheBetweenlands.prefix("textures/item/green_dentrothyst_vial.png")).setAntiInfusion());
 	public static final DeferredHolder<ElixirEffect, ElixirEffect> EFFECT_ISOLATEDSENSES = registerElixir("isolated_senses", new ElixirEffect(TheBetweenlands.prefix("textures/item/green_dentrothyst_vial.png")).setAntiInfusion());
-	//Other Elixirs
-	public static final DeferredHolder<ElixirEffect, ElixirEffect> EFFECT_PETRIFY = registerElixir("petrify", new ElixirPetrify(TheBetweenlands.prefix("textures/item/green_dentrothyst_vial.png")));
-	public static final DeferredHolder<ElixirEffect, ElixirEffect> EFFECT_BLESSED = registerElixir("blessed", new ElixirEffect(TheBetweenlands.prefix("textures/gui/effect_blessed.png")));
-	public static final DeferredHolder<ElixirEffect, ElixirEffect> EFFECT_SHOCKED = registerElixir("shocked", new ElixirShocked(TheBetweenlands.prefix("textures/gui/effect_shocked.png")));
-
-	//Potions
-	public static final DeferredHolder<MobEffect, MobEffect> ROOT_BOUND = EFFECTS.register("root_bound", () -> new RootBoundEffect().addAttributeModifier(Attributes.MOVEMENT_SPEED, TheBetweenlands.prefix("root_bound_slowdown"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-	public static final DeferredHolder<MobEffect, MobEffect> ENLIGHTENED = EFFECTS.register("enlightened", EnlightenedEffect::new);
-
 
 	public static DeferredHolder<ElixirEffect, ElixirEffect> registerElixir(String name, ElixirEffect elixir) {
-		DeferredHolder<MobEffect, ElixirPotionEffect> effect = EFFECTS.register(name, () -> wrapAttributeModifiers(elixir, new ElixirEffect.ElixirPotionEffect(elixir, elixir.getColor(), elixir.getIcon())));
+		DeferredHolder<MobEffect, ElixirPotionEffect> effect = MobEffectRegistry.EFFECTS.register(name, () -> wrapAttributeModifiers(elixir, new ElixirEffect.ElixirPotionEffect(elixir, elixir.getColor(), elixir.getIcon())));
 		elixir.setElixirEffect(effect);
 		return ELIXIRS.register(name, () -> elixir);
 	}

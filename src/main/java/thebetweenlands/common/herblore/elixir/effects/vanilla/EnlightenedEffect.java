@@ -1,4 +1,4 @@
-package thebetweenlands.common.herblore.elixir;
+package thebetweenlands.common.herblore.elixir.effects.vanilla;
 
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public class EnlightenedEffect extends MobEffect {
 	}
 
 	@Override
-	public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
+	public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance instance) {
 		cures.clear();
 	}
 }
