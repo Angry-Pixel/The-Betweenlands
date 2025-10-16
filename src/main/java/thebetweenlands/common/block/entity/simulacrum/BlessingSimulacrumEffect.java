@@ -37,20 +37,20 @@ public class BlessingSimulacrumEffect implements SimulacrumEffect {
 						cap.setBlessed(player.level().dimension(), pos);
 						player.displayClientMessage(Component.translatable("block.thebetweenlands.simulacrum.blessed"), true);
 					} else if (level.isClientSide()) {
-						this.spawnBlessingParticles(level.getGameTime() * 0.025f, offering.getBlockPos().getX() + 0.5f, offering.getBlockPos().getY() + 0.4f, offering.getBlockPos().getZ() + 0.5f);
+						this.spawnBlessingParticles(level, level.getGameTime() * 0.025f, offering.getBlockPos().getX() + 0.5f, offering.getBlockPos().getY() + 0.4f, offering.getBlockPos().getZ() + 0.5f);
 					}
 				}
 			}
 		}
 	}
 
-	private void spawnBlessingParticles(float rot, float x, float y, float z) {
+	private void spawnBlessingParticles(Level level, float rot, float x, float y, float z) {
 		float step = Mth.PI * 2 / 20;
 		for (int i = 0; i < 20; i++) {
 			float dx = (float) Math.cos(rot + step * i);
 			float dz = (float) Math.sin(rot + step * i);
 
-//			BLParticles.CORRUPTED.spawn(this.getLevel(), x, y, z, ParticleArgs.get().withMotion(dx * 0.05f, 0.2f, dz * 0.05f).withData(80, true, 0.1f, true));
+			TheBetweenlands.createParticle(ParticleRegistry.CORRUPTED.get(), level, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * 0.05f, 0.2f, dz * 0.05f).withData(80, true, 0.1f, true));
 		}
 	}
 }

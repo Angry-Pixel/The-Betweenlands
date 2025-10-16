@@ -16,6 +16,8 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
@@ -115,12 +117,12 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			if (level.isClientSide() && entity.infusionColorGradientTicks > 0 && entity.currentInfusionState == 2) {
 				float[] colors = entity.currentInfusionColor;
 				for (int i = 0; i < 3 + level.getRandom().nextInt(5); i++) {
-//					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
-//						ParticleArgs.get()
-//							.withMotion((level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f, level.getRandom().nextFloat() * 0.02F + 0.01F, (level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f)
-//							.withScale(1f + level.getRandom().nextFloat() * 2.0F)
-//							.withColor(colors[0], colors[1], colors[2], 1)
-//							.withData(80, true, 0.01F, true)));
+					TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
+						ParticleFactory.ParticleArgs.get()
+							.withMotion((level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f, level.getRandom().nextFloat() * 0.02F + 0.01F, (level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f)
+							.withScale(1f + level.getRandom().nextFloat() * 2.0F)
+							.withColor(colors[0], colors[1], colors[2], 1)
+							.withData(80, true, 0.01F, true));
 				}
 			}
 		} else {
@@ -156,12 +158,12 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 				if (level.isClientSide() && entity.infusionColorGradientTicks > 0) {
 					float[] colors = entity.currentInfusionColor;
 					for (int i = 0; i < 3 + level.getRandom().nextInt(5); i++) {
-//						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
-//							ParticleArgs.get()
-//								.withMotion((level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f, level.getRandom().nextFloat() * 0.02F + 0.01F, (level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f)
-//								.withScale(1f + level.getRandom().nextFloat() * 2.0F)
-//								.withColor(colors[0], colors[1], colors[2], 1)
-//								.withData(80, true, 0.01F, true)));
+						TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
+							ParticleFactory.ParticleArgs.get()
+								.withMotion((level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f, level.getRandom().nextFloat() * 0.02F + 0.01F, (level.getRandom().nextFloat() * 0.25F - 0.125f) * 0.09f)
+								.withScale(1f + level.getRandom().nextFloat() * 2.0F)
+								.withColor(colors[0], colors[1], colors[2], 1)
+								.withData(80, true, 0.01F, true));
 					}
 				}
 			} else {

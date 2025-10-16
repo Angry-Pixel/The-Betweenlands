@@ -776,6 +776,9 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD.get(), GasCloudParticle.GasCloudFactory::new);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD_HAZE.get(), GasCloudHazeParticle.GasCloudHazeFactory::new);
 		event.registerSpriteSet(ParticleRegistry.CHIROMAW_TRANSFORM.get(), EntitySwirlParticle.DefaultFactory::new);
+		event.registerSpriteSet(ParticleRegistry.CORRUPTED.get(), SimpleParticle.CorruptedFactory::new);
+		event.registerSpriteSet(ParticleRegistry.EMBER.get(), SimpleParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.SMOOTH_SMOKE.get(), SimpleParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

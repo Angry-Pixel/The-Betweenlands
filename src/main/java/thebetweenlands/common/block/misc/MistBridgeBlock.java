@@ -18,6 +18,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.ParticleRegistry;
+
 import javax.annotation.Nullable;
 
 import java.util.Map;
@@ -59,12 +63,12 @@ public class MistBridgeBlock extends Block {
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (level.isEmptyBlock(pos.above())) {
 			for(int i = 0; i < 3 + random.nextInt(5); i++) {
-//				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F,
-//					ParticleArgs.get()
-//						.withMotion((random.nextFloat() - 0.5F) * 0.08F, random.nextFloat() * 0.01F + 0.01F, (random.nextFloat() - 0.5F) * 0.08F)
-//						.withScale(1.0F + random.nextFloat() * 8.0F)
-//						.withColor(1.0F, 1.0F, 1.0F, 0.05F)
-//						.withData(80, true, 0.01F, true)));
+				TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F,
+					ParticleFactory.ParticleArgs.get()
+						.withMotion((random.nextFloat() - 0.5F) * 0.08F, random.nextFloat() * 0.01F + 0.01F, (random.nextFloat() - 0.5F) * 0.08F)
+						.withScale(1.0F + random.nextFloat() * 8.0F)
+						.withColor(1.0F, 1.0F, 1.0F, 0.05F)
+						.withData(80, true, 0.01F, true));
 			}
 		}
 	}

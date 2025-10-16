@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.common.Tags;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.List;
 
@@ -70,19 +72,7 @@ public class HearthgroveLogBlock extends RotatedPillarBlock {
 						float x = pos.getX() + (offset.getStepX() > 0 ? 1.05F : offset.getStepX() == 0 ? random.nextFloat() : -0.05F);
 						float y = pos.getY() + random.nextFloat();
 						float z = pos.getZ() + (offset.getStepZ() > 0 ? 1.05F : offset.getStepZ() == 0 ? random.nextFloat() : -0.05F);
-
-//						switch(random.nextInt(3)) {
-//							default:
-//							case 0:
-//								BLParticles.EMBER_1.spawn(level, x, y, z);
-//								break;
-//							case 1:
-//								BLParticles.EMBER_2.spawn(level, x, y, z);
-//								break;
-//							case 2:
-//								BLParticles.EMBER_3.spawn(level, x, y, z);
-//								break;
-//						}
+						TheBetweenlands.createParticle(ParticleRegistry.EMBER.get(), level, x, y, z);
 					}
 				}
 			}

@@ -7,8 +7,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.GrubHubBlockEntity;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public record InfestWeedwoodBushPacket(BlockPos tilePos, BlockPos bushPos) implements CustomPacketPayload {
 
@@ -36,12 +38,12 @@ public record InfestWeedwoodBushPacket(BlockPos tilePos, BlockPos bushPos) imple
 				Vec3 dir = new Vec3((packet.bushPos().getX() + 0.5D) - (packet.tilePos().getX() + 0.5D), (packet.bushPos().getY() + 1D) - (packet.tilePos().getY() + 0.325D), (packet.bushPos().getZ() + 0.5D) - (packet.tilePos().getZ() + 0.5D));
 
 				for (int i = 0; i < 20 + level.getRandom().nextInt(5); i++) {
-//					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, packet.tilePos().getX() + 0.5F, packet.tilePos().getY() + 0.325F, packet.tilePos().getZ() + 0.5F,
-//						ParticleArgs.get()
-//							.withMotion(dir.x * 0.08f, dir.y * 0.08F, dir.z * 0.08F)
-//							.withScale(0.6f + level.getRandom().nextFloat() * 5.0F)
-//							.withColor(0.45f, 0.1f, 0.6f, 0.08f)
-//							.withData(80, true, 0.01F, true)));
+					TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, packet.tilePos().getX() + 0.5F, packet.tilePos().getY() + 0.325F, packet.tilePos().getZ() + 0.5F,
+						ParticleFactory.ParticleArgs.get()
+							.withMotion(dir.x * 0.08f, dir.y * 0.08F, dir.z * 0.08F)
+							.withScale(0.6f + level.getRandom().nextFloat() * 5.0F)
+							.withColor(0.45f, 0.1f, 0.6f, 0.08f)
+							.withData(80, true, 0.01F, true));
 				}
 			}
 		});

@@ -418,7 +418,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	@Nullable
 	@Override
 	public Particle createParticle(T type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-		return this.createParticle(type, new ImmutableParticleArgs(level, x, y, z, ParticleArgs.create()));
+		return this.create(type, level, x, y, z, ParticleArgs.create().withMotion(xSpeed, ySpeed, zSpeed));
 	}
 
 	@Nullable

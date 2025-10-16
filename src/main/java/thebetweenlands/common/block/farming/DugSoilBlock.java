@@ -29,8 +29,11 @@ import thebetweenlands.api.block.DungeonFogBlock;
 import thebetweenlands.api.block.FarmablePlant;
 import thebetweenlands.api.client.ConnectedTextureBlock;
 import thebetweenlands.api.client.ConnectionRules;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import javax.annotation.Nullable;
 
@@ -236,12 +239,12 @@ public abstract class DugSoilBlock extends BaseEntityBlock implements ConnectedT
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (state.getValue(FOGGED)) {
-//			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1, pos.getZ() + rand.nextFloat(),
-//				ParticleArgs.get()
-//					.withMotion((random.nextFloat() - 0.5f) * 0.05f, random.nextFloat() * 0.02F + 0.005F, (random.nextFloat() - 0.5f) * 0.05f)
-//					.withScale(5.0f)
-//					.withColor(1, 1, 1, 0.1f)
-//					.withData(80, true, 0.0F, true)));
+			TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + random.nextFloat(), pos.getY() + 1, pos.getZ() + random.nextFloat(),
+				ParticleFactory.ParticleArgs.get()
+					.withMotion((random.nextFloat() - 0.5f) * 0.05f, random.nextFloat() * 0.02F + 0.005F, (random.nextFloat() - 0.5f) * 0.05f)
+					.withScale(5.0f)
+					.withColor(1, 1, 1, 0.1f)
+					.withData(80, true, 0.0F, true));
 		}
 
 		if (state.getValue(DECAYED)) {

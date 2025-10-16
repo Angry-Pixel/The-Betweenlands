@@ -229,6 +229,10 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 		return 7;
 	}
 
+	public boolean isSmoking() {
+		return !this.getItems().getFirst().isEmpty();
+	}
+
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);

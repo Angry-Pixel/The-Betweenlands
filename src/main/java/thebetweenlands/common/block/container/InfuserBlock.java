@@ -192,12 +192,12 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 				if (infuser.getTemperature() >= 100) {
 					float[] colors = infuser.currentInfusionColor;
 					for (int i = 0; i < 2 + random.nextInt(3); i++) {
-//						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
-//							ParticleArgs.get()
-//								.withMotion((random.nextFloat() * 0.25F - 0.125f) * 0.09f, random.nextFloat() * 0.02F + 0.01F, (random.nextFloat() * 0.25F - 0.125f) * 0.09f)
-//								.withScale(1f + random.nextFloat() * 2.0F)
-//								.withColor(colors[0], colors[1], colors[2], 1)
-//								.withData(80, true, 0.01F, true)));
+						TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
+							ParticleFactory.ParticleArgs.get()
+								.withMotion((random.nextFloat() * 0.25F - 0.125f) * 0.09f, random.nextFloat() * 0.02F + 0.01F, (random.nextFloat() * 0.25F - 0.125f) * 0.09f)
+								.withScale(1f + random.nextFloat() * 2.0F)
+								.withColor(colors[0], colors[1], colors[2], 1)
+								.withData(80, true, 0.01F, true));
 					}
 				}
 			}

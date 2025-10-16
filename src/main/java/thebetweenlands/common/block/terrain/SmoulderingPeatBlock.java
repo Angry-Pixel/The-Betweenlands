@@ -9,7 +9,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.SmokingRackBlock;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
+import thebetweenlands.common.block.misc.ChipPathBlock;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class SmoulderingPeatBlock extends PeatBlock {
 	public SmoulderingPeatBlock(Properties properties) {
@@ -37,58 +43,47 @@ public class SmoulderingPeatBlock extends PeatBlock {
 
 		if (level.isEmptyBlock(pos.above())) {
 			for (int i = 0; i < 3 + random.nextInt(5); i++) {
-//				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F,
-//					ParticleArgs.get()
-//						.withMotion((random.nextFloat() - 0.5f) * 0.08f, random.nextFloat() * 0.01F + 0.01F, (random.nextFloat() - 0.5f) * 0.08f)
-//						.withScale(1f + rand.nextFloat() * 8.0F)
-//						.withColor(1F, 1.0F, 1.0F, 0.05f)
-//						.withData(80, true, 0.01F, true)));
+				TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F,
+					ParticleFactory.ParticleArgs.get()
+						.withMotion((random.nextFloat() - 0.5F) * 0.08F, random.nextFloat() * 0.01F + 0.01F, (random.nextFloat() - 0.5F) * 0.08F)
+						.withScale(random.nextFloat() * 8.0F)
+						.withColor(1.0F, 1.0F, 1.0F, 0.05F)
+						.withData(80, true, 0.01F, true));
 			}
 		}
 
-//		if (level.getBlockState(pos.above()).getBlock() instanceof BlockChipPath) {
-//			for(int i = 0; i < 3 + random.nextInt(5); i++) {
-//				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F,
-//					ParticleArgs.get()
-//						.withMotion((rand.nextFloat() - 0.5f) * 0.04f, rand.nextFloat() * 0.1F + 0.05F, (rand.nextFloat() - 0.5f) * 0.04f)
-//						.withScale(2f + rand.nextFloat() * 2.0F)
-//						.withColor(0F, 0.0F, 0.0F, 0.5f)
-//						.withData(80, true, 0.01F, true)));
-//			}
+		if (level.getBlockState(pos.above()).getBlock() instanceof ChipPathBlock) {
+			for(int i = 0; i < 3 + random.nextInt(5); i++) {
+				TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F,
+					ParticleFactory.ParticleArgs.get()
+						.withMotion((random.nextFloat() - 0.5F) * 0.04F, random.nextFloat() * 0.1F + 0.05F, (random.nextFloat() - 0.5F) * 0.04F)
+						.withScale(2.0F + random.nextFloat() * 2.0F)
+						.withColor(0.0F, 0.0F, 0.0F, 0.5F)
+						.withData(80, true, 0.01F, true));
+			}
 
-//			switch(random.nextInt(3)) {
-//				default:
-//				case 0:
-//					BLParticles.EMBER_1.spawn(level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
-//					break;
-//				case 1:
-//					BLParticles.EMBER_2.spawn(level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
-//					break;
-//				case 2:
-//					BLParticles.EMBER_3.spawn(level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
-//					break;
-//			}
-//		}
+			TheBetweenlands.createParticle(ParticleRegistry.EMBER.get(), level, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
+		}
 
-//		if (level.getBlockState(pos.above()).getBlock() instanceof BlockSmokingRack) {
-//			TileEntitySmokingRack tile = (TileEntitySmokingRack) level.getBlockEntity(pos.above());
-//			if (tile != null && tile.updateFuelState()) {
-//				for(int i = 0; i < 3 + random.nextInt(5); i++) {
-//					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F,
-//						ParticleArgs.get()
-//							.withMotion((random.nextFloat() - 0.5f) * 0.04f, random.nextFloat() * 0.2F + 0.01F, (random.nextFloat() - 0.5f) * 0.04f)
-//							.withScale(1f + random.nextFloat() * 2.0F)
-//							.withColor(1F, 1F, 1F, 0.5f)
-//							.withData(80, true, 0.01F, true)));
-//
-//					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 2.125F, pos.getZ() + 0.5F,
-//						ParticleArgs.get()
-//							.withMotion((random.nextFloat() - 0.5f) * 0.04f, random.nextFloat() * 0.02F + 0.01F, (random.nextFloat() - 0.5f) * 0.04f)
-//							.withScale(1f + random.nextFloat() * 2.0F)
-//							.withColor(1F, 1F, 1F, 0.5f)
-//							.withData(80, true, 0.01F, true)));
-//				}
-//			}
-//		}
+		if (level.getBlockState(pos.above()).getBlock() instanceof SmokingRackBlock) {
+			SmokingRackBlockEntity tile = (SmokingRackBlockEntity) level.getBlockEntity(pos.above());
+			if (tile != null && tile.isSmoking()) {
+				for(int i = 0; i < 3 + random.nextInt(5); i++) {
+					TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F,
+						ParticleFactory.ParticleArgs.get()
+							.withMotion((random.nextFloat() - 0.5F) * 0.04F, random.nextFloat() * 0.2F + 0.01F, (random.nextFloat() - 0.5F) * 0.04F)
+							.withScale(random.nextFloat() * 2.0F)
+							.withColor(1.0F, 1.0F, 1.0F, 0.5F)
+							.withData(80, true, 0.01F, true));
+
+					TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 2.125F, pos.getZ() + 0.5F,
+						ParticleFactory.ParticleArgs.get()
+							.withMotion((random.nextFloat() - 0.5F) * 0.04F, random.nextFloat() * 0.02F + 0.01F, (random.nextFloat() - 0.5F) * 0.04F)
+							.withScale(1f + random.nextFloat() * 2.0F)
+							.withColor(1.0F, 1.0F, 1.0F, 0.5F)
+							.withData(80, true, 0.01F, true));
+				}
+			}
+		}
 	}
 }

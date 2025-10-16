@@ -150,7 +150,7 @@ public class OfferingTableBlockEntity extends SyncedBlockEntity implements Conta
 			float dx = (float) Math.cos(rot + step * i);
 			float dz = (float) Math.sin(rot + step * i);
 
-//			BLParticles.CORRUPTED.spawn(level, x, y, z, ParticleArgs.get().withMotion(dx * 0.075f, 0.15f, dz * 0.075f).withData(80, true, 0.1f, true));
+			TheBetweenlands.createParticle(ParticleRegistry.CORRUPTED.get(), level, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * 0.075f, 0.15f, dz * 0.075f).withData(80, true, 0.1f, true));
 		}
 	}
 

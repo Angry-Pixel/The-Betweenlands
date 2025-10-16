@@ -3,6 +3,7 @@ package thebetweenlands.common.block.container;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,15 +28,20 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+
 import javax.annotation.Nullable;
+
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.block.AspectFogBlock;
 import thebetweenlands.api.block.DungeonFogBlock;
 import thebetweenlands.api.recipes.CenserRecipe;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.Optional;
 
@@ -110,6 +116,34 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 		}
 	}
 
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		BlockEntity te = level.getBlockEntity(pos);
+		if (te instanceof CenserBlockEntity censer) {
+
+			if (censer.getFuelTicks() > 0) {
+				CenserRecipe<Object> recipe = censer.getCurrentRecipe();
+
+				if (recipe != null) {
+					int fogColor = recipe.getEffectColor(censer.getCurrentRecipeContext(), censer, CenserRecipe.EffectColorType.FOG);
+
+					float r = ((fogColor >> 16) & 0xFF) / 255f;
+					float g = ((fogColor >> 8) & 0xFF) / 255f;
+					float b = ((fogColor) & 0xFF) / 255f;
+
+					for (int i = 0; i < 3 + random.nextInt(5); i++) {
+						TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
+							ParticleFactory.ParticleArgs.get()
+								.withMotion((random.nextFloat() - 0.5F) * 0.08F, random.nextFloat() * 0.01F + 0.005F, (random.nextFloat() - 0.5F) * 0.08F)
+								.withScale(2.0F + random.nextFloat() * 8.0F)
+								.withColor(r, g, b, 0.1F)
+								.withData(80, true, 0.05F, true));
+					}
+				}
+			}
+		}
+	}
+
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -147,6 +181,7 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 		return levelAccessor.getBlockEntity(pos) instanceof CenserBlockEntity censer && censer.getDungeonFogStrength(1) >= 0.1F;
 	}
 
+	@Nullable
 	@Override
 	public Holder<AspectType> getAspectFogType(LevelAccessor level, BlockPos pos, BlockState state) {
 		if (level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {

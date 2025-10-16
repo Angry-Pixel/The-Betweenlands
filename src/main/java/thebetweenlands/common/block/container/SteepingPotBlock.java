@@ -33,11 +33,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nullable;
+
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.SteepingPotBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.Optional;
 
@@ -162,16 +166,16 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock implements Swamp
 				float yy = y + 0.35F + size * 0.25F;
 				float zz = z + 0.5F;
 				int color = pot.tank.getFluid().getOrDefault(DataComponents.DYED_COLOR, new DyedItemColor(0, false)).rgb();
-//				BLParticles.BUBBLE_INFUSION.spawn(level, xx + 0.3F - random.nextFloat() * 0.6F, yy, zz + 0.3F - random.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(color));
+				TheBetweenlands.createParticle(ParticleRegistry.INFUSER_BUBBLE.get(), level, xx + 0.3F - random.nextFloat() * 0.6F, yy, zz + 0.3F - random.nextFloat() * 0.6F, ParticleFactory.ParticleArgs.get().withScale(0.3F).withColor(color));
 
 				if (pot.getHeatProgress() >= 100) {
 					for (int i = 0; i < 2 + random.nextInt(3); i++) {
-//						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
-//							ParticleArgs.get()
-//								.withMotion((random.nextFloat() * 0.25F - 0.125F) * 0.09F, random.nextFloat() * 0.02F + 0.01F, (random.nextFloat() * 0.25F - 0.125F) * 0.09F)
-//								.withScale(1.0F + random.nextFloat() * 2.0F)
-//								.withColor(color)
-//								.withData(80, true, 0.01F, true)));
+						TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
+							ParticleFactory.ParticleArgs.get()
+								.withMotion((random.nextFloat() * 0.25F - 0.125F) * 0.09F, random.nextFloat() * 0.02F + 0.01F, (random.nextFloat() * 0.25F - 0.125F) * 0.09F)
+								.withScale(1.0F + random.nextFloat() * 2.0F)
+								.withColor(color)
+								.withData(80, true, 0.01F, true));
 					}
 				}
 			}

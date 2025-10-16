@@ -52,6 +52,9 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GAS_CLOUD = PARTICLES.register("gas_cloud", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GAS_CLOUD_HAZE = PARTICLES.register("gas_cloud_haze", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> CHIROMAW_TRANSFORM = register("chiromaw_transform", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CORRUPTED = PARTICLES.register("corrupted", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EMBER = PARTICLES.register("ember", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SMOOTH_SMOKE = PARTICLES.register("smooth_smoke", () -> new SimpleParticleType(false));
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {

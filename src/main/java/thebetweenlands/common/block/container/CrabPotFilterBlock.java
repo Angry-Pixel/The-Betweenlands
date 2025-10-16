@@ -24,11 +24,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
+
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.List;
 
@@ -75,12 +79,10 @@ public class CrabPotFilterBlock extends HorizontalBaseEntityBlock implements Swa
 			if (random.nextInt(3) == 0)
 				if (filter.isBaited() && filter.isProgressing()) {
 					for (int i = 0; i < 5 + random.nextInt(5); i++) {
-//						BatchedParticleRenderer.INSTANCE.addParticle(
-//							DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR,
-//							BLParticles.SMOOTH_SMOKE.create(level, pos.getX() + 0.5F, pos.getY() + 0.99F, pos.getZ() + 0.5F,
-//								ParticleArgs.get().withMotion((random.nextFloat() - 0.5f) * 0.01f, -random.nextFloat() * -0.05F - 0.05F, (random.nextFloat() - 0.5f) * 0.01f)
-//									.withScale(0.5f + random.nextFloat() * 8.0F)
-//									.withColor(0.59F, 0.29F, 0F, 0.3f).withData(80, true, 0.01F, true)));
+						TheBetweenlands.createParticle(ParticleRegistry.SMOOTH_SMOKE.get(), level, pos.getX() + 0.5F, pos.getY() + 0.99F, pos.getZ() + 0.5F,
+								ParticleFactory.ParticleArgs.get().withMotion((random.nextFloat() - 0.5f) * 0.01f, -random.nextFloat() * -0.05F - 0.05F, (random.nextFloat() - 0.5f) * 0.01f)
+									.withScale(0.5f + random.nextFloat() * 8.0F)
+									.withColor(0.59F, 0.29F, 0F, 0.3f).withData(80, true, 0.01F, true));
 					}
 				}
 		}
