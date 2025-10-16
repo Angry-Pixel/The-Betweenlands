@@ -1,24 +1,28 @@
 package thebetweenlands.common.handler;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
-import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.SimulacrumEffectRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.component.entity.LastKilledData;
+import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
 
@@ -26,9 +30,10 @@ public class SimulacrumHandler {
 
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(SimulacrumHandler::modifyBreakSpeedWithSimulacrum);
-		NeoForge.EVENT_BUS.addListener(SimulacrumHandler::handleBlessingDeath);
-		NeoForge.EVENT_BUS.addListener(SimulacrumHandler::resurrectDeadEntities);
+		NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, SimulacrumHandler::handleBlessingDeath);
+		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, SimulacrumHandler::resurrectDeadEntities);
 		NeoForge.EVENT_BUS.addListener(SimulacrumHandler::addBlessingEffect);
+		NeoForge.EVENT_BUS.addListener(SimulacrumHandler::storeLastKilledEntity);
 	}
 
 	private static void modifyBreakSpeedWithSimulacrum(PlayerEvent.BreakSpeed event) {
@@ -49,9 +54,10 @@ public class SimulacrumHandler {
 	}
 
 	private static void handleBlessingDeath(LivingDeathEvent event) {
+		if (event.isCanceled()) return;
 		LivingEntity entity = event.getEntity();
 
-		if (!entity.level().isClientSide() && entity instanceof Player player && player.hasData(AttachmentRegistry.BLESSING)) {
+		if (entity instanceof ServerPlayer player && player.hasData(AttachmentRegistry.BLESSING)) {
 			BlessingData data = entity.getData(AttachmentRegistry.BLESSING);
 
 			if (data.isBlessed()) {
@@ -73,34 +79,35 @@ public class SimulacrumHandler {
 						player.level().addFreshEntity(xpOrb);
 					}
 
-//					if (entity.level().getRandom().nextBoolean()) {
-//						BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(entity.level(), location, 8, false, 4, 0);
-//
-//						if (spawnPoint != null) {
-//							if (entity.distanceToSqr(Vec3.atCenterOf(spawnPoint)) > 24) {
-//								playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-//								entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
-//							}
-//
-//							PlayerUtil.teleport(entity, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
-//
-//							playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-//							entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
-//
-//							entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
-//						} else if (entity instanceof ServerPlayer) {
-//							player.displayClientMessage(Component.translatable("chat.simulacrum.obstructed"), true);
-//						}
-//					} else {
-//						playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-//						entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
-//					}
+					//TODO lightning
+					if (entity.level().getRandom().nextBoolean()) {
+						BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(player.serverLevel(), location, 8, false, 4, 0, true);
+
+						if (spawnPoint != null) {
+							if (entity.distanceToSqr(Vec3.atCenterOf(spawnPoint)) > 24) {
+								playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
+								//entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
+							}
+
+							player.teleportTo(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
+
+							playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
+							//entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
+
+							entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
+						} else if (entity instanceof ServerPlayer) {
+							player.displayClientMessage(Component.translatable("block.thebetweenlands.simulacrum.obstructed"), true);
+						}
+					} else {
+						playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
+						//entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
+					}
 
 					if (player instanceof ServerPlayer sp) {
 						AdvancementCriteriaRegistry.REVIVED_BLESSED.get().trigger(sp);
 					}
 
-					data.clearBlessed();
+					player.setData(AttachmentRegistry.BLESSING, BlessingData.noBlessing());
 				}
 			}
 		}
@@ -112,6 +119,7 @@ public class SimulacrumHandler {
 	}
 
 	private static void resurrectDeadEntities(LivingDeathEvent event) {
+		if (event.isCanceled()) return;
 		LivingEntity entity = event.getEntity();
 
 		if (!entity.level().isClientSide() && !(entity instanceof Player) && entity.level().getRandom().nextInt(4) == 0) {
@@ -139,6 +147,14 @@ public class SimulacrumHandler {
 			if (data.isBlessed() && data.getBlessingLocation() != null && event.getEntity().level().dimension() == data.getBlessingDimension()) {
 				event.getEntity().addEffect(new MobEffectInstance(MobEffectRegistry.BLESSED, 205, 0, true, false));
 			}
+		}
+	}
+
+	public static void storeLastKilledEntity(LivingDeathEvent event) {
+		DamageSource source = event.getSource();
+		Entity attacker = source.getEntity();
+		if (attacker instanceof Player player) {
+			player.setData(AttachmentRegistry.LAST_KILLED, LastKilledData.setLastKilled(event.getEntity().getType()));
 		}
 	}
 }

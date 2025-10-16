@@ -16,7 +16,7 @@ import thebetweenlands.common.registries.AttachmentRegistry;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class LastKilledData {
+public record LastKilledData(Optional<EntityType<?>> lastKilled) {
 
 	public static final Codec<LastKilledData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		BuiltInRegistries.ENTITY_TYPE.byNameCodec().optionalFieldOf("last_killed").forGetter(o -> o.lastKilled)
@@ -27,30 +27,12 @@ public class LastKilledData {
 		LastKilledData::new
 	);
 
-	private Optional<EntityType<?>> lastKilled;
-
-	public LastKilledData() {
-		this(Optional.empty());
-	}
-
-	private LastKilledData(Optional<EntityType<?>> lastKilled) {
-		this.lastKilled = lastKilled;
+	public static LastKilledData setLastKilled(@Nullable EntityType<?> killed) {
+		return new LastKilledData(Optional.ofNullable(killed));
 	}
 
 	@Nullable
 	public EntityType<?> getLastKilled() {
 		return this.lastKilled.orElse(null);
-	}
-
-	public void setLastKilled(EntityType<?> entity) {
-		this.lastKilled = Optional.of(entity);
-	}
-
-	public static void onLivingDeath(LivingDeathEvent event) {
-		DamageSource source = event.getSource();
-		Entity attacker = source.getEntity();
-		if(attacker != null) {
-			attacker.getData(AttachmentRegistry.LAST_KILLED).setLastKilled(event.getEntity().getType());
-		}
 	}
 }

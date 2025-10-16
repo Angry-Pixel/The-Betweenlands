@@ -4,18 +4,23 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.ItemCageBlockEntity;
+import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.boss.Barrishee;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 
 import java.util.List;
 
@@ -51,6 +56,16 @@ public class TestFlagItem extends Item {
 		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
 
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
+	}
+
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+		if (!level.isClientSide() && player.getData(AttachmentRegistry.BLESSING).isBlessed()) {
+			player.setData(AttachmentRegistry.BLESSING, BlessingData.noBlessing());
+			player.displayClientMessage(Component.literal("Fuck you (unblesses you)"), true);
+			player.removeEffect(MobEffectRegistry.BLESSED);
+		}
+		return super.use(level, player, usedHand);
 	}
 
 	@Override

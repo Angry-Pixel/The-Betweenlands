@@ -3,22 +3,26 @@ package thebetweenlands.common.block.entity.simulacrum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.block.SimulacrumEffect;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.OfferingTableBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class BlessingSimulacrumEffect implements SimulacrumEffect {
 	@Override
 	public void executeEffect(Level level, BlockPos pos, BlockState state, SimulacrumBlockEntity entity) {
 		if (level.getGameTime() % 4 == 0) {
 			Player player = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5D, pos.getZ() + 0.5D, 4, e -> {
-				if (!e.isSpectator() && e.hasData(AttachmentRegistry.BLESSING)) {
+				if (EntitySelector.NO_SPECTATORS.test(e) && e.hasData(AttachmentRegistry.BLESSING)) {
 					BlessingData cap = e.getData(AttachmentRegistry.BLESSING);
 					return (!cap.isBlessed() || cap.getBlessingDimension() != e.level().dimension() || !pos.equals(cap.getBlessingLocation()));
 				}
@@ -30,11 +34,8 @@ public class BlessingSimulacrumEffect implements SimulacrumEffect {
 
 				if (offering != null) {
 					if (!level.isClientSide() && level.getRandom().nextInt(40) == 0) {
-						BlessingData cap = player.getData(AttachmentRegistry.BLESSING);
-						ItemStack stack = offering.getTheItem();
-						stack.shrink(1);
-						offering.setTheItem(stack);
-						cap.setBlessed(player.level().dimension(), pos);
+						offering.splitTheItem(1);
+						player.setData(AttachmentRegistry.BLESSING, BlessingData.setBlessed(player.level().dimension(), pos));
 						player.displayClientMessage(Component.translatable("block.thebetweenlands.simulacrum.blessed"), true);
 					} else if (level.isClientSide()) {
 						this.spawnBlessingParticles(level, level.getGameTime() * 0.025f, offering.getBlockPos().getX() + 0.5f, offering.getBlockPos().getY() + 0.4f, offering.getBlockPos().getZ() + 0.5f);

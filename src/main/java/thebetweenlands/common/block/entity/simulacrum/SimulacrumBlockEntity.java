@@ -149,7 +149,7 @@ public class SimulacrumBlockEntity extends RepellerBlockEntity implements Spawne
 						BlockEntity tile = level.getBlockEntity(pos);
 
 						if (tile != exclude && tileCls.isInstance(tile)) {
-							double dstSq = pos.distToCenterSqr(x, y, z);
+							float dstSq = (float) pos.distToLowCornerSqr(x, y, z);
 
 							if (dstSq <= range * range && (closest == null || dstSq <= closest.getBlockPos().distToCenterSqr(x, y, z)) &&
 								(effect == null || !(tile instanceof SimulacrumBlockEntity simulacrum) || simulacrum.getEffect() == effect && simulacrum.isActive()) &&
