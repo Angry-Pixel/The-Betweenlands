@@ -17,14 +17,17 @@ public class ArmorMaterialRegistry {
 
 	public static final DeferredRegister<ArmorMaterial> MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, TheBetweenlands.ID);
 
-	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SKULL_MASK = MATERIALS.register("skull_mask", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-		map.put(ArmorItem.Type.BOOTS, 0);
-		map.put(ArmorItem.Type.LEGGINGS, 0);
-		map.put(ArmorItem.Type.CHESTPLATE, 0);
-		map.put(ArmorItem.Type.HELMET, 0);
-		map.put(ArmorItem.Type.BODY, 0);
-	}), 0, SoundEvents.ARMOR_EQUIP_CHAIN, Ingredient::of, List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("skull_mask"))), 0.0F, 0.0F));
+	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> EXPLORER = MATERIALS.register("explorer", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+		map.put(ArmorItem.Type.BOOTS, 1);
+		map.put(ArmorItem.Type.LEGGINGS, 2);
+		map.put(ArmorItem.Type.CHESTPLATE, 3);
+		map.put(ArmorItem.Type.HELMET, 1);
+		map.put(ArmorItem.Type.BODY, 4);
+	}), 0, SoundEvents.ARMOR_EQUIP_GENERIC, Ingredient::of, List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("explorer"))), 0.0F, 0.0F));
 
+	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SILK_MASK = MATERIALS.register("silk_mask", () -> new ArmorMaterial(new EnumMap<>(ArmorItem.Type.class), 0, SoundEvents.ARMOR_EQUIP_GENERIC, Ingredient::of, List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("silk_mask"))), 0.0F, 0.0F));
+	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SKULL_MASK = MATERIALS.register("skull_mask", () -> new ArmorMaterial(new EnumMap<>(ArmorItem.Type.class), 0, SoundEvents.ARMOR_EQUIP_CHAIN, Ingredient::of, List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("skull_mask"))), 0.0F, 0.0F));
+	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SPIRIT_TREE_MASK = MATERIALS.register("spirit_tree_mask", () -> new ArmorMaterial(new EnumMap<>(ArmorItem.Type.class), 0, SoundEvents.ARMOR_EQUIP_GENERIC, Ingredient::of, List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("spirit_tree_mask"))), 0.0F, 0.0F));
 
 	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> LURKER_SKIN = MATERIALS.register("lurker_skin", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
 		map.put(ArmorItem.Type.BOOTS, 1);

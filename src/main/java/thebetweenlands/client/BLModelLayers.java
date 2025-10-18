@@ -6,6 +6,11 @@ import thebetweenlands.common.TheBetweenlands;
 public class BLModelLayers {
 
 	public static final ModelLayerLocation AMPHIBIOUS_ARMOR = register("amphibious_armor");
+	public static final ModelLayerLocation ANCIENT_ARMOR = register("ancient_armor");
+	public static final ModelLayerLocation EXPLORERS_HAT = register("explorers_hat");
+	public static final ModelLayerLocation LARGE_SPIRIT_TREE_MASK = register("large_spirit_tree_mask");
+	public static final ModelLayerLocation SMALL_SPIRIT_TREE_MASK = register("small_spirit_tree_mask");
+	public static final ModelLayerLocation SILK_MASK = register("silk_mask");
 
 	public static final ModelLayerLocation BONE_SHIELD = register("bone_shield");
 	public static final ModelLayerLocation DENTROTHYST_SHIELD = register("dentrothyst_shield");
@@ -57,6 +62,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation LURKER = register("lurker");
 	public static final ModelLayerLocation LARGE_SLUDGE_WORM = register("large_sludge_worm");
 	public static final ModelLayerLocation LARGE_SLUDGE_WORM_OUTER = register("large_sludge_worm", "outer");
+	public static final ModelLayerLocation LARGE_SPIRIT_TREE_FACE = register("large_spirit_tree_face");
 	public static final ModelLayerLocation MIRE_SNAIL = register("mire_snail");
 	public static final ModelLayerLocation MUMMY_ARM = register("mummy_arm");
 	public static final ModelLayerLocation OLM = register("olm");

@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-08T21:36:35.073159705	Item Models: thebetweenlands
+// 1.21.1	2025-10-17T14:59:45.021631404	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -178,6 +178,7 @@ cef39ea745081ebae4bf14016bb714a8ffa6b580 assets/thebetweenlands/models/item/elm_
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_shaman_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/emberling_spawn_egg.json
 53d8dd76227adbcaceade991d59b2692175c4e12 assets/thebetweenlands/models/item/empty_amulet.json
+69260fcbdd3bc3a845a55372ef21327b8ed77c33 assets/thebetweenlands/models/item/explorers_hat.json
 f94da2497630fae1a4f23ab7b23fb8fb33cf9e79 assets/thebetweenlands/models/item/fabricated_scroll.json
 0f8fce75845dea8ecd855e954a21ff70c41c4554 assets/thebetweenlands/models/item/filled_amate_map.json
 d04657e81e3097966eef11e7e10a54fa7776ebb0 assets/thebetweenlands/models/item/firefly.json
@@ -298,6 +299,7 @@ b05945461f2ce9480dc6dbec84821e8d32b4d335 assets/thebetweenlands/models/item/lake
 0032e26ab556dee88ee74ccfb56a1c8bdde93a82 assets/thebetweenlands/models/item/large_gallery_frame.json
 814748dec6173e81a555f3563e001b242c135f5c assets/thebetweenlands/models/item/large_lurker_skin_pouch.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/large_sludge_worm_spawn_egg.json
+f408351769c73209811e29fe516326aa030d992b assets/thebetweenlands/models/item/large_spirit_tree_face_mask.json
 30710e59c353551a817ed3ef87b898330efa4a43 assets/thebetweenlands/models/item/lavender_blue_dye.json
 c1ef0fdc9f0c99b8807b6f4ab622801aa088be7c assets/thebetweenlands/models/item/lavender_blue_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/lavender_blue_item_frame.json

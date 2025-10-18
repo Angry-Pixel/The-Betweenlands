@@ -7,6 +7,9 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.model.HumanoidArmorModel;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -64,6 +67,8 @@ import thebetweenlands.client.gui.screen.SmokingRackScreen;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
+import thebetweenlands.client.model.armor.ExplorersHatModel;
+import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.block.AlcoveModel;
@@ -125,6 +130,7 @@ import thebetweenlands.common.fluid.SwampWaterFluidType;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
+import thebetweenlands.common.item.armor.extension.*;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
 import thebetweenlands.common.item.misc.MobItem;
@@ -301,6 +307,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.FISHING_SPEAR))));
 		event.registerEntityRenderer(EntityRegistry.AMPHIBIOUS_FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.AMPHIBIOUS_FISHING_SPEAR))));
 		event.registerEntityRenderer(EntityRegistry.ROBUST_FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.ROBUST_FISHING_SPEAR))));
+		event.registerEntityRenderer(EntityRegistry.SPIRIT_TREE_FACE_MASK.get(), SpiritTreeFaceMaskRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -344,6 +351,10 @@ public class ClientRegistrationEvents {
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.EXPLORERS_HAT, ExplorersHatModel::create);
+		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_MASK, () -> LargeSpiritTreeFaceModel.create(true));
+		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_MASK, () -> SmallSpiritTreeFaceModel.createFace2(true));
+		event.registerLayerDefinition(BLModelLayers.SILK_MASK, SilkMaskModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.BONE_SHIELD, BoneShieldModel::create);
 		event.registerLayerDefinition(BLModelLayers.DENTROTHYST_SHIELD, DentrothystShieldModel::create);
@@ -362,7 +373,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_1, GreeblingModel::createVariant1);
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_2, GreeblingModel::createVariant2);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_ARROW, SludgeWormArrowModel::create);
-		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, SmallSpiritTreeFaceModel::createFace2);
+		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, () -> SmallSpiritTreeFaceModel.createFace2(false));
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM, SludgeWormModel::create);
 		event.registerLayerDefinition(BLModelLayers.TINY_SLUDGE_WORM, TinySludgeWormModel::create);
 		event.registerLayerDefinition(BLModelLayers.STALKER, StalkerModel::create);
@@ -414,6 +425,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.FISHING_SPEAR, FishingSpearModel::create);
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_FISHING_SPEAR, FishingSpearModel::createFinned);
 		event.registerLayerDefinition(BLModelLayers.ROBUST_FISHING_SPEAR, RobustFishingSpearModel::create);
+		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_FACE, () -> LargeSpiritTreeFaceModel.create(false));
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -645,6 +657,12 @@ public class ClientRegistrationEvents {
 		event.registerItem(AmphibiousArmorItem.ArmorRender.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
 			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
+
+		event.registerItem(new ExplorersHatRenderer(), ItemRegistry.EXPLORERS_HAT.get());
+		event.registerItem(new SkullMaskRenderer(), ItemRegistry.SKULL_MASK.get());
+		event.registerItem(new SilkMaskRenderer(), ItemRegistry.SILK_MASK.get());
+		event.registerItem(new SmallSpiritTreeMaskRenderer(), ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
+		event.registerItem(new LargeSpiritTreeMaskRenderer(), ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
 
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override

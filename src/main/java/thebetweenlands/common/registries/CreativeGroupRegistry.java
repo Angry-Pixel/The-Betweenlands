@@ -962,8 +962,8 @@ public class CreativeGroupRegistry {
 		.icon(() -> new ItemStack(ItemRegistry.RECORD_ASTATOS.get()))
 		.displayItems((parameters, output) -> {
 			output.accept(ItemRegistry.SKULL_MASK);
-//			output.accept(ItemRegistry.EXPLORERS_HAT);
-//			output.accept(ItemRegistry.LARGE_SPIRIT_TREE_MASK);
+			output.accept(ItemRegistry.EXPLORERS_HAT);
+			output.accept(ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK);
 			output.accept(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK);
 			output.accept(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK);
 			output.accept(ItemRegistry.SMALL_GALLERY_FRAME);

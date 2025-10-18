@@ -433,10 +433,10 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SILK_BUNDLE);
 
 		this.basicItem(ItemRegistry.SKULL_MASK);
-		//explorer hat
+		this.basicItem(ItemRegistry.EXPLORERS_HAT);
+		this.basicItem(ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK);
 		this.basicItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK);
 		this.basicItem(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK);
-		//tree masks
 		this.basicItem(ItemRegistry.SMALL_GALLERY_FRAME);
 		this.basicItem(ItemRegistry.LARGE_GALLERY_FRAME);
 		this.basicItem(ItemRegistry.VERY_LARGE_GALLERY_FRAME);

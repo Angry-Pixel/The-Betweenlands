@@ -1603,10 +1603,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.silk_bundle.item", "- %s");
 
 		this.addItem(ItemRegistry.SKULL_MASK, "Skull Mask");
-		//explorer hat
+		this.addItem(ItemRegistry.EXPLORERS_HAT, "Explorer's Hat");
+		this.addItem(ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK, "Large Spirit Tree Face Mask");
 		this.addItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK, "Small Spirit Tree Face Mask");
 		this.addItem(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK, "Small Animated Spirit Tree Face Mask");
-		//tree masks
 		this.addItem(ItemRegistry.SMALL_GALLERY_FRAME, "Small Gallery Frame");
 		this.addItem(ItemRegistry.LARGE_GALLERY_FRAME, "Large Gallery Frame");
 		this.addItem(ItemRegistry.VERY_LARGE_GALLERY_FRAME, "Very Large Gallery Frame");
