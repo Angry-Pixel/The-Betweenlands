@@ -148,11 +148,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.WEEDWOOD);
 		this.logBlockWithItem(BlockRegistry.SAP_LOG);
 		this.barkBlockWithItem(BlockRegistry.SAP_BARK, this.modLoc("block/sap_log_side"));
-		this.leavesBlockWithItem(BlockRegistry.WEEDWOOD_LEAVES);
-		this.leavesBlockWithItem(BlockRegistry.SAP_LEAVES);
-		this.leavesBlockWithItem(BlockRegistry.RUBBER_TREE_LEAVES);
-		this.leavesBlockWithItem(BlockRegistry.HEARTHGROVE_LEAVES);
-		this.leavesBlockWithItem(BlockRegistry.NIBBLETWIG_LEAVES);
+		this.leavesBlockWithItem(BlockRegistry.WEEDWOOD_LEAVES, true);
+		this.leavesBlockWithItem(BlockRegistry.SAP_LEAVES, false);
+		this.leavesBlockWithItem(BlockRegistry.RUBBER_TREE_LEAVES, false);
+		this.leavesBlockWithItem(BlockRegistry.HEARTHGROVE_LEAVES, false);
+		this.leavesBlockWithItem(BlockRegistry.NIBBLETWIG_LEAVES, false);
 		this.simpleBlock(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/top_spirit_tree_leaves_top")));
 		this.basicItemTex(BlockRegistry.TOP_SPIRIT_TREE_LEAVES, true);
 		this.simpleBlock(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/blank")));
@@ -1161,8 +1161,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
-	public void leavesBlockWithItem(DeferredBlock<Block> block) {
-		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), this.mcLoc("block/leaves")).texture("all", this.blockTexture(block.get())).renderType("cutout_mipped"));
+	public void leavesBlockWithItem(DeferredBlock<Block> block, boolean shaggy) {
+		this.simpleBlock(block.get(), this.models().withExistingParent(block.getId().getPath(), shaggy ? this.modLoc("block/shaggy_leaves") : this.mcLoc("block/leaves")).texture("all", this.blockTexture(block.get())).renderType("cutout_mipped"));
 		this.simpleBlockItem(block);
 	}
 

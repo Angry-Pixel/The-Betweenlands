@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/leaves",
+  "parent": "thebetweenlands:block/shaggy_leaves",
   "render_type": "minecraft:cutout_mipped",
   "textures": {
     "all": "thebetweenlands:block/weedwood_leaves"
