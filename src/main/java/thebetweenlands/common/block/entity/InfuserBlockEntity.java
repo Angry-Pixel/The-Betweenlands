@@ -311,14 +311,6 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	@Override
-	public void setChanged() {
-		super.setChanged();
-		if (this.getLevel() != null) {
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
-		}
-	}
-
-	@Override
 	public NonNullList<ItemStack> getItems() {
 		return this.items;
 	}

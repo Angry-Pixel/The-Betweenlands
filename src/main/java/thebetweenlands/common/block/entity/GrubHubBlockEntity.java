@@ -1,9 +1,12 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,7 +21,7 @@ import thebetweenlands.common.registries.*;
 
 public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
 
-	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME, stack -> stack.is(FluidRegistry.PHEROMONE_EXTRACT_STILL));
+	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 8, stack -> stack.is(FluidRegistry.PHEROMONE_EXTRACT_STILL));
 	private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
 	public int switchTextureCount = 0;
@@ -29,14 +32,14 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	public static void tick(Level level, BlockPos pos, BlockState state, GrubHubBlockEntity entity) {
 		if (!level.isClientSide() && level.getGameTime() % 10 == 0)
-			entity.checkCanInfestOrHarvest(level, pos);
+			entity.checkCanInfestOrHarvest(level, pos.below());
 
-		if (level.isClientSide && entity.switchTextureCount > 0)
+		if (level.isClientSide() && entity.switchTextureCount > 0)
 			entity.switchTextureCount--;
 	}
 
 	private void checkCanInfestOrHarvest(Level level, BlockPos pos) {
-		for (BlockPos checkPos : BlockPos.betweenClosedStream(new AABB(pos.below()).inflate(1.0D, 0.0D, 1.0D)).toList()) {
+		for (BlockPos checkPos : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
 			BlockState state = level.getBlockState(checkPos);
 			if (state.is(BlockRegistry.WEEDWOOD_BUSH) && this.getTankFluidAmount() >= 50) {
 				this.infestBush(level, checkPos);
@@ -56,7 +59,6 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 		} else {
 			contents.grow(1);
 		}
-		level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		this.setChanged();
 	}
 
@@ -70,7 +72,6 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 		level.playSound(null, pos, SoundRegistry.GRUB_HUB_MIST.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
 		level.setBlockAndUpdate(pos, BlockRegistry.PHEROMONE_INFUSED_WEEDWOOD_BUSH.get().defaultBlockState());
 		this.drain(50, FluidAction.EXECUTE);
-		level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		this.setChanged();
 		PacketDistributor.sendToPlayersNear((ServerLevel) level, null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 32.0D, new InfestWeedwoodBushPacket(this, pos));
 	}
@@ -80,7 +81,22 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	@Override
-	protected NonNullList<ItemStack> getItems() {
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
+		this.tank.writeToNBT(registries, tag);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(tag, this.items, registries);
+		this.tank.readFromNBT(registries, tag);
+	}
+
+	@Override
+	public NonNullList<ItemStack> getItems() {
 		return this.items;
 	}
 

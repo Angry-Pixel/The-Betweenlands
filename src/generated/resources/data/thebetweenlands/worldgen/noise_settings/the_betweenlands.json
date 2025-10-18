@@ -55,7 +55,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "thebetweenlands:bedrock"
+            "Name": "thebetweenlands:betweenlands_bedrock"
           }
         }
       },

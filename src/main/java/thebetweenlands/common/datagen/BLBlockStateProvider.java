@@ -725,6 +725,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.STEEPING_POT, this.modLoc("block/particle/steeping_pot_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.MOTH_HOUSE, this.modLoc("block/particle/mothhouse_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.FILTERED_SILT_GLASS_JAR, this.modLoc("block/filtered_silt_glass_0"), 0.625F, 0.0F);
+		this.simpleBlockWithItem(BlockRegistry.GRUB_HUB.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.GRUB_HUB.get())));
 		this.simpleBlockWithItem(BlockRegistry.DULL_LAVENDER_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.MAROON_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.SHADOW_GREEN_SAMITE);

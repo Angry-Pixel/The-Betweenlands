@@ -323,6 +323,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.GECKO_CAGE.get(), GeckoCageRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.GRUB_HUB.get(), GrubHubRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.INFUSER.get(), InfuserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ITEM_CAGE.get(), ItemCageRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ITEM_SHELF.get(), ItemShelfRenderer::new);

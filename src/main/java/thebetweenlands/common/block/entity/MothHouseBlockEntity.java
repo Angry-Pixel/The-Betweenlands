@@ -112,14 +112,6 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	}
 
 	@Override
-	public void setChanged() {
-		super.setChanged();
-		if (this.getLevel() != null) {
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
-		}
-	}
-
-	@Override
 	public void setLevel(Level level) {
 		super.setLevel(level);
 		this.updatePlacerFromUUID(level);

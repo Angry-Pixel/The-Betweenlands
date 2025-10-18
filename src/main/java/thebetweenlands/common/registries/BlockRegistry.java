@@ -52,7 +52,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> DRUID_STONE_6 = register("druid_stone_6", () -> new DruidStoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.5F, 10.0F).lightLevel(value -> 12)));
 
 	//terrain
-	public static final DeferredBlock<Block> BETWEENLANDS_BEDROCK = register("bedrock", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.BEDROCK)));
+	public static final DeferredBlock<Block> BETWEENLANDS_BEDROCK = register("betweenlands_bedrock", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.BEDROCK)));
 	public static final DeferredBlock<Block> BETWEENSTONE = register("betweenstone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.5F, 10.0F)));
 	public static final DeferredBlock<Block> CORRUPT_BETWEENSTONE = register("corrupt_betweenstone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.5F, 10.0F)));
 	public static final DeferredBlock<Block> MUD = register("mud", () -> new MudBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.MUD).isValidSpawn((state, level, pos, type) -> true).isRedstoneConductor((state, level, pos) -> true).isViewBlocking((state, level, pos) -> true).isSuffocating((state, level, pos) -> true)));
@@ -575,11 +575,11 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> ASPECTRUS_CROP = BLOCKS.register("aspectrus_crop", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> FUNGUS_CROP = BLOCKS.register("fungus_crop", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> MIDDLE_FRUIT_BUSH = BLOCKS.register("middle_fruit_bush", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> PHEROMONE_INFUSED_WEEDWOOD_BUSH = register("pheromone_infused_weedwood_bush", () -> new InfestedWeedwoodBushBlock(0, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get())));
-	public static final DeferredBlock<Block> MOTH_INFESTED_WEEDWOOD_BUSH = register("moth_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(1, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get())));
-	public static final DeferredBlock<Block> GRUB_INFESTED_WEEDWOOD_BUSH = register("grub_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(2, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get())));
-	public static final DeferredBlock<Block> SILK_COCOONED_WEEDWOOD_BUSH = register("silk_cocooned_weedwood_bush", () -> new InfestedWeedwoodBushBlock(3, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get())));
-	public static final DeferredBlock<Block> DECAY_INFESTED_WEEDWOOD_BUSH = register("decay_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(4, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get())));
+	public static final DeferredBlock<Block> PHEROMONE_INFUSED_WEEDWOOD_BUSH = register("pheromone_infused_weedwood_bush", () -> new InfestedWeedwoodBushBlock(0, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
+	public static final DeferredBlock<Block> MOTH_INFESTED_WEEDWOOD_BUSH = register("moth_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(1, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
+	public static final DeferredBlock<Block> GRUB_INFESTED_WEEDWOOD_BUSH = register("grub_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(2, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
+	public static final DeferredBlock<Block> SILK_COCOONED_WEEDWOOD_BUSH = register("silk_cocooned_weedwood_bush", () -> new InfestedWeedwoodBushBlock(3, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
+	public static final DeferredBlock<Block> DECAY_INFESTED_WEEDWOOD_BUSH = register("decay_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(4, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
 	public static final DeferredBlock<Block> PURIFIED_SWAMP_DIRT = register("purified_swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> DUG_SWAMP_DIRT = register("dug_swamp_dirt", () -> new DugDirtBlock(false, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> PURIFIED_DUG_SWAMP_DIRT = register("purified_dug_swamp_dirt", () -> new DugDirtBlock(true, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));

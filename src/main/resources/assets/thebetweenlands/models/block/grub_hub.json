@@ -1,0 +1,77 @@
+{
+  "parent": "block/block",
+  "render_type": "translucent",
+  "textures": {
+    "bottom": "thebetweenlands:block/grub_hub_bottom",
+    "top": "thebetweenlands:block/grub_hub_top",
+    "side": "thebetweenlands:block/grub_hub_sides",
+    "particle": "#bottom"
+  },
+  "elements": [
+    {
+      "name": "tank",
+      "from": [1, 0, 1],
+      "to": [15, 12, 15],
+      "faces": {
+        "north": {"uv": [1, 4, 15, 16], "texture": "#side"},
+        "east": {"uv": [1, 4, 15, 16], "texture": "#side"},
+        "south": {"uv": [1, 4, 15, 16], "texture": "#side"},
+        "west": {"uv": [1, 4, 15, 16], "texture": "#side"},
+        "up": {"uv": [1, 1, 15, 15], "texture": "#top"},
+        "down": {"uv": [1, 1, 15, 15], "texture": "#bottom"}
+      }
+    },
+    {
+      "name": "tank_top",
+      "from": [1, 12, 1],
+      "to": [15, 12, 15],
+      "faces": {
+        "down": {"uv": [1, 1, 15, 15], "texture": "#top"}
+      }
+    },
+    {
+      "name": "west_edge",
+      "from": [1, 12, 1],
+      "to": [2, 16, 15],
+      "faces": {
+        "north": {"uv": [15, 0, 16, 4], "texture": "#side"},
+        "east": {"uv": [1, 0, 15, 4], "texture": "#side"},
+        "south": {"uv": [0, 0, 1, 4], "texture": "#side"},
+        "west": {"uv": [1, 0, 15, 4], "texture": "#side"},
+        "up": {"uv": [14, 1, 15, 15], "texture": "#top"}
+      }
+    },
+    {
+      "name": "east_edge",
+      "from": [14, 12, 1],
+      "to": [15, 16, 15],
+      "faces": {
+        "north": {"uv": [0, 0, 1, 4], "texture": "#side"},
+        "east": {"uv": [1, 0, 15, 4], "texture": "#side"},
+        "south": {"uv": [15, 0, 16, 4], "texture": "#side"},
+        "west": {"uv": [1, 0, 15, 4], "texture": "#side"},
+        "up": {"uv": [1, 1, 2, 15], "texture": "#top"}
+      }
+    },
+    {
+      "name": "north_edge",
+      "from": [2, 12, 1],
+      "to": [14, 16, 2],
+      "faces": {
+        "north": {"uv": [2, 0, 14, 4], "texture": "#side"},
+        "south": {"uv": [2, 0, 14, 4], "texture": "#side"},
+        "up": {"uv": [2, 14, 14, 15], "texture": "#top"}
+      }
+    },
+    {
+      "name": "south_edge",
+      "from": [2, 12, 14],
+      "to": [14, 16, 15],
+      "faces": {
+        "north": {"uv": [2, 0, 14, 4], "texture": "#side"},
+        "south": {"uv": [2, 0, 14, 4], "texture": "#side"},
+        "up": {"uv": [2, 1, 14, 2], "texture": "#top"}
+      }
+    }
+  ]
+}

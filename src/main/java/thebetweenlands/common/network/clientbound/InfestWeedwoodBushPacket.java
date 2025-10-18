@@ -33,7 +33,7 @@ public record InfestWeedwoodBushPacket(BlockPos tilePos, BlockPos bushPos) imple
 		context.enqueueWork(() -> {
 			Level level = context.player().level();
 			if (level.getBlockEntity(packet.tilePos()) instanceof GrubHubBlockEntity hub) {
-				hub.switchTextureCount = 10;
+				hub.switchTextureCount = 20;
 
 				Vec3 dir = new Vec3((packet.bushPos().getX() + 0.5D) - (packet.tilePos().getX() + 0.5D), (packet.bushPos().getY() + 1D) - (packet.tilePos().getY() + 0.325D), (packet.bushPos().getZ() + 0.5D) - (packet.tilePos().getZ() + 0.5D));
 
