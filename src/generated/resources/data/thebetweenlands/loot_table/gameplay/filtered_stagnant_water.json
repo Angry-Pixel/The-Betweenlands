@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:sulfur"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:anadia_remains"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:syrmorite_nugget"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:slimy_bone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:limestone_flux"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/filtered_stagnant_water"
+}

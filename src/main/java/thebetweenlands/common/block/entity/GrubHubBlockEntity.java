@@ -10,7 +10,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -31,14 +30,14 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, GrubHubBlockEntity entity) {
-		if (!level.isClientSide() && level.getGameTime() % 10 == 0)
-			entity.checkCanInfestOrHarvest(level, pos.below());
+		if (level instanceof ServerLevel serverLevel && level.getGameTime() % 10 == 0)
+			entity.checkCanInfestOrHarvest(serverLevel, pos.below());
 
 		if (level.isClientSide() && entity.switchTextureCount > 0)
 			entity.switchTextureCount--;
 	}
 
-	private void checkCanInfestOrHarvest(Level level, BlockPos pos) {
+	private void checkCanInfestOrHarvest(ServerLevel level, BlockPos pos) {
 		for (BlockPos checkPos : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
 			BlockState state = level.getBlockState(checkPos);
 			if (state.is(BlockRegistry.WEEDWOOD_BUSH) && this.getTankFluidAmount() >= 50) {
@@ -68,12 +67,12 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 		return contents.isEmpty() || contents.is(ItemRegistry.SILK_GRUB) && contents.getCount() < this.getMaxStackSize();
 	}
 
-	private void infestBush(Level level, BlockPos pos) {
+	private void infestBush(ServerLevel level, BlockPos pos) {
 		level.playSound(null, pos, SoundRegistry.GRUB_HUB_MIST.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
 		level.setBlockAndUpdate(pos, BlockRegistry.PHEROMONE_INFUSED_WEEDWOOD_BUSH.get().defaultBlockState());
 		this.drain(50, FluidAction.EXECUTE);
 		this.setChanged();
-		PacketDistributor.sendToPlayersNear((ServerLevel) level, null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 32.0D, new InfestWeedwoodBushPacket(this, pos));
+		PacketDistributor.sendToPlayersNear(level, null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 32.0D, new InfestWeedwoodBushPacket(this, pos));
 	}
 
 	public int getTankFluidAmount() {

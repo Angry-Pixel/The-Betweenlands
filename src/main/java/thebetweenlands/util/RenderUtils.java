@@ -87,7 +87,7 @@ public class RenderUtils {
 		float vHeight = vMax - vMin;
 
 		// top
-		renderTopQuad(pose, consumer, light, color, xMin, xMax, yMax, zMin, zMin, uMin, uMax, vMin, vMax);
+		renderTopQuad(pose, consumer, light, color, xMin, xMax, yMax, zMin, zMax, uMin, uMax, vMin, vMax);
 		// north
 		renderSideQuad(pose, consumer, light, color, xMin, xMax, yMin, yMax, zMin, zMin, uMin, uMax, vMin, vMin + (vHeight * yMax));
 		// south

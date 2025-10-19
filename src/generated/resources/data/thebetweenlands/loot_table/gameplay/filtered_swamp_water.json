@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:sludge_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:angler_tooth"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:lurker_skin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:dragonfly_wing"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:betweenstone_pebble"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/filtered_swamp_water"
+}

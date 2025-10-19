@@ -40,6 +40,7 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 	public static void tick(Level level, BlockPos pos, BlockState state, WaterFilterBlockEntity entity) {
 		if (!level.isClientSide() && level.getGameTime() % 10 == 0) {
 			IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos.below(), Direction.UP);
+			boolean draining = false;
 
 			if (handler != null) {
 				for (int i = 0; i < handler.getTanks(); i++) {
@@ -50,35 +51,30 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 
 							FluidStack drained = entity.tank.drain(filled, FluidAction.EXECUTE);
 
-							if (!drained.isEmpty() && entity.hasFilter()) {
-								if (drained.getAmount() >= 20) {
-									entity.addByProductRandom(level, drained);
+							if (!drained.isEmpty()) {
+								if (entity.hasFilter()) {
+									if (drained.getAmount() >= 20) {
+										entity.addByProductRandom(level, drained);
+									}
+
+									entity.damageFilter(level, pos, 1);
 								}
-
-								entity.damageFilter(level, pos, 1);
+								draining = true;
 							}
-
-							if (!entity.getFluidAnimation())
-								entity.setFluidAnimation(true);
-
-							level.sendBlockUpdated(pos, state, state, 2);
-						} else if (tankFluid.getAmount() == 0 && entity.getFluidAnimation()) {
-							entity.setFluidAnimation(false);
-							level.sendBlockUpdated(pos, state, state, 2);
+							entity.setChanged();
 						}
 					}
 				}
 			}
-		}
 
-		if (!level.isClientSide() && entity.tank.isEmpty() && entity.getFluidAnimation()) { //instead of filter check - check for can empty stuff and change rendering
-			entity.setFluidAnimation(false);
-			level.sendBlockUpdated(pos, state, state, 2);
+			if (draining != entity.getFluidAnimation()) {
+				entity.setFluidAnimation(draining);
+			}
 		}
 	}
 
 	public FluidStack getResultFluid(FluidStack fluid) {
-		if(this.hasFilter()) {
+		if (this.hasFilter()) {
 			if (fluid.is(FluidRegistry.STAGNANT_WATER_STILL)) {
 				return new FluidStack(FluidRegistry.SWAMP_WATER_STILL, fluid.getAmount());
 			}
@@ -91,6 +87,7 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 
 	public void setFluidAnimation(boolean showFluid) {
 		this.showFluidAnimation = showFluid;
+		this.setChanged();
 	}
 
 	public boolean getFluidAnimation() {
@@ -106,10 +103,16 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 			if (fluid.is(FluidRegistry.SWAMP_WATER_STILL))
 				stack = this.chooseRandomItemFromLootTable(level, this.getSwampWaterLootTable());
 
-			for (int slot = 1; slot < 5; slot++) {
-//				if (this.insertItem(slot, stack, false).isEmpty()) {
-//					break;
-//				}
+			if (!stack.isEmpty()) {
+				for (int slot = 1; slot < this.getContainerSize(); slot++) {
+					if (this.getItem(slot).isEmpty()) {
+						this.setItem(slot, stack);
+						break;
+					} else if (ItemStack.isSameItemSameComponents(stack, this.getItem(slot)) && this.getItem(slot).getCount() + stack.getCount() < this.getMaxStackSize()) {
+						this.getItem(slot).grow(stack.getCount());
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -135,14 +138,14 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 				return loot.getFirst();
 			}
 		}
-		return new ItemStack(ItemRegistry.GLUE.get()); // to stop null;
+		return ItemStack.EMPTY;
 	}
 
 	private void damageFilter(Level level, BlockPos pos, int damage) {
 		ItemStack mesh = this.getItem(0);
-		if(!mesh.isEmpty()) {
-			mesh.setDamageValue(mesh.getDamageValue() +damage);
-			if(mesh.getDamageValue() > mesh.getMaxDamage()) {
+		if (!mesh.isEmpty()) {
+			mesh.setDamageValue(mesh.getDamageValue() + damage);
+			if (mesh.getDamageValue() > mesh.getMaxDamage()) {
 				mesh.shrink(1);
 				level.levelEvent(2001, pos, Block.getId(BlockRegistry.WEEDWOOD_PLANKS.get().defaultBlockState()));
 			}

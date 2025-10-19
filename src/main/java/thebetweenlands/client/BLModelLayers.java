@@ -142,6 +142,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SPIKE_BLOCK = register("spike_block");
 	public static final ModelLayerLocation SPOOP = register("spoop");
 	public static final ModelLayerLocation STEEPING_POT = register("steeping_pot");
+	public static final ModelLayerLocation WATER_FILTER = register("water_filter");
 	public static final ModelLayerLocation WAYSTONE = register("waystone");
 	public static final ModelLayerLocation WIND_CHIME = register("wind_chime");
 

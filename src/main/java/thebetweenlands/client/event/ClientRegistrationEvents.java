@@ -7,9 +7,6 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.model.HumanoidArmorModel;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -71,36 +68,7 @@ import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
-import thebetweenlands.client.model.block.AlcoveModel;
-import thebetweenlands.client.model.block.AlembicModel;
-import thebetweenlands.client.model.block.AnimatorModel;
-import thebetweenlands.client.model.block.BarrelModel;
-import thebetweenlands.client.model.block.CenserModel;
-import thebetweenlands.client.model.block.CompostBinModel;
-import thebetweenlands.client.model.block.CrabPotFilterModel;
-import thebetweenlands.client.model.block.CrabPotModel;
-import thebetweenlands.client.model.block.DruidAltarModel;
-import thebetweenlands.client.model.block.FishTrimmingTableModel;
-import thebetweenlands.client.model.block.FishingTackleBoxModel;
-import thebetweenlands.client.model.block.GlassJarModel;
-import thebetweenlands.client.model.block.InfuserModel;
-import thebetweenlands.client.model.block.ItemCageModel;
-import thebetweenlands.client.model.block.LootPotModels;
-import thebetweenlands.client.model.block.LootUrnModels;
-import thebetweenlands.client.model.block.MobSpawnerCrystalModel;
-import thebetweenlands.client.model.block.MortarModel;
-import thebetweenlands.client.model.block.MossBedModel;
-import thebetweenlands.client.model.block.MothHouseModel;
-import thebetweenlands.client.model.block.OfferingTableModel;
-import thebetweenlands.client.model.block.PuffshroomModel;
-import thebetweenlands.client.model.block.PurifierModel;
-import thebetweenlands.client.model.block.RepellerModel;
-import thebetweenlands.client.model.block.RubberTapModel;
-import thebetweenlands.client.model.block.SmokingRackModel;
-import thebetweenlands.client.model.block.SpikeTrapModel;
-import thebetweenlands.client.model.block.SteepingPotModel;
-import thebetweenlands.client.model.block.WaystoneModel;
-import thebetweenlands.client.model.block.WindChimeModel;
+import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.cage.CagedGeckoModel;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
 import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
@@ -127,7 +95,6 @@ import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.BasicFluidType;
 import thebetweenlands.common.fluid.ColoredFluidType;
 import thebetweenlands.common.fluid.SwampWaterFluidType;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.item.armor.extension.*;
@@ -344,6 +311,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.STEEPING_POT.get(), SteepingPotRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.WATER_FILTER.get(), WaterFilterRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WAYSTONE.get(), WaystoneRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CHEST.get(), WeedwoodChestRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), WeedwoodCraftingTableRenderer::new);
@@ -486,6 +454,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.SPIKE_BLOCK, SpikeTrapModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.SPOOP, SpikeTrapModel::makeSpoop);
 		event.registerLayerDefinition(BLModelLayers.STEEPING_POT, SteepingPotModel::makeNormalModel);
+		event.registerLayerDefinition(BLModelLayers.WATER_FILTER, WaterFilterModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.WAYSTONE, WaystoneModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.WIND_CHIME, WindChimeModel::makeModel);
 	}
@@ -640,7 +609,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(),
 			BlockRegistry.MORTAR.asItem(), BlockRegistry.MUD_BRICK_ALCOVE.asItem(), BlockRegistry.ITEM_CAGE.asItem(),
 			BlockRegistry.SILT_GLASS_JAR.asItem(), BlockRegistry.FILTERED_SILT_GLASS_JAR.asItem(), BlockRegistry.STEEPING_POT.asItem(),
-			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(), BlockRegistry.MOTH_HOUSE.asItem(),
+			BlockRegistry.SYRMORITE_BARREL.asItem(), BlockRegistry.WEEDWOOD_BARREL.asItem(), BlockRegistry.MOTH_HOUSE.asItem(), BlockRegistry.WATER_FILTER.asItem(),
 			BlockRegistry.INFUSER.asItem(), BlockRegistry.REPELLER.asItem(), BlockRegistry.WEEDWOOD_CHEST.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),

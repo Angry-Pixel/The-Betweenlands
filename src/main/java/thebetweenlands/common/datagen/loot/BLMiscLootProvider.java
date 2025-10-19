@@ -74,5 +74,21 @@ public class BLMiscLootProvider implements LootTableSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN))
 				.add(LootItem.lootTableItem(ItemRegistry.MIRE_SNAIL_EGG))
 				.add(LootItem.lootTableItem(ItemRegistry.RAW_SNAIL_FLESH))));
+
+		output.accept(LootTableRegistry.FILTERED_STAGNANT_WATER, LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SULFUR))
+				.add(LootItem.lootTableItem(ItemRegistry.ANADIA_REMAINS))
+				.add(LootItem.lootTableItem(ItemRegistry.SYRMORITE_NUGGET))
+				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE))
+				.add(LootItem.lootTableItem(ItemRegistry.LIMESTONE_FLUX))));
+
+		output.accept(LootTableRegistry.FILTERED_SWAMP_WATER, LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SLUDGE_BALL))
+				.add(LootItem.lootTableItem(ItemRegistry.ANGLER_TOOTH))
+				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING))
+				.add(LootItem.lootTableItem(ItemRegistry.BETWEENSTONE_PEBBLE))));
 	}
 }
