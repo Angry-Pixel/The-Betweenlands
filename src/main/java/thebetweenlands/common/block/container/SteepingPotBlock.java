@@ -107,6 +107,7 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock implements Swamp
 			if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}
+			return ItemInteractionResult.CONSUME;
 		}
 
 		if (level.getBlockEntity(pos) instanceof SteepingPotBlockEntity pot) {

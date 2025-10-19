@@ -88,6 +88,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 				if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection())) {
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				}
+				return ItemInteractionResult.CONSUME;
 			}
 
 			if (!player.isShiftKeyDown()) {
