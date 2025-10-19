@@ -3,6 +3,7 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -63,10 +64,10 @@ public class PossessedBlockEntity extends SyncedBlockEntity {
 		float yy = (float) pos.getY() + 0.5F;
 		float zz = (float) pos.getZ() + 0.5F + facing.getStepZ();
 		float randomOffset = level.getRandom().nextFloat() * 0.6F - 0.3F;
-//		BLParticles.SMOKE.spawn(level, (double) (xx - randomOffset), (double) (yy + randomOffset), (double) (zz + randomOffset));
-//		BLParticles.SMOKE.spawn(level, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset));
-//		BLParticles.SMOKE.spawn(level, (double) (xx + randomOffset), (double) (yy + randomOffset), (double) (zz - randomOffset));
-//		BLParticles.SMOKE.spawn(level, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset));
+		level.addParticle(ParticleTypes.WHITE_SMOKE, xx - randomOffset, yy + randomOffset, zz + randomOffset, 0.0D, 0.0D, 0.0D);
+		level.addParticle(ParticleTypes.WHITE_SMOKE, xx + randomOffset, yy - randomOffset, zz + randomOffset, 0.0D, 0.0D, 0.0D);
+		level.addParticle(ParticleTypes.WHITE_SMOKE, xx + randomOffset, yy + randomOffset, zz - randomOffset, 0.0D, 0.0D, 0.0D);
+		level.addParticle(ParticleTypes.WHITE_SMOKE, xx + randomOffset, yy - randomOffset, zz + randomOffset, 0.0D, 0.0D, 0.0D);
 	}
 
 	public void setActive(Level level, BlockPos pos, BlockState state, boolean isActive) {

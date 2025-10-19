@@ -302,6 +302,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MOTH_HOUSE.get(), MothHouseRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_FLOWER_POT.get(), MudFlowerPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.OFFERING_TABLE.get(), OfferingTableRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.POSSESSED_BLOCK.get(), PossessedBlockRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PUFFSHROOM.get(), PuffshroomRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.REPELLER.get(), RepellerRenderer::new);
@@ -442,6 +443,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.MOSS_BED, MossBedModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.MOTH_HOUSE, MothHouseModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.OFFERING_TABLE, OfferingTableModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.POSSESSED_BLOCK, PossessedBlockModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PUFFSHROOM, PuffshroomModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PURIFIER, PurifierModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.REPELLER, RepellerModel::makeModel);

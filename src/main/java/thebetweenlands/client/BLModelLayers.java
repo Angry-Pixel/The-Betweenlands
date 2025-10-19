@@ -130,6 +130,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation MOSS_BED = register("moss_bed");
 	public static final ModelLayerLocation MOTH_HOUSE = register("mouth_house");
 	public static final ModelLayerLocation OFFERING_TABLE = register("offering_table");
+	public static final ModelLayerLocation POSSESSED_BLOCK = register("possessed_block");
 	public static final ModelLayerLocation PUFFSHROOM = register("puffshroom");
 	public static final ModelLayerLocation PURIFIER = register("purifier");
 	public static final ModelLayerLocation REPELLER = register("repeller");
