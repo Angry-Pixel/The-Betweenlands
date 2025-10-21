@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:slant",
+  "textures": {
+    "base": "thebetweenlands:block/thatch",
+    "side": "thebetweenlands:block/thatch",
+    "slant": "thebetweenlands:block/thatch"
+  }
+}

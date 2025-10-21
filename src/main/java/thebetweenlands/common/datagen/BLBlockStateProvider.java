@@ -6,10 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
@@ -25,6 +22,7 @@ import thebetweenlands.common.block.structure.*;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
 import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.datagen.builders.model.SlantModelBuilder;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import java.util.List;
@@ -372,7 +370,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.stairBlockWithItem(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLES);
 		this.stairBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES);
 		this.stairBlockWithItem(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLES);
+		this.slant(BlockRegistry.MUD_BRICK_SHINGLE_ROOF, BlockRegistry.MUD_BRICK_SHINGLES);
 		this.slabBlockWithItem(BlockRegistry.THATCH_SLAB, BlockRegistry.THATCH);
+		this.slant(BlockRegistry.THATCH_ROOF, BlockRegistry.THATCH);
 		this.slabBlockWithItem(BlockRegistry.SCABYST_BRICK_SLAB, BlockRegistry.SCABYST_BRICKS);
 		this.wallBlockWithItem(BlockRegistry.CRAGROCK_WALL, BlockRegistry.CRAGROCK);
 		this.wallBlockWithItem(BlockRegistry.PITSTONE_WALL, BlockRegistry.PITSTONE);
@@ -530,7 +530,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MUD_ENERGY_BARRIER, "translucent");
 		this.spikeTrap(BlockRegistry.MUD_BRICK_SPIKE_TRAP, BlockRegistry.MUD_BRICKS);
 		this.spikeTrap(BlockRegistry.MUD_TILES_SPIKE_TRAP, BlockRegistry.MUD_TILES);
-		//compacted mud slope
+		this.slant(BlockRegistry.COMPACTED_MUD_SLOPE, BlockRegistry.COMPACTED_MUD);
 		this.slabBlockWithItem(BlockRegistry.COMPACTED_MUD_SLAB, BlockRegistry.COMPACTED_MUD);
 		this.simpleBlockWithItem(BlockRegistry.COMPACTED_MUD_MIRAGE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.COMPACTED_MUD.get())));
 		this.simpleBlockWithItem(BlockRegistry.ROTTEN_PLANKS);
@@ -1227,6 +1227,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	public void connectedGlassBlockWithItem(DeferredBlock<Block> block) {
 		this.simpleBlock(block.get(), this.models().getExistingFile(this.modLoc("block/" + block.getId().getPath())));
 		this.simpleBlockItem(block.get(), this.models().cubeAll(block.getId().getPath() +"_inventory", this.modLoc("block/" + block.getId().getPath() + "_0")).renderType("translucent"));
+	}
+
+	public void slant(DeferredBlock<Block> slant, DeferredBlock<Block> base) {
+		this.simpleBlockWithItem(slant.get(), this.models().withExistingParent(slant.getId().getPath(), "block/block").customLoader(SlantModelBuilder::begin).end().texture("base", this.blockTexture(base.get())).texture("side", this.blockTexture(base.get())).texture("slant", this.blockTexture(base.get())));
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {

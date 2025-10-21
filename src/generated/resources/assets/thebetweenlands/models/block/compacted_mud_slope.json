@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:slant",
+  "textures": {
+    "base": "thebetweenlands:block/compacted_mud",
+    "side": "thebetweenlands:block/compacted_mud",
+    "slant": "thebetweenlands:block/compacted_mud"
+  }
+}

@@ -68,6 +68,7 @@ import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
+import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.cage.CagedGeckoModel;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
@@ -582,6 +583,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("slant"), SlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);
 	}
 
