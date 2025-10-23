@@ -72,7 +72,7 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 		super.setPlacedBy(level, pos, state, placer, stack);
 		if (placer instanceof Player player && level.getBlockEntity(pos) instanceof CrabPotBlockEntity pot) {
 			pot.setPlacer(player);
-			level.sendBlockUpdated(pos, state, state, 3);
+			pot.setChanged();
 		}
 	}
 
@@ -82,7 +82,7 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 			if (pot.getTheItem().isEmpty()) {
 				pot.setTheItem(stack.copyWithCount(1));
 				stack.consume(1, player);
-				level.sendBlockUpdated(pos, state, state, 3);
+				pot.setChanged();
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}
@@ -97,7 +97,7 @@ public class CrabPotBlock extends HorizontalBaseEntityBlock implements SwampWate
 				item.setDeltaMovement(Vec3.ZERO);
 				level.addFreshEntity(item);
 				pot.setTheItem(ItemStack.EMPTY);
-				level.sendBlockUpdated(pos, state, state, 3);
+				pot.setChanged();
 				return InteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}

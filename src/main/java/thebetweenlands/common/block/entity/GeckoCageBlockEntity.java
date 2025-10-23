@@ -35,16 +35,16 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 			if (entity.recoverTicks > 0) {
 				--entity.recoverTicks;
 				if (entity.recoverTicks == 0) {
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 			} else {
 				if (entity.aspectType.isPresent() && entity.geckoUsages == 0) {
 					entity.geckoName = "";
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 				if (entity.aspectType.isPresent()) {
 					entity.aspectType = Optional.empty();
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 			}
 		}
@@ -63,11 +63,11 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 		return this.aspectType.orElse(null);
 	}
 
-	public void setAspectType(Level level, BlockPos pos, BlockState state, @Nullable Holder<AspectType> type, int recoverTime) {
+	public void setAspectType(@Nullable Holder<AspectType> type, int recoverTime) {
 		--this.geckoUsages;
 		this.aspectType = Optional.ofNullable(type);
 		this.recoverTicks = recoverTime;
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 		if (!this.hasGecko())
 			this.recoverTicks = 0;
 	}
@@ -76,10 +76,10 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 		return this.geckoUsages > 0;
 	}
 
-	public void setGeckoUsages(Level level, BlockPos pos, BlockState state, int usages) {
+	public void setGeckoUsages(int usages) {
 		this.geckoUsages = usages;
 		this.setChanged();
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 	}
 
 	public int getGeckoUsages() {
@@ -91,12 +91,12 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 		return this.geckoName;
 	}
 
-	public void addGecko(Level level, BlockPos pos, BlockState state, int usages, @Nullable String name) {
+	public void addGecko(int usages, @Nullable String name) {
 		this.geckoUsages = usages;
 		this.geckoName = name;
 		this.ticks = 0;
 		this.setChanged();
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 	}
 
 	@Override

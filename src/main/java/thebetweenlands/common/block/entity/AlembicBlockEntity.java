@@ -131,14 +131,6 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 		this.setChanged();
 	}
 
-	@Override
-	public void setChanged() {
-		if (this.getLevel() != null) {
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
-		}
-		super.setChanged();
-	}
-
 	@Nullable
 	public Holder<ElixirRecipe> getElixirRecipe() {
 		return this.recipe;
@@ -319,7 +311,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 		this.producableStrength = 0;
 		this.producedAmount = 0;
 		this.progress = 0;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
 	private ItemStack createElixir(Holder<ElixirEffect> elixir, int strength, int duration, DentrothystVialItem vial) {

@@ -94,7 +94,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 
 				// TODO remove ghetto syncing
 				if (level.getGameTime() % 20 == 0)
-					entity.updateBlock(level, pos, state);
+					entity.setChanged();
 
 				if (level.getGameTime() % 2400 == 0) { // once every 2 minutes
 					// S
@@ -123,7 +123,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 					entity.setPlugged(true);
 					entity.setSpawnXPAndDrops(true);
 					entity.removeInvisiBlocks(level, pos);
-					entity.updateBlock(level, pos, state);
+					entity.setChanged();
 					level.playSound(null, pos.offset(1, 6, 0), SoundEvents.ANVIL_BREAK, SoundSource.HOSTILE, 0.5F, 1F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.8F);
 					level.playSound(null, pos.offset(-1, 6, 0), SoundEvents.ANVIL_BREAK, SoundSource.HOSTILE, 0.5F, 1F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.8F);
 					level.playSound(null, pos.offset(0, 6, 1), SoundEvents.ANVIL_BREAK, SoundSource.HOSTILE, 0.5F, 1F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.8F);
@@ -170,7 +170,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 				if (!level.isClientSide()) {
 					entity.setShowFloor(false);
 					entity.shakeTimer = 0;
-					entity.updateBlock(level, pos, state);
+					entity.setChanged();
 				}
 
 			if (entity.shaking)
@@ -199,7 +199,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 
 			if (entity.getDeathTicks() > 120) {
 				entity.setSpawnXPAndDrops(false);
-				entity.updateBlock(level, pos, state);
+				entity.setChanged();
 			}
 		}
 
@@ -218,7 +218,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 
 				// Syncs to add shake and final particles
 				if (entity.getTentacleSpawnCountDown() == 100 || entity.getTentacleSpawnCountDown() == 59 || entity.getTentacleSpawnCountDown() == 29 || entity.getTentacleSpawnCountDown() == 1)
-					entity.updateBlock(level, pos, state);
+					entity.setChanged();
 
 				// sounds
 				if (entity.getTentacleSpawnCountDown() % 30 == 0 && entity.getTentacleSpawnCountDown() <= 270 && entity.getTentacleSpawnCountDown() > 150 || entity.getTentacleSpawnCountDown() % 33 == 0 && entity.getTentacleSpawnCountDown() <= 270 && entity.getTentacleSpawnCountDown() > 150)
@@ -230,7 +230,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 				if (entity.getTentacleSpawnCountDown() == 60 || entity.getTentacleSpawnCountDown() == 30) {
 					level.playSound(null, pos, SoundRegistry.PLUG_LOCK.get(), SoundSource.HOSTILE, 0.5F, 1F);
 					level.playSound(null, pos, SoundRegistry.WALL_SLAM.get(), SoundSource.HOSTILE, 1F, 0.75F);
-					entity.updateBlock(level, pos, state);
+					entity.setChanged();
 				}
 
 				if (entity.getTentacleSpawnCountDown() == 0) {
@@ -367,10 +367,6 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 //				.withScale(4f));
 //
 //		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
-	}
-
-	private void updateBlock(Level level, BlockPos pos, BlockState state) {
-		level.sendBlockUpdated(pos, state, state, 3);
 	}
 
 	private void checkSurfaceCollisions(Level level, BlockPos pos) {

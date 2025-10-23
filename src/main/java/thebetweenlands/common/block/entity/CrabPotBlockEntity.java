@@ -179,7 +179,7 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 								}
 
 								entity.setChanged();
-								level.sendBlockUpdated(pos, state, state, 2);
+								entity.setChanged();
 
 								if ((entity.hasSiltCrab() || entity.hasBubblerCrab()) && placer instanceof ServerPlayer sp) {
 									AdvancementCriteriaRegistry.CRAB_POT.get().trigger(sp);

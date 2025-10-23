@@ -60,7 +60,7 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock implements SwampW
 			if (stack.has(DataComponentRegistry.SIMULACRUM_EFFECT)) {
 				simulacrum.setEffect(BLRegistries.SIMULACRUM_EFFECTS.get(stack.get(DataComponentRegistry.SIMULACRUM_EFFECT)));
 			}
-			simulacrum.setActive(level, pos, state, true);
+			simulacrum.setActive(true);
 			if (stack.has(DataComponents.CUSTOM_NAME)) {
 				simulacrum.setCustomName(stack.getDisplayName());
 			}

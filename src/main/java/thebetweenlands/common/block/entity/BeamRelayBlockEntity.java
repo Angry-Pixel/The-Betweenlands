@@ -26,10 +26,10 @@ public class BeamRelayBlockEntity extends SyncedBlockEntity {
 	public static void tick(Level level, BlockPos pos, BlockState state, BeamRelayBlockEntity entity) {
 		if (state.getValue(BeamRelayBlock.POWERED)) {
 			if (!entity.active)
-				entity.setActive(level, pos, state, true);
+				entity.setActive(true);
 		} else {
 			if (entity.active)
-				entity.setActive(level, pos, state, false);
+				entity.setActive(false);
 		}
 
 		if (entity.active)
@@ -125,9 +125,9 @@ public class BeamRelayBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
-	public void setActive(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setActive(boolean isActive) {
 		this.active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
 	public boolean isGettingBeamed() {

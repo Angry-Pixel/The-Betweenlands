@@ -27,23 +27,24 @@ public class ItemCageBlockEntity extends SyncedBlockEntity {
 		if (!level.isClientSide()) {
 			if (entity.isBlockOccupied(level, pos, state)) {
 				if (!entity.canBreak)
-					entity.setCanBeBroken(level, pos, state, true);
+					entity.setCanBeBroken(true);
 			} else {
 				if (entity.canBreak)
-					entity.setCanBeBroken(level, pos, state, false);
+					entity.setCanBeBroken(false);
 			}
 		}
 	}
 
-	public void setCanBeBroken(Level level, BlockPos pos, BlockState state, boolean isBreakable) {
+	public void setCanBeBroken(boolean isBreakable) {
 		this.canBreak = isBreakable;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
 	public static void setBlockWithType(Level level, BlockPos pos, BlockState state, int blockType) {
 		level.setBlockAndUpdate(pos, state);
-		((ItemCageBlockEntity)level.getBlockEntity(pos)).type = (byte) blockType;
-		level.sendBlockUpdated(pos, state, state, 2);
+		ItemCageBlockEntity entity = (ItemCageBlockEntity) level.getBlockEntity(pos);
+		entity.type = (byte) blockType;
+		entity.setChanged();
 	}
 
 	protected boolean isBlockOccupied(Level level, BlockPos pos, BlockState state) {

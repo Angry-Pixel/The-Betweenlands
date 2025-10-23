@@ -50,7 +50,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 		if (litBraziers == 4) {
 			if (!entity.active) {
-				entity.setActive(level, pos, state, true);
+				entity.setActive(true);
 				if (level instanceof ServerLevel serverLevel) {
 					entity.spawnEmberling(serverLevel, pos.offset(3, -1, 3));
 					entity.spawnEmberling(serverLevel, pos.offset(3, -1, -3));
@@ -60,7 +60,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 			}
 		} else {
 			if (entity.active)
-				entity.setActive(level, pos, state, false);
+				entity.setActive(false);
 		}
 
 
@@ -70,13 +70,13 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 					entity.spawnBrazierParticles(level, pos, new Vec3(3, -1, 3));
 				if (!level.isClientSide())
 					if (!entity.beam_1_active) {
-						entity.setBeam1Active(level, pos, state, true);
+						entity.setBeam1Active(true);
 						level.playSound(null, pos.offset(3, -1, 3), SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.BLOCKS, 0.125F, 0.25F);
 					}
 			} else {
 				if (!level.isClientSide())
 					if (entity.beam_1_active)
-						entity.setBeam1Active(level, pos, state, false);
+						entity.setBeam1Active(false);
 			}
 
 			if (entity.checkForLitBrazier(level, pos.offset(3, -1, -3))) {
@@ -84,13 +84,13 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 					entity.spawnBrazierParticles(level, pos, new Vec3(3, -1, -3));
 				if (!level.isClientSide())
 					if (!entity.beam_2_active) {
-						entity.setBeam2Active(level, pos, state, true);
+						entity.setBeam2Active(true);
 						level.playSound(null, pos.offset(3, -1, -3), SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.BLOCKS, 0.125F, 0.25F);
 					}
 			} else {
 				if (!level.isClientSide())
 					if (entity.beam_2_active)
-						entity.setBeam2Active(level, pos, state, false);
+						entity.setBeam2Active(false);
 			}
 
 			if (entity.checkForLitBrazier(level, pos.offset(-3, -1, 3))) {
@@ -98,13 +98,13 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 					entity.spawnBrazierParticles(level, pos, new Vec3(-3, -1, 3));
 				if (!level.isClientSide())
 					if (!entity.beam_3_active) {
-						entity.setBeam3Active(level, pos, state, true);
+						entity.setBeam3Active(true);
 						level.playSound(null, pos.offset(-3, -1, 3), SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.BLOCKS, 0.125F, 0.25F);
 					}
 			} else {
 				if (!level.isClientSide())
 					if (entity.beam_3_active)
-						entity.setBeam3Active(level, pos, state, false);
+						entity.setBeam3Active(false);
 			}
 
 			if (entity.checkForLitBrazier(level, pos.offset(-3, -1, -3))) {
@@ -112,13 +112,13 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 					entity.spawnBrazierParticles(level, pos, new Vec3(-3, -1, -3));
 				if (!level.isClientSide())
 					if (!entity.beam_4_active) {
-						entity.setBeam4Active(level, pos, state, true);
+						entity.setBeam4Active(true);
 						level.playSound(null, pos.offset(-3, -1, -3), SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.BLOCKS, 0.125F, 0.25F);
 					}
 			} else {
 				if (!level.isClientSide())
 					if (entity.beam_4_active)
-						entity.setBeam4Active(level, pos, state, false);
+						entity.setBeam4Active(false);
 			}
 		}
 
@@ -256,29 +256,29 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
-	public void setActive(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setActive(boolean isActive) {
 		this.active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
-	public void setBeam1Active(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setBeam1Active(boolean isActive) {
 		this.beam_1_active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
-	public void setBeam2Active(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setBeam2Active(boolean isActive) {
 		this.beam_2_active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
-	public void setBeam3Active(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setBeam3Active(boolean isActive) {
 		this.beam_3_active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
-	public void setBeam4Active(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setBeam4Active(boolean isActive) {
 		this.beam_4_active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
 	public static int getDistanceToObstruction(LevelAccessor level, BlockPos pos, Direction facing) {

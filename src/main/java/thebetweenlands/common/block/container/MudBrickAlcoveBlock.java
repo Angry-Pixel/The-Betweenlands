@@ -118,7 +118,7 @@ public class MudBrickAlcoveBlock extends HorizontalBaseEntityBlock implements Sw
 					level.levelEvent(null, 2001, pos, Block.getId(BlockRegistry.MUD_FLOWER_POT.get().defaultBlockState())); //this will do unless we want specific particles
 
 					level.setBlockAndUpdate(pos, state.setValue(HAS_URN, false));
-					level.sendBlockUpdated(pos, state, state, 2);
+					alcove.setChanged();
 					if (player instanceof ServerPlayer sp) {
 						AdvancementCriteriaRegistry.BREAK_ALCOVE_URN.get().trigger(sp);
 					}

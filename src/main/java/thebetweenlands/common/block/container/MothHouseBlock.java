@@ -61,7 +61,7 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock implements SwampWa
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MothHouseBlockEntity house) {
 			if (placer instanceof Player player)
 				house.setPlacer(player);
-			level.sendBlockUpdated(pos, state, state, 2);
+			house.setChanged();
 		}
 	}
 
@@ -110,7 +110,6 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock implements SwampWa
 				int grubCount = cap.insertItem(MothHouseBlockEntity.SLOT_GRUBS, stack, false).getCount();
 				stack.consume(grubCount, player);
 				house.setChanged();
-				level.sendBlockUpdated(pos, state, state, 2);
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}
 		}

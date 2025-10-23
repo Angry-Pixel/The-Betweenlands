@@ -73,27 +73,27 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 					entity.setTempFluidColour(IClientFluidTypeExtensions.of(entity.tank.getFluid().getFluid()).getTintColor(entity.tank.getFluid()));
 					entity.hasCraftResult = true;
 				}
-				level.sendBlockUpdated(pos, state, state, 2);
+				entity.setChanged();
 			}
 
 			if (entity.isHeatSource(level.getBlockState(pos.below()))) {
 				if (entity.getHeatProgress() < 100 && entity.getTankFluidAmount() > 0) {
 					if (level.getGameTime() % 10 == 0) {
 						entity.setHeatProgress(entity.getHeatProgress() + 1);
-						level.sendBlockUpdated(pos, state, state, 2);
+						entity.setChanged();
 					}
 				} else if (entity.tank.getFluid().isEmpty() && entity.getHeatProgress() != 0) {
 					entity.setHeatProgress(0);
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 			} else {
 				if (entity.getHeatProgress() > 0) {
 					if (level.getGameTime() % 5 == 0) {
 						entity.setHeatProgress(entity.getHeatProgress() - 1);
-						level.sendBlockUpdated(pos, state, state, 2);
+						entity.setChanged();
 					} else if (entity.tank.getFluid().isEmpty() && entity.getHeatProgress() != 0) {
 						entity.setHeatProgress(0);
-						level.sendBlockUpdated(pos, state, state, 2);
+						entity.setChanged();
 					}
 				}
 			}
@@ -126,7 +126,7 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 					ExperienceOrb orb = new ExperienceOrb(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1);
 					level.addFreshEntity(orb);
 					entity.hasCraftResult = false;
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 			}
 		}

@@ -103,7 +103,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 								infuser.updateInfusingRecipe();
 								if (!player.isCreative())
 									singleIngredient.shrink(1);
-								level.sendBlockUpdated(pos, state, state, 2);
+								infuser.setChanged();
 								if (infuser.getWaterAmount() > 0) {
 									level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.3f, 0.9f + level.getRandom().nextFloat() * 0.3f);
 								} else {
@@ -132,7 +132,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 						if (itemEntity != null) itemEntity.setNoPickUpDelay();
 						infuser.setItem(i, ItemStack.EMPTY);
 						infuser.updateInfusingRecipe();
-						level.sendBlockUpdated(pos, state, state, 2);
+						infuser.setChanged();
 						return ItemInteractionResult.SUCCESS;
 					}
 				}
@@ -155,7 +155,7 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 					if (itemEntity != null) itemEntity.setPickUpDelay(0);
 					infuser.setItem(InfuserBlockEntity.MAX_INGREDIENTS + 1, ItemStack.EMPTY);
 					infuser.updateInfusingRecipe();
-					level.sendBlockUpdated(pos, state, state, 2);
+					infuser.setChanged();
 					return InteractionResult.SUCCESS;
 				}
 			}

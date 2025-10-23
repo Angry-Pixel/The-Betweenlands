@@ -48,19 +48,19 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 			if (entity.fuel > 0 && entity.hasShimmerstone) {
 				if (!entity.running) {
 					entity.running = true;
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 					entity.setChanged();
 				}
 			} else {
 				if (entity.running) {
 					entity.running = false;
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 					entity.setChanged();
 				}
 			}
 			if (entity.fuel < 0) {
 				entity.fuel = 0;
-				level.sendBlockUpdated(pos, state, state, 2);
+				entity.setChanged();
 				entity.setChanged();
 			} else {
 				float fuelCost = 0;
@@ -120,7 +120,7 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 				}
 
 				if (fuelConsumed) {
-					level.sendBlockUpdated(pos, state, state, 2);
+					entity.setChanged();
 				}
 
 				entity.setChanged();

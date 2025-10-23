@@ -64,7 +64,6 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock implements 
 				if (!isSatOn(level, pos)) {
 					level.playSound(null, pos, state.getValue(OPEN) ? SoundRegistry.FISHING_TACKLE_BOX_CLOSE.get() : SoundRegistry.FISHING_TACKLE_BOX_OPEN.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 					level.setBlockAndUpdate(pos, state.cycle(OPEN));
-					level.sendBlockUpdated(pos, state, state, 2);
 					box.setChanged();
 				}
 			}

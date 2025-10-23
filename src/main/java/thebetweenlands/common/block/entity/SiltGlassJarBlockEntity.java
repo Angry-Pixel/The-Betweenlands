@@ -64,7 +64,7 @@ public class SiltGlassJarBlockEntity extends NoMenuContainerBlockEntity {
 		}
 
 		if(prevCount != this.getItemCount()) {
-			level.sendBlockUpdated(pos, state, state, 2);
+			this.setChanged();
 		}
 	}
 

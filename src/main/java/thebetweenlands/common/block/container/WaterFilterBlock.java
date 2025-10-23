@@ -51,7 +51,7 @@ public class WaterFilterBlock extends BaseEntityBlock {
 					if (!level.isClientSide()) {
 						filter.setItem(0, stack.copy());
 						stack.consume(1, player);
-						level.sendBlockUpdated(pos, state, state, 2);
+						filter.setChanged();
 					}
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				}
@@ -86,7 +86,7 @@ public class WaterFilterBlock extends BaseEntityBlock {
 		item.setDeltaMovement(Vec3.ZERO);
 		level.addFreshEntity(item);
 		filter.setItem(slot, ItemStack.EMPTY);
-		level.sendBlockUpdated(pos, state, state, 2);
+		filter.setChanged();
 	}
 
 	@Nullable

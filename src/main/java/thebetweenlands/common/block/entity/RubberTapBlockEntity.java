@@ -33,7 +33,7 @@ public class RubberTapBlockEntity extends SyncedBlockEntity implements IFluidHan
 					entity.tank.fill(new FluidStack(FluidRegistry.RUBBER_STILL.get(), 67), IFluidHandler.FluidAction.EXECUTE);
 					entity.fillProgress = 0;
 
-					level.sendBlockUpdated(pos, state, state, 3);
+					entity.setChanged();
 					entity.setChanged();
 				}
 			}

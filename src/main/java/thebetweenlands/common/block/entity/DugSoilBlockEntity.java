@@ -60,9 +60,6 @@ public class DugSoilBlockEntity extends SyncedBlockEntity {
 			} else {
 				level.setBlockAndUpdate(pos, blockState.setValue(DugSoilBlock.DECAYED, this.isFullyDecayed()).setValue(DugSoilBlock.COMPOSTED, false));
 			}
-		} else {
-			BlockState state = level.getBlockState(pos);
-			level.sendBlockUpdated(pos, state, state, 3);
 		}
 		this.setChanged();
 	}
@@ -106,9 +103,6 @@ public class DugSoilBlockEntity extends SyncedBlockEntity {
 					}
 				}
 			}
-		} else {
-			BlockState state = level.getBlockState(pos);
-			level.sendBlockUpdated(pos, state, state, 3);
 		}
 		this.setChanged();
 	}

@@ -39,7 +39,7 @@ public class PuffshroomBlockEntity extends SyncedBlockEntity {
 		entity.prev_renderTicks = entity.renderTicks;
 
 		if (!level.isClientSide() && entity.cooldown <= 0 && level.getGameTime() % 5 == 0)
-			entity.findEnemyToAttack(level, pos, state);
+			entity.findEnemyToAttack(level, pos);
 
 		if (entity.active_1 || entity.active_5) {
 			if (level.isClientSide()) {
@@ -150,14 +150,14 @@ public class PuffshroomBlockEntity extends SyncedBlockEntity {
 		entity.renderTicks++;
 	}
 
-	protected void findEnemyToAttack(Level level, BlockPos pos, BlockState state) {
+	protected void findEnemyToAttack(Level level, BlockPos pos) {
 		if (!this.active_1 && this.animation_1 == 0) {
 			List<Player> list = level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(2.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
 			if (!list.isEmpty()) {
 				this.active_1 = true;
 				this.cooldown = 120;
 				this.pause = true;
-				level.sendBlockUpdated(pos, state, state, 2);
+				this.setChanged();
 			}
 		}
 	}

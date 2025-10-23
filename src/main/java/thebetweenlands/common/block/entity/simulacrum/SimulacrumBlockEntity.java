@@ -102,9 +102,9 @@ public class SimulacrumBlockEntity extends RepellerBlockEntity implements Spawne
 		this.name = name;
 	}
 
-	public void setActive(Level level, BlockPos pos, BlockState state, boolean active) {
+	public void setActive(boolean active) {
 		this.isActive = active;
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 	}
 
 	public boolean isActive() {

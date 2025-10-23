@@ -64,7 +64,7 @@ public class MortarBlock extends HorizontalBaseEntityBlock implements SwampWater
 	protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MortarBlockEntity mortar) {
 			mortar.manualGrinding = true;
-			level.sendBlockUpdated(pos, state, state, 3);
+			mortar.setChanged();
 		}
 	}
 
@@ -73,12 +73,12 @@ public class MortarBlock extends HorizontalBaseEntityBlock implements SwampWater
 		if (level.getBlockEntity(pos) instanceof MortarBlockEntity mortar) {
 			if (stack.is(ItemRegistry.PESTLE) && mortar.getItem(1).isEmpty()) {
 				mortar.setItem(1, stack.copyWithCount(1));
-				level.sendBlockUpdated(pos, state, state, 2);
+				mortar.setChanged();
 				stack.shrink(1);
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			} else if (stack.getItem() instanceof LifeCrystalItem && mortar.getItem(3).isEmpty()) {
 				mortar.setItem(3, stack.copyWithCount(1));
-				level.sendBlockUpdated(pos, state, state, 2);
+				mortar.setChanged();
 				stack.shrink(1);
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			}

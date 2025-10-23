@@ -123,7 +123,7 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock implements Swamp
 						pot.hasCraftResult = false;
 						if (!pot.tank.getFluid().isEmpty())
 							level.playSound(null, pos, SoundEvents.PLAYER_SPLASH, SoundSource.BLOCKS, 0.75F, 2F);
-						level.sendBlockUpdated(pos, state, state, 3);
+						pot.setChanged();
 						return ItemInteractionResult.sidedSuccess(level.isClientSide());
 					}
 				}
@@ -144,7 +144,7 @@ public class SteepingPotBlock extends HorizontalBaseEntityBlock implements Swamp
 					pot.setHeatProgress(0);
 					pot.hasCraftResult = false;
 					level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.5F, 2F);
-					level.sendBlockUpdated(pos, state, state, 3);
+					pot.setChanged();
 					return InteractionResult.sidedSuccess(level.isClientSide());
 				}
 			}

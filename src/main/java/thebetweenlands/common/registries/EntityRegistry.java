@@ -96,7 +96,7 @@ public class EntityRegistry {
 	//sludge menace
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWorm>> SLUDGE_WORM = registerWithEgg("sludge_worm", EntityType.Builder.of(SludgeWorm::new, MobCategory.MONSTER).sized(0.4375F, 0.3125F).fireImmune(), 0x6D3D39, 0x301411, SludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<SmolSludge>> SMOL_SLUDGE = registerWithEgg("smol_sludge", EntityType.Builder.of(SmolSludge::new, MobCategory.MONSTER).sized(0.7F, 0.7F).fireImmune(), 0x726459, 0x726459, SmolSludge::registerAttributes);
-	//spirit tree faces
+	//spirit tree faces (small, large, tame)
 	public static final DeferredHolder<EntityType<?>, EntityType<Splodeshroom>> SPLODESHROOM = registerWithEgg("splodeshroom", EntityType.Builder.of(Splodeshroom::new, MobCategory.MONSTER).sized(0.5F, 1.0F), 0xC8527D, 0x792B48, Mob::createMobAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Sporeling>> SPORELING = registerWithEgg("sporeling", EntityType.Builder.of(Sporeling::new, MobCategory.CREATURE).sized(0.3F, 0.6F), 0x696144, 0xFFFB00, Sporeling::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Stalker>> STALKER = registerWithEgg("stalker", EntityType.Builder.of(Stalker::new, MobCategory.MONSTER).sized(0.85F, 0.85F).clientTrackingRange(10), 0xE4DCC9, 0xD58888, Stalker::registerAttributes);

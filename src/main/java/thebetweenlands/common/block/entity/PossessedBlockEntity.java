@@ -40,7 +40,7 @@ public class PossessedBlockEntity extends SyncedBlockEntity {
 				if (entity.animationTicks <= 24)
 					entity.animationTicks++;
 				if (entity.animationTicks == 24) {
-					entity.setActive(level, pos, state, false);
+					entity.setActive(false);
 					entity.coolDown = 200;
 				}
 			}
@@ -50,7 +50,7 @@ public class PossessedBlockEntity extends SyncedBlockEntity {
 				if (entity.coolDown >= 0)
 					entity.coolDown--;
 			}
-			level.sendBlockUpdated(pos, state, state, 3);
+			entity.setChanged();
 		}
 		entity.moveProgress = 1 + entity.headShake.swing(4, 1F, false);
 		if (level.isClientSide())
@@ -70,9 +70,9 @@ public class PossessedBlockEntity extends SyncedBlockEntity {
 		level.addParticle(ParticleTypes.WHITE_SMOKE, xx + randomOffset, yy - randomOffset, zz + randomOffset, 0.0D, 0.0D, 0.0D);
 	}
 
-	public void setActive(Level level, BlockPos pos, BlockState state, boolean isActive) {
+	public void setActive(boolean isActive) {
 		this.active = isActive;
-		level.sendBlockUpdated(pos, state, state, 3);
+		this.setChanged();
 	}
 
 	protected void findEnemyToAttack(Level level, BlockPos pos, BlockState state) {
@@ -82,7 +82,7 @@ public class PossessedBlockEntity extends SyncedBlockEntity {
 		List<Player> list = level.getEntitiesOfClass(Player.class, new AABB(pos.relative(facing)).expandTowards(x + 1, 1, z + 1));
 		if (!list.isEmpty()) {
 			if (!this.active && this.animationTicks == 0 && this.coolDown <= 0) {
-				this.setActive(level, pos, state, true);
+				this.setActive(true);
 			}
 		}
 	}

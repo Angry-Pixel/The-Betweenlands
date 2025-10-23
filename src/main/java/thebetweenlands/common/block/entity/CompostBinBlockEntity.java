@@ -48,7 +48,7 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 							entity.compostTimes[i] = 0;
 							entity.compostAmounts[i] = 0;
 
-							level.sendBlockUpdated(pos, state, state, 2);
+							entity.setChanged();
 						} else {
 							entity.processes[i]++;
 						}
@@ -78,7 +78,7 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	 * @param amount
 	 * @return
 	 */
-	public boolean removeCompost(Level level, BlockPos pos, BlockState state, int amount) {
+	public boolean removeCompost(int amount) {
 		if (this.compostedAmount != 0) {
 			if (this.compostedAmount >= amount) {
 				this.compostedAmount -= amount;
@@ -87,7 +87,6 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 				this.compostedAmount = 0;
 				this.totalCompostAmount = 0;
 			}
-			level.sendBlockUpdated(pos, state, state, 2);
 			this.setChanged();
 			return true;
 		}
@@ -103,7 +102,7 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	 * @param doSimulate
 	 * @return
 	 */
-	public CompostResult addItemToBin(Level level, BlockPos pos, BlockState state, ItemStack stack, int compostAmount, int compostTime, boolean doSimulate) {
+	public CompostResult addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate) {
 		int clampedAmount = this.getTotalCompostAmount() + compostAmount <= MAX_COMPOST_AMOUNT ? compostAmount : MAX_COMPOST_AMOUNT - this.getTotalCompostAmount();
 		if (clampedAmount > 0) {
 			for (int i = 0; i < this.getContainerSize(); i++) {
@@ -117,7 +116,7 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 						this.processes[i] = 0;
 						this.totalCompostAmount += clampedAmount;
 
-						level.sendBlockUpdated(pos, state, state, 2);
+						this.setChanged();
 					}
 					return CompostResult.ADDED;
 				}

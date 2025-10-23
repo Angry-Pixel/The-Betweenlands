@@ -133,7 +133,7 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 
 			if (entity.shouldTrapTrigger(level, pos, state) != null && entity.isActive(state))
 				if (!entity.isExtending() && entity.extendingTicks == 0)
-					entity.setExtending(level, pos, state, true);
+					entity.setExtending(true);
 
 		}
 
@@ -146,8 +146,8 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 				entity.extendingTicks += 4;
 			if (entity.extendingTicks >= 20) {
 				entity.extendingTicks = 20;
-				if (!level.isClientSide) {
-					entity.setExtending(level, pos, state, false);
+				if (!level.isClientSide()) {
+					entity.setExtending(false);
 				}
 			}
 		} else {
@@ -159,12 +159,12 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		if (entity.canSpook) {
 			entity.prevSpoopAnimationTicks = entity.spoopAnimationTicks;
 			if (!entity.activeSpoop && level.getRandom().nextInt(11) + level.getGameTime() % 10 == 0 && entity.spoopAnimationTicks == 0)
-				entity.setActiveSpoop(level, pos, state, true);
+				entity.setActiveSpoop(true);
 			if (entity.activeSpoop) {
 				if (entity.spoopAnimationTicks < 20)
 					entity.spoopAnimationTicks += 1;
 				if (entity.spoopAnimationTicks == 20)
-					entity.setActiveSpoop(level, pos, state, false);
+					entity.setActiveSpoop(false);
 			}
 			if (!entity.activeSpoop)
 				if (entity.spoopAnimationTicks >= 1)
@@ -335,16 +335,16 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 			}
 			if (couldBreak) {
 				this.setActive(level, spikeTrapPos, spikeTrapState, true);
-				this.setExtending(level, spikeTrapPos, spikeTrapState, true);
+				this.setExtending(true);
 				level.levelEvent(null, 2001, targetPos, Block.getId(targetState));
 			}
 			return couldBreak ? BreakBlockResult.BREAK : BreakBlockResult.BLOCK;
 		}
 	}
 
-	public void setExtending(Level level, BlockPos pos, BlockState state, boolean extending) {
+	public void setExtending(boolean extending) {
 		this.extending = extending;
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 	}
 
 	public boolean isExtending() {
@@ -359,9 +359,9 @@ public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 		level.setBlockAndUpdate(pos, state.setValue(SpikeTrapBlock.ACTIVE, active));
 	}
 
-	public void setActiveSpoop(Level level, BlockPos pos, BlockState state, boolean active) {
+	public void setActiveSpoop(boolean active) {
 		this.activeSpoop = active;
-		level.sendBlockUpdated(pos, state, state, 2);
+		this.setChanged();
 	}
 
 	public BlockPos getHitArea(BlockPos pos, BlockState state) {

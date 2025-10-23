@@ -91,7 +91,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 				if (stack.getItem() instanceof MobItem<?> mob) {
 					if (!cage.hasGecko() && !level.isClientSide()) {
 						if (mob.getCapturedEntityId(stack) == EntityRegistry.GECKO.getId()) {
-							cage.addGecko(level, pos, state, Mth.floor(mob.getMobHealth(stack)), stack.getOrDefault(DataComponents.CUSTOM_NAME, Component.empty()).getString());
+							cage.addGecko(Mth.floor(mob.getMobHealth(stack)), stack.getOrDefault(DataComponents.CUSTOM_NAME, Component.empty()).getString());
 							if (!player.isCreative())
 								stack.shrink(1);
 						}
@@ -102,7 +102,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 				}
 				if (stack.is(ItemRegistry.SAP_SPIT) && cage.hasGecko() && cage.getGeckoUsages() < 12) {
 					if (!level.isClientSide()) {
-						cage.setGeckoUsages(level, pos, state, 12);
+						cage.setGeckoUsages(12);
 						stack.consume(1, player);
 					} else {
 						this.spawnHeartParticles(level, pos);
@@ -123,7 +123,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 											case NEW:
 											case LAST:
 												DiscoveryContainerData.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type());
-												cage.setAspectType(level, pos, state, discovery.discovered.type(), 600);
+												cage.setAspectType(discovery.discovered.type(), 600);
 												if (player instanceof ServerPlayer sp) {
 													AdvancementCriteriaRegistry.GECKO.get().trigger(sp, true, false);
 													if (discovery.result == DiscoveryResult.LAST && DiscoveryContainerData.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {

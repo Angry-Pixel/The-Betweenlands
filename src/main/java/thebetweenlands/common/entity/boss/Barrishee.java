@@ -355,7 +355,7 @@ public class Barrishee extends Monster implements ScreenShaker, BLEntity, PathOb
 			Containers.dropContents(level, pos.relative(facing), alcove);
 			this.spawnAshSpriteMinion(level, pos, state);
 			level.levelEvent(null, 2001, pos, Block.getId(state));
-			level.sendBlockUpdated(pos, state, state, 2);
+			alcove.setChanged();
 		}
 	}
 

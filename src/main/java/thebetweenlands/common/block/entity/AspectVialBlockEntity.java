@@ -55,13 +55,6 @@ public class AspectVialBlockEntity extends SyncedBlockEntity {
 		return removed;
 	}
 
-	@Override
-	public void setChanged() {
-		final BlockState state = this.getLevel().getBlockState(this.getBlockPos());
-		this.getLevel().sendBlockUpdated(this.getBlockPos(), state, state, 2);
-		super.setChanged();
-	}
-
 	@Nullable
 	public Aspect getAspect() {
 		return this.aspect;

@@ -83,7 +83,7 @@ public class ItemShelfBlock extends HorizontalBaseEntityBlock implements SwampWa
 						ItemStack result = wrapper.insertItem(slot, stack, true);
 						if (result.isEmpty() || result.getCount() != stack.getCount()) {
 							result = wrapper.insertItem(slot, stack.copy(), false);
-							level.sendBlockUpdated(pos, state, state, 2);
+							shelf.setChanged();
 							if (!player.isCreative()) {
 								player.setItemInHand(hand, result);
 							}

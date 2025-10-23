@@ -94,7 +94,7 @@ public class PuffshroomBlock extends BaseEntityBlock {
 							level.levelEvent(null, 2001, pos, Block.getId(state));
 						}
 
-						level.sendBlockUpdated(pos, state, state, 3);
+						puffshroom.setChanged();
 					}
 
 					return true;

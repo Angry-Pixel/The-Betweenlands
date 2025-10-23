@@ -56,7 +56,7 @@ public class DecayPitGroundChainBlockEntity extends SyncedBlockEntity {
 			if (entity.breakTimer > 32) {
 				if (entity.breakTimer % 4 == 0) {
 					entity.setLength(entity.getLength() - 1);
-					level.sendBlockUpdated(pos, state, state, 3);
+					entity.setChanged();
 				}
 				if (entity.getLength() <= 0) {
 					level.removeBlock(pos, false);

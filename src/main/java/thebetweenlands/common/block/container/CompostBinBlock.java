@@ -67,7 +67,7 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 				boolean interacted = false;
 
 				if (bin.getCompostedAmount() > 0) {
-					if (bin.removeCompost(level, pos, state, CompostBinBlockEntity.COMPOST_PER_ITEM)) {
+					if (bin.removeCompost(CompostBinBlockEntity.COMPOST_PER_ITEM)) {
 						if (!player.getInventory().add(new ItemStack(ItemRegistry.COMPOST.get()))) {
 							player.drop(new ItemStack(ItemRegistry.COMPOST.get()), false);
 						}
@@ -80,9 +80,9 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 					if (data != null) {
 						int amount = data.amount();
 						int time = data.time();
-						switch (bin.addItemToBin(level, pos, state, stack, amount, time, true)) {
+						switch (bin.addItemToBin(stack, amount, time, true)) {
 							case CompostBinBlockEntity.CompostResult.ADDED:
-								bin.addItemToBin(level, pos, state, stack, amount, time, false);
+								bin.addItemToBin(stack, amount, time, false);
 								stack.consume(1, player);
 								break;
 							case CompostBinBlockEntity.CompostResult.FULL:
