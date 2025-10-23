@@ -4,12 +4,15 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.*;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
+import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
@@ -38,6 +41,7 @@ public class ClientEvents {
 
 		NeoForge.EVENT_BUS.addListener(ClientEvents::renderMobsOnFrame);
 		NeoForge.EVENT_BUS.addListener(ClientEvents::changeFOV);
+		NeoForge.EVENT_BUS.addListener(ClientEvents::removeBlockHitboxes);
 
 		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWorldLast);
 		NeoForge.EVENT_BUS.addListener(ShaderHandler::onRenderWeather);
@@ -85,6 +89,13 @@ public class ClientEvents {
 				strength = 1.0F;
 			}
 			event.setNewFovModifier(1.0F - strength * 0.25F);
+		}
+	}
+
+	static void removeBlockHitboxes(RenderHighlightEvent.Block event) {
+		Level level = Minecraft.getInstance().level;
+		if (level.getBlockState(event.getTarget().getBlockPos()).getBlock() instanceof DungeonDoorRunesBlock) {
+			event.setCanceled(true);
 		}
 	}
 }

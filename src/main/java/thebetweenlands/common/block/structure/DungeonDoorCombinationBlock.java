@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,26 +25,41 @@ public class DungeonDoorCombinationBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
+	protected RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
+	}
+
+	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
 		if (player.isCreative()) {
-			if (!level.isClientSide()) {
-				if (level.getBlockEntity(pos) instanceof DungeonDoorCombinationBlockEntity combo && result.getDirection() == state.getValue(FACING)) {
-					double hitY = result.getLocation().y();
-					if (hitY >= 0.0625F && hitY < 0.375F)
+			if (level.getBlockEntity(pos) instanceof DungeonDoorCombinationBlockEntity combo && result.getDirection() == state.getValue(FACING)) {
+				boolean changed = false;
+				double hitY = result.getLocation().y() - pos.getY();
+				if (hitY >= 0.0625F && hitY < 0.375F) {
+					if (!level.isClientSide()) {
 						combo.cycleBottomState();
-					if (hitY >= 0.375F && hitY < 0.625F)
-						combo.cycleMidState();
-					if (hitY >= 0.625F && hitY <= 0.9375F)
-						combo.cycleTopState();
-					level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
-					level.sendBlockUpdated(pos, state, state, 3);
-					return InteractionResult.SUCCESS;
+					}
+					changed = true;
 				}
-			} else {
-				return InteractionResult.SUCCESS;
+				if (hitY >= 0.375F && hitY < 0.625F) {
+					if (!level.isClientSide()) {
+						combo.cycleMidState();
+					}
+					changed = true;
+				}
+				if (hitY >= 0.625F && hitY <= 0.9375F) {
+					if (!level.isClientSide()) {
+						combo.cycleTopState();
+					}
+					changed = true;
+				}
+				if (changed) {
+					level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1.0F);
+					return InteractionResult.sidedSuccess(level.isClientSide());
+				}
 			}
 		}
-		return InteractionResult.PASS;
+		return super.useWithoutItem(state, level, pos, player, result);
 	}
 
 	@Nullable

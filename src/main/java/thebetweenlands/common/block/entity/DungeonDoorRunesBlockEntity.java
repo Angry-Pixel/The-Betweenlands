@@ -31,20 +31,19 @@ import java.util.List;
 public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements ScreenShaker {
 
 	//private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts(null);
-	private boolean mimic; // true = trap
-	private boolean barrishee; // true = Barrishee / false = Crypt Crawler Chief
-	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
-	public int top_state = 0, mid_state = 0, bottom_state = 0;
-	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
-	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;
-	public int lastTickTopRotate = 0, lastTickMidRotate = 0, lastTickBottomRotate = 0;
+	private DoorType doorType;
+	public int top_code, mid_code, bottom_code = -1; // set back to -1
+	public int top_state, mid_state, bottom_state = 0;
+	public int top_state_prev, mid_state_prev, bottom_state_prev = 0;
+	public int top_rotate, mid_rotate, bottom_rotate = 0;
+	public int lastTickTopRotate, lastTickMidRotate, lastTickBottomRotate = 0;
 	public int renderTicks = 0;
 	public boolean animate_open = false;
 	public boolean animate_open_recess = false;
 	public boolean animate_tile_recess = false;
 	public boolean break_blocks = false;
-	public int slate_1_rotate = 0, slate_2_rotate = 0, slate_3_rotate = 0;
-	public int last_tick_slate_1_rotate = 0, last_tick_slate_2_rotate = 0, last_tick_slate_3_rotate = 0;
+	public int slate_1_rotate, slate_2_rotate, slate_3_rotate = 0;
+	public int last_tick_slate_1_rotate, last_tick_slate_2_rotate, last_tick_slate_3_rotate = 0;
 	public int recess_pos = 0;
 	public int last_tick_recess_pos = 0;
 
@@ -74,13 +73,12 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 	private int shakingTimerMax = 240;
 
 	public DungeonDoorRunesBlockEntity(BlockPos pos, BlockState state) {
-		this(pos, state, false, false);
+		this(pos, state, DoorType.NORMAL);
 	}
 
-	public DungeonDoorRunesBlockEntity(BlockPos pos, BlockState state, boolean mimic, boolean barishee) {
+	public DungeonDoorRunesBlockEntity(BlockPos pos, BlockState state, DoorType type) {
 		super(BlockEntityRegistry.DUNGEON_DOOR_RUNES.get(), pos, state);
-		this.mimic = mimic;
-		this.barrishee = barishee;
+		this.doorType = type;
 	}
 
 	public void sinkingParticles(Level level, BlockPos pos, BlockState state, float ySpikeVel) {
@@ -131,7 +129,7 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 
 		List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, hitBox);
 		for (LivingEntity entity : list) {
-			if (entity != null/* && !(entity instanceof Barrishee)*/)
+			if (entity != null && !(entity instanceof Barrishee))
 				if (!level.isClientSide())
 					entity.hurt(level.damageSources().fallingBlock(null), 10F); // dunno what damage to do yet...
 		}
@@ -225,14 +223,14 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 					entity.animate_open_recess = false;
 					if (!entity.animate_open) {
 						entity.animate_open = true;
-						level.sendBlockUpdated(pos, state, state, 3);
+						entity.setChanged();
 					}
 				}
 			}
 		}
 
 		if (entity.animate_tile_recess) {
-			if (!entity.mimic) {
+			if (entity.doorType == DoorType.NORMAL) {
 				if (entity.tile_1_recess_pos <= 0)
 					if (!level.isClientSide())
 						entity.playOpenRecessSound(level, pos, false);
@@ -259,13 +257,13 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 				entity.last_tick_recess_pos_tile_3 = entity.tile_3_recess_pos = limit;
 				if (!level.isClientSide()) {
 					entity.break_blocks = true;
-					level.sendBlockUpdated(pos, state, state, 3);
+					entity.setChanged();
 				}
 			}
 		}
 
 		if (entity.animate_open) {
-			if (entity.mimic) {
+			if (entity.doorType != DoorType.NORMAL) {
 				if (entity.slate_1_rotate <= 0)
 					if (!level.isClientSide()) {
 						entity.playTrapFallingSound(level, pos);
@@ -273,7 +271,7 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 						Direction facing = state.getValue(DungeonDoorRunesBlock.FACING);
 
 						BlockPos offsetPos = pos.relative(facing.getOpposite());
-						if (entity.barrishee) {
+						if (entity.doorType == DoorType.BARRISHEE) {
 							Barrishee barishee = new Barrishee(EntityRegistry.BARRISHEE.get(), level);
 							barishee.moveTo(offsetPos.getX() + 0.5D, offsetPos.below().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
 							barishee.yHeadRot = barishee.getYRot();
@@ -296,8 +294,7 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 				entity.slate_3_rotate += 2 + (entity.last_tick_slate_3_rotate < 8 ? 0 : entity.last_tick_slate_3_rotate / 8);
 				entity.hide_lock = true;
 				entity.hide_back_wall = true;
-			}
-			if (!entity.mimic) {
+			} else {
 				if (entity.slate_1_rotate == 0)
 					if (!level.isClientSide()) {
 						entity.playOpenSinkingSound(level, pos);
@@ -310,14 +307,14 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 				entity.slate_2_rotate += 3;
 				entity.slate_3_rotate += 3;
 			}
-			int limit = entity.mimic ? 90 : 360;
-			if (!entity.mimic)
+			int limit = entity.doorType != DoorType.NORMAL ? 90 : 360;
+			if (entity.doorType == DoorType.NORMAL)
 				if (entity.slate_3_rotate < limit - 6)
 					entity.sinkingParticles(level, pos, state, 0F);
 				else
 					entity.sinkingParticles(level, pos, state, 0.25F);
 			if (entity.slate_1_rotate >= limit) {
-				if (entity.mimic) {
+				if (entity.doorType != DoorType.NORMAL) {
 					entity.falling_shake = true;
 					entity.crashingParticles(level, pos, state, 0.125F);
 					entity.hide_slate_1 = true;
@@ -325,18 +322,17 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 				entity.last_tick_slate_1_rotate = entity.slate_1_rotate = limit;
 			}
 			if (entity.slate_2_rotate >= limit) {
-				if (entity.mimic) {
+				if (entity.doorType != DoorType.NORMAL) {
 					entity.crashingParticles(level, pos, state, 0.125F);
 					entity.hide_slate_2 = true;
 				}
 				entity.last_tick_slate_2_rotate = entity.slate_2_rotate = limit;
 			}
 			if (entity.slate_3_rotate >= limit) {
-				if (entity.mimic) {
+				if (entity.doorType != DoorType.NORMAL) {
 					entity.crashingParticles(level, pos, state, 0.125F);
 					entity.hide_slate_3 = true;
-				}
-				if (!entity.mimic) {
+				} else {
 					entity.hide_slate_1 = true;
 					entity.hide_slate_2 = true;
 					entity.hide_slate_3 = true;
@@ -345,15 +341,17 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 				}
 				entity.last_tick_slate_3_rotate = entity.slate_3_rotate = limit;
 				if (!level.isClientSide()) {
-					if (entity.mimic)
+					if (entity.doorType != DoorType.NORMAL) {
 						entity.break_blocks = true;
-					if (!entity.mimic)
-						if (entity.is_in_dungeon)
+					} else {
+						if (entity.is_in_dungeon) {
 							entity.animate_tile_recess = true;
-						else
+						} else {
 							entity.break_blocks = true;
+						}
+					}
 					entity.animate_open = false;
-					level.sendBlockUpdated(pos, state, state, 3);
+					entity.setChanged();
 				}
 			}
 			if (entity.falling_shake) {
@@ -365,28 +363,21 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 		if (!level.isClientSide()) {
 			Direction facing = state.getValue(DungeonDoorRunesBlock.FACING);
 			if (entity.top_state_prev == entity.top_code && entity.mid_state_prev == entity.mid_code && entity.bottom_state_prev == entity.bottom_code) {
-				if (!entity.mimic) {
+				if (entity.doorType == DoorType.NORMAL) {
 					if (!entity.animate_open_recess) {
 						entity.animate_open_recess = true;
-						level.sendBlockUpdated(pos, state, state, 3);
+						entity.setChanged();
 					}
 				} else {
 					if (!entity.animate_open) {
 						entity.animate_open = true;
-						level.sendBlockUpdated(pos, state, state, 3);
+						entity.setChanged();
 					}
 				}
 			}
 			if (entity.break_blocks) {
-				if (!entity.mimic)
-					entity.breakAllDoorBlocks(level, pos, state, facing, entity.is_in_dungeon, false);
-				else {
-					entity.breakAllDoorBlocks(level, pos, state, facing, false, false);
-				}
+				DungeonDoorRunesBlock.breakAllDoorBlocks(level, pos, facing, entity.is_in_dungeon && entity.doorType == DoorType.NORMAL, false);
 			}
-
-			if (level.getGameTime() % 5 == 0)
-				entity.checkComplete(level, pos, state, facing);
 		}
 	}
 
@@ -400,48 +391,6 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 			this.shake_timer++;
 
 		this.shaking = this.shake_timer < this.shakingTimerMax;
-	}
-
-	private void checkComplete(Level level, BlockPos pos, BlockState state, Direction facing) {
-		if (facing == Direction.WEST || facing == Direction.EAST) {
-			for (int z = -1; z <= 1; z++)
-				for (int y = -1; y <= 1; y++)
-					if (!(level.getBlockState(pos.offset(0, y, z)).getBlock() instanceof DungeonDoorRunesBlock))
-						breakAllDoorBlocks(level, pos, state, facing, false, true);
-		}
-
-		if (facing == Direction.NORTH || facing == Direction.SOUTH) {
-			for (int x = -1; x <= 1; x++)
-				for (int y = -1; y <= 1; y++)
-					if (!(level.getBlockState(pos.offset(x, y, 0)).getBlock() instanceof DungeonDoorRunesBlock))
-						breakAllDoorBlocks(level, pos, state, facing, false, true);
-		}
-	}
-
-	public void breakAllDoorBlocks(Level level, BlockPos pos, BlockState state, Direction facing, boolean breakFloorBelow, boolean particles) {
-		if (facing == Direction.WEST || facing == Direction.EAST) {
-			for (int z = -1; z <= 1; z++)
-				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)
-					if (particles) {
-						level.destroyBlock(pos.offset(0, y, z), false);
-						level.removeBlockEntity(pos);
-					} else {
-						level.removeBlock(pos.offset(0, y, z), false);
-						level.removeBlockEntity(pos);
-					}
-		}
-
-		if (facing == Direction.NORTH || facing == Direction.SOUTH) {
-			for (int x = -1; x <= 1; x++)
-				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)
-					if (particles) {
-						level.destroyBlock(pos.offset(x, y, 0), false);
-						level.removeBlockEntity(pos);
-					} else {
-						level.removeBlock(pos.offset(x, y, 0), false);
-						level.removeBlockEntity(pos);
-					}
-		}
 	}
 
 	public void cycleTopState(Level level, BlockPos pos) {
@@ -510,8 +459,7 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 		tag.putInt("top_state_prev", this.top_state_prev);
 		tag.putInt("mid_state_prev", this.mid_state_prev);
 		tag.putInt("bottom_state_prev", this.bottom_state_prev);
-		tag.putBoolean("mimic", this.mimic);
-		tag.putBoolean("barrishee", this.barrishee);
+		tag.putInt("door_type", this.doorType.ordinal());
 		tag.putBoolean("animate_open", this.animate_open);
 		tag.putBoolean("animate_open_recess", this.animate_open_recess);
 		tag.putBoolean("animate_tile_recess", this.animate_tile_recess);
@@ -537,8 +485,7 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 		this.top_state_prev = tag.getInt("top_state_prev");
 		this.mid_state_prev = tag.getInt("mid_state_prev");
 		this.bottom_state_prev = tag.getInt("bottom_state_prev");
-		this.mimic = tag.getBoolean("mimic");
-		this.barrishee = tag.getBoolean("barrishee");
+		this.doorType = DoorType.values()[tag.getInt("door_type")];
 		this.animate_open = tag.getBoolean("animate_open");
 		this.animate_open_recess = tag.getBoolean("animate_open_recess");
 		this.animate_tile_recess = tag.getBoolean("animate_tile_recess");
@@ -582,10 +529,16 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 	}
 
 	public boolean isMimic() {
-		return this.mimic;
+		return this.doorType != DoorType.NORMAL;
 	}
 
 	public ItemStack cachedStack() {
 		return renderStack;
+	}
+
+	public enum DoorType {
+		NORMAL,
+		BARRISHEE,
+		CHIEF
 	}
 }

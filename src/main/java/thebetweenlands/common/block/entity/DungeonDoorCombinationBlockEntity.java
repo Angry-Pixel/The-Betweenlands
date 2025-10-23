@@ -9,9 +9,9 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class DungeonDoorCombinationBlockEntity extends SyncedBlockEntity {
 
-	private int topCode = 0;
-	private int midCode = 0;
-	private int bottomCode = 0;
+	public int topCode = 0;
+	public int midCode = 0;
+	public int bottomCode = 0;
 	public int renderTicks = 0;
 
 	public DungeonDoorCombinationBlockEntity(BlockPos pos, BlockState state) {

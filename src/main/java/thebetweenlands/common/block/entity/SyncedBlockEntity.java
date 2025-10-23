@@ -27,4 +27,12 @@ public abstract class SyncedBlockEntity extends BlockEntity {
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
 		return this.saveCustomOnly(registries);
 	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
+	}
 }

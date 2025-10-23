@@ -287,6 +287,8 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT.get(), CrabPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT_FILTER.get(), CrabPotFilterRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.DRUID_ALTAR.get(), DruidAltarRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.DUNGEON_DOOR_RUNES.get(), DungeonDoorRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.DUNGEON_DOOR_COMBINATION.get(), DungeonDoorCombinationRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FILTERED_SILT_GLASS_JAR.get(), FilteredSiltGlassJarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableRenderer::new);
@@ -423,6 +425,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_3, DeepmanSimulacrumModels::makeSimulacrum3);
 		event.registerLayerDefinition(BLModelLayers.DRUID_ALTAR, DruidAltarModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DRUID_STONES, DruidAltarModel::makeStones);
+		event.registerLayerDefinition(BLModelLayers.DUNGEON_DOOR, DungeonDoorModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DUNGEON_DOOR_RUNES, DungeonDoorRunesModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.FISHING_TACKLE_BOX, FishingTackleBoxModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.FISH_TRIMMING_TABLE, FishTrimmingTableModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.GECKO_CAGE, GeckoCageModel::makeModel);

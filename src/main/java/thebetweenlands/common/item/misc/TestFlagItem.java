@@ -13,6 +13,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
 import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.entity.SwordEnergy;
@@ -43,17 +44,21 @@ public class TestFlagItem extends Item {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		int offset = 4;
-		SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
+		if (context.getLevel().getBlockEntity(context.getClickedPos()) instanceof DungeonDoorRunesBlockEntity runes) {
+			runes.is_in_dungeon = true;
+		} else {
+			int offset = 4;
+			SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
 
-		energy.setPos(context.getClickedPos().above(offset - 1).getCenter());
+			energy.setPos(context.getClickedPos().above(offset - 1).getCenter());
 
-		context.getLevel().addFreshEntity(energy);
+			context.getLevel().addFreshEntity(energy);
 
-		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
-		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
-		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
-		ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
+		}
 
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
 	}
