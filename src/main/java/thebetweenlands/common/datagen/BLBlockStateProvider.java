@@ -824,6 +824,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(BlockRegistry.WEEDWOOD_SIGN, false);
 		this.builtinEntity(BlockRegistry.MOSS_BED, this.modLoc("block/moss"));
 		this.basicItemTex(BlockRegistry.MOSS_BED, false);
+		this.horizontalBlock(BlockRegistry.DECAY_PIT_GROUND_CHAIN.get(), this.models().getExistingFile(this.modLoc("block/beam_relay")));
+		this.simpleBlock(BlockRegistry.DECAY_PIT_HANGING_CHAIN.get(), this.models().getExistingFile(this.modLoc("block/compacted_mud")));
+		this.simpleBlock(BlockRegistry.DECAY_PIT_CONTROL.get(), this.models().getExistingFile(this.modLoc("block/compacted_mud")));
 
 		this.simpleBlockWithItem(BlockRegistry.WHITE_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 		this.simpleBlockWithItem(BlockRegistry.LIGHT_GRAY_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));

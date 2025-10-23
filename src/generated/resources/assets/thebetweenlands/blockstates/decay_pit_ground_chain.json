@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/beam_relay",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/beam_relay"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/beam_relay",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/beam_relay",
+      "y": 270
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-20T19:51:03.715335977	Block States: thebetweenlands
+// 1.21.1	2025-10-23T09:43:48.846416836	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 5e616fe21bb0abaab4f1e2c2a994e516eb5c0af3 assets/thebetweenlands/blockstates/algae.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
@@ -152,6 +152,9 @@ a60db6c4d0726f820786666a85cd8e65691e5b5c assets/thebetweenlands/blockstates/damp
 022770e5b3872d400b142e33b63e52419e15211d assets/thebetweenlands/blockstates/dead_lichen.json
 d38f3cfbf882aaa7c2a9ddab4545be6155d6e74a assets/thebetweenlands/blockstates/dead_moss.json
 a327d88bddf6bb5f533a55acabd16b585ac040f4 assets/thebetweenlands/blockstates/dead_weedwood_bush.json
+6c22cfa1cca331d3f171bfbe2d9645183982dc21 assets/thebetweenlands/blockstates/decay_pit_control.json
+31bcc564dcd87e3e856b33d8db0fb65b782a7c13 assets/thebetweenlands/blockstates/decay_pit_ground_chain.json
+6c22cfa1cca331d3f171bfbe2d9645183982dc21 assets/thebetweenlands/blockstates/decay_pit_hanging_chain.json
 e70c6966054a1ded95ec7027ece4d4b0d4588a5b assets/thebetweenlands/blockstates/deep_water_coral.json
 7061a83b78506b45d1789114580c892a580852b1 assets/thebetweenlands/blockstates/deep_water_coral_block.json
 b21aedd1c2e7b9e64c50438569f0619bf89f2e21 assets/thebetweenlands/blockstates/deepman_simulacrum_1.json

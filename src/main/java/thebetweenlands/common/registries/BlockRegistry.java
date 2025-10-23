@@ -475,9 +475,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> ROTTEN_FENCE = register("rotten_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ROTTEN_FENCE_GATE = register("rotten_fence_gate", () -> new FenceGateBlock(BLWoodTypes.ROTTEN_WOOD_TYPE, BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> BRAZIER = register("brazier", () -> new BrazierBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> DECAY_PIT_GROUND_CHAIN = BLOCKS.register("decay_pit_ground_chain", () -> new DecayPitGroundChainBlock(BlockBehaviour.Properties.of().noLootTable().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> DECAY_PIT_HANGING_CHAIN = BLOCKS.register("decay_pit_hanging_chain", () -> new DecayPitHangingChainBlock(BlockBehaviour.Properties.of().noLootTable().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> DECAY_PIT_CONTROL = BLOCKS.register("decay_pit_control", () -> new DecayPitControlBlock(BlockBehaviour.Properties.of().noLootTable().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> DECAY_PIT_GROUND_CHAIN = BLOCKS.register("decay_pit_ground_chain", () -> new DecayPitGroundChainBlock(BlockBehaviour.Properties.of().noLootTable().noOcclusion().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> DECAY_PIT_HANGING_CHAIN = BLOCKS.register("decay_pit_hanging_chain", () -> new DecayPitHangingChainBlock(BlockBehaviour.Properties.of().noLootTable().noOcclusion().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> DECAY_PIT_CONTROL = BLOCKS.register("decay_pit_control", () -> new DecayPitControlBlock(BlockBehaviour.Properties.of().noLootTable().noOcclusion().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
 	//TODO invisible block variants for the decay pit control
 	//perhaps consider making them all 1 block with variants that cycle the hitbox
 	public static final DeferredBlock<Block> WHITE_PRESENT = register("white_present", () -> new PresentBlock(DyeColor.WHITE, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));

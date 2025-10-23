@@ -286,6 +286,9 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT.get(), CrabPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT_FILTER.get(), CrabPotFilterRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.DECAY_PIT_CONTROL.get(), DecayPitControlRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.DECAY_PIT_GROUND_CHAIN.get(), DecayPitGroundChainRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.DECAY_PIT_HANGING_CHAIN.get(), DecayPitHangingChainRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.DRUID_ALTAR.get(), DruidAltarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.DUNGEON_DOOR_RUNES.get(), DungeonDoorRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.DUNGEON_DOOR_COMBINATION.get(), DungeonDoorCombinationRenderer::new);
@@ -420,6 +423,9 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CRAB_POT, CrabPotModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CRAB_POT_FILTER, CrabPotFilterModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_CHAIN, DecayPitChainModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_PLUG, DecayPitPlugModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_TARGET, DecayPitTargetModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_1, DeepmanSimulacrumModels::makeSimulacrum1);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_2, DeepmanSimulacrumModels::makeSimulacrum2);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_3, DeepmanSimulacrumModels::makeSimulacrum3);

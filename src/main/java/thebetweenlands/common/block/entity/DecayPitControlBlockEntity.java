@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -112,7 +113,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 				}
 
 				// spawn stuff here
-				if (level.getGameTime() % 80 == 0) {
+				if (level.getGameTime() % 80 == 0 && level.getDifficulty() != Difficulty.PEACEFUL) {
 					Entity thing = entity.getEntitySpawned(level, pos, entity.getSpawnType());
 					if (thing != null) {
 						thing.setPos(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
