@@ -120,6 +120,7 @@ public class ConfiguredFeatureRegistry {
 		context.register(SAP_TREE, new ConfiguredFeature<>(FeatureRegistry.SAP_TREE.get(), FeatureConfiguration.NONE));
 		context.register(RUBBER_TREE, new ConfiguredFeature<>(FeatureRegistry.RUBBER_TREE.get(), FeatureConfiguration.NONE));
 		context.register(NIBBLETWIG_TREE, new ConfiguredFeature<>(FeatureRegistry.NIBBLETWIG_TREE.get(), FeatureConfiguration.NONE));
+		context.register(HEARTHGROVE_TREE, new ConfiguredFeature<>(FeatureRegistry.HEARTHGROVE_TREE.get(), FeatureConfiguration.NONE));
 
 		context.register(SULFUR,
 			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SULFUR_ORE.get().defaultBlockState(), 14)));

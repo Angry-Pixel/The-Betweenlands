@@ -9,7 +9,22 @@
     "water_color": 1589792,
     "water_fog_color": 1589792
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "thebetweenlands:weedwood_tree_uncommon",
+      "thebetweenlands:sap_tree_uncommon",
+      "thebetweenlands:hearthgrove_tree"
+    ]
+  ],
   "has_precipitation": true,
   "spawn_costs": {},
   "spawners": {

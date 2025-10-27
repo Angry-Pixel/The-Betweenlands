@@ -53,7 +53,12 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.HEARTHGROVE_TREE)
+				.build()
+			)
 			.build());
 
 		context.register(SWAMPLANDS, new Biome.BiomeBuilder()
@@ -71,11 +76,12 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
-				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE)
-				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NIBBLETWIG_TREE)
-				.build())
+				.build()
+			)
 			.build());
 
 		context.register(DEEP_WATERS, new Biome.BiomeBuilder()
@@ -90,7 +96,9 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.build()
+			)
 			.build());
 
 		context.register(COARSE_ISLANDS, new Biome.BiomeBuilder()
@@ -105,7 +113,11 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
+				.build()
+			)
 			.build());
 
 		context.register(RAISED_ISLES, new Biome.BiomeBuilder()
@@ -120,7 +132,11 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
+				.build()
+			)
 			.build());
 
 		context.register(SLUDGE_PLAINS, new Biome.BiomeBuilder()
@@ -150,7 +166,10 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
+				.build()
+			)
 			.build());
 
 		context.register(MARSH, new Biome.BiomeBuilder()
@@ -165,7 +184,10 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
+				.build()
+			)
 			.build());
 
 		context.register(SWAMPLANDS_CLEARING, new Biome.BiomeBuilder()

@@ -8,12 +8,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 
-public class NibbletwigTree extends Feature<NoneFeatureConfiguration> {
+public class NibbletwigTree extends WorldGenHelper<NoneFeatureConfiguration> {
 
 	public NibbletwigTree(Codec<NoneFeatureConfiguration> codec) {
 		super(codec);
@@ -26,10 +26,14 @@ public class NibbletwigTree extends Feature<NoneFeatureConfiguration> {
 
 	public boolean generate(LevelAccessor accessor, BlockPos pos, RandomSource random) {
 
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+
 		double foldedNormalDist = (Math.abs(random.nextGaussian()) + 0.2D) / 3.0D;
 		int height = (int) (Math.pow((1 - Math.min(foldedNormalDist, 1)), 1.5D) * 10) + 5;
 
-		for (int x = -2; x <= 2; x++) {
+		/*for (int x = -2; x <= 2; x++) {
 			for (int y = 2; y <= height; y++) {
 				for (int z = -2; z <= 2; z++) {
 					if (!accessor.getBlockState(new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z)).isAir()) {
@@ -37,7 +41,7 @@ public class NibbletwigTree extends Feature<NoneFeatureConfiguration> {
 					}
 				}
 			}
-		}
+		}*/
 
 
 		int bend1 = random.nextInt(3) + 6;
@@ -64,7 +68,7 @@ public class NibbletwigTree extends Feature<NoneFeatureConfiguration> {
 			accessor.setBlock(pos.offset(bxo, i, bzo), log, 2);
 		}
 
-		//this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[canopy1] + x, y + canopy1, zo[canopy1] + z, -1, 0, -1, leaves, 3, 1, 3, 0);
+		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[canopy1] + x, y + canopy1, zo[canopy1] + z, -1, 0, -1, leaves, 3, 1, 3, Direction.from3DDataValue(0));
 		for (Direction offset : Direction.Plane.HORIZONTAL) {
 			BlockPos offsetPos = pos.offset(xo[canopy1] + offset.getStepX(), canopy1 + 1, zo[canopy1] + offset.getStepZ());
 			if (accessor.isEmptyBlock(offsetPos)) {
@@ -94,12 +98,12 @@ public class NibbletwigTree extends Feature<NoneFeatureConfiguration> {
 			}
 		}
 
-//		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1, zo[height - 1] + z, -1, 0, -2, leaves, 3, 2, 5, 0);
-//		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1, zo[height - 1] + z, -2, 0, -1, leaves, 5, 2, 3, 0);
-//
-//		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1 + 2, zo[height - 1] + z, -1, 0, 0, leaves, 3, 1, 1, 0);
-//		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1 + 2, zo[height - 1] + z, 0, 0, -1, leaves, 1, 1, 3, 0);
-//		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1 + 3, zo[height - 1] + z, 0, 0, 0, leaves, 1, 1, 1, 0);
+		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1, zo[height - 1] + z, -1, 0, -2, leaves, 3, 2, 5, Direction.from3DDataValue(0));
+		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1, zo[height - 1] + z, -2, 0, -1, leaves, 5, 2, 3, Direction.from3DDataValue(0));
+
+		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1 + 2, zo[height - 1] + z, -1, 0, 0, leaves, 3, 1, 1, Direction.from3DDataValue(0));
+		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1 + 2, zo[height - 1] + z, 0, 0, -1, leaves, 1, 1, 3, Direction.from3DDataValue(0));
+		this.rotatedCubeVolume(accessor, setPos -> accessor.isEmptyBlock(setPos), xo[height - 1] + x, y + height - 1 + 3, zo[height - 1] + z, 0, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0));
 
 		boolean[] generatedDroops = new boolean[9 * 9];
 

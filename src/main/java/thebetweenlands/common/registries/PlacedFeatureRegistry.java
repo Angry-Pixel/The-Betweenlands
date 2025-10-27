@@ -15,13 +15,27 @@ import java.util.List;
 
 public class PlacedFeatureRegistry {
 
-	//trees
-	public static final ResourceKey<PlacedFeature> WEEDWOOD_TREE = makeKey("weedwood_tree");
+	//weedwood trees
+	public static final ResourceKey<PlacedFeature> WEEDWOOD_TREE_COMMON = makeKey("weedwood_tree_common");
+	public static final ResourceKey<PlacedFeature> WEEDWOOD_TREE_UNCOMMON = makeKey("weedwood_tree_uncommon");
+	public static final ResourceKey<PlacedFeature> WEEDWOOD_TREE_RARE = makeKey("weedwood_tree_rare");
+	public static final ResourceKey<PlacedFeature> WEEDWOOD_TREE_SUPER_RARE = makeKey("weedwood_tree_super_rare");
 	public static final ResourceKey<PlacedFeature> ROTTEN_WEEDWOOD_TREE = makeKey("rotten_weedwood_tree");
-	public static final ResourceKey<PlacedFeature> SAP_TREE = makeKey("sap_tree");
+
+	//sap trees
+	public static final ResourceKey<PlacedFeature> SAP_TREE_COMMON = makeKey("sap_tree_common");
+	public static final ResourceKey<PlacedFeature> SAP_TREE_UNCOMMON = makeKey("sap_tree_uncommon");
+	public static final ResourceKey<PlacedFeature> SAP_TREE_RARE = makeKey("sap_tree_rare");
+
+	//rubber trees
 	public static final ResourceKey<PlacedFeature> RUBBER_TREE = makeKey("rubber_tree");
+
+	//nibbletwig trees
 	public static final ResourceKey<PlacedFeature> NIBBLETWIG_TREE = makeKey("nibbletwig_tree");
+
+	//hearthgrove trees
 	public static final ResourceKey<PlacedFeature> HEARTHGROVE_TREE = makeKey("hearthgrove_tree");
+
 	public static final ResourceKey<PlacedFeature> GIANT_TREE = makeKey("giant_tree");
 
 	//ores
@@ -112,13 +126,23 @@ public class PlacedFeatureRegistry {
 	public static void bootstrap(BootstrapContext<PlacedFeature> context) {
 		HolderGetter<ConfiguredFeature<?, ?>> featureGetter = context.lookup(Registries.CONFIGURED_FEATURE);
 
-		context.register(WEEDWOOD_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(80)));
-		context.register(SAP_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(8)));
+		context.register(WEEDWOOD_TREE_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(80)));
+		context.register(WEEDWOOD_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(50)));
+		context.register(WEEDWOOD_TREE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(25)));
+		context.register(WEEDWOOD_TREE_SUPER_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(1)));
+
+		context.register(SAP_TREE_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(15)));
+		context.register(SAP_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(10)));
+		context.register(SAP_TREE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(8)));
+
 		context.register(RUBBER_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.RUBBER_TREE), tree(4)));
+
 		context.register(NIBBLETWIG_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NIBBLETWIG_TREE), tree(100)));
+
+		context.register(HEARTHGROVE_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.HEARTHGROVE_TREE), tree(5)));
 	}
 
-	private static List<PlacementModifier> tree(int tries) {
-		return List.of(CountPlacement.of(tries), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome());
+	private static List<PlacementModifier> tree(int count) {
+		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome());
 	}
 }
