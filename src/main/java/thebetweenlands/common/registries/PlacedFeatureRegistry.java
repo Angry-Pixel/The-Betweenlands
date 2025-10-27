@@ -131,18 +131,22 @@ public class PlacedFeatureRegistry {
 		context.register(WEEDWOOD_TREE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(25)));
 		context.register(WEEDWOOD_TREE_SUPER_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(1)));
 
-		context.register(SAP_TREE_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(15)));
-		context.register(SAP_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(10)));
-		context.register(SAP_TREE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(8)));
+		context.register(SAP_TREE_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), treeHydrophobic(15)));
+		context.register(SAP_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), treeHydrophobic(10)));
+		context.register(SAP_TREE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), treeHydrophobic(8)));
 
-		context.register(RUBBER_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.RUBBER_TREE), tree(4)));
+		context.register(RUBBER_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.RUBBER_TREE), treeHydrophobic(4)));
 
-		context.register(NIBBLETWIG_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NIBBLETWIG_TREE), tree(100)));
+		context.register(NIBBLETWIG_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NIBBLETWIG_TREE), treeHydrophobic(100)));
 
 		context.register(HEARTHGROVE_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.HEARTHGROVE_TREE), tree(5)));
 	}
 
 	private static List<PlacementModifier> tree(int count) {
 		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome());
+	}
+
+	private static List<PlacementModifier> treeHydrophobic(int count) {
+		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
 	}
 }
