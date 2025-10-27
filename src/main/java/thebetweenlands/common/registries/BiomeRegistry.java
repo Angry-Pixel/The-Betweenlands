@@ -10,6 +10,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import thebetweenlands.common.TheBetweenlands;
@@ -69,7 +70,12 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NIBBLETWIG_TREE)
+				.build())
 			.build());
 
 		context.register(DEEP_WATERS, new Biome.BiomeBuilder()

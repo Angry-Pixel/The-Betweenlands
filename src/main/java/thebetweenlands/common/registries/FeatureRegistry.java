@@ -9,10 +9,20 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.feature.*;
 import thebetweenlands.common.world.gen.feature.config.*;
 import thebetweenlands.common.world.gen.feature.structure.UnderwaterRuinsFeature;
+import thebetweenlands.common.world.gen.feature.tree.NibbletwigTree;
+import thebetweenlands.common.world.gen.feature.tree.RubberTree;
+import thebetweenlands.common.world.gen.feature.tree.SapTree;
+import thebetweenlands.common.world.gen.feature.tree.WeedwoodTree;
 
 public class FeatureRegistry {
 
 	public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Registries.FEATURE, TheBetweenlands.ID);
+
+	// Tree
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_TREE = FEATURES.register("weedwood_tree", () -> new WeedwoodTree(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SAP_TREE = FEATURES.register("sap_tree", () -> new SapTree(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> RUBBER_TREE = FEATURES.register("rubber_tree", () -> new RubberTree(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> NIBBLETWIG_TREE = FEATURES.register("nibbletwig_tree", () -> new NibbletwigTree(NoneFeatureConfiguration.CODEC));
 
 	//Biome Features
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",

@@ -9,7 +9,23 @@
     "water_color": 1589792,
     "water_fog_color": 1589792
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "thebetweenlands:weedwood_tree",
+      "thebetweenlands:sap_tree",
+      "thebetweenlands:rubber_tree",
+      "thebetweenlands:nibbletwig_tree"
+    ]
+  ],
   "has_precipitation": true,
   "spawn_costs": {},
   "spawners": {

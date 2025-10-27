@@ -1,13 +1,26 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class RubberTree {
+public class RubberTree extends Feature<NoneFeatureConfiguration> {
+
+	public RubberTree(Codec<NoneFeatureConfiguration> codec) {
+		super(codec);
+	}
+
+	@Override
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		return this.generate(context.level(), context.origin(), context.random());
+	}
 
 	public boolean generate(LevelAccessor level, BlockPos position, RandomSource random) {
 		MutableBlockPos checkPos = new MutableBlockPos();

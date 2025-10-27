@@ -1,10 +1,17 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.*;
 import thebetweenlands.common.TheBetweenlands;
+
+import java.util.List;
 
 public class PlacedFeatureRegistry {
 
@@ -103,6 +110,15 @@ public class PlacedFeatureRegistry {
 	}
 
 	public static void bootstrap(BootstrapContext<PlacedFeature> context) {
+		HolderGetter<ConfiguredFeature<?, ?>> featureGetter = context.lookup(Registries.CONFIGURED_FEATURE);
 
+		context.register(WEEDWOOD_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(80)));
+		context.register(SAP_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), tree(8)));
+		context.register(RUBBER_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.RUBBER_TREE), tree(4)));
+		context.register(NIBBLETWIG_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NIBBLETWIG_TREE), tree(100)));
+	}
+
+	private static List<PlacementModifier> tree(int tries) {
+		return List.of(CountPlacement.of(tries), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome());
 	}
 }

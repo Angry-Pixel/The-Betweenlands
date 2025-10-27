@@ -1,20 +1,33 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class SapTree {
+public class SapTree extends Feature<NoneFeatureConfiguration> {
 
 	private final BlockState logX = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.X);
 	private final BlockState logY = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
 	private final BlockState logZ = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Z);
 	private final BlockState roots = BlockRegistry.SAP_BARK.get().defaultBlockState();
 	private final BlockState leaves = BlockRegistry.SAP_LEAVES.get().defaultBlockState();
+
+	public SapTree(Codec<NoneFeatureConfiguration> codec) {
+		super(codec);
+	}
+
+	@Override
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		return this.generate(context.level(), context.origin(), context.random());
+	}
 
 	public boolean generate(LevelAccessor accessor, BlockPos pos, RandomSource random) {
 
