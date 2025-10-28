@@ -123,10 +123,10 @@ public class FoodSicknessHandler {
 
 						if (player.level().isClientSide()) {
 							//Remove all gained decay on client side and wait for sync
-							decayData.addStats(player, -Math.min(Mth.ceil(decayLevel * decayLoss), decayLevel), 0.0F);
+							player.setData(AttachmentRegistry.DECAY, decayData.addStats(-Math.min(Mth.ceil(decayLevel * decayLoss), decayLevel), 0.0F));
 						} else {
 							int minDecayGain = player.level().getRandom().nextInt(4) == 0 ? 1 : 0;
-							decayData.addStats(player, -Math.min(Mth.ceil(decayLevel * decayLoss), Math.max(decayLevel - minDecayGain, 0)), 0.0F);
+							player.setData(AttachmentRegistry.DECAY, decayData.addStats(-Math.min(Mth.ceil(decayLevel * decayLoss), Math.max(decayLevel - minDecayGain, 0)), 0.0F));
 						}
 					}
 

@@ -1,7 +1,6 @@
 package thebetweenlands.common.handler;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -13,18 +12,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.api.attachment.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.entity.DecayData;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.network.clientbound.attachment.UpdateDecayDataPacket;
-import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
-import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.MathUtils;
 
@@ -34,17 +27,16 @@ public class PlayerDecayHandler {
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::accelerateDecayOnDamage);
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::tickDecay);
-		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::syncDecayOnJoin);
 	}
 
 	private static void tickDecay(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
 
 		if (!player.level().isClientSide()) {
-			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
+			DecayData decayData = player.getData(AttachmentRegistry.DECAY);
 			applyDecayAttributeModifiers(player);
 
-			if (decayData.isDecayEnabled(player)) {
+			if (DecayData.isDecayEnabled(player)) {
 				int decay = decayData.getDecayLevel(player);
 
 				if (decay >= 16) {
@@ -82,14 +74,14 @@ public class PlayerDecayHandler {
 							decaySpeed -= decaySpeed * (armorDecayReduction / 4f);
 						}
 
-						decayData.addDecayAcceleration(player, decaySpeed);
+						decayData = decayData.addDecayAcceleration(decaySpeed);
 					}
 				}
 
-				decayData.tick(player);
+				decayData = decayData.update(player);
+				player.setData(AttachmentRegistry.DECAY, decayData);
 			} else {
-				decayData.setDecayLevel(player, 0);
-				decayData.setDecaySaturationLevel(player, 1);
+				player.setData(AttachmentRegistry.DECAY, new DecayData());
 			}
 		}
 	}
@@ -97,21 +89,19 @@ public class PlayerDecayHandler {
 	private static void accelerateDecayOnDamage(LivingDamageEvent.Pre event) {
 		LivingEntity entity = event.getEntity();
 		if (!entity.level().isClientSide() && entity instanceof Player player) {
-
-			IDecayData cap = player.getData(AttachmentRegistry.DECAY);
 			float decayBaseSpeed = getDecayBaseSpeed(player.level().getDifficulty());
-			cap.addDecayAcceleration(player, decayBaseSpeed * 60);
+			player.setData(AttachmentRegistry.DECAY, player.getData(AttachmentRegistry.DECAY).addDecayAcceleration(decayBaseSpeed * 60));
 		}
 	}
 
 	public static void applyDecayAttributeModifiers(Player player) {
-		IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
+		DecayData decayData = player.getData(AttachmentRegistry.DECAY);
 		AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);
 
 		if (attr != null) {
 			if (BetweenlandsConfig.decayPercentual) {
-				float decayMaxBaseHealthPercentage = decayData.getPlayerMaxHealthPenaltyPercentage(player, decayData.getDecayLevel(player));
-				float prevDecayMaxBaseHealthPercentage = decayData.getPlayerMaxHealthPenaltyPercentage(player, decayData.getPrevDecayLevel());
+				float decayMaxBaseHealthPercentage = DecayData.getPlayerMaxHealthPenaltyPercentage(player, decayData.getDecayLevel(player));
+				float prevDecayMaxBaseHealthPercentage = DecayData.getPlayerMaxHealthPenaltyPercentage(player, decayData.prevDecayLevel());
 
 				AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
 
@@ -124,8 +114,8 @@ public class PlayerDecayHandler {
 				}
 			} else {
 				int currentMaxHealth = (int) attr.getValue();
-				int decayHealthPenalty = (int) (decayData.getPlayerMaxHealthPenalty(player, decayData.getDecayLevel(player)) / 2.0F) * 2;
-				int prevDecayHealthPenalty = (int) (decayData.getPlayerMaxHealthPenalty(player, decayData.getPrevDecayLevel()) / 2.0F) * 2;
+				int decayHealthPenalty = (int) (DecayData.getPlayerMaxHealthPenalty(player, decayData.getDecayLevel(player)) / 2.0F) * 2;
+				int prevDecayHealthPenalty = (int) (DecayData.getPlayerMaxHealthPenalty(player, decayData.prevDecayLevel()) / 2.0F) * 2;
 				boolean decayHealthChange = (decayHealthPenalty - prevDecayHealthPenalty) != 0;
 				AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
 				// Only change modifier if decay modifier is missing, decay health modifier value has changed or if player has less than 3 hearts (in which case decay modifier should be reduced or removed)
@@ -160,17 +150,9 @@ public class PlayerDecayHandler {
 		return switch (difficulty) {
 			case PEACEFUL -> 0.0F;
 			case EASY -> 0.0025F;
-			default -> 0.0033F;
+			case NORMAL -> 0.0033F;
 			case HARD -> 0.005F;
 		};
-	}
-
-	private static void syncDecayOnJoin(EntityJoinLevelEvent event) {
-		ServerPlayer player = event.getEntity() instanceof ServerPlayer p ? p : null;
-		if(player != null && !player.level().isClientSide()) { // should always be true
-			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
-			PacketDistributor.sendToPlayer(player, new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
-		}
 	}
 
 	// TODO OverworldItemHandler required for item use methods

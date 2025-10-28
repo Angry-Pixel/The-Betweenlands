@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import thebetweenlands.common.component.entity.DecayData;
+import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 public class ElixirRipening extends ElixirEffect {
@@ -18,10 +19,9 @@ public class ElixirRipening extends ElixirEffect {
 
 	@Override
 	protected void performEffect(LivingEntity entity, int amplifier) {
-		if(!entity.level().isClientSide() && entity instanceof Player player) {
-			DecayData cap = player.getData(AttachmentRegistry.DECAY);
-			if(cap.isDecayEnabled(player)) {
-				cap.addStats(player, -1, 0.6F);
+		if (!entity.level().isClientSide() && entity instanceof Player player) {
+			if (DecayData.isDecayEnabled(player)) {
+				player.setData(AttachmentRegistry.DECAY, player.getData(AttachmentRegistry.DECAY).addStats(-1, 0.6F));
 			}
 		}
 	}

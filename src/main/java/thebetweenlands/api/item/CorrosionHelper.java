@@ -14,7 +14,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.api.attachment.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -252,8 +251,7 @@ public class CorrosionHelper {
 				float probability = holder.isInWater() ? 0.0014F : 0.0007F;
 				if (holder instanceof Player player) {
 					probability *= (isHeldItem && !player.getMainHandItem().isEmpty() ? 2.8F : 1.0F);
-					IDecayData cap = player.getData(AttachmentRegistry.DECAY);
-					float playerCorruption = cap.getDecayLevel(player) / 20.0F;
+					float playerCorruption = player.getData(AttachmentRegistry.DECAY).getDecayLevel(player) / 20.0F;
 					probability *= (float) (1 - Math.pow(playerCorruption, 2) * 0.9F);
 				}
 				if (world.getRandom().nextFloat() < probability) {

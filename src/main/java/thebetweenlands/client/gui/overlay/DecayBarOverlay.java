@@ -8,8 +8,9 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import thebetweenlands.api.attachment.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.entity.DecayData;
+import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 public class DecayBarOverlay {
@@ -23,16 +24,14 @@ public class DecayBarOverlay {
 		Gui gui = minecraft.gui;
 		Player player = gui.getCameraPlayer();
 		if (!minecraft.options.hideGui && player != null && player.hasData(AttachmentRegistry.DECAY)) {
-			IDecayData data = player.getData(AttachmentRegistry.DECAY);
-
-			if (!data.isDecayEnabled(player)) return;
+			if (!DecayData.isDecayEnabled(player)) return;
 
 			int posX = graphics.guiWidth() / 2 + 91;
 			int posY = graphics.guiHeight() - gui.rightHeight;
 
 			minecraft.getProfiler().push("decay");
 			final int maxDecay = 20;
-			int currentDecay = data.getDecayLevel(player);
+			int currentDecay = player.getData(AttachmentRegistry.DECAY).getDecayLevel(player);
 			int decayBalls = maxDecay - currentDecay;
 
 			RenderSystem.enableBlend();

@@ -27,23 +27,22 @@ public class WeepingBluePetalCenserRecipe extends AbstractCenserRecipe<Void> {
 	public int update(Void context, Censer censer) {
 		Level level = censer.getLevel();
 
-		if(!level.isClientSide() && level.getGameTime() % 100 == 0) {
+		if (!level.isClientSide() && level.getGameTime() % 100 == 0) {
 			boolean applied = false;
 
 			BlockPos pos = censer.getBlockPos();
 
 			List<Player> affected = this.getAffectedEntities(level, pos);
-			for(Player player : affected) {
+			for (Player player : affected) {
 				DecayData cap = player.getData(AttachmentRegistry.DECAY);
 
-				if(cap.getDecayLevel(player) > 0) {
-					cap.addStats(player, -2, 0);
-
+				if (cap.getDecayLevel(player) > 0) {
+					player.setData(AttachmentRegistry.DECAY, cap.addStats(-2, 0));
 					applied = true;
 				}
 			}
 
-			if(applied) {
+			if (applied) {
 				return 150;
 			}
 		}
