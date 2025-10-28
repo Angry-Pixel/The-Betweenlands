@@ -133,18 +133,17 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 				QuadBuilder builder = new QuadBuilder(hasOverlay ? 40 : 24, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
 
 
-				for(int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
+				for (int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
 
-					if(i == 0) {
+					if (i == 0) {
 						builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
-						if(emissiveBase)
+						if (emissiveBase)
 							builder.setLightmap(15, 15);
 						else
 							builder.removeLightmap();
-					}
-					else {
+					} else {
 						builder.setSprite(this.textureOverlay);
-						if(emissiveOverlay)
+						if (emissiveOverlay)
 							builder.setLightmap(15, 15);
 						else
 							builder.removeLightmap();
@@ -172,7 +171,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
 
 					// Do not render overlay on top/bottom faces
-					if(i == 1) continue;
+					if (i == 1) continue;
 
 					// top
 					if (distUp == 0) {
@@ -212,7 +211,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 			final int pos_getY = pos.getY();
 
-			if(state.getBlock() instanceof IStalactite stalactite) {
+			if (state.getBlock() instanceof IStalactite stalactite) {
 				//TODO pool pos probably
 				MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
 				BlockState mutableBlockState = state;
@@ -248,7 +247,10 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 		@Override
 		public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data) {
-			return data.get(HAS_OVERLAY) ? ChunkRenderTypeSet.of(RenderType.TRANSLUCENT) : IDynamicBakedModel.super.getRenderTypes(state, rand, data);
+			if (data.has(HAS_OVERLAY) && data.get(HAS_OVERLAY)) {
+				return ChunkRenderTypeSet.of(RenderType.TRANSLUCENT);
+			}
+			return IDynamicBakedModel.super.getRenderTypes(state, rand, data);
 		}
 
 		@Override
