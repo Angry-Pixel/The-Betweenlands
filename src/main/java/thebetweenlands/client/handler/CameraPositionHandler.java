@@ -7,28 +7,32 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.ChunkPos;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.entity.CameraOffsetter;
 import thebetweenlands.api.entity.ScreenShaker;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class CameraPositionHandler {
 
-	public static void init() {
-		NeoForge.EVENT_BUS.addListener(CameraPositionHandler::calculateShakers);
-		NeoForge.EVENT_BUS.addListener(CameraPositionHandler::shakeCamera);
+	public static final CameraPositionHandler INSTANCE = new CameraPositionHandler();
+
+	public void init() {
+		NeoForge.EVENT_BUS.addListener(this::calculateShakers);
+		NeoForge.EVENT_BUS.addListener(this::shakeCameraPre);
+		NeoForge.EVENT_BUS.addListener(this::shakeCameraPost);
 	}
 
-	private static float getShakeStrength(@Nullable Entity renderViewEntity) {
+	private float getShakeStrength(@Nullable Entity renderViewEntity) {
 		float screenShake = 0.0F;
 
 		if (renderViewEntity != null) {
@@ -39,12 +43,23 @@ public class CameraPositionHandler {
 				}
 			}
 
-			//TODO vanilla no longer has a list of loaded block entities
-//			for(BlockEntity tile : level.blockEntityList) {
-//				if(tile instanceof ScreenShaker shake) {
-//					screenShake += shake.getShakeIntensity(renderViewEntity);
-//				}
-//			}
+			HashSet<ChunkPos> chunksInRange = new HashSet<>();
+			for (int x = -16; x <= 16; x += 16) {
+				for (int z = -16; z <= 16; z += 16) {
+					chunksInRange.add(new ChunkPos((int) (renderViewEntity.getX() + x) >> 4, (int) (renderViewEntity.getZ() + z) >> 4));
+				}
+			}
+			for (ChunkPos pos : chunksInRange) {
+				if (level.getChunkSource().getChunkNow(pos.x, pos.z) != null) {
+					List<ScreenShaker> shakers = level.getChunk(pos.x, pos.z).getBlockEntities().values().stream()
+						.filter(blockEntity -> blockEntity instanceof ScreenShaker)
+						.map(ScreenShaker.class::cast)
+						.toList();
+					for (ScreenShaker shaker : shakers) {
+						screenShake += shaker.getShakeIntensity(renderViewEntity);
+					}
+				}
+			}
 
 			//Crumbling cragrock tower
 			BetweenlandsWorldStorage worldData = BetweenlandsWorldStorage.getNullable(level);
@@ -78,52 +93,72 @@ public class CameraPositionHandler {
 			}
 		}
 
-		return Math.min(1.0F, Mth.clamp(screenShake, 0.0F, 0.15F) * 10.0F);
+		return Mth.clamp(screenShake, 0.0F, 0.15F);
 	}
 
-	private static final List<CameraOffsetter> offsetEntities = new ArrayList<>();
-	private static float shakeStrength = 0.0F;
+	private double prevPosX;
+	private double prevPosY;
+	private double prevPosZ;
+	private boolean didChange = false;
 
-	private static void calculateShakers(ClientTickEvent.Pre event) {
+	private final List<CameraOffsetter> offsetEntities = new ArrayList<>();
+	private float shakeStrength = 0.0F;
+
+	private void calculateShakers(ClientTickEvent.Pre event) {
 		Entity entity = Minecraft.getInstance().getCameraEntity();
 
-		if (entity != null) {
-			shakeStrength = getShakeStrength(entity);
-			if (shakeStrength > 0.0F) {
-				entity.moveTo(entity.getX(), entity.getY(), entity.getZ(),
-					entity.getYRot() + (entity.getRandom().nextFloat() - 0.5F) * shakeStrength,
-					entity.getXRot() + (entity.getRandom().nextFloat() * 2.5F - 1.25F) * shakeStrength);
-			}
-
-			offsetEntities.clear();
+		if (entity != null && !Minecraft.getInstance().isPaused()) {
+			this.shakeStrength = this.getShakeStrength(entity);
+			this.offsetEntities.clear();
 
 			for (Entity rendered : Minecraft.getInstance().level.entitiesForRendering()) {
 				if (rendered instanceof CameraOffsetter offsetter)
-					offsetEntities.add(offsetter);
+					this.offsetEntities.add(offsetter);
 			}
 		} else {
-			shakeStrength = 0.0f;
-			offsetEntities.clear();
+			this.shakeStrength = 0.0F;
+			this.offsetEntities.clear();
 		}
 	}
 
-	private static void shakeCamera(ViewportEvent.ComputeCameraAngles event) {
-		boolean shouldChange = shakeStrength > 0.0F;
+	private void shakeCameraPre(RenderFrameEvent.Pre event) {
+		Entity renderViewEntity = Minecraft.getInstance().getCameraEntity();
 
-		if (shouldChange && !Minecraft.getInstance().isPaused()) {
-			RandomSource rnd = Minecraft.getInstance().player.getRandom();
+		if (renderViewEntity != null && !Minecraft.getInstance().isPaused()) {
+			boolean shouldChange = this.shakeStrength > 0.0F || !this.offsetEntities.isEmpty();
 
-			event.setYaw((float) Mth.lerp(event.getPartialTick(), event.getYaw(), event.getYaw() + (rnd.nextFloat() * 2F - 1F) * shakeStrength));
-			event.setPitch((float) Mth.lerp(event.getPartialTick(), event.getPitch(), event.getPitch() + (rnd.nextFloat() * 2F - 1F) * shakeStrength));
-			event.setRoll((float) Mth.lerp(event.getPartialTick(), event.getRoll(), event.getRoll() + (rnd.nextFloat() * 2F - 1F) * shakeStrength));
+			if ((shouldChange && !Minecraft.getInstance().isPaused()) || this.didChange) {
+				this.prevPosX = renderViewEntity.getX();
+				this.prevPosY = renderViewEntity.getY();
+				this.prevPosZ = renderViewEntity.getZ();
 
-			if (!offsetEntities.isEmpty()) {
-				for (CameraOffsetter offset : offsetEntities)
-					if (((Entity) offset).isAlive() && offset.applyOffset(event.getCamera().getEntity(), (float) event.getPartialTick()))
-						break;
+				RandomSource rnd = renderViewEntity.getRandom();
+				renderViewEntity.setPos(
+					renderViewEntity.getX() + rnd.nextFloat() * this.shakeStrength,
+					renderViewEntity.getY() + rnd.nextFloat() * this.shakeStrength,
+					renderViewEntity.getZ() + rnd.nextFloat() * this.shakeStrength);
+
+				if (!this.offsetEntities.isEmpty()) {
+					for (CameraOffsetter offset : this.offsetEntities)
+						if (((Entity) offset).isAlive() && offset.applyOffset(renderViewEntity, event.getPartialTick().getRealtimeDeltaTicks()))
+							break;
+				}
+
+				this.didChange = true;
 			}
+		}
+	}
 
-			shakeStrength = 0.0F;
+	private void shakeCameraPost(RenderFrameEvent.Post event) {
+		Entity renderViewEntity = Minecraft.getInstance().getCameraEntity();
+
+		if (renderViewEntity != null && !Minecraft.getInstance().isPaused()) {
+			boolean shouldChange = this.shakeStrength > 0.0F || !this.offsetEntities.isEmpty();
+
+			if ((shouldChange && !Minecraft.getInstance().isPaused()) || this.didChange) {
+				renderViewEntity.setPos(this.prevPosX, this.prevPosY, this.prevPosZ);
+				this.didChange = false;
+			}
 		}
 	}
 }

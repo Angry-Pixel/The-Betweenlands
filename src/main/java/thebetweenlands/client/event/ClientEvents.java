@@ -25,7 +25,7 @@ public class ClientEvents {
 
 	public static void init() {
 		BossHandler.init();
-		CameraPositionHandler.init();
+		CameraPositionHandler.INSTANCE.init();
 		ElixirClientHandler.init();
 		EquipmentRenderingHandler.init();
 		ItemTooltipHandler.init();
