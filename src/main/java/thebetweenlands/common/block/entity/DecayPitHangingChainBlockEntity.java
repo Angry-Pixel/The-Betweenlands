@@ -75,7 +75,7 @@ public class DecayPitHangingChainBlockEntity extends SyncedBlockEntity {
 			if (!entity.isBroken()) {
 				BetweenlandsClient.playLocalSound(new DecayPitChainSoundInstance(entity));
 			} else {
-				//TODO Add final chain sound/other thing
+				//TODO Add final chain sound/other thing (1.12)
 			}
 			entity.playChainSound = false;
 		}

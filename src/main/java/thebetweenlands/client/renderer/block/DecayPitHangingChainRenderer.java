@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.entity.DecayPitGroundChainBlockEntity;
 import thebetweenlands.common.block.entity.DecayPitHangingChainBlockEntity;
 
 public class DecayPitHangingChainRenderer implements BlockEntityRenderer<DecayPitHangingChainBlockEntity> {
@@ -45,6 +44,6 @@ public class DecayPitHangingChainRenderer implements BlockEntityRenderer<DecayPi
 
 	@Override
 	public AABB getRenderBoundingBox(DecayPitHangingChainBlockEntity entity) {
-		return new AABB(entity.getBlockPos()).inflate(1.0D, 0.0D, 1.0D).expandTowards(0.0D, -4.0D, 0.0D);
+		return new AABB(entity.getBlockPos()).inflate(1.0D, 0.0D, 1.0D).expandTowards(0.0D, -9.0D, 0.0D);
 	}
 }

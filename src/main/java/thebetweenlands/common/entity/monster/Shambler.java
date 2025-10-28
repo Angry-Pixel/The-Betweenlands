@@ -39,6 +39,7 @@ import thebetweenlands.common.entity.creature.Dragonfly;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.creature.frog.Frog;
 import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
+import thebetweenlands.common.entity.multipart.ShamblerTongueMultipart;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class Shambler extends Monster implements BLEntity {

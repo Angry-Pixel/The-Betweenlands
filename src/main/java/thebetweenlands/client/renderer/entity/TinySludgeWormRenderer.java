@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.TinySludgeWormModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.monster.SludgeWormMultipart;
+import thebetweenlands.common.entity.multipart.SludgeWormMultipart;
 import thebetweenlands.common.entity.monster.TinySludgeWorm;
 
 public class TinySludgeWormRenderer extends MobRenderer<TinySludgeWorm, TinySludgeWormModel> {

@@ -67,7 +67,7 @@ public class DecayPitPlugModel {
 		var bottomBase2 = bottomBase1.addOrReplaceChild("base_bottom_edge2", CubeListBuilder.create()
 				.texOffs(0, 5).addBox(0.0F, 0.0F, 0.0F, 2, 3, 6),
 			PartPose.offset(0.0F, 2.0F, 13.0F));
-		var bottomBase3 = bottomBase2.addOrReplaceChild("base_bottom_edge3", CubeListBuilder.create()
+		var bottomBase3 = bottomBase.addOrReplaceChild("base_bottom_edge3", CubeListBuilder.create()
 				.texOffs(138, 7).addBox(-24.0F, 0.0F, 0.0F, 44, 3, 2),
 			PartPose.offset(0.0F, 0.0F, 22.0F));
 		bottomBase3.addOrReplaceChild("base_bottom_edge4", CubeListBuilder.create()

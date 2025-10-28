@@ -2,6 +2,8 @@ package thebetweenlands.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.DripParticle;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -9,6 +11,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ParticleRegistry;
 
@@ -44,10 +47,6 @@ public class ColoredDripParticle extends DripParticle {
 		return new FluidDripHangParticle(level, x, y, z, ParticleRegistry.FALLING_FLUID.get());
 	}
 
-	public static TextureSheetParticle createFluidFallParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-		return new FluidFallAndLandParticle(level, x, y, z, ParticleRegistry.LANDING_FLUID.get());
-	}
-
 	public static TextureSheetParticle createFluidLandParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 		DripParticle particle = new ColoredDripLandParticle(level, x, y, z);
 		particle.setLifetime(40 + (int)(Math.random() * 40));
@@ -75,16 +74,24 @@ public class ColoredDripParticle extends DripParticle {
 
 	public static class FluidFallAndLandParticle extends DripParticle.FallAndLandParticle {
 
-		protected FluidFallAndLandParticle(ClientLevel level, double x, double y, double z, ParticleOptions particle) {
+		private final boolean createLandParticle;
+
+		protected FluidFallAndLandParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, ParticleOptions particle, boolean createLandParticle) {
 			super(level, x, y, z, Fluids.EMPTY, particle);
 			this.gravity = 0.01F;
+			this.xd = xd;
+			this.yd = yd;
+			this.zd = zd;
+			this.createLandParticle = createLandParticle;
 		}
 
 		@Override
 		protected void postMoveUpdate() {
 			if (this.onGround) {
 				this.remove();
-				TheBetweenlands.createParticle(this.landParticle, this.level, this.x, this.y, this.z, ParticleFactory.ParticleArgs.get().withColor(this.rCol, this.gCol, this.bCol, this.alpha));
+				if (this.createLandParticle) {
+					TheBetweenlands.createParticle(this.landParticle, this.level, this.x, this.y, this.z, ParticleFactory.ParticleArgs.get().withColor(this.rCol, this.gCol, this.bCol, this.alpha));
+				}
 			}
 		}
 	}
@@ -93,6 +100,27 @@ public class ColoredDripParticle extends DripParticle {
 
 		protected ColoredDripLandParticle(ClientLevel level, double x, double y, double z) {
 			super(level, x, y, z, Fluids.EMPTY);
+		}
+	}
+
+	public static class FallFactory extends ParticleFactory<FallFactory, SimpleParticleType> {
+
+		private final SpriteSet spriteSet;
+
+		public FallFactory(SpriteSet spriteSet) {
+			this.spriteSet = spriteSet;
+		}
+
+		@Override
+		protected @Nullable Particle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
+			var particle = new FluidFallAndLandParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, ParticleRegistry.LANDING_FLUID.get(), args.data.getBool(0));
+			particle.pickSprite(this.spriteSet);
+			return particle;
+		}
+
+		@Override
+		protected void setDefaultArguments(ClientLevel level, double x, double y, double z, ParticleArgs<?> args) {
+			args.withData(true);
 		}
 	}
 }

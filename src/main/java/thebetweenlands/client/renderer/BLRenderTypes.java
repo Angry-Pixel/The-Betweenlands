@@ -88,6 +88,26 @@ public class BLRenderTypes extends RenderType {
 		);
 	}
 
+	public static RenderType pitChains(ResourceLocation location, float u, float v) {
+		return create(
+			"thebetweenlands:pit_chains",
+			DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
+			VertexFormat.Mode.QUADS,
+			1536,
+			false,
+			true,
+			RenderType.CompositeState.builder()
+				.setShaderState(RenderStateShard.RENDERTYPE_ENERGY_SWIRL_SHADER)
+				.setTextureState(new RenderStateShard.TextureStateShard(location, false, false))
+				.setTexturingState(new RenderStateShard.OffsetTexturingStateShard(u, v))
+				.setTransparencyState(RenderStateShard.LIGHTNING_TRANSPARENCY)
+				.setCullState(NO_CULL)
+				.setLightmapState(LIGHTMAP)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(false)
+		);
+	}
+
 	public static RenderType primordialShield(ResourceLocation location, float u, float v, boolean depthMask) {
 		return create(
 			"thebetweenlands:primordial_shield",

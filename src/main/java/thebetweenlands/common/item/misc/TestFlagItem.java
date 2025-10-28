@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -12,10 +13,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
 import thebetweenlands.common.block.entity.ItemCageBlockEntity;
+import thebetweenlands.common.block.structure.DecayPitGroundChainBlock;
 import thebetweenlands.common.component.entity.BlessingData;
+import thebetweenlands.common.entity.DecayPitTarget;
 import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -47,17 +51,27 @@ public class TestFlagItem extends Item {
 		if (context.getLevel().getBlockEntity(context.getClickedPos()) instanceof DungeonDoorRunesBlockEntity runes) {
 			runes.is_in_dungeon = true;
 		} else {
-			int offset = 4;
-			SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
+			context.getLevel().setBlockAndUpdate(context.getClickedPos(), BlockRegistry.DECAY_PIT_CONTROL.get().defaultBlockState());
+			context.getLevel().setBlockAndUpdate(context.getClickedPos().above(15), BlockRegistry.DECAY_PIT_HANGING_CHAIN.get().defaultBlockState());
+			for (Direction dir : Direction.Plane.HORIZONTAL) {
+				context.getLevel().setBlockAndUpdate(context.getClickedPos().above(10).relative(dir, 12), BlockRegistry.DECAY_PIT_GROUND_CHAIN.get().defaultBlockState().setValue(DecayPitGroundChainBlock.FACING, dir.getOpposite()));
+			}
 
-			energy.setPos(context.getClickedPos().above(offset - 1).getCenter());
+			DecayPitTarget target = new DecayPitTarget(EntityRegistry.DECAY_PIT_TARGET.get(), context.getLevel());
+			target.setPos(Vec3.atCenterOf(context.getClickedPos().above(8)));
+			context.getLevel().addFreshEntity(target);
 
-			context.getLevel().addFreshEntity(energy);
-
-			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
-			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
-			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
-			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
+//			int offset = 4;
+//			SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
+//
+//			energy.setPos(context.getClickedPos().above(offset - 1).getCenter());
+//
+//			context.getLevel().addFreshEntity(energy);
+//
+//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
+//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
+//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
+//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
 		}
 
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());

@@ -28,6 +28,7 @@ import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.multipart.SludgeWormMultipart;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

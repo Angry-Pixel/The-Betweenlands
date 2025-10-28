@@ -31,7 +31,7 @@ import net.neoforged.neoforge.entity.PartEntity;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.entity.BLEntity;
-import thebetweenlands.common.entity.GenericPartEntity;
+import thebetweenlands.common.entity.multipart.GenericPartEntity;
 import thebetweenlands.common.entity.ai.goals.EmberlingFireBreathGoal;
 import thebetweenlands.common.entity.movement.EmberlingMoveControl;
 import thebetweenlands.common.registries.*;

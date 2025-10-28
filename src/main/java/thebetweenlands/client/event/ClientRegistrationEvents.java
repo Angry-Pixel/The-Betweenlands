@@ -276,6 +276,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.AMPHIBIOUS_FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.AMPHIBIOUS_FISHING_SPEAR))));
 		event.registerEntityRenderer(EntityRegistry.ROBUST_FISHING_SPEAR.get(), context -> new FishingSpearRenderer<>(context, new FishingSpearModel<>(context.bakeLayer(BLModelLayers.ROBUST_FISHING_SPEAR))));
 		event.registerEntityRenderer(EntityRegistry.SPIRIT_TREE_FACE_MASK.get(), SpiritTreeFaceMaskRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.DECAY_PIT_TARGET.get(), DecayPitTargetRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_JET.get(), NoopRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -425,6 +427,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.CRAB_POT_FILTER, CrabPotFilterModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_CHAIN, DecayPitChainModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_PLUG, DecayPitPlugModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_SHIELD, DecayPitShieldModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DECAY_PIT_TARGET, DecayPitTargetModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_1, DeepmanSimulacrumModels::makeSimulacrum1);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_2, DeepmanSimulacrumModels::makeSimulacrum2);
@@ -763,7 +766,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.EMBER_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 		event.registerSpriteSet(ParticleRegistry.DRUID_CASTING.get(), DruidCastingParticle.Factory::new);
 		event.registerSprite(ParticleRegistry.DRIPPING_FLUID.get(), ColoredDripParticle::createFluidHangParticle);
-		event.registerSprite(ParticleRegistry.FALLING_FLUID.get(), ColoredDripParticle::createFluidFallParticle);
+		event.registerSpriteSet(ParticleRegistry.FALLING_FLUID.get(), ColoredDripParticle.FallFactory::new);
 		event.registerSprite(ParticleRegistry.LANDING_FLUID.get(), ColoredDripParticle::createFluidLandParticle);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD.get(), GasCloudParticle.GasCloudFactory::new);
 		event.registerSpriteSet(ParticleRegistry.GAS_CLOUD_HAZE.get(), GasCloudHazeParticle.GasCloudHazeFactory::new);

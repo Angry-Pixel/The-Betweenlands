@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity;
+package thebetweenlands.common.entity.multipart;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;

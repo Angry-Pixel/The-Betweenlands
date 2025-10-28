@@ -12,22 +12,23 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.DecayPitGearsSoundInstance;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.monster.*;
 import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
+import thebetweenlands.common.entity.projectile.ShockwaveBlock;
+import thebetweenlands.common.entity.projectile.SludgeJet;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -185,7 +186,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 				while (xp > 0) {
 					int dropXP = ExperienceOrb.getExperienceValue(xp);
 					xp -= dropXP;
-					level.addFreshEntity(new ExperienceOrb(level, pos.getX() + 0.5D, pos.getY() + 3.0D, pos.getZ() + 0.5D, dropXP));
+					level.addFreshEntity(new ExperienceOrb(level, pos.getX() + 0.5D, pos.getY() + 2.0D, pos.getZ() + 0.5D, dropXP));
 				}
 			}
 
@@ -194,7 +195,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 				while (xp > 0) {
 					int dropXP = ExperienceOrb.getExperienceValue(xp);
 					xp -= dropXP;
-					level.addFreshEntity(new ExperienceOrb(level, pos.getX() + 0.5D, pos.getY() + 3.0D, pos.getZ() + 0.5D, dropXP));
+					level.addFreshEntity(new ExperienceOrb(level, pos.getX() + 0.5D, pos.getY() + 2.0D, pos.getZ() + 0.5D, dropXP));
 				}
 			}
 
@@ -372,43 +373,44 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 
 	private void checkSurfaceCollisions(Level level, BlockPos pos) {
 		boolean reverse = false;
-//		for (Entity entity : getEntityAbove(level, pos)) {
-//			if (entity != null && !(entity instanceof EntitySludgeJet) && !(entity instanceof EntityRootGrabber) && !(entity instanceof BLEntity) && !(entity instanceof EntityShockwaveBlock)) {
-//				if (entity instanceof AbstractArrow)
-//					entity.kill();
-//				if (this.getDistance(pos, entity) >= 4.25F - entity.getBbWidth() * 0.5F && this.getDistance(pos, entity) <= 7F + entity.getBbWidth() * 0.5F) {
-//					reverse = false;
-//					if (entity.getY() <= pos.getY() + 3D) {
-//						entity.setDeltaMovement(0.0D, 0.1D, 0.0D);
-//					} else if (entity.getDeltaMovement().y() < 0) {
-//						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
-//						this.checkJumpOnTopOfAABB(entity);
-//					}
-//				}
-//
-//				if (this.getDistance(pos, entity) < 4.25F - entity.getBbWidth() * 0.5F && this.getDistance(pos, entity) >= 2.5F + entity.getBbWidth() * 0.5F) {
-//					if (entity.getY() <= pos.getY() + 2D + 0.0625D) {
-//						reverse = true;
-//						this.checkJumpOnTopOfAABB(entity);
-//					}
-//				}
-//
-//				if (this.getDistance(pos, entity) >= 2.5F + entity.getBbWidth() * 0.5F) {
-//					Vec3 center = new Vec3(pos.getX() + 0.5D, 0, pos.getZ() + 0.5D);
-//					Vec3 entityOffset = new Vec3(entity.getX(), 0, entity.getZ());
-//
-//					double dist = entityOffset.distanceTo(center);
-//					double circumference = 2 * Math.PI * dist;
-//					double speed = circumference / 360 * (reverse ? 1F : 0.75F) /* angle per tick */;
-//
-//					Vec3 push = new Vec3(0, 1, 0).cross(entityOffset.subtract(center).normalize()).normalize().scale(reverse ? -speed : speed);
-//
-//					if (!entity.level().isClientSide() || entity instanceof Player) {
-//						entity.move(MoverType.SELF, push.multiply(1.0D, 0.0D, 1.0D));
-//					}
-//				}
-//			}
-//		}
+		for (Entity entity : this.getEntityAbove(level, pos)) {
+			if (entity != null && !(entity instanceof SludgeJet) && /*!(entity instanceof RootGrabber) &&*/ !(entity instanceof BLEntity) && !(entity instanceof ShockwaveBlock)) {
+				if (entity instanceof AbstractArrow)
+					entity.kill();
+				if (entity instanceof Player player && player.getAbilities().flying) return;
+				if (this.getDistance(pos, entity) >= 4.25F - entity.getBbWidth() * 0.5F && this.getDistance(pos, entity) <= 7F + entity.getBbWidth() * 0.5F) {
+					reverse = false;
+					if (entity.getY() <= pos.getY() + 3D) {
+						entity.setDeltaMovement(0.0D, 0.1D, 0.0D);
+					} else if (entity.getDeltaMovement().y() < 0) {
+						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
+						this.checkJumpOnTopOfAABB(entity);
+					}
+				}
+
+				if (this.getDistance(pos, entity) < 4.25F - entity.getBbWidth() * 0.5F && this.getDistance(pos, entity) >= 2.5F + entity.getBbWidth() * 0.5F) {
+					if (entity.getY() <= pos.getY() + 2D + 0.0625D) {
+						reverse = true;
+						this.checkJumpOnTopOfAABB(entity);
+					}
+				}
+
+				if (this.getDistance(pos, entity) >= 2.5F + entity.getBbWidth() * 0.5F) {
+					Vec3 center = new Vec3(pos.getX() + 0.5D, 0, pos.getZ() + 0.5D);
+					Vec3 entityOffset = new Vec3(entity.getX(), 0, entity.getZ());
+
+					double dist = entityOffset.distanceTo(center);
+					double circumference = 2 * Math.PI * dist;
+					double speed = circumference / 360 * (reverse ? 1F : 0.75F) /* angle per tick */;
+
+					Vec3 push = new Vec3(0, 1, 0).cross(entityOffset.subtract(center).normalize()).normalize().scale(reverse ? -speed : speed);
+
+					if (!entity.level().isClientSide() || entity instanceof Player) {
+						entity.move(MoverType.SELF, push.multiply(1.0D, 0.0D, 1.0D));
+					}
+				}
+			}
+		}
 	}
 
 	public float getDistance(BlockPos pos, Entity entity) {
@@ -427,7 +429,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 	}
 
 	public List<Entity> getEntityAbove(Level level, BlockPos pos) {
-		return level.getEntitiesOfClass(Entity.class, this.getFloorEntityBoundingBox(pos), EntitySelector.ENTITY_STILL_ALIVE);
+		return level.getEntitiesOfClass(Entity.class, this.getFloorEntityBoundingBox(pos), EntitySelector.ENTITY_STILL_ALIVE.and(EntitySelector.NO_SPECTATORS));
 	}
 
 	private AABB getFloorEntityBoundingBox(BlockPos pos) {
@@ -439,10 +441,10 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 	}
 
 	private void spawnSludgeJet(Level level, double posX, double posY, double posZ) {
-//		EntitySludgeJet jet = new EntitySludgeJet(level);
-//		jet.setPosition(posX, posY, posZ);
-//		level.spawnEntity(jet);
-//		level.playSound(null, jet.blockPosition(), SoundRegistry.POOP_JET.get(), SoundSource.HOSTILE, 1F, 0.8F + level.getRandom().nextFloat() * 0.5F);
+		SludgeJet jet = new SludgeJet(EntityRegistry.SLUDGE_JET.get(), level);
+		jet.setPos(posX, posY, posZ);
+		level.addFreshEntity(jet);
+		level.playSound(null, jet.blockPosition(), SoundRegistry.POOP_JET.get(), SoundSource.HOSTILE, 1F, 0.8F + level.getRandom().nextFloat() * 0.5F);
 	}
 
 	public void setSpawnType(int spawn_type) {
@@ -525,7 +527,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 	@Override
 	public float getShakeIntensity(Entity viewer) {
 		if (this.isShaking()) {
-			double dist = getShakeDistance(viewer);
+			double dist = Math.sqrt(viewer.distanceToSqr(Vec3.atCenterOf(this.getBlockPos())));
 			float shakeMult = (float) (1.0F - dist / 10.0F);
 			if (dist >= 10.0F) {
 				return 0.0F;
@@ -536,19 +538,12 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 		}
 	}
 
-	public float getShakeDistance(Entity entity) {
-		float distX = (float) (this.getBlockPos().getX() - entity.blockPosition().getX());
-		float distY = (float) (this.getBlockPos().getY() - entity.blockPosition().getY());
-		float distZ = (float) (this.getBlockPos().getZ() - entity.blockPosition().getZ());
-		return Mth.sqrt(distX * distX + distY * distY + distZ * distZ);
-	}
-
 	public boolean isShaking() {
-		return shaking;
+		return this.shaking;
 	}
 
 	public float getShakingProgress() {
-		return 1.0F / shakingTimerMax * (prevShakeTimer + (shakeTimer - prevShakeTimer));
+		return Mth.lerp(1.0F / this.shakingTimerMax, this.prevShakeTimer, this.shakeTimer);
 	}
 
 	@Override

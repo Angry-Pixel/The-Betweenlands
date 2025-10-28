@@ -7,6 +7,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class DecayPitChainSoundInstance extends BlockEntitySoundInstance<DecayPitHangingChainBlockEntity> {
 	public DecayPitChainSoundInstance(DecayPitHangingChainBlockEntity entity) {
 		super(SoundRegistry.CHAIN_LONG.get(), SoundSource.HOSTILE, entity, DecayPitHangingChainBlockEntity::isSlow);
+		this.looping = false;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.SludgeWormModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.monster.SludgeWorm;
-import thebetweenlands.common.entity.monster.SludgeWormMultipart;
+import thebetweenlands.common.entity.multipart.SludgeWormMultipart;
 
 public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel> {
 	public static final ResourceLocation TEXTURE_HEAD = TheBetweenlands.prefix("textures/entity/sludge_worm_head.png");
@@ -36,7 +36,7 @@ public class SludgeWormRenderer extends MobRenderer<SludgeWorm, SludgeWormModel>
 		boolean isGlowing = minecraft.shouldEntityAppearGlowing(entity);
 		int overlay = getOverlayCoords(entity, this.getWhiteOverlayProgress(entity, partialTicks));
 		int colour = isTranslucentToPlayer ? 654311423 : -1;
-		
+
 		stack.pushPose();
 		float totalAngleDiff = 0.0f;
 

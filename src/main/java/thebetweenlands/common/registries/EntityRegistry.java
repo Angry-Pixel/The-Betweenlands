@@ -92,7 +92,6 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Shambler>> SHAMBLER = registerWithEgg("shambler", EntityType.Builder.of(Shambler::new, MobCategory.MONSTER).sized(0.95F, 1.25F), 0x14331C, 0xCD5472, Shambler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<SiltCrab>> SILT_CRAB = registerWithEgg("silt_crab", EntityType.Builder.of(SiltCrab::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F), 0x468282, 0xBC4114, SiltCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Sludge>> SLUDGE = registerWithEgg("sludge", EntityType.Builder.of(Sludge::new, MobCategory.MONSTER).sized(1.1F, 1.2F).fireImmune(), 0x726459, 0x726459, Sludge::registerAttributes);
-	//sludge jet
 	//sludge menace
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWorm>> SLUDGE_WORM = registerWithEgg("sludge_worm", EntityType.Builder.of(SludgeWorm::new, MobCategory.MONSTER).sized(0.4375F, 0.3125F).fireImmune(), 0x6D3D39, 0x301411, SludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<SmolSludge>> SMOL_SLUDGE = registerWithEgg("smol_sludge", EntityType.Builder.of(SmolSludge::new, MobCategory.MONSTER).sized(0.7F, 0.7F).fireImmune(), 0x726459, 0x726459, SmolSludge::registerAttributes);
@@ -119,7 +118,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawBarb>> CHIROMAW_BARB = register("chiromaw_barb", EntityType.Builder.<ChiromawBarb>of(ChiromawBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawShockBarb>> CHIROMAW_SHOCK_BARB = register("chiromaw_shock_barb", EntityType.Builder.<ChiromawShockBarb>of(ChiromawShockBarb::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawDroppings>> CHIROMAW_DROPPINGS = register("chiromaw_droppings", EntityType.Builder.<ChiromawDroppings>of(ChiromawDroppings::new, MobCategory.MISC).sized(0.5F, 0.5F).noSave().noSummon().fireImmune());
-	//decay pit target
+	public static final DeferredHolder<EntityType<?>, EntityType<DecayPitTarget>> DECAY_PIT_TARGET = register("decay_pit_target", EntityType.Builder.of(DecayPitTarget::new, MobCategory.MISC).sized(5.0F, 5.0F).noSummon().fireImmune().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//draeton
 	//draeton chiromaw
 	//draeton dragonfly
@@ -162,6 +161,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<ShockwaveBlock>> SHOCKWAVE_BLOCK = register("shockwave_block", EntityType.Builder.of(ShockwaveBlock::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<ShockwaveSwordItemEntity>> SHOCKWAVE_SWORD_ITEM = register("shockwave_sword_item", EntityType.Builder.<ShockwaveSwordItemEntity>of(ShockwaveSwordItemEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20).noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = register("sludge_ball", EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20));
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeJet>> SLUDGE_JET = register("sludge_jet", EntityType.Builder.of(SludgeJet::new, MobCategory.MISC).sized(1.0F, 2.5F).fireImmune().noSave().noSummon());
 	//sludge wall jet
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormArrow>> SLUDGE_WORM_ARROW = register("sludge_worm_arrow", EntityType.Builder.<SludgeWormArrow>of(SludgeWormArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<SnailPoisonJet>> SNAIL_POISON_JET = register("snail_poison_jet", EntityType.Builder.<SnailPoisonJet>of(SnailPoisonJet::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));

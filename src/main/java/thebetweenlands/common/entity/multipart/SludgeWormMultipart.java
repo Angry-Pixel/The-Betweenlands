@@ -1,7 +1,7 @@
-package thebetweenlands.common.entity.monster;
+package thebetweenlands.common.entity.multipart;
 
 import net.minecraft.world.damagesource.DamageSource;
-import thebetweenlands.common.entity.GenericPartEntity;
+import thebetweenlands.common.entity.monster.SludgeWorm;
 
 public class SludgeWormMultipart extends GenericPartEntity<SludgeWorm> {
 

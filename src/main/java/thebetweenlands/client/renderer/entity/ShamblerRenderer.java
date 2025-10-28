@@ -15,7 +15,7 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.ShamblerModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.monster.Shambler;
-import thebetweenlands.common.entity.monster.ShamblerTongueMultipart;
+import thebetweenlands.common.entity.multipart.ShamblerTongueMultipart;
 
 public class ShamblerRenderer extends MobRenderer<Shambler, ShamblerModel> {
 	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/shambler.png");

@@ -261,7 +261,7 @@ public class DecayPitTargetModel {
 		var target_left_base = target_base.addOrReplaceChild("target_left_base", CubeListBuilder.create()
 				.texOffs(0, 0).addBox(0.0F, 0.0F, 0.0F, 0, 0, 0),
 			PartPose.offsetAndRotation(11.0F, 0.0F, 0.0F, 0.0F, -1.5707963267948966F, 0.0F));
-		var left_plate_uppermid = target_back_base.addOrReplaceChild("left_plate_uppermid", CubeListBuilder.create()
+		var left_plate_uppermid = target_left_base.addOrReplaceChild("left_plate_uppermid", CubeListBuilder.create()
 				.texOffs(0, 89).addBox(-10.0F, -10.0F, -3.0F, 20, 12, 3),
 			PartPose.offset(0.0F, -6.0F, -10.0F));
 		var left_plate_upperleft1 = left_plate_uppermid.addOrReplaceChild("left_plate_upperleft1", CubeListBuilder.create()
@@ -270,52 +270,52 @@ public class DecayPitTargetModel {
 		var left_plate_upperright1 = left_plate_uppermid.addOrReplaceChild("left_plate_upperright1", CubeListBuilder.create()
 				.texOffs(104, 0).addBox(-4.0F, -8.0F, 0.0F, 4, 24, 3),
 			PartPose.offsetAndRotation(-10.0F, 2.0F, -3.0F, 0.0F, 0.18203784098300857F, 0.0F));
-		var left_plate_lower1 = target_back_base.addOrReplaceChild("left_plate_lower1", CubeListBuilder.create()
+		var left_plate_lower1 = target_left_base.addOrReplaceChild("left_plate_lower1", CubeListBuilder.create()
 				.texOffs(0, 104).addBox(-10.0F, -2.0F, -3.0F, 20, 12, 3),
 			PartPose.offset(0.0F, 6.0F, -10.0F));
-		var left_beam_bottom_right = target_back_base.addOrReplaceChild("left_beam_bottom_right", CubeListBuilder.create()
+		var left_beam_bottom_right = target_left_base.addOrReplaceChild("left_beam_bottom_right", CubeListBuilder.create()
 				.texOffs(89, 45).addBox(-4.0F, 0.0F, -10.0F, 4, 4, 10),
 			PartPose.offset(-3.0F, 6.0F, 0.0F));
-		var left_beam_bottom_left = target_back_base.addOrReplaceChild("left_beam_bottom_left", CubeListBuilder.create()
+		var left_beam_bottom_left = target_left_base.addOrReplaceChild("left_beam_bottom_left", CubeListBuilder.create()
 				.texOffs(89, 30).addBox(0.0F, 0.0F, -10.0F, 4, 4, 10),
 			PartPose.offset(3.0F, 6.0F, 0.0F));
-		var left_beam_top_left = target_back_base.addOrReplaceChild("left_beam_top_left", CubeListBuilder.create()
+		var left_beam_top_left = target_left_base.addOrReplaceChild("left_beam_top_left", CubeListBuilder.create()
 				.texOffs(47, 89).addBox(0.0F, -4.0F, -10.0F, 4, 4, 10),
 			PartPose.offset(3.0F, -6.0F, 0.0F));
-		var left_beam_top_right = target_back_base.addOrReplaceChild("left_beam_top_right", CubeListBuilder.create()
+		var left_beam_top_right = target_left_base.addOrReplaceChild("left_beam_top_right", CubeListBuilder.create()
 				.texOffs(47, 104).addBox(-4.0F, -4.0F, -10.0F, 4, 4, 10),
 			PartPose.offset(-3.0F, -6.0F, 0.0F));
-		var left_lense_edge_upper = target_back_base.addOrReplaceChild("left_lense_edge_upper", CubeListBuilder.create()
+		var left_lense_edge_upper = target_left_base.addOrReplaceChild("left_lense_edge_upper", CubeListBuilder.create()
 				.texOffs(89, 60).addBox(-8.0F, -2.0F, 0.0F, 16, 2, 2),
 			PartPose.offsetAndRotation(0.0F, -8.0F, -15.0F, -0.091106186954104F, 0.0F, 0.0F));
-		var left_lense_edge_right = target_back_base.addOrReplaceChild("left_lense_edge_right", CubeListBuilder.create()
+		var left_lense_edge_right = target_left_base.addOrReplaceChild("left_lense_edge_right", CubeListBuilder.create()
 				.texOffs(73, 21).addBox(-2.0F, -8.0F, -2.0F, 2, 16, 4),
 			PartPose.offset(-8.0F, 0.0F, -13.0F));
-		var left_lense_edge_left = target_back_base.addOrReplaceChild("left_lense_edge_left", CubeListBuilder.create()
+		var left_lense_edge_left = target_left_base.addOrReplaceChild("left_lense_edge_left", CubeListBuilder.create()
 				.texOffs(73, 0).addBox(0.0F, -8.0F, -2.0F, 2, 16, 4),
 			PartPose.offset(8.0F, 0.0F, -13.0F));
-		var left_lense_edge_corner3 = target_back_base.addOrReplaceChild("left_lense_edge_corner3", CubeListBuilder.create()
+		var left_lense_edge_corner3 = target_left_base.addOrReplaceChild("left_lense_edge_corner3", CubeListBuilder.create()
 				.texOffs(73, 68).addBox(0.0F, -2.0F, -2.0F, 2, 2, 2),
 			PartPose.offset(-8.0F, 8.0F, -13.0F));
-		var left_lense_edge_lower = target_back_base.addOrReplaceChild("left_lense_edge_lower", CubeListBuilder.create()
+		var left_lense_edge_lower = target_left_base.addOrReplaceChild("left_lense_edge_lower", CubeListBuilder.create()
 				.texOffs(89, 65).addBox(-8.0F, 0.0F, 0.0F, 16, 2, 2),
 			PartPose.offsetAndRotation(0.0F, 8.0F, -15.0F, 0.091106186954104F, 0.0F, 0.0F));
-		var left_lense_edge_corner4 = target_back_base.addOrReplaceChild("left_lense_edge_corner4", CubeListBuilder.create()
+		var left_lense_edge_corner4 = target_left_base.addOrReplaceChild("left_lense_edge_corner4", CubeListBuilder.create()
 				.texOffs(73, 73).addBox(0.0F, 0.0F, -2.0F, 2, 2, 2),
 			PartPose.offset(-8.0F, -8.0F, -13.0F));
-		var left_lense_edge_corner1 = target_back_base.addOrReplaceChild("left_lense_edge_corner1", CubeListBuilder.create()
+		var left_lense_edge_corner1 = target_left_base.addOrReplaceChild("left_lense_edge_corner1", CubeListBuilder.create()
 				.texOffs(73, 58).addBox(-2.0F, 0.0F, -2.0F, 2, 2, 2),
 			PartPose.offset(8.0F, -8.0F, -13.0F));
-		var left_lense_edge_corner2 = target_back_base.addOrReplaceChild("left_lense_edge_corner2", CubeListBuilder.create()
+		var left_lense_edge_corner2 = target_left_base.addOrReplaceChild("left_lense_edge_corner2", CubeListBuilder.create()
 				.texOffs(73, 63).addBox(-2.0F, -2.0F, -2.0F, 2, 2, 2),
 			PartPose.offset(8.0F, 8.0F, -13.0F));
-		var left_lense_main = target_back_base.addOrReplaceChild("left_lense_main", CubeListBuilder.create()
+		var left_lense_main = target_left_base.addOrReplaceChild("left_lense_main", CubeListBuilder.create()
 				.texOffs(89, 70).addBox(-8.0F, -6.0F, -3.0F, 16, 12, 3),
 			PartPose.offset(0.0F, 0.0F, -13.0F));
-		var left_lense_lower = target_back_base.addOrReplaceChild("left_lense_lower", CubeListBuilder.create()
+		var left_lense_lower = target_left_base.addOrReplaceChild("left_lense_lower", CubeListBuilder.create()
 				.texOffs(89, 92).addBox(-6.0F, 0.0F, -3.0F, 12, 2, 3),
 			PartPose.offset(0.0F, 6.0F, -13.0F));
-		var left_lense_upper = target_back_base.addOrReplaceChild("left_lense_upper", CubeListBuilder.create()
+		var left_lense_upper = target_left_base.addOrReplaceChild("left_lense_upper", CubeListBuilder.create()
 				.texOffs(89, 86).addBox(-6.0F, -6.0F, -3.0F, 12, 2, 3),
 			PartPose.offset(0.0F, -2.0F, -13.0F));
 

@@ -47,7 +47,7 @@ public class DecayPitControlRenderer implements BlockEntityRenderer<DecayPitCont
 	public void render(DecayPitControlBlockEntity entity, float partialTick, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		if (entity.getLevel() == null) return;
 		light = LevelRenderer.getLightColor(entity.getLevel(), entity.getBlockPos().above());
-		float floor_fade = Mth.lerp(partialTick, entity.floorFadeTicksPrev, entity.floorFadeTicks);
+		float alpha = Math.max(0.0F, 1.0F - Mth.lerp(partialTick, entity.floorFadeTicksPrev, entity.floorFadeTicks));
 		if (entity.getShowFloor()) {
 			float ringRotation = Mth.lerp(partialTick, entity.animationTicksPrev, entity.animationTicks);
 
@@ -56,7 +56,6 @@ public class DecayPitControlRenderer implements BlockEntityRenderer<DecayPitCont
 			RenderSystem.enableDepthTest();
 
 			Tesselator tessellator = Tesselator.getInstance();
-			float alpha = 1.0F - floor_fade;
 
 			RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 			if (entity.getShowFloor()) {
@@ -163,13 +162,13 @@ public class DecayPitControlRenderer implements BlockEntityRenderer<DecayPitCont
 				stack.pushPose();
 				stack.translate(0.5F, 4F - fall, 0.5F);
 				stack.scale(1F, -1F, -1F);
-				this.plug.renderChains(stack, source.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay, FastColor.ARGB32.colorFromFloat(1 - floor_fade, 1, 1, 1));
+				this.plug.renderChains(stack, source.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay, FastColor.ARGB32.colorFromFloat(alpha, 1, 1, 1));
 				stack.popPose();
 
 				stack.pushPose();
 				stack.translate(0.5F, 7F - fall, 0.5F);
 				stack.scale(1F, -1F, -1F);
-				this.targets.render(stack, source.getBuffer(RenderType.entityCutoutNoCull(TARGET_TEXTURE)), light, overlay, FastColor.ARGB32.colorFromFloat(1 - floor_fade, 1, 1, 1));
+				this.targets.render(stack, source.getBuffer(RenderType.entityTranslucent(TARGET_TEXTURE)), light, overlay, FastColor.ARGB32.colorFromFloat(alpha, 1, 1, 1));
 				stack.popPose();
 			}
 		}

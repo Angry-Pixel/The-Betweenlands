@@ -106,6 +106,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation CRAB_POT_FILTER = register("crab_pot_filter");
 	public static final ModelLayerLocation DECAY_PIT_CHAIN = register("decay_pit_chain");
 	public static final ModelLayerLocation DECAY_PIT_PLUG = register("decay_pit_plug");
+	public static final ModelLayerLocation DECAY_PIT_SHIELD = register("decay_pit_shield");
 	public static final ModelLayerLocation DECAY_PIT_TARGET = register("decay_pit_target");
 	public static final ModelLayerLocation DEEPMAN_SIMULACRUM_1 = register("deepman_simulacrum_1");
 	public static final ModelLayerLocation DEEPMAN_SIMULACRUM_2 = register("deepman_simulacrum_2");
