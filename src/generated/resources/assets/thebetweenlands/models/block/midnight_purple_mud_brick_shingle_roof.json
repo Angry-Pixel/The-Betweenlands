@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:slant",
+  "textures": {
+    "base": "thebetweenlands:block/midnight_purple_mud_brick_shingles",
+    "side": "thebetweenlands:block/midnight_purple_mud_brick_shingles",
+    "slant": "thebetweenlands:block/midnight_purple_mud_brick_shingles"
+  }
+}

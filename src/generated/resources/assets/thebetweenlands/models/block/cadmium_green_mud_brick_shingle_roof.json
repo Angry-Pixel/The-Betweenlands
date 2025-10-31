@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:slant",
+  "textures": {
+    "base": "thebetweenlands:block/cadmium_green_mud_brick_shingles",
+    "side": "thebetweenlands:block/cadmium_green_mud_brick_shingles",
+    "slant": "thebetweenlands:block/cadmium_green_mud_brick_shingles"
+  }
+}

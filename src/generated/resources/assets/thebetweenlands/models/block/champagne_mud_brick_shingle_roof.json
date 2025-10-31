@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:slant",
+  "textures": {
+    "base": "thebetweenlands:block/champagne_mud_brick_shingles",
+    "side": "thebetweenlands:block/champagne_mud_brick_shingles",
+    "slant": "thebetweenlands:block/champagne_mud_brick_shingles"
+  }
+}
