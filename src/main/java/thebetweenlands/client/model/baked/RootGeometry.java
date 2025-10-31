@@ -35,6 +35,8 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.textures.UnitTextureAtlasSprite;
+import net.neoforged.neoforge.common.NeoForgeConfig;
+import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.common.block.terrain.StalactiteBlock;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
@@ -66,136 +68,175 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random, ModelData extraData, @Nullable RenderType renderType) {
-			List<BakedQuad> quads;
+			
+			if(side != null) {
+				return ImmutableList.of();
+			}
+			
+			int distUp = Optional.ofNullable(extraData.get(DIST_UP)).orElse(0);
+			int distDown = Optional.ofNullable(extraData.get(DIST_DOWN)).orElse(0);
 
-			if (side == null) {
-				int distUp = Optional.ofNullable(extraData.get(DIST_UP)).orElse(0);
-				int distDown = Optional.ofNullable(extraData.get(DIST_DOWN)).orElse(0);
-				boolean noTop = Optional.ofNullable(extraData.get(NO_TOP)).orElse(true);
-				boolean noBottom = Optional.ofNullable(extraData.get(NO_BOTTOM)).orElse(true);
-				int posX = Optional.ofNullable(extraData.get(POS_X)).orElse(0);
-				int posY = Optional.ofNullable(extraData.get(POS_Y)).orElse(0);
-				int posZ = Optional.ofNullable(extraData.get(POS_Z)).orElse(0);
-				float height = 1.0F;
+//			if ((side == Direction.UP && distUp != 0) || (side == Direction.DOWN && distDown != 0)) {
+//				return ImmutableList.of();
+//			}
+			
+			boolean noTop = Optional.ofNullable(extraData.get(NO_TOP)).orElse(true);
+			boolean noBottom = Optional.ofNullable(extraData.get(NO_BOTTOM)).orElse(true);
+			int posX = Optional.ofNullable(extraData.get(POS_X)).orElse(0);
+			int posY = Optional.ofNullable(extraData.get(POS_Y)).orElse(0);
+			int posZ = Optional.ofNullable(extraData.get(POS_Z)).orElse(0);
+			float height = 1.0F;
 
-				int totalHeight = 1 + distDown + distUp;
-				float distToMidBottom, distToMidTop;
+			int totalHeight = 1 + distDown + distUp;
+			float distToMidBottom, distToMidTop;
 
-				double squareAmount = 1.2D;
-				double halfTotalHeightSQ;
+			double squareAmount = 1.2D;
+			double halfTotalHeightSQ;
 
-				if (noTop) {
-					halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-					distToMidBottom = Math.abs(distUp + 1);
-					distToMidTop = Math.abs(distUp);
-				} else if (noBottom) {
-					halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-					distToMidBottom = Math.abs(distDown);
-					distToMidTop = Math.abs(distDown + 1);
-				} else {
-					float halfTotalHeight = totalHeight * 0.5F;
-					halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
-					distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
-					distToMidTop = Math.abs(halfTotalHeight - distUp);
-				}
+			if (noTop) {
+				halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+				distToMidBottom = Math.abs(distUp + 1);
+				distToMidTop = Math.abs(distUp);
+			} else if (noBottom) {
+				halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+				distToMidBottom = Math.abs(distDown);
+				distToMidTop = Math.abs(distDown + 1);
+			} else {
+				float halfTotalHeight = totalHeight * 0.5F;
+				halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
+				distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
+				distToMidTop = Math.abs(halfTotalHeight - distUp);
+			}
 
-				int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
-				int minValTop = (noTop && distUp == 0) ? 0 : 1;
-				int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
-				int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
+			int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
+			int minValTop = (noTop && distUp == 0) ? 0 : 1;
+			int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
+			int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
 
-				float umin = 0;
-				float umax = 16;
-				float vmin = 0;
-				float vmax = 16;
+			float umin = 0;
+			float umax = 16;
+			float vmin = 0;
+			float vmax = 16;
 
-				float halfSize = (float) scaledValBottom / 16;
-				float halfSizeTexW = halfSize * (umax - umin);
-				float halfSize1 = (float) (scaledValTop) / 16;
-				float halfSizeTex1 = halfSize1 * (umax - umin);
+			float halfSize = (float) scaledValBottom / 16;
+			float halfSizeTexW = halfSize * (umax - umin);
+			float halfSize1 = (float) (scaledValTop) / 16;
+			float halfSizeTex1 = halfSize1 * (umax - umin);
 
-				StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
+			StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
 
-				if (distDown == 0 && !noBottom) {
-					core.bX = 0.5F;
-					core.bZ = 0.5F;
-				}
-				if (distUp == 0 && !noTop) {
-					core.tX = 0.5F;
-					core.tZ = 0.5F;
-				}
+			if (distDown == 0 && !noBottom) {
+				core.bX = 0.5F;
+				core.bZ = 0.5F;
+			}
+			if (distUp == 0 && !noTop) {
+				core.tX = 0.5F;
+				core.tZ = 0.5F;
+			}
 
-				boolean hasTop = distUp == 0 && !noTop;
-				boolean hasBottom = distDown == 0 && !noBottom;
+			boolean hasTop = distUp == 0 && !noTop;
+			boolean hasBottom = distDown == 0 && !noBottom;
 
-				boolean hasOverlay = Optional.ofNullable(extraData.get(HAS_OVERLAY)).orElse(false);
+			boolean hasOverlay = Optional.ofNullable(extraData.get(HAS_OVERLAY)).orElse(false);
 
-				QuadBuilder builder = new QuadBuilder(hasOverlay ? 40 : 24, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
+			final int vertexCount = switch(side) {
+			case null:
+				yield hasOverlay ? 40 : 24;
+			case Direction.DOWN:
+			case Direction.UP:
+				yield 4;
+			default:
+				yield hasOverlay ? 8 : 4;
+			};
+			
+			QuadBuilder builder = new QuadBuilder(vertexCount, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
 
-
-				for (int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
-
-					if (i == 0) {
-						builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
-						if (emissiveBase)
-							builder.setLightmap(15, 15);
-						else
-							builder.removeLightmap();
+			// the experimental forge pipeline fixes our ambient occlusion issues (mostly)
+			final boolean experimentalPipelineEnabled = NeoForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.getAsBoolean();
+			
+			for (int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
+				if (i == 0) {
+					builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
+					builder.setHasAmbientOcclusion(experimentalPipelineEnabled && !emissiveBase);
+					builder.setUseShading(!emissiveBase);
+					if (emissiveBase) {
+						builder.setLightmap(15, 15);
 					} else {
-						builder.setSprite(this.textureOverlay);
-						if (emissiveOverlay)
-							builder.setLightmap(15, 15);
-						else
-							builder.removeLightmap();
+						builder.removeLightmap();
 					}
+				} else {
+					builder.setSprite(this.textureOverlay);
+					builder.setHasAmbientOcclusion(experimentalPipelineEnabled && !emissiveOverlay);
+					builder.setUseShading(!emissiveOverlay);
+					if (emissiveOverlay) {
+						builder.setLightmap(15, 15);
+					} else {
+						builder.removeLightmap();
+					}
+				}
 
-					// front
+//				if(side == null || side == Direction.WEST) {
+					// front (negative X - west face)
+					builder.setOrientation(Direction.WEST);
 					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-					// back
+//				}
+//				if(side == null || side == Direction.EAST) {
+					// back (positive X - east face)
+					builder.setOrientation(Direction.EAST);
 					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
 					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
 					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
 					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-					// left
+//				}
+//				if(side == null || side == Direction.NORTH) {
+					// left (negative Z - north face)
+					builder.setOrientation(Direction.NORTH);
 					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
 					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-					// right
+//				}
+//				if(side == null || side == Direction.SOUTH) {
+					// right (negative Z - south face)
+					builder.setOrientation(Direction.SOUTH);
 					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
 					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
 					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+//				} 
 
-					// Do not render overlay on top/bottom faces
-					if (i == 1) continue;
+				// Do not render overlay on top/bottom faces
+				if (i == 1) continue;
 
-					// top
-					if (distUp == 0) {
-						builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
-						builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
-						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
-					}
-
-					// bottom
-					if (distDown == 0) {
-						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
-						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
-						builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
-						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
-					}
+				// top
+				if (
+						distUp == 0
+//						&& (side == null || side == Direction.UP)
+				) {
+					builder.setOrientation(Direction.UP);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
 				}
 
-				quads = builder.build().nonCulledQuads;
-			} else {
-				quads = ImmutableList.of();
+				// bottom
+				if (
+						distDown == 0
+//						&& (side == null || side == Direction.DOWN)
+				) {
+					builder.setOrientation(Direction.DOWN);
+					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
+					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
+					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
+					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
+				}
 			}
 
-			return quads;
+			return builder.build().nonCulledQuads;
 		}
 
 		@Override
@@ -255,7 +296,13 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 		@Override
 		public boolean useAmbientOcclusion() {
-			return true;
+			// use experimental forge lighting pipeline for ambient occlusion
+			return NeoForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.getAsBoolean();
+		}
+		
+		@Override
+		public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType) {
+			return NeoForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.getAsBoolean() ? TriState.TRUE : IDynamicBakedModel.super.useAmbientOcclusion(state, data, renderType);
 		}
 
 		@Override

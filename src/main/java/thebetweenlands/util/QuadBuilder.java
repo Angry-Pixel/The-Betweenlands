@@ -37,10 +37,11 @@ public class QuadBuilder {
 		public final int blockLight, skyLight;
 		public final int tintIndex;
 		public final Direction cullFace, orientation;
-		public final boolean diffuse;
+		public final boolean useShading;
+		public final boolean hasAmbientOcclusion;
 
 		private Vertex(Vec3 pos, float u, float v, TextureAtlasSprite sprite, boolean switchUV, Transformation transformation,
-				float[] color, Vec3 normal, int blockLight, int skyLight, int tintIndex, Direction cullFace, Direction orientation, boolean diffuse) {
+				float[] color, Vec3 normal, int blockLight, int skyLight, int tintIndex, Direction cullFace, Direction orientation, boolean useShading, boolean ambientOcclusion) {
 			this.pos = pos;
 			this.u = u;
 			this.v = v;
@@ -54,7 +55,8 @@ public class QuadBuilder {
 			this.tintIndex = tintIndex;
 			this.cullFace = cullFace;
 			this.orientation = orientation;
-			this.diffuse = diffuse;
+			this.useShading = useShading;
+			this.hasAmbientOcclusion = ambientOcclusion;
 		}
 	}
 
@@ -68,7 +70,8 @@ public class QuadBuilder {
 	private int tintIndex = -1;
 	@Nullable
 	private Direction cullFace, orientation;
-	private boolean diffuseLighting = true;
+	private boolean useShading = true;
+	private boolean hasAmbientOcclusion = false;
 
 	private final List<Vertex> vertices;
 
@@ -108,11 +111,21 @@ public class QuadBuilder {
 
 	/**
 	 * Sets whether the quad should use diffuse lighting
-	 * @param diffuseLighting
+	 * @param useShading
 	 * @return
 	 */
-	public QuadBuilder setDiffuseLighting(boolean diffuseLighting) {
-		this.diffuseLighting = diffuseLighting;
+	public QuadBuilder setUseShading(boolean useShading) {
+		this.useShading = useShading;
+		return this;
+	}
+
+	/**
+	 * Sets whether the quad should use ambient occlusion lighting
+	 * @param hasAmbientOcclusion
+	 * @return
+	 */
+	public QuadBuilder setHasAmbientOcclusion(boolean hasAmbientOcclusion) {
+		this.hasAmbientOcclusion = hasAmbientOcclusion;
 		return this;
 	}
 
@@ -288,7 +301,7 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public QuadBuilder addVertex(Vec3 pos, float u, float v) {
-		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.diffuseLighting));
+		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.useShading, this.hasAmbientOcclusion));
 		return this;
 	}
 
@@ -298,7 +311,7 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public QuadBuilder addVertex(Vec3 pos) {
-		this.vertices.add(new Vertex(pos, 0.0F, 0.0F, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.diffuseLighting));
+		this.vertices.add(new Vertex(pos, 0.0F, 0.0F, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.useShading, this.hasAmbientOcclusion));
 		return this;
 	}
 
@@ -337,7 +350,7 @@ public class QuadBuilder {
 			u = 16.0F;
 			break;
 		}
-		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.diffuseLighting));
+		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.useShading, this.hasAmbientOcclusion));
 		return this;
 	}
 
@@ -585,8 +598,8 @@ public class QuadBuilder {
 			//Use orientation that matches the normal the most
 			builder.setDirection(Direction.getNearest(quadNormal.x, quadNormal.y, quadNormal.z));
 		}
-		// TODO setApplyDiffuseLighting
-//		builder.setApplyDiffuseLighting(vert4.diffuse);
+		builder.setShade(vert4.useShading);
+		builder.setHasAmbientOcclusion(vert4.hasAmbientOcclusion);
 		builder.setSprite(vert4.sprite); // Sprite might've changed
 
 		putVertex(format, builder, quadNormal, vert1);
