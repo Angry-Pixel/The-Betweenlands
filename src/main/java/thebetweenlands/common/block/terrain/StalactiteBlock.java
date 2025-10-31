@@ -6,12 +6,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.util.StalactiteHelper.IStalactite;
 
@@ -22,6 +25,21 @@ public class StalactiteBlock extends Block implements SwampWaterLoggable, IStala
 	public StalactiteBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(WATER_TYPE, WaterType.NONE));
+	}
+
+	@Override
+	protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.empty();
+	}
+
+	@Override
+	protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+		return 1.0F;
 	}
 
 	@Nullable
@@ -35,7 +53,7 @@ public class StalactiteBlock extends Block implements SwampWaterLoggable, IStala
 		super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
 
 		//tell clients to re-render all stalactites
-		if(neighborPos.getX() == pos.getX() && neighborPos.getZ() == pos.getZ()) {
+		if (neighborPos.getX() == pos.getX() && neighborPos.getZ() == pos.getZ()) {
 			level.blockEvent(pos, state.getBlock(), 0, neighborPos.getY() < pos.getY() ? 1 : 0);
 		}
 	}
@@ -60,18 +78,17 @@ public class StalactiteBlock extends Block implements SwampWaterLoggable, IStala
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
 		//re-render all stalactites
-		if(id == 0) {
-			if(!level.isClientSide())
+		if (id == 0) {
+			if (!level.isClientSide())
 				return true;
 
 			boolean down = param == 1;
 
 			final int y = pos.getY();
 			MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), y, pos.getZ());
-			BlockState mutableBlockState = state;
+			BlockState mutableBlockState;
 
 			int direction = down ? -1 : 1; //was this or a ternary
 
