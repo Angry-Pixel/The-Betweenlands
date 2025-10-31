@@ -926,8 +926,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlockWithItem(BlockRegistry.ROTBULB);
 		this.mossBlockWithItem(BlockRegistry.MOSS);
 		this.mossBlockWithItem(BlockRegistry.DEAD_MOSS);
-		this.mossBlockWithItem(BlockRegistry.LICHEN);
-		this.mossBlockWithItem(BlockRegistry.DEAD_LICHEN);
+		this.lichenBlockWithItem(BlockRegistry.LICHEN);
+		this.lichenBlockWithItem(BlockRegistry.DEAD_LICHEN);
 		this.tintedCrossBlockWithItem(BlockRegistry.HANGER);
 		this.basicItemTex(BlockRegistry.HANGER, false);
 		this.simpleBlock(BlockRegistry.SEEDED_HANGER.get(), this.models().withExistingParent(BlockRegistry.SEEDED_HANGER.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
@@ -1231,6 +1231,20 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void mossBlockWithItem(DeferredBlock<Block> block) {
+		ModelFile ceiling = this.models().getExistingFile(TheBetweenlands.prefix("block/moss_ceiling"));
+		ModelFile floor = this.models().getExistingFile(TheBetweenlands.prefix("block/moss_floor"));
+		ModelFile wall = this.models().getExistingFile(TheBetweenlands.prefix("block/moss_wall"));
+		this.getVariantBuilder(block.get()).forAllStates(state -> {
+			Direction dir = state.getValue(BlockStateProperties.FACING);
+			return ConfiguredModel.builder()
+				.modelFile(dir == Direction.DOWN ? ceiling : dir == Direction.UP ? floor : wall)
+				.rotationY(dir.getAxis().isVertical() ? 0 : (int) ((dir.toYRot()) % 360)).build();
+		});
+		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
+			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "block/" + block.getId().getPath().replace("dead_", "")));
+	}
+
+	public void lichenBlockWithItem(DeferredBlock<Block> block) {
 		ModelFile file = this.models().withExistingParent(block.getId().getPath(), this.modLoc("block/thin_block")).renderType("cutout").texture("texture", this.modLoc("block/" + block.getId().getPath().replace("dead_", "")));
 		this.getVariantBuilder(block.get()).forAllStates(state -> {
 			Direction dir = state.getValue(BlockStateProperties.FACING);

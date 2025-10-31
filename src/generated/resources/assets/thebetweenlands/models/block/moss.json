@@ -1,7 +1,0 @@
-{
-  "parent": "thebetweenlands:block/thin_block",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "texture": "thebetweenlands:block/moss"
-  }
-}
