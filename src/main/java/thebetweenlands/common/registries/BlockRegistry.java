@@ -81,36 +81,7 @@ import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
 import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DugDirtBlock;
 import thebetweenlands.common.block.farming.DugGrassBlock;
-import thebetweenlands.common.block.misc.BLLanternBlock;
-import thebetweenlands.common.block.misc.BaubleBlock;
-import thebetweenlands.common.block.misc.CavingRopeLightBlock;
-import thebetweenlands.common.block.misc.ChipPathBlock;
-import thebetweenlands.common.block.misc.CompactMudBlock;
-import thebetweenlands.common.block.misc.DampTorchBlock;
-import thebetweenlands.common.block.misc.DampWallTorchBlock;
-import thebetweenlands.common.block.misc.ExtinguishedSulfurTorchBlock;
-import thebetweenlands.common.block.misc.ExtinguishedSulfurWallTorchBlock;
-import thebetweenlands.common.block.misc.FilteredSiltGlassBlock;
-import thebetweenlands.common.block.misc.GlowingGoopBlock;
-import thebetweenlands.common.block.misc.MistBridgeBlock;
-import thebetweenlands.common.block.misc.MossBedBlock;
-import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
-import thebetweenlands.common.block.misc.OctineBlock;
-import thebetweenlands.common.block.misc.ReedMatBlock;
-import thebetweenlands.common.block.misc.RopeBlock;
-import thebetweenlands.common.block.misc.RubberBlock;
-import thebetweenlands.common.block.misc.SamiteCanvasPanelBlock;
-import thebetweenlands.common.block.misc.ShadowWalkerBlock;
-import thebetweenlands.common.block.misc.SiltGlassLanternBlock;
-import thebetweenlands.common.block.misc.StainedFilteredSiltGlassBlock;
-import thebetweenlands.common.block.misc.SulfurTorchBlock;
-import thebetweenlands.common.block.misc.SulfurWallTorchBlock;
-import thebetweenlands.common.block.misc.SyrmoritePressurePlateBlock;
-import thebetweenlands.common.block.misc.TarredHearthgroveLogBlock;
-import thebetweenlands.common.block.misc.TemplePillarBlock;
-import thebetweenlands.common.block.misc.ThickerGlassPaneBlock;
-import thebetweenlands.common.block.misc.WalkwayBlock;
-import thebetweenlands.common.block.misc.WindChimeBlock;
+import thebetweenlands.common.block.misc.*;
 import thebetweenlands.common.block.plant.AlgaeBlock;
 import thebetweenlands.common.block.plant.BladderwortFlowerBlock;
 import thebetweenlands.common.block.plant.BladderwortStalkBlock;
@@ -459,12 +430,12 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> GIANT_ROOT_SLAB = register("giant_root_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(GIANT_ROOT_PLANKS.get())));
 	public static final DeferredBlock<Block> HEARTHGROVE_SLAB = register("hearthgrove_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(HEARTHGROVE_PLANKS.get())));
 	public static final DeferredBlock<Block> NIBBLETWIG_SLAB = register("nibbletwig_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(NIBBLETWIG_PLANKS.get())));
-	
+
 	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_SLAB = register("mud_brick_shingle_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLES.get())));
 	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_STAIRS = register("mud_brick_shingle_stairs", () -> new SwampStairBlock(MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLES.get())));
-	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_ROOF = register("mud_brick_shingle_roof", () -> new SwampStairBlock(MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5F, 10.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_ROOF = register("mud_brick_shingle_roof", () -> new SlopeBlock(MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_WALL = register("mud_brick_shingle_wall", () -> new SwampWallBlock(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLES.get())));
-	
+
 	public static final DeferredBlock<Block> DULL_LAVENDER_FILTERED_SILT_GLASS = register("dull_lavender_filtered_silt_glass", () -> new StainedFilteredSiltGlassBlock(BLDyeColor.DULL_LAVENDER, BlockBehaviour.Properties.ofFullCopy(FILTERED_SILT_GLASS.get())));
 	public static final DeferredBlock<Block> MAROON_FILTERED_SILT_GLASS = register("maroon_filtered_silt_glass", () -> new StainedFilteredSiltGlassBlock(BLDyeColor.MAROON, BlockBehaviour.Properties.ofFullCopy(FILTERED_SILT_GLASS.get())));
 	public static final DeferredBlock<Block> SHADOW_GREEN_FILTERED_SILT_GLASS = register("shadow_green_filtered_silt_glass", () -> new StainedFilteredSiltGlassBlock(BLDyeColor.SHADOW_GREEN, BlockBehaviour.Properties.ofFullCopy(FILTERED_SILT_GLASS.get())));
@@ -481,7 +452,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> BROWN_RUST_FILTERED_SILT_GLASS = register("brown_rust_filtered_silt_glass", () -> new StainedFilteredSiltGlassBlock(BLDyeColor.BROWN_RUST, BlockBehaviour.Properties.ofFullCopy(FILTERED_SILT_GLASS.get())));
 	public static final DeferredBlock<Block> MIDNIGHT_PURPLE_FILTERED_SILT_GLASS = register("midnight_purple_filtered_silt_glass", () -> new StainedFilteredSiltGlassBlock(BLDyeColor.MIDNIGHT_PURPLE, BlockBehaviour.Properties.ofFullCopy(FILTERED_SILT_GLASS.get())));
 	public static final DeferredBlock<Block> PEWTER_GREY_FILTERED_SILT_GLASS = register("pewter_grey_filtered_silt_glass", () -> new StainedFilteredSiltGlassBlock(BLDyeColor.PEWTER_GREY, BlockBehaviour.Properties.ofFullCopy(FILTERED_SILT_GLASS.get())));
-	
+
 	public static final DeferredBlock<Block> DULL_LAVENDER_MUD_BRICK_SHINGLES = register("dull_lavender_mud_brick_shingles", () -> new Block(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLES.get())));
 	public static final DeferredBlock<Block> MAROON_MUD_BRICK_SHINGLES = register("maroon_mud_brick_shingles", () -> new Block(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLES.get())));
 	public static final DeferredBlock<Block> SHADOW_GREEN_MUD_BRICK_SHINGLES = register("shadow_green_mud_brick_shingles", () -> new Block(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLES.get())));
@@ -515,7 +486,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> BROWN_RUST_MUD_BRICK_SHINGLE_SLAB = register("brown_rust_mud_brick_shingle_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_SLAB.get())));
 	public static final DeferredBlock<Block> MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_SLAB = register("midnight_purple_mud_brick_shingle_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_SLAB.get())));
 	public static final DeferredBlock<Block> PEWTER_GREY_MUD_BRICK_SHINGLE_SLAB = register("pewter_grey_mud_brick_shingle_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_SLAB.get())));
-	
+
 	public static final DeferredBlock<Block> DULL_LAVENDER_MUD_BRICK_SHINGLE_STAIRS = register("dull_lavender_mud_brick_shingle_stairs", () -> new SwampStairBlock(DULL_LAVENDER_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_STAIRS.get())));
 	public static final DeferredBlock<Block> MAROON_MUD_BRICK_SHINGLE_STAIRS = register("maroon_mud_brick_shingle_stairs", () -> new SwampStairBlock(MAROON_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_STAIRS.get())));
 	public static final DeferredBlock<Block> SHADOW_GREEN_MUD_BRICK_SHINGLE_STAIRS = register("shadow_green_mud_brick_shingle_stairs", () -> new SwampStairBlock(SHADOW_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_STAIRS.get())));
@@ -533,23 +504,23 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_STAIRS = register("midnight_purple_mud_brick_shingle_stairs", () -> new SwampStairBlock(MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_STAIRS.get())));
 	public static final DeferredBlock<Block> PEWTER_GREY_MUD_BRICK_SHINGLE_STAIRS = register("pewter_grey_mud_brick_shingle_stairs", () -> new SwampStairBlock(PEWTER_GREY_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_STAIRS.get())));
 
-	public static final DeferredBlock<Block> DULL_LAVENDER_MUD_BRICK_SHINGLE_ROOF = register("dull_lavender_mud_brick_shingle_roof", () -> new SwampStairBlock(DULL_LAVENDER_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> MAROON_MUD_BRICK_SHINGLE_ROOF = register("maroon_mud_brick_shingle_roof", () -> new SwampStairBlock(MAROON_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> SHADOW_GREEN_MUD_BRICK_SHINGLE_ROOF = register("shadow_green_mud_brick_shingle_roof", () -> new SwampStairBlock(SHADOW_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_ROOF = register("camelot_magenta_mud_brick_shingle_roof", () -> new SwampStairBlock(CAMELOT_MAGENTA_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> SAFFRON_MUD_BRICK_SHINGLE_ROOF = register("saffron_mud_brick_shingle_roof", () -> new SwampStairBlock(SAFFRON_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_ROOF = register("caribbean_green_mud_brick_shingle_roof", () -> new SwampStairBlock(CARIBBEAN_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> VIVID_TANGERINE_MUD_BRICK_SHINGLE_ROOF = register("vivid_tangerine_mud_brick_shingle_roof", () -> new SwampStairBlock(VIVID_TANGERINE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> CHAMPAGNE_MUD_BRICK_SHINGLE_ROOF = register("champagne_mud_brick_shingle_roof", () -> new SwampStairBlock(CHAMPAGNE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> RAISIN_BLACK_MUD_BRICK_SHINGLE_ROOF = register("raisin_black_mud_brick_shingle_roof", () -> new SwampStairBlock(RAISIN_BLACK_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> SUSHI_GREEN_MUD_BRICK_SHINGLE_ROOF = register("sushi_green_mud_brick_shingle_roof", () -> new SwampStairBlock(SUSHI_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> ELM_CYAN_MUD_BRICK_SHINGLE_ROOF = register("elm_cyan_mud_brick_shingle_roof", () -> new SwampStairBlock(ELM_CYAN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> CADMIUM_GREEN_MUD_BRICK_SHINGLE_ROOF = register("cadmium_green_mud_brick_shingle_roof", () -> new SwampStairBlock(CADMIUM_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> LAVENDER_BLUE_MUD_BRICK_SHINGLE_ROOF = register("lavender_blue_mud_brick_shingle_roof", () -> new SwampStairBlock(LAVENDER_BLUE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> BROWN_RUST_MUD_BRICK_SHINGLE_ROOF = register("brown_rust_mud_brick_shingle_roof", () -> new SwampStairBlock(BROWN_RUST_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_ROOF = register("midnight_purple_mud_brick_shingle_roof", () -> new SwampStairBlock(MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	public static final DeferredBlock<Block> PEWTER_GREY_MUD_BRICK_SHINGLE_ROOF = register("pewter_grey_mud_brick_shingle_roof", () -> new SwampStairBlock(PEWTER_GREY_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
-	
+	public static final DeferredBlock<Block> DULL_LAVENDER_MUD_BRICK_SHINGLE_ROOF = register("dull_lavender_mud_brick_shingle_roof", () -> new SlopeBlock(DULL_LAVENDER_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> MAROON_MUD_BRICK_SHINGLE_ROOF = register("maroon_mud_brick_shingle_roof", () -> new SlopeBlock(MAROON_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> SHADOW_GREEN_MUD_BRICK_SHINGLE_ROOF = register("shadow_green_mud_brick_shingle_roof", () -> new SlopeBlock(SHADOW_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_ROOF = register("camelot_magenta_mud_brick_shingle_roof", () -> new SlopeBlock(CAMELOT_MAGENTA_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> SAFFRON_MUD_BRICK_SHINGLE_ROOF = register("saffron_mud_brick_shingle_roof", () -> new SlopeBlock(SAFFRON_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_ROOF = register("caribbean_green_mud_brick_shingle_roof", () -> new SlopeBlock(CARIBBEAN_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> VIVID_TANGERINE_MUD_BRICK_SHINGLE_ROOF = register("vivid_tangerine_mud_brick_shingle_roof", () -> new SlopeBlock(VIVID_TANGERINE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> CHAMPAGNE_MUD_BRICK_SHINGLE_ROOF = register("champagne_mud_brick_shingle_roof", () -> new SlopeBlock(CHAMPAGNE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> RAISIN_BLACK_MUD_BRICK_SHINGLE_ROOF = register("raisin_black_mud_brick_shingle_roof", () -> new SlopeBlock(RAISIN_BLACK_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> SUSHI_GREEN_MUD_BRICK_SHINGLE_ROOF = register("sushi_green_mud_brick_shingle_roof", () -> new SlopeBlock(SUSHI_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> ELM_CYAN_MUD_BRICK_SHINGLE_ROOF = register("elm_cyan_mud_brick_shingle_roof", () -> new SlopeBlock(ELM_CYAN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> CADMIUM_GREEN_MUD_BRICK_SHINGLE_ROOF = register("cadmium_green_mud_brick_shingle_roof", () -> new SlopeBlock(CADMIUM_GREEN_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> LAVENDER_BLUE_MUD_BRICK_SHINGLE_ROOF = register("lavender_blue_mud_brick_shingle_roof", () -> new SlopeBlock(LAVENDER_BLUE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> BROWN_RUST_MUD_BRICK_SHINGLE_ROOF = register("brown_rust_mud_brick_shingle_roof", () -> new SlopeBlock(BROWN_RUST_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_ROOF = register("midnight_purple_mud_brick_shingle_roof", () -> new SlopeBlock(MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+	public static final DeferredBlock<Block> PEWTER_GREY_MUD_BRICK_SHINGLE_ROOF = register("pewter_grey_mud_brick_shingle_roof", () -> new SlopeBlock(PEWTER_GREY_MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(MUD_BRICK_SHINGLE_ROOF.get())));
+
 	public static final DeferredBlock<Block> THATCH_SLAB = register("thatch_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(THATCH.get())));
 	public static final DeferredBlock<Block> SCABYST_BRICK_SLAB = register("scabyst_brick_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.ofFullCopy(SCABYST_BRICKS.get())));
 	public static final DeferredBlock<Block> PITSTONE_WALL = register("pitstone_wall", () -> new SwampWallBlock(BlockBehaviour.Properties.ofFullCopy(PITSTONE.get())));
@@ -674,7 +645,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MUD_ENERGY_BARRIER = BLOCKS.register("mud_energy_barrier", () -> new Block(BlockBehaviour.Properties.of().lightLevel(value -> 12).noLootTable().strength(-1.0F, 6000000.0F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> MUD_BRICK_SPIKE_TRAP = register("mud_brick_spike_trap", () -> new SpikeTrapBlock(true, BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> MUD_TILES_SPIKE_TRAP = register("mud_tile_spike_trap", () -> new SpikeTrapBlock(false, BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> COMPACTED_MUD_SLOPE = register("compacted_mud_slope", () -> new SwampStairBlock(COMPACTED_MUD.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.PACKED_MUD)));
+	public static final DeferredBlock<Block> COMPACTED_MUD_SLOPE = register("compacted_mud_slope", () -> new SlopeBlock(COMPACTED_MUD.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_SLAB = register("compacted_mud_slab", () -> new SwampSlabBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_MIRAGE = register("compacted_mud_mirage", () -> new MirageBlock(COMPACTED_MUD.get(), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> ROTTEN_PLANKS = register("rotten_planks", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
@@ -873,7 +844,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> DAMP_WALL_TORCH = BLOCKS.register("damp_wall_torch", () -> new DampWallTorchBlock(BlockBehaviour.Properties.of().lootFrom(DAMP_TORCH).noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> WALKWAY = register("walkway", () -> new WalkwayBlock(BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> CHIP_PATH = register("chip_path", () -> new ChipPathBlock(BlockBehaviour.Properties.of().strength(0.5F).pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> THATCH_ROOF = register("thatch_roof", () -> new SwampStairBlock(THATCH.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.AZALEA)));
+	public static final DeferredBlock<Block> THATCH_ROOF = register("thatch_roof", () -> new SlopeBlock(THATCH.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.AZALEA)));
 	public static final DeferredBlock<Block> REPELLER = register("repeller", () -> new RepellerBlock(BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> WAYSTONE = register("waystone", () -> new WaystoneBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(25.0F, 10000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CAVING_ROPE_LIGHT = BLOCKS.register("caving_rope_light", () -> new CavingRopeLightBlock(BlockBehaviour.Properties.of().noLootTable().randomTicks().lightLevel(value -> 6).air()));

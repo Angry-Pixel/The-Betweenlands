@@ -23,6 +23,7 @@ import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.misc.SlopeBlock;
 import thebetweenlands.util.QuadBuilder;
 
 import java.util.EnumMap;
@@ -439,7 +440,7 @@ public class SlantModel implements IDynamicBakedModel {
 		EnumMap<Direction, Direction> facings = new EnumMap<>(Direction.class);
 		for(Direction side : Direction.Plane.HORIZONTAL) {
 			BlockState offsetState = level.getBlockState(pos.relative(side));
-			if(StairBlock.isStairs(offsetState)) {
+			if(offsetState.getBlock() instanceof SlopeBlock) {
 				facings.put(side, offsetState.getValue(StairBlock.FACING));
 				halves.put(side, offsetState.getValue(StairBlock.HALF));
 			}
