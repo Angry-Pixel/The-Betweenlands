@@ -67,6 +67,7 @@ import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.block.*;
@@ -595,6 +596,7 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+		event.register(TheBetweenlands.prefix("bush"), BushModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("slant"), SlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);
@@ -792,6 +794,14 @@ public class ClientRegistrationEvents {
 			BlockRegistry.SEEDED_HANGER.get());
 
 		event.register((state, level, pos, tintIndex) -> {
+				if (tintIndex == 0) {
+					return level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor();
+				}
+				return 0xFFFFFFFF;
+			},
+			BlockRegistry.WEEDWOOD_BUSH.get());
+
+		event.register((state, level, pos, tintIndex) -> {
 				if (tintIndex <= 0) {
 					return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.getDefaultColor();
 				}
@@ -824,7 +834,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.LIME_PRESENT, BlockRegistry.BLUE_PRESENT, BlockRegistry.CYAN_PRESENT, BlockRegistry.LIGHT_BLUE_PRESENT,
 			BlockRegistry.PURPLE_PRESENT, BlockRegistry.MAGENTA_PRESENT, BlockRegistry.PINK_PRESENT, BlockRegistry.BROWN_PRESENT,
 			BlockRegistry.SHORT_SWAMP_GRASS, BlockRegistry.POISON_IVY, BlockRegistry.TALL_SWAMP_GRASS, BlockRegistry.MOSS, BlockRegistry.DEAD_MOSS,
-			BlockRegistry.WEEDWOOD_LEAVES.get(), BlockRegistry.RUBBER_TREE_LEAVES.get(), BlockRegistry.SWAMP_GRASS);
+			BlockRegistry.WEEDWOOD_LEAVES.get(), BlockRegistry.RUBBER_TREE_LEAVES.get(), BlockRegistry.SWAMP_GRASS, BlockRegistry.WEEDWOOD_BUSH);
 
 		event.register((stack, tintIndex) -> {
 			if (stack.get(DataComponents.ENTITY_DATA) != null) {

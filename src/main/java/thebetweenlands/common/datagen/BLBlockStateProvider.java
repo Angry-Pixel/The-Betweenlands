@@ -22,6 +22,7 @@ import thebetweenlands.common.block.structure.*;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
 import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.datagen.builders.model.BushModelBuilder;
 import thebetweenlands.common.datagen.builders.model.SlantModelBuilder;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -914,7 +915,14 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.doubleCrossBlockWithItem(BlockRegistry.TALL_CATTAIL);
 		this.tintedCrossBlockWithItem(BlockRegistry.SHORT_SWAMP_GRASS);
 		this.crossBlockWithItem(BlockRegistry.DEAD_WEEDWOOD_BUSH);
-		//bushes and nests
+		this.bush(BlockRegistry.WEEDWOOD_BUSH, TheBetweenlands.prefix("block/weedwood_leaves"), TheBetweenlands.prefix("item/weedwood_stick"));
+		this.bush(BlockRegistry.PHEROMONE_INFUSED_WEEDWOOD_BUSH, TheBetweenlands.prefix("block/weedwood_bush_infested_0"), TheBetweenlands.prefix("item/weedwood_stick"));
+		this.bush(BlockRegistry.MOTH_INFESTED_WEEDWOOD_BUSH, TheBetweenlands.prefix("block/weedwood_bush_infested_1"), TheBetweenlands.prefix("item/weedwood_stick"));
+		this.bush(BlockRegistry.GRUB_INFESTED_WEEDWOOD_BUSH, TheBetweenlands.prefix("block/weedwood_bush_infested_2"), TheBetweenlands.prefix("item/weedwood_stick"));
+		this.bush(BlockRegistry.SILK_COCOONED_WEEDWOOD_BUSH, TheBetweenlands.prefix("block/weedwood_bush_infested_3"), TheBetweenlands.prefix("item/weedwood_stick"));
+		this.bush(BlockRegistry.DECAY_INFESTED_WEEDWOOD_BUSH, TheBetweenlands.prefix("block/weedwood_bush_infested_4"), TheBetweenlands.prefix("item/weedwood_stick"));
+		this.bush(BlockRegistry.BONE_NESTING_BLOCK, TheBetweenlands.prefix("block/thorns"), TheBetweenlands.prefix("item/slimy_bone"));
+		this.bush(BlockRegistry.STICK_NESTING_BLOCK, TheBetweenlands.prefix("block/thorns"), TheBetweenlands.prefix("item/weedwood_stick"));
 		this.crossBlock(BlockRegistry.CAVE_MOSS_PLANT);
 		this.crossBlockWithItem(BlockRegistry.CAVE_MOSS);
 		this.crossBlock(BlockRegistry.CRYPTWEED_PLANT);
@@ -1264,6 +1272,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 
 	public void slant(DeferredBlock<Block> slant, DeferredBlock<Block> base) {
 		this.simpleBlockWithItem(slant.get(), this.models().withExistingParent(slant.getId().getPath(), "block/block").customLoader(SlantModelBuilder::begin).end().texture("base", this.blockTexture(base.get())).texture("side", this.blockTexture(base.get())).texture("slant", this.blockTexture(base.get())));
+	}
+
+	public void bush(DeferredBlock<Block> bush, ResourceLocation leaves, ResourceLocation stick) {
+		this.simpleBlockWithItem(bush.get(), this.models().withExistingParent(bush.getId().getPath(), "block/block").customLoader(BushModelBuilder::begin).end().texture("leaves", leaves).texture("sticks", stick));
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {

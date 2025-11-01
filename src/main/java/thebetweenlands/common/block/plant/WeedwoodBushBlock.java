@@ -85,7 +85,7 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 
 	public boolean canConnectTo(BlockGetter level, BlockPos pos, Direction direction) {
 		BlockState state = level.getBlockState(pos.relative(direction));
-		return state.is(this) && !(state.getBlock() instanceof NestBlock);
+		return state.getBlock() instanceof WeedwoodBushBlock && !(state.getBlock() instanceof NestBlock);
 	}
 
 	@Override
@@ -133,6 +133,21 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 			float mag = 0.01F + level.getRandom().nextFloat() * 0.07F;
 			//BLParticles.WEEDWOOD_LEAF.spawn(level, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 		}
+	}
+
+	@Override
+	protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.empty();
+	}
+
+	@Override
+	protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+		return 1.0F;
 	}
 
 	@Override
