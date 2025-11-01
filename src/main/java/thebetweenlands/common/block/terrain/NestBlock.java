@@ -21,7 +21,7 @@ public class NestBlock extends WeedwoodBushBlock {
 		if (direction == Direction.DOWN && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP)) {
 			return true;
 		}
-		return level.getBlockState(pos).is(this);
+		return level.getBlockState(pos.relative(direction)).getBlock() instanceof NestBlock;
 	}
 
 	@Override
