@@ -737,7 +737,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.ROOTMAN_SIMULACRUM_3, "Rootman Simulacrum");
 		this.addBlock(BlockRegistry.ROPE, "Rope");
 		this.addBlock(BlockRegistry.ROTBULB, "Rotbulb");
-		this.addBlock(BlockRegistry.ROTTEN_BARK, "Rotten bark");
+		this.addBlock(BlockRegistry.ROTTEN_BARK, "Rotten Bark");
 		this.addBlock(BlockRegistry.ROTTEN_FENCE, "Rotten Fence");
 		this.addBlock(BlockRegistry.ROTTEN_FENCE_GATE, "Rotten Fence Gate");
 		this.addBlock(BlockRegistry.ROTTEN_DOOR, "Rotten Door");
