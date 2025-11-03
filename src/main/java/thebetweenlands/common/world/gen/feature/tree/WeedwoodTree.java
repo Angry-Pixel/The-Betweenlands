@@ -30,13 +30,12 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 		return this.generate(context.level(), context.origin(), context.random());
 	}
 
-	public boolean generate(LevelAccessor accessor, BlockPos pos, RandomSource random) {
-
+	public boolean generate(LevelAccessor level, BlockPos pos, RandomSource random) {
 		int radius = random.nextInt(2) + 3;
 		int height = random.nextInt(5) + 15;
 		int maxRadius = 9;
 
-		if (!accessor.isAreaLoaded(pos, maxRadius))
+		if (!level.isAreaLoaded(pos, maxRadius))
 			return false;
 
 		boolean hasPoisonIvy = random.nextInt(7) == 0;
@@ -44,7 +43,7 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 		for (int xx = -maxRadius; xx <= maxRadius; xx++)
 			for (int zz = -maxRadius; zz <= maxRadius; zz++)
 				for (int yy = 2; yy < height; yy++)
-					if (!accessor.isEmptyBlock(pos.offset(xx, yy, zz)) && !accessor.getBlockState(pos.offset(xx, yy, zz)).canBeReplaced()) {
+					if (!level.isEmptyBlock(pos.offset(xx, yy, zz)) && !level.getBlockState(pos.offset(xx, yy, zz)).canBeReplaced()) {
 						return false;
 					}
 
@@ -56,61 +55,61 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 				for (int j = radius * -1; j <= radius; ++j) {
 					double dSq = i * i + j * j;
 					if (Math.round(Math.sqrt(dSq)) < radius && yy <= 1 + height - 2)
-						accessor.setBlock(pos.offset(i, yy, j), wood, 2);
+						level.setBlock(pos.offset(i, yy, j), wood, 2);
 					if (Math.round(Math.sqrt(dSq)) == radius && yy == 0 || Math.round(Math.sqrt(dSq)) == radius && yy <= height - 1)
-						accessor.setBlock(pos.offset(i, yy, j), bark, 2);
+						level.setBlock(pos.offset(i, yy, j), bark, 2);
 				}
 
 			if (yy == height / 2 + 2) {
-				this.createBranch(accessor, random, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, false, random.nextInt(2) + 4, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, false, random.nextInt(2) + 4, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(0, yy - random.nextInt(2), radius + 1), 3, false, random.nextInt(2) + 4, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(0, yy - random.nextInt(2), -radius - 1), 4, false, random.nextInt(2) + 4, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, false, random.nextInt(2) + 4, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, false, random.nextInt(2) + 4, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(0, yy - random.nextInt(2), radius + 1), 3, false, random.nextInt(2) + 4, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(0, yy - random.nextInt(2), -radius - 1), 4, false, random.nextInt(2) + 4, hasPoisonIvy);
 
-				this.createBranch(accessor, random, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, false, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, false, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, false, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, false, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, false, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, false, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, false, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, false, random.nextInt(2) + 3, hasPoisonIvy);
 			}
 
 			if (yy == height / 2 + 4) {
-				this.createSmallBranch(accessor, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, 4);
-				this.createSmallBranch(accessor, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, 4);
-				this.createSmallBranch(accessor, pos.offset(0, yy - random.nextInt(2), radius + 1), 3, 4);
-				this.createSmallBranch(accessor, pos.offset(0, yy - random.nextInt(2), -radius - 1), 4, 4);
+				this.createSmallBranch(level, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, 4);
+				this.createSmallBranch(level, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, 4);
+				this.createSmallBranch(level, pos.offset(0, yy - random.nextInt(2), radius + 1), 3, 4);
+				this.createSmallBranch(level, pos.offset(0, yy - random.nextInt(2), -radius - 1), 4, 4);
 
-				this.createSmallBranch(accessor, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, 3);
-				this.createSmallBranch(accessor, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, 3);
-				this.createSmallBranch(accessor, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, 3);
-				this.createSmallBranch(accessor, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, 3);
+				this.createSmallBranch(level, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, 3);
+				this.createSmallBranch(level, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, 3);
+				this.createSmallBranch(level, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, 3);
+				this.createSmallBranch(level, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, 3);
 			}
 
 			if (yy == height / 2 + 7) {
-				this.createSmallBranch(accessor, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, 2);
-				this.createSmallBranch(accessor, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, 2);
-				this.createSmallBranch(accessor, pos.offset(0, yy - random.nextInt(3), radius + 1), 3, 2);
-				this.createSmallBranch(accessor, pos.offset(0, yy - random.nextInt(3), -radius - 1), 4, 2);
+				this.createSmallBranch(level, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, 2);
+				this.createSmallBranch(level, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, 2);
+				this.createSmallBranch(level, pos.offset(0, yy - random.nextInt(3), radius + 1), 3, 2);
+				this.createSmallBranch(level, pos.offset(0, yy - random.nextInt(3), -radius - 1), 4, 2);
 
-				this.createSmallBranch(accessor, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, 2);
-				this.createSmallBranch(accessor, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, 2);
-				this.createSmallBranch(accessor, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, 2);
-				this.createSmallBranch(accessor, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, 2);
+				this.createSmallBranch(level, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, 2);
+				this.createSmallBranch(level, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, 2);
+				this.createSmallBranch(level, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, 2);
+				this.createSmallBranch(level, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, 2);
 			}
 
 			if (yy == 0) {
-				this.createBranch(accessor, random, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, true, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, true, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(0, yy - random.nextInt(2), radius + 1), 3, true, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(0, yy - random.nextInt(2), -radius - 1), 4, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(radius + 1, yy - random.nextInt(2), 0), 1, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(-radius - 1, yy - random.nextInt(2), 0), 2, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(0, yy - random.nextInt(2), radius + 1), 3, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(0, yy - random.nextInt(2), -radius - 1), 4, true, random.nextInt(2) + 3, hasPoisonIvy);
 
-				this.createBranch(accessor, random, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, true, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, true, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, true, random.nextInt(2) + 3, hasPoisonIvy);
-				this.createBranch(accessor, random, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(radius + 1, yy - random.nextInt(2), radius + 1), 5, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(-radius - 1, yy - random.nextInt(2), -radius - 1), 6, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(-radius - 1, yy - random.nextInt(2), radius + 1), 7, true, random.nextInt(2) + 3, hasPoisonIvy);
+				this.createBranch(level, random, pos.offset(radius + 1, yy - random.nextInt(2), -radius - 1), 8, true, random.nextInt(2) + 3, hasPoisonIvy);
 			}
 		}
 
-		this.createMainCanopy(accessor, random, pos.offset(0, height / 2 + 4, 0), maxRadius);
+		this.createMainCanopy(level, random, pos.offset(0, height / 2 + 4, 0), maxRadius);
 
 		return true;
 	}

@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -117,6 +118,7 @@ public class ConfiguredFeatureRegistry {
 
 	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
 		context.register(WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_TREE.get(), FeatureConfiguration.NONE));
+		context.register(ROTTEN_WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_WEEDWOOD_TREE.get(), NoneFeatureConfiguration.NONE));
 		context.register(SAP_TREE, new ConfiguredFeature<>(FeatureRegistry.SAP_TREE.get(), FeatureConfiguration.NONE));
 		context.register(RUBBER_TREE, new ConfiguredFeature<>(FeatureRegistry.RUBBER_TREE.get(), FeatureConfiguration.NONE));
 		context.register(NIBBLETWIG_TREE, new ConfiguredFeature<>(FeatureRegistry.NIBBLETWIG_TREE.get(), FeatureConfiguration.NONE));

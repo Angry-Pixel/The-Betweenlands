@@ -151,7 +151,10 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ROTTEN_WEEDWOOD_TREE)
+				.build()
+			)
 			.build());
 
 		context.register(ERODED_MARSH, new Biome.BiomeBuilder()

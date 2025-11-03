@@ -9,7 +9,20 @@
     "water_color": 3813131,
     "water_fog_color": 1589792
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "thebetweenlands:rotten_weedwood_tree"
+    ]
+  ],
   "has_precipitation": true,
   "spawn_costs": {},
   "spawners": {

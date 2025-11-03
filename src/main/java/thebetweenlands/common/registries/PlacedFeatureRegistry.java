@@ -130,6 +130,7 @@ public class PlacedFeatureRegistry {
 		context.register(WEEDWOOD_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(50)));
 		context.register(WEEDWOOD_TREE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(25)));
 		context.register(WEEDWOOD_TREE_SUPER_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(1)));
+		context.register(ROTTEN_WEEDWOOD_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ROTTEN_WEEDWOOD_TREE), tree(4)));
 
 		context.register(SAP_TREE_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), treeHydrophobic(15)));
 		context.register(SAP_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SAP_TREE), treeHydrophobic(10)));

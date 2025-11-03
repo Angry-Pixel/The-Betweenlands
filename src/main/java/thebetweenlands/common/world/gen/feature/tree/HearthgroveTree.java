@@ -98,7 +98,7 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 					int steps = 30;
 					for(int j = 0; j < steps; j++) {
 						BlockPos branchPos = BlockPos.containing(spline.interpolate(1.0F / (steps-1) * j));
-						if(!branchPos.equals(setBranchPos) && level.getBlockState(branchPos).isAir()) {
+						if(!branchPos.equals(setBranchPos) && level.isEmptyBlock(branchPos)) {
 							this.setBlock(level, branchPos, log);
 
 							if(!support && branchPos.distToCenterSqr(x, branchPos.getY(), z) >= 2.5D) {
@@ -158,13 +158,13 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 						}
 					}
 					if(!nearSupport) return false;
-					return level.getBlockState(p).isAir() && (k > 1 || (canopySize - k) < 4 || Math.sqrt((p.getX()-x)*(p.getX()-x)*centerSquashX+(p.getZ()-z)*(p.getZ()-z)*centerSquashZ) >= canopySize - k - 3 - rand.nextFloat() * 0.8F);
+					return level.isEmptyBlock(p) && (k > 1 || (canopySize - k) < 4 || Math.sqrt((p.getX()-x)*(p.getX()-x)*centerSquashX+(p.getZ()-z)*(p.getZ()-z)*centerSquashZ) >= canopySize - k - 3 - rand.nextFloat() * 0.8F);
 				}, p -> {
 					if(k == 0 && rand.nextInt(6) == 0) {
 						int hangerLength = rand.nextInt(5) + 1;
 						for(int yo = 0; yo < hangerLength; yo++) {
 							BlockPos hangerPos = p.below(1 + yo);
-							if(level.getBlockState(hangerPos).isAir()) {
+							if(level.isEmptyBlock(hangerPos)) {
 								this.setBlock(level, hangerPos, hangers);
 							} else {
 								break;
@@ -178,8 +178,8 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 				Direction branchDir = Direction.getNearest(endpoint.getX() - x, 0, endpoint.getZ() - z);
 				BlockPos branch1 = endpoint.offset(branchDir.getNormal()).offset(branchDir.getClockWise().getNormal());
 				BlockPos branch2 = endpoint.offset(branchDir.getNormal()).offset(branchDir.getCounterClockWise().getNormal());
-				if(level.getBlockState(branch1).isAir()) this.setBlock(level, branch1, log);
-				if(level.getBlockState(branch2).isAir()) this.setBlock(level, branch2, log);
+				if(level.isEmptyBlock(branch1)) this.setBlock(level, branch1, log);
+				if(level.isEmptyBlock(branch2)) this.setBlock(level, branch2, log);
 			}
 
 			boolean[] generatedRoots = new boolean[5*5];

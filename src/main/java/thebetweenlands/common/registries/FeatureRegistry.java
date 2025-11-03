@@ -17,6 +17,7 @@ public class FeatureRegistry {
 
 	//trees
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_TREE = FEATURES.register("weedwood_tree", () -> new WeedwoodTree(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> ROTTEN_WEEDWOOD_TREE = FEATURES.register("rotten_weedwood_tree", () -> new RottenWeedwoodTree(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SAP_TREE = FEATURES.register("sap_tree", () -> new SapTree(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> RUBBER_TREE = FEATURES.register("rubber_tree", () -> new RubberTree(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> NIBBLETWIG_TREE = FEATURES.register("nibbletwig_tree", () -> new NibbletwigTree(NoneFeatureConfiguration.CODEC));
