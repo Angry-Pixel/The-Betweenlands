@@ -20,7 +20,11 @@
     [],
     [
       "thebetweenlands:weedwood_tree_rare",
-      "thebetweenlands:sap_tree_common"
+      "thebetweenlands:sap_tree_common",
+      "thebetweenlands:short_swamp_grass_patch_rare",
+      "thebetweenlands:nettle_patch_rare",
+      "thebetweenlands:volarpad",
+      "thebetweenlands:tall_swamp_grass_common"
     ]
   ],
   "has_precipitation": true,

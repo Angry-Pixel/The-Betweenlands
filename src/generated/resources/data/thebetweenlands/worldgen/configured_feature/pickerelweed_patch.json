@@ -1,11 +1,30 @@
 {
-  "type": "thebetweenlands:plant_cluster",
+  "type": "minecraft:random_patch",
   "config": {
-    "attempts": 128,
-    "offset": 8,
-    "state": {
-      "Name": "thebetweenlands:pickerelweed"
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "thebetweenlands:pickerelweed"
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
     },
-    "underwater": false
+    "tries": 128,
+    "xz_spread": 8,
+    "y_spread": 3
   }
 }

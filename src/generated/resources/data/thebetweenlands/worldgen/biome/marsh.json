@@ -20,7 +20,17 @@
     [],
     [],
     [
-      "thebetweenlands:weedwood_tree_super_rare"
+      "thebetweenlands:weedwood_tree_super_rare",
+      "thebetweenlands:short_swamp_grass_patch_more_rare",
+      "thebetweenlands:nettle_patch_uncommon",
+      "thebetweenlands:arrow_arum_patch",
+      "thebetweenlands:pickerelweed_patch",
+      "thebetweenlands:marsh_hibiscus_patch",
+      "thebetweenlands:marsh_mallow_patch",
+      "thebetweenlands:button_bush_patch",
+      "thebetweenlands:soft_rush_patch",
+      "thebetweenlands:broomsedge",
+      "thebetweenlands:bottle_brush_grass_patch"
     ]
   ],
   "has_precipitation": true,

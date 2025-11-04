@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "thebetweenlands:broomsedge",
+        "Properties": {
+          "facing": "north",
+          "half": "lower"
+        }
+      }
+    }
+  }
+}

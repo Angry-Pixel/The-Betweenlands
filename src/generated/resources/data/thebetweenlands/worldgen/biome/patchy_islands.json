@@ -22,7 +22,10 @@
     [
       "thebetweenlands:weedwood_tree_uncommon",
       "thebetweenlands:sap_tree_uncommon",
-      "thebetweenlands:hearthgrove_tree"
+      "thebetweenlands:hearthgrove_tree",
+      "thebetweenlands:short_swamp_grass_patch_uncommon",
+      "thebetweenlands:tall_cattail_common",
+      "thebetweenlands:tall_swamp_grass_uncommon"
     ]
   ],
   "has_precipitation": true,

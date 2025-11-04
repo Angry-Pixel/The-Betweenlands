@@ -72,7 +72,11 @@ public class PlacedFeatureRegistry {
 	public static final ResourceKey<PlacedFeature> TAR_POOL = makeKey("tar_pool");
 
 	//plants
-	public static final ResourceKey<PlacedFeature> SWAMP_TALLGRASS_PATCH = makeKey("swamp_tallgrass_patch");
+	public static final ResourceKey<PlacedFeature> SHORT_SWAMP_GRASS_PATCH_COMMON = makeKey("short_swamp_grass_patch_common");
+	public static final ResourceKey<PlacedFeature> SHORT_SWAMP_GRASS_PATCH_UNCOMMON = makeKey("short_swamp_grass_patch_uncommon");
+	public static final ResourceKey<PlacedFeature> SHORT_SWAMP_GRASS_PATCH_RARE = makeKey("short_swamp_grass_patch_rare");
+	public static final ResourceKey<PlacedFeature> SHORT_SWAMP_GRASS_PATCH_MORE_RARE = makeKey("short_swamp_grass_patch_more_rare");
+	public static final ResourceKey<PlacedFeature> SHORT_SWAMP_GRASS_PATCH_SUPER_RARE = makeKey("short_swamp_grass_patch_super_rare");
 	public static final ResourceKey<PlacedFeature> BARNACLE_PATCH = makeKey("barnacle_patch");
 	public static final ResourceKey<PlacedFeature> BLADDERWORT_PATCH = makeKey("bladderwort_patch");
 	public static final ResourceKey<PlacedFeature> MOSS_PATCH = makeKey("moss_patch");
@@ -80,19 +84,32 @@ public class PlacedFeatureRegistry {
 	public static final ResourceKey<PlacedFeature> PEBBLE_PATCH_LAND = makeKey("pebble_patch_land");
 	public static final ResourceKey<PlacedFeature> PEBBLE_PATCH_WATER = makeKey("pebble_patch_water");
 	public static final ResourceKey<PlacedFeature> BULB_CAPPED_MUSHROOM_PATCH = makeKey("bulb_capped_mushroom_patch");
-	public static final ResourceKey<PlacedFeature> NETTLE_PATCH = makeKey("nettle_patch");
-	public static final ResourceKey<PlacedFeature> ARROW_ATUM_PATCH = makeKey("arrow_atum_patch");
+	public static final ResourceKey<PlacedFeature> NETTLE_PATCH_COMMON = makeKey("nettle_patch_common");
+	public static final ResourceKey<PlacedFeature> NETTLE_PATCH_UNCOMMON = makeKey("nettle_patch_uncommon");
+	public static final ResourceKey<PlacedFeature> NETTLE_PATCH_RARE = makeKey("nettle_patch_rare");
+	public static final ResourceKey<PlacedFeature> ARROW_ARUM_PATCH = makeKey("arrow_arum_patch");
 	public static final ResourceKey<PlacedFeature> PICKERELWEED_PATCH = makeKey("pickerelweed_patch");
 	public static final ResourceKey<PlacedFeature> MARSH_HIBISCUS_PATCH = makeKey("marsh_hibiscus_patch");
 	public static final ResourceKey<PlacedFeature> MARSH_MALLOW_PATCH = makeKey("marsh_mallow_patch");
 	public static final ResourceKey<PlacedFeature> BUTTON_BUSH_PATCH = makeKey("button_bush_patch");
 	public static final ResourceKey<PlacedFeature> SOFT_RUSH_PATCH = makeKey("soft_rush_patch");
+	public static final ResourceKey<PlacedFeature> BROOMSEDGE = makeKey("broomsedge");
 	public static final ResourceKey<PlacedFeature> BOTTLE_BRUSH_GRASS_PATCH = makeKey("bottle_brush_grass_patch");
-	public static final ResourceKey<PlacedFeature> SWAMP_PLANT_PATCH = makeKey("swamp_plant_patch");
-	public static final ResourceKey<PlacedFeature> FLAT_HEAD_MUSHROOM_PATCH = makeKey("flat_head_mushroom_patch");
-	public static final ResourceKey<PlacedFeature> BLACK_HAT_MUSHROOM_PATCH = makeKey("black_hat_mushroom_patch");
-	public static final ResourceKey<PlacedFeature> CATTAIL_PATCH = makeKey("cattail_patch");
-	public static final ResourceKey<PlacedFeature> VENUS_FLY_TRAP_PATCH = makeKey("venus_fly_trap_patch");
+	public static final ResourceKey<PlacedFeature> SWAMP_PLANT_PATCH_COMMON = makeKey("swamp_plant_patch_common");
+	public static final ResourceKey<PlacedFeature> SWAMP_PLANT_PATCH_UNCOMMON = makeKey("swamp_plant_patch_uncommon");
+	public static final ResourceKey<PlacedFeature> FLAT_HEAD_MUSHROOM_PATCH_COMMON = makeKey("flat_head_mushroom_patch_common");
+	public static final ResourceKey<PlacedFeature> FLAT_HEAD_MUSHROOM_PATCH_UNCOMMON = makeKey("flat_head_mushroom_patch_uncommon");
+	public static final ResourceKey<PlacedFeature> BLACK_HAT_MUSHROOM_PATCH_COMMON = makeKey("black_hat_mushroom_patch_common");
+	public static final ResourceKey<PlacedFeature> BLACK_HAT_MUSHROOM_PATCH_UNCOMMON = makeKey("black_hat_mushroom_patch_uncommon");
+	public static final ResourceKey<PlacedFeature> VOLARPAD = makeKey("volarpad");
+	public static final ResourceKey<PlacedFeature> TALL_CATTAIL_COMMON = makeKey("tall_cattail_common");
+	public static final ResourceKey<PlacedFeature> TALL_CATTAIL_UNCOMMON = makeKey("tall_cattail_uncommon");
+	public static final ResourceKey<PlacedFeature> TALL_SWAMP_GRASS = makeKey("tall_swamp_grass");
+	public static final ResourceKey<PlacedFeature> CATTAIL_PATCH_COMMON = makeKey("tall_swamp_grass_common");
+	public static final ResourceKey<PlacedFeature> CATTAIL_PATCH_UNCOMMON = makeKey("tall_swamp_grass_uncommon");
+	public static final ResourceKey<PlacedFeature> VENUS_FLY_TRAP_PATCH_COMMON = makeKey("venus_fly_trap_patch_common");
+	public static final ResourceKey<PlacedFeature> VENUS_FLY_TRAP_PATCH_UNCOMMON = makeKey("venus_fly_trap_patch_uncommon");
+	public static final ResourceKey<PlacedFeature> PITCHER_PLANT = makeKey("pitcher_plant");
 	public static final ResourceKey<PlacedFeature> MIRE_CORAL_PATCH = makeKey("mire_coral_patch");
 	public static final ResourceKey<PlacedFeature> DEEP_WATER_CORAL_PATCH = makeKey("deep_water_coral_patch");
 	public static final ResourceKey<PlacedFeature> COPPER_IRIS_PATCH = makeKey("copper_iris_patch");
@@ -141,6 +158,56 @@ public class PlacedFeatureRegistry {
 		context.register(NIBBLETWIG_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NIBBLETWIG_TREE), treeHydrophobic(100)));
 
 		context.register(HEARTHGROVE_TREE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.HEARTHGROVE_TREE), tree(5)));
+
+		context.register(SHORT_SWAMP_GRASS_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SHORT_SWAMP_GRASS_PATCH), patch(150)));
+		context.register(SHORT_SWAMP_GRASS_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SHORT_SWAMP_GRASS_PATCH), patch(90)));
+		context.register(SHORT_SWAMP_GRASS_PATCH_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SHORT_SWAMP_GRASS_PATCH), patch(40)));
+		context.register(SHORT_SWAMP_GRASS_PATCH_MORE_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SHORT_SWAMP_GRASS_PATCH), patch(30)));
+		context.register(SHORT_SWAMP_GRASS_PATCH_SUPER_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SHORT_SWAMP_GRASS_PATCH), patch(15)));
+
+		context.register(NETTLE_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NETTLE_PATCH), patch(6)));
+		context.register(NETTLE_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NETTLE_PATCH), patch(2)));
+		context.register(NETTLE_PATCH_RARE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.NETTLE_PATCH), patch(1)));
+
+		context.register(ARROW_ARUM_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ARROW_ARUM_PATCH), patch(2)));
+
+		context.register(PICKERELWEED_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.PICKERELWEED_PATCH), patch(2)));
+
+		context.register(MARSH_HIBISCUS_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.MARSH_HIBISCUS_PATCH), patch(2)));
+
+		context.register(MARSH_MALLOW_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.MARSH_MALLOW_PATCH), patch(2)));
+
+		context.register(BUTTON_BUSH_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BUTTON_BUSH_PATCH), patch(2)));
+
+		context.register(SOFT_RUSH_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SOFT_RUSH_PATCH), patch(90)));
+
+		context.register(BROOMSEDGE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BROOMSEDGE), patch(40)));
+
+		context.register(BOTTLE_BRUSH_GRASS_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BOTTLE_BRUSH_GRASS_PATCH), patch(5)));
+
+		context.register(SWAMP_PLANT_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SWAMP_PLANT_PATCH), patch(26)));
+		context.register(SWAMP_PLANT_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SWAMP_PLANT_PATCH), patch(10)));
+
+		context.register(VENUS_FLY_TRAP_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.VENUS_FLY_TRAP_PATCH), patch(26)));
+		context.register(VENUS_FLY_TRAP_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.VENUS_FLY_TRAP_PATCH), patch(10)));
+
+		context.register(PITCHER_PLANT, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.PITCHER_PLANT), patch(4)));
+
+		context.register(FLAT_HEAD_MUSHROOM_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.FLAT_HEAD_MUSHROOM_PATCH), patch(12)));
+		context.register(FLAT_HEAD_MUSHROOM_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.FLAT_HEAD_MUSHROOM_PATCH), patch(5)));
+
+		context.register(BLACK_HAT_MUSHROOM_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BLACK_HAT_MUSHROOM_PATCH), patch(12)));
+		context.register(BLACK_HAT_MUSHROOM_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BLACK_HAT_MUSHROOM_PATCH), patch(5)));
+
+		context.register(VOLARPAD, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.VOLARPAD), patch(18)));
+
+		context.register(TALL_CATTAIL_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.TALL_CATTAIL), patch(50)));
+		context.register(TALL_CATTAIL_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.TALL_CATTAIL), patch(20)));
+
+		context.register(TALL_SWAMP_GRASS, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.TALL_SWAMP_GRASS), patch(120)));
+
+		context.register(CATTAIL_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(10)));
+		context.register(CATTAIL_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(5)));
 	}
 
 	private static List<PlacementModifier> tree(int count) {
@@ -149,5 +216,9 @@ public class PlacedFeatureRegistry {
 
 	private static List<PlacementModifier> treeHydrophobic(int count) {
 		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
+	}
+
+	private static List<PlacementModifier> patch(int count) {
+		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
 	}
 }

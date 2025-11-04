@@ -8,7 +8,26 @@
     "water_color": 1589792,
     "water_fog_color": 1589792
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "thebetweenlands:short_swamp_grass_patch_super_rare",
+      "thebetweenlands:swamp_plant_patch_uncommon",
+      "thebetweenlands:venus_fly_trap_patch_uncommon",
+      "thebetweenlands:pitcher_plant",
+      "thebetweenlands:flat_head_mushroom_patch_uncommon",
+      "thebetweenlands:black_hat_mushroom_patch_uncommon",
+      "thebetweenlands:tall_swamp_grass_uncommon"
+    ]
+  ],
   "has_precipitation": true,
   "spawn_costs": {},
   "spawners": {

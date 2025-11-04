@@ -1,14 +1,33 @@
 {
-  "type": "thebetweenlands:plant_cluster",
+  "type": "minecraft:random_patch",
   "config": {
-    "attempts": 10,
-    "offset": 4,
-    "state": {
-      "Name": "thebetweenlands:deep_water_coral",
-      "Properties": {
-        "swamp_water": "true"
-      }
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "thebetweenlands:deep_water_coral",
+              "Properties": {
+                "swamp_water": "true"
+              }
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
     },
-    "underwater": true
+    "tries": 10,
+    "xz_spread": 4,
+    "y_spread": 3
   }
 }

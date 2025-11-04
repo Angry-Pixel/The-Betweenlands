@@ -23,7 +23,18 @@
       "thebetweenlands:weedwood_tree_common",
       "thebetweenlands:sap_tree_rare",
       "thebetweenlands:rubber_tree",
-      "thebetweenlands:nibbletwig_tree"
+      "thebetweenlands:nibbletwig_tree",
+      "thebetweenlands:short_swamp_grass_patch_common",
+      "thebetweenlands:nettle_patch_common",
+      "thebetweenlands:swamp_plant_patch_common",
+      "thebetweenlands:venus_fly_trap_patch_common",
+      "thebetweenlands:pitcher_plant",
+      "thebetweenlands:flat_head_mushroom_patch_common",
+      "thebetweenlands:black_hat_mushroom_patch_common",
+      "thebetweenlands:volarpad",
+      "thebetweenlands:tall_cattail_uncommon",
+      "thebetweenlands:tall_swamp_grass",
+      "thebetweenlands:tall_swamp_grass_uncommon"
     ]
   ],
   "has_precipitation": true,

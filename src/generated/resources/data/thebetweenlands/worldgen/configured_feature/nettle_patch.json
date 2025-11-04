@@ -1,11 +1,30 @@
 {
-  "type": "thebetweenlands:plant_cluster",
+  "type": "minecraft:random_patch",
   "config": {
-    "attempts": 128,
-    "offset": 3,
-    "state": {
-      "Name": "thebetweenlands:nettle"
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "thebetweenlands:nettle"
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
     },
-    "underwater": false
+    "tries": 128,
+    "xz_spread": 3,
+    "y_spread": 3
   }
 }

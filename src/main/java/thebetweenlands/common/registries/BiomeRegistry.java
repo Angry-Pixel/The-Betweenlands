@@ -57,6 +57,10 @@ public class BiomeRegistry {
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.HEARTHGROVE_TREE)
+
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.TALL_CATTAIL_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_UNCOMMON)
 				.build()
 			)
 			.build());
@@ -80,6 +84,18 @@ public class BiomeRegistry {
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NIBBLETWIG_TREE)
+
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SWAMP_PLANT_PATCH_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.VENUS_FLY_TRAP_PATCH_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.PITCHER_PLANT)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.FLAT_HEAD_MUSHROOM_PATCH_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BLACK_HAT_MUSHROOM_PATCH_COMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.VOLARPAD)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.TALL_CATTAIL_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.TALL_SWAMP_GRASS)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_UNCOMMON)
 				.build()
 			)
 			.build());
@@ -116,6 +132,11 @@ public class BiomeRegistry {
 			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
+
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.VOLARPAD)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_COMMON)
 				.build()
 			)
 			.build());
@@ -135,6 +156,11 @@ public class BiomeRegistry {
 			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
+
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.VOLARPAD)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_COMMON)
 				.build()
 			)
 			.build());
@@ -171,6 +197,17 @@ public class BiomeRegistry {
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
+
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ARROW_ARUM_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.PICKERELWEED_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_HIBISCUS_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_MALLOW_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BUTTON_BUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SOFT_RUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BROOMSEDGE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BOTTLE_BRUSH_GRASS_PATCH)
 				.build()
 			)
 			.build());
@@ -189,6 +226,17 @@ public class BiomeRegistry {
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
+
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ARROW_ARUM_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.PICKERELWEED_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_HIBISCUS_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_MALLOW_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BUTTON_BUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SOFT_RUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BROOMSEDGE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BOTTLE_BRUSH_GRASS_PATCH)
 				.build()
 			)
 			.build());
@@ -204,7 +252,16 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_SUPER_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SWAMP_PLANT_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.VENUS_FLY_TRAP_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.PITCHER_PLANT)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.FLAT_HEAD_MUSHROOM_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BLACK_HAT_MUSHROOM_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_UNCOMMON)
+				.build()
+			)
 			.build());
 
 		context.register(SLUDGE_PLAINS_CLEARING, new Biome.BiomeBuilder()

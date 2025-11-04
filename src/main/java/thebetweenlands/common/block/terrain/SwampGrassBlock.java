@@ -119,9 +119,9 @@ public class SwampGrassBlock extends Block implements BonemealableBlock {
 		for (int i = 0; i < 4; i++) {
 			//TODO generate 1 piece of swamp grass
 			//TODO generate 1 cattail
-			this.tryPlaceFeature(level, pos, random, PlacedFeatureRegistry.SWAMP_TALLGRASS_PATCH);
+			this.tryPlaceFeature(level, pos, random, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_COMMON);
 			if (random.nextInt(5) == 0) {
-				this.tryPlaceFeature(level, pos, random, PlacedFeatureRegistry.CATTAIL_PATCH);
+				this.tryPlaceFeature(level, pos, random, PlacedFeatureRegistry.TALL_CATTAIL_COMMON);
 			}
 			if (random.nextInt(3) == 0) {
 				this.tryPlaceFeature(level, pos, random, PlacedFeatureRegistry.SHOOTS_PATCH);

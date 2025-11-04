@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "thebetweenlands:tall_cattail",
+        "Properties": {
+          "facing": "north",
+          "half": "lower"
+        }
+      }
+    }
+  }
+}
