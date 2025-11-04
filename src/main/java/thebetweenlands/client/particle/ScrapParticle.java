@@ -6,12 +6,10 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class ScrapParticle extends TextureSheetParticle {
+public class ScrapParticle extends RandomAnimatedParticle {
 
-	public static final int LEAF_COLOR = 0XFF3F652D;
-
-	public ScrapParticle(ClientLevel level, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale) {
-		super(level, x, y, z);
+	public ScrapParticle(ClientLevel level, double x, double y, double z, double mx, double my, double mz, SpriteSet spriteSet, int maxAge, float scale) {
+		super(level, x, y, z, spriteSet, 6);
 		this.x = this.xo = x;
 		this.y = this.yo = y;
 		this.z = this.zo = z;
@@ -51,6 +49,7 @@ public class ScrapParticle extends TextureSheetParticle {
 				this.lifetime = 120;
 			}
 		}
+		this.tickParticleAnimation();
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public class ScrapParticle extends TextureSheetParticle {
 
 		@Override
 		public ScrapParticle createParticle(SimpleParticleType options, ImmutableParticleArgs args) {
-			var particle = new ScrapParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale);
+			var particle = new ScrapParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, this.spriteSet, args.data.getInt(0), args.scale);
 			particle.pickSprite(this.spriteSet);
 			return particle;
 		}

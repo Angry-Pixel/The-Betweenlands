@@ -8,8 +8,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 
 public class FishVortexParticle extends EntitySwirlParticle {
-	public FishVortexParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress, Entity target, SpriteSet spriteSet) {
-		super(options, level, x, y, z, maxAge, scale, progress, target);
+
+	public FishVortexParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, SpriteSet spriteSet, int maxAge, float scale, float progress, Entity target) {
+		super(options, level, x, y, z, spriteSet, 2, maxAge, scale, progress, target);
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class FishVortexParticle extends EntitySwirlParticle {
 
 		@Override
 		public FishVortexParticle createParticle(EntitySwirlParticleOptions options, ImmutableParticleArgs args) {
-			return new FishVortexParticle(options, args.level, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2), this.spriteSet);
+			return new FishVortexParticle(options, args.level, args.x, args.y, args.z, this.spriteSet, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
 		}
 
 		@Override

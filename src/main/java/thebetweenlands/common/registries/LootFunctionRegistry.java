@@ -18,4 +18,5 @@ public class LootFunctionRegistry {
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> HAS_ITEM = CONDITIONS.register("has_item", () -> new LootItemConditionType(PlayerHasItemCondition.CODEC));
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> EVENT_ACTIVE = CONDITIONS.register("event_active", () -> new LootItemConditionType(EventActiveCondition.CODEC));
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> WORM_SQUISHED = CONDITIONS.register("worm_squished", () -> new LootItemConditionType(WormSquishedCondition.CODEC));
+	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> PYRAD_CHARGING = CONDITIONS.register("pyrad_charging", () -> new LootItemConditionType(PyradChargingCondition.CODEC));
 }

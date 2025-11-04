@@ -198,7 +198,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(CircleGemType.GREEN, new Item.Properties()));
 	public static final DeferredItem<Item> LIFE_CRYSTAL = ITEMS.register("life_crystal", () -> new LifeCrystalItem(true, new Item.Properties().setNoRepair().durability(128)));
 	public static final DeferredItem<Item> LIFE_CRYSTAL_FRAGMENT = ITEMS.register("life_crystal_fragment", () -> new LifeCrystalItem(false, new Item.Properties().setNoRepair().durability(64)));
-	public static final DeferredItem<Item> PYRAD_FLAME = ITEMS.register("pyrad_flame", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> PYRAD_FLAME = ITEMS.register("pyrad_flame", () -> new PyradFlameItem(new Item.Properties()));
 	public static final DeferredItem<MobItem<Firefly>> FIREFLY = ITEMS.register("firefly", () -> new MobItem<>(new Item.Properties().stacksTo(1), 4.0D, EntityRegistry.FIREFLY.get(), null));
 	public static final DeferredItem<MobItem<MireSnail>> MIRE_SNAIL = ITEMS.register("mire_snail", () -> new MobItem<>(new Item.Properties().stacksTo(1), 6.0D, EntityRegistry.MIRE_SNAIL.get(), null));
 	public static final DeferredItem<MobItem<Gecko>> GECKO = ITEMS.register("gecko", () -> new MobItem<>(new Item.Properties().stacksTo(1), 12.0D, EntityRegistry.GECKO.get(), null));

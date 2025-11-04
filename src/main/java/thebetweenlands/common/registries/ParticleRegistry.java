@@ -43,6 +43,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_BUBBLE = PARTICLES.register("water_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SONIC_SCREAM = PARTICLES.register("sonic_scream", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SCRAP = PARTICLES.register("scrap", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LEAF = PARTICLES.register("leaf", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SLEEPING = PARTICLES.register("sleeping", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> EMBER_SWIRL = register("ember_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DRUID_CASTING = PARTICLES.register("druid_casting", () -> new SimpleParticleType(false));
@@ -55,6 +56,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CORRUPTED = PARTICLES.register("corrupted", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EMBER = PARTICLES.register("ember", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SMOOTH_SMOKE = PARTICLES.register("smooth_smoke", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> LEAF_SWIRL = register("leaf_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {

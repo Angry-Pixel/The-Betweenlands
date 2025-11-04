@@ -85,7 +85,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Olm>> OLM = registerWithEgg("olm", EntityType.Builder.of(Olm::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.95F, 0.25F).eyeHeight(0.125F), 0xE8D8B8, 0xE79B7B, Olm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<PeatMummy>> PEAT_MUMMY = registerWithEgg("peat_mummy", EntityType.Builder.of(PeatMummy::new, MobCategory.MONSTER).sized(1.0F, 1.2F).passengerAttachments(0.35F).clientTrackingRange(10).canSpawnFarFromPlayer(), 0x524D3A, 0x69463F, PeatMummy::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolence>> PRIMORDIAL_MALEVOLENCE = registerWithEgg("primordial_malevolence", EntityType.Builder.of(PrimordialMalevolence::new, MobCategory.MONSTER).sized(1.9F, 1.9F).canSpawnFarFromPlayer(), 0x000000, 0x00FFFA, PrimordialMalevolence::registerAttributes);
-	//pyrad
+	public static final DeferredHolder<EntityType<?>, EntityType<Pyrad>> PYRAD = registerWithEgg("pyrad", EntityType.Builder.of(Pyrad::new, MobCategory.MONSTER).sized(0.7F, 2.0F).fireImmune(), 0x5E4726, 0x2D4231, Pyrad::registerAttributes);
 	//rock snot
 	public static final DeferredHolder<EntityType<?>, EntityType<RootSprite>> ROOT_SPRITE = registerWithEgg("root_sprite", EntityType.Builder.of(RootSprite::new, MobCategory.CREATURE).sized(0.3F, 0.55F), 0x5D533D, 0x8F952B, RootSprite::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<GasCloud>> SHALLOWBREATH = registerWithEgg("shallowbreath", EntityType.Builder.of(GasCloud::new, MobCategory.MONSTER).sized(1.75F,1.75F), 0x61988D, 0x4C7F76, GasCloud::registerAttributes);
@@ -150,7 +150,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceSpawner>> PRIMORDIAL_MALEVOLENCE_SPAWNER = register("primordial_malevolence_spawner", EntityType.Builder.<PrimordialMalevolenceSpawner>of(PrimordialMalevolenceSpawner::new, MobCategory.MISC).sized(0.4F, 0.4F));
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTeleporter>> PRIMORDIAL_MALEVOLENCE_TELEPORTER = register("primordial_malevolence_teleporter", EntityType.Builder.of(PrimordialMalevolenceTeleporter::new, MobCategory.MISC).sized(1.0F, 1.0F));
 	public static final DeferredHolder<EntityType<?>, EntityType<PrimordialMalevolenceTurret>> PRIMORDIAL_MALEVOLENCE_TURRET = registerWithAttributes("primordial_malevolence_turret", EntityType.Builder.<PrimordialMalevolenceTurret>of(PrimordialMalevolenceTurret::new, MobCategory.MISC).sized(0.4F, 0.4F), Mob::createMobAttributes);
-	//pyrad flame
+	public static final DeferredHolder<EntityType<?>, EntityType<PyradFlame>> PYRAD_FLAME = register("pyrad_flame", EntityType.Builder.<PyradFlame>of(PyradFlame::new, MobCategory.MISC).sized(0.3125F, 0.3125F));
 	//resurrection
 	public static final DeferredHolder<EntityType<?>, EntityType<RobustFishingSpear>> ROBUST_FISHING_SPEAR = register("robust_fishing_spear", EntityType.Builder.of(RobustFishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
 	//root grabber

@@ -16,7 +16,7 @@ import net.minecraft.util.RandomSource;
 import org.joml.Quaternionf;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.FireflyModel;
-import thebetweenlands.client.renderer.entity.layers.FireflyGlowLayer;
+import thebetweenlands.client.renderer.entity.layers.AlphaGlowLayer;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
@@ -26,12 +26,12 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 
 	public static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/firefly.png");
 	public static final ResourceLocation GLOW = TheBetweenlands.prefix("textures/entity/firefly_glow.png");
-	private final FireflyGlowLayer<Firefly, FireflyModel> layer;
+	private final AlphaGlowLayer<Firefly, FireflyModel> layer;
 	protected static final RandomSource RANDOM = RandomSource.create();
 
 	public FireflyRenderer(EntityRendererProvider.Context context) {
 		super(context, new FireflyModel(context.bakeLayer(BLModelLayers.FIREFLY)), 0.0F);
-		this.addLayer(this.layer = new FireflyGlowLayer<>(this, TheBetweenlands.prefix("textures/entity/firefly_glow_overlay.png")));
+		this.addLayer(this.layer = new AlphaGlowLayer<>(this, TheBetweenlands.prefix("textures/entity/firefly_glow_overlay.png")));
 	}
 
 	@Override

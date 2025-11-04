@@ -280,10 +280,7 @@ public class ChiromawHatchling extends PathfinderMob implements OwnableEntity, P
 			ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withDataBuilder().setData(2, this).buildData()
 				.withColor(this.getElectricBoogaloo() ? thunderColor : normalColor)
 				.withScale(0.5F + this.getRandom().nextFloat() * 0.5f);
-			TheBetweenlands.createParticle(new EntitySwirlParticleOptions(ParticleRegistry.CHIROMAW_TRANSFORM.get(),
-					new Vec3(0, -1.3D, 0),
-					new Vec3(0, 1.3D, 0),
-					Vec3.ZERO, Vec3.ZERO, 4.0D, false),
+			TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.CHIROMAW_TRANSFORM.get()),
 				this.level(), this.getX(), this.getY() + 2.6D, this.getZ(), args);
 		}
 

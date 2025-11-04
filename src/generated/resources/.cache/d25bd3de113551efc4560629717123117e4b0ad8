@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-17T14:59:45.021631404	Item Models: thebetweenlands
+// 1.21.1	2025-11-01T18:54:59.877404222	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -434,6 +434,7 @@ a6d8e1389c7fcd324cf3903e11a0022dea3c48cb assets/thebetweenlands/models/item/pred
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/primordial_malevolence_spawn_egg.json
 f7e0eb6623d4e9f59e98d11ac80205019b4ecbba assets/thebetweenlands/models/item/puffshroom_tendril.json
 aa792ec1c1e90d386486ed329e0dedff82bfad74 assets/thebetweenlands/models/item/pyrad_flame.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/pyrad_spawn_egg.json
 8ec128ded98c0e18bea91c39e39d86a99cc7350f assets/thebetweenlands/models/item/raisin_black_dye.json
 64ceda901b12ee1e7addb39d11e2d22265baefd7 assets/thebetweenlands/models/item/raisin_black_dye_bucket.json
 86aa70c45e59e8e75e40274cfb891e27f329262d assets/thebetweenlands/models/item/raisin_black_item_frame.json

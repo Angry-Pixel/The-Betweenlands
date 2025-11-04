@@ -123,7 +123,7 @@ public class GreeblingVolarpadFloater extends Entity {
 				float dy = this.getRandom().nextFloat() - 0.1F;
 				float dz = this.getRandom().nextFloat() - 0.5F;
 				float mag = 0.08F + this.getRandom().nextFloat() * 0.07F;
-				TheBetweenlands.createParticle(ParticleRegistry.SCRAP.get(), this.level(), this.getX(), this.getY(), this.getZ(), ParticleFactory.ParticleArgs.get().withColor(ScrapParticle.LEAF_COLOR).withMotion(dx * mag, dy * mag, dz * mag));
+				this.level().addParticle(ParticleRegistry.LEAF.get(), this.getX(), this.getY(), this.getZ(), dx * mag, dy * mag, dz * mag);
 			}
 		}
 	}

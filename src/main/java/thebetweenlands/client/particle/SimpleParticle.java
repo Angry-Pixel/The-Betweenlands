@@ -10,7 +10,7 @@ import thebetweenlands.client.renderer.BLParticleRenderType;
 public class SimpleParticle extends TextureSheetParticle {
 
 	private float startAlpha = 1.0F;
-	private boolean fade = false;
+	private final boolean fade;
 
 	protected SimpleParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int maxAge, float scale, boolean fade, float gravity, boolean exactMotion) {
 		super(level, x, y, z, xSpeed, ySpeed, zSpeed);

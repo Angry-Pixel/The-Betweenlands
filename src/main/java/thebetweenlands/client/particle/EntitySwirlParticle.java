@@ -11,8 +11,8 @@ public class EntitySwirlParticle extends SwirlParticle {
 	protected final Entity entityTarget;
 	private final Vec3 targetOffset;
 
-	public EntitySwirlParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress, Entity target) {
-		super(options, level, x, y, z, maxAge, scale, progress);
+	public EntitySwirlParticle(EntitySwirlParticleOptions options, ClientLevel level, double x, double y, double z, SpriteSet spriteSet, int frameTime, int maxAge, float scale, float progress, Entity target) {
+		super(options, level, x, y, z, spriteSet, frameTime, maxAge, scale, progress);
 		this.entityTarget = target;
 		this.targetOffset = options.targetOffset;
 
@@ -45,9 +45,7 @@ public class EntitySwirlParticle extends SwirlParticle {
 
 		@Override
 		public EntitySwirlParticle createParticle(EntitySwirlParticleOptions options, ImmutableParticleArgs args) {
-			var particle = new EntitySwirlParticle(options, args.level, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
-			particle.pickSprite(this.spriteSet);
-			return particle;
+			return new EntitySwirlParticle(options, args.level, args.x, args.y, args.z, this.spriteSet, 6, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
 		}
 
 		@Override

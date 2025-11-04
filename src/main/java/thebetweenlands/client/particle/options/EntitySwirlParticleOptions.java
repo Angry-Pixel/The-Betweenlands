@@ -21,6 +21,10 @@ public class EntitySwirlParticleOptions extends SwirlParticleOptions {
 		this.targetOffset = targetOffset;
 	}
 
+	public static EntitySwirlParticleOptions defaultSwirl(ParticleType<?> type) {
+		return new EntitySwirlParticleOptions(type, new Vec3(0, -1.3D, 0), new Vec3(0, 1.3D, 0), Vec3.ZERO, Vec3.ZERO, 4.0D, false);
+	}
+
 	public static final MapCodec<EntitySwirlParticleOptions> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			BuiltInRegistries.PARTICLE_TYPE.byNameCodec().fieldOf("type").forGetter(o -> o.type),
 			Vec3.CODEC.fieldOf("offset").forGetter(o -> o.offset),

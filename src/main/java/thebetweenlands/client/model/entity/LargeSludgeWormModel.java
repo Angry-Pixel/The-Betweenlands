@@ -182,38 +182,40 @@ public class LargeSludgeWormModel extends MowzieModelBase<LargeSludgeWorm> {
 		stack.pushPose();
 		LargeSludgeWorm.HullSegment headSegment = entity.segments[0];
 
-		float headYaw = Mth.lerp(partialTicks, headSegment.prevYaw, headSegment.yaw);
+		if (headSegment != null) {
+			float headYaw = Mth.lerp(partialTicks, headSegment.prevYaw, headSegment.yaw);
 
-		stack.scale(-1.0F, -1.0F, 1.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(headYaw));
-		stack.translate(0.0D, -1.0D, 0.0D);
-		if (renderSolid) {
-			float smoothedTicks = entity.tickCount + (entity.tickCount - (entity.tickCount - 1)) * partialTicks;
-			float jawWibbleLeft = Mth.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
-			float jawWibbleRight = Mth.sin(1F + (smoothedTicks) * 0.5F + 0.1F) * 0.5F;
+			stack.scale(-1.0F, -1.0F, 1.0F);
+			stack.mulPose(Axis.YP.rotationDegrees(headYaw));
+			stack.translate(0.0D, -1.0D, 0.0D);
+			if (renderSolid) {
+				float smoothedTicks = entity.tickCount + (entity.tickCount - (entity.tickCount - 1)) * partialTicks;
+				float jawWibbleLeft = Mth.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
+				float jawWibbleRight = Mth.sin(1F + (smoothedTicks) * 0.5F + 0.1F) * 0.5F;
 
-			this.leftLowerJaw.xRot = 0.5918411493512771F - 0.2F + jawWibbleLeft * 0.8F;
-			this.leftLowerJaw.yRot = -0.18203784098300857F - jawWibbleRight * 0.2F;
+				this.leftLowerJaw.xRot = 0.5918411493512771F - 0.2F + jawWibbleLeft * 0.8F;
+				this.leftLowerJaw.yRot = -0.18203784098300857F - jawWibbleRight * 0.2F;
 
-			this.rightLowerJaw.xRot = 0.5918411493512771F - 0.2F + jawWibbleRight * 0.8F;
-			this.rightLowerJaw.yRot = 0.18203784098300857F + jawWibbleRight * 0.2F;
+				this.rightLowerJaw.xRot = 0.5918411493512771F - 0.2F + jawWibbleRight * 0.8F;
+				this.rightLowerJaw.yRot = 0.18203784098300857F + jawWibbleRight * 0.2F;
 
-			this.head.xRot = -0.045553093477052F - jawWibbleLeft * 0.1F;
+				this.head.xRot = -0.045553093477052F - jawWibbleLeft * 0.1F;
 
-			this.beatHeart(entity, this.heart1, 0, partialTicks);
-			this.beatHeart(entity, this.heart2, 15, partialTicks);
+				this.beatHeart(entity, this.heart1, 0, partialTicks);
+				this.beatHeart(entity, this.heart2, 15, partialTicks);
 
-			stack.pushPose();
+				stack.pushPose();
 
-			stack.translate(0.0D, 1.0D, 0.8D);
-			stack.mulPose(Axis.XP.rotationDegrees(Mth.sin(smoothedTicks * 0.25F) * 3));
-			stack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(smoothedTicks * 0.125F) * 13));
-			stack.translate(0, -0.96D, -0.8D);
+				stack.translate(0.0D, 1.0D, 0.8D);
+				stack.mulPose(Axis.XP.rotationDegrees(Mth.sin(smoothedTicks * 0.25F) * 3));
+				stack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(smoothedTicks * 0.125F) * 13));
+				stack.translate(0, -0.96D, -0.8D);
 
-			this.body.render(stack, consumer, light, overlay, color);
-			stack.popPose();
-		} else {
-			this.body.render(stack, consumer, light, overlay, color);
+				this.body.render(stack, consumer, light, overlay, color);
+				stack.popPose();
+			} else {
+				this.body.render(stack, consumer, light, overlay, color);
+			}
 		}
 		stack.popPose();
 	}
@@ -259,32 +261,33 @@ public class LargeSludgeWormModel extends MowzieModelBase<LargeSludgeWorm> {
 
 		LargeSludgeWorm.HullSegment tailSegment = entity.segments[entity.segments.length - 1];
 
-		Vec3 pos = tailSegment.pos;
-		Vec3 prevPos = tailSegment.prevPos;
+		if (tailSegment != null) {
+			Vec3 pos = tailSegment.pos;
+			Vec3 prevPos = tailSegment.prevPos;
 
-		double x = Mth.lerp(partialTicks, prevPos.x, pos.x);
-		double y = Mth.lerp(partialTicks, prevPos.y, pos.y);
-		double z = Mth.lerp(partialTicks, prevPos.z, pos.z);
+			double x = Mth.lerp(partialTicks, prevPos.x, pos.x);
+			double y = Mth.lerp(partialTicks, prevPos.y, pos.y);
+			double z = Mth.lerp(partialTicks, prevPos.z, pos.z);
 
-		float tailYaw = Mth.lerp(partialTicks, tailSegment.prevYaw, tailSegment.yaw);
+			float tailYaw = Mth.lerp(partialTicks, tailSegment.prevYaw, tailSegment.yaw);
 
-		stack.translate(x, y, z);
-		stack.scale(-1.0F, -1.0F, 1.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(tailYaw));
-		stack.translate(0.0D, -1.0D, -1.8D);
+			stack.translate(x, y, z);
+			stack.scale(-1.0F, -1.0F, 1.0F);
+			stack.mulPose(Axis.YP.rotationDegrees(tailYaw));
+			stack.translate(0.0D, -1.0D, -1.8D);
 
-		if (renderSolid) {
-			float smoothedTicks = entity.tickCount + (entity.tickCount - (entity.tickCount - 1)) * partialTicks;
-			stack.pushPose();
-			stack.translate(0.0D, 1.0D, 1.6D);
-			stack.mulPose(Axis.XP.rotationDegrees(Mth.sin(smoothedTicks * 0.25F) * 6));
-			stack.translate(0.0D, -1.0D, -1.6D);
-			this.tail.render(stack, consumer, light, overlay, color);
-			stack.popPose();
-		} else {
-			this.tail.render(stack, consumer, light, overlay, color);
+			if (renderSolid) {
+				float smoothedTicks = entity.tickCount + (entity.tickCount - (entity.tickCount - 1)) * partialTicks;
+				stack.pushPose();
+				stack.translate(0.0D, 1.0D, 1.6D);
+				stack.mulPose(Axis.XP.rotationDegrees(Mth.sin(smoothedTicks * 0.25F) * 6));
+				stack.translate(0.0D, -1.0D, -1.6D);
+				this.tail.render(stack, consumer, light, overlay, color);
+				stack.popPose();
+			} else {
+				this.tail.render(stack, consumer, light, overlay, color);
+			}
 		}
-
 		stack.popPose();
 	}
 }

@@ -4,13 +4,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import thebetweenlands.client.particle.options.SwirlParticleOptions;
 
-public class SwirlParticle extends TextureSheetParticle {
+public class SwirlParticle extends RandomAnimatedParticle {
 
 	protected float progress;
 	protected final float startRotation;
@@ -33,8 +34,8 @@ public class SwirlParticle extends TextureSheetParticle {
 	protected final double rotationSpeed;
 	private boolean firstUpdate = true;
 
-	public SwirlParticle(SwirlParticleOptions options, ClientLevel level, double x, double y, double z, int maxAge, float scale, float progress) {
-		super(level, x, y, z, 0, 0, 0);
+	public SwirlParticle(SwirlParticleOptions options, ClientLevel level, double x, double y, double z, SpriteSet spriteSet, int frameTime, int maxAge, float scale, float progress) {
+		super(level, x, y, z, 0, 0, 0, spriteSet, frameTime);
 		this.xd = this.yd = this.zd = 0.0D;
 		this.progress = progress;
 
@@ -136,6 +137,7 @@ public class SwirlParticle extends TextureSheetParticle {
 
 		this.updateDrag();
 		this.updatePosition();
+		this.tickParticleAnimation();
 
 		this.firstUpdate = false;
 	}

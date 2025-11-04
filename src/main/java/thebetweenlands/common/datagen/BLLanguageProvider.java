@@ -1126,6 +1126,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.LEECH, "Leech");
 		this.addEntityAndEgg(EntityRegistry.BLOOD_SNAIL, "Blood Snail");
 		this.addEntityAndEgg(EntityRegistry.INFESTATION, "Infestation");
+		this.addEntityAndEgg(EntityRegistry.PYRAD, "Pyrad");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1166,6 +1167,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.AMPHIBIOUS_FISHING_SPEAR, "Amphibious Fishing Spear");
 		this.addEntityType(EntityRegistry.ROBUST_FISHING_SPEAR, "Robust Amphibious Fishing Spear");
 		this.addEntityType(EntityRegistry.DECAY_PIT_TARGET, "Not A Boss");
+		this.addEntityType(EntityRegistry.PYRAD_FLAME, "Pyrad Flame");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");

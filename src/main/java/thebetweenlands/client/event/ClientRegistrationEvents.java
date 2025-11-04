@@ -279,6 +279,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SPIRIT_TREE_FACE_MASK.get(), SpiritTreeFaceMaskRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.DECAY_PIT_TARGET.get(), DecayPitTargetRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_JET.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PYRAD.get(), PyradRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.PYRAD_FLAME.get(), context -> new ThrownItemRenderer<>(context, 1.0F, true));
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -405,6 +407,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_FISHING_SPEAR, FishingSpearModel::createFinned);
 		event.registerLayerDefinition(BLModelLayers.ROBUST_FISHING_SPEAR, RobustFishingSpearModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_FACE, () -> LargeSpiritTreeFaceModel.create(false));
+		event.registerLayerDefinition(BLModelLayers.PYRAD, PyradModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -764,6 +767,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.WATER_BUBBLE.get(), BLBubbleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SONIC_SCREAM.get(), SonicScreamParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SCRAP.get(), ScrapParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.LEAF.get(), ScrapParticle.Factory::new);
 		event.registerSprite(ParticleRegistry.SLEEPING.get(), (type, level, x, y, z, xSpeed, ySpeed, zSpeed) -> new SleepingParticle(level, x, y, z, xSpeed, ySpeed, zSpeed));
 		event.registerSpriteSet(ParticleRegistry.EMBER_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 		event.registerSpriteSet(ParticleRegistry.DRUID_CASTING.get(), DruidCastingParticle.Factory::new);
@@ -776,6 +780,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.CORRUPTED.get(), SimpleParticle.CorruptedFactory::new);
 		event.registerSpriteSet(ParticleRegistry.EMBER.get(), SimpleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SMOOTH_SMOKE.get(), SimpleParticle.Factory::new);
+		event.registerSpriteSet(ParticleRegistry.LEAF_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {

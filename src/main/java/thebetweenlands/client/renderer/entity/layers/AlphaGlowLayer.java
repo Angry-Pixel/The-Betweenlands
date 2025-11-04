@@ -10,11 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Entity;
 
-public class FireflyGlowLayer<T extends Entity, M extends EntityModel<T>> extends GenericEyesLayer<T, M> {
+public class AlphaGlowLayer<T extends Entity, M extends EntityModel<T>> extends GenericEyesLayer<T, M> {
 
 	private float alpha;
 
-	public FireflyGlowLayer(RenderLayerParent<T, M> parent, ResourceLocation eyeType) {
+	public AlphaGlowLayer(RenderLayerParent<T, M> parent, ResourceLocation eyeType) {
 		super(parent, eyeType);
 	}
 

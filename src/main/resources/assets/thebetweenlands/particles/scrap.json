@@ -1,5 +1,9 @@
 {
   "textures": [
-    "thebetweenlands:scrap"
+    "thebetweenlands:scrap_0",
+    "thebetweenlands:scrap_1",
+    "thebetweenlands:scrap_2",
+    "thebetweenlands:scrap_3",
+    "thebetweenlands:scrap_4"
   ]
 }

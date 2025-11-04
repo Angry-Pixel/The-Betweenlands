@@ -56,7 +56,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(EntityRegistry.STALKER.get(), EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.DRAGONFLY.get(), EntityRegistry.FIREFLY.get(), EntityRegistry.SPORELING.get(), EntityRegistry.CHIROMAW.get(), EntityRegistry.CHIROMAW_MATRIARCH.get(), EntityRegistry.CHIROMAW_GREEBLING_RIDER.get(), EntityRegistry.TAME_CHIROMAW.get(), EntityRegistry.SHALLOWBREATH.get());
 		this.tag(EntityTypeTags.UNDEAD).add(EntityRegistry.SWAMP_HAG.get(), EntityRegistry.WIGHT.get(), EntityRegistry.PEAT_MUMMY.get(), EntityRegistry.DREADFUL_PEAT_MUMMY.get(), EntityRegistry.MUMMY_ARM.get());
 		this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(EntityRegistry.DREADFUL_PEAT_MUMMY.get());
-		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get());
+		this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(EntityRegistry.EMBERLING.get(), EntityRegistry.EMBERLING_SHAMAN.get(), EntityRegistry.PYRAD.get());
 		this.tag(EntityTypeTags.AQUATIC).add(EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.ANADIA.get(), EntityRegistry.JELLYFISH.get(), EntityRegistry.LURKER.get(), EntityRegistry.FRESHWATER_URCHIN.get(), EntityRegistry.CAVE_FISH.get(), EntityRegistry.FROG.get(), EntityRegistry.OLM.get());
 		this.tag(EntityTypeTags.ARTHROPOD).add(EntityRegistry.DRAGONFLY.get(), EntityRegistry.TERMITE.get(), EntityRegistry.BUBBLER_CRAB.get(), EntityRegistry.SILT_CRAB.get(), EntityRegistry.INFESTATION.get());
 		this.tag(TAR_BEING).add(EntityRegistry.TAR_BEAST.get(), EntityRegistry.TARMINION.get());
@@ -80,7 +80,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 
 		// TODO Pit of Decay Mechanism
 		this.tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(
-//			EntityRegistry.DECAY_PIT_TARGET.get(),
+			EntityRegistry.DECAY_PIT_TARGET.get(),
 //			EntityRegistry.LIGHTNING_BOLT.get(),
 //			EntityRegistry.MOVING_WALL.get(),
 			EntityRegistry.SWORD_ENERGY.get(),
@@ -94,7 +94,7 @@ public class BLEntityTagProvider extends EntityTypeTagsProvider {
 		);
 
 		this.tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED).add(
-//			EntityRegistry.DECAY_PIT_TARGET.get(),
+			EntityRegistry.DECAY_PIT_TARGET.get(),
 //			EntityRegistry.MOVING_WALL.get(),
 			EntityRegistry.SWORD_ENERGY.get(),
 			EntityRegistry.SEAT.get(),

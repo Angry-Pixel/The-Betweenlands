@@ -140,7 +140,7 @@ public class Greebling extends Mob implements BLEntity, MusicPlayer {
 				float dy = this.level().getRandom().nextFloat() - 0.1F;
 				float dz = this.level().getRandom().nextFloat() - 0.5F;
 				float mag = 0.08F + this.level().getRandom().nextFloat() * 0.07F;
-				TheBetweenlands.createParticle(ParticleRegistry.SCRAP.get(), this.level(), x, y, z, ParticleFactory.ParticleArgs.get().withColor(ScrapParticle.LEAF_COLOR).withMotion(dx * mag, dy * mag, dz * mag));
+				this.level().addParticle(ParticleRegistry.LEAF.get(), x, y, z,dx * mag, dy * mag, dz * mag);
 			}
 		}
 	}

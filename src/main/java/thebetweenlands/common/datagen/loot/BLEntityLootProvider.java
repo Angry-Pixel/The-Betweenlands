@@ -35,7 +35,6 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 
 	//TODO seasonal drops for unimplemented mobs:
 	//angler: 1, 8, 1, 4
-	//pyrad: 2, 3, 1, 1
 	//sludge menace: 8, 0, 6, 0
 	//consider seasonal drops for stalkers and infestations?
 	//why do shallowbreath have seasonal drops??? Theyre gas clouds??????
@@ -480,6 +479,18 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.when(LootItemKilledByPlayerCondition.killedByPlayer())
 				.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F))))));
+
+		this.addWithSeasonalDrops(EntityRegistry.PYRAD.get(), 2, 3, 1, 1, LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.SULFUR)
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(1.0F, 3.0F)))))
+			.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(1, 3)).add(LootItem.lootTableItem(ItemRegistry.TANGLED_ROOT)
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 2.0F)))))
+			.withPool(LootPool.lootPool()
+				.add(EmptyLootItem.emptyItem().setWeight(3))
+				.add(LootItem.lootTableItem(ItemRegistry.PYRAD_FLAME)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 6.0F))))
+				.when(LootItemKilledByPlayerCondition.killedByPlayer())
+				.when(PyradChargingCondition.pyradCharging())));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
