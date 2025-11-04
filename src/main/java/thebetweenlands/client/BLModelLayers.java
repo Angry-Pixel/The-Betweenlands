@@ -55,6 +55,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation GREEBLING_1 = register("greebling_1");
 	public static final ModelLayerLocation GREEBLING_2 = register("greebling_2");
 	public static final ModelLayerLocation GREEBLING_CORACLE = register("greebling_coracle");
+	public static final ModelLayerLocation GREEBLING_CORPSE = register("greebling_corpse");
 	public static final ModelLayerLocation GREEBLING_VOLARPAD_FLOATER = register("greebling_volarpad_floater");
 	public static final ModelLayerLocation INFESTATION = register("infestation");
 	public static final ModelLayerLocation JELLYFISH = register("jellyfish");

@@ -59,6 +59,7 @@ public class BugParticle extends TextureSheetParticle {
 				this.move(-(this.x - this.tx) / distToTarget * this.speed, -(this.y - this.ty) / distToTarget * this.speed, -(this.z - this.tz) / distToTarget * this.speed);
 			}
 		}
+		if (this.onGround) this.remove();
 	}
 
 	@Override

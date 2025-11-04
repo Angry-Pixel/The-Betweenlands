@@ -7,6 +7,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -90,5 +91,26 @@ public class BLMiscLootProvider implements LootTableSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN))
 				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING))
 				.add(LootItem.lootTableItem(ItemRegistry.BETWEENSTONE_PEBBLE))));
+
+		output.accept(LootTableRegistry.GREEBLING_CORPSE, LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_ANADIA_MEAT).setWeight(8))
+				.add(LootItem.lootTableItem(ItemRegistry.SILT_CRAB_CLAW).setWeight(8))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.DRAGONFLY_WING).setWeight(8))
+				.add(LootItem.lootTableItem(ItemRegistry.FIREFLY).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_FROG_LEGS).setWeight(8))
+				.add(LootItem.lootTableItem(ItemRegistry.GECKO).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN).setWeight(8))
+				.add(LootItem.lootTableItem(ItemRegistry.MIRE_SNAIL_EGG).setWeight(4))
+				.add(LootItem.lootTableItem(ItemRegistry.RAW_SNAIL_FLESH).setWeight(8))
+				.add(LootItem.lootTableItem(ItemRegistry.NET).setWeight(2))
+				.add(LootItem.lootTableItem(ItemRegistry.AMATE_MAP))
+				.add(LootItem.lootTableItem(ItemRegistry.SLINGSHOT))
+				.add(LootItem.lootTableItem(ItemRegistry.BETWEENSTONE_PEBBLE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))).setWeight(10))
+				.add(LootItem.lootTableItem(ItemRegistry.REED_ROPE).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))).setWeight(10))
+				.add(LootItem.lootTableItem(ItemRegistry.WEEDWOOD_STICK).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).setWeight(10))
+				.add(LootItem.lootTableItem(ItemRegistry.FABRICATED_SCROLL))
+				.add(LootItem.lootTableItem(ItemRegistry.AMATE_PAPER).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).setWeight(5))));
 	}
 }

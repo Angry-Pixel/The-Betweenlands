@@ -1,0 +1,143 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_anadia_meat",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:crab_claw",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:dragonfly",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:dragonfly_wing",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:firefly",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_frog_legs",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:gecko",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:lurker_skin",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:mire_snail_egg",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_snail_flesh",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:net",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:amate_map"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:simple_slingshot"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:betweenstone_pebble",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:reed_rope",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:weedwood_stick",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:fabricated_scroll"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:amate_paper",
+          "weight": 5
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/greebling_corpse"
+}

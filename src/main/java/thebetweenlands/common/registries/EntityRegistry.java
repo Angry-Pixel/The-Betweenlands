@@ -135,7 +135,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<GalleryFrame>> GALLERY_FRAME = register("gallery_frame", EntityType.Builder.<GalleryFrame>of(GalleryFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//glowing goop
 	//grappling hoke node
-	//greebling corpse
+	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingCorpse>> GREEBLING_CORPSE = register("greebling_corpse", EntityType.Builder.of(GreeblingCorpse::new, MobCategory.MISC).sized(0.6F, 0.2F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//ground spawner
 	public static final DeferredHolder<EntityType<?>, EntityType<BLItemFrame>> ITEM_FRAME = register("item_frame", EntityType.Builder.<BLItemFrame>of(BLItemFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//lightning bolt

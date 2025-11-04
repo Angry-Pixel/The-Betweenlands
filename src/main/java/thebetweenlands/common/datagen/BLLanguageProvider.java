@@ -1168,6 +1168,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.ROBUST_FISHING_SPEAR, "Robust Amphibious Fishing Spear");
 		this.addEntityType(EntityRegistry.DECAY_PIT_TARGET, "Not A Boss");
 		this.addEntityType(EntityRegistry.PYRAD_FLAME, "Pyrad Flame");
+		this.addEntityType(EntityRegistry.GREEBLING_CORPSE, "Greebling Corpse");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");

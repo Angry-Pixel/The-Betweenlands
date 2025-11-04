@@ -21,6 +21,7 @@ public class LootTableRegistry {
 	public static final ResourceKey<LootTable> LAKE_CAVERN_SIMULACRUM_OFFERINGS = register("gameplay/lake_cavern_simulacrum_offerings");
 	public static final ResourceKey<LootTable> DEEPMAN_SIMULACRUM_OFFERINGS = register("gameplay/deepman_simulacrum_offerings");
 	public static final ResourceKey<LootTable> ROOTMAN_SIMULACRUM_OFFERINGS = register("gameplay/rootman_simulacrum_offerings");
+	public static final ResourceKey<LootTable> GREEBLING_CORPSE = register("gameplay/greebling_corpse");
 
 	//LOOT INVENTORIES
 	//Misc

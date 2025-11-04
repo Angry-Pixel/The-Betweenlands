@@ -16,16 +16,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
-import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 import thebetweenlands.common.block.structure.DecayPitGroundChainBlock;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.entity.DecayPitTarget;
-import thebetweenlands.common.entity.SwordEnergy;
+import thebetweenlands.common.entity.GreeblingCorpse;
 import thebetweenlands.common.entity.boss.Barrishee;
-import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.EntityRegistry;
-import thebetweenlands.common.registries.MobEffectRegistry;
+import thebetweenlands.common.entity.creature.Greebling;
+import thebetweenlands.common.registries.*;
 
 import java.util.List;
 
@@ -94,6 +91,12 @@ public class TestFlagItem extends Item {
 			barrishee.setIsScreamingBeam(!barrishee.isScreamingBeam());
 			barrishee.setScreamTimer(0);
 			return InteractionResult.sidedSuccess(player.level().isClientSide());
+		} else if (entity instanceof Greebling) {
+			GreeblingCorpse corpse = new GreeblingCorpse(EntityRegistry.GREEBLING_CORPSE.get(), entity.level());
+			corpse.moveTo(entity.position());
+			entity.level().addFreshEntity(corpse);
+			entity.playSound(SoundRegistry.GREEBLING_FALL.get());
+			entity.discard();
 		}
 		return super.interactLivingEntity(stack, player, entity, hand);
 	}

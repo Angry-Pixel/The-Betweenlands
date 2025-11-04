@@ -281,6 +281,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_JET.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.PYRAD.get(), PyradRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.PYRAD_FLAME.get(), context -> new ThrownItemRenderer<>(context, 1.0F, true));
+		event.registerEntityRenderer(EntityRegistry.GREEBLING_CORPSE.get(), GreeblingCorpseRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -408,6 +409,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ROBUST_FISHING_SPEAR, RobustFishingSpearModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_FACE, () -> LargeSpiritTreeFaceModel.create(false));
 		event.registerLayerDefinition(BLModelLayers.PYRAD, PyradModel::create);
+		event.registerLayerDefinition(BLModelLayers.GREEBLING_CORPSE, GreeblingCorpseModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
