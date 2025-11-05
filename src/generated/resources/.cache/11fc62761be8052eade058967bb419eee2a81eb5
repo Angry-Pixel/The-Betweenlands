@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-17T19:57:28.419780043	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2025-11-04T17:36:19.827906723	Tags for minecraft:block mod id thebetweenlands
 8fa1aae501231e311bdf3374ba19975117ab887d data/c/tags/block/chests/wooden.json
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
@@ -113,6 +113,7 @@ b239e7b03736ed687b12fa515c9a1139f07cc1a8 data/thebetweenlands/tags/block/incorre
 950a086f855d118e00d3fc9697663c7721c42db1 data/thebetweenlands/tags/block/incorrect_for_octine_tool.json
 f57a1c0d935679dbbcab3f2e8a06cae2238a6735 data/thebetweenlands/tags/block/incorrect_for_valonite_tool.json
 692e5e8079060e4fa82d274ffd9cb805360b550a data/thebetweenlands/tags/block/incorrect_for_weedwood_tool.json
+3e5b9049dde414efd71cdccbee228c4746da0946 data/thebetweenlands/tags/block/moving_wall_unbreakable.json
 dab1a03dad5eaa4505b23e07e83731aba7ec66c5 data/thebetweenlands/tags/block/mud_brick_shingles.json
 53411505a5188e3fb58c71a373b5f17fae167a64 data/thebetweenlands/tags/block/octine_ignites.json
 9d2b82c32e7eb6fa9305623c015f7f8a65744a8f data/thebetweenlands/tags/block/peat_mummy_spawnable.json

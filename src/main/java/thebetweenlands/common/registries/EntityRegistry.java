@@ -141,7 +141,7 @@ public class EntityRegistry {
 	//lightning bolt
 	public static final DeferredHolder<EntityType<?>, EntityType<LurkerSkinRaft>> LURKER_SKIN_RAFT = register("lurker_skin_raft", EntityType.Builder.<LurkerSkinRaft>of(LurkerSkinRaft::new, MobCategory.MISC).sized(1.25F, 0.25F).clientTrackingRange(10));
 	//mist bridge
-	//moving wall
+	public static final DeferredHolder<EntityType<?>, EntityType<MovingWall>> MOVING_WALL = register("moving_wall", EntityType.Builder.<MovingWall>of(MovingWall::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<OctineArrow>> OCTINE_ARROW = register("octine_arrow", EntityType.Builder.<OctineArrow>of(OctineArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<PoisonAnglerToothArrow>> POISON_ANGLER_TOOTH_ARROW = register("poison_angler_tooth_arrow", EntityType.Builder.<PoisonAnglerToothArrow>of(PoisonAnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<PredatorArrowGuide>> PREDATOR_ARROW_GUIDE = register("predator_arrow_guide", EntityType.Builder.of(PredatorArrowGuide::new, MobCategory.MISC).sized(0.1F, 0.1F).clientTrackingRange(4).updateInterval(20));

@@ -65,6 +65,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation LARGE_SLUDGE_WORM_OUTER = register("large_sludge_worm", "outer");
 	public static final ModelLayerLocation LARGE_SPIRIT_TREE_FACE = register("large_spirit_tree_face");
 	public static final ModelLayerLocation MIRE_SNAIL = register("mire_snail");
+	public static final ModelLayerLocation MOVING_WALL = register("moving_wall");
 	public static final ModelLayerLocation MUMMY_ARM = register("mummy_arm");
 	public static final ModelLayerLocation OLM = register("olm");
 	public static final ModelLayerLocation PEAT_MUMMY = register("peat_mummy");
