@@ -15,6 +15,10 @@ import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 
 public class NibbletwigTree extends WorldGenHelper<NoneFeatureConfiguration> {
 
+	private final BlockState log = BlockRegistry.NIBBLETWIG_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+	private final BlockState leaves = BlockRegistry.NIBBLETWIG_LEAVES.get().defaultBlockState().setValue(BlockStateProperties.DISTANCE, 1);
+	private final BlockState ivy = BlockRegistry.POISON_IVY.get().defaultBlockState();
+
 	public NibbletwigTree(Codec<NoneFeatureConfiguration> codec) {
 		super(codec);
 	}
@@ -48,10 +52,6 @@ public class NibbletwigTree extends WorldGenHelper<NoneFeatureConfiguration> {
 		int bend2 = random.nextInt(2) == 0 ? random.nextInt(3) + 10 : -1;
 
 		int canopy1 = random.nextInt(3) + 3;
-
-		BlockState log = BlockRegistry.NIBBLETWIG_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
-		BlockState leaves = BlockRegistry.NIBBLETWIG_LEAVES.get().defaultBlockState();
-		BlockState ivy = BlockRegistry.POISON_IVY.get().defaultBlockState();
 
 		int[] xo = new int[height + 1];
 		int[] zo = new int[height + 1];

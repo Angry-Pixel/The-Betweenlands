@@ -19,7 +19,7 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 	private final BlockState log = BlockRegistry.WEEDWOOD_LOG.get().defaultBlockState();
 	private final BlockState bark = BlockRegistry.WEEDWOOD_BARK.get().defaultBlockState();
 	private final BlockState wood = BlockRegistry.WEEDWOOD.get().defaultBlockState();
-	private final BlockState leaves = BlockRegistry.WEEDWOOD_LEAVES.get().defaultBlockState();
+	private final BlockState leaves = BlockRegistry.WEEDWOOD_LEAVES.get().defaultBlockState().setValue(BlockStateProperties.DISTANCE, 1);
 
 	public WeedwoodTree(Codec<NoneFeatureConfiguration> codec) {
 		super(codec);
@@ -114,7 +114,7 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 		return true;
 	}
 
-	private void createSmallBranch(LevelAccessor accessor, BlockPos pos, int dir, int branchLength) {
+	private void createSmallBranch(LevelAccessor level, BlockPos pos, int dir, int branchLength) {
 		int y = 0;
 		boolean branchBend = false;
 		for (int i = 0; i <= branchLength; ++i) {
@@ -126,48 +126,48 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 
 			switch (dir) {
 				case 1:
-					accessor.setBlock(pos.east(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+					level.setBlock(pos.east(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 					break;
 
 				case 2:
-					accessor.setBlock(pos.west(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+					level.setBlock(pos.west(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 					break;
 
 				case 3:
-					accessor.setBlock(pos.south(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+					level.setBlock(pos.south(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 					break;
 
 				case 4:
-					accessor.setBlock(pos.north(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+					level.setBlock(pos.north(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 					break;
 
 				case 5:
-					accessor.setBlock(pos.east(i).above(y).south(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+					level.setBlock(pos.east(i).above(y).south(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 					break;
 
 				case 6:
-					accessor.setBlock(pos.west(i).above(y).north(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+					level.setBlock(pos.west(i).above(y).north(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 					break;
 
 				case 7:
-					accessor.setBlock(pos.west(i).above(y).south(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+					level.setBlock(pos.west(i).above(y).south(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 					break;
 
 				case 8:
-					accessor.setBlock(pos.east(i).above(y).north(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+					level.setBlock(pos.east(i).above(y).north(i), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 					break;
 			}
 		}
 	}
 
-	private void createMainCanopy(LevelAccessor accessor, RandomSource random, BlockPos pos, int maxRadius) {
+	private void createMainCanopy(LevelAccessor level, RandomSource random, BlockPos pos, int maxRadius) {
 		for (int x1 = -maxRadius; x1 <= maxRadius; x1++)
 			for (int z1 = -maxRadius; z1 <= maxRadius; z1++)
 				for (int y1 = 0; y1 < maxRadius; y1++) {
 					double dSq = Math.pow(x1, 2.0D) + Math.pow(z1, 2.0D) + Math.pow(y1, 2.5D);
 					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && y1 > 0)
-						if (!isALog(accessor.getBlockState(pos.offset(x1, y1, z1))))
-							accessor.setBlock(pos.offset(x1, y1, z1), this.log, 2);
+						if (!isALog(level.getBlockState(pos.offset(x1, y1, z1))))
+							level.setBlock(pos.offset(x1, y1, z1), this.log, 2);
 				}
 
 		//Generate leaves after generating logs so that it doesn't trigger breakBlock when replacing blocks, causing BlockLeaves' CHECK_DECAY to become true
@@ -176,13 +176,13 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 				for (int y1 = 0; y1 < maxRadius; y1++) {
 					double dSq = Math.pow(x1, 2.0D) + Math.pow(z1, 2.0D) + Math.pow(y1, 2.5D);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
-						if (!isALog(accessor.getBlockState(pos.offset(x1, y1, z1))) && random.nextInt(5) != 0)
-							accessor.setBlock(pos.offset(x1, y1, z1), this.leaves, 2);
+						if (!isALog(level.getBlockState(pos.offset(x1, y1, z1))) && random.nextInt(5) != 0)
+							level.setBlock(pos.offset(x1, y1, z1), this.leaves, 2);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && random.nextInt(3) == 0 && y1 == 0)
-						if (accessor.getBlockState(pos.offset(x1, y1, z1)) == this.leaves)
+						if (level.getBlockState(pos.offset(x1, y1, z1)) == this.leaves)
 							for (int i = 1; i < 1 + random.nextInt(3); i++)
-								if (!this.isALog(accessor.getBlockState(pos.offset(x1, y1 - i, z1))))
-									accessor.setBlock(pos.offset(x1, y1 - i, z1), this.leaves, 2);
+								if (!this.isALog(level.getBlockState(pos.offset(x1, y1 - i, z1))))
+									level.setBlock(pos.offset(x1, y1 - i, z1), this.leaves, 2);
 				}
 	}
 
@@ -190,7 +190,7 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 		return state.is(BlockTags.LOGS);
 	}
 
-	private void createBranch(LevelAccessor accessor, RandomSource random, BlockPos pos, int dir, boolean root, int branchLength, boolean ivy) {
+	private void createBranch(LevelAccessor level, RandomSource random, BlockPos pos, int dir, boolean root, int branchLength, boolean ivy) {
 		int y = 0;
 		boolean branchBend = false;
 		for (int i = 0; i <= branchLength; ++i) {
@@ -204,101 +204,101 @@ public class WeedwoodTree extends Feature<NoneFeatureConfiguration> {
 				case 1:
 
 					if (!root) {
-						accessor.setBlock(pos.east(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+						level.setBlock(pos.east(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.east(i).above(y - 1), Direction.EAST);
+							addVines(level, random, pos.east(i).above(y - 1), Direction.EAST);
 					} else {
-						accessor.setBlock(pos.east(i).below(y), bark, 2);
-						accessor.setBlock(pos.east(i).below(y - 1), bark, 2);
+						level.setBlock(pos.east(i).below(y), bark, 2);
+						level.setBlock(pos.east(i).below(y - 1), bark, 2);
 					}
 					break;
 
 				case 2:
 					if (!root) {
-						accessor.setBlock(pos.west(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+						level.setBlock(pos.west(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.west(i).above(y - 1), Direction.WEST);
+							addVines(level, random, pos.west(i).above(y - 1), Direction.WEST);
 					} else {
-						accessor.setBlock(pos.west(i).below(y), bark, 2);
-						accessor.setBlock(pos.west(i).below(y - 1), bark, 2);
+						level.setBlock(pos.west(i).below(y), bark, 2);
+						level.setBlock(pos.west(i).below(y - 1), bark, 2);
 					}
 					break;
 
 				case 3:
 					if (!root) {
-						accessor.setBlock(pos.south(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+						level.setBlock(pos.south(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.south(i).above(y - 1), Direction.SOUTH);
+							addVines(level, random, pos.south(i).above(y - 1), Direction.SOUTH);
 					} else {
-						accessor.setBlock(pos.south(i).below(y), bark, 2);
-						accessor.setBlock(pos.south(i).below(y - 1), bark, 2);
+						level.setBlock(pos.south(i).below(y), bark, 2);
+						level.setBlock(pos.south(i).below(y - 1), bark, 2);
 					}
 					break;
 
 				case 4:
 					if (!root) {
-						accessor.setBlock(pos.north(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+						level.setBlock(pos.north(i).above(y), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.north(i).above(y - 1), Direction.NORTH);
+							addVines(level, random, pos.north(i).above(y - 1), Direction.NORTH);
 					} else {
-						accessor.setBlock(pos.north(i).below(y), bark, 2);
-						accessor.setBlock(pos.north(i).below(y - 1), bark, 2);
+						level.setBlock(pos.north(i).below(y), bark, 2);
+						level.setBlock(pos.north(i).below(y - 1), bark, 2);
 					}
 					break;
 
 				case 5:
 					if (!root) {
-						accessor.setBlock(pos.east(i - 1).above(y).south(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+						level.setBlock(pos.east(i - 1).above(y).south(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.east(i - 1).above(y - 1).south(i - 1), Direction.EAST);
+							addVines(level, random, pos.east(i - 1).above(y - 1).south(i - 1), Direction.EAST);
 					} else {
-						accessor.setBlock(pos.east(i - 1).below(y).south(i - 1), bark, 2);
-						accessor.setBlock(pos.east(i - 1).below(y - 1).south(i - 1), bark, 2);
+						level.setBlock(pos.east(i - 1).below(y).south(i - 1), bark, 2);
+						level.setBlock(pos.east(i - 1).below(y - 1).south(i - 1), bark, 2);
 					}
 					break;
 
 				case 6:
 					if (!root) {
-						accessor.setBlock(pos.west(i - 1).above(y).north(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
+						level.setBlock(pos.west(i - 1).above(y).north(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.X), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.west(i - 1).above(y - 1).north(i - 1), Direction.WEST);
+							addVines(level, random, pos.west(i - 1).above(y - 1).north(i - 1), Direction.WEST);
 					} else {
-						accessor.setBlock(pos.west(i - 1).below(y).north(i - 1), bark, 2);
-						accessor.setBlock(pos.west(i - 1).below(y - 1).north(i - 1), bark, 2);
+						level.setBlock(pos.west(i - 1).below(y).north(i - 1), bark, 2);
+						level.setBlock(pos.west(i - 1).below(y - 1).north(i - 1), bark, 2);
 					}
 					break;
 
 				case 7:
 					if (!root) {
-						accessor.setBlock(pos.west(i - 1).above(y).south(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+						level.setBlock(pos.west(i - 1).above(y).south(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.west(i - 1).above(y - 1).south(i - 1), Direction.SOUTH);
+							addVines(level, random, pos.west(i - 1).above(y - 1).south(i - 1), Direction.SOUTH);
 					} else {
-						accessor.setBlock(pos.west(i - 1).below(y).south(i - 1), bark, 2);
-						accessor.setBlock(pos.west(i - 1).below(y - 1).south(i - 1), bark, 2);
+						level.setBlock(pos.west(i - 1).below(y).south(i - 1), bark, 2);
+						level.setBlock(pos.west(i - 1).below(y - 1).south(i - 1), bark, 2);
 					}
 					break;
 
 				case 8:
 					if (!root) {
-						accessor.setBlock(pos.east(i - 1).above(y).north(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
+						level.setBlock(pos.east(i - 1).above(y).north(i - 1), branchBend ? this.log : this.log.setValue(BlockStateProperties.AXIS, Direction.Axis.Z), 2);
 						if (i <= branchLength && ivy)
-							addVines(accessor, random, pos.east(i - 1).above(y - 1).north(i - 1), Direction.NORTH);
+							addVines(level, random, pos.east(i - 1).above(y - 1).north(i - 1), Direction.NORTH);
 					} else {
-						accessor.setBlock(pos.east(i - 1).below(y).north(i - 1), bark, 2);
-						accessor.setBlock(pos.east(i - 1).below(y - 1).north(i - 1), bark, 2);
+						level.setBlock(pos.east(i - 1).below(y).north(i - 1), bark, 2);
+						level.setBlock(pos.east(i - 1).below(y - 1).north(i - 1), bark, 2);
 					}
 					break;
 			}
 		}
 	}
 
-	private void addVines(LevelAccessor accessor, RandomSource random, BlockPos pos, Direction facing) {
+	private void addVines(LevelAccessor level, RandomSource random, BlockPos pos, Direction facing) {
 		if (random.nextInt(4) != 0) {
 			int length = random.nextInt(4) + 4;
 			for (int yy = 0; yy < length; ++yy)
-				if (accessor.isEmptyBlock(pos.below(yy)))
-					accessor.setBlock(pos.below(yy), BlockRegistry.POISON_IVY.get().defaultBlockState().setValue(VineBlock.getPropertyForFace(facing.getOpposite()), true), 2);
+				if (level.isEmptyBlock(pos.below(yy)))
+					level.setBlock(pos.below(yy), BlockRegistry.POISON_IVY.get().defaultBlockState().setValue(VineBlock.getPropertyForFace(facing.getOpposite()), true), 2);
 				else
 					break;
 		}

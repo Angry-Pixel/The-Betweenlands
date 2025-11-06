@@ -18,7 +18,7 @@ public class SapTree extends Feature<NoneFeatureConfiguration> {
 	private final BlockState logY = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
 	private final BlockState logZ = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Z);
 	private final BlockState roots = BlockRegistry.SAP_BARK.get().defaultBlockState();
-	private final BlockState leaves = BlockRegistry.SAP_LEAVES.get().defaultBlockState();
+	private final BlockState leaves = BlockRegistry.SAP_LEAVES.get().defaultBlockState().setValue(BlockStateProperties.DISTANCE, 1);
 
 	public SapTree(Codec<NoneFeatureConfiguration> codec) {
 		super(codec);

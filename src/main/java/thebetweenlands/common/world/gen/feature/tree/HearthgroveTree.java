@@ -26,6 +26,11 @@ import java.util.function.Predicate;
 
 public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 
+	private final BlockState log = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState();
+	private final BlockState logY = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+	private final BlockState leaves = BlockRegistry.HEARTHGROVE_LEAVES.get().defaultBlockState().setValue(BlockStateProperties.DISTANCE, 1);
+	private final BlockState hangers = BlockRegistry.HANGER.get().defaultBlockState();
+
 	public HearthgroveTree(Codec<NoneFeatureConfiguration> codec) {
 		super(codec);
 	}
@@ -45,11 +50,6 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 
 		if(!this.rotatedCubeCantReplace(level, x, y + 2, z, 0, 0, 0, 1, height, 1, 0) &&
 			!this.rotatedCubeCantReplace(level, x, y + 2, z, -canopySize+2, 0, -canopySize+2, canopySize*2-4, height, canopySize*2-4, 0)) {
-
-			BlockState log = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState();
-			BlockState logY = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
-			BlockState leaves = BlockRegistry.HEARTHGROVE_LEAVES.get().defaultBlockState();
-			BlockState hangers = BlockRegistry.HANGER.get().defaultBlockState();
 
 			int rootHeight = rand.nextInt(3) + 1;
 

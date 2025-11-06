@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -91,7 +92,7 @@ public class RubberTree extends Feature<NoneFeatureConfiguration> {
 					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.0D);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (!accessor.getBlockState(checkPos.set(x1, y1, z1)).is(BlockRegistry.RUBBER_LOG.get()) && random.nextInt(5) != 0)
-							accessor.setBlock(new BlockPos(x1, y1, z1), BlockRegistry.RUBBER_TREE_LEAVES.get().defaultBlockState(), 2);
+							accessor.setBlock(new BlockPos(x1, y1, z1), BlockRegistry.RUBBER_TREE_LEAVES.get().defaultBlockState().setValue(BlockStateProperties.DISTANCE, 1), 2);
 				}
 	}
 }
