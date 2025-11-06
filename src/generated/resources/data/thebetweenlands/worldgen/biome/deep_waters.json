@@ -9,7 +9,24 @@
     "water_color": 1784132,
     "water_fog_color": 1589792
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "thebetweenlands:sulfur",
+      "thebetweenlands:syrmorite",
+      "thebetweenlands:bone_ore",
+      "thebetweenlands:octine",
+      "thebetweenlands:swamp_dirt",
+      "thebetweenlands:valonite",
+      "thebetweenlands:scabyst",
+      "thebetweenlands:life_gem"
+    ]
+  ],
   "has_precipitation": true,
   "spawn_costs": {},
   "spawners": {

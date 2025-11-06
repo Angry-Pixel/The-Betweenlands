@@ -4,8 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
@@ -142,6 +144,16 @@ public class PlacedFeatureRegistry {
 
 	public static void bootstrap(BootstrapContext<PlacedFeature> context) {
 		HolderGetter<ConfiguredFeature<?, ?>> featureGetter = context.lookup(Registries.CONFIGURED_FEATURE);
+
+		context.register(SULFUR, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SULFUR), OrePlacements.commonOrePlacement(22, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(128)))));
+		context.register(SYRMORITE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SYRMORITE), OrePlacements.commonOrePlacement(6, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT + 40), VerticalAnchor.absolute(TheBetweenlands.CAVE_START - 5)))));
+		context.register(BONE_ORE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BONE_ORE), OrePlacements.commonOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(128)))));
+		context.register(OCTINE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.OCTINE), OrePlacements.commonOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.CAVE_START - 40)))));
+		context.register(SWAMP_DIRT, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SWAMP_DIRT), OrePlacements.commonOrePlacement(4, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.CAVE_START - 15)))));
+//		context.register(LIMESTONE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.LIMESTONE), OrePlacements.commonOrePlacement(1, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.CAVE_START - 15)))));
+		context.register(VALONITE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.VALONITE), OrePlacements.commonOrePlacement(1, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT)))));
+		context.register(SCABYST, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SCABYST), OrePlacements.commonOrePlacement(3, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT)))));
+		context.register(LIFE_GEM, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.LIFE_GEM), OrePlacements.commonOrePlacement(70, HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(TheBetweenlands.CAVE_WATER_HEIGHT)))));
 
 		context.register(WEEDWOOD_TREE_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(80)));
 		context.register(WEEDWOOD_TREE_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.WEEDWOOD_TREE), tree(50)));

@@ -35,6 +35,23 @@ public class BiomeRegistry {
 		return ResourceKey.create(Registries.BIOME, TheBetweenlands.prefix(name));
 	}
 
+	private static BiomeGenerationSettings.Builder addUniversalFeatures(BiomeGenerationSettings.Builder builder) {
+		return addBetweenlandsOres(builder);
+	}
+
+	private static BiomeGenerationSettings.Builder addBetweenlandsOres(BiomeGenerationSettings.Builder builder) {
+		return builder
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.SULFUR)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.SYRMORITE)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.BONE_ORE)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.OCTINE)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.SWAMP_DIRT)
+//			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.LIMESTONE)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.VALONITE)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.SCABYST)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacedFeatureRegistry.LIFE_GEM);
+	}
+
 	// TODO figure out how to do spawns
 	public static void bootstrap(BootstrapContext<Biome> context) {
 		HolderGetter<PlacedFeature> featureGetter = context.lookup(Registries.PLACED_FEATURE);
@@ -53,7 +70,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.HEARTHGROVE_TREE)
@@ -79,7 +96,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_COMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
@@ -112,7 +129,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.build()
 			)
 			.build());
@@ -129,7 +146,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
 
@@ -153,7 +170,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
 
@@ -177,7 +194,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ROTTEN_WEEDWOOD_TREE)
 				.build()
 			)
@@ -195,7 +212,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
 
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
@@ -224,7 +241,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
 
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
@@ -252,7 +269,7 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(new BiomeGenerationSettings.Builder(featureGetter, carverGetter)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_SUPER_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SWAMP_PLANT_PATCH_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.VENUS_FLY_TRAP_PATCH_UNCOMMON)
@@ -276,7 +293,9 @@ public class BiomeRegistry {
 				.skyColor(0)
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
-			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.build()
+			)
 			.build());
 	}
 
