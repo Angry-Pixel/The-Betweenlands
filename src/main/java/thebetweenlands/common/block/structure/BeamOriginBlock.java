@@ -48,6 +48,16 @@ public class BeamOriginBlock extends BaseEntityBlock {
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return COLLISION_SHAPE;
 	}
+	
+	@Override
+	protected boolean isCollisionShapeFullBlock(BlockState state, BlockGetter level, BlockPos pos) {
+		return false;
+	}
+	
+	@Override
+	public boolean hasDynamicShape() {
+		return true;
+	}
 
 	@Override
 	public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {

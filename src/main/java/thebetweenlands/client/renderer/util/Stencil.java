@@ -130,4 +130,13 @@ public final class Stencil implements AutoCloseable {
 
 		return Stencil.INVALID;
 	}
+	
+	/**
+	 * Last resort method to prevent lost stencil bits in the rare case where an error that would normally crash is thrown, but another mod prevents that crash from going through.
+	 */
+	@Override
+	protected void finalize() throws Throwable {
+		this.close();
+		super.finalize();
+	}
 }
