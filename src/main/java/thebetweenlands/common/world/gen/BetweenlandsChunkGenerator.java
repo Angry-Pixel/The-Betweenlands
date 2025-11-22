@@ -20,6 +20,8 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
+
 import org.apache.commons.lang3.mutable.MutableObject;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.warp.*;
@@ -46,8 +48,18 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
 		super(biomeSource, settings);
 
+		// net.minecraft.server.level.ChunkMap gets NoiseGeneratorSettings from this class, and passes it to RandomState.create(...)
+		// RandomState's constructor does settings.getRandomSource().newInstance(levelSeed).forkPositional();
+		// with legacy_random_source set in the noise generator settings, this should be a LegacyPositionalRandomFactory
+		
+		// Info on the blended noise from 1.12.2:
+		// lower noise receives a random with the world seed
+		// upper noise receives a random with the world seed advanced 16 * 262 = 4192 values
+		// blend noise receives a random with the world seed advanced 16 * 262 * 2 = 8384 values
+		
 		this.settings = settings;
 		if (settings.isBound()) {
+//			NoiseGeneratorSettings settingsValue = settings.value();
 			NoiseSettings noise = settings.value().noiseSettings();
 			this.defaultBlock = settings.value().defaultBlock();
 			this.defaultFluid = settings.value().defaultFluid();
@@ -55,7 +67,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			this.cellHeight = noise.getCellHeight();
 			NoiseSlider topSlide = new NoiseSlider(-10.0D, 3, 0);
 			NoiseSlider bottomSlide = new NoiseSlider(15.0D, 3, 0);
-			BlendedNoise blend = BlendedNoise.createUnseeded(1.0F, 1.0F, 80.0F, 160.0F, 0.0D); //todo
+//			BlendedNoise blend = BlendedNoise.createUnseeded(8.0F, 8.0F, 80.0F, 160.0F, 1.0D).withNewRandom(new LegacyRandomSource(1)); //todo
+			BLLegacyBlendedNoise blend = BLLegacyBlendedNoise.createUnseeded(8.0F, 8.0F, 80.0F, 160.0F, 1.0D).withNewRandom(new LegacyRandomSource(1)); // TODO - currently hardcodes seed
 			this.warper = new TerrainWarper(this.cellWidth, this.cellHeight, noise.height() / this.cellHeight, biomeSource, noise, topSlide, bottomSlide, blend, NoiseModifier.PASS);
 		} else {
 			this.defaultBlock = BlockRegistry.BETWEENSTONE.get().defaultBlockState();
