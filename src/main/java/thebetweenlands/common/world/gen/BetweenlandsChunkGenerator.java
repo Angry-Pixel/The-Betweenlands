@@ -45,6 +45,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	private final int cellWidth;
 	private final int cellHeight;
 
+	// TODO extra settings
+	
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
 		super(biomeSource, settings);
 
@@ -183,10 +185,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			int xMin = xMod / this.cellWidth;
 			int zMin = zMod / this.cellWidth;
 			double[][] columns = new double[][]{
-				this.makeAndFillNoiseColumn(xDiv, zDiv, min, max),
-				this.makeAndFillNoiseColumn(xDiv, zDiv + 1, min, max),
-				this.makeAndFillNoiseColumn(xDiv + 1, zDiv, min, max),
-				this.makeAndFillNoiseColumn(xDiv + 1, zDiv + 1, min, max)
+				this.makeAndFillNoiseColumn(xDiv, zDiv, min, max, noise.height()),
+				this.makeAndFillNoiseColumn(xDiv, zDiv + 1, min, max, noise.height()),
+				this.makeAndFillNoiseColumn(xDiv + 1, zDiv, min, max, noise.height()),
+				this.makeAndFillNoiseColumn(xDiv + 1, zDiv + 1, min, max, noise.height())
 			};
 			//Aquifers?
 
@@ -220,14 +222,20 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		}
 	}
 
-	private double[] makeAndFillNoiseColumn(int x, int z, int min, int max) {
+	// TODO get rid of worldHeight
+	
+	private double[] makeAndFillNoiseColumn(int x, int z, int min, int max, int worldHeight) {
 		double[] columns = new double[max + 1];
-		this.fillNoiseColumn(columns, x, z, min, max);
+		this.fillNoiseColumn(columns, x, z, min, max, worldHeight);
 		return columns;
 	}
 
+	private void fillNoiseColumn(double[] columns, int x, int z, int min, int max, int worldHeight) {
+		this.warper.fillNoiseColumn(columns, x, z, sampler, this.getSeaLevel(), worldHeight, min, max);
+	}
+
 	private void fillNoiseColumn(double[] columns, int x, int z, int min, int max) {
-		this.warper.fillNoiseColumn(columns, x, z, sampler, this.getSeaLevel(), min, max);
+		this.fillNoiseColumn(columns, x, z, min, max, max * this.cellHeight);
 	}
 
 	private BlockState generateBaseState(double a, double b) {

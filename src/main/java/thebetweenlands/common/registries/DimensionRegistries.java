@@ -89,7 +89,7 @@ public class DimensionRegistries {
 
 		BiomeSource biomeSource = new BetweenlandsBiomeSource(
 			BiomeRegistry.biomeParameters(biome),
-			0.412F, //affects the base height of all biomes
+			0.46875F, //affects the base height of all biomes
 			1.0F,
 			4,
 			biome);

@@ -17,7 +17,6 @@ public class TerrainWarper {
 	private final NoiseSettings noiseSettings;
 	private final NoiseSlider topSlide;
 	private final NoiseSlider bottomSlide;
-//	private final BlendedNoise blendedNoise;
 	private final BLLegacyBlendedNoise blendedNoise;
 	private final double dimensionDensityFactor;
 	private final double dimensionDensityOffset;
@@ -31,41 +30,41 @@ public class TerrainWarper {
 		}
 	});
 
-//	public TerrainWarper(int width, int height, int yCount, BiomeSource source, NoiseSettings settings, NoiseSlider topSlide, NoiseSlider bottomSlide, BlendedNoise blend, NoiseModifier modifier) {
-	public TerrainWarper(int width, int height, int yCount, BiomeSource source, NoiseSettings settings, NoiseSlider topSlide, NoiseSlider bottomSlide, BLLegacyBlendedNoise blend, NoiseModifier modifier) {
-		this.cellWidth = width;
-		this.cellHeight = height;
-		this.cellCountY = yCount;
-		this.biomeSource = source;
-		this.noiseSettings = settings;
+	public TerrainWarper(int cellWidth, int cellHeight, int cellCountY, BiomeSource biomeSource, NoiseSettings noiseSettings, NoiseSlider topSlide, NoiseSlider bottomSlide, BLLegacyBlendedNoise blendedNoise, NoiseModifier caveNoiseModifier) {
+		this.cellWidth = cellWidth;
+		this.cellHeight = cellHeight;
+		this.cellCountY = cellCountY;
+		this.biomeSource = biomeSource;
+		this.noiseSettings = noiseSettings;
 		this.topSlide = topSlide;
 		this.bottomSlide = bottomSlide;
-		this.blendedNoise = blend;
-		//Fallbacks will never be met as this will crash to enforce correct source
-		this.dimensionDensityFactor = source instanceof BetweenlandsBiomeSource blsource ? blsource.getBaseFactor() : 1.0F;
-		this.dimensionDensityOffset = source instanceof BetweenlandsBiomeSource blsource ? blsource.getBaseOffset() : 0.0F;
-		this.caveNoiseModifier = modifier;
+		this.blendedNoise = blendedNoise;
+		// Fallbacks will never be used as this will crash to enforce correct source
+		this.dimensionDensityFactor = biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getBaseFactor() : 1.0F;
+		this.dimensionDensityOffset = biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getBaseOffset() : 0.0F;
+		this.caveNoiseModifier = caveNoiseModifier;
 	}
 
-	public void fillNoiseColumn(double[] adouble, int x, int z, Climate.Sampler sampler, int sealevel, int min, int max) {
+	public void fillNoiseColumn(double[] adouble, int x, int z, Climate.Sampler sampler, int sealevel, int worldHeight, int min, int max) {
 		if (biomeSource instanceof BetweenlandsBiomeSource source) {
 			float averageBiomeScale = 0.0F; // In 1.12: biomeVariation
 			float averageBiomeDepth = 0.0F; // In 1.12: biomeDepth
 			float totalBiomeWeight = 0.0F;
 			float centerBiomeDepth = source.getBiomeDepth(x, sealevel, z, sampler);
 
-			for (int offX = -2; offX <= 2; ++offX) {
-				for (int offZ = -2; offZ <= 2; ++offZ) {
-					Biome nearbyBiome = source.getNoiseBiome(x + offX, sealevel, z + offZ, sampler).value();
+			for (int offsetX = -2; offsetX <= 2; ++offsetX) {
+				for (int offsetZ = -2; offsetZ <= 2; ++offsetZ) {
+					Biome nearbyBiome = source.getNoiseBiome(x + offsetX, sealevel, z + offsetZ, sampler).value();
 					float nearbyBiomeDepth = source.getBiomeDepth(nearbyBiome);
 					float nearbyBiomeScale = source.getBiomeScale(nearbyBiome);
 
 					// If the neighboring biome is higher than this one, then don't weight them as highly
 					// This helps make sure the lower biome blends properly into the higher one, and doesn't rise too high
 					float weightModifier = nearbyBiomeDepth > centerBiomeDepth ? 0.5F : 1.0F;
-					float biomeWeight = weightModifier * BIOME_WEIGHTS[offX + 2 + (offZ + 2) * 5];
-//					float adjustedWeight = biomeWeight / (nearbyBiomeDepth + 2.0F); // what is this? why is this? is it meant to blend mountains? it feels like it's meant to blend mountains.
+					float biomeWeight = weightModifier * BIOME_WEIGHTS[offsetX + 2 + (offsetZ + 2) * 5];
 					float adjustedWeight = biomeWeight;
+					
+					// Add values to average
 					averageBiomeScale += nearbyBiomeScale * adjustedWeight;
 					averageBiomeDepth += nearbyBiomeDepth * adjustedWeight;
 					totalBiomeWeight += adjustedWeight;
@@ -75,34 +74,16 @@ public class TerrainWarper {
 			// convert biome depth and biome scale to averages
 			averageBiomeDepth /= totalBiomeWeight;
 			averageBiomeScale /= totalBiomeWeight;
-			
-			// normalize depths
-//			double d6 = averageBiomeDepth * 0.5F - 0.125F;
-//			double normalisedBiomeScale = averageBiomeScale * 0.9F + 0.1F;
-//			final double d0 = d6 * 0.265625D;
-//			final double d1 = 96.0D / normalisedBiomeScale;
-//			final double density = -0.46875;
 
+			double baseBiomeHeight = (double)worldHeight * this.dimensionDensityOffset;
+			
 			for (int index = 0; index <= max; ++index) {
 				int y = index + min;
 				DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(x, index, z);
 				final double noise = blendedNoise.compute(context) * 128.0D;
-				// Biome scale multiplier: density multiplier, multiplies noise by a certain amount
-				double biomeScaleDensityMultiplier = averageBiomeScale * 10.0D / 256.0;
 				
-				// Height offset: density modifier that decreases density as height increases
-				double heightDensityOffset = ((double)y * 8.0F) / 256.0 / (512.0D / 32767.0D); // TODO move elsewhere
+				double totalDensity = this.computeInitialDensity(y, averageBiomeDepth, averageBiomeScale, baseBiomeHeight, noise);
 				
-				// Biome depth offset: density modifier that 
-				double biomeDepthDensityOffset = ((double)sealevel + averageBiomeDepth * 10.0D) / 256.0 / (512.0D / 32767.0D); // TODO move elsewhere
-				
-//				adouble[index] = noise - densityOffset;
-//				double modifiedDensity = noise;
-				double totalDensity = noise;
-				totalDensity *= biomeScaleDensityMultiplier;
-				totalDensity -= heightDensityOffset;
-				totalDensity += biomeDepthDensityOffset;
-//				totalDensity += this.computeInitialDensity(y, d0, d1, density);
 				totalDensity = this.caveNoiseModifier.modifyNoise(totalDensity, y * this.cellHeight, z * this.cellWidth, x * this.cellWidth);
 				totalDensity = this.applySlide(totalDensity, y);
 				adouble[index] = totalDensity;
@@ -112,13 +93,33 @@ public class TerrainWarper {
 		}
 	}
 
-	protected double computeInitialDensity(int y, double offset, double factor, double density) {
-		double base = 1.0D - (double)y * 2.0D / 32.0D + density;
-		double factored = base * this.dimensionDensityFactor + this.dimensionDensityOffset;
-		double total = (factored + offset) * factor;
-		return total * (double)(total > 0.0D ? 4 : 1);
-	}
+	protected double computeInitialDensity(int y, double averageBiomeDepth, double averageBiomeScale, double baseBiomeHeight, double noise) {
+		// TODO move some of these hardcoded values to a settings object from the ChunkGenerator
 
+		double totalDensity = noise;
+		
+		// Biome scale multiplier: density multiplier, multiplies noise by a certain amount
+		// Effectively, limits noise to the biome's height variation
+		double biomeScaleDensityMultiplier = averageBiomeScale * 10.0D / 256.0; // Note: 1 / 256.0 is a weighting from 1.12
+		totalDensity *= biomeScaleDensityMultiplier;
+		
+		// Biome depth offset: density modifier that controls biome height
+		double biomeDepthDensityOffset = baseBiomeHeight + averageBiomeDepth * 10.0D;
+
+		totalDensity += biomeDepthDensityOffset / 256.0 / (512.0D / 32767.0D);
+		totalDensity *= this.dimensionDensityFactor;
+				
+		// Height offset: density modifier that decreases density as height increases
+		// TODO the 8.0D could be made into a setting
+		double heightDensityOffset = -((double)y) * 8.0D;
+		
+		// Note: 1 / 256.0 is a weighting from 1.12
+		// Note: 1 / (512.0D / 32767.0D) converts from 1.12 numbers to 1.21 numbers
+		totalDensity += heightDensityOffset / 256.0 / (512.0D / 32767.0D);
+		
+		return totalDensity;
+	}
+	
 	protected double applySlide(double density, int height) {
 		int i = Math.floorDiv(this.noiseSettings.minY(), this.cellHeight);
 		int j = height - i;

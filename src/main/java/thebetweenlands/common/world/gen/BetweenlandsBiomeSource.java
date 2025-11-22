@@ -31,23 +31,23 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 			TerrainPoint.CODEC.fieldOf("parameters").forGetter(Pair::getFirst),
 			Biome.CODEC.fieldOf("biome").forGetter(Pair::getSecond)
 		).apply(pair, Pair::of)).listOf().fieldOf("biomes").forGetter((object) -> object.list),
-		Codec.FLOAT.fieldOf("base_offset").forGetter((object) -> object.offset),
-		Codec.FLOAT.fieldOf("base_factor").forGetter((object) -> object.factor),
+		Codec.floatRange(0.0F, 1.0F).fieldOf("surface_depth").forGetter((object) -> object.surfaceDepth),
+		Codec.FLOAT.optionalFieldOf("global_factor", 1.0F).forGetter((object) -> object.globalFactor),
 		ExtraCodecs.POSITIVE_INT.fieldOf("biome_size").forGetter((object) -> object.biomeSize),
 		RegistryOps.retrieveGetter(Registries.BIOME)
 	).apply(instance, BetweenlandsBiomeSource::new));
 
 	private Layer genBiomes;
 	private final List<Pair<TerrainPoint, Holder<Biome>>> list;
-	private final float offset;
-	private final float factor;
+	private final float surfaceDepth; // The "depth" of the surface, as a factor of the world height: 0.46875 in a 256-high world means the surface is at y = 0.46875 * 256 = 120;
+	private final float globalFactor; // Global multiplier that is used to multiply the output of the biome-related density
 	private final int biomeSize;
 	private final HolderGetter<Biome> registry;
 
-	public BetweenlandsBiomeSource(List<Pair<TerrainPoint, Holder<Biome>>> list, float offset, float factor, int biomeSize, HolderGetter<Biome> registry) {
+	public BetweenlandsBiomeSource(List<Pair<TerrainPoint, Holder<Biome>>> list, float surfaceDepth, float globalFactor, int biomeSize, HolderGetter<Biome> registry) {
 		this.list = list;
-		this.offset = offset;
-		this.factor = factor;
+		this.surfaceDepth = surfaceDepth;
+		this.globalFactor = globalFactor;
 		this.biomeSize = biomeSize;
 		this.registry = registry;
 	}
@@ -69,11 +69,11 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 	}
 
 	public float getBaseOffset() {
-		return this.offset;
+		return this.surfaceDepth;
 	}
 
 	public float getBaseFactor() {
-		return this.factor;
+		return this.globalFactor;
 	}
 
 	public float getBiomeDepth(int x, int y, int z, Climate.Sampler sampler) {
