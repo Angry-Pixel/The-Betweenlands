@@ -10,6 +10,7 @@ import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.NoiseSettings;
+import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 
@@ -47,9 +48,7 @@ public class TerrainWarper {
 		this.blendedNoise = blendedNoise.withNewRandom(randomSource);
 		
 		// Advance the seed to line up with 1.12 depth pertubation noise
-		for(int i = 0; i < 4 * 262 + 10 * 262; ++i) {
-			randomSource.nextInt();
-		}
+		randomSource.consumeCount(4 * 262 + 10 * 262);
 		
 		this.depthNoise = PerlinNoise.create(randomSource, IntStream.rangeClosed(-15, 0));
 		this.seed = seed;
@@ -92,19 +91,20 @@ public class TerrainWarper {
 			averageBiomeDepth /= totalBiomeWeight;
 			averageBiomeScale /= totalBiomeWeight;
 
-			final double baseBiomeHeight = (double)worldHeight * this.settings.dimensionDensityOffset();
-
 			final NoiseModifier caveNoiseModifier = this.settings.caveNoiseModifier();
 			final int cellHeight = this.settings.cellHeight();
 			final int cellWidth = this.settings.cellWidth();
+			
+			final double depthPerturbation = computeDepthPerturbation(x, z, averageBiomeScale);
 			
 			for (int index = 0; index <= max; ++index) {
 				int y = index + min;
 				DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(x, index, z);
 				final double noise = this.blendedNoise.compute(context) * 128.0D;
 				
-				double totalDensity = this.computeInitialDensity(y, averageBiomeDepth, averageBiomeScale, baseBiomeHeight, noise);
-				
+				double totalDensity = this.computeInitialDensity(averageBiomeDepth, averageBiomeScale, noise);
+				totalDensity = this.applyHeightDensityModifiers(y, worldHeight, totalDensity);
+				totalDensity -= depthPerturbation;
 				totalDensity = caveNoiseModifier.modifyNoise(totalDensity, y * cellHeight, z * cellWidth, x * cellWidth);
 				totalDensity = this.applySlide(totalDensity, y);
 				adouble[index] = totalDensity;
@@ -114,7 +114,7 @@ public class TerrainWarper {
 		}
 	}
 
-	protected double computeInitialDensity(int y, double averageBiomeDepth, double averageBiomeScale, double baseBiomeHeight, double noise) {
+	protected double computeInitialDensity(double averageBiomeDepth, double averageBiomeScale, double noise) {
 		// TODO move some of these hardcoded values to a settings object from the ChunkGenerator
 
 		double totalDensity = noise;
@@ -125,20 +125,68 @@ public class TerrainWarper {
 		totalDensity *= biomeScaleDensityMultiplier;
 		
 		// Biome depth offset: density modifier that controls biome height
-		double biomeDepthDensityOffset = averageBiomeDepth * 10.0D;
+		double biomeDepthDensity = averageBiomeDepth * 10.0D;
 
-		totalDensity += biomeDepthDensityOffset / 256.0 / (512.0D / 32767.0D);
+		totalDensity += biomeDepthDensity / 256.0 / (512.0D / 32767.0D);
 		totalDensity *= this.settings.dimensionDensityFactor();
-				
+		
+		return totalDensity;
+	}
+
+	protected double applyHeightDensityModifiers(int y, int worldHeight, double totalDensity) {
+		// Base biome height offset: density modifier that decreases density as height increases
+		final double baseBiomeHeight = (double)worldHeight * this.settings.dimensionDensityOffset();
+
 		// Height offset: density modifier that decreases density as height increases
 		// TODO the 8.0D could be made into a setting
-		double heightDensityOffset = -((double)y) * 8.0D;
+		final double heightDensity = -((double)y) * 8.0D;
 		
 		// Note: 1 / 256.0 is a weighting from 1.12
 		// Note: 1 / (512.0D / 32767.0D) converts from 1.12 numbers to 1.21 numbers
-		totalDensity += (baseBiomeHeight + heightDensityOffset) / 256.0 / (512.0D / 32767.0D);
+		return totalDensity + (baseBiomeHeight + heightDensity) / 256.0 / (512.0D / 32767.0D);
+	}
+	
+	@SuppressWarnings("deprecation")
+	protected double computeDepthPerturbation(int x, int z, double averageBiomeScale) {
+		double depthPerturbation = 0.0;
+		double scale = 1.0;
 		
-		return totalDensity;
+		for (int i = 0; i < 16; i++) {
+			ImprovedNoise improvednoise = this.depthNoise.getOctaveNoise(i);
+			if (improvednoise != null) {
+				depthPerturbation += improvednoise.noise(PerlinNoise.wrap(200.0D * x * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(200.0D * z * scale), 1.0D, -1.0D) / scale;
+			}
+		
+			scale /= 2.0;
+		}
+		
+		depthPerturbation /= 8000.0;
+		
+		if (depthPerturbation < 0.0D) {
+			depthPerturbation = -depthPerturbation * 0.3D;
+		}
+		
+		depthPerturbation = depthPerturbation * 3.0D - 2.0D;
+		
+		if (depthPerturbation < 0.0D) {
+			depthPerturbation = depthPerturbation / 2.0D;
+			
+			if (depthPerturbation < -1.0D)
+			{
+				depthPerturbation = -1.0D;
+			}
+			
+			depthPerturbation = depthPerturbation / 1.4D;
+			depthPerturbation = depthPerturbation / 2.0D;
+		} else {
+			if (depthPerturbation > 1.0D) {
+				depthPerturbation = 1.0D;
+			}
+			
+			depthPerturbation = depthPerturbation / 8.0D;
+		}
+		
+		return depthPerturbation * (averageBiomeScale * 10.0D / 256.0) / 256.0 / (512.0D / 32767.0D);
 	}
 	
 	protected double applySlide(double density, int height) {

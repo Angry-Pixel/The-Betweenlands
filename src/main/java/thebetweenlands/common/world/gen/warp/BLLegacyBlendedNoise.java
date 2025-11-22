@@ -99,15 +99,15 @@ public class BLLegacyBlendedNoise implements DensityFunction.SimpleFunction {
         double minLimitNoiseValue = 0.0;
         double maxLimitNoiseValue = 0.0;
         double mainNoiseValue = 0.0;
-        double d11 = 1.0;
+        double scale = 1.0;
 
         for (int i = 0; i < 8; i++) {
             ImprovedNoise improvednoise = this.mainNoise.getOctaveNoise(i);
             if (improvednoise != null) {
-                mainNoiseValue += improvednoise.noise(PerlinNoise.wrap(d3 * d11), PerlinNoise.wrap(d4 * d11), PerlinNoise.wrap(d5 * d11), d7 * d11, d4 * d11) / d11;
+                mainNoiseValue += improvednoise.noise(PerlinNoise.wrap(d3 * scale), PerlinNoise.wrap(d4 * scale), PerlinNoise.wrap(d5 * scale), d7 * scale, d4 * scale) / scale;
             }
 
-            d11 /= 2.0;
+            scale /= 2.0;
         }
 
         /*
@@ -119,28 +119,28 @@ public class BLLegacyBlendedNoise implements DensityFunction.SimpleFunction {
         double mainDensity = mainNoiseValue / 127.0;
         boolean maxLimitOnly = mainDensity >= 1.0;
         boolean minLimitOnly = mainDensity <= 0.0;
-        d11 = 1.0;
+        scale = 1.0;
 
         for (int j = 0; j < 16; j++) {
-            double d12 = PerlinNoise.wrap(d0 * d11);
-            double d13 = PerlinNoise.wrap(d1 * d11);
-            double d14 = PerlinNoise.wrap(d2 * d11);
-            double d15 = d6 * d11;
+            double d12 = PerlinNoise.wrap(d0 * scale);
+            double d13 = PerlinNoise.wrap(d1 * scale);
+            double d14 = PerlinNoise.wrap(d2 * scale);
+            double d15 = d6 * scale;
             if (!maxLimitOnly) {
                 ImprovedNoise improvednoise1 = this.minLimitNoise.getOctaveNoise(j);
                 if (improvednoise1 != null) {
-                    minLimitNoiseValue += improvednoise1.noise(d12, d13, d14, d15, d1 * d11) / d11;
+                    minLimitNoiseValue += improvednoise1.noise(d12, d13, d14, d15, d1 * scale) / scale;
                 }
             }
 
             if (!minLimitOnly) {
                 ImprovedNoise improvednoise2 = this.maxLimitNoise.getOctaveNoise(j);
                 if (improvednoise2 != null) {
-                    maxLimitNoiseValue += improvednoise2.noise(d12, d13, d14, d15, d1 * d11) / d11;
+                    maxLimitNoiseValue += improvednoise2.noise(d12, d13, d14, d15, d1 * scale) / scale;
                 }
             }
 
-            d11 /= 2.0;
+            scale /= 2.0;
         }
 
         return Mth.clampedLerp(minLimitNoiseValue / 512.0, maxLimitNoiseValue / 512.0, mainDensity) / 128.0;
