@@ -1,8 +1,16 @@
 package thebetweenlands.common.world.gen;
 
+import java.util.List;
+import java.util.OptionalInt;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+
+import org.apache.commons.lang3.mutable.MutableObject;
+
 import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
@@ -17,19 +25,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.levelgen.*;
+import net.minecraft.world.level.levelgen.DensityFunctions;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.NoiseSettings;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import net.minecraft.world.level.levelgen.synth.BlendedNoise;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
-
-import org.apache.commons.lang3.mutable.MutableObject;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.gen.warp.*;
-
-import java.util.List;
-import java.util.OptionalInt;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
+import thebetweenlands.common.world.gen.warp.BLLegacyBlendedNoise;
+import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
+import thebetweenlands.common.world.gen.warp.NoiseModifier;
+import thebetweenlands.common.world.gen.warp.NoiseSlider;
+import thebetweenlands.common.world.gen.warp.TerrainWarper;
 
 public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -69,9 +77,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			this.cellHeight = noise.getCellHeight();
 			NoiseSlider topSlide = new NoiseSlider(-10.0D, 3, 0);
 			NoiseSlider bottomSlide = new NoiseSlider(15.0D, 3, 0);
-//			BlendedNoise blend = BlendedNoise.createUnseeded(8.0F, 8.0F, 80.0F, 160.0F, 1.0D).withNewRandom(new LegacyRandomSource(1)); //todo
-			BLLegacyBlendedNoise blend = BLLegacyBlendedNoise.createUnseeded(8.0F, 8.0F, 80.0F, 160.0F, 1.0D).withNewRandom(new LegacyRandomSource(1)); // TODO - currently hardcodes seed
-			this.warper = new TerrainWarper(this.cellWidth, this.cellHeight, noise.height() / this.cellHeight, biomeSource, noise, topSlide, bottomSlide, blend, NoiseModifier.PASS);
+			BLLegacyBlendedNoise blend = BLLegacyBlendedNoise.createUnseeded(8.0F, 8.0F, 80.0F, 160.0F, 1.0D);
+			this.warper = new TerrainWarper(this.cellWidth, this.cellHeight, noise.height() / this.cellHeight, biomeSource, noise, topSlide, bottomSlide, NoiseModifier.PASS, blend).usingSeed(1L); // TODO - currently hardcodes seed
 		} else {
 			this.defaultBlock = BlockRegistry.BETWEENSTONE.get().defaultBlockState();
 			this.defaultFluid = BlockRegistry.SWAMP_WATER.get().defaultBlockState();
