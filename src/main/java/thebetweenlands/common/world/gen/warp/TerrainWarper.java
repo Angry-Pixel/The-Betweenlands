@@ -104,7 +104,7 @@ public class TerrainWarper {
 		totalDensity *= biomeScaleDensityMultiplier;
 		
 		// Biome depth offset: density modifier that controls biome height
-		double biomeDepthDensityOffset = baseBiomeHeight + averageBiomeDepth * 10.0D;
+		double biomeDepthDensityOffset = averageBiomeDepth * 10.0D;
 
 		totalDensity += biomeDepthDensityOffset / 256.0 / (512.0D / 32767.0D);
 		totalDensity *= this.dimensionDensityFactor;
@@ -115,7 +115,7 @@ public class TerrainWarper {
 		
 		// Note: 1 / 256.0 is a weighting from 1.12
 		// Note: 1 / (512.0D / 32767.0D) converts from 1.12 numbers to 1.21 numbers
-		totalDensity += heightDensityOffset / 256.0 / (512.0D / 32767.0D);
+		totalDensity += (baseBiomeHeight + heightDensityOffset) / 256.0 / (512.0D / 32767.0D);
 		
 		return totalDensity;
 	}
