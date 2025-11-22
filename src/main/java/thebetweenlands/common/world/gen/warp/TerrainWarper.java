@@ -2,6 +2,7 @@ package thebetweenlands.common.world.gen.warp;
 
 import net.minecraft.Util;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -48,49 +49,63 @@ public class TerrainWarper {
 
 	public void fillNoiseColumn(double[] adouble, int x, int z, Climate.Sampler sampler, int sealevel, int min, int max) {
 		if (biomeSource instanceof BetweenlandsBiomeSource source) {
-//			double d0;
-//			double d1;
-//			float f = 0.0F;
-//			float f1 = 0.0F;
-//			float f2 = 0.0F;
-//			float depth = source.getBiomeDepth(x, sealevel, z, sampler);
-//
-//			for (int offX = -2; offX <= 2; ++offX) {
-//				for (int offZ = -2; offZ <= 2; ++offZ) {
-//					Biome biome = source.getNoiseBiome(x + offX, sealevel, z + offZ, sampler).value();
-//					float offD = source.getBiomeDepth(biome);
-//					float offS = source.getBiomeScale(biome);
-//					float f6;
-//					float f7;
-//					f6 = offD;
-//					f7 = offS;
-//
-//					float f8 = offD > depth ? 0.5F : 1.0F;
-//					float f9 = f8 * BIOME_WEIGHTS[offX + 2 + (offZ + 2) * 5] / (f6 + 2.0F);
-//					f += f7 * f9;
-//					f1 += f6 * f9;
-//					f2 += f9;
-//				}
-//			}
-//
-//			float f10 = f1 / f2;
-//			float f11 = f / f2;
-//			double d6 = f10 * 0.5F - 0.125F;
-//			double d8 = f11 * 0.9F + 0.1F;
-//			d0 = d6 * 0.265625D;
-//			d1 = 96.0D / d8;
-//			double density = -0.46875;
+			float averageBiomeScale = 0.0F; // In 1.12: biomeVariation
+			float averageBiomeDepth = 0.0F; // In 1.12: biomeDepth
+			float totalBiomeWeight = 0.0F;
+			float centerBiomeDepth = source.getBiomeDepth(x, sealevel, z, sampler);
+
+			for (int offX = -2; offX <= 2; ++offX) {
+				for (int offZ = -2; offZ <= 2; ++offZ) {
+					Biome nearbyBiome = source.getNoiseBiome(x + offX, sealevel, z + offZ, sampler).value();
+					float nearbyBiomeDepth = source.getBiomeDepth(nearbyBiome);
+					float nearbyBiomeScale = source.getBiomeScale(nearbyBiome);
+
+					// If the neighboring biome is higher than this one, then don't weight them as highly
+					// This helps make sure the lower biome blends properly into the higher one, and doesn't rise too high
+					float weightModifier = nearbyBiomeDepth > centerBiomeDepth ? 0.5F : 1.0F;
+					float biomeWeight = weightModifier * BIOME_WEIGHTS[offX + 2 + (offZ + 2) * 5];
+//					float adjustedWeight = biomeWeight / (nearbyBiomeDepth + 2.0F); // what is this? why is this? is it meant to blend mountains? it feels like it's meant to blend mountains.
+					float adjustedWeight = biomeWeight;
+					averageBiomeScale += nearbyBiomeScale * adjustedWeight;
+					averageBiomeDepth += nearbyBiomeDepth * adjustedWeight;
+					totalBiomeWeight += adjustedWeight;
+				}
+			}
+
+			// convert biome depth and biome scale to averages
+			averageBiomeDepth /= totalBiomeWeight;
+			averageBiomeScale /= totalBiomeWeight;
+			
+			// normalize depths
+//			double d6 = averageBiomeDepth * 0.5F - 0.125F;
+//			double normalisedBiomeScale = averageBiomeScale * 0.9F + 0.1F;
+//			final double d0 = d6 * 0.265625D;
+//			final double d1 = 96.0D / normalisedBiomeScale;
+//			final double density = -0.46875;
 
 			for (int index = 0; index <= max; ++index) {
 				int y = index + min;
 				DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(x, index, z);
-				double noise = blendedNoise.compute(context) * 128.0D;
-				double densityOffset = ((double)y * 8.0 / 256.0 / (512.0D / 32767.0D)); // TODO move elsewhere
-				adouble[index] = noise - densityOffset;
-//				double totaldensity = this.computeInitialDensity(y, d0, d1, density) + noise;
-//				totaldensity = this.caveNoiseModifier.modifyNoise(totaldensity, y * this.cellHeight, z * this.cellWidth, x * this.cellWidth);
-//				totaldensity = this.applySlide(totaldensity, y);
-//				adouble[index] = totaldensity;
+				final double noise = blendedNoise.compute(context) * 128.0D;
+				// Biome scale multiplier: density multiplier, multiplies noise by a certain amount
+				double biomeScaleDensityMultiplier = averageBiomeScale * 10.0D / 256.0;
+				
+				// Height offset: density modifier that decreases density as height increases
+				double heightDensityOffset = ((double)y * 8.0F) / 256.0 / (512.0D / 32767.0D); // TODO move elsewhere
+				
+				// Biome depth offset: density modifier that 
+				double biomeDepthDensityOffset = ((double)sealevel + averageBiomeDepth * 10.0D) / 256.0 / (512.0D / 32767.0D); // TODO move elsewhere
+				
+//				adouble[index] = noise - densityOffset;
+//				double modifiedDensity = noise;
+				double totalDensity = noise;
+				totalDensity *= biomeScaleDensityMultiplier;
+				totalDensity -= heightDensityOffset;
+				totalDensity += biomeDepthDensityOffset;
+//				totalDensity += this.computeInitialDensity(y, d0, d1, density);
+				totalDensity = this.caveNoiseModifier.modifyNoise(totalDensity, y * this.cellHeight, z * this.cellWidth, x * this.cellWidth);
+				totalDensity = this.applySlide(totalDensity, y);
+				adouble[index] = totalDensity;
 			}
 		} else {
 			throw new IllegalArgumentException("BiomeSource is not an instance of BetweenlandsBiomeSource");
