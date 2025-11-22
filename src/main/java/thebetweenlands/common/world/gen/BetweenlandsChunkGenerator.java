@@ -235,7 +235,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 
 		if (a > 0.0D) {
 			state = this.defaultBlock;
-		} else if (b < this.getSeaLevel()) {
+		} else if (b <= this.getSeaLevel()) {
 			state = this.defaultFluid;
 		} else {
 			state = Blocks.AIR.defaultBlockState();
