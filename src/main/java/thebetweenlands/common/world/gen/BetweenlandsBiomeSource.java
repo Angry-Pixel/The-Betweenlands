@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.Climate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.common.world.gen.layer.*;
 import thebetweenlands.common.world.gen.layer.util.*;
+import thebetweenlands.common.world.gen.warp.BLBiomeData;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;
 
 import java.util.List;
@@ -27,10 +28,7 @@ import java.util.stream.Stream;
 public class BetweenlandsBiomeSource extends BiomeSource {
 
 	public static final MapCodec<BetweenlandsBiomeSource> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
-		RecordCodecBuilder.<Pair<TerrainPoint, Holder<Biome>>>create((pair) -> pair.group(
-			TerrainPoint.CODEC.fieldOf("parameters").forGetter(Pair::getFirst),
-			Biome.CODEC.fieldOf("biome").forGetter(Pair::getSecond)
-		).apply(pair, Pair::of)).listOf().fieldOf("biomes").forGetter((object) -> object.list),
+		BLBiomeData.CODEC.listOf().fieldOf("biomes").forGetter((object) -> object.list),
 		Codec.floatRange(0.0F, 1.0F).fieldOf("surface_depth").forGetter((object) -> object.surfaceDepth),
 		Codec.FLOAT.optionalFieldOf("global_factor", 1.0F).forGetter((object) -> object.globalFactor),
 		ExtraCodecs.POSITIVE_INT.fieldOf("biome_size").forGetter((object) -> object.biomeSize),
@@ -38,13 +36,13 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 	).apply(instance, BetweenlandsBiomeSource::new));
 
 	private Layer genBiomes;
-	private final List<Pair<TerrainPoint, Holder<Biome>>> list;
+	private final List<BLBiomeData> list;
 	private final float surfaceDepth; // The "depth" of the surface, as a factor of the world height: 0.46875 in a 256-high world means the surface is at y = 0.46875 * 256 = 120;
 	private final float globalFactor; // Global multiplier that is used to multiply the output of the biome-related density
 	private final int biomeSize;
 	private final HolderGetter<Biome> registry;
 
-	public BetweenlandsBiomeSource(List<Pair<TerrainPoint, Holder<Biome>>> list, float surfaceDepth, float globalFactor, int biomeSize, HolderGetter<Biome> registry) {
+	public BetweenlandsBiomeSource(List<BLBiomeData> list, float surfaceDepth, float globalFactor, int biomeSize, HolderGetter<Biome> registry) {
 		this.list = list;
 		this.surfaceDepth = surfaceDepth;
 		this.globalFactor = globalFactor;
@@ -59,7 +57,7 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 
 	@Override
 	protected Stream<Holder<Biome>> collectPossibleBiomes() {
-		return this.list.stream().map(Pair::getSecond);
+		return this.list.stream().map(BLBiomeData::biome);
 	}
 
 	@Override
@@ -96,7 +94,7 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 
 	private float getBiomeValue(Biome biome, Function<? super TerrainPoint, Float> function) {
 		this.lazyLoad();
-		return this.list.stream().filter(p -> p.getSecond().value().equals(biome)).map(Pair::getFirst).map(function).findFirst().orElse(0.0F);
+		return this.list.stream().filter(p -> p.biome().value().equals(biome)).map(BLBiomeData::terrainPoint).map(function).findFirst().orElse(0.0F);
 	}
 
 	private void lazyLoad() {
@@ -113,12 +111,12 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldData().worldGenOptions().seed();
 	}
 
-	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<Pair<TerrainPoint, Holder<Biome>>> biomes, int size) {
+	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<BLBiomeData> biomes, int size) {
 		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context), biomes, registry, size);
 		return new Layer(areaFactory);
 	}
 
-	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<Pair<TerrainPoint, Holder<Biome>>> biomes, HolderGetter<Biome> registry, int size) {
+	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<BLBiomeData> biomes, HolderGetter<Biome> registry, int size) {
 		AreaFactory<A> genLayer = new BetweenlandsBiomeLayer(registry, biomes).run(context.apply(100L));
 		genLayer = BetweenlandsBiomeSource.repeatZoom(2000L, genLayer, 2, context);
 
