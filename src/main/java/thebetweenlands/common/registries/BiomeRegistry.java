@@ -1,7 +1,7 @@
 package thebetweenlands.common.registries;
 
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.Holder;
+import java.util.List;
+
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -14,9 +14,8 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.warp.BLBiomeData;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;
-
-import java.util.List;
 
 public class BiomeRegistry {
 
@@ -300,7 +299,7 @@ public class BiomeRegistry {
 			.build());
 	}
 
-	public static List<Pair<TerrainPoint, Holder<Biome>>> biomeParameters(HolderGetter<Biome> registry) {
+	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry) {
 		return List.of(
 			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
 			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS),
@@ -315,7 +314,7 @@ public class BiomeRegistry {
 		);
 	}
 
-	private static Pair<TerrainPoint, Holder<Biome>> pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
-		return Pair.of(new TerrainPoint((short)weight, depth, scale), registry.getOrThrow(biome));
+	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
+		return new BLBiomeData(registry.getOrThrow(biome), new TerrainPoint((short)weight, depth, scale));
 	}
 }
