@@ -38,6 +38,7 @@ import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
 import thebetweenlands.common.world.gen.warp.NoiseModifier;
 import thebetweenlands.common.world.gen.warp.NoiseSlider;
 import thebetweenlands.common.world.gen.warp.TerrainWarper;
+import thebetweenlands.util.IBetweenlandsRandomStateExtension;
 
 public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -78,7 +79,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			NoiseSlider topSlide = new NoiseSlider(-10.0D, 3, 0);
 			NoiseSlider bottomSlide = new NoiseSlider(15.0D, 3, 0);
 			BLLegacyBlendedNoise blend = BLLegacyBlendedNoise.createUnseeded(8.0F, 8.0F, 80.0F, 160.0F, 1.0D);
-			this.warper = new TerrainWarper(this.cellWidth, this.cellHeight, noise.height() / this.cellHeight, biomeSource, noise, topSlide, bottomSlide, NoiseModifier.PASS, blend).usingSeed(1L); // TODO - currently hardcodes seed
+			this.warper = new TerrainWarper(this.cellWidth, this.cellHeight, noise.height() / this.cellHeight, biomeSource, noise, topSlide, bottomSlide, NoiseModifier.PASS, blend);
 		} else {
 			this.defaultBlock = BlockRegistry.BETWEENSTONE.get().defaultBlockState();
 			this.defaultFluid = BlockRegistry.SWAMP_WATER.get().defaultBlockState();
@@ -111,7 +112,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		ChunkPos chunkpos = access.getPos();
 		int minX = chunkpos.getMinBlockX();
 		int minZ = chunkpos.getMinBlockZ();
-		BLNoiseInterpolator interpolator = new BLNoiseInterpolator(cellCountX, max, cellCountZ, chunkpos, min, this::fillNoiseColumn);
+		TerrainWarper terrainWarper = this.warper.usingSeed(IBetweenlandsRandomStateExtension.getLevelSeed(random));
+		BLNoiseInterpolator interpolator = new BLNoiseInterpolator(cellCountX, max, cellCountZ, chunkpos, min, (double[] _columns, int _x, int _z, int _min, int _max) -> this.fillNoiseColumn(terrainWarper, _columns, _x, _z, _min, _max));
 		List<BLNoiseInterpolator> list = Lists.newArrayList(interpolator);
 		list.forEach(BLNoiseInterpolator::initialiseFirstX);
 
@@ -180,6 +182,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		if (max <= 0) {
 			return OptionalInt.empty();
 		} else {
+			TerrainWarper terrainWarper = this.warper.usingSeed(IBetweenlandsRandomStateExtension.getLevelSeed(random));
+			
 			BlockState[] states = null;
 			if (column != null) {
 				states = new BlockState[max * noise.getCellHeight()];
@@ -192,10 +196,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			int xMin = xMod / this.cellWidth;
 			int zMin = zMod / this.cellWidth;
 			double[][] columns = new double[][]{
-				this.makeAndFillNoiseColumn(xDiv, zDiv, min, max, noise.height()),
-				this.makeAndFillNoiseColumn(xDiv, zDiv + 1, min, max, noise.height()),
-				this.makeAndFillNoiseColumn(xDiv + 1, zDiv, min, max, noise.height()),
-				this.makeAndFillNoiseColumn(xDiv + 1, zDiv + 1, min, max, noise.height())
+				this.makeAndFillNoiseColumn(terrainWarper, xDiv, zDiv, min, max, noise.height()),
+				this.makeAndFillNoiseColumn(terrainWarper, xDiv, zDiv + 1, min, max, noise.height()),
+				this.makeAndFillNoiseColumn(terrainWarper, xDiv + 1, zDiv, min, max, noise.height()),
+				this.makeAndFillNoiseColumn(terrainWarper, xDiv + 1, zDiv + 1, min, max, noise.height())
 			};
 			//Aquifers?
 
@@ -231,18 +235,18 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 
 	// TODO get rid of worldHeight
 	
-	private double[] makeAndFillNoiseColumn(int x, int z, int min, int max, int worldHeight) {
+	private double[] makeAndFillNoiseColumn(TerrainWarper terrainWarper, int x, int z, int min, int max, int worldHeight) {
 		double[] columns = new double[max + 1];
-		this.fillNoiseColumn(columns, x, z, min, max, worldHeight);
+		this.fillNoiseColumn(terrainWarper, columns, x, z, min, max, worldHeight);
 		return columns;
 	}
 
-	private void fillNoiseColumn(double[] columns, int x, int z, int min, int max, int worldHeight) {
-		this.warper.fillNoiseColumn(columns, x, z, sampler, this.getSeaLevel(), worldHeight, min, max);
+	private void fillNoiseColumn(TerrainWarper terrainWarper, double[] columns, int x, int z, int min, int max, int worldHeight) {
+		terrainWarper.fillNoiseColumn(columns, x, z, this.sampler, this.getSeaLevel(), worldHeight, min, max);
 	}
 
-	private void fillNoiseColumn(double[] columns, int x, int z, int min, int max) {
-		this.fillNoiseColumn(columns, x, z, min, max, max * this.cellHeight);
+	private void fillNoiseColumn(TerrainWarper terrainWarper, double[] columns, int x, int z, int min, int max) {
+		this.fillNoiseColumn(terrainWarper, columns, x, z, min, max, max * this.cellHeight);
 	}
 
 	private BlockState generateBaseState(double a, double b) {
