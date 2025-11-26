@@ -15,6 +15,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "StateHolderMixin"
+    "StateHolderMixin",
+	"RandomStateMixin"
   ]
 }
