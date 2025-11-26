@@ -6,10 +6,49 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.feature.*;
-import thebetweenlands.common.world.gen.feature.config.*;
+import thebetweenlands.common.world.gen.feature.BarnacleClusterFeature;
+import thebetweenlands.common.world.gen.feature.BigBulbCappedMushroomFeature;
+import thebetweenlands.common.world.gen.feature.BladderwortClusterFeature;
+import thebetweenlands.common.world.gen.feature.BlockReplacementClusterFeature;
+import thebetweenlands.common.world.gen.feature.CaveGrassFeature;
+import thebetweenlands.common.world.gen.feature.CaveHangersFeature;
+import thebetweenlands.common.world.gen.feature.CaveMossFeature;
+import thebetweenlands.common.world.gen.feature.CavePotsFeature;
+import thebetweenlands.common.world.gen.feature.CaveThornsFeature;
+import thebetweenlands.common.world.gen.feature.DeepmanSimulacrumFeature;
+import thebetweenlands.common.world.gen.feature.FlatLandFeature;
+import thebetweenlands.common.world.gen.feature.FluidPoolFeature;
+import thebetweenlands.common.world.gen.feature.LakeCavernSimulacrumFeature;
+import thebetweenlands.common.world.gen.feature.LifeGemOreFeature;
+import thebetweenlands.common.world.gen.feature.LyestoneFeature;
+import thebetweenlands.common.world.gen.feature.MossClusterFeature;
+import thebetweenlands.common.world.gen.feature.PebbleClusterFeature;
+import thebetweenlands.common.world.gen.feature.PlantClusterFeature;
+import thebetweenlands.common.world.gen.feature.RootmanSimulacrumFeature;
+import thebetweenlands.common.world.gen.feature.RootsClusterFeature;
+import thebetweenlands.common.world.gen.feature.RottenLogFeature;
+import thebetweenlands.common.world.gen.feature.SmallHollowLogFeature;
+import thebetweenlands.common.world.gen.feature.SpeleothemFeature;
+import thebetweenlands.common.world.gen.feature.SwampKelpClusterFeature;
+import thebetweenlands.common.world.gen.feature.SwampReedClusterFeature;
+import thebetweenlands.common.world.gen.feature.WaterRootsClusterFeature;
+import thebetweenlands.common.world.gen.feature.WeedwoodBushFeature;
+import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.BlockReplacementConfiguration;
+import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.FlatLandConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PlantConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
+import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
+import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 import thebetweenlands.common.world.gen.feature.structure.UnderwaterRuinsFeature;
-import thebetweenlands.common.world.gen.feature.tree.*;
+import thebetweenlands.common.world.gen.feature.tree.HearthgroveTree;
+import thebetweenlands.common.world.gen.feature.tree.NibbletwigTree;
+import thebetweenlands.common.world.gen.feature.tree.RottenWeedwoodTree;
+import thebetweenlands.common.world.gen.feature.tree.RubberTree;
+import thebetweenlands.common.world.gen.feature.tree.SapTree;
+import thebetweenlands.common.world.gen.feature.tree.WeedwoodTree;
 
 public class FeatureRegistry {
 
@@ -23,6 +62,9 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> NIBBLETWIG_TREE = FEATURES.register("nibbletwig_tree", () -> new NibbletwigTree(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> HEARTHGROVE_TREE = FEATURES.register("hearthgrove_tree", () -> new HearthgroveTree(NoneFeatureConfiguration.CODEC));
 
+	// Raw Biome Features
+	public static final DeferredHolder<Feature<?>, Feature<FlatLandConfiguration>> FLAT_LAND = FEATURES.register("flat_land", () -> new FlatLandFeature(FlatLandConfiguration.CODEC));
+	
 	//Biome Features
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",
 		() -> new BarnacleClusterFeature(BlockPlaceConfiguration.CODEC));

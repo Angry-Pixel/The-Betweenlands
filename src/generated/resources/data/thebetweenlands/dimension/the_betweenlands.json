@@ -4,8 +4,6 @@
     "type": "thebetweenlands:bl_chunk_generator",
     "biome_source": {
       "type": "thebetweenlands:bl_biome_source",
-      "global_factor": 1.0,
-      "surface_depth": 0.46875,
       "biome_size": 4,
       "biomes": [
         {
@@ -88,7 +86,8 @@
             "weight": 0
           }
         }
-      ]
+      ],
+      "surface_depth": 0.46875
     },
     "settings": "thebetweenlands:the_betweenlands"
   }

@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:flat_land",
+  "config": {
+    "terrain_level": 8,
+    "terrain_state": {
+      "Name": "thebetweenlands:dead_grass"
+    },
+    "water_level": 120
+  }
+}

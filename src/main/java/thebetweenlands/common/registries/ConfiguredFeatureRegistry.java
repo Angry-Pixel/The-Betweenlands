@@ -27,6 +27,9 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SPIRIT_TREE = makeKey("spirit_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOT_POD = makeKey("root_pod");
 
+	// flat land
+	public static final ResourceKey<ConfiguredFeature<?, ?>> FLAT_LAND_SWAMPLANDS = makeKey("flat_land_swamplands");
+	
 	//ores
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR = makeKey("sulfur");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SYRMORITE = makeKey("syrmorite");
@@ -130,6 +133,8 @@ public class ConfiguredFeatureRegistry {
 		context.register(NIBBLETWIG_TREE, new ConfiguredFeature<>(FeatureRegistry.NIBBLETWIG_TREE.get(), FeatureConfiguration.NONE));
 		context.register(HEARTHGROVE_TREE, new ConfiguredFeature<>(FeatureRegistry.HEARTHGROVE_TREE.get(), FeatureConfiguration.NONE));
 
+		context.register(FLAT_LAND_SWAMPLANDS, new ConfiguredFeature<>(FeatureRegistry.FLAT_LAND.get(), new FlatLandConfiguration(BlockRegistry.DEAD_GRASS.get().defaultBlockState(), 120, 8)));
+		
 		context.register(SULFUR,
 			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SULFUR_ORE.get().defaultBlockState(), 14)));
 		context.register(SYRMORITE,
