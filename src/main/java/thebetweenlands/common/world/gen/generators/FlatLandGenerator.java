@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen.generators;
 
 import java.util.stream.IntStream;
 
@@ -10,26 +10,27 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
+import thebetweenlands.api.world.EarlyGenerationContext;
+import thebetweenlands.api.world.EarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.feature.config.FlatLandConfiguration;
+import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 
 // TODO fix this up so we don't need to generate new perlin noise every single time
 // TODO biome tapering
 // TODO move to earlier in generation somehow - we preferably want this stuff to happen before biome blocks get replaced
-public class FlatLandFeature extends Feature<FlatLandConfiguration> {
+public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {
 
-	public FlatLandFeature(Codec<FlatLandConfiguration> codec) {
+	public FlatLandGenerator(Codec<FlatLandGeneratorConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<FlatLandConfiguration> context) {
-		WorldGenLevel level = context.level();
-		long seed = level.getSeed();
+	public boolean place(EarlyGenerationContext<FlatLandGeneratorConfiguration> context) {
+		long seed = context.worldSeed();
 		
 		// Create noise generators
 
@@ -41,7 +42,7 @@ public class FlatLandFeature extends Feature<FlatLandConfiguration> {
 		
 		// Compute all the noise values for this chunk
 		
-		ChunkPos chunkPos = new ChunkPos(context.origin());
+		ChunkPos chunkPos = context.chunkAccess().getPos();
 
 		double[] landNoise = computeLandNoise(landNoiseGen, chunkPos.x, chunkPos.z);
 		double[] riverNoise = computeRiverNoise(riverNoiseGen, chunkPos.x, chunkPos.z);
@@ -55,19 +56,17 @@ public class FlatLandFeature extends Feature<FlatLandConfiguration> {
 		return true;
 	}
 
-	public void placeColumnBlocks(FeaturePlaceContext<FlatLandConfiguration> context, ChunkPos chunkPos, int xOffset, int zOffset, double[] landNoise, double[] riverNoise) {
-		WorldGenLevel level = context.level();
-		FlatLandConfiguration config = context.config();
-
-		final int x = chunkPos.getBlockX(xOffset);
-		final int z = chunkPos.getBlockZ(zOffset);
+	public void placeColumnBlocks(EarlyGenerationContext<FlatLandGeneratorConfiguration> context, ChunkPos chunkPos, int x, int z, double[] landNoise, double[] riverNoise) {
+//		WorldGenLevel level = context.level();
+		FlatLandGeneratorConfiguration config = context.config();
 		
 		// Used to "flatten" the terrain to the water level (so we don't leave gaps between the terrain and seafloor)
-		final int lowestBlock = findHighestBlockBelowWaterLevel(level, x, z, config.waterLevel());
+//		final int lowestBlock = findHighestBlockBelowWaterLevel(level, x, z, config.waterLevel());
+		final int lowestBlock = context.chunkHeightmaps().oceanfloorHeightmap().getHighestTaken(x, z);
 
 		// Fetch noise values
-		final double landNoiseValue = landNoise[xOffset * 16 + zOffset];
-		final double riverNoiseValue = riverNoise[xOffset * 16 + zOffset];
+		final double landNoiseValue = landNoise[x * 16 + z];
+		final double riverNoiseValue = riverNoise[x * 16 + z];
 
 		// Calculate chance of a river spawning, and how much it'll affect the terrain height
 		int terrainHeight = (int)Math.ceil(Math.abs(landNoiseValue * (config.waterLevel() - lowestBlock + config.terrainLevel())));
@@ -87,23 +86,22 @@ public class FlatLandFeature extends Feature<FlatLandConfiguration> {
 		}
 //		TheBetweenlands.LOGGER.info("Min Height: {}, Max Height: {}", lowestBlock, maxHeight);
 		
-		MutableBlockPos pos = new MutableBlockPos(x, 0, z);
 		for(int y = lowestBlock; y < Mth.clampedLerp(maxHeight, lowestBlock, weight); y++) {
-			this.setBlock(level, pos.setY(y), config.terrainState());
+//			this.setBlock(level, pos.setY(y), context.blockGenerator().defaultTerrainState());
 		}
 	}
 	
-	public static int findHighestBlockBelowWaterLevel(WorldGenLevel level, int x, int z, int waterLevel) {
-		MutableBlockPos pos = new MutableBlockPos(x, 0, z);
-		for(int y = waterLevel; y > level.getMinBuildHeight(); y--) {
-			BlockState currentBlock = level.getBlockState(pos.setY(y));
-			if(!currentBlock.isAir() && !currentBlock.canBeReplaced()) {
-				return y;
-			}
-		}
-		
-		return level.getMinBuildHeight();
-	}
+//	public static int findHighestBlockBelowWaterLevel(WorldGenLevel level, int x, int z, int waterLevel) {
+//		MutableBlockPos pos = new MutableBlockPos(x, 0, z);
+//		for(int y = waterLevel; y > level.getMinBuildHeight(); y--) {
+//			BlockState currentBlock = level.getBlockState(pos.setY(y));
+//			if(!currentBlock.isAir() && !currentBlock.canBeReplaced()) {
+//				return y;
+//			}
+//		}
+//		
+//		return level.getMinBuildHeight();
+//	}
 	
 	public static double[] computeLandNoise(PerlinNoise landNoise, int chunkX, int chunkZ) {
 		double[] noise = new double[256];
