@@ -2,9 +2,10 @@ package thebetweenlands.api.world;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.Climate;
 
-public interface IBetweenlandsBiomeSource {
+public interface IBetweenlandsBiomeSource extends BiomeResolver {
 	public float getSurfaceDepth();
 	
 	public float getGlobalFactor();

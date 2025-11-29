@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
+import thebetweenlands.api.world.IBetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 
 public class TerrainWarper {
@@ -63,7 +64,7 @@ public class TerrainWarper {
 	}
 	
 	public void fillNoiseColumn(double[] adouble, int x, int z, Climate.Sampler sampler, int sealevel, int worldHeight, int min, int max) {
-		if (this.settings.biomeSource() instanceof BetweenlandsBiomeSource biomeSource) {
+		if (this.settings.biomeSource() instanceof IBetweenlandsBiomeSource biomeSource) {
 			float averageBiomeScale = 0.0F; // In 1.12: biomeVariation
 			float averageBiomeDepth = 0.0F; // In 1.12: biomeDepth
 			float totalBiomeWeight = 0.0F;

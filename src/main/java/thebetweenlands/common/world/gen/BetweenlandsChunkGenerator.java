@@ -35,6 +35,7 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import thebetweenlands.api.world.IBetweenlandsBiomeSource;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.warp.BLLegacyBlendedNoise;
 import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
@@ -179,7 +180,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	}
 	
 	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
-		if(this.biomeSource instanceof BetweenlandsBiomeSource biomeSource) {
+		if(this.biomeSource instanceof IBetweenlandsBiomeSource biomeSource) {
 			Set<Holder<Biome>> biomes = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
 			
 		}
