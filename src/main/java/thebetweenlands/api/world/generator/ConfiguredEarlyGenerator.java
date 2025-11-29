@@ -13,12 +13,12 @@ import thebetweenlands.api.BLRegistries;
 public record ConfiguredEarlyGenerator<GC extends EarlyGeneratorConfiguration, G extends EarlyGenerator<GC>>(G generator, GC configuration) {
     public static final Codec<ConfiguredEarlyGenerator<?, ?>> DIRECT_CODEC = BLRegistries.EARLY_GENERATORS
             .byNameCodec()
-            .dispatch(earlyGenerator -> earlyGenerator.generator, EarlyGenerator::configuredCodec);
+            .dispatch(configuredGenerator -> configuredGenerator.generator, EarlyGenerator::configuredCodec);
     public static final Codec<Holder<ConfiguredEarlyGenerator<?, ?>>> CODEC = RegistryFileCodec.create(BLRegistries.Keys.CONFIGURED_GENERATORS, DIRECT_CODEC);
     public static final Codec<HolderSet<ConfiguredEarlyGenerator<?, ?>>> LIST_CODEC = RegistryCodecs.homogeneousList(BLRegistries.Keys.CONFIGURED_GENERATORS, DIRECT_CODEC);
 
 	public Stream<ConfiguredEarlyGenerator<?, ?>> getGenerators() {
-		return Stream.concat(Stream.of(this), configuration.getSubGenerators());
+		return Stream.concat(Stream.of(this), this.configuration.getSubGenerators());
 	}
 	
 }

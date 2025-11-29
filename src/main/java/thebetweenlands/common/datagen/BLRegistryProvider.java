@@ -29,7 +29,8 @@ public class BLRegistryProvider extends DatapackBuiltinEntriesProvider {
 		.add(BLRegistries.Keys.ASPECT_TYPES, AspectTypeRegistry::bootstrap)
 		.add(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipeRegistry::bootstrap)
 		.add(Registries.DAMAGE_TYPE, DamageTypeRegistry::bootstrap)
-		.add(BLRegistries.Keys.FROG_VARIANT, FrogVariantRegistry::bootstrap);
+		.add(BLRegistries.Keys.FROG_VARIANT, FrogVariantRegistry::bootstrap)
+		.add(BLRegistries.Keys.CONFIGURED_GENERATORS, EarlyGeneratorRegistry::bootstrapConfigured);
 
 	public BLRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, provider, BUILDER, Set.of("minecraft", TheBetweenlands.ID));
