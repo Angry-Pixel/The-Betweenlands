@@ -40,9 +40,6 @@ public class PlacedFeatureRegistry {
 
 	public static final ResourceKey<PlacedFeature> GIANT_TREE = makeKey("giant_tree");
 
-	// flat land
-	public static final ResourceKey<PlacedFeature> FLAT_LAND_SWAMPLANDS = makeKey("flat_land_swamplands");
-	
 	//ores
 	public static final ResourceKey<PlacedFeature> SULFUR = makeKey("sulfur");
 	public static final ResourceKey<PlacedFeature> SYRMORITE = makeKey("syrmorite");
@@ -147,9 +144,6 @@ public class PlacedFeatureRegistry {
 
 	public static void bootstrap(BootstrapContext<PlacedFeature> context) {
 		HolderGetter<ConfiguredFeature<?, ?>> featureGetter = context.lookup(Registries.CONFIGURED_FEATURE);
-
-//		context.register(FLAT_LAND_SWAMPLANDS, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.FLAT_LAND_SWAMPLANDS), List.of(CountPlacement.of(1), FixedPlacement.of(BlockPos.ZERO), BiomeFilter.biome())));
-		context.register(FLAT_LAND_SWAMPLANDS, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.FLAT_LAND_SWAMPLANDS), List.of(CountPlacement.of(1))));
 		
 		context.register(SULFUR, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SULFUR), OrePlacements.commonOrePlacement(22, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(128)))));
 		context.register(SYRMORITE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SYRMORITE), OrePlacements.commonOrePlacement(6, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT + 40), VerticalAnchor.absolute(TheBetweenlands.CAVE_START - 5)))));

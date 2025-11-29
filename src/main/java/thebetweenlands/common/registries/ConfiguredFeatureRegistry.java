@@ -27,9 +27,6 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SPIRIT_TREE = makeKey("spirit_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOT_POD = makeKey("root_pod");
 
-	// flat land
-	public static final ResourceKey<ConfiguredFeature<?, ?>> FLAT_LAND_SWAMPLANDS = makeKey("flat_land_swamplands");
-	
 	//ores
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR = makeKey("sulfur");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SYRMORITE = makeKey("syrmorite");
