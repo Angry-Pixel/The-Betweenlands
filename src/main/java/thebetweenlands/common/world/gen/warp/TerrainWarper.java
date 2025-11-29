@@ -3,6 +3,7 @@ package thebetweenlands.common.world.gen.warp;
 import java.util.stream.IntStream;
 
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -31,8 +32,8 @@ public class TerrainWarper {
 
 	public TerrainWarper(int cellWidth, int cellHeight, int cellCountY, BiomeSource biomeSource, NoiseSettings noiseSettings, NoiseSlider topSlide, NoiseSlider bottomSlide, NoiseModifier caveNoiseModifier, BLLegacyBlendedNoise blendedNoise) {
 		// Fallbacks will never be used as this will crash to enforce correct source
-		final double dimensionDensityFactor = biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getBaseFactor() : 1.0F;
-		final double dimensionDensityOffset = biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getBaseOffset() : 0.0F;
+		final double dimensionDensityFactor = biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getGlobalFactor() : 1.0F;
+		final double dimensionDensityOffset = biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getSurfaceDepth() : 0.0F;
 		
 		this.settings = new TerrainWarperSettings(cellWidth, cellHeight, cellCountY, biomeSource, noiseSettings, topSlide, bottomSlide, dimensionDensityFactor, dimensionDensityOffset, caveNoiseModifier);
 		this.blendedNoise = blendedNoise;
@@ -70,7 +71,7 @@ public class TerrainWarper {
 
 			for (int offsetX = -2; offsetX <= 2; ++offsetX) {
 				for (int offsetZ = -2; offsetZ <= 2; ++offsetZ) {
-					Biome nearbyBiome = biomeSource.getNoiseBiome(x + offsetX, sealevel, z + offsetZ, sampler).value();
+					Holder<Biome> nearbyBiome = biomeSource.getNoiseBiome(x + offsetX, sealevel, z + offsetZ, sampler);
 					float nearbyBiomeDepth = biomeSource.getBiomeDepth(nearbyBiome);
 					float nearbyBiomeScale = biomeSource.getBiomeScale(nearbyBiome);
 

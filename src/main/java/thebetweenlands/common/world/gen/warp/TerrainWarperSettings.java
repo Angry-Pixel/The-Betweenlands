@@ -12,8 +12,8 @@ public record TerrainWarperSettings(int cellWidth, int cellHeight, int cellCount
 				biomeSource, 
 				noiseSettings, 
 				topSlide, bottomSlide,
-				biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getBaseFactor() : 1.0F, 
-				biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getBaseOffset() : 0.0F, 
+				biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getGlobalFactor() : 1.0F, 
+				biomeSource instanceof BetweenlandsBiomeSource blBiomeSource ? blBiomeSource.getSurfaceDepth() : 0.0F, 
 				caveNoiseModifier
 			);
 	}

@@ -1,4 +1,4 @@
-package thebetweenlands.api.world;
+package thebetweenlands.api.world.generator;
 
 import java.util.stream.Stream;
 

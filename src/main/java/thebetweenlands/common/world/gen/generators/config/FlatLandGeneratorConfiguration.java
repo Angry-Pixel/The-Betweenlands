@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import thebetweenlands.api.world.EarlyGeneratorConfiguration;
+import thebetweenlands.api.world.generator.EarlyGeneratorConfiguration;
 
 public record FlatLandGeneratorConfiguration(int waterLevel, int terrainLevel) implements EarlyGeneratorConfiguration {
 

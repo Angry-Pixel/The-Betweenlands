@@ -14,6 +14,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import thebetweenlands.api.world.IBetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.layer.*;
 import thebetweenlands.common.world.gen.layer.util.*;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
@@ -25,7 +26,7 @@ import java.util.function.Function;
 import java.util.function.LongFunction;
 import java.util.stream.Stream;
 
-public class BetweenlandsBiomeSource extends BiomeSource {
+public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenlandsBiomeSource {
 
 	public static final MapCodec<BetweenlandsBiomeSource> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 		BLBiomeData.CODEC.listOf().fieldOf("biomes").forGetter((object) -> object.list),
@@ -66,35 +67,41 @@ public class BetweenlandsBiomeSource extends BiomeSource {
 		return this.genBiomes.get(registry, x, z);
 	}
 
-	public float getBaseOffset() {
+	@Override
+	public float getSurfaceDepth() {
 		return this.surfaceDepth;
 	}
 
-	public float getBaseFactor() {
+	@Override
+	public float getGlobalFactor() {
 		return this.globalFactor;
 	}
 
+	@Override
 	public float getBiomeDepth(int x, int y, int z, Climate.Sampler sampler) {
-		Biome biome = this.getNoiseBiome(x, y, z, sampler).value();
+		Holder<Biome> biome = this.getNoiseBiome(x, y, z, sampler);
 		return this.getBiomeDepth(biome);
 	}
 
-	public float getBiomeDepth(Biome biome) {
+	@Override
+	public float getBiomeDepth(Holder<Biome> biome) {
 		return this.getBiomeValue(biome, TerrainPoint::depth);
 	}
 
+	@Override
 	public float getBiomeScale(int x, int y, int z, Climate.Sampler sampler) {
-		Biome biome = this.getNoiseBiome(x, y, z, sampler).value();
+		Holder<Biome> biome = this.getNoiseBiome(x, y, z, sampler);
 		return this.getBiomeScale(biome);
 	}
 
-	public float getBiomeScale(Biome biome) {
+	@Override
+	public float getBiomeScale(Holder<Biome> biome) {
 		return getBiomeValue(biome, TerrainPoint::scale);
 	}
 
-	private float getBiomeValue(Biome biome, Function<? super TerrainPoint, Float> function) {
+	private float getBiomeValue(Holder<Biome> biome, Function<? super TerrainPoint, Float> function) {
 		this.lazyLoad();
-		return this.list.stream().filter(p -> p.biome().value().equals(biome)).map(BLBiomeData::terrainPoint).map(function).findFirst().orElse(0.0F);
+		return this.list.stream().filter(p -> p.biome().is(biome)).map(BLBiomeData::terrainPoint).map(function).findFirst().orElse(0.0F);
 	}
 
 	private void lazyLoad() {

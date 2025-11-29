@@ -1,9 +1,11 @@
-package thebetweenlands.api.world;
+package thebetweenlands.api.world.generator;
 
 import java.util.EnumSet;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+
+import thebetweenlands.api.world.ExtraChunkInfoTypes;
 
 public abstract class EarlyGenerator<GC extends EarlyGeneratorConfiguration> {
 
