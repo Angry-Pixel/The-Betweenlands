@@ -1,13 +1,16 @@
 package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
+import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -43,11 +46,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 
 		LegacyRandomSource random = new LegacyRandomSource(seed);
 		
-		// TODO Fix this up so we don't need to create new perlin noise every single time
-//		PerlinNoise landNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-3, 0));
-//		PerlinNoise riverNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-1, 0));
-//		BLPerlinSimplexNoise landNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-3, 0).boxed().collect(ImmutableList.toImmutableList()));
-//		BLPerlinSimplexNoise riverNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-1, 0).boxed().collect(ImmutableList.toImmutableList()));
+		// TODO Fix this up so we don't need to create new noise every single time
 		BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(random, 4);
 		BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(random, 2);
 		
@@ -141,7 +140,9 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		Heightmap oceanfloorHeightmap = context.chunkHeightmaps().oceanfloorHeightmap();
 		// Get biome weights
 		BiomeWeights biomeWeights = context.extraChunkInfo().biomeWeights().orElseThrow();
-
+		// If specified, only set blocks if the biome matches this
+		Optional<Holder<Biome>> biomeLock = context.biome();
+		
 		final int waterLevel = config.waterLevel();
 		final int terrainHeight = config.terrainHeight();
 		
@@ -151,6 +152,13 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		for(int x = 0; x < 16; ++x) {
 			for(int z = 0; z < 16; ++z) {
 				final int index = x * 16 + z;
+				
+				// If the biome lock is present and the biome test fails, do not set blocks in this column
+				if(biomeLock.isPresent() && biomeWeights.getBiome(x, z) != biomeLock.get()) {
+					minBlockYOut[index] = waterLevel;
+					maxBlockYOut[index] = waterLevel;
+					continue;
+				}
 				
 				// Used to "flatten" the terrain to the water level (so we don't leave gaps between the terrain and seafloor)
 				final int lowestBlock = Math.min(oceanfloorHeightmap.getHighestTaken(x, z), waterLevel);
@@ -199,7 +207,6 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		return IntIntPair.of(minHeightTotal, maxHeightTotal);
 	}
 
-//	public static double[] computeLandNoiseRaw(PerlinNoise landNoise, ChunkPos pos) {
 	public static double[] computeLandNoiseRaw(BLLegacyPerlinSimplexNoise landNoise, ChunkPos pos) {
 		double[] noise = new double[256];
 		
@@ -212,7 +219,6 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		return noise;
 	}
 	
-//	public static double[] computeLandNoise(PerlinNoise landNoise, ChunkPos pos) {
 	public static double[] computeLandNoise(BLLegacyPerlinSimplexNoise landNoise, ChunkPos pos) {
 		double[] noise = computeLandNoiseRaw(landNoise, pos);
 
@@ -224,7 +230,6 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		return noise;
 	}
 
-//	public static double[] computeRiverNoiseRaw(PerlinNoise riverNoise, ChunkPos pos) {
 	public static double[] computeRiverNoiseRaw(BLLegacyPerlinSimplexNoise riverNoise, ChunkPos pos) {
 		double[] noise = new double[256];
 

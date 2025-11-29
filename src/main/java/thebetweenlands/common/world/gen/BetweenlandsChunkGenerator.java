@@ -17,10 +17,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -36,7 +34,6 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
@@ -53,14 +50,12 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmap
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGeneratorConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.gen.generators.FlatLandGenerator;
 import thebetweenlands.common.world.gen.warp.BLLegacyBlendedNoise;
 import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
 import thebetweenlands.common.world.gen.warp.NoiseModifier;
 import thebetweenlands.common.world.gen.warp.NoiseSlider;
 import thebetweenlands.common.world.gen.warp.TerrainWarper;
 import thebetweenlands.util.IBetweenlandsRandomStateExtension;
-import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -197,6 +192,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return access;
 	}
 	
+	public static record BiomeBasedEarlyGenerator(Optional<Holder<Biome>> biomeOptional, ConfiguredEarlyGenerator<?, ?> generator) {}
+	
 	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
 		if(this.biomeSource instanceof IBetweenlandsBiomeSource biomeSource) {
 			Set<Holder<Biome>> biomeSet = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
@@ -204,23 +201,25 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			// TODO feature sorting
 			
 			boolean hasFeatures = false;
-			List<ConfiguredEarlyGenerator<?, ?>> rootGenerators = new ArrayList<>(biomeSet.size());
+			List<BiomeBasedEarlyGenerator> rootGenerators = new ArrayList<>(biomeSet.size());
 			for (Holder<Biome> holder : biomeSet) {
 				HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
 				if(generators.size() != 0) {
+					Optional<Holder<Biome>> biomeOptional = Optional.of(holder);
 					hasFeatures = true;
-					generators.stream().map(Holder::value).forEach(rootGenerators::add);
+					generators.stream().map(Holder::value).map((generator) -> new BiomeBasedEarlyGenerator(biomeOptional, generator)).forEach(rootGenerators::add);
 				}
 			}
 			
 			if(hasFeatures) {
 				long worldSeed = ((IBetweenlandsRandomStateExtension)(Object)random).thebetweenlands$getLevelSeed();
 				ChunkHeightmaps heightmaps = new ChunkHeightmaps(oceanfloorHeightmap, surfaceHeightmap);
-				EarlyGenerationContext<?> context = new EarlyGenerationContext<>(Optional.empty(), this, worldSeed, access, heightmaps, new BlockGenerator(this.defaultBlock, this.defaultFluid, this::generateBaseState), null, new ExtraChunkInfo());
+				EarlyGenerationContext<?> context = new EarlyGenerationContext<>(Optional.empty(), Optional.empty(), this, worldSeed, access, heightmaps, new BlockGenerator(this.defaultBlock, this.defaultFluid, this::generateBaseState), null, new ExtraChunkInfo());
 				
-				for(ConfiguredEarlyGenerator<?, ?> generator : rootGenerators) {
+				for(BiomeBasedEarlyGenerator generator : rootGenerators) {
+					context = context.withBiome(generator.biomeOptional());
 //					TheBetweenlands.LOGGER.info("Placing generator {} with context {}", generator, context);
-					context = placeRootGenerator(generator, context);
+					context = placeRootGenerator(generator.generator(), context);
 //					TheBetweenlands.LOGGER.info("New context {}", context);
 				}
 			}
@@ -312,6 +311,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return context.withExtraChunkInfo(extraInfo);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public BiomeWeights calculateBiomeWeights(ChunkPos pos) {
 		final int cellCountX = 16 / this.cellWidth;
 		final int cellCountZ = 16 / this.cellWidth;
@@ -322,7 +322,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		final int sealevel = this.getSeaLevel();
 		final Climate.Sampler sampler = this.sampler;
 		
-		final float[] terrainBiomeWeights = new float[(cellCountX + 1) * (cellCountZ + 1)];
+		final int totalCellCount = (cellCountX + 1) * (cellCountZ + 1);
+		
+		final float[] terrainBiomeWeights = new float[totalCellCount];
+		final Holder<?>[] noiseBiomes = new Holder[totalCellCount];
 		
 		// Calculate the distance to the nearest biome for each noise cell (including the cells at the start of the next chunk)
 		for (int x = 0; x <= cellCountX; ++x) {
@@ -347,17 +350,22 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 					}
 				}
 				
-				// Store the weight
-				terrainBiomeWeights[x * (cellCountX + 1) + z] = Mth.clamp((float)(nearestOtherBiomeSq - 2) / 46.0F, 0.0F, 1.0F);
+				// Store the weight & biome
+				final int index = x * (cellCountX + 1) + z;
+				terrainBiomeWeights[index] = Mth.clamp((float)(nearestOtherBiomeSq - 2) / 46.0F, 0.0F, 1.0F);
+				noiseBiomes[index] = currentBiome;
 			}
 		}
 		
 		// Interpolate biome weights
 		float[] interpolatedBiomeWeights = new float[256];
+		final Holder<?>[] interpolatedBiomes = new Holder[256];
 		
 		// Note: not sure why we start iterating in z -> x order instead of x -> z order
 		for(int z = 0; z < 16; ++z) {
 			for(int x = 0; x < 16; ++x) {
+				final int index = x + z * 16;
+				
 				int cellX = Math.floorDiv(x, this.cellWidth);
 				int cellZ = Math.floorDiv(z, this.cellWidth);
 				int xMod = Math.floorMod(x, this.cellWidth);
@@ -374,11 +382,16 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * zFraction;
 				float currentVal = interpZAxisXC + (interpZAxisXN - interpZAxisXC) * xFraction;
 
-				interpolatedBiomeWeights[x + z * 16] = currentVal;
+				interpolatedBiomeWeights[index] = currentVal;
+				
+				// There's probably a really smart algorithm that you could use here
+				int biomeCellX = cellX + Math.round(xFraction);
+				int biomeCellZ = cellZ + Math.round(xFraction);
+				interpolatedBiomes[index] = noiseBiomes[biomeCellX + biomeCellZ * (cellCountZ + 1)];
 			}
 		}
 		
-		return new BiomeWeights(interpolatedBiomeWeights);
+		return new BiomeWeights(interpolatedBiomeWeights, (Holder<Biome>[])interpolatedBiomes);
 	}
 	
 	@Override
