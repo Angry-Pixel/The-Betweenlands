@@ -202,27 +202,12 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 //	public static double[] computeLandNoiseRaw(PerlinNoise landNoise, int chunkX, int chunkZ) {
 	public static double[] computeLandNoiseRaw(BLLegacyPerlinSimplexNoise landNoise, int chunkX, int chunkZ) {
 		double[] noise = new double[256];
-//		double scale = 1.0;
-//		
-//		for (int i = 0; i < 4; i++) {
-//			ImprovedNoise improvednoise = landNoise.getOctaveNoise(i);
-//			if (improvednoise != null) {
-//				for(int x = 0; x < 16; ++x) {
-//					final int worldX = (chunkX << 4) + x;
-//					for(int z = 0; z < 16; ++z) {
-//						final int worldZ = (chunkZ << 4) + z;
-//						
-//						final double noiseValue = improvednoise.noise(PerlinNoise.wrap(0.06D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.06D * worldZ * scale), 1.0D, -1.0D) / scale;
-//						noise[x * 16 + z] += noiseValue;
-//					}
-//				}
-//			}
-//		
-//			scale /= 2.0;
-//		}
 		
 		// TODO get rid of getRegion and stuff again
-		noise = landNoise.getRegionTransposed(noise, (chunkX * 16), (chunkZ * 16), 16, 16, 0.06D, 0.06D, 1.0D);
+		// Note: 1.12.2 swaps X and Z when calculating noise for this, so we swap it here to line up with 1.12
+		//       If worldgen ever changes in future, then swap this for:
+		//       noise = landNoise.getRegionTransposed(noise, (chunkX * 16), (chunkZ * 16), 16, 16, 0.06D, 0.06D, 1.0D);
+		noise = landNoise.getRegion(noise, (chunkZ * 16), (chunkX * 16), 16, 16, 0.06D, 0.06D, 1.0D);
 		
 		return noise;
 	}
@@ -242,25 +227,12 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 //	public static double[] computeRiverNoiseRaw(PerlinNoise riverNoise, int chunkX, int chunkZ) {
 	public static double[] computeRiverNoiseRaw(BLLegacyPerlinSimplexNoise riverNoise, int chunkX, int chunkZ) {
 		double[] noise = new double[256];
-//		double scale = 1.0;
-//		
-//		for (int i = 0; i < 2; i++) {
-//			ImprovedNoise improvednoise = riverNoise.getOctaveNoise(i);
-//			if (improvednoise != null) {
-//				for(int x = 0; x < 16; ++x) {
-//					final int worldX = (chunkX << 4) + x;
-//					for(int z = 0; z < 16; ++z) {
-//						final int worldZ = (chunkZ << 4) + z;
-//						noise[x * 16 + z] += improvednoise.noise(PerlinNoise.wrap(0.032D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.032D * worldZ * scale), 1.0D, -1.0D) / scale;
-//					}
-//				}
-//			}
-//		
-//			scale /= 2.0;
-//		}
 
 		// TODO get rid of getRegion and stuff again
-		noise = riverNoise.getRegionTransposed(noise, (chunkX * 16), (chunkZ * 16), 16, 16, 0.032D, 0.032D, 1.0D);
+		// Note: 1.12.2 swaps X and Z when calculating noise for this, so we swap it here to line up with 1.12
+		//       If worldgen ever changes in future, then swap this for:
+		//       noise = riverNoise.getRegionTransposed(noise, (chunkX * 16), (chunkZ * 16), 16, 16, 0.032D, 0.032D, 1.0D);
+		noise = riverNoise.getRegion(noise, (chunkZ * 16), (chunkX * 16), 16, 16, 0.032D, 0.032D, 1.0D);
 		
 		return noise;
 	}
