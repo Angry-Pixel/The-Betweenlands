@@ -17,4 +17,8 @@ public record BLBiomeData(Holder<Biome> biome, TerrainPoint terrainPoint, Holder
 		).apply(pair, BLBiomeData::new));
 
 	public static final Codec<BLBiomeData> CODEC = MAP_CODEC.codec();
+	
+	public BLBiomeData(Holder<Biome> biome, TerrainPoint terrainPoint) {
+		this(biome, terrainPoint, HolderSet.empty());
+	}
 }

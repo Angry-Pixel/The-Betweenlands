@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import java.util.List;
 
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;
@@ -96,7 +98,6 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
-				.addFeature(GenerationStep.Decoration.RAW_GENERATION, PlacedFeatureRegistry.FLAT_LAND_SWAMPLANDS)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_COMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
@@ -314,7 +315,11 @@ public class BiomeRegistry {
 		);
 	}
 
+	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome, HolderSet<ConfiguredEarlyGenerator<?, ?>> generators) {
+		return new BLBiomeData(registry.getOrThrow(biome), new TerrainPoint((short)weight, depth, scale), generators);
+	}
+
 	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
-		return new BLBiomeData(registry.getOrThrow(biome), new TerrainPoint((short)weight, depth, scale));
+		return pairBiome(registry, weight, depth, scale, biome, HolderSet.empty());
 	}
 }
