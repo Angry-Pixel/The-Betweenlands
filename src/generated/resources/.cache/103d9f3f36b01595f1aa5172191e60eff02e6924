@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-29T12:29:14.4255635	Registries
+// 1.21.1	2025-11-29T18:46:33.6755605	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -155,7 +155,6 @@ a9c83e1ec4da3062b6272b3b0a9b44f7eb0d1b39 data/thebetweenlands/worldgen/configure
 269837ebd89c45c8622fe05883bf8fbe14548c79 data/thebetweenlands/worldgen/configured_feature/deepman_simulacrum.json
 4947ea39a3d013519995e322ef5aeac69bb3a4b1 data/thebetweenlands/worldgen/configured_feature/deep_water_coral_patch.json
 25b8bb0d11c0a8eb45fc7cb3eef7fd53ae2e12ac data/thebetweenlands/worldgen/configured_feature/flat_head_mushroom_patch.json
-acd6d80bb21bfd50ca7804967e7560e852aa5f1b data/thebetweenlands/worldgen/configured_feature/flat_land_swamplands.json
 3b896df5acb7dba5f114751c14e46b092e1c8a42 data/thebetweenlands/worldgen/configured_feature/hearthgrove_tree.json
 28be35572e9b6a622aefb935d63265d74d2d0bba data/thebetweenlands/worldgen/configured_feature/lake_cavern_simulacrum.json
 0cade5e7aad8ffc8b71836bcae680e22c8cf09da data/thebetweenlands/worldgen/configured_feature/lichen_patch.json
