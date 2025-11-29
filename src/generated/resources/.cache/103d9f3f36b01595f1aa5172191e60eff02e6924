@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-26T15:13:27.843581	Registries
+// 1.21.1	2025-11-29T12:14:30.2547205	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -77,6 +77,7 @@ dc32aa6f2198aafbdc68ad16492ab8b702f4fb05 data/thebetweenlands/betweenlands/aspec
 26a8c9488b6993bb5bff15b7baecf4827325cedd data/thebetweenlands/betweenlands/aspect/type/yeowynn.json
 23f9bcd3036fb0fd67b9cbb61fa3d1150dac817a data/thebetweenlands/betweenlands/aspect/type/yihinren.json
 baa5133d916fcb2aa0129e52f60f079739d4e226 data/thebetweenlands/betweenlands/aspect/type/yunugaz.json
+f232fa2eb4db7f118a0517b601f90b2b70a7092b data/thebetweenlands/betweenlands/configured_generators/flat_land_swamplands.json
 773bd5045e551faa67b040501bbb6926dec69422 data/thebetweenlands/betweenlands/elixir_recipe/cats_eye.json
 caeb323f9bb7a688b24d0a30fd8b3a5923c0dd02 data/thebetweenlands/betweenlands/elixir_recipe/feasting.json
 c9e247ca9c5988a1e534f155a65820d5a2998e58 data/thebetweenlands/betweenlands/elixir_recipe/healing.json
@@ -127,7 +128,7 @@ d93eee9e403838c967faf092a1b68b9862273687 data/thebetweenlands/worldgen/biome/pat
 d2407310727ac87bdb42ab29709f4da2f3244b89 data/thebetweenlands/worldgen/biome/raised_isles.json
 e1fa3d2b7ecae53cf0a7ce6c7da96026fa8e9fee data/thebetweenlands/worldgen/biome/sludge_plains.json
 dca0c9ea04ada78855d21e7afa965dd982a448ba data/thebetweenlands/worldgen/biome/sludge_plains_clearing.json
-10dcfe45c0f7d153831a2e6d1ed0eae64a63c34a data/thebetweenlands/worldgen/biome/swamplands.json
+084130245b17d6a2eb468a960fe3af1157404270 data/thebetweenlands/worldgen/biome/swamplands.json
 917ca3cd22f59907035395b63965d6d69dbb2563 data/thebetweenlands/worldgen/biome/swamplands_clearing.json
 d3a04f4b216561b8d852160ae2717cb9acba29ed data/thebetweenlands/worldgen/configured_feature/arrow_arum_patch.json
 48748e392e829042501278aca8a3abff6f685c1d data/thebetweenlands/worldgen/configured_feature/barnacle_patch.json

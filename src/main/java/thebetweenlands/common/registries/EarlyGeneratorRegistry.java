@@ -13,9 +13,9 @@ import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfi
 
 public class EarlyGeneratorRegistry {
 
-	public static final DeferredRegister<EarlyGenerator<?>> EARLY_GENERATORS = DeferredRegister.create(BLRegistries.EARLY_GENERATORS, TheBetweenlands.ID);
+	public static final DeferredRegister<EarlyGenerator<?>> GENERATORS = DeferredRegister.create(BLRegistries.EARLY_GENERATORS, TheBetweenlands.ID);
 
-	public static final DeferredHolder<EarlyGenerator<?>, FlatLandGenerator> FLAT_LAND = EARLY_GENERATORS.register("flat_land", () -> new FlatLandGenerator(FlatLandGeneratorConfiguration.CODEC));
+	public static final DeferredHolder<EarlyGenerator<?>, FlatLandGenerator> FLAT_LAND = GENERATORS.register("flat_land", () -> new FlatLandGenerator(FlatLandGeneratorConfiguration.CODEC));
 	
 	public static final class Configured {
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> FLAT_LAND_SWAMPLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("flat_land_swamplands"));

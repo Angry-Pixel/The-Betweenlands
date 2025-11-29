@@ -103,6 +103,7 @@ public class TheBetweenlands {
 		LootFunctionRegistry.CONDITIONS.register(eventbus);
 		StructureTypeRegistry.TYPES.register(eventbus);
 		StructureTypeRegistry.PIECE_TYPES.register(eventbus);
+		EarlyGeneratorRegistry.GENERATORS.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
 

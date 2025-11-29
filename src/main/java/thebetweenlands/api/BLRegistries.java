@@ -34,7 +34,6 @@ public class BLRegistries {
 
 	// Unsynced registries
 	public static final Registry<EarlyGenerator<?>> EARLY_GENERATORS = new RegistryBuilder<>(Keys.EARLY_GENERATORS).sync(false).create();
-	public static final Registry<ConfiguredEarlyGenerator<?, ?>> CONFIGURED_GENERATORS = new RegistryBuilder<>(Keys.CONFIGURED_GENERATORS).sync(false).create();
 
 	public static final class Keys {
 
@@ -54,7 +53,7 @@ public class BLRegistries {
 		public static final ResourceKey<Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>>> WORLD_STORAGE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("world_storage"));
 
 		// Unsynced registries
-		public static final ResourceKey<Registry<EarlyGenerator<?>>> EARLY_GENERATORS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("early_generators"));
-		public static final ResourceKey<Registry<ConfiguredEarlyGenerator<?, ?>>> CONFIGURED_GENERATORS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("configured_generators"));
+		public static final ResourceKey<Registry<EarlyGenerator<?>>> EARLY_GENERATORS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("generators"));
+		public static final ResourceKey<Registry<ConfiguredEarlyGenerator<?, ?>>> CONFIGURED_GENERATORS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "configured_generators"));
 	}
 }

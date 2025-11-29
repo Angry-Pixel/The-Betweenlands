@@ -69,7 +69,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		final double riverNoiseValue = riverNoise[x * 16 + z];
 
 		// Calculate chance of a river spawning, and how much it'll affect the terrain height
-		int terrainHeight = (int)Math.ceil(Math.abs(landNoiseValue * (config.waterLevel() - lowestBlock + config.terrainLevel())));
+		int terrainHeight = (int)Math.ceil(Math.abs(landNoiseValue * (config.waterLevel() - lowestBlock + config.terrainHeight())));
 		float riverThreshold = 6.0f * (terrainHeight + 2);
 		double riverPercentage = 1.0D - (riverNoiseValue / riverThreshold);
 		

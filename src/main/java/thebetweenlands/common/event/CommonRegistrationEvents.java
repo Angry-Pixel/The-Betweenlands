@@ -44,6 +44,7 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.GrubHubWrapper;
@@ -185,10 +186,14 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void makeDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-		event.dataPackRegistry(BLRegistries.Keys.ASPECT_ITEMS, AspectItem.DIRECT_CODEC, AspectItem.DIRECT_CODEC);
-		event.dataPackRegistry(BLRegistries.Keys.ASPECT_TYPES, AspectType.DIRECT_CODEC, AspectType.DIRECT_CODEC);
-		event.dataPackRegistry(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipe.CODEC, ElixirRecipe.CODEC);
-		event.dataPackRegistry(BLRegistries.Keys.FROG_VARIANT, FrogVariant.DIRECT_CODEC, FrogVariant.DIRECT_CODEC);
+		// Synced registries
+		event.dataPackRegistry(BLRegistries.Keys.ASPECT_ITEMS,   AspectItem.DIRECT_CODEC,  AspectItem.DIRECT_CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.ASPECT_TYPES,   AspectType.DIRECT_CODEC,  AspectType.DIRECT_CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipe.CODEC,       ElixirRecipe.CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.FROG_VARIANT,   FrogVariant.DIRECT_CODEC, FrogVariant.DIRECT_CODEC);
+		
+		// Unsynced registries
+		event.dataPackRegistry(BLRegistries.Keys.CONFIGURED_GENERATORS, ConfiguredEarlyGenerator.DIRECT_CODEC);
 	}
 
 	private static void makeNewRegistries(NewRegistryEvent event) {
@@ -201,7 +206,6 @@ public class CommonRegistrationEvents {
 		event.register(BLRegistries.WORLD_STORAGE);
 
 		event.register(BLRegistries.EARLY_GENERATORS);
-		event.register(BLRegistries.CONFIGURED_GENERATORS);
 	}
 
 	private static void extraRegistration(RegisterEvent event) {
