@@ -3,6 +3,7 @@ package thebetweenlands.common.world.gen.generators;
 import java.util.EnumSet;
 import java.util.stream.IntStream;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
@@ -14,15 +15,15 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
-import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
+import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
+import thebetweenlands.common.world.gen.warp.BLPerlinSimplexNoise;
 
 // TODO fix this up so we don't need to generate new perlin noise every single time
 // TODO biome tapering
@@ -47,8 +48,10 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		LegacyRandomSource random = new LegacyRandomSource(seed);
 		
 		// TODO Fix this up so we don't need to create new perlin noise every single time
-		PerlinNoise landNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-3, 0));
-		PerlinNoise riverNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-1, 0));
+//		PerlinNoise landNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-3, 0));
+//		PerlinNoise riverNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-1, 0));
+		BLPerlinSimplexNoise landNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-3, 0).boxed().collect(ImmutableList.toImmutableList()));
+		BLPerlinSimplexNoise riverNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-1, 0).boxed().collect(ImmutableList.toImmutableList()));
 		
 		// Compute all the noise values for this chunk
 		
@@ -168,7 +171,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 				double riverPercentage = 1.0D - (riverNoiseValue / riverThreshold);
 				
 				// Get biome weighting (for blending)
-				float biomeWeight = biomeWeights.get(x, z);
+				float biomeWeight = biomeWeights.get(x, z, 0, 10);
 				
 				// Calculate lerp weight
 				float weight = (Math.min(biomeWeight + 0.5F, 1.0F) - 0.5F) * 2.0F;
@@ -198,53 +201,99 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		return IntIntPair.of(minHeightTotal, maxHeightTotal);
 	}
 	
-	public static double[] computeLandNoise(PerlinNoise landNoise, int chunkX, int chunkZ) {
-		double[] noise = new double[256];
-		double scale = 1.0; // 1.0 / 18.0 - account for / 18.0 later in 1.12
-		
-		for (int i = 0; i < 4; i++) {
-			ImprovedNoise improvednoise = landNoise.getOctaveNoise(i);
-			if (improvednoise != null) {
-				for(int x = 0; x < 16; ++x) {
-					final int worldX = (chunkX << 4) + x;
-					for(int z = 0; z < 16; ++z) {
-						final int worldZ = (chunkZ << 4) + z;
-						
-						final double noiseValue = improvednoise.noise(PerlinNoise.wrap(0.06D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.06D * worldZ * scale), 1.0D, -1.0D) / scale;
-						noise[x * 16 + z] += noiseValue;
-					}
-				}
-			}
-		
-			scale /= 2.0;
-		}
+//	public static double[] computeLandNoise(PerlinNoise landNoise, int chunkX, int chunkZ) {
+//		double[] noise = new double[256];
+//		double scale = 1.0; // 1.0 / 18.0 - account for / 18.0 later in 1.12
+//		
+//		for (int i = 0; i < 4; i++) {
+//			ImprovedNoise improvednoise = landNoise.getOctaveNoise(i);
+//			if (improvednoise != null) {
+//				for(int x = 0; x < 16; ++x) {
+//					final int worldX = (chunkX << 4) + x;
+//					for(int z = 0; z < 16; ++z) {
+//						final int worldZ = (chunkZ << 4) + z;
+//						
+//						final double noiseValue = improvednoise.noise(PerlinNoise.wrap(0.06D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.06D * worldZ * scale), 1.0D, -1.0D) / scale;
+//						noise[x * 16 + z] += noiseValue;
+//					}
+//				}
+//			}
+//		
+//			scale /= 2.0;
+//		}
+//
+//		for(int i = 256; i-- != 0;) {
+//			noise[i] /= 18.0D; // account for X / 18.0 later in 1.12
+//		}
+//		
+//		return noise;
+//	}
 
-		for(int x = 16; x-- != 0;) {
-			for(int z = 16; z-- != 0;) {
-				noise[x * 16 + z] /= 18.0D; // account for X / 18.0 later in 1.12
+	public static double[] computeLandNoise(BLPerlinSimplexNoise landNoise, int chunkX, int chunkZ) {
+		double[] noise = new double[256];
+		
+//		final double multiplier = Math.pow(2.0D, -(-3) + 0 + 1) - 1.0D;
+		
+		for(int x = 0; x < 16; ++x) {
+			final int worldX = (chunkX << 4) + x;
+			for(int z = 0; z < 16; ++z) {
+				final int worldZ = (chunkZ << 4) + z;
+
+				final double noiseValue = landNoise.getValue(PerlinNoise.wrap(0.06D * worldX), PerlinNoise.wrap(0.06D * worldZ), false, 0.5D, 2.0D, 1.0D, 0.55D);
+//				final double noiseValue = landNoise.getValue(PerlinNoise.wrap(0.06D * worldX), PerlinNoise.wrap(0.06D * worldZ), false) * multiplier * 0.55D;
+				noise[x * 16 + z] = noiseValue / 18.0D;
 			}
 		}
 		
 		return noise;
 	}
 
-	public static double[] computeRiverNoise(PerlinNoise riverNoise, int chunkX, int chunkZ) {
+//	public static double[] computeRiverNoise(PerlinNoise riverNoise, int chunkX, int chunkZ) {
+//		double[] noise = new double[256];
+//		double scale = 1.0;
+//		
+//		for (int i = 0; i < 2; i++) {
+//			ImprovedNoise improvednoise = riverNoise.getOctaveNoise(i);
+//			if (improvednoise != null) {
+//				for(int x = 0; x < 16; ++x) {
+//					final int worldX = (chunkX << 4) + x;
+//					for(int z = 0; z < 16; ++z) {
+//						final int worldZ = (chunkZ << 4) + z;
+//						noise[x * 16 + z] += improvednoise.noise(PerlinNoise.wrap(0.032D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.032D * worldZ * scale), 1.0D, -1.0D) / scale;
+//					}
+//				}
+//			}
+//		
+//			scale /= 2.0;
+//		}
+//		
+//		for(int x = 16; x-- != 0;) {
+//			for(int z = 16; z-- != 0;) {
+//				double riverNoiseValue = noise[x * 16 + z];
+//				riverNoiseValue = Math.abs(riverNoiseValue) * 4.0D;
+//				riverNoiseValue = riverNoiseValue * riverNoiseValue * riverNoiseValue * riverNoiseValue * riverNoiseValue;
+//				riverNoiseValue *= 25.0D;
+//				noise[x * 16 + z] = riverNoiseValue;
+//			}
+//		}
+//		
+//		return noise;
+//	}
+
+	public static double[] computeRiverNoise(BLPerlinSimplexNoise riverNoise, int chunkX, int chunkZ) {
 		double[] noise = new double[256];
-		double scale = 1.0;
+
+//		final double multiplier = Math.pow(2.0D, -(-1) + 0 + 1) - 1.0D;
 		
-		for (int i = 0; i < 2; i++) {
-			ImprovedNoise improvednoise = riverNoise.getOctaveNoise(i);
-			if (improvednoise != null) {
-				for(int x = 0; x < 16; ++x) {
-					final int worldX = (chunkX << 4) + x;
-					for(int z = 0; z < 16; ++z) {
-						final int worldZ = (chunkZ << 4) + z;
-						noise[x * 16 + z] += improvednoise.noise(PerlinNoise.wrap(0.032D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.032D * worldZ * scale), 1.0D, -1.0D) / scale;
-					}
-				}
+		for(int x = 0; x < 16; ++x) {
+			final int worldX = (chunkX << 4) + x;
+			for(int z = 0; z < 16; ++z) {
+				final int worldZ = (chunkZ << 4) + z;
+				
+				final double noiseValue = riverNoise.getValue(PerlinNoise.wrap(0.032D * worldX), PerlinNoise.wrap(0.032D * worldZ), false, 0.5D, 2.0D, 1.0D, 0.55D);
+//				final double noiseValue = riverNoise.getValue(PerlinNoise.wrap(0.032D * worldX), PerlinNoise.wrap(0.032D * worldZ), false) * multiplier * 0.55D;
+				noise[x * 16 + z] = noiseValue;
 			}
-		
-			scale /= 2.0;
 		}
 		
 		for(int x = 16; x-- != 0;) {
@@ -259,5 +308,41 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		
 		return noise;
 	}
+	
+	
+	// 1.12.2 stuff:
+	
+
+//    public double[] getRegion(double[] out, double x, double z, int width, int height, double scaleX, double scaleZ, double factor)
+//    {
+//        return this.getRegion(out, x, z, width, height, scaleX, scaleZ, factor, 0.5D);
+//    }
+//
+//    public double[] getRegion(double[] out, double x, double z, int width, int height, double scaleX, double scaleZ, double octaveScaleFactor, double octiveAmplifierFactor)
+//    {
+//        if (out != null && out.length >= width * height)
+//        {
+//            for (int i = 0; i < out.length; ++i)
+//            {
+//                out[i] = 0.0D;
+//            }
+//        }
+//        else
+//        {
+//            out = new double[width * height];
+//        }
+//
+//        double amplifier = 1.0D;
+//        double scale = 1.0D;
+//
+//        for (int j = 0; j < this.levels; ++j)
+//        {
+//            this.noiseLevels[j].add(out, x, z, width, height, scaleX * scale * amplifier, scaleZ * scale * amplifier, 0.55D / amplifier);
+//            scale *= octaveScaleFactor;
+//            amplifier *= octiveAmplifierFactor;
+//        }
+//
+//        return out;
+//    }
 	
 }
