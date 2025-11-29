@@ -190,18 +190,17 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			
 			boolean hasFeatures = false;
 			List<ConfiguredEarlyGenerator<?, ?>> rootGenerators = new ArrayList<>(biomeSet.size());
-            for (Holder<Biome> holder : biomeSet) {
-            	HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
-            	if(generators.size() != 0) {
-            		hasFeatures = true;
-            		generators.stream().map(Holder::value).forEach(rootGenerators::add);
-            	}
-            }
-            
-            if(hasFeatures) {
-            	
-            }
+			for (Holder<Biome> holder : biomeSet) {
+				HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
+				if(generators.size() != 0) {
+					hasFeatures = true;
+					generators.stream().map(Holder::value).forEach(rootGenerators::add);
+				}
+			}
 			
+			if(hasFeatures) {
+				
+			}
 		}
 		
 		return access;
@@ -223,13 +222,13 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		final LevelChunkSection[] sections = access.getSections();
 		
 		final Set<Holder<Biome>> set = new ObjectArraySet<>();
-        for (int i = minSectionIndex; i < maxSectionIndex; ++i) {
-        	LevelChunkSection levelchunksection = sections[i];
-            levelchunksection.getBiomes().getAll(set::add);
-        }
-        set.retainAll(this.biomeSource.possibleBiomes());
-        
-        return set;
+		for (int i = minSectionIndex; i < maxSectionIndex; ++i) {
+			LevelChunkSection levelchunksection = sections[i];
+			levelchunksection.getBiomes().getAll(set::add);
+		}
+		set.retainAll(this.biomeSource.possibleBiomes());
+		
+		return set;
 	}
 	
 	@Override
