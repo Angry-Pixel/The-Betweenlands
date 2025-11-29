@@ -29,7 +29,7 @@ public abstract class EarlyGenerator<GC extends EarlyGeneratorConfiguration> {
 	 * Tells the chunk generator to provide additional info
 	 * @return
 	 */
-	public EnumSet<ExtraChunkInfoTypes> getRequiredExtraInfo() {
+	public EnumSet<ExtraChunkInfoTypes> getRequiredExtraInfo(GC config) {
 		return EnumSet.noneOf(ExtraChunkInfoTypes.class);
 	}
 	

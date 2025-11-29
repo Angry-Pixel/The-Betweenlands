@@ -5,5 +5,15 @@ package thebetweenlands.api.world;
  * TODO Make extensible eventually
  */
 public enum ExtraChunkInfoTypes {
-	BIOME_WEIGHTS
+	BIOME_WEIGHTS(BiomeWeights.class);
+	
+	private final Class<?> datatypeClass;
+	
+	private ExtraChunkInfoTypes(Class<?> datatypeClass) {
+		this.datatypeClass = datatypeClass;
+	}
+	
+	public Class<?> getDatatypeClass() {
+		return this.datatypeClass;
+	}
 }

@@ -4,9 +4,7 @@ public class BiomeWeights {
 	private final float[] weights = new float[256];
 
 	public BiomeWeights(float[] weights) {
-		for(int i = 0; i < weights.length; i++) {
-			this.weights[i] = weights[i];
-		}
+		System.arraycopy(weights, 0, this.weights, 0, Math.min(weights.length, this.weights.length));
 	}
 
 	/**
