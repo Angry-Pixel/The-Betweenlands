@@ -18,6 +18,18 @@ public record EarlyGenerationContext<GC extends EarlyGeneratorConfiguration>(
 		GC config
 	) {
 
+	public <GC2 extends EarlyGeneratorConfiguration> EarlyGenerationContext<GC2> withConfig(GC2 config) {
+		return new EarlyGenerationContext<GC2>(this.parentGenerator, this.chunkGenerator, this.worldSeed, this.chunkAccess, this.chunkHeightmaps, this.blockGenerator, config);
+	}
+
+	public EarlyGenerationContext<GC> withParentGenerator(ConfiguredEarlyGenerator<?, ?> parent) {
+		return new EarlyGenerationContext<GC>(Optional.of(parent), this.chunkGenerator, this.worldSeed, this.chunkAccess, this.chunkHeightmaps, this.blockGenerator, this.config);
+	}
+
+	public EarlyGenerationContext<GC> withoutParentGenerator() {
+		return new EarlyGenerationContext<GC>(Optional.empty(), this.chunkGenerator, this.worldSeed, this.chunkAccess, this.chunkHeightmaps, this.blockGenerator, this.config);
+	}
+	
 	public static record BlockGenerator(BlockState defaultTerrainState, BlockState defaultLiquidState, BlockGeneratorFunction generatorFunction) {
 
 		public BlockState getBlockState(double density, double y) {

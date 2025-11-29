@@ -2,6 +2,7 @@ package thebetweenlands.common.world.gen;
 
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
@@ -11,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
@@ -170,9 +173,45 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			list.forEach(BLNoiseInterpolator::swapSlices);
 		}
 
+		access = applyEarlyGenerators(blender, structureManager, random, access, oceanfloor, surface, min, max);
+		
+		return access;
+	}
+	
+	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
+		if(this.biomeSource instanceof BetweenlandsBiomeSource biomeSource) {
+			Set<Holder<Biome>> biomes = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
+			
+		}
+		
 		return access;
 	}
 
+	protected Set<Holder<Biome>> getBiomeSet(ChunkAccess access, int minBlockY, int maxBlockY) {
+		final int minSectionIndex = 
+			Math.max(
+				access.getSectionIndex(minBlockY),
+				0
+			);
+		
+		final int maxSectionIndex = 
+				Math.min(
+						access.getSectionIndex(maxBlockY) + 1,
+						access.getSectionsCount()
+					);
+
+		final LevelChunkSection[] sections = access.getSections();
+		
+		final Set<Holder<Biome>> set = new ObjectArraySet<>();
+        for (int i = minSectionIndex; i < maxSectionIndex; ++i) {
+        	LevelChunkSection levelchunksection = sections[i];
+            levelchunksection.getBiomes().getAll(set::add);
+        }
+        set.retainAll(this.biomeSource.possibleBiomes());
+        
+        return set;
+	}
+	
 	@Override
 	public OptionalInt iterateNoiseColumn(LevelHeightAccessor level, RandomState random, int x, int z, MutableObject<NoiseColumn> column, Predicate<BlockState> stoppingState) {
 		NoiseSettings noise = this.settings.value().noiseSettings().clampToHeightAccessor(level);
