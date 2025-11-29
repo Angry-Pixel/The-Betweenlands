@@ -15,12 +15,15 @@ import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
+import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
+import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 public class BLRegistries {
+	// Synced registries
 	public static final Registry<AmphibiousArmorUpgrade> AMPHIBIOUS_ARMOR_UPGRADES = new RegistryBuilder<>(Keys.AMPHIBIOUS_ARMOR_UPGRADES).sync(true).create();
 	public static final Registry<MapCodec<? extends AspectCalculatorType>> ASPECT_CALCULATOR_TYPE = new RegistryBuilder<>(Keys.ASPECT_CALCULATOR_TYPE).sync(true).create();
 	public static final Registry<CenserRecipe<?>> CENSER_RECIPES = new RegistryBuilder<>(Keys.CENSER_RECIPES).sync(true).create();
@@ -29,10 +32,15 @@ public class BLRegistries {
 	public static final Registry<SimulacrumEffect> SIMULACRUM_EFFECTS = new RegistryBuilder<>(Keys.SIMULACRUM_EFFECTS).sync(true).create();
 	public static final Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>> WORLD_STORAGE = new RegistryBuilder<>(Keys.WORLD_STORAGE).sync(true).create();
 
+	// Unsynced registries
+	public static final Registry<EarlyGenerator<?>> EARLY_GENERATORS = new RegistryBuilder<>(Keys.EARLY_GENERATORS).sync(false).create();
+	public static final Registry<ConfiguredEarlyGenerator<?, ?>> CONFIGURED_GENERATORS = new RegistryBuilder<>(Keys.CONFIGURED_GENERATORS).sync(false).create();
+
 	public static final class Keys {
 
 		private static final String DATAPACK_PREFIX = "betweenlands";
 
+		// Synced registries
 		public static final ResourceKey<Registry<AmphibiousArmorUpgrade>> AMPHIBIOUS_ARMOR_UPGRADES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("amphibious_armor_upgrades"));
 		public static final ResourceKey<Registry<MapCodec<? extends AspectCalculatorType>>> ASPECT_CALCULATOR_TYPE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("aspect_calculator_type"));
 		public static final ResourceKey<Registry<AspectItem>> ASPECT_ITEMS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "aspect/item"));
@@ -44,5 +52,9 @@ public class BLRegistries {
 		public static final ResourceKey<Registry<FrogVariant>> FROG_VARIANT = ResourceKey.createRegistryKey(TheBetweenlands.prefix("frog_variant"));
 		public static final ResourceKey<Registry<SimulacrumEffect>> SIMULACRUM_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("simulacrum_effect"));
 		public static final ResourceKey<Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>>> WORLD_STORAGE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("world_storage"));
+
+		// Unsynced registries
+		public static final ResourceKey<Registry<EarlyGenerator<?>>> EARLY_GENERATORS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("early_generators"));
+		public static final ResourceKey<Registry<ConfiguredEarlyGenerator<?, ?>>> CONFIGURED_GENERATORS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("configured_generators"));
 	}
 }

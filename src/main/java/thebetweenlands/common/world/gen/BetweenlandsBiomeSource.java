@@ -1,11 +1,18 @@
 package thebetweenlands.common.world.gen;
 
-import com.mojang.datafixers.util.Pair;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.LongFunction;
+import java.util.stream.Stream;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
@@ -15,16 +22,18 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.world.IBetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.layer.*;
-import thebetweenlands.common.world.gen.layer.util.*;
+import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
+import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
+import thebetweenlands.common.world.gen.layer.ThinMaskLayer;
+import thebetweenlands.common.world.gen.layer.ZoomIncrementLayer;
+import thebetweenlands.common.world.gen.layer.util.Area;
+import thebetweenlands.common.world.gen.layer.util.AreaFactory;
+import thebetweenlands.common.world.gen.layer.util.BigContext;
+import thebetweenlands.common.world.gen.layer.util.Layer;
+import thebetweenlands.common.world.gen.layer.util.LazyArea;
+import thebetweenlands.common.world.gen.layer.util.LazyAreaContext;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.LongFunction;
-import java.util.stream.Stream;
 
 public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenlandsBiomeSource {
 
@@ -99,6 +108,14 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		return getBiomeValue(biome, TerrainPoint::scale);
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public HolderSet<ConfiguredEarlyGenerator<?, ?>> getBiomeGenerators(Holder<Biome> biome) {
+		this.lazyLoad();
+		return this.list.stream().filter(p -> p.biome().is(biome)).map(BLBiomeData::generators).findFirst().orElseGet(HolderSet::empty);
+	}
+
+	@SuppressWarnings("deprecation")
 	private float getBiomeValue(Holder<Biome> biome, Function<? super TerrainPoint, Float> function) {
 		this.lazyLoad();
 		return this.list.stream().filter(p -> p.biome().is(biome)).map(BLBiomeData::terrainPoint).map(function).findFirst().orElse(0.0F);

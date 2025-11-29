@@ -199,6 +199,9 @@ public class CommonRegistrationEvents {
 		event.register(BLRegistries.ENVIRONMENT_EVENTS);
 		event.register(BLRegistries.SIMULACRUM_EFFECTS);
 		event.register(BLRegistries.WORLD_STORAGE);
+
+		event.register(BLRegistries.EARLY_GENERATORS);
+		event.register(BLRegistries.CONFIGURED_GENERATORS);
 	}
 
 	private static void extraRegistration(RegisterEvent event) {
