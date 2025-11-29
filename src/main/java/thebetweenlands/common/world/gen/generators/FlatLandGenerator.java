@@ -100,7 +100,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 							0
 						);
 					
-					// if lowest block for this x/z is above this section, don't place anything
+					// If lowest block for this x/z is above this section, don't place anything
 					if(yMin >= 16) {
 						continue;
 					}
@@ -116,7 +116,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 					}
 					
 					for(int y = yMin; y <= yMax; ++y) {
-						// Important: disable locks since the section is already acquired by the chunk generator
+						// Important: disable locks since the section was already acquired by the chunk generator
 						section.setBlockState(x, y, z, terrainBlock, false);
 						heightmaps.update(x, sectionMinY + y, z, terrainBlock);
 					}
@@ -211,12 +211,18 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 						final int worldZ = (chunkZ << 4) + z;
 						
 						final double noiseValue = improvednoise.noise(PerlinNoise.wrap(0.06D * worldX * scale), PerlinNoise.wrap(1.0D * 10.0D * scale), PerlinNoise.wrap(0.06D * worldZ * scale), 1.0D, -1.0D) / scale;
-						noise[x * 16 + z] += noiseValue / 18.0D; // account for X / 18.0 later in 1.12
+						noise[x * 16 + z] += noiseValue;
 					}
 				}
 			}
 		
 			scale /= 2.0;
+		}
+
+		for(int x = 16; x-- != 0;) {
+			for(int z = 16; z-- != 0;) {
+				noise[x * 16 + z] /= 18.0D; // account for X / 18.0 later in 1.12
+			}
 		}
 		
 		return noise;
