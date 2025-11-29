@@ -17,8 +17,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -34,6 +36,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
@@ -49,14 +52,15 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext.BlockGenerator
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGeneratorConfiguration;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.generators.FlatLandGenerator;
 import thebetweenlands.common.world.gen.warp.BLLegacyBlendedNoise;
 import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
 import thebetweenlands.common.world.gen.warp.NoiseModifier;
 import thebetweenlands.common.world.gen.warp.NoiseSlider;
 import thebetweenlands.common.world.gen.warp.TerrainWarper;
 import thebetweenlands.util.IBetweenlandsRandomStateExtension;
+import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -377,6 +381,40 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return new BiomeWeights(interpolatedBiomeWeights);
 	}
 	
+
+	// DEBUG CODE
+    @Override
+    public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random, ChunkAccess chunk) {
+    	super.buildSurface(level, structureManager, random, chunk);
+    	
+    	long seed = level.getSeed();
+		LegacyRandomSource randomSource = new LegacyRandomSource(seed);
+
+//		PerlinNoise landNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-3, 0));
+//		PerlinNoise riverNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-1, 0));
+//		BLPerlinSimplexNoise landNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-3, 0).boxed().collect(ImmutableList.toImmutableList()));
+//		BLPerlinSimplexNoise riverNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-1, 0).boxed().collect(ImmutableList.toImmutableList()));
+		BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(randomSource, 4);
+		BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(randomSource, 2);
+
+		double[] landNoise = FlatLandGenerator.computeLandNoiseRaw(landNoiseGen, chunk.getPos().x, chunk.getPos().z);
+		double[] riverNoise = FlatLandGenerator.computeRiverNoiseRaw(riverNoiseGen, chunk.getPos().x, chunk.getPos().z);
+    	
+		MutableBlockPos pos = new MutableBlockPos();
+		for(int x = 0; x < 16; ++x) {
+			for(int z = 0; z < 16; ++z) {
+				int index = x * 16 + z;
+				final double land = landNoise[index];
+				for(int y = 0; y < Math.abs(land); ++y) {
+					chunk.setBlockState(pos.set(x, 150 + (land < 0 ? -y : y), z), Blocks.COBBLESTONE.defaultBlockState(), false);
+				}
+				final double river = riverNoise[index];
+				for(int y = 0; y < Math.abs(river); ++y) {
+					chunk.setBlockState(pos.set(x, 200 + (river < 0 ? -y : y), z), Blocks.STONE.defaultBlockState(), false);
+				}
+			}
+		}
+    }
 	
 	@Override
 	public OptionalInt iterateNoiseColumn(LevelHeightAccessor level, RandomState random, int x, int z, MutableObject<NoiseColumn> column, Predicate<BlockState> stoppingState) {

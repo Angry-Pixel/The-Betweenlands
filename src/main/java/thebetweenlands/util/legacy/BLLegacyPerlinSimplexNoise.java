@@ -1,21 +1,23 @@
-package thebetweenlands.common.world.gen.warp;
+package thebetweenlands.util.legacy;
+
+import java.util.Arrays;
 
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 
 // Recreation of 1.12 NoiseGeneratorPerlin
+@Deprecated
 public class BLLegacyPerlinSimplexNoise {
-	private final SimplexNoise[] noiseLevels;
+	private final BLLegacySimplexNoise[] noiseLevels;
 
 	public BLLegacyPerlinSimplexNoise(RandomSource random, int octaves) {
-		this.noiseLevels = new SimplexNoise[octaves];
+		this.noiseLevels = new BLLegacySimplexNoise[octaves];
 		
 		for(int i = 0; i < octaves; ++i) {
-			this.noiseLevels[i] = new SimplexNoise(random);
+			this.noiseLevels[i] = new BLLegacySimplexNoise(random);
 		}
 	}
 
-	public SimplexNoise getNoiseLevel(int index) {
+	public BLLegacySimplexNoise getNoiseLevel(int index) {
 		return this.noiseLevels[index];
 	}
 
@@ -24,7 +26,7 @@ public class BLLegacyPerlinSimplexNoise {
 		double value = 0.0D;
 		double scale = 1.0D;
 
-		for (SimplexNoise simplexnoise : this.noiseLevels)
+		for (BLLegacySimplexNoise simplexnoise : this.noiseLevels)
 		{
 			value += simplexnoise.getValue(x * scale, y * scale) / scale;
 			scale /= 2.0D;
@@ -38,7 +40,7 @@ public class BLLegacyPerlinSimplexNoise {
 		double scale = 1.0F;
 		double amplifier = 1.0F;
 		
-		for (SimplexNoise simplexnoise : this.noiseLevels) {
+		for (BLLegacySimplexNoise simplexnoise : this.noiseLevels) {
 			if (simplexnoise != null) {
 				noiseValue += simplexnoise.getValue(x * scale + (useNoiseOffsets ? simplexnoise.xo : 0.0), y * scale + (useNoiseOffsets ? simplexnoise.yo : 0.0)) * 0.55 * amplifier;
 			}
@@ -55,7 +57,7 @@ public class BLLegacyPerlinSimplexNoise {
 		double scale = initialScale;
 		double amplifier = initialAmplifier;
 
-		for (SimplexNoise simplexnoise : this.noiseLevels) {
+		for (BLLegacySimplexNoise simplexnoise : this.noiseLevels) {
 			if (simplexnoise != null) {
 				noiseValue += simplexnoise.getValue(x * scale + (useNoiseOffsets ? simplexnoise.xo : 0.0), y * scale + (useNoiseOffsets ? simplexnoise.yo : 0.0)) * amplifier;
 			}
@@ -66,7 +68,7 @@ public class BLLegacyPerlinSimplexNoise {
 
 		return noiseValue;
 	}
-	
+
 	@Deprecated
 	public double[] getRegion(double[] out, double x, double y, int sizeX, int sizeY, double xScale, double yScale, double octaveScaleFactor)
 	{
@@ -78,10 +80,7 @@ public class BLLegacyPerlinSimplexNoise {
 	{
 		if (out != null && out.length >= sizeX * sizeY)
 		{
-			for (int i = 0; i < out.length; ++i)
-			{
-				out[i] = 0.0D;
-			}
+			Arrays.fill(out, 0.0D);
 		}
 		else
 		{
@@ -91,17 +90,8 @@ public class BLLegacyPerlinSimplexNoise {
 		double amplifier = 1.0D;
 		double scale = 1.0D;
 
-		for (SimplexNoise simplexnoise : this.noiseLevels) {
-			int i = 0;
-			for (int yOffset = 0; yOffset < sizeY; ++yOffset) {
-				double noiseY = (y + (double)yOffset) * (yScale * scale * amplifier) + simplexnoise.yo;
-
-				for (int xOffset = 0; xOffset < sizeX; ++xOffset) {
-					double noiseX = (x + (double)xOffset) * (xScale * scale * amplifier) + simplexnoise.xo;
-					
-					out[i++] = simplexnoise.getValue(noiseX, noiseY) * 0.55D / amplifier;
-				}
-			}
+		for (BLLegacySimplexNoise simplexnoise : this.noiseLevels) {
+			simplexnoise.add(out, x, y, sizeX, sizeY, xScale * scale * amplifier, yScale * scale * amplifier, 0.55D / amplifier);
 			
 			scale *= octaveScaleFactor;
 			amplifier *= octaveAmplifierFactor;
@@ -121,10 +111,7 @@ public class BLLegacyPerlinSimplexNoise {
 	{
 		if (out != null && out.length >= sizeX * sizeY)
 		{
-			for (int i = 0; i < out.length; ++i)
-			{
-				out[i] = 0.0D;
-			}
+			Arrays.fill(out, 0.0D);
 		}
 		else
 		{
@@ -134,17 +121,8 @@ public class BLLegacyPerlinSimplexNoise {
 		double amplifier = 1.0D;
 		double scale = 1.0D;
 
-		for (SimplexNoise simplexnoise : this.noiseLevels) {
-			int i = 0;
-			for (int xOffset = 0; xOffset < sizeX; ++xOffset) {
-				double noiseX = (x + (double)xOffset) * (xScale * scale * amplifier) + simplexnoise.xo;
-				
-				for (int yOffset = 0; yOffset < sizeY; ++yOffset) {
-					double noiseY = (y + (double)yOffset) * (yScale * scale * amplifier) + simplexnoise.yo;
-
-					out[i++] = simplexnoise.getValue(noiseX, noiseY) * 0.55D / amplifier;
-				}
-			}
+		for (BLLegacySimplexNoise simplexnoise : this.noiseLevels) {
+			simplexnoise.addTransposed(out, x, y, sizeX, sizeY, xScale * scale * amplifier, yScale * scale * amplifier, 0.55D / amplifier);
 			
 			scale *= octaveScaleFactor;
 			amplifier *= octaveAmplifierFactor;
