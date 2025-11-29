@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -15,6 +16,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -36,6 +38,7 @@ import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import thebetweenlands.api.world.IBetweenlandsBiomeSource;
+import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.warp.BLLegacyBlendedNoise;
 import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
@@ -181,7 +184,23 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	
 	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
 		if(this.biomeSource instanceof IBetweenlandsBiomeSource biomeSource) {
-			Set<Holder<Biome>> biomes = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
+			Set<Holder<Biome>> biomeSet = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
+			
+			// TODO feature sorting
+			
+			boolean hasFeatures = false;
+			List<ConfiguredEarlyGenerator<?, ?>> rootGenerators = new ArrayList<>(biomeSet.size());
+            for (Holder<Biome> holder : biomeSet) {
+            	HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
+            	if(generators.size() != 0) {
+            		hasFeatures = true;
+            		generators.stream().map(Holder::value).forEach(rootGenerators::add);
+            	}
+            }
+            
+            if(hasFeatures) {
+            	
+            }
 			
 		}
 		
