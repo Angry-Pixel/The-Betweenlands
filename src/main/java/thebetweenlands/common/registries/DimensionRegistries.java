@@ -13,6 +13,8 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
+import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
@@ -86,9 +88,10 @@ public class DimensionRegistries {
 		HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
 		HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 		HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
+		HolderGetter<ConfiguredEarlyGenerator<?, ?>> generators = context.lookup(BLRegistries.Keys.CONFIGURED_GENERATORS);
 
 		BiomeSource biomeSource = new BetweenlandsBiomeSource(
-			BiomeRegistry.biomeParameters(biome),
+			BiomeRegistry.biomeParameters(biome, generators),
 			0.46875F, //affects the base height of all biomes
 			1.0F,
 			4,

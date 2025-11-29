@@ -1,0 +1,7 @@
+{
+  "type": "thebetweenlands:flat_land",
+  "config": {
+    "terrain_height": 5,
+    "water_level": 120
+  }
+}

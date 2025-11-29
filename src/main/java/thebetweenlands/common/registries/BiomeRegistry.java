@@ -300,14 +300,15 @@ public class BiomeRegistry {
 			.build());
 	}
 
-	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry) {
+	// TODO make a builder so this looks nicer
+	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry, HolderGetter<ConfiguredEarlyGenerator<?, ?>> configuredGenerators) {
 		return List.of(
 			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
-			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS),
+			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS))),
 			pairBiome(registry, 12, -1.2F, 0.5F, DEEP_WATERS),
 			pairBiome(registry, 16, -0.5F, 0.4F, COARSE_ISLANDS),
 			pairBiome(registry, 16, -0.5F, 0.4F, RAISED_ISLES),
-			pairBiome(registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS),
+			pairBiome(registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS))),
 			pairBiome(registry, 4, -0.1F, 0.11F, ERODED_MARSH),
 			pairBiome(registry, 10, -0.1F, 0.11F, MARSH),
 			pairBiome(registry, 0, 0.2F, 0.1F, SWAMPLANDS_CLEARING),

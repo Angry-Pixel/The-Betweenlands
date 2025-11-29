@@ -16,6 +16,7 @@
         },
         {
           "biome": "thebetweenlands:swamplands",
+          "generators": "thebetweenlands:flat_land_swamplands",
           "parameters": {
             "depth": -0.2,
             "scale": 0.1,
@@ -48,6 +49,7 @@
         },
         {
           "biome": "thebetweenlands:sludge_plains",
+          "generators": "thebetweenlands:flat_land_sludge_plains",
           "parameters": {
             "depth": -0.5,
             "scale": 0.3,
