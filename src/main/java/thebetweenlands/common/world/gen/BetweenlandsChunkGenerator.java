@@ -381,41 +381,6 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return new BiomeWeights(interpolatedBiomeWeights);
 	}
 	
-
-	// DEBUG CODE
-    @Override
-    public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random, ChunkAccess chunk) {
-    	super.buildSurface(level, structureManager, random, chunk);
-    	
-    	long seed = level.getSeed();
-		LegacyRandomSource randomSource = new LegacyRandomSource(seed);
-
-//		PerlinNoise landNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-3, 0));
-//		PerlinNoise riverNoiseGen = PerlinNoise.create(random, IntStream.rangeClosed(-1, 0));
-//		BLPerlinSimplexNoise landNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-3, 0).boxed().collect(ImmutableList.toImmutableList()));
-//		BLPerlinSimplexNoise riverNoiseGen = new BLPerlinSimplexNoise(random, IntStream.rangeClosed(-1, 0).boxed().collect(ImmutableList.toImmutableList()));
-		BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(randomSource, 4);
-		BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(randomSource, 2);
-
-		double[] landNoise = FlatLandGenerator.computeLandNoiseRaw(landNoiseGen, chunk.getPos().x, chunk.getPos().z);
-		double[] riverNoise = FlatLandGenerator.computeRiverNoiseRaw(riverNoiseGen, chunk.getPos().x, chunk.getPos().z);
-    	
-		MutableBlockPos pos = new MutableBlockPos();
-		for(int x = 0; x < 16; ++x) {
-			for(int z = 0; z < 16; ++z) {
-				int index = x * 16 + z;
-				final double land = landNoise[index];
-				for(int y = 0; y < Math.abs(land); ++y) {
-					chunk.setBlockState(pos.set(x, 150 + (land < 0 ? -y : y), z), Blocks.COBBLESTONE.defaultBlockState(), false);
-				}
-				final double river = riverNoise[index];
-				for(int y = 0; y < Math.abs(river); ++y) {
-					chunk.setBlockState(pos.set(x, 200 + (river < 0 ? -y : y), z), Blocks.STONE.defaultBlockState(), false);
-				}
-			}
-		}
-    }
-	
 	@Override
 	public OptionalInt iterateNoiseColumn(LevelHeightAccessor level, RandomState random, int x, int z, MutableObject<NoiseColumn> column, Predicate<BlockState> stoppingState) {
 		NoiseSettings noise = this.settings.value().noiseSettings().clampToHeightAccessor(level);
