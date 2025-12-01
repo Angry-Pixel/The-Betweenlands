@@ -2,7 +2,6 @@ package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.mojang.serialization.Codec;
 
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
@@ -22,11 +20,15 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmap
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.MarshIslandsGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
+import thebetweenlands.common.world.gen.generators.util.BiSimplexData;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class MarshIslandsGenerator extends EarlyGenerator<MarshIslandsGeneratorConfiguration> {
 
+	// Cache so we don't have to re-create the simplex noise every execution
+	protected final BiSimplexCache noiseCache = new BiSimplexCache(4, 8);
+	
 	public MarshIslandsGenerator(Codec<MarshIslandsGeneratorConfiguration> codec) {
 		super(codec);
 	}
@@ -34,27 +36,6 @@ public class MarshIslandsGenerator extends EarlyGenerator<MarshIslandsGeneratorC
 	@Override
 	public EnumSet<ExtraChunkInfoTypes> getRequiredExtraInfo(MarshIslandsGeneratorConfiguration config) {
 		return EnumSet.of(ExtraChunkInfoTypes.BIOME_WEIGHTS);
-	}
-
-	// Cache so we don't have to re-create the simplex noise every execution
-	// Technically, one volatile field should be equally safe (and faster) because the data is immutable and only read once.
-	// However, the atomic reference makes it very clear that this data may be read on multiple threads at once, 
-	//          and is much harder to accidentally make thread-unsafe in future.
-	protected final AtomicReference<BiSimplexCache> noiseCacheReference = new AtomicReference<>();
-
-	protected BiSimplexCache getNoise(long seed) {
-		return this.noiseCacheReference.updateAndGet((biSimplexCache) -> {
-			if(biSimplexCache != null && biSimplexCache.worldSeed() == seed) {
-				return biSimplexCache;
-			}
-			
-			// If it doesn't exist or has a different seed than expected, create noise with the correct seed
-			LegacyRandomSource random = new LegacyRandomSource(seed);
-
-			BLLegacyPerlinSimplexNoise islandNoiseGen = new BLLegacyPerlinSimplexNoise(random, 4);
-			BLLegacyPerlinSimplexNoise fuzzNoiseGen = new BLLegacyPerlinSimplexNoise(random, 8);
-			return new BiSimplexCache(seed, islandNoiseGen, fuzzNoiseGen);
-		});
 	}
 
 	protected static record MarshIslandColumns(int globalMinBlockY, int[] minBlockY) {}
@@ -66,7 +47,7 @@ public class MarshIslandsGenerator extends EarlyGenerator<MarshIslandsGeneratorC
 		long seed = context.worldSeed();
 
 		// Get or create noise generators for this seed
-		BiSimplexCache noise = getNoise(seed);
+		BiSimplexData noise = noiseCache.getNoise(seed);
 
 		BLLegacyPerlinSimplexNoise islandNoiseGen = noise.first();
 		BLLegacyPerlinSimplexNoise fuzzNoiseGen = noise.second();

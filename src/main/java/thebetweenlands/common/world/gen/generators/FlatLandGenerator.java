@@ -2,7 +2,6 @@ package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.mojang.serialization.Codec;
 
@@ -16,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
@@ -24,11 +22,15 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmap
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
+import thebetweenlands.common.world.gen.generators.util.BiSimplexData;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {
 
+	// Cache so we don't have to re-create the simplex noise every execution
+	protected final BiSimplexCache noiseCache = new BiSimplexCache(4, 2);
+	
 	public FlatLandGenerator(Codec<FlatLandGeneratorConfiguration> codec) {
 		super(codec);
 	}
@@ -38,47 +40,12 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		return EnumSet.of(ExtraChunkInfoTypes.BIOME_WEIGHTS);
 	}
 
-	// Cache so we don't have to re-create the simplex noise every execution
-	// Technically, one volatile field should be equally safe (and faster) because the data is immutable and only read once.
-	// However, the atomic reference makes it very clear that this data may be read on multiple threads at once, 
-	//          and is much harder to accidentally make thread-unsafe in future.
-	protected final AtomicReference<BiSimplexCache> noiseCacheReference = new AtomicReference<>();
-
-	// Profile results from atomic cache vs creating a new instance each time:
-	//     Without atomic cache (new instance each time):
-	//         Approx 11800000 nanoseconds (~11.8 millis) on the first run of each thread (first 8 chunks generated)
-	//         Approx 300000 nanoseconds (~0.30 millis) on each subsequent run
-	//     With atomic cache:
-	//         Approx 17300000 nanoseconds (~17.3 millis) on the first run of each thread (first 8 chunks generated)
-	//         Approx 2700 nanoseconds (~0.0027 millis) on each subsequent run
-	// Bonus non-atomic cache results:
-	//    Two separate volatile SimplexCache fields:
-	//        Approx 16200000 nanoseconds (~16.2 millis) on the first run of each thread (first 8 chunks generated)
-	//        Approx 1500 nanoseconds (~0.0015 millis) on each subsequent run
-	//    One volatile BiSimplexCache field:
-	//        Approx 16000000 nanoseconds (~16.0 millis) on the first run of each thread (first 8 chunks generated)
-	//        Approx 1000 nanoseconds (~0.0010 millis) on each subsequent run
-	protected BiSimplexCache getNoise(long seed) {
-		return this.noiseCacheReference.updateAndGet((biSimplexCache) -> {
-			if(biSimplexCache != null && biSimplexCache.worldSeed() == seed) {
-				return biSimplexCache;
-			}
-			
-			// If it doesn't exist or has a different seed than expected, create noise with the correct seed
-			LegacyRandomSource random = new LegacyRandomSource(seed);
-
-			BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(random, 4);
-			BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(random, 2);
-			return new BiSimplexCache(seed, landNoiseGen, riverNoiseGen);
-		});
-	}
-
 	@Override
 	public boolean place(EarlyGenerationContext<FlatLandGeneratorConfiguration> context) {
 		long seed = context.worldSeed();
 
 		// Get or create noise generators for this seed
-		BiSimplexCache noise = getNoise(seed);
+		BiSimplexData noise = this.noiseCache.getNoise(seed);
 
 		BLLegacyPerlinSimplexNoise landNoiseGen = noise.first();
 		BLLegacyPerlinSimplexNoise riverNoiseGen = noise.second();
