@@ -2,6 +2,7 @@ package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.mojang.serialization.Codec;
@@ -22,8 +23,10 @@ import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
+import thebetweenlands.common.world.gen.generators.util.SimplexCache;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {
@@ -38,10 +41,25 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 	}
 
 	// Cache so we don't have to re-create the simplex noise every execution
-	// Technically, two non-volatile single {@link SimplexCache}s should be equally safe (and faster) because the data is immutable and only read once,
-	//              but this way makes it *very clear* that this data may be read on multiple threads at once.
+	// Technically, one volatile field should be equally safe (and faster) because the data is immutable and only read once.
+	// However, the atomic reference makes it very clear that this data may be read on multiple threads at once, 
+	//          and is much harder to accidentally make thread-unsafe in future.
 	protected final AtomicReference<BiSimplexCache> noiseCacheReference = new AtomicReference<>();
 
+	// Profile results from atomic cache vs creating a new instance each time:
+	//     Without atomic cache (new instance each time):
+	//         Approx 11800000 nanoseconds (~11.8 millis) on the first run of each thread (first 8 chunks generated)
+	//         Approx 300000 nanoseconds (~0.30 millis) on each subsequent run
+	//     With atomic cache:
+	//         Approx 17300000 nanoseconds (~17.3 millis) on the first run of each thread (first 8 chunks generated)
+	//         Approx 2700 nanoseconds (~0.0027 millis) on each subsequent run
+	// Bonus non-atomic cache results:
+	//    Two separate volatile SimplexCache fields:
+	//        Approx 16200000 nanoseconds (~16.2 millis) on the first run of each thread (first 8 chunks generated)
+	//        Approx 1500 nanoseconds (~0.0015 millis) on each subsequent run
+	//    One volatile BiSimplexCache field:
+	//        Approx 16000000 nanoseconds (~16.0 millis) on the first run of each thread (first 8 chunks generated)
+	//        Approx 1000 nanoseconds (~0.0010 millis) on each subsequent run
 	protected BiSimplexCache getNoise(long seed) {
 		return this.noiseCacheReference.updateAndGet((biSimplexCache) -> {
 			if(biSimplexCache != null && biSimplexCache.worldSeed() == seed) {
@@ -56,7 +74,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 			return new BiSimplexCache(seed, landNoiseGen, riverNoiseGen);
 		});
 	}
-	
+
 	@Override
 	public boolean place(EarlyGenerationContext<FlatLandGeneratorConfiguration> context) {
 		long seed = context.worldSeed();
