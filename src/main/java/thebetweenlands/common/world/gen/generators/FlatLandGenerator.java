@@ -23,6 +23,7 @@ import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
 import thebetweenlands.common.world.gen.generators.util.BiSimplexData;
+import thebetweenlands.common.world.gen.generators.util.ColumnVolumeResult;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
@@ -59,26 +60,8 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 
 		double[] landNoise = computeLandNoise(landNoiseGen, chunkPos, config.landNoiseScale());
 		double[] riverNoise = computeRiverNoise(riverNoiseGen, chunkPos, config.riverNoiseScale());
-
-		int[] minBlockY = new int[256];
-		int[] maxBlockY = new int[256];
 		
-		IntIntPair minHeightMaxHeight = computeColumnBlocks(context, chunkPos, landNoise, riverNoise, minBlockY, maxBlockY);
-		int totalMinBlockY = minHeightMaxHeight.leftInt();
-		int totalMaxBlockY = minHeightMaxHeight.rightInt();
-
-//		TheBetweenlands.LOGGER.info("Generated noise values for chunk {}: Global Min = {}, Global Max = {}, Min Array = {}, Max Array = {}", chunkPos, totalMinBlockY, totalMaxBlockY, minBlockY, maxBlockY);
-		
-		// If the min block is above the max block, then no blocks can be placed
-		if(totalMinBlockY + 1 > totalMaxBlockY - 1) {
-			return false;
-		}
-
-		// Minimum section index (inclusive) that needs blocks placed
-		int minSectionIndex = chunkAccess.getSectionIndex(totalMinBlockY + 1);
-
-		// Maximum section index (inclusive) that needs blocks placed
-		int maxSectionIndex = chunkAccess.getSectionIndex(totalMaxBlockY - 1);
+		ColumnVolumeResult columnBlocks = computeColumnBlocks(context, chunkPos, landNoise, riverNoise);
 		
 		// The block we will be setting
 		BlockState terrainBlock = context.blockGenerator().defaultTerrainState();
@@ -86,56 +69,14 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		// The heightmaps (for updating)
 		ChunkHeightmaps heightmaps = context.chunkHeightmaps();
 		
-		for(int sectionIndex = minSectionIndex; sectionIndex <= maxSectionIndex; ++sectionIndex) {
-			// The section we'll be setting blocks in
-			LevelChunkSection section = chunkAccess.getSection(sectionIndex);
-			
-			// The y value of block 0 in this section
-			int sectionMinY = SectionPos.sectionToBlockCoord(chunkAccess.getSectionYFromSectionIndex(sectionIndex));
-			
-			for(int x = 0; x < 16; ++x) {
-				for(int z = 0; z < 16; ++z) {
-					final int index = x * 16 + z;
-					
-					final int yMin = Math.max(
-							minBlockY[index] - sectionMinY + 1,
-							0
-						);
-					
-					// If lowest block for this x/z is above this section, don't place anything
-					if(yMin >= 16) {
-						continue;
-					}
-					
-					final int yMax = Math.min(
-							maxBlockY[index] - sectionMinY - 1,
-							15
-						);
-					
-					// if highest block for this x/z is below this section, don't place anything
-					if(yMax < 0) {
-						continue;
-					}
-					
-					for(int y = yMin; y <= yMax; ++y) {
-						// Important: disable locks since the section was already acquired by the chunk generator
-						section.setBlockState(x, y, z, terrainBlock, false);
-						heightmaps.update(x, sectionMinY + y, z, terrainBlock);
-					}
-				}
-			}
-		}
-		
-		return true;
+		return ColumnVolumeResult.placeColumnVolumeResult(columnBlocks, chunkAccess, terrainBlock, heightmaps);
 	}
 
 	/**
 	 * Computes the min (exclusive) and max (exclusive) height that blocks will need to be placed in each column
-	 * @param minBlockYOut the output array for the minimum height that blocks need to be placed in each column
-	 * @param maxBlockYOut the output array for the maximum height that blocks need to be placed in each column
-	 * @return an int pair containing the global minimum height to set (left) and global maximum height to set (right) of the entire chunk
+	 * @return a {@linkplain ColumnVolumeResult} describing the blocks that need to be placed in each column
 	 */
-	public IntIntPair computeColumnBlocks(EarlyGenerationContext<FlatLandGeneratorConfiguration> context, ChunkPos chunkPos, double[] landNoise, double[] riverNoise, int[] minBlockYOut, int[] maxBlockYOut) {
+	public ColumnVolumeResult computeColumnBlocks(EarlyGenerationContext<FlatLandGeneratorConfiguration> context, ChunkPos chunkPos, double[] landNoise, double[] riverNoise) {
 		// Get info on where these blocks should even go
 		FlatLandGeneratorConfiguration config = context.config();
 		// Use heightmap so we don't have to manually check each block
@@ -150,6 +91,8 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		
 		int minHeightTotal = waterLevel;
 		int maxHeightTotal = waterLevel;
+		int[] minBlockYOut = new int[256];
+		int[] maxBlockYOut = new int[256];
 		
 		for(int x = 0; x < 16; ++x) {
 			for(int z = 0; z < 16; ++z) {
@@ -206,7 +149,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 			}
 		}
 		
-		return IntIntPair.of(minHeightTotal, maxHeightTotal);
+		return new ColumnVolumeResult(minBlockYOut, maxBlockYOut, minHeightTotal, maxHeightTotal);
 	}
 	
 	public static double[] computeLandNoise(BLLegacyPerlinSimplexNoise landNoise, ChunkPos pos, double scale) {

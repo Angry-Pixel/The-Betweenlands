@@ -106,9 +106,9 @@ public class BlockHeightSelectors {
 		public int getHeight(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
 			switch(this.type()) {
 			case WORLD_SURFACE_WG:
-				return heightmaps.surfaceHeightmap().getFirstAvailable(offsetX, offsetZ);
+				return heightmaps.surfaceHeightmap().getHighestTaken(offsetX, offsetZ);
 			case OCEAN_FLOOR_WG:
-				return heightmaps.oceanfloorHeightmap().getFirstAvailable(offsetX, offsetZ);
+				return heightmaps.oceanfloorHeightmap().getHighestTaken(offsetX, offsetZ);
 			default:
 				throw new IllegalStateException("Heightmap type must be either WORLD_SURFACE_WG or OCEAN_FLOOR_WG, got " + this.type);
 			}
