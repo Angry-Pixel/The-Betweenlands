@@ -25,6 +25,7 @@
         },
         {
           "biome": "thebetweenlands:deep_waters",
+          "generators": "thebetweenlands:deep_waters_simplex_terrain",
           "parameters": {
             "depth": -1.2,
             "scale": 0.5,

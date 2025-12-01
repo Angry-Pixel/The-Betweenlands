@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:simplex_terrain",
+  "config": {
+    "max_level": 120,
+    "min_level": {
+      "type": "thebetweenlands:heightmap",
+      "heightmap": "ocean_floor"
+    },
+    "noise_scale": 0.05,
+    "use_biome_weights": true
+  }
+}

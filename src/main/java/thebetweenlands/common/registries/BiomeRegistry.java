@@ -305,7 +305,7 @@ public class BiomeRegistry {
 		return List.of(
 			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
 			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS))),
-			pairBiome(registry, 12, -1.2F, 0.5F, DEEP_WATERS),
+			pairBiome(registry, 12, -1.2F, 0.5F, DEEP_WATERS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.DEEP_WATERS_SIMPLEX_TERRAIN))),
 			pairBiome(registry, 16, -0.5F, 0.4F, COARSE_ISLANDS),
 			pairBiome(registry, 16, -0.5F, 0.4F, RAISED_ISLES),
 			pairBiome(registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS))),
