@@ -2,6 +2,7 @@ package thebetweenlands.util;
 
 import com.mojang.datafixers.util.Function7;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,6 +24,11 @@ public class ExtraCodecs {
 		ComponentSerialization.CODEC.optionalFieldOf("name").forGetter(MapDecoration::name)
 	).apply(instance, MapDecoration::new));
 
+	public static final Codec<Double> POSITIVE_DOUBLE = Codec.DOUBLE
+			.validate(
+	                value -> value.compareTo(0.0D) > 0 ? DataResult.success(value) : DataResult.error(() -> "Value must be positive: " + value)
+	            );
+	
 	public static <B, C, T1, T2, T3, T4, T5, T6, T7> StreamCodec<B, C> composite(
 		final StreamCodec<? super B, T1> codec1,
 		final Function<C, T1> getter1,
