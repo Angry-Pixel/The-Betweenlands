@@ -2,6 +2,7 @@ package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.mojang.serialization.Codec;
 
@@ -22,11 +23,9 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
+import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
-// TODO fix this up so we don't need to generate new perlin noise every single time
-// TODO biome tapering
-// TODO move to earlier in generation somehow - we preferably want this stuff to happen before biome blocks get replaced
 public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {
 
 	public FlatLandGenerator(Codec<FlatLandGeneratorConfiguration> codec) {
@@ -37,18 +36,36 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 	public EnumSet<ExtraChunkInfoTypes> getRequiredExtraInfo(FlatLandGeneratorConfiguration config) {
 		return EnumSet.of(ExtraChunkInfoTypes.BIOME_WEIGHTS);
 	}
+
+	// Cache so we don't have to re-create the simplex noise every execution
+	// Technically, two non-volatile single {@link SimplexCache}s should be equally safe (and faster) because the data is immutable and only read once,
+	//              but this way makes it *very clear* that this data may be read on multiple threads at once.
+	protected final AtomicReference<BiSimplexCache> noiseCacheReference = new AtomicReference<>();
+
+	protected BiSimplexCache getNoise(long seed) {
+		return this.noiseCacheReference.updateAndGet((biSimplexCache) -> {
+			if(biSimplexCache != null && biSimplexCache.worldSeed() == seed) {
+				return biSimplexCache;
+			}
+			
+			// If it doesn't exist or has a different seed than expected, create noise with the correct seed
+			LegacyRandomSource random = new LegacyRandomSource(seed);
+
+			BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(random, 4);
+			BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(random, 2);
+			return new BiSimplexCache(seed, landNoiseGen, riverNoiseGen);
+		});
+	}
 	
 	@Override
 	public boolean place(EarlyGenerationContext<FlatLandGeneratorConfiguration> context) {
 		long seed = context.worldSeed();
-		
-		// Create noise generators
 
-		LegacyRandomSource random = new LegacyRandomSource(seed);
-		
-		// TODO Fix this up so we don't need to create new noise every single time
-		BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(random, 4);
-		BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(random, 2);
+		// Get or create noise generators for this seed
+		BiSimplexCache noise = getNoise(seed);
+
+		BLLegacyPerlinSimplexNoise landNoiseGen = noise.first();
+		BLLegacyPerlinSimplexNoise riverNoiseGen = noise.second();
 		
 		// Compute all the noise values for this chunk
 		
