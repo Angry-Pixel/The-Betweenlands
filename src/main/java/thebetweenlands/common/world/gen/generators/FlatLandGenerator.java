@@ -2,7 +2,6 @@ package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.mojang.serialization.Codec;
@@ -23,10 +22,9 @@ import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
-import thebetweenlands.common.world.gen.generators.util.SimplexCache;
+import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {
@@ -243,21 +241,9 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		
 		return IntIntPair.of(minHeightTotal, maxHeightTotal);
 	}
-
-	public static double[] computeLandNoiseRaw(BLLegacyPerlinSimplexNoise landNoise, ChunkPos pos, double scale) {
-		double[] noise = new double[256];
-		
-		// TODO get rid of getRegion and stuff again
-		// Note: 1.12.2 swaps X and Z when calculating noise for this, so we swap it here to line up with 1.12
-		//       If worldgen ever changes in future, then swap this for:
-		//       noise = landNoise.getRegionTransposed(noise, (pos.x * 16), (pos.z * 16), 16, 16, scale, scale, 1.0D);
-		noise = landNoise.getRegion(noise, (pos.z * 16), (pos.x * 16), 16, 16, scale, scale, 1.0D);
-		
-		return noise;
-	}
 	
 	public static double[] computeLandNoise(BLLegacyPerlinSimplexNoise landNoise, ChunkPos pos, double scale) {
-		double[] noise = computeLandNoiseRaw(landNoise, pos, scale);
+		double[] noise = EarlyGeneratorHelper.computeNoiseRaw(landNoise, pos, scale);
 
 		
 		for(int i = 256; i-- != 0;) {
@@ -266,21 +252,9 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		
 		return noise;
 	}
-
-	public static double[] computeRiverNoiseRaw(BLLegacyPerlinSimplexNoise riverNoise, ChunkPos pos, double scale) {
-		double[] noise = new double[256];
-
-		// TODO get rid of getRegion and stuff again
-		// Note: 1.12.2 swaps X and Z when calculating noise for this, so we swap it here to line up with 1.12
-		//       If worldgen ever changes in future, then swap this for:
-		//       noise = riverNoise.getRegionTransposed(noise, (pos.x * 16), (pos.z * 16), 16, 16, scale, scale, 1.0D);
-		noise = riverNoise.getRegion(noise, (pos.z * 16), (pos.x * 16), 16, 16, scale, scale, 1.0D);
-		
-		return noise;
-	}
 	
 	public static double[] computeRiverNoise(BLLegacyPerlinSimplexNoise riverNoise, ChunkPos pos, double scale) {
-		double[] noise = computeRiverNoiseRaw(riverNoise, pos, scale);
+		double[] noise = EarlyGeneratorHelper.computeNoiseRaw(riverNoise, pos, scale);
 		
 		for(int i = 256; i-- != 0;) {
 			double riverNoiseValue = noise[i];
