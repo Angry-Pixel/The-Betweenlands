@@ -6,6 +6,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.feature.AlgaePatchFeature;
 import thebetweenlands.common.world.gen.feature.BarnacleClusterFeature;
 import thebetweenlands.common.world.gen.feature.BigBulbCappedMushroomFeature;
 import thebetweenlands.common.world.gen.feature.BladderwortClusterFeature;
@@ -35,6 +36,8 @@ import thebetweenlands.common.world.gen.feature.WeedwoodBushFeature;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockReplacementConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.NoisePatchFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.NoisePatchWithLevelFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PlantConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
@@ -113,7 +116,10 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WATER_ROOTS_CLUSTER = FEATURES.register("water_roots_cluster",
 		() -> new WaterRootsClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_BUSH = FEATURES.register("weedwood_bush",
-		() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
+			() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
+
+	public static final DeferredHolder<Feature<?>, Feature<NoisePatchWithLevelFeatureConfiguration>> ALGAE_PATCH = FEATURES.register("algae_patch",
+		() -> new AlgaePatchFeature(NoisePatchWithLevelFeatureConfiguration.CODEC));
 
 	//Structure Features
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> UNDERWATER_RUINS = FEATURES.register("underwater_ruins",

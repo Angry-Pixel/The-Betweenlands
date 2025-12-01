@@ -25,6 +25,11 @@
       "thebetweenlands:valonite",
       "thebetweenlands:scabyst",
       "thebetweenlands:life_gem"
+    ],
+    [],
+    [],
+    [
+      "thebetweenlands:algae"
     ]
   ],
   "has_precipitation": true,

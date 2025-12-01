@@ -60,6 +60,7 @@ public class SimplexTerrainGenerator extends EarlyGenerator<SimplexTerrainGenera
 		ColumnVolumeResult columnBlocks = computeColumnBlocks(context, chunkPos, terrainNoise);
 
 		// The block we will be setting
+//		BlockState terrainBlock = Blocks.GLASS.defaultBlockState();
 		BlockState terrainBlock = context.blockGenerator().defaultTerrainState();
 		
 		// The heightmaps (for updating)

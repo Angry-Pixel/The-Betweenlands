@@ -222,8 +222,10 @@ public class PlacedFeatureRegistry {
 
 		context.register(CATTAIL_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(10)));
 		context.register(CATTAIL_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(5)));
+		
+		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE), List.of(CountPlacement.of(1))));
 	}
-
+	
 	private static List<PlacementModifier> tree(int count) {
 		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome());
 	}

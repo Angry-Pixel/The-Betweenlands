@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -283,6 +285,8 @@ public class ConfiguredFeatureRegistry {
 		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), FeatureConfiguration.NONE));
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
+		
+		context.register(ALGAE, new ConfiguredFeature<>(FeatureRegistry.ALGAE_PATCH.get(), new NoisePatchWithLevelFeatureConfiguration(Optional.empty(), 0.16D, 1.6F, 1.8F)));
 	}
 
 	private static RandomPatchConfiguration patch(Block block, int spread, int tries) {

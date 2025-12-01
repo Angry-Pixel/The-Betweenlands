@@ -72,6 +72,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+				
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.HEARTHGROVE_TREE)
@@ -98,6 +100,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+				
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_COMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
@@ -131,6 +135,7 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
 				.build()
 			)
 			.build());
@@ -148,6 +153,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+					
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
 
@@ -172,6 +179,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+				
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
 

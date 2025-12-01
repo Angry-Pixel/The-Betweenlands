@@ -1,0 +1,8 @@
+{
+  "type": "thebetweenlands:algae_patch",
+  "config": {
+    "amplifier_factor": 1.6,
+    "amplifier_offset": 1.8,
+    "noise_scale": 0.16
+  }
+}
