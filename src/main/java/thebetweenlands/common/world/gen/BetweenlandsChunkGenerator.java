@@ -60,10 +60,12 @@ import thebetweenlands.util.IBetweenlandsRandomStateExtension;
 public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 		BiomeSource.CODEC.fieldOf("biome_source").forGetter((object) -> object.biomeSource),
-		NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter((object) -> object.settings)
+		NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter((object) -> object.settings),
+		ConfiguredEarlyGenerator.LIST_CODEC.optionalFieldOf("global_generators", HolderSet.empty()).forGetter((object) -> object.globalGenerators)
 	).apply(instance, instance.stable(BetweenlandsChunkGenerator::new)));
 
 	protected final Holder<NoiseGeneratorSettings> settings;
+	protected final HolderSet<ConfiguredEarlyGenerator<?, ?>> globalGenerators;
 	private final BlockState defaultBlock;
 	private final BlockState defaultFluid;
 	protected final Climate.Sampler sampler;
@@ -74,6 +76,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	// TODO extra settings
 	
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
+		this(biomeSource, settings, HolderSet.empty());
+	}
+
+	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, HolderSet<ConfiguredEarlyGenerator<?, ?>> globalGenerators) {
 		super(biomeSource, settings);
 
 		// net.minecraft.server.level.ChunkMap gets NoiseGeneratorSettings from this class, and passes it to RandomState.create(...)
@@ -86,6 +92,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		// blend noise receives a random with the world seed advanced 16 * 262 * 2 = 8384 values
 		
 		this.settings = settings;
+		this.globalGenerators = globalGenerators;
 		if (settings.isBound()) {
 //			NoiseGeneratorSettings settingsValue = settings.value();
 			NoiseSettings noise = settings.value().noiseSettings();
@@ -192,36 +199,51 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return access;
 	}
 	
-	public static record BiomeBasedEarlyGenerator(Optional<Holder<Biome>> biomeOptional, ConfiguredEarlyGenerator<?, ?> generator) {}
+	public static record EarlyGeneratorWithBiome(Optional<Holder<Biome>> biomeOptional, ConfiguredEarlyGenerator<?, ?> generator) {}
 	
 	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
+		// TODO feature sorting
+		
+		// List of all generators to generate in this chunk
+		List<EarlyGeneratorWithBiome> baseGenerators = new ArrayList<>();
+		
+		// Add all global generators
+		this.globalGenerators.stream()
+			.map(Holder::value)
+			.map((generator) -> new EarlyGeneratorWithBiome(Optional.empty(), generator))
+			.forEach(baseGenerators::add);
+		
+		// If the biome source supports biome-specific generators
 		if(this.biomeSource instanceof IBetweenlandsBiomeSource biomeSource) {
+			// Get all biomes in the chunk
 			Set<Holder<Biome>> biomeSet = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
 			
-			// TODO feature sorting
-			
-			boolean hasFeatures = false;
-			List<BiomeBasedEarlyGenerator> rootGenerators = new ArrayList<>(biomeSet.size());
+			// Get the generators from every biome
 			for (Holder<Biome> holder : biomeSet) {
 				HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
 				if(generators.size() != 0) {
 					Optional<Holder<Biome>> biomeOptional = Optional.of(holder);
-					hasFeatures = true;
-					generators.stream().map(Holder::value).map((generator) -> new BiomeBasedEarlyGenerator(biomeOptional, generator)).forEach(rootGenerators::add);
+					generators.stream()
+						.map(Holder::value)
+						.map((generator) -> new EarlyGeneratorWithBiome(biomeOptional, generator))
+						.forEach(baseGenerators::add);
 				}
 			}
+		}
+
+		// If there are generators to generate
+		if(baseGenerators.size() != 0) {
+			// Create context
+			long worldSeed = ((IBetweenlandsRandomStateExtension)(Object)random).thebetweenlands$getLevelSeed();
+			ChunkHeightmaps heightmaps = new ChunkHeightmaps(oceanfloorHeightmap, surfaceHeightmap);
+			EarlyGenerationContext<?> context = new EarlyGenerationContext<>(Optional.empty(), Optional.empty(), this, worldSeed, access, heightmaps, new BlockGenerator(this.defaultBlock, this.defaultFluid, this::generateBaseState), null, new ExtraChunkInfo());
 			
-			if(hasFeatures) {
-				long worldSeed = ((IBetweenlandsRandomStateExtension)(Object)random).thebetweenlands$getLevelSeed();
-				ChunkHeightmaps heightmaps = new ChunkHeightmaps(oceanfloorHeightmap, surfaceHeightmap);
-				EarlyGenerationContext<?> context = new EarlyGenerationContext<>(Optional.empty(), Optional.empty(), this, worldSeed, access, heightmaps, new BlockGenerator(this.defaultBlock, this.defaultFluid, this::generateBaseState), null, new ExtraChunkInfo());
-				
-				for(BiomeBasedEarlyGenerator generator : rootGenerators) {
-					context = context.withBiome(generator.biomeOptional());
-//					TheBetweenlands.LOGGER.info("Placing generator {} with context {}", generator, context);
-					context = placeRootGenerator(generator.generator(), context);
-//					TheBetweenlands.LOGGER.info("New context {}", context);
-				}
+			// Generate all generators
+			for(EarlyGeneratorWithBiome generator : baseGenerators) {
+				context = context.withBiome(generator.biomeOptional());
+//				TheBetweenlands.LOGGER.info("Placing generator {} with context {}", generator, context);
+				context = placeBaseGenerator(generator.generator(), context);
+//				TheBetweenlands.LOGGER.info("New context {}", context);
 			}
 		}
 		
@@ -254,7 +276,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	}
 	
 	
-	protected EarlyGenerationContext<?> placeRootGenerator(ConfiguredEarlyGenerator<?, ?> parentGenerator, EarlyGenerationContext<?> context) {
+	protected EarlyGenerationContext<?> placeBaseGenerator(ConfiguredEarlyGenerator<?, ?> parentGenerator, EarlyGenerationContext<?> context) {
 		
 		context = context.withParentGenerator(parentGenerator);
 		
