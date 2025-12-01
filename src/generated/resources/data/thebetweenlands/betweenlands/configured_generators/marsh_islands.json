@@ -1,0 +1,8 @@
+{
+  "type": "thebetweenlands:marsh_islands",
+  "config": {
+    "fuzz_noise_scale": 10.5,
+    "island_level": 120,
+    "island_noise_scale": 0.16
+  }
+}

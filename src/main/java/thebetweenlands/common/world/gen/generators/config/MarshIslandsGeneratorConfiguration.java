@@ -11,8 +11,8 @@ public record MarshIslandsGeneratorConfiguration(int islandLevel, double islandN
 	public static final Codec<MarshIslandsGeneratorConfiguration> CODEC = RecordCodecBuilder.create(
 		instance -> instance.group(
 				Codec.INT.fieldOf("island_level").forGetter(MarshIslandsGeneratorConfiguration::islandLevel),
-				ExtraCodecs.POSITIVE_DOUBLE.lenientOptionalFieldOf("island_noise_scale", 0.16D).forGetter(MarshIslandsGeneratorConfiguration::islandNoiseScale),
-				ExtraCodecs.POSITIVE_DOUBLE.lenientOptionalFieldOf("fuzz_noise_scale", 10.5D).forGetter(MarshIslandsGeneratorConfiguration::fuzzNoiseScale)
+				ExtraCodecs.POSITIVE_DOUBLE.fieldOf("island_noise_scale").forGetter(MarshIslandsGeneratorConfiguration::islandNoiseScale),
+				ExtraCodecs.POSITIVE_DOUBLE.fieldOf("fuzz_noise_scale").forGetter(MarshIslandsGeneratorConfiguration::fuzzNoiseScale)
 		).apply(instance, MarshIslandsGeneratorConfiguration::new));
 	
 }

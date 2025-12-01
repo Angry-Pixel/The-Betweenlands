@@ -309,8 +309,8 @@ public class BiomeRegistry {
 			pairBiome(registry, 16, -0.5F, 0.4F, COARSE_ISLANDS),
 			pairBiome(registry, 16, -0.5F, 0.4F, RAISED_ISLES),
 			pairBiome(registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS))),
-			pairBiome(registry, 4, -0.1F, 0.11F, ERODED_MARSH),
-			pairBiome(registry, 10, -0.1F, 0.11F, MARSH),
+			pairBiome(registry, 4, -0.1F, 0.11F, ERODED_MARSH, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS))),
+			pairBiome(registry, 10, -0.1F, 0.11F, MARSH, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS))),
 			pairBiome(registry, 0, 0.2F, 0.1F, SWAMPLANDS_CLEARING),
 			pairBiome(registry, 0, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
 		);
