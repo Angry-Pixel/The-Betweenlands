@@ -34,6 +34,7 @@ import net.minecraft.client.Minecraft;
 import thebetweenlands.api.audio.EntityMusicProvider;
 import thebetweenlands.api.audio.EntitySoundInstance;
 import thebetweenlands.api.entity.MusicPlayer;
+import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.gui.menu.BLTitleScreen;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -52,7 +53,7 @@ public class MusicHandler {
 	private List<Sound> musicDimTrackAccessors;
 	@Nullable
 	private List<Sound> musicMenuTrackAccessors;
-	private final RandomSource RANDOM = RandomSource.create();
+	private static final RandomSource RANDOM = RandomSource.create();
 	private int timeUntilMusic = 100;
 	@Nullable
 	private SoundInstance currentSound;
@@ -165,8 +166,7 @@ public class MusicHandler {
 				}
 			}
 
-			//TODO
-			if (!this.entityMusicMap.isEmpty() /*|| AmbienceManager.INSTANCE.shouldStopMusic()*/) {
+			if (!this.entityMusicMap.isEmpty() || AmbienceManager.INSTANCE.shouldStopMusic()) {
 				if (this.currentSound != null && manager.isActive(this.currentSound)) {
 					manager.stop(this.currentSound);
 					this.currentSound = null;
@@ -174,11 +174,9 @@ public class MusicHandler {
 				}
 			} else if (Minecraft.getInstance().options.getSoundSourceVolume(SoundSource.MUSIC) > 0.0F) {
 				if (this.currentSound != null) {
-					// FIXME Both of these checks are broken, because `this.currentSound.getLocation()` will always be the *sound id* (e.g. "thebetweenlands:menu/the_adventure_begins"), not the sound instance id (e.g. "thebetweenlands:music.menu") like this check is expecting.
-					//           See my comment in SoundWrapper::getLocation for more info.
-					if ((!this.isInBlMainMenu && SoundRegistry.BL_MUSIC_MENU.getId().equals(this.currentSound.getLocation())) || (this.isInBlMainMenu && SoundRegistry.BL_MUSIC_DIMENSION.getId().equals(this.currentSound.getLocation()))) {
-						manager.stop(currentSound);
-						this.timeUntilMusic = Mth.nextInt(RANDOM, 0, (isInBlMainMenu ? BL_MAIN_MENU.getMinDelay() : BL_DIMENSION.getMinDelay()) / 2);
+					if ((!this.isInBlMainMenu && SoundRegistry.BL_MUSIC_MENU.get().getLocation().equals(this.currentSound.getLocation())) || (this.isInBlMainMenu && SoundRegistry.BL_MUSIC_DIMENSION.get().getLocation().equals(this.currentSound.getLocation()))) {
+						manager.stop(this.currentSound);
+						this.timeUntilMusic = Mth.nextInt(RANDOM, 0, (this.isInBlMainMenu ? BL_MAIN_MENU.getMinDelay() : BL_DIMENSION.getMinDelay()) / 2);
 					}
 					//Wait for sound track to finish
 					if (!manager.isActive(this.currentSound)) {
@@ -289,10 +287,7 @@ public class MusicHandler {
 	 * The previously played soundtrack will be excluded.
 	 */
 	private void playRandomSoundTrack() {
-		// Temp Hack to fix the menu music playing multiple times over itself
-		// FIXME Main menu music is already overridden in MainMenuHandler::playProperMenuMusic, is also playing it here necessary?
-		if(this.isInBlMainMenu) return; 
-		List<Sound> availableSounds = new ArrayList<>(this.isInBlMainMenu ? getBetweenlandsMenuMusicTracks() : getBetweenlandsMusicTracks());
+		List<Sound> availableSounds = new ArrayList<>(this.isInBlMainMenu ? this.getBetweenlandsMenuMusicTracks() : this.getBetweenlandsMusicTracks());
 		if (!availableSounds.isEmpty()) {
 			if (availableSounds.size() > 1 && this.previousSound != null) {
 				availableSounds.remove(this.previousSound);
@@ -347,15 +342,7 @@ public class MusicHandler {
 
 		@Override
 		public ResourceLocation getLocation() {
-			// TODO Should this be this.parent.getLocation()?
-			//        A couple of checks do comparisons with `this.currentSound.getLocation()` but they'll always fail because it's being wrapped by this thing.
-			//        For example: `SoundRegistry.BL_MUSIC_MENU.getId().equals(this.currentSound.getLocation())` always fails.
-			//            If it was actually menu music, `this.currentSound.getLocation()` would return one of 
-			//                "thebetweenlands:menu/the_adventure_begins"
-			//                "thebetweenlands:menu/a_foreboding_welcome"
-			//                "thebetweenlands:menu/this_is_where_it_starts"
-			//            Instead of "thebetweenlands:music.menu" (what the check is expecting) 
-			return this.sound.getLocation();
+			return this.parent.getLocation();
 		}
 
 		@Override

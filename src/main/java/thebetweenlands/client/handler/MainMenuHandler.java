@@ -20,7 +20,6 @@ public class MainMenuHandler {
 		NeoForge.EVENT_BUS.addListener(MainMenuHandler::openMainMenu);
 		NeoForge.EVENT_BUS.addListener(MainMenuHandler::initBackground);
 		NeoForge.EVENT_BUS.addListener(MainMenuHandler::tickBackground);
-		NeoForge.EVENT_BUS.addListener(MainMenuHandler::playProperMenuMusic);
 	}
 
 	private static void openMainMenu(ScreenEvent.Opening event) {
@@ -40,12 +39,6 @@ public class MainMenuHandler {
 	private static void tickBackground(ClientTickEvent.Pre event) {
 		if (Minecraft.getInstance().screen != null && BetweenlandsConfig.blMainMenu) {
 			MainMenuHandler.background.tick();
-		}
-	}
-
-	private static void playProperMenuMusic(SelectMusicEvent event) {
-		if (event.getOriginalMusic() == Musics.MENU && BetweenlandsConfig.blMainMenu) {
-			event.overrideMusic(MusicHandler.BL_MAIN_MENU);
 		}
 	}
 }

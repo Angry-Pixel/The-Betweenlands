@@ -142,6 +142,7 @@ public class ClientRegistrationEvents {
 		File galleryFolder = new File(new File(Minecraft.getInstance().gameDirectory, "betweenlands_gallery"), "gallery_" + TheBetweenlands.GALLERY_VERSION);
 		galleryFolder.mkdirs();
 		GalleryManager.INSTANCE.checkAndUpdate(galleryFolder);
+		AmbienceRegistry.init();
 
 		event.enqueueWork(() -> {
 			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
