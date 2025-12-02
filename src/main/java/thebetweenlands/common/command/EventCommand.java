@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.api.BLRegistries;
@@ -27,18 +28,19 @@ public class EventCommand {
 		return Commands.literal("event")
 			.requires(cs -> cs.hasPermission(Commands.LEVEL_GAMEMASTERS))
 			.then(Commands.literal("toggle")
-				.then(Commands.argument("event", StringArgumentType.string())
+				.then(Commands.argument("event", ResourceLocationArgument.id())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggestResource(getEventNames(), builder))
-					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocation.parse(StringArgumentType.getString(context, "event"))))))
+					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocationArgument.getId(context, "event")))))
+			.then(Commands.literal("active").executes(EventCommand::showAllActiveEvents))
 			.then(Commands.literal("on")
-				.then(Commands.argument("event", StringArgumentType.string())
+				.then(Commands.argument("event", ResourceLocationArgument.id())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggestResource(getEventsForState(false), builder))
-					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocation.parse(StringArgumentType.getString(context, "event")), true))))
+					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocationArgument.getId(context, "event"), true))))
 			.then(Commands.literal("off")
 				.executes(EventCommand::toggleAllOff)
-				.then(Commands.argument("event", StringArgumentType.string())
+				.then(Commands.argument("event", ResourceLocationArgument.id())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggestResource(getEventsForState(true), builder))
-					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocation.parse(StringArgumentType.getString(context, "event")), false))))
+					.executes(context -> toggleEventForWorld(context.getSource(), ResourceLocationArgument.getId(context, "event"), false))))
 			.then(Commands.literal("disable")
 				.requires(cs -> cs.hasPermission(Commands.LEVEL_ADMINS))
 				.executes(EventCommand::disableEvents))
@@ -63,6 +65,15 @@ public class EventCommand {
 		}
 	}
 
+	private static int showAllActiveEvents(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+		if (context.getSource().getLevel().dimension() != DimensionRegistries.DIMENSION_KEY) {
+			throw NOT_IN_BETWEENLANDS.create();
+		}
+		BLEnvironmentEventRegistry environmentEventRegistry = BetweenlandsWorldStorage.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
+		context.getSource().sendSuccess(() -> Component.translatable("commands.thebetweenlands.event.active", environmentEventRegistry.getActiveEvents().stream().map(event -> Component.translatable(event.getDescriptionId()).getString()).toList().toString()), false);
+		return Command.SINGLE_SUCCESS;
+	}
+
 	private static int toggleAllOff(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		if (context.getSource().getLevel().dimension() != DimensionRegistries.DIMENSION_KEY) {
 			throw NOT_IN_BETWEENLANDS.create();
@@ -81,15 +92,15 @@ public class EventCommand {
 
 		EnvironmentEvent event = BLRegistries.ENVIRONMENT_EVENTS.get(eventName);
 		if (event.isActive() == active) {
-			source.sendFailure(Component.translatable("commands.thebetweenlands.event.already_" + (active ? "off" : "on"), Component.translatable(event.getDescriptionId())));
+			source.sendFailure(Component.translatable("commands.thebetweenlands.event.already_" + (active ? "on" : "off"), Component.translatable(event.getDescriptionId())));
 			return 0;
 		}
 		event.setActive(source.getLevel(), active);
-		if (event.isActive() != active) {
-			source.sendSuccess(() -> Component.translatable("commands.thebetweenlands.event." + (active ? "off" : "on"), Component.translatable(event.getDescriptionId())), false);
+		if (event.isActive() == active) {
+			source.sendSuccess(() -> Component.translatable("commands.thebetweenlands.event." + (active ? "on" : "off"), Component.translatable(event.getDescriptionId())), false);
 			return Command.SINGLE_SUCCESS;
 		} else {
-			source.sendFailure(Component.translatable("commands.thebetweenlands.event.fail_" + (active ? "off" : "on"), Component.translatable(event.getDescriptionId())));
+			source.sendFailure(Component.translatable("commands.thebetweenlands.event.fail_" + (active ? "on" : "off"), Component.translatable(event.getDescriptionId())));
 			return 0;
 		}
 	}

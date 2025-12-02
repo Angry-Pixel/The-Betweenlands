@@ -6,7 +6,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class DenseFogEvent extends TimedEnvironmentEvent {
 
@@ -54,11 +56,9 @@ public class DenseFogEvent extends TimedEnvironmentEvent {
 	}
 
 	public static boolean isDenseFog(Level level) {
-		if (level != null) {
-//			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(level);
-//			if (provider != null) {
-//				return provider.getEnvironmentEventRegistry().denseFog.isActive();
-//			}
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		if (storage != null) {
+			return storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.DENSE_FOG.getId());
 		}
 		return false;
 	}
