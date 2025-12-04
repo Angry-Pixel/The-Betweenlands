@@ -10,6 +10,7 @@ import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public record RemoveLocalStoragePacket(StorageID id) implements CustomPacketPayload {
 
@@ -25,12 +26,12 @@ public record RemoveLocalStoragePacket(StorageID id) implements CustomPacketPayl
 	}
 
 	public static void handle(RemoveLocalStoragePacket packet, IPayloadContext context) {
-		IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(context.player().level());
+		IWorldStorage worldStorage = WorldStorageGetter.getNullable(context.player().level());
 		if (worldStorage != null) {
 			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
 			ILocalStorage loadedStorage = localStorageHandler.getLocalStorage(packet.id());
 			if (loadedStorage != null) {
-				localStorageHandler.removeLocalStorage(loadedStorage);
+				localStorageHandler.removeLocalStorage(context.player().level(), loadedStorage);
 			}
 		}
 	}

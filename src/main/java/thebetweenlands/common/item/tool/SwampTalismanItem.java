@@ -32,9 +32,11 @@ import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.tree.PortalTree;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class SwampTalismanItem extends Item {
@@ -73,14 +75,14 @@ public class SwampTalismanItem extends Item {
 							if (TreePortalBlock.isPatternValid(level, portalPos.above())) {
 								//Only create new location is none exists
 								if (this.getPortalAt(level, portalPos.above()) == null) {
-									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+									BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 									if (worldStorage != null) {
 										LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), portalPos.relative(closestDir).below());
 										location.addBounds(new AABB(portalPos.above()).inflate(1, 2, 1).expandTowards(0, -0.5D, 0));
 										location.setSeed(level.getRandom().nextLong());
 										location.setDirty(true);
 										location.setVisible(false);
-										//worldStorage.getLocalStorageHandler().addLocalStorage(location);
+										worldStorage.getLocalStorageHandler().addLocalStorage(level, location);
 									}
 								}
 
@@ -162,24 +164,24 @@ public class SwampTalismanItem extends Item {
 
 	@Nullable
 	protected LocationPortal getPortalAt(Level level, BlockPos pos) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
-//			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(pos.getCenter()));
-//			if (!portals.isEmpty()) {
-//				return portals.getFirst();
-//			}
+			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(level, LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(pos.getCenter()));
+			if (!portals.isEmpty()) {
+				return portals.getFirst();
+			}
 		}
 		return null;
 	}
 
 	@Nullable
 	protected LocationPortal getLinkPortal(ServerLevel level, BlockPos portal2Pos) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
-//			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(portal2Pos.getCenter()) && portal2Pos.equals(location.getPortalPosition()));
-//			if (!portals.isEmpty()) {
-//				return portals.getFirst();
-//			}
+			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(level, LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(portal2Pos.getCenter()) && portal2Pos.equals(location.getPortalPosition()));
+			if (!portals.isEmpty()) {
+				return portals.getFirst();
+			}
 		}
 		return null;
 	}

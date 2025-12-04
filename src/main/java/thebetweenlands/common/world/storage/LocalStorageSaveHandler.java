@@ -13,7 +13,7 @@ import net.minecraft.nbt.NbtIo;
 import net.neoforged.neoforge.event.level.ChunkDataEvent;
 import thebetweenlands.common.TheBetweenlands;
 
-public class LocalStorageSaveHandler implements IThreadedFileIO {
+public class LocalStorageSaveHandler implements AutoCloseable {
 	private static final CompoundTag DELETE_NBT = new CompoundTag();
 
 	private final ConcurrentHashMap<File, CompoundTag> filesToSave = new ConcurrentHashMap<>();
@@ -28,7 +28,6 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 	 */
 	public boolean queueRegion(File regionFile, @Nullable CompoundTag regionNbtCopy) {
 		this.filesToSave.put(regionFile, regionNbtCopy == null ? DELETE_NBT : regionNbtCopy);
-		ThreadedFileIOBase.getThreadedIOInstance().queueIO(this);
 		return true;
 	}
 
@@ -40,7 +39,6 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 	 */
 	public boolean queueLocalStorage(File storageFile, @Nullable CompoundTag storageNbtCopy) {
 		this.filesToSave.put(storageFile, storageNbtCopy == null ? DELETE_NBT : storageNbtCopy);
-		ThreadedFileIOBase.getThreadedIOInstance().queueIO(this);
 		return true;
 	}
 
@@ -62,9 +60,6 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 
 	/**
 	 * Loads the specified file as NBT
-	 * @param file
-	 * @return
-	 * @throws IOException
 	 */
 	@Nullable
 	public CompoundTag loadFileNbt(File file) throws IOException {
@@ -86,10 +81,6 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 		}
 	}
 
-	public void saveChunks(ChunkDataEvent.Save event) {
-	}
-
-	@Override
 	public boolean writeNextIO() {
 		if(!this.filesToSave.isEmpty()) {
 			final File file = this.filesToSave.keySet().iterator().next();
@@ -125,7 +116,8 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 		return false;
 	}
 
-	public void flush() {
+	@Override
+	public void close() {
 		while(this.writeNextIO());
 	}
 }

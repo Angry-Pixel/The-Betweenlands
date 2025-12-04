@@ -150,7 +150,7 @@ public abstract class BLEnvironmentEvent implements RemotelyControllableEnvironm
 	}
 
 	@Override
-	public void setDefaults(Level level) {
+	public void setDefaults(Level level, BLEnvironmentEventRegistry registry) {
 	}
 
 	@Override

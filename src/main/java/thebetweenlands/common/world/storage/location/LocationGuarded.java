@@ -54,7 +54,6 @@ public class LocationGuarded extends LocationStorage implements TickableStorage 
 		super(worldStorage, id, region, name, type);
 	}
 
-	@Nullable
 	@Override
 	public BlockLocationGuard getGuard() {
 		return this.guard;

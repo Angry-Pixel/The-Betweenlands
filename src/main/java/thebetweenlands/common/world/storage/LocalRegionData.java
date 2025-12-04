@@ -32,11 +32,6 @@ public class LocalRegionData {
 
 	/**
 	 * Tries to read the region from a file and if it doesn't exist and {@code create} is true a new region is created
-	 * @param cache
-	 * @param dir
-	 * @param region
-	 * @param
-	 * @return
 	 */
 	@Nullable
 	public static LocalRegionData getOrCreateRegion(LocalRegionCache cache, File dir, LocalRegion region, boolean create) {
@@ -44,7 +39,7 @@ public class LocalRegionData {
 		File file = new File(dir, region.getFileName() + ".dat");
 		try {
 			regionNbt = cache.getLocalStorageHandler().getSaveHandler().loadFileNbt(file);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			TheBetweenlands.LOGGER.error("Failed loading local region cache", ex);
 			File backup = new File(file.getAbsolutePath() + ".backup");
 			try {
@@ -55,11 +50,11 @@ public class LocalRegionData {
 			}
 			try {
 				file.delete();
-			} catch(Exception e) {}
-			regionNbt = null;
+			} catch (Exception ignored) {
+			}
 		}
-		if(regionNbt == null) {
-			if(!create) {
+		if (regionNbt == null) {
+			if (!create) {
 				return null;
 			}
 
@@ -70,7 +65,6 @@ public class LocalRegionData {
 
 	/**
 	 * Returns the region ID
-	 * @return
 	 */
 	public String getID() {
 		return this.region.getFileName();
@@ -78,7 +72,6 @@ public class LocalRegionData {
 
 	/**
 	 * Returns the region this data belongs to
-	 * @return
 	 */
 	public LocalRegion getRegion() {
 		return this.region;
@@ -100,7 +93,6 @@ public class LocalRegionData {
 
 	/**
 	 * Returns whether there are any references left
-	 * @return
 	 */
 	public boolean hasReferences() {
 		return this.refCounter > 0;
@@ -108,7 +100,7 @@ public class LocalRegionData {
 
 	@Nullable
 	public CompoundTag getLocalStorageNBT(StorageID id) {
-		if(this.nbt.contains(id.getStringID(), Tag.TAG_COMPOUND)) {
+		if (this.nbt.contains(id.getStringID(), Tag.TAG_COMPOUND)) {
 			return this.nbt.getCompound(id.getStringID());
 		}
 		return null;
@@ -116,8 +108,6 @@ public class LocalRegionData {
 
 	/**
 	 * Sets the NBT of a local storage in this region
-	 * @param id
-	 * @param nbt
 	 */
 	public void setLocalStorageNBT(StorageID id, CompoundTag nbt) {
 		this.nbt.put(id.getStringID(), nbt);
@@ -126,15 +116,13 @@ public class LocalRegionData {
 
 	/**
 	 * Removes a shared storage from this region
-	 * @param dir
-	 * @param id
 	 * @return true if something was removed
 	 */
 	public boolean deleteLocalStorage(File dir, StorageID id) {
-		if(this.nbt.contains(id.getStringID(), Tag.TAG_COMPOUND)) {
+		if (this.nbt.contains(id.getStringID(), Tag.TAG_COMPOUND)) {
 			this.dirty = true;
 			this.nbt.remove(id.getStringID());
-			if(this.nbt.isEmpty()) {
+			if (this.nbt.isEmpty()) {
 				this.deleteRegionFile(dir);
 			}
 			return true;
@@ -149,7 +137,7 @@ public class LocalRegionData {
 
 	@Nullable
 	public CompoundTag getChunkNBT(ChunkPos chunk) {
-		if(this.nbt.contains("ChunkData." + chunk.x + "." + chunk.z, Tag.TAG_COMPOUND)) {
+		if (this.nbt.contains("ChunkData." + chunk.x + "." + chunk.z, Tag.TAG_COMPOUND)) {
 			return this.nbt.getCompound("ChunkData." + chunk.x + "." + chunk.z);
 		}
 		return null;
@@ -157,7 +145,6 @@ public class LocalRegionData {
 
 	/**
 	 * Returns whether the data is dirty
-	 * @return
 	 */
 	public boolean isDirty() {
 		return this.dirty;
@@ -165,10 +152,9 @@ public class LocalRegionData {
 
 	/**
 	 * Saves the region to a file
-	 * @param dir
 	 */
 	public void saveRegion(File dir) {
-		if(!this.nbt.isEmpty()) {
+		if (!this.nbt.isEmpty()) {
 			File file = new File(dir, this.getID() + ".dat");
 			this.cache.getLocalStorageHandler().getSaveHandler().queueRegion(file, this.nbt.copy());
 		} else {
@@ -179,7 +165,6 @@ public class LocalRegionData {
 
 	/**
 	 * Deletes the region file
-	 * @param dir
 	 */
 	public void deleteRegionFile(File dir) {
 		File file = new File(dir, this.getID() + ".dat");

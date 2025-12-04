@@ -64,6 +64,7 @@ public class StorageRegistry {
 	 * @param id
 	 * @return
 	 */
+	@Nullable
 	public static Factory<? extends ILocalStorage> getStorageFactory(ResourceLocation id) {
 		return FACTORIES.get(id);
 	}
@@ -73,6 +74,7 @@ public class StorageRegistry {
 	 * @param storage
 	 * @return
 	 */
+	@Nullable
 	public static ResourceLocation getStorageId(Class<? extends ILocalStorage> storage) {
 		return STORAGE_MAP.inverse().get(storage);
 	}
@@ -111,6 +113,7 @@ public class StorageRegistry {
 	 * @param operation
 	 * @return
 	 */
+	@Nullable
 	public static ResourceLocation getDeferredOperationId(Class<? extends IDeferredStorageOperation> operation) {
 		return DEFERRED_MAP.inverse().get(operation);
 	}

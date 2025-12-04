@@ -37,7 +37,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 
 	@Nullable
 	public static BetweenlandsChunkStorage forChunk(Level level, ChunkAccess chunk) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
 			ChunkStorageImpl chunkStorage = worldStorage.getChunkStorage(chunk);
 			if (chunkStorage instanceof BetweenlandsChunkStorage) {
@@ -76,8 +76,8 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	}
 
 	@Override
-	public void readFromNBT(CompoundTag nbt, boolean packet) {
-		super.readFromNBT(nbt, packet);
+	public void readFromNBT(Level level, CompoundTag nbt, boolean packet) {
+		super.readFromNBT(level, nbt, packet);
 
 		if (!packet) {
 			this.savedGemTargets.clear();

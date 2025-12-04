@@ -200,7 +200,7 @@ public interface ILocalStorage {
 	 * Unlinks all chunks from this local storage.
 	 * Do not use this to remove local storage since the
 	 * file won't be deleted. To remove a local storage
-	 * use {@link ILocalStorageHandler#removeLocalStorage(ILocalStorage)} instead
+	 * use {@link ILocalStorageHandler#removeLocalStorage(Level, ILocalStorage)} instead
 	 *
 	 * @return True if all chunks were successfully unlinked
 	 */
@@ -220,14 +220,14 @@ public interface ILocalStorage {
 	 *
 	 * @param chunk
 	 */
-	default void linkChunkDeferred(ChunkPos chunk) {
+	default void linkChunkDeferred(Level level, ChunkPos chunk) {
 
 	}
 
 	/**
 	 * Links the specified chunk to this local storage in a safe manner,
 	 * i.e. calls {@link #linkChunk(ChunkAccess)} if the chunk already exists and is loaded,
-	 * and {@link #linkChunkDeferred(ChunkPos)} if the chunk does not yet exist
+	 * and {@link #linkChunkDeferred(Level, ChunkPos)} if the chunk does not yet exist
 	 * or is not loaded.
 	 *
 	 * @param chunk
@@ -237,7 +237,7 @@ public interface ILocalStorage {
 		if (instance != null) {
 			this.linkChunk(instance);
 		} else {
-			this.linkChunkDeferred(chunk);
+			this.linkChunkDeferred(level, chunk);
 		}
 	}
 
@@ -245,7 +245,7 @@ public interface ILocalStorage {
 	 * Unlinks the specified chunk from this local storage
 	 * Do not use this to remove local storage since the
 	 * file won't be deleted. To remove a local storage
-	 * use {@link ILocalStorageHandler#removeLocalStorage(ILocalStorage)} instead
+	 * use {@link ILocalStorageHandler#removeLocalStorage(Level, ILocalStorage)} instead
 	 *
 	 * @param chunk
 	 * @return True if the chunk was unlinked successfully

@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.LevelAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -163,11 +164,12 @@ public class TheBetweenlands {
 	}
 
 	@Nullable
-	public static Level getBetweenlands(Level level) {
-		if(isBetweenlands(level)) {
+	public static Level getBetweenlands(@Nullable LevelAccessor accessor) {
+		if (accessor == null) return null;
+		if(accessor instanceof Level level && isBetweenlands(level)) {
 			return level;
-		} else if (level.getServer() != null && level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
-			return level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY);
+		} else if (accessor.getServer() != null && accessor.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
+			return accessor.getServer().getLevel(DimensionRegistries.DIMENSION_KEY);
 		} else {
 			return null;
 		}

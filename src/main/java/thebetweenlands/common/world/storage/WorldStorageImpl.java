@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -26,25 +27,14 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	private ILocalStorageHandler localStorageHandler;
 
-	private Level level;
 	private ResourceKey<Level> dimension;
-
-	public void setLevel(Level level) {
-		this.level = level;
-		this.dimension = level.dimension();
-		this.localStorageHandler = new LocalStorageHandlerImpl(this);
-	}
 
 	/**
 	 * Called after the world is set
 	 */
-	protected void init() {
-
-	}
-
-	@Override
-	public Level getLevel() {
-		return this.level;
+	protected void init(Level level) {
+		this.dimension = level.dimension();
+		this.localStorageHandler = new LocalStorageHandlerImpl(level, this);
 	}
 
 	@Override
@@ -60,11 +50,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 				storage.init();
 				storage.setDefaults();
 				this.storageMap.put(chunk.getPos(), storage);
-
-				if (storage instanceof TickableStorage) {
-					this.tickableStorages.add(storage);
-				}
-
+				this.tickableStorages.add(storage);
 				//Makes sure that the default values are saved
 				chunk.setUnsaved(true);
 			} catch (Exception ex) {
@@ -81,12 +67,10 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 			try {
 				ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
 				storage.init();
-				storage.readFromNBT(nbt, false);
+				storage.readFromNBT(chunk.getLevel(), nbt, false);
 				this.storageMap.put(chunk.getPos(), storage);
 
-				if (storage instanceof TickableStorage) {
-					this.tickableStorages.add(storage);
-				}
+				this.tickableStorages.add(storage);
 			} catch (Exception ex) {
 				TheBetweenlands.LOGGER.error("Failed reading chunk storage at {}", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]", ex);
 			}
@@ -102,7 +86,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 			if (storage != null) {
 				this.tickableStorages.remove(storage);
 			}
-			storage.onUnload();
+			storage.onUnload(chunk.getLevel());
 		}
 	}
 
@@ -153,7 +137,9 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	@Override
 	public void tick(Level level) {
-		this.localStorageHandler.tick();
+		if (!level.isClientSide()) {
+			this.localStorageHandler.tick(level);
+		}
 
 		for (TickableStorage tickable : this.tickableStorages) {
 			tickable.tick(level);

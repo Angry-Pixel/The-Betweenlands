@@ -28,6 +28,7 @@ import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
 import java.util.List;
@@ -143,9 +144,9 @@ public class MovingWall extends Entity implements ScreenShaker, IEntityWithCompl
 
 		//Remove wall if it is a dungeon wall and the dungeon is defeated
 		if (!this.level().isClientSide() && this.isDungeonWall) {
-			var storage = BetweenlandsWorldStorage.getForLevel(this.level());
-			if (storage.isPresent()) {
-				List<LocationSludgeWormDungeon> dungeons = storage.get().getLocalStorageHandler().getLocalStorages(LocationSludgeWormDungeon.class, this.getBoundingBox(), l -> true);
+			BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(this.level());
+			if (storage != null) {
+				List<LocationSludgeWormDungeon> dungeons = storage.getLocalStorageHandler().getLocalStorages(this.level(), LocationSludgeWormDungeon.class, this.getBoundingBox(), l -> true);
 
 				if (dungeons.isEmpty()) {
 					this.discard();

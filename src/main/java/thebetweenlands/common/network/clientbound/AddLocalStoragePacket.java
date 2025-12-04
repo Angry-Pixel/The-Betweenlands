@@ -20,6 +20,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.StorageRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class AddLocalStoragePacket implements CustomPacketPayload {
 
@@ -79,13 +80,13 @@ public class AddLocalStoragePacket implements CustomPacketPayload {
 			Level level = context.player().level();
 			StorageID id = StorageID.readFromNBT(packet.idTag);
 
-			IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+			IWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 			if (worldStorage != null) {
 				ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
 
 				ILocalStorage loadedStorage = storageHandler.getLocalStorage(id);
 				if (loadedStorage != null) {
-					storageHandler.removeLocalStorage(loadedStorage);
+					storageHandler.removeLocalStorage(level, loadedStorage);
 				}
 
 				ILocalStorage newStorage = storageHandler.createLocalStorage(packet.type, id, null);
@@ -99,7 +100,7 @@ public class AddLocalStoragePacket implements CustomPacketPayload {
 					}
 				}
 
-				storageHandler.addLocalStorage(newStorage);
+				storageHandler.addLocalStorage(level, newStorage);
 			}
 		});
 	}

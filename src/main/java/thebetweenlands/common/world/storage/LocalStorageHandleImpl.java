@@ -14,11 +14,10 @@ public class LocalStorageHandleImpl implements ILocalStorageHandle {
 	@Nullable
 	private final LocalStorageReference handleRef;
 
-	public LocalStorageHandleImpl(ILocalStorage storage, LocalStorageReference reference) {
+	public LocalStorageHandleImpl(Level level, ILocalStorage storage, LocalStorageReference reference) {
 		this.storage = storage;
 
-		Level level = TheBetweenlands.getLevelWorkaround(DimensionRegistries.DIMENSION_KEY);
-		if(level != null && !level.isClientSide()) {
+		if(!level.isClientSide()) {
 			this.handleRef = new LocalStorageReference(this, reference.getID(), reference.getRegion());
 			storage.loadReference(this.handleRef);
 		} else {
@@ -37,7 +36,10 @@ public class LocalStorageHandleImpl implements ILocalStorageHandle {
 			this.storage.unloadReference(this.handleRef);
 
 			if(this.storage.getLoadedReferences().isEmpty()) {
-				this.storage.getWorldStorage().getLocalStorageHandler().unloadLocalStorage(this.storage);
+				Level level = TheBetweenlands.getLevelWorkaround(DimensionRegistries.DIMENSION_KEY);
+				if (level != null) {
+					this.storage.getWorldStorage().getLocalStorageHandler().unloadLocalStorage(level, this.storage);
+				}
 			}
 		}
 	}

@@ -9,13 +9,14 @@ import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class SpiritTreeAmbienceType extends AmbienceType {
 
 	private double getClosestSpiritTree() {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(Minecraft.getInstance().level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(Minecraft.getInstance().level);
 
 		double closestSpiritTree = -1;
 		if (worldStorage != null) {

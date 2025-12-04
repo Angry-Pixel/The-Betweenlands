@@ -257,10 +257,10 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public void linkChunkDeferred(ChunkPos chunk) {
+	public void linkChunkDeferred(Level level, ChunkPos chunk) {
 		if (!this.linkedChunks.contains(chunk) && this.linkedChunks.add(chunk)) {
 			this.setDirty(true);
-			this.worldStorage.getLocalStorageHandler().queueDeferredOperation(chunk, new DeferredLinkOperation(new LocalStorageReference(chunk, this.getID(), this.getRegion())));
+			this.worldStorage.getLocalStorageHandler().queueDeferredOperation(level, chunk, new DeferredLinkOperation(new LocalStorageReference(chunk, this.getID(), this.getRegion())));
 		}
 	}
 

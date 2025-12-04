@@ -9,6 +9,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class DenseFogEvent extends TimedEnvironmentEvent {
 
@@ -56,7 +57,7 @@ public class DenseFogEvent extends TimedEnvironmentEvent {
 	}
 
 	public static boolean isDenseFog(Level level) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
 		if (storage != null) {
 			return storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.DENSE_FOG.getId());
 		}

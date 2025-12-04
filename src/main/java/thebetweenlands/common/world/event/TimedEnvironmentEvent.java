@@ -243,7 +243,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 	}
 
 	@Override
-	public void setDefaults(Level level) {
+	public void setDefaults(Level level, BLEnvironmentEventRegistry registry) {
 		this.dataManager.set(TICKS, this.getOffTime(level.getRandom()));
 		this.dataManager.set(NEXT_DURATION, this.getOnTime(level.getRandom()));
 	}

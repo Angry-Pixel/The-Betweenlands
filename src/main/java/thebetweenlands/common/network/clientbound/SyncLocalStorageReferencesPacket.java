@@ -13,6 +13,7 @@ import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.util.ExtraCodecs;
 
 public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) implements CustomPacketPayload {
@@ -37,11 +38,11 @@ public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) im
 			Level level = context.player().level();
 			ChunkAccess chunk = level.getChunkSource().getChunkNow(packet.pos().x, packet.pos().z);
 			if (chunk != null) {
-				IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+				IWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 				if (worldStorage != null) {
 					IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
 					if (chunkStorage != null) {
-						chunkStorage.readLocalStorageReferences(packet.tag);
+						chunkStorage.readLocalStorageReferences(context.player().level(), packet.tag);
 					}
 				}
 			}

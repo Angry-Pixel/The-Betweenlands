@@ -12,6 +12,7 @@ import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard.GuardChunkSection;
 
@@ -52,7 +53,7 @@ public class ChangeBlockGuardSectionPacket implements CustomPacketPayload {
 
 	public static void handle(ChangeBlockGuardSectionPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(context.player().level());
+			BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(context.player().level());
 			if (worldStorage != null) {
 				ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id));
 				if (storage instanceof LocationGuarded location) {

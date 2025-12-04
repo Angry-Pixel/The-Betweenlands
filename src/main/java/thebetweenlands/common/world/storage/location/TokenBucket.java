@@ -13,14 +13,12 @@ import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 import javax.annotation.Nullable;
 
 public class TokenBucket {
 
-	@Nullable
-	private Level level;
 	@Nullable
 	private BlockPos pos;
 	@Nullable
@@ -33,9 +31,6 @@ public class TokenBucket {
 
 	private long lastCheckedTime = Long.MIN_VALUE;
 	private double consumedTokenFraction;
-
-	public TokenBucket() {
-	}
 
 	public TokenBucket(CompoundTag nbt) {
 		this.readFromNBT(nbt);
@@ -52,17 +47,14 @@ public class TokenBucket {
 		this.tokensConsumedPerTick = tokensConsumedPerTick;
 	}
 
-	public TokenBucket setLevel(Level level) {
-		this.level = level;
+	public void refreshCheckTime(Level level) {
 		if (this.lastCheckedTime == Long.MIN_VALUE) {
 			this.lastCheckedTime = level.getGameTime();
 		}
-		return this;
 	}
 
-	public TokenBucket setPos(BlockPos pos) {
+	public void setPos(BlockPos pos) {
 		this.pos = pos;
-		return this;
 	}
 
 	public CompoundTag writeToNBT(CompoundTag tag) {
@@ -95,12 +87,12 @@ public class TokenBucket {
 		this.consumedTokenFraction = tag.getDouble("consumedTokenFraction");
 	}
 
-	public long consume() {
-		if (this.level == null || this.pos == null || this.bucketId == null) {
+	public long consume(Level level) {
+		if (this.pos == null || this.bucketId == null) {
 			return 0;
 		}
 
-		IWorldStorage storage = BetweenlandsWorldStorage.getNullable(this.level);
+		IWorldStorage storage = WorldStorageGetter.getNullable(level);
 		if (storage != null) {
 			ILocalStorageHandler handler = storage.getLocalStorageHandler();
 
@@ -108,20 +100,20 @@ public class TokenBucket {
 
 			AABB posAabb = new AABB(this.pos);
 
-			List<LocationTokenBucket> locations = handler.getLocalStorages(LocationTokenBucket.class, posAabb, location -> this.bucketId.equals(location.getBucketId()));
+			List<LocationTokenBucket> locations = handler.getLocalStorages(level, LocationTokenBucket.class, posAabb, location -> this.bucketId.equals(location.getBucketId()));
 			if (!locations.isEmpty()) {
 				tokenBucket = locations.getFirst();
 			}
 
-			if (tokenBucket == null && !this.level.isClientSide()) {
-				tokenBucket = new LocationTokenBucket(storage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(this.pos), posAabb.inflate(this.sizeX * 0.5f - 0.49f, this.sizeY * 0.5f - 0.49f, this.sizeZ * 0.5f - 0.49f), this.bucketId, this.level.getGameTime());
+			if (tokenBucket == null && !level.isClientSide()) {
+				tokenBucket = new LocationTokenBucket(storage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(this.pos), posAabb.inflate(this.sizeX * 0.5f - 0.49f, this.sizeY * 0.5f - 0.49f, this.sizeZ * 0.5f - 0.49f), this.bucketId, level.getGameTime());
 				tokenBucket.setTokensPerTick(this.minTokensPerTick, this.maxTokensPerTick);
 				tokenBucket.setLimitMultiplier(this.limitMultiplier);
-				handler.addLocalStorage(tokenBucket);
+				handler.addLocalStorage(level, tokenBucket);
 			}
 
 			if (tokenBucket != null) {
-				long worldTime = this.level.getGameTime();
+				long worldTime = level.getGameTime();
 				long ticks = Math.max(worldTime - this.lastCheckedTime, 0);
 
 				double consumedTokens = ticks * this.tokensConsumedPerTick + this.consumedTokenFraction;

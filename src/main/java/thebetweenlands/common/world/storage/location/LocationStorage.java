@@ -26,6 +26,7 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 import java.util.ArrayList;
@@ -526,9 +527,9 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3i position) { // BlockPos is a Vec3i
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
-			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.getX(), position.getZ(), (location) -> location.isInside(position));
+			return worldStorage.getLocalStorageHandler().getLocalStorages(level, LocationStorage.class, position.getX(), position.getZ(), (location) -> location.isInside(position));
 		}
 		return List.of();
 	}
@@ -540,9 +541,9 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3 position) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
-			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.x, position.z, (location) -> location.isInside(position));
+			return worldStorage.getLocalStorageHandler().getLocalStorages(level, LocationStorage.class, position.x, position.z, (location) -> location.isInside(position));
 		}
 		return List.of();
 	}
@@ -555,9 +556,9 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, AABB aabb) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
-			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> location.intersects(aabb));
+			return worldStorage.getLocalStorageHandler().getLocalStorages(level, LocationStorage.class, aabb, (location) -> location.intersects(aabb));
 		}
 		return List.of();
 	}

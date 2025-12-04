@@ -31,6 +31,7 @@ import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class Sporeling extends PathfinderMob implements BLEntity {
 
@@ -228,7 +229,7 @@ public class Sporeling extends PathfinderMob implements BLEntity {
 	}
 
 	public boolean isBloodSkiesActive() {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(this.level());
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(this.level());
 		return worldStorage != null && EnvironmentEventRegistry.BLOOD_SKY.get().isActive();
 	}
 }

@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
 public interface IChunkStorage {
@@ -29,7 +30,7 @@ public interface IChunkStorage {
 	/**
 	 * Called when the chunk storage is unloaded, after the data has been saved
 	 */
-	void onUnload();
+	void onUnload(Level level);
 
 	/**
 	 * Sets the default value if the chunk is new
@@ -41,14 +42,14 @@ public interface IChunkStorage {
 	 * @param tag NBT
 	 * @param packet Whether the NBT is being read from a packet
 	 */
-	void readFromNBT(CompoundTag tag, boolean packet);
+	void readFromNBT(Level level, CompoundTag tag, boolean packet);
 
 	/**
 	 * Reads the local storage references from NBT
 	 * @param tag
 	 * @return
 	 */
-	CompoundTag readLocalStorageReferences(CompoundTag tag);
+	CompoundTag readLocalStorageReferences(Level level, CompoundTag tag);
 
 	/**
 	 * Writes the chunk storage data to NBT

@@ -25,6 +25,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -44,7 +45,7 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 	}
 
 	public static boolean isFroooosty(Level level) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
 		if (storage != null) {
 			return storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.WINTER.getId());
 		}

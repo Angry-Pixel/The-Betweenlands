@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -32,7 +31,6 @@ import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
@@ -51,19 +49,17 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private final List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
 	public static BetweenlandsWorldStorage create(IAttachmentHolder holder) {
-		if(!(holder instanceof Level level)) {
-//			throw new IllegalArgumentException("World storage attachments must be registered to a Level!");
+		if (!(holder instanceof Level level)) {
 			TheBetweenlands.LOGGER.warn("Tried to attach level-only world storage attachment to non-level {}", holder);
 			return null;
 		}
 		BetweenlandsWorldStorage worldStorage = new BetweenlandsWorldStorage();
-		worldStorage.setLevel(level);
-//		worldStorage.init();
+		worldStorage.init(level);
 		return worldStorage;
 	}
 
 	public static BetweenlandsWorldStorage copy(BetweenlandsWorldStorage attachment, IAttachmentHolder holder, HolderLookup.Provider provider) {
-		if(!(holder instanceof Level)) {
+		if (!(holder instanceof Level)) {
 			TheBetweenlands.LOGGER.warn("Tried to copy level-only world storage attachment to non-level {}", holder);
 			return null;
 		}
@@ -84,12 +80,11 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 //	}
 
 	@Override
-	protected void init() {
-		super.init();
-		Level level = getLevel();
+	protected void init(Level level) {
+		super.init(level);
 		if (!level.isClientSide()) {
 			for (EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-				event.setDefaults(level);
+				event.setDefaults(level, this.environmentEventRegistry);
 				event.setLoaded(level);
 			}
 			this.aspectManager.loadAndPopulateStaticAspects(null, level.registryAccess(), AspectManager.getAspectsSeed(level.getServer().getLevel(Level.OVERWORLD).getSeed()));
@@ -189,63 +184,8 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return false;
 	}
 
-	/**
-	 * Gets any existing Betweenlands World Storage for the Level (regardless of whether that level is The Betweenlands)
-	 * @param level
-	 * @return
-	 */
-	public static Optional<BetweenlandsWorldStorage> getExistingForLevel(Level level) {
-		return level.getExistingData(AttachmentRegistry.WORLD_STORAGE);
-	}
-
-	public static BetweenlandsWorldStorage getOrCreateForLevel(Level level) {
-		return level.getData(AttachmentRegistry.WORLD_STORAGE);
-	}
-
-	public static Optional<BetweenlandsWorldStorage> getForLevel(Level level) {
-		if(TheBetweenlands.isBetweenlands(level)) {
-			return Optional.of(getOrCreateForLevel(level));
-		} else {
-			return getExistingForLevel(level);
-		}
-	}
-
-	@Nullable
-	public static BetweenlandsWorldStorage getForLevelNullable(Level level) {
-		return getForLevel(level).orElse(null);
-	}
-
-	public static Optional<BetweenlandsWorldStorage> getExisting(Level level) {
-		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
-		if(betweenlandsLevel != null) {
-			return getExistingForLevel(betweenlandsLevel);
-		}
-		return Optional.empty();
-	}
-
-	public static Optional<BetweenlandsWorldStorage> get(Level level) {
-		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
-		if(betweenlandsLevel != null) {
-			return Optional.of(getOrCreateForLevel(betweenlandsLevel));
-		}
-		return Optional.empty();
-	}
-
-	@Nullable
-	public static BetweenlandsWorldStorage getNullable(Level level) {
-		return get(level).orElse(null);
-	}
-
-	public static BetweenlandsWorldStorage getOrThrow(Level level) {
-		return get(level).orElseThrow(() -> new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.dimension().location())));
-	}
-
-	public static BetweenlandsWorldStorage getOrThrow(ServerLevelAccessor level) {
-		return getOrThrow((Level)level.getLevel());
-	}
-
 	public static boolean isEventActive(Level level, Holder<EnvironmentEvent> event) {
-		return BetweenlandsWorldStorage.get(level).map(storage -> storage.getEnvironmentEventRegistry().getActiveEvents().contains(event.value())).orElse(false);
+		return WorldStorageGetter.get(level).map(storage -> storage.getEnvironmentEventRegistry().getActiveEvents().contains(event.value())).orElse(false);
 	}
 
 	public List<SpiritTreeKillToken> getSpiritTreeKillTokens() {

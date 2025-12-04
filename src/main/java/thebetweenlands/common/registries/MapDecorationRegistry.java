@@ -18,7 +18,7 @@ public class MapDecorationRegistry {
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> SMALL_MARKER = register("small_marker");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> PORTAL = register("portal");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> SPAWN = register("spawn");
-	public static final DeferredHolder<MapDecorationType, MapDecorationType> SMALL_DUNGEON = register("small_dungeon");
+	public static final DeferredHolder<MapDecorationType, MapDecorationType> SMALL_DUNGEON = register("shrine");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> GIANT_TREE = register("giant_tree");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> RUINS = register("ruins");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> TOWER = register("cragrock_tower");
@@ -29,7 +29,7 @@ public class MapDecorationRegistry {
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> WIGHT_TOWER = register("wight_tower");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> SLUDGE_WORM_DUNGEON = register("sludge_worm_dungeon");
 	public static final DeferredHolder<MapDecorationType, MapDecorationType> FLOATING_ISLAND = register("floating_island");
-	public static final DeferredHolder<MapDecorationType, MapDecorationType> CHECK = register("check");
+	public static final DeferredHolder<MapDecorationType, MapDecorationType> CHECK = register("checkmark");
 
 	private static DeferredHolder<MapDecorationType, MapDecorationType> register(String name) {
 		return DECORATIONS.register(name, () -> new MapDecorationType(TheBetweenlands.prefix(name), true, -1, false, true));

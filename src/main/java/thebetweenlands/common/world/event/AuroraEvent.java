@@ -13,6 +13,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class AuroraEvent extends TimedEnvironmentEvent {
 	protected static final EntityDataAccessor<Integer> AURORA_TYPE = GenericDataAccessor.defineId(AuroraEvent.class, EntityDataSerializers.INT);
@@ -74,8 +75,9 @@ public class AuroraEvent extends TimedEnvironmentEvent {
 	}
 
 	protected boolean canBeActive(Level level) {
-		if (BetweenlandsWorldStorage.getNullable(level) != null) {
-			for (EnvironmentEvent event : BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getEventsOfState(true)) {
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
+		if (storage != null) {
+			for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEventsOfState(true)) {
 				if (event != this && event.getClass() != WinterEvent.class && event.getClass() != SnowfallEvent.class &&
 					event.getClass() != RiftEvent.class) {
 					return false;

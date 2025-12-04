@@ -23,6 +23,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
@@ -55,7 +56,7 @@ public class UnderwaterRuinsFeature extends WorldGenHelper<NoneFeatureConfigurat
 	}
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getOrThrow(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "underwater_ruins", EnumLocationType.RUINS);
 		boolean generated;
 
@@ -107,7 +108,7 @@ public class UnderwaterRuinsFeature extends WorldGenHelper<NoneFeatureConfigurat
 			locationStorage.setSeed(level.getSeed());
 			locationStorage.setVisible(true);
 			locationStorage.setDirty(true);
-			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
+			worldStorage.getLocalStorageHandler().addLocalStorage(level.getLevel(), locationStorage);
 		}
 
 		return generated;

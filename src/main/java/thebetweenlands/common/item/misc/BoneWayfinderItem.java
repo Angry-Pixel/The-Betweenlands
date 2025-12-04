@@ -40,6 +40,7 @@ import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
@@ -210,10 +211,9 @@ public class BoneWayfinderItem extends HoverTextItem implements UnbreakableItem 
 
 				this.playThunderSounds(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
-				var storage = BetweenlandsWorldStorage.getNullable(level);
+				var storage = WorldStorageGetter.getNullable(level);
 				if (storage != null) {
-					List<LocationStorage> waystoneLocations = storage.getLocalStorageHandler()
-						.getLocalStorages(LocationStorage.class, new AABB(pos.getX(), pos.getY() + startY, pos.getZ(), pos.getX() + 1, pos.getY() + startY + 3, pos.getZ() + 1), loc -> loc.getType() == EnumLocationType.WAYSTONE);
+					List<LocationStorage> waystoneLocations = storage.getLocalStorageHandler().getLocalStorages(level, LocationStorage.class, new AABB(pos.getX(), pos.getY() + startY, pos.getZ(), pos.getX() + 1, pos.getY() + startY + 3, pos.getZ() + 1), loc -> loc.getType() == EnumLocationType.WAYSTONE);
 					if (!waystoneLocations.isEmpty()) {
 						LocationStorage location = waystoneLocations.getFirst();
 

@@ -19,11 +19,12 @@ public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;
 	@Nullable
 	private BlockPos otherPortalPos;
+	@Nullable
 	private ResourceKey<Level> otherPortalDimension;
 	private boolean targetDimensionSet;
 
 	public LocationPortal(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
-		super(worldStorage, id, region);
+		this(worldStorage, id, region, null);
 	}
 
 	public LocationPortal(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region, BlockPos pos) {
@@ -53,15 +54,15 @@ public class LocationPortal extends LocationStorage {
 		if (this.otherPortalPos != null) {
 			tag.putLong("OtherPortalPos", this.otherPortalPos.asLong());
 		}
-		tag.putString("OtherPortalDimension", this.otherPortalDimension.location().toString());
+		if (this.otherPortalDimension != null) {
+			tag.putString("OtherPortalDimension", this.otherPortalDimension.location().toString());
+		}
 		tag.putBoolean("TargetDimSet", this.targetDimensionSet);
 		return tag;
 	}
 
 	/**
 	 * Returns the position of this portal
-	 *
-	 * @return
 	 */
 	public BlockPos getPortalPosition() {
 		return this.portalPos;
@@ -69,8 +70,6 @@ public class LocationPortal extends LocationStorage {
 
 	/**
 	 * Returns the position of the portal on the other side
-	 *
-	 * @return
 	 */
 	@Nullable
 	public BlockPos getOtherPortalPosition() {
@@ -79,17 +78,14 @@ public class LocationPortal extends LocationStorage {
 
 	/**
 	 * Returns the dimension the other portal is in
-	 *
-	 * @return
 	 */
+	@Nullable
 	public ResourceKey<Level> getOtherPortalDimension() {
 		return this.otherPortalDimension;
 	}
 
 	/**
 	 * Sets the position of the portal on the other side
-	 *
-	 * @param pos
 	 */
 	public void setOtherPortalPosition(ResourceKey<Level> dim, @Nullable BlockPos pos) {
 		this.otherPortalPos = pos;
@@ -114,8 +110,6 @@ public class LocationPortal extends LocationStorage {
 
 	/**
 	 * Returns whether a target dimension was set. See {@link #setTargetDimension(ResourceKey)}
-	 *
-	 * @return
 	 */
 	public boolean hasTargetDimension() {
 		return this.targetDimensionSet;
@@ -133,6 +127,6 @@ public class LocationPortal extends LocationStorage {
 				return false;
 			}
 		}
-		return this.getWorldStorage().getLocalStorageHandler().removeLocalStorage(this);
+		return this.getWorldStorage().getLocalStorageHandler().removeLocalStorage(level, this);
 	}
 }

@@ -27,15 +27,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MapDecorationRegistry;
 import thebetweenlands.common.world.storage.AmateMapData;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class AmateMapItem extends MapItem {
 
@@ -160,6 +158,14 @@ public class AmateMapItem extends MapItem {
 							data.setColor(xPixel, zPixel, ourPixel);
 							data.setDirty();
 						}
+
+						int worldX = (centerX / blocksPerPixel + xPixel - 64) * blocksPerPixel;
+						int worldZ = (centerZ / blocksPerPixel + zPixel - 64) * blocksPerPixel;
+						int chunkX = worldX >> 4;
+						int chunkZ = worldZ >> 4;
+						if (!checkedChunks.containsKey(chunkX) || (checkedChunks.containsKey(chunkX) && !checkedChunks.get(chunkX).contains(chunkZ))) {
+							checkedChunks.computeIfAbsent(chunkX, integer -> new ArrayList<>()).add(chunkZ);
+						}
 					}
 				}
 			}
@@ -169,14 +175,14 @@ public class AmateMapItem extends MapItem {
 	}
 
 	private void locateBLLocations(Level world, Map<Integer, List<Integer>> posList, int centerX, int centerZ, int blocksPerPixel, AmateMapData data) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(world);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(world);
 		if (worldStorage != null) {
 			ILocalStorageHandler handler = worldStorage.getLocalStorageHandler();
 
 			for (Map.Entry<Integer, List<Integer>> chunkX : posList.entrySet()) {
 				for (Integer z : chunkX.getValue()) {
 					int x = chunkX.getKey();
-					List<LocationStorage> localStorages = handler.getLocalStorages(LocationStorage.class, x << 4, z << 4, input -> true);
+					List<LocationStorage> localStorages = handler.getLocalStorages(world, LocationStorage.class, x << 4, z << 4, input -> true);
 					if (!localStorages.isEmpty()) {
 						for (LocationStorage storage : localStorages) {
 							AABB aabb = storage.getEnclosingBounds();
@@ -193,11 +199,8 @@ public class AmateMapItem extends MapItem {
 									if (tower.isTopConquered()) {
 										done = true;
 									}
-								} else if (location == MapDecorationRegistry.WIGHT_TOWER || location == MapDecorationRegistry.SPIRIT_TREE || location == MapDecorationRegistry.SLUDGE_WORM_DUNGEON) {
-									LocationGuarded guarded = (LocationGuarded) storage;
-									if (guarded.getGuard().isClear(world)) {
-										done = true;
-									}
+								} else if (storage instanceof LocationGuarded guarded && guarded.getGuard().isClear(world)) {
+									done = true;
 								}
 								if (done) {
 									data.addDecoration(MapDecorationRegistry.CHECK, world, makeName(MapDecorationRegistry.CHECK, mapX, mapZ), mapX, mapZ, 180.0F, null);

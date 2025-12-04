@@ -230,7 +230,7 @@ public class LocationTokenBucket extends LocationStorage implements TickableStor
 		}
 
 		if (this.tickets.isEmpty()) {
-			this.getWorldStorage().getLocalStorageHandler().removeLocalStorage(this);
+			this.getWorldStorage().getLocalStorageHandler().removeLocalStorage(level, this);
 			return;
 		}
 

@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -30,7 +31,7 @@ public class SpoopyEvent extends SeasonalEnvironmentEvent {
 	}
 
 	public static boolean isSpoooopy(Level level) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
 		if (storage != null) {
 			return storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.SPOOPY.getId());
 		}

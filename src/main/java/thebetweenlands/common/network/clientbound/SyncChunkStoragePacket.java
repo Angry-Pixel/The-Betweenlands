@@ -13,6 +13,7 @@ import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.util.ExtraCodecs;
 
 public record SyncChunkStoragePacket(CompoundTag tag, ChunkPos pos) implements CustomPacketPayload {
@@ -37,10 +38,10 @@ public record SyncChunkStoragePacket(CompoundTag tag, ChunkPos pos) implements C
 			Level level = context.player().level();
 			ChunkAccess chunk = level.getChunkSource().getChunkNow(packet.pos().x, packet.pos().z);
 			if(chunk != null) {
-				IWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+				IWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 				if (worldStorage != null) {
 					IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
-					chunkStorage.readFromNBT(packet.tag, true);
+					chunkStorage.readFromNBT(level, packet.tag, true);
 				}
 			}
 		});

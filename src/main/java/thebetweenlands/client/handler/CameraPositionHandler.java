@@ -16,6 +16,7 @@ import thebetweenlands.api.entity.CameraOffsetter;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 
 import java.util.ArrayList;
@@ -62,9 +63,9 @@ public class CameraPositionHandler {
 			}
 
 			//Crumbling cragrock tower
-			BetweenlandsWorldStorage worldData = BetweenlandsWorldStorage.getNullable(level);
+			BetweenlandsWorldStorage worldData = WorldStorageGetter.getNullable(level);
 			if (worldData != null) {
-				List<LocationCragrockTower> towers = worldData.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, renderViewEntity.getX(), renderViewEntity.getZ(), location -> location.getInnerBoundingBox().inflate(4, 4, 4).contains(renderViewEntity.position()));
+				List<LocationCragrockTower> towers = worldData.getLocalStorageHandler().getLocalStorages(level, LocationCragrockTower.class, renderViewEntity.getX(), renderViewEntity.getZ(), location -> location.getInnerBoundingBox().inflate(4, 4, 4).contains(renderViewEntity.position()));
 				for (LocationCragrockTower tower : towers) {
 					if (tower.isCrumbling()) {
 						screenShake += (float) Math.min(Math.pow(tower.getCrumblingTicks() / 400.0f, 4) * 0.08f, 0.08f);

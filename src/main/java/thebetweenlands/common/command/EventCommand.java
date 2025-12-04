@@ -17,6 +17,7 @@ import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class EventCommand {
 		if (context.getSource().getLevel().dimension() != DimensionRegistries.DIMENSION_KEY) {
 			throw NOT_IN_BETWEENLANDS.create();
 		}
-		BLEnvironmentEventRegistry environmentEventRegistry = BetweenlandsWorldStorage.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
+		BLEnvironmentEventRegistry environmentEventRegistry = WorldStorageGetter.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
 		context.getSource().sendSuccess(() -> Component.translatable("commands.thebetweenlands.event.active", environmentEventRegistry.getActiveEvents().stream().map(event -> Component.translatable(event.getDescriptionId()).getString()).toList().toString()), false);
 		return Command.SINGLE_SUCCESS;
 	}
@@ -79,7 +80,7 @@ public class EventCommand {
 			throw NOT_IN_BETWEENLANDS.create();
 		}
 
-		BLEnvironmentEventRegistry environmentEventRegistry = BetweenlandsWorldStorage.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
+		BLEnvironmentEventRegistry environmentEventRegistry = WorldStorageGetter.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
 		for (EnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
 			event.setActive(context.getSource().getLevel(), false);
 		}
@@ -109,7 +110,7 @@ public class EventCommand {
 		if (context.getSource().getLevel().dimension() != DimensionRegistries.DIMENSION_KEY) {
 			throw NOT_IN_BETWEENLANDS.create();
 		}
-		BLEnvironmentEventRegistry environmentEventRegistry = BetweenlandsWorldStorage.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
+		BLEnvironmentEventRegistry environmentEventRegistry = WorldStorageGetter.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
 		if (environmentEventRegistry.isEnabled()) {
 			context.getSource().sendFailure(Component.translatable("commands.thebetweenlands.event.already_enabled"));
 			return 0;
@@ -123,7 +124,7 @@ public class EventCommand {
 		if (context.getSource().getLevel().dimension() != DimensionRegistries.DIMENSION_KEY) {
 			throw NOT_IN_BETWEENLANDS.create();
 		}
-		BLEnvironmentEventRegistry environmentEventRegistry = BetweenlandsWorldStorage.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
+		BLEnvironmentEventRegistry environmentEventRegistry = WorldStorageGetter.getNullable(context.getSource().getLevel()).getEnvironmentEventRegistry();
 		if (environmentEventRegistry.isDisabled()) {
 			context.getSource().sendFailure(Component.translatable("commands.thebetweenlands.event.already_disabled"));
 			return 0;

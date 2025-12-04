@@ -59,13 +59,13 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 	}
 
 	@Override
-	public void onUnload() {
+	public void onUnload(Level level) {
 		for(LocalStorageReference ref : this.localStorageReferences) {
 			ILocalStorage localStorage = this.getWorldStorage().getLocalStorageHandler().getLocalStorage(ref.getID());
 			if(localStorage != null) {
 				localStorage.unloadReference(ref);
 				if(localStorage.getLoadedReferences().isEmpty()) {
-					this.getWorldStorage().getLocalStorageHandler().unloadLocalStorage(localStorage);
+					this.getWorldStorage().getLocalStorageHandler().unloadLocalStorage(level, localStorage);
 				}
 			}
 		}
@@ -77,12 +77,12 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 	}
 
 	@Override
-	public void readFromNBT(CompoundTag nbt, boolean packet) {
-		this.readLocalStorageReferences(nbt);
+	public void readFromNBT(Level level, CompoundTag nbt, boolean packet) {
+		this.readLocalStorageReferences(level, nbt);
 	}
 
 	@Override
-	public CompoundTag readLocalStorageReferences(CompoundTag nbt) {
+	public CompoundTag readLocalStorageReferences(Level level, CompoundTag nbt) {
 		this.localStorageReferences.clear();
 		ListTag localReferenceList = nbt.getList("LocalStorageReferences", Tag.TAG_COMPOUND);
 		for (Tag tag : localReferenceList) {
@@ -93,7 +93,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 		while(refIT.hasNext()) {
 			LocalStorageReference ref = refIT.next();
 
-			try(ILocalStorageHandle handle = this.worldStorage.getLocalStorageHandler().getOrLoadLocalStorage(ref)) {
+			try(ILocalStorageHandle handle = this.worldStorage.getLocalStorageHandler().getOrLoadLocalStorage(level, ref)) {
 				//Load reference if properly linked
 				if(handle != null && handle.get().getLinkedChunks().contains(this.chunk.getPos())) {
 					handle.get().loadReference(ref);

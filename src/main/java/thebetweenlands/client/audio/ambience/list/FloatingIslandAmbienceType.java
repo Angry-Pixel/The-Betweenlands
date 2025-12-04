@@ -12,6 +12,7 @@ import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
@@ -22,10 +23,10 @@ public class FloatingIslandAmbienceType extends AmbienceType {
 	protected float getSoundStrength() {
 		Player player = this.getPlayer();
 
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(player.level());
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(player.level());
 
 		if (worldStorage != null) {
-			List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, player.getBoundingBox().inflate(8), location -> location.getType() == EnumLocationType.FLOATING_ISLAND);
+			List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(player.level(), LocationStorage.class, player.getBoundingBox().inflate(8), location -> location.getType() == EnumLocationType.FLOATING_ISLAND);
 
 			if (!locations.isEmpty()) {
 				double minDist = Double.MAX_VALUE;

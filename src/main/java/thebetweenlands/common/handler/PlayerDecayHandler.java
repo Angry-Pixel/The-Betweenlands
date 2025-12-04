@@ -19,6 +19,7 @@ import thebetweenlands.common.component.entity.DecayData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.util.MathUtils;
 
 public class PlayerDecayHandler {
@@ -58,7 +59,7 @@ public class PlayerDecayHandler {
 						decaySpeed += (player.walkDist - player.walkDistO) * 4 * decayBaseSpeed;
 					}
 
-					BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getNullable(player.level());
+					BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(player.level());
 					if (storage != null && storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId()) && player.level().canSeeSky(player.blockPosition())) {
 						decaySpeed += decayBaseSpeed;
 					}

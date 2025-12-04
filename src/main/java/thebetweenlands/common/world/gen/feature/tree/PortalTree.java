@@ -14,6 +14,7 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.TreePortalBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 
 import javax.annotation.Nullable;
@@ -127,7 +128,7 @@ public class PortalTree {
 			}
 		}
 
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getNullable(level);
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
 			LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
 			location.addBounds(new AABB(pos).inflate(8, 7, 8).move(0, 7, 0));
@@ -137,7 +138,7 @@ public class PortalTree {
 			}
 			location.setDirty(true);
 			location.setVisible(false);
-			worldStorage.getLocalStorageHandler().addLocalStorage(location);
+			worldStorage.getLocalStorageHandler().addLocalStorage(level, location);
 		}
 		return true;
 	}

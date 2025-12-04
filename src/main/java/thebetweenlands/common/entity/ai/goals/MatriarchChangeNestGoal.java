@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -38,7 +39,7 @@ public class MatriarchChangeNestGoal extends Goal {
 		if (!this.matriarch.isReturningToNest() && this.matriarch.getTarget() == null && this.checkTimer-- <= 0) {
 			this.checkTimer = 10;
 
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.getForLevelNullable(this.matriarch.level());
+			BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(this.matriarch.level());
 
 			if (worldStorage == null) return false;
 

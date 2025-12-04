@@ -10,6 +10,7 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
@@ -35,10 +36,10 @@ public class BarrisheeNodeEvaluator extends WalkNodeEvaluator {
 
 		BlockPos pos = new BlockPos(x, y, z);
 
-		var storage = BetweenlandsWorldStorage.getNullable(this.barrishee.level());
+		var storage = WorldStorageGetter.getNullable(this.barrishee.level());
 
 		if (storage != null) {
-			List<LocationSludgeWormDungeon> locations = storage.getLocalStorageHandler().getLocalStorages(LocationSludgeWormDungeon.class, new AABB(pos), location -> location.getGuard() != null);
+			List<LocationSludgeWormDungeon> locations = storage.getLocalStorageHandler().getLocalStorages(this.barrishee.level(), LocationSludgeWormDungeon.class, new AABB(pos), location -> location.getGuard() != null);
 
 			if (!locations.isEmpty()) {
 				boolean isWalkable = true;

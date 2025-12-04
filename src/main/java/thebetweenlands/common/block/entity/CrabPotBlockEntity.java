@@ -53,6 +53,7 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 
 	public CrabPotBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.CRAB_POT.get(), pos, state);
+		this.tokenBucket.setPos(pos);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, CrabPotBlockEntity entity) {
@@ -106,7 +107,7 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 				if (level.getGameTime() % 20 == 0) {
 					SiltCrab crab = null;
 
-					entity.updateCatchTimer();
+					entity.updateCatchTimer(level);
 
 					int remainingCatchTicks = entity.getRemainingCatchTicks();
 
@@ -222,8 +223,8 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 		this.catchTimer = 0;
 	}
 
-	private void updateCatchTimer() {
-		long increment = this.tokenBucket.consume();
+	private void updateCatchTimer(Level level) {
+		long increment = this.tokenBucket.consume(level);
 		this.catchTimer = Mth.clamp(this.catchTimer + (int) increment, 0, this.catchTimerMax);
 	}
 
@@ -337,5 +338,11 @@ public class CrabPotBlockEntity extends SyncedBlockEntity implements ContainerSi
 	@Override
 	public BlockEntity getContainerBlockEntity() {
 		return this;
+	}
+
+	@Override
+	public void setLevel(Level level) {
+		super.setLevel(level);
+		this.tokenBucket.refreshCheckTime(level);
 	}
 }

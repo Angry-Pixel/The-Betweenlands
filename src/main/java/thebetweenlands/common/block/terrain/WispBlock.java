@@ -25,6 +25,7 @@ import thebetweenlands.common.block.entity.WispBlockEntity;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 
@@ -100,18 +101,18 @@ public class WispBlock extends Block implements EntityBlock {
 	}
 
 	protected boolean checkVisibility(Level level, BlockPos pos) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getNullable(level);
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
 
 		if (storage != null) {
 			if (BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)) {
 				return true;
 			}
 
-			if (!storage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
+			if (!storage.getLocalStorageHandler().getLocalStorages(level, LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
 				return true;
 			}
 
-			if (!storage.getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
+			if (!storage.getLocalStorageHandler().getLocalStorages(level, LocationSpiritTree.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
 				return true;
 			}
 

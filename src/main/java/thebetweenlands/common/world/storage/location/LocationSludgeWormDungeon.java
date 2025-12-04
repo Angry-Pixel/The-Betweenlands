@@ -241,9 +241,9 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		return (this.structurePos.getY() - 1 - pos.getY()) / (MAX_FLOORS - 1);
 	}
 
-	public void removeLocations() {
+	public void removeLocations(Level level) {
 		ILocalStorageHandler handler = this.getWorldStorage().getLocalStorageHandler();
-		handler.removeLocalStorage(this);
-		handler.getLocalStorages(LocationStorage.class, this.getEnclosingBounds(), l -> l.getType() == EnumLocationType.SLUDGE_WORM_DUNGEON).forEach(handler::removeLocalStorage);
+		handler.removeLocalStorage(level, this);
+		handler.getLocalStorages(level, LocationStorage.class, this.getEnclosingBounds(), l -> l.getType() == EnumLocationType.SLUDGE_WORM_DUNGEON).forEach(locationStorage -> handler.removeLocalStorage(level, locationStorage));
 	}
 }

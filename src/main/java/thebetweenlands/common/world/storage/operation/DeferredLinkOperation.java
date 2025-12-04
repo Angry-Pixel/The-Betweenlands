@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.storage.operation;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.api.storage.ILocalStorageHandle;
@@ -19,10 +20,10 @@ public class DeferredLinkOperation implements IDeferredStorageOperation {
 	}
 
 	@Override
-	public void apply(IChunkStorage chunkStorage) {
+	public void apply(Level level, IChunkStorage chunkStorage) {
 		ILocalStorageHandler handler = chunkStorage.getWorldStorage().getLocalStorageHandler();
 
-		try(ILocalStorageHandle handle = handler.getOrLoadLocalStorage(this.ref)) {
+		try(ILocalStorageHandle handle = handler.getOrLoadLocalStorage(level, this.ref)) {
 			if(handle != null) {
 				chunkStorage.linkLocalStorage(handle.get());
 			}

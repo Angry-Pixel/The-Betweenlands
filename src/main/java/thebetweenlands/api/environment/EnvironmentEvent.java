@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.network.GenericDataAccessorAccess;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 
 public interface EnvironmentEvent {
 
@@ -68,7 +69,7 @@ public interface EnvironmentEvent {
 	/**
 	 * Sets the default values when the event is first loaded from the save file.
 	 */
-	void setDefaults(Level level);
+	void setDefaults(Level level, BLEnvironmentEventRegistry registry);
 
 	/**
 	 * Saves additional event data.

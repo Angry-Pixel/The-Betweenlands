@@ -19,6 +19,7 @@ import thebetweenlands.common.entity.monster.chiromaw.ChiromawHatchling;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
 
 import java.util.List;
@@ -42,9 +43,9 @@ public class ChiromawHatchlingItem extends MobItem<ChiromawHatchling> {
 			AABB checkBox = player.getBoundingBox().inflate(8);
 
 			if (player.level().getEntitiesOfClass(ChiromawHatchling.class, checkBox, EntitySelector.LIVING_ENTITY_STILL_ALIVE).isEmpty()) {
-				var storage = BetweenlandsWorldStorage.getForLevel(player.level());
-				if (storage.isPresent()) {
-					List<LocationChiromawMatriarchNest> nests = storage.get().getLocalStorageHandler().getLocalStorages(LocationChiromawMatriarchNest.class, checkBox, location -> location.getBoundingBox().intersects(checkBox));
+				BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(player.level());
+				if (storage != null) {
+					List<LocationChiromawMatriarchNest> nests = storage.getLocalStorageHandler().getLocalStorages(player.level(), LocationChiromawMatriarchNest.class, checkBox, location -> location.getBoundingBox().intersects(checkBox));
 
 					if (nests.isEmpty()) {
 						return;

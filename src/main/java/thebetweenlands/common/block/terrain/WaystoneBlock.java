@@ -25,14 +25,21 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
+
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
+import java.util.List;
 import java.util.Locale;
 
 public class WaystoneBlock extends BaseEntityBlock implements SwampWaterLoggable {
@@ -126,13 +133,13 @@ public class WaystoneBlock extends BaseEntityBlock implements SwampWaterLoggable
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		super.onRemove(state, level, pos, newState, movedByPiston);
-		var worldStorage = BetweenlandsWorldStorage.getNullable(level);
+		var worldStorage = WorldStorageGetter.getNullable(level);
 		if (worldStorage != null) {
-//			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
-//			List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(LocationStorage.class, new AABB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);
-//			for (LocationStorage waystoneLocation : waystoneLocations) {
-//				localStorageHandler.removeLocalStorage(waystoneLocation);
-//			}
+			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
+			List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(level, LocationStorage.class, new AABB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);
+			for (LocationStorage waystoneLocation : waystoneLocations) {
+				localStorageHandler.removeLocalStorage(level, waystoneLocation);
+			}
 		}
 	}
 

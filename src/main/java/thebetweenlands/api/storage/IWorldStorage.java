@@ -18,12 +18,6 @@ public interface IWorldStorage {
 	ResourceKey<Level> getDimension();
 
 	/**
-	 * Get the level this world storage is registered for
-	 * @return
-	 */
-	Level getLevel();
-
-	/**
 	 * Called when a chunk storage needs to be read from the specified NBT and loaded
 	 * @param chunk
 	 * @param tag

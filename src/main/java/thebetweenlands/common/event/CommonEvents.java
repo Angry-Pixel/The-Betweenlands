@@ -28,6 +28,7 @@ public class CommonEvents {
 		PlayerDecayHandler.init();
 		ShieldHandler.init();
 		SimulacrumHandler.init();
+		WorldEventHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);

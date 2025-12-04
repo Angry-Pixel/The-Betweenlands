@@ -22,6 +22,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +41,7 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 
 	public static float getSnowingStrength(@Nullable Level level) {
 		if (level != null) {
-			BetweenlandsWorldStorage provider = BetweenlandsWorldStorage.getNullable(level);
+			BetweenlandsWorldStorage provider = WorldStorageGetter.getNullable(level);
 			if (provider != null) {
 				return EnvironmentEventRegistry.SNOWFALL.get().getSnowingStrength();
 			}

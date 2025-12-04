@@ -22,6 +22,7 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 			entity.chimeTicks = Math.max(entity.chimeTicks - 1, 0);
 		}
 
-		var storage = BetweenlandsWorldStorage.getNullable(level);
+		var storage = WorldStorageGetter.getNullable(level);
 		if (storage != null) {
 			BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
 
@@ -250,8 +251,9 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 
 	@Nullable
 	public ResourceLocation cycleAttunedEvent(Level level) {
-		if (BetweenlandsWorldStorage.getNullable(level) != null) {
-			BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry();
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
+		if (storage != null) {
+			BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
 
 			List<PredictableEnvironmentEvent> choices = new ArrayList<>();
 

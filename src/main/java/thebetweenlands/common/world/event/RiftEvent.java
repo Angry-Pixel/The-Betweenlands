@@ -18,7 +18,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.RiftSoundPacket;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class RiftEvent extends TimedEnvironmentEvent {
 
 	protected static final EntityDataAccessor<Integer> ACTIVATION_TICKS = GenericDataAccessor.defineId(RiftEvent.class, EntityDataSerializers.INT);
 
-	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { TheBetweenlands.prefix("textures/events/rift.png") };
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[]{TheBetweenlands.prefix("textures/events/rift.png")};
 
 	protected int lastActivationTicks;
 
@@ -102,9 +101,9 @@ public class RiftEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setDefaults(Level level) {
-		super.setDefaults(level);
-		if(BetweenlandsWorldStorage.getNullable(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().isDisabled()) {
+	public void setDefaults(Level level, BLEnvironmentEventRegistry registry) {
+		super.setDefaults(level, registry);
+		if (registry.isDisabled()) {
 			this.dataManager.set(ACTIVATION_TICKS, this.lastActivationTicks = 0).syncImmediately();
 		} else {
 			this.playRiftOpenSound = false;
@@ -127,10 +126,10 @@ public class RiftEvent extends TimedEnvironmentEvent {
 
 	@Override
 	public void setActive(Level level, boolean active) {
-		if(!level.isClientSide() && active && !this.isActive() && this.getActivationTicks() == 0) {
+		if (!level.isClientSide() && active && !this.isActive() && this.getActivationTicks() == 0) {
 			this.setRandomConfiguration(level);
 
-			if(this.playRiftOpenSound) {
+			if (this.playRiftOpenSound) {
 				PacketDistributor.sendToPlayersInDimension((ServerLevel) level, new RiftSoundPacket(RiftSoundPacket.RiftSoundType.OPEN));
 			}
 		}
@@ -140,10 +139,10 @@ public class RiftEvent extends TimedEnvironmentEvent {
 
 	protected void setRandomConfiguration(Level level) {
 		this.dataManager.set(RIFT_CONFIGURATION, new RiftConfiguration(
-				level.getRandom().nextInt(Integer.MAX_VALUE),
-				level.getRandom().nextFloat(), level.getRandom().nextFloat(),
-				level.getRandom().nextFloat(), level.getRandom().nextFloat(),
-				level.getRandom().nextBoolean(), level.getRandom().nextBoolean()));
+			level.getRandom().nextInt(Integer.MAX_VALUE),
+			level.getRandom().nextFloat(), level.getRandom().nextFloat(),
+			level.getRandom().nextFloat(), level.getRandom().nextFloat(),
+			level.getRandom().nextBoolean(), level.getRandom().nextBoolean()));
 	}
 
 	@Override
@@ -152,28 +151,28 @@ public class RiftEvent extends TimedEnvironmentEvent {
 
 		this.lastActivationTicks = this.getActivationTicks();
 
-		if(this.isActive()) {
-			if(this.getActivationTicks() < MAX_ACTIVATION_TICKS) {
-				if(this.getActivationTicks() == 108) {
+		if (this.isActive()) {
+			if (this.getActivationTicks() < MAX_ACTIVATION_TICKS) {
+				if (this.getActivationTicks() == 108) {
 					this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() + 180).syncImmediately();
 				}
 				this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() + 1);
-			} else if(this.getActivationTicks() != MAX_ACTIVATION_TICKS) {
+			} else if (this.getActivationTicks() != MAX_ACTIVATION_TICKS) {
 				this.dataManager.set(ACTIVATION_TICKS, MAX_ACTIVATION_TICKS).syncImmediately();
 			}
 		} else {
-			if(this.getActivationTicks() > 0) {
+			if (this.getActivationTicks() > 0) {
 				this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() - 4);
 			}
-			if(this.getActivationTicks() < 0) {
+			if (this.getActivationTicks() < 0) {
 				this.dataManager.set(ACTIVATION_TICKS, 0).syncImmediately();
 			}
 		}
 
-		if(!level.isClientSide()) {
+		if (!level.isClientSide()) {
 			int remainingTicks = this.getTicks();
-			if((!this.isActive() && remainingTicks < 1800 && remainingTicks > 80) || (this.isActive() && remainingTicks < 1800 && remainingTicks > 80)) {
-				if(this.soundTicks-- <= 0) {
+			if ((!this.isActive() && remainingTicks < 1800 && remainingTicks > 80) || (this.isActive() && remainingTicks < 1800 && remainingTicks > 80)) {
+				if (this.soundTicks-- <= 0) {
 					PacketDistributor.sendToPlayersInDimension((ServerLevel) level, new RiftSoundPacket(RiftSoundPacket.RiftSoundType.CREAK));
 					this.soundTicks = level.getRandom().nextInt(150) + 100;
 				}
@@ -195,82 +194,47 @@ public class RiftEvent extends TimedEnvironmentEvent {
 		this.dataManager.set(RIFT_CONFIGURATION, new RiftConfiguration(tag));
 	}
 
-	/**
-	 * Returns the current visibility of the rift [0, 1]
-	 * @param partialTicks
-	 * @return
-	 */
 	public float getVisibility(float partialTicks) {
 		return Mth.lerp(partialTicks, this.lastActivationTicks, this.getActivationTicks()) / (float)MAX_ACTIVATION_TICKS;
 	}
 
-	/**
-	 * Returns the current active ticks
-	 * @return
-	 */
 	public int getActivationTicks() {
 		return this.dataManager.get(ACTIVATION_TICKS);
 	}
 
-	/**
-	 * Returns the current rift configuration
-	 * @return
-	 */
 	public RiftConfiguration getRiftConfiguration() {
 		return this.dataManager.get(RIFT_CONFIGURATION);
 	}
 
-	/**
-	 * Returns the rift variant
-	 * @return
-	 */
 	public RiftVariant getVariant() {
 		List<RiftVariant> availableVariants = BetweenlandsClient.getRiftVariantLoader().getRiftVariants();
-		if(availableVariants.isEmpty()) {
+		if (availableVariants.isEmpty()) {
 			return RiftVariant.DEFAULT;
 		} else {
 			return availableVariants.get(this.getRiftConfiguration().riftSeed % availableVariants.size());
 		}
 	}
 
-	/**
-	 * Returns the scale of the rift
-	 * @param partialTicks
-	 * @return
-	 */
 	public float getRiftScale(float partialTicks) {
 		RiftVariant variant = this.getVariant();
 		return variant.minScale() + this.getRiftConfiguration().scaleComponent * (variant.maxScale() - variant.minScale());
 	}
 
-	/**
-	 * Returns whether the U coordinates of the rift are mirrored
-	 * @return
-	 */
 	public boolean getRiftMirrorU() {
 		return this.getRiftConfiguration().mirrorU && this.getVariant().mirrorU();
 	}
 
-	/**
-	 * Returns whether the V coordinates of the rift are mirrored
-	 * @return
-	 */
 	public boolean getRiftMirrorV() {
 		return this.getRiftConfiguration().mirrorV && this.getVariant().mirrorV();
 	}
 
-	/**
-	 * Returns the angles of the rift: [yaw, pitch, roll]
-	 * @param partialTicks
-	 * @return
-	 */
 	public float[] getRiftAngles(float partialTicks) {
 		RiftVariant variant = this.getVariant();
 		RiftConfiguration configuration = this.getRiftConfiguration();
-		return new float[] {
-				variant.minYaw() + configuration.yawComponent * (variant.maxYaw() - variant.minYaw()),
-				variant.minPitch() + configuration.pitchComponent * (variant.maxPitch() - variant.minPitch()),
-				variant.minRoll() + configuration.rollComponent * (variant.maxRoll() - variant.minRoll())
+		return new float[]{
+			variant.minYaw() + configuration.yawComponent * (variant.maxYaw() - variant.minYaw()),
+			variant.minPitch() + configuration.pitchComponent * (variant.maxPitch() - variant.minPitch()),
+			variant.minRoll() + configuration.rollComponent * (variant.maxRoll() - variant.minRoll())
 		};
 	}
 
