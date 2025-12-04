@@ -6,6 +6,7 @@
     },
     "max_height_inclusive": 9,
     "min_height_inclusive": 8,
+    "patch_feature": "thebetweenlands:bulb_capped_mushroom_patch",
     "stalk_bottom_state": {
       "Name": "thebetweenlands:bulb_capped_mushroom_stalk",
       "Properties": {

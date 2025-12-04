@@ -19,10 +19,11 @@ public class BigBulbCappedMushroomFeature extends Feature<BigBulbCappedMushroomF
 
 	@Override
 	public boolean place(FeaturePlaceContext<BigBulbCappedMushroomFeatureConfiguration> context) {
-		return generate(context.level(), context.random(), context.origin(), context.config());
-	}
-
-	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos, BigBulbCappedMushroomFeatureConfiguration config) {
+		WorldGenLevel level = context.level();
+		RandomSource rand = context.random();
+		BlockPos pos = context.origin();
+		BigBulbCappedMushroomFeatureConfiguration config = context.config();
+		
 		int height = rand.nextInt(config.minHeightInclusive(), config.maxHeightInclusive() + 1);
 		int maxRadius = 2;
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
@@ -58,8 +59,10 @@ public class BigBulbCappedMushroomFeature extends Feature<BigBulbCappedMushroomF
 			}
 		}
 
-		//TODO: generate bulb capped mushrooms
-		// Maybe we do that by placing the bulb_capped_mushroom_patch feature?
+		// Generate bulb capped mushrooms
+		config.patchFeature().ifPresent((feature) -> {
+			feature.value().place(context.level(), context.chunkGenerator(), context.random(), context.origin());
+		});
 		return true;
 	}
 

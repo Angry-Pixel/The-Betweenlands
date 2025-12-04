@@ -222,7 +222,8 @@ public class PlacedFeatureRegistry {
 
 		context.register(CATTAIL_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(10)));
 		context.register(CATTAIL_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(5)));
-
+		
+		context.register(BULB_CAPPED_MUSHROOM_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BULB_CAPPED_MUSHROOM_PATCH), bulbCappedMushroomPatch(1)));
 		context.register(BIG_BULB_CAPPED_MUSHROOM, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM), bulbCappedMushroomPatch(1)));
 
 		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE), List.of(CountPlacement.of(1))));

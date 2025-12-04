@@ -3,9 +3,9 @@ package thebetweenlands.common.registries;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.math.Axis;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -140,6 +140,7 @@ public class ConfiguredFeatureRegistry {
 	public static final RuleTest PITSTONE_TEST = new BlockStateMatchTest(BlockRegistry.PITSTONE.get().defaultBlockState());
 
 	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+		
 		context.register(WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_TREE.get(), FeatureConfiguration.NONE));
 		context.register(ROTTEN_WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_WEEDWOOD_TREE.get(), NoneFeatureConfiguration.NONE));
 		context.register(SAP_TREE, new ConfiguredFeature<>(FeatureRegistry.SAP_TREE.get(), FeatureConfiguration.NONE));
@@ -224,9 +225,6 @@ public class ConfiguredFeatureRegistry {
 			new PebbleClusterConfiguration(BlockRegistry.BETWEENSTONE_PEBBLE.get().defaultBlockState(), 8, 128, false)));
 		context.register(PEBBLE_PATCH_WATER, new ConfiguredFeature<>(FeatureRegistry.PEBBLE_CLUSTER.get(),
 			new PebbleClusterConfiguration(BlockRegistry.BETWEENSTONE_PEBBLE.get().defaultBlockState(), 8, 128, true)));
-		// Duplicate? Should this just be a regular RANDOM_PATCH and not a BIG_BULB_CAPPED_MUSHROOM?
-//		context.register(BULB_CAPPED_MUSHROOM_PATCH, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(),
-//			FeatureConfiguration.NONE));
 		context.register(NETTLE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 			patch(BlockRegistry.NETTLE.get(), 3, 128)));
 		context.register(ARROW_ARUM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
@@ -298,7 +296,18 @@ public class ConfiguredFeatureRegistry {
 		context.register(ROTTEN_LOGS, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_LOG.get(),
 			new RottenLogConfiguration(4, 5, 2, 3)));
 
-		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), new BigBulbCappedMushroomFeatureConfiguration(8, 9, BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y).setValue(BulbCappedMushroomStemBlock.GROUND, true), BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y), BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get().defaultBlockState())));
+		final Holder.Reference<ConfiguredFeature<?, ?>> bulbCappedMushroomPatchHolder = context.register(BULB_CAPPED_MUSHROOM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+			patch(BlockRegistry.BULB_CAPPED_MUSHROOM.get(), 5, 40)));
+		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), 
+				new BigBulbCappedMushroomFeatureConfiguration(
+						8, 9, 
+						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y).setValue(BulbCappedMushroomStemBlock.GROUND, true), 
+						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y), 
+						BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get().defaultBlockState(), 
+						Optional.of(bulbCappedMushroomPatchHolder)
+					)
+				));
+		
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
 		
