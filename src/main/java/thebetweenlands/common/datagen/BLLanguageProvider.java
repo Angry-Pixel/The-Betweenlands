@@ -18,6 +18,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.StringUtils;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -1953,18 +1954,29 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		this.add("commands.thebetweenlands.event.not_in_bl", "You must be in the Betweenlands to toggle events");
 		this.add("commands.thebetweenlands.event.invalid_event", "Unknown event '%s'");
-		this.add("commands.thebetweenlands.event.already_on", "The event '%s' is already on");
-		this.add("commands.thebetweenlands.event.already_off", "The event '%s' is already off");
+		this.add("commands.thebetweenlands.event.already_on", "The %s event is already on");
+		this.add("commands.thebetweenlands.event.already_off", "The %s event is already off");
 		this.add("commands.thebetweenlands.event.already_enabled", "Events are already enabled");
 		this.add("commands.thebetweenlands.event.already_disabled", "Events are already disabled");
-		this.add("commands.thebetweenlands.event.fail_on", "The event '%s' could not be turned on");
-		this.add("commands.thebetweenlands.event.fail_off", "The event '%s' could not be turned off");
+		this.add("commands.thebetweenlands.event.fail_on", "The %s event could not be turned on");
+		this.add("commands.thebetweenlands.event.fail_off", "The %s event could not be turned off");
+		this.add("commands.thebetweenlands.event.active", "Currently Active Events: %s");
 
-		this.add("commands.thebetweenlands.event.on", "The event '%s' is now taking place");
-		this.add("commands.thebetweenlands.event.off", "The event '%s' is no longer taking place");
+		this.add("commands.thebetweenlands.event.on", "The %s event is now taking place");
+		this.add("commands.thebetweenlands.event.off", "The %s event is no longer taking place");
 		this.add("commands.thebetweenlands.event.all_off", "All events are no longer taking place");
 		this.add("commands.thebetweenlands.event.enable", "Events are enabled");
 		this.add("commands.thebetweenlands.event.disable", "Events are disabled");
+
+		this.addEvent(EnvironmentEventRegistry.AURORAS, "Aurora");
+		this.addEvent(EnvironmentEventRegistry.BLOOD_SKY, "Blood Sky");
+		this.addEvent(EnvironmentEventRegistry.DENSE_FOG, "Dense Fog");
+		this.addEvent(EnvironmentEventRegistry.HEAVY_RAIN, "Heavy Rain");
+		this.addEvent(EnvironmentEventRegistry.RIFT, "Rift");
+		this.addEvent(EnvironmentEventRegistry.SNOWFALL, "Snowfall");
+		this.addEvent(EnvironmentEventRegistry.SPOOPY, "Spooky");
+		this.addEvent(EnvironmentEventRegistry.THUNDERSTORM, "Thunderstorm");
+		this.addEvent(EnvironmentEventRegistry.WINTER, "Winter");
 
 		this.add("commands.thebetweenlands.reset_aspects.confirm", "Confirm with '/resetAspects confirm'");
 		this.add("commands.thebetweenlands.reset_aspects.reset", "All aspects have been reset");
@@ -2078,6 +2090,10 @@ public class BLLanguageProvider extends LanguageProvider {
 	public void addAdvancement(String key, String title, String desc) {
 		this.add("advancement.thebetweenlands." + key, title);
 		this.add("advancement.thebetweenlands." + key + ".desc", desc);
+	}
+
+	public void addEvent(Holder<EnvironmentEvent> event, String name) {
+		this.add(event.value().getDescriptionId(), name);
 	}
 
 	public void addEntityAndEgg(DeferredHolder<EntityType<?>, ? extends EntityType<?>> entity, String name) {

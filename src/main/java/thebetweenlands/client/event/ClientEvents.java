@@ -24,6 +24,7 @@ import thebetweenlands.util.RenderUtils;
 public class ClientEvents {
 
 	public static void init() {
+		AmbienceHandler.init();
 		BossHandler.init();
 		CameraPositionHandler.INSTANCE.init();
 		ElixirClientHandler.init();

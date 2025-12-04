@@ -22,7 +22,9 @@ import thebetweenlands.common.block.terrain.BLSnowLayerBlock;
 import thebetweenlands.common.block.entity.PresentBlockEntity;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -42,11 +44,9 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 	}
 
 	public static boolean isFroooosty(Level level) {
-		if (level != null) {
-//			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(level);
-//			if(provider != null) {
-//				return provider.getEnvironmentEventRegistry().winter.isActive();
-//			}
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.getForLevelNullable(level);
+		if (storage != null) {
+			return storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.WINTER.getId());
 		}
 		return false;
 	}

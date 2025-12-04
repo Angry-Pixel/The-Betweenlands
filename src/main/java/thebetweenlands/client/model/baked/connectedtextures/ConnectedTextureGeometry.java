@@ -260,9 +260,11 @@ public class ConnectedTextureGeometry implements IUnbakedGeometry<ConnectedTextu
 					Direction cullFace = null;
 					if(faceObject.has("cullface")) {
 						String cullFaceName = faceObject.get("cullface").getAsString();
-						cullFace = Direction.byName(cullFaceName);
-						if(cullFace == null) {
-							cullFaceProperty = cullFaceName;
+						if(!"null".equals(cullFaceName) && !"none".equals(cullFaceName)) {
+							cullFace = Direction.byName(cullFaceName);
+							if(cullFace == null) {
+								cullFaceProperty = cullFaceName;
+							}
 						}
 					}
 
