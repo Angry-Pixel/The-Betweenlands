@@ -222,7 +222,9 @@ public class PlacedFeatureRegistry {
 
 		context.register(CATTAIL_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(10)));
 		context.register(CATTAIL_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(5)));
-		
+
+		context.register(BIG_BULB_CAPPED_MUSHROOM, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM), bulbCappedMushroomPatch(1)));
+
 		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE), List.of(CountPlacement.of(1))));
 	}
 	
@@ -232,6 +234,10 @@ public class PlacedFeatureRegistry {
 
 	private static List<PlacementModifier> treeHydrophobic(int count) {
 		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
+	}
+
+	private static List<PlacementModifier> bulbCappedMushroomPatch(int count) {
+		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.BULB_CAPPED_MUSHROOM.get().defaultBlockState(), BlockPos.ZERO)), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
 	}
 
 	private static List<PlacementModifier> patch(int count) {

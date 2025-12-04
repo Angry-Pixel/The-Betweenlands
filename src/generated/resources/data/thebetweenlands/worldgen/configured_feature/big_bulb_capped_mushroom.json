@@ -1,4 +1,24 @@
 {
   "type": "thebetweenlands:big_bulb_capped_mushroom",
-  "config": {}
+  "config": {
+    "head_state": {
+      "Name": "thebetweenlands:bulb_capped_mushroom_cap"
+    },
+    "max_height_inclusive": 9,
+    "min_height_inclusive": 8,
+    "stalk_bottom_state": {
+      "Name": "thebetweenlands:bulb_capped_mushroom_stalk",
+      "Properties": {
+        "axis": "y",
+        "ground": "true"
+      }
+    },
+    "stalk_state": {
+      "Name": "thebetweenlands:bulb_capped_mushroom_stalk",
+      "Properties": {
+        "axis": "y",
+        "ground": "false"
+      }
+    }
+  }
 }

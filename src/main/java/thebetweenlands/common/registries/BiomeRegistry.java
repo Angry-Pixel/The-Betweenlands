@@ -81,6 +81,8 @@ public class BiomeRegistry {
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.TALL_CATTAIL_COMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_UNCOMMON)
+				
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM)
 				.build()
 			)
 			.build());

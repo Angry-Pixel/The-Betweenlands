@@ -33,10 +33,10 @@ import thebetweenlands.common.world.gen.feature.SwampKelpClusterFeature;
 import thebetweenlands.common.world.gen.feature.SwampReedClusterFeature;
 import thebetweenlands.common.world.gen.feature.WaterRootsClusterFeature;
 import thebetweenlands.common.world.gen.feature.WeedwoodBushFeature;
+import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockReplacementConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.NoisePatchFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.NoisePatchWithLevelFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PlantConfiguration;
@@ -66,8 +66,8 @@ public class FeatureRegistry {
 	//Biome Features
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",
 		() -> new BarnacleClusterFeature(BlockPlaceConfiguration.CODEC));
-	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BIG_BULB_CAPPED_MUSHROOM = FEATURES.register("big_bulb_capped_mushroom",
-		() -> new BigBulbCappedMushroomFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<BigBulbCappedMushroomFeatureConfiguration>> BIG_BULB_CAPPED_MUSHROOM = FEATURES.register("big_bulb_capped_mushroom",
+		() -> new BigBulbCappedMushroomFeature(BigBulbCappedMushroomFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BLADDERWORT_CLUSTER = FEATURES.register("bladderwort_cluster",
 		() -> new BladderwortClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<BlockReplacementConfiguration>> BLOCK_REPLACE_CLUSTER = FEATURES.register("block_replacement_cluster",
