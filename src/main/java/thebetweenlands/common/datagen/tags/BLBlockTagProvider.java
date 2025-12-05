@@ -311,6 +311,12 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 			BlockRegistry.POTTED_FLOWERED_NETTLE.get(), BlockRegistry.POTTED_MARSH_HIBISCUS.get(), BlockRegistry.POTTED_MARSH_MALLOW.get(), BlockRegistry.POTTED_MILKWEED.get(),
 			BlockRegistry.POTTED_NETTLE.get(), BlockRegistry.POTTED_PICKERELWEED.get(), BlockRegistry.POTTED_BUTTON_BUSH.get());
 		this.tag(BlockTags.ICE).add(BlockRegistry.BLACK_ICE.get());
+		this.tag(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON).add(
+			BlockRegistry.BLACK_ICE.get(), BlockRegistry.MIST_BRIDGE.get(), BlockRegistry.SHADOW_WALKER.get(),
+			BlockRegistry.STALACTITE.get(), BlockRegistry.LIFE_CRYSTAL_STALACTITE.get(), BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE.get(), BlockRegistry.ROOT.get(),
+			BlockRegistry.WEEDWOOD_BUSH.get(), BlockRegistry.GRUB_INFESTED_WEEDWOOD_BUSH.get(), BlockRegistry.MOTH_INFESTED_WEEDWOOD_BUSH.get(), BlockRegistry.SILK_COCOONED_WEEDWOOD_BUSH.get(), BlockRegistry.DECAY_INFESTED_WEEDWOOD_BUSH.get(),
+			BlockRegistry.PHEROMONE_INFUSED_WEEDWOOD_BUSH.get(), BlockRegistry.BONE_NESTING_BLOCK.get(), BlockRegistry.STICK_NESTING_BLOCK.get());
+		this.tag(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).add(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get(), BlockRegistry.MUD.get(), BlockRegistry.SILT.get(), BlockRegistry.FILTERED_SILT.get(), BlockRegistry.PEAT.get(), BlockRegistry.SPREADING_SLUDGY_DIRT.get(), BlockRegistry.SLUDGY_DIRT.get());
 		this.tag(BlockTags.STANDING_SIGNS).add(BlockRegistry.WEEDWOOD_SIGN.get());
 		this.tag(BlockTags.WALL_SIGNS).add(BlockRegistry.WEEDWOOD_WALL_SIGN.get());
 		this.tag(BlockTags.DRAGON_IMMUNE).add(BlockRegistry.BETWEENLANDS_BEDROCK.get(), BlockRegistry.MOB_SPAWNER.get(), BlockRegistry.ITEM_CAGE.get(), BlockRegistry.DUNGEON_DOOR_RUNES.get(),

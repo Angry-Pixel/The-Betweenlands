@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-04T17:36:19.827906723	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2025-12-04T20:02:24.253079712	Tags for minecraft:block mod id thebetweenlands
 8fa1aae501231e311bdf3374ba19975117ab887d data/c/tags/block/chests/wooden.json
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
@@ -86,6 +86,8 @@ cd320b34bb4be3cf1d74cd0808a8e80c70d96799 data/minecraft/tags/block/pressure_plat
 568addcec33798df9f737db82da2c54d794385cd data/minecraft/tags/block/saplings.json
 e3e758cd88f124371a288346635b5ac767a6ff48 data/minecraft/tags/block/slabs.json
 50880f1f017f9c899db433b2b85a5098ab97e238 data/minecraft/tags/block/snow.json
+733156b2a461a33b5334f8dc4c42047140ca48fc data/minecraft/tags/block/snow_layer_can_survive_on.json
+abe3a878380b678f87966f4ffd24f336038ec0a7 data/minecraft/tags/block/snow_layer_cannot_survive_on.json
 14fd8da664d8b22e1a2378c43a348b87b4ac7f66 data/minecraft/tags/block/stairs.json
 6a802235a9aea6e3b817abf41a18844b7d7d06ce data/minecraft/tags/block/standing_signs.json
 f36aabed704ae2fcecece7ae4f998d03b6bd736e data/minecraft/tags/block/stone_buttons.json
