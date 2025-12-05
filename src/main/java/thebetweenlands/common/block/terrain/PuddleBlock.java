@@ -2,6 +2,7 @@ package thebetweenlands.common.block.terrain;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,7 +26,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 import javax.annotation.Nullable;
@@ -44,7 +48,7 @@ public class PuddleBlock extends Block {
 
 	public PuddleBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(AMOUNT, 0));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, true).setValue(EAST, true).setValue(SOUTH, true).setValue(WEST, true).setValue(AMOUNT, 0));
 	}
 
 	@Override
@@ -99,7 +103,7 @@ public class PuddleBlock extends Block {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		return state.canSurvive(level, pos) ? state.setValue(PROPERTY_BY_DIRECTION.get(direction), !neighborState.is(this) && level.getBlockState(neighborPos.below()).isFaceSturdy(level, neighborPos.below(), Direction.UP)) : Blocks.AIR.defaultBlockState();
+		return state.canSurvive(level, pos) ? state.trySetValue(PROPERTY_BY_DIRECTION.get(direction), !neighborState.is(this) && level.getBlockState(neighborPos.below()).isFaceSturdy(level, neighborPos.below(), Direction.UP)) : Blocks.AIR.defaultBlockState();
 	}
 
 	@Override
@@ -113,7 +117,7 @@ public class PuddleBlock extends Block {
 				for (int j = 0; (float) j < 10.0F + entity.getBbWidth() * 20.0F; ++j) {
 					float rx = (level.getRandom().nextFloat() * 2.0F - 1.0F) * entity.getBbWidth();
 					float rz = (level.getRandom().nextFloat() * 2.0F - 1.0F) * entity.getBbWidth();
-					level.addParticle(ParticleTypes.SPLASH, entity.getX() + rx, pos.getY() + 0.1f, entity.getZ() + rz, entity.getDeltaMovement().y() + (level.getRandom().nextFloat() - 0.5f) * strength * 20, entity.getDeltaMovement().z(), entity.getDeltaMovement().z() + (level.getRandom().nextFloat() - 0.5f) * strength * 20);
+					TheBetweenlands.createParticle(ParticleRegistry.RAIN.get(), level, entity.getX() + rx, pos.getY() + 0.1f, entity.getZ() + rz, ParticleFactory.ParticleArgs.get().withMotion(entity.getDeltaMovement().x() + (level.getRandom().nextFloat() - 0.5f) * strength * 20, entity.getDeltaMovement().y(), entity.getDeltaMovement().z() + (level.getRandom().nextFloat() - 0.5f) * strength * 20).withColor(1.0F, BiomeColors.getAverageWaterColor(level, pos)));
 				}
 			}
 		}

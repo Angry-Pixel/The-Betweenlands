@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.environment.RemotelyControllableEnvironmentEvent;
 import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.common.TheBetweenlands;
@@ -138,14 +139,17 @@ public abstract class BLEnvironmentEvent implements RemotelyControllableEnvironm
 
 	@Override
 	public final void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
-		tag.putBoolean("active", this.dataManager.get(ACTIVE));
-		this.saveEventData(tag, registries);
+		CompoundTag eventTag = new CompoundTag();
+		eventTag.putBoolean("active", this.dataManager.get(ACTIVE));
+		this.saveEventData(eventTag, registries);
+		tag.put(BLRegistries.ENVIRONMENT_EVENTS.getKey(this).toString(), eventTag);
 	}
 
 	@Override
 	public final void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
-		this.dataManager.set(ACTIVE, tag.getBoolean("active"));
-		this.loadEventData(tag, registries);
+		CompoundTag eventTag = tag.getCompound(BLRegistries.ENVIRONMENT_EVENTS.getKey(this).toString());
+		this.dataManager.set(ACTIVE, eventTag.getBoolean("active"));
+		this.loadEventData(eventTag, registries);
 		this.loaded = true;
 	}
 

@@ -39,10 +39,8 @@ public interface GenericDataAccessorAccess extends TickableStorage {
 
 	boolean isDirty();
 
-	@Nullable
 	List<IDataEntry<?>> getDirty();
 
-	@Nullable
 	List<IDataEntry<?>> getAll();
 
 	void setValuesFromPacket(List<? extends IDataEntry<?>> newEntries);

@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.client.BetweenlandsClient;
+import thebetweenlands.common.block.misc.BaubleBlock;
 import thebetweenlands.common.block.terrain.BLSnowLayerBlock;
 import thebetweenlands.common.block.entity.PresentBlockEntity;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
@@ -33,6 +34,17 @@ import java.util.GregorianCalendar;
 public class WinterEvent extends SeasonalEnvironmentEvent {
 
 	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.DECEMBER, 24, 0, 0).getTime().getTime();
+
+	private static final Block[] BAUBLES = {
+		BlockRegistry.RED_BAUBLE.get(),
+		BlockRegistry.BLUE_BAUBLE.get(),
+		BlockRegistry.GREEN_BAUBLE.get(),
+		BlockRegistry.YELLOW_BAUBLE.get(),
+		BlockRegistry.CYAN_BAUBLE.get(),
+		BlockRegistry.LIGHT_BLUE_BAUBLE.get(),
+		BlockRegistry.MAGENTA_BAUBLE.get(),
+		BlockRegistry.PINK_BAUBLE.get()
+	};
 
 	@Override
 	public long getStartDateInMs() {
@@ -114,7 +126,7 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 									if (!state.is(BlockTags.LEAVES)) {
 										if (level.isEmptyBlock(offsetPos) && level.getBrightness(LightLayer.BLOCK, offsetPos) == 0 &&
 											(state.isFaceSturdy(level, offsetPos.above(), Direction.DOWN) || Block.canSupportCenter(level, offsetPos.above(), Direction.DOWN))) {
-//											level.setBlockAndUpdate(offsetPos, BlockRegistry.BAUBLE.getDefaultState().setValue(BlockBauble.DIAGONAL, level.getRandom().nextBoolean()).setValue(BlockBauble.COLOR, level.getRandom().nextInt(8)));
+											level.setBlockAndUpdate(offsetPos, BAUBLES[level.getRandom().nextInt(8)].defaultBlockState().setValue(BaubleBlock.DIAGONAL, level.getRandom().nextBoolean()));
 										}
 
 										break;

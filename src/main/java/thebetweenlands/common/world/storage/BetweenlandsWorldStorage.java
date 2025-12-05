@@ -48,6 +48,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	private final List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
+	@Nullable
 	public static BetweenlandsWorldStorage create(IAttachmentHolder holder) {
 		if (!(holder instanceof Level level)) {
 			TheBetweenlands.LOGGER.warn("Tried to attach level-only world storage attachment to non-level {}", holder);
@@ -58,6 +59,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return worldStorage;
 	}
 
+	@Nullable
 	public static BetweenlandsWorldStorage copy(BetweenlandsWorldStorage attachment, IAttachmentHolder holder, HolderLookup.Provider provider) {
 		if (!(holder instanceof Level)) {
 			TheBetweenlands.LOGGER.warn("Tried to copy level-only world storage attachment to non-level {}", holder);

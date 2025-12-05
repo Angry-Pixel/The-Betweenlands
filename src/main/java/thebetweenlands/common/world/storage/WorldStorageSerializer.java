@@ -29,11 +29,13 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		return deserialize(holder, tag, registries);
 	}
 
-	public static @Nullable CompoundTag serialize(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
+	public static CompoundTag serialize(BetweenlandsWorldStorage storage, HolderLookup.Provider registries) {
 		CompoundTag tag = new CompoundTag();
+		CompoundTag eventTag = new CompoundTag();
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
-			event.writeToNBT(tag, registries);
+			event.writeToNBT(eventTag, registries);
 		}
+		tag.put("events", eventTag);
 		tag.putBoolean("eventsDisabled", storage.getEnvironmentEventRegistry().isDisabled());
 		CompoundTag aspectData = new CompoundTag();
 		storage.getAspectManager().saveStaticAspects(aspectData, registries);
@@ -55,6 +57,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		return tag;
 	}
 
+	@Nullable
 	public static BetweenlandsWorldStorage deserialize(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider registries) {
 		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.create(holder);
 		if(storage == null) {
@@ -62,7 +65,7 @@ public class WorldStorageSerializer implements IAttachmentSerializer<CompoundTag
 		}
 
 		for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEvents().values()) {
-			event.readFromNBT(tag, registries);
+			event.readFromNBT(tag.getCompound("events"), registries);
 		}
 		storage.getEnvironmentEventRegistry().setDisabled(tag.getBoolean("eventsDisabled"));
 		storage.getAspectManager().loadAndPopulateStaticAspects(tag.getCompound("itemAspects"), registries, AspectManager.getAspectsSeed(Optional.ofNullable(TheBetweenlands.tryGetServer(Level.OVERWORLD)).map(ServerLevel::getSeed).orElse(0L)));

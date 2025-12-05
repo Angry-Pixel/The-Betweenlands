@@ -191,7 +191,7 @@ public class CommonRegistrationEvents {
 		event.dataPackRegistry(BLRegistries.Keys.ASPECT_TYPES,   AspectType.DIRECT_CODEC,  AspectType.DIRECT_CODEC);
 		event.dataPackRegistry(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipe.CODEC,       ElixirRecipe.CODEC);
 		event.dataPackRegistry(BLRegistries.Keys.FROG_VARIANT,   FrogVariant.DIRECT_CODEC, FrogVariant.DIRECT_CODEC);
-		
+
 		// Unsynced registries
 		event.dataPackRegistry(BLRegistries.Keys.CONFIGURED_GENERATORS, ConfiguredEarlyGenerator.DIRECT_CODEC);
 	}
@@ -239,11 +239,13 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(OpenHerbloreBookPacket.TYPE, OpenHerbloreBookPacket.STREAM_CODEC, OpenHerbloreBookPacket::handle);
 		registrar.playToClient(OpenRenameScreenPacket.TYPE, OpenRenameScreenPacket.STREAM_CODEC, OpenRenameScreenPacket::handle);
 		registrar.playToClient(LivingWeedwoodShieldSpitPacket.TYPE, LivingWeedwoodShieldSpitPacket.STREAM_CODEC, LivingWeedwoodShieldSpitPacket::handle);
+		registrar.playToClient(SyncEnvironmentEventDataPacket.TYPE, SyncEnvironmentEventDataPacket.STREAM_CODEC, SyncEnvironmentEventDataPacket::handle);
 		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
 		registrar.playToClient(SummonPeatMummyParticlesPacket.TYPE, SummonPeatMummyParticlesPacket.STREAM_CODEC, SummonPeatMummyParticlesPacket::handle);
 		registrar.playToClient(AddBetweenlandsBossBarPacket.TYPE, AddBetweenlandsBossBarPacket.STREAM_CODEC, AddBetweenlandsBossBarPacket::handle);
 		registrar.playToClient(WeedwoodBushRustlePacket.TYPE, WeedwoodBushRustlePacket.STREAM_CODEC, WeedwoodBushRustlePacket::handle);
 		registrar.playToClient(WightVolatileParticlesPacket.TYPE, WightVolatileParticlesPacket.STREAM_CODEC, WightVolatileParticlesPacket::handle);
+		registrar.playToClient(RiftSoundPacket.TYPE, RiftSoundPacket.STREAM_CODEC, RiftSoundPacket::handle);
 
 		registrar.playToServer(ChiromawDoubleJumpPacket.TYPE, ChiromawDoubleJumpPacket.STREAM_CODEC, ChiromawDoubleJumpPacket::handle);
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));

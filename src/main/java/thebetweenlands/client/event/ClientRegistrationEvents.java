@@ -786,6 +786,8 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.EMBER.get(), SimpleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.SMOOTH_SMOKE.get(), SimpleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.LEAF_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
+		event.registerSpriteSet(ParticleRegistry.WATER_RIPPLE.get(), WaterRippleParticle.Factory::new);
+
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -802,6 +804,14 @@ public class ClientRegistrationEvents {
 			BlockRegistry.DEAD_MOSS.get(),
 			BlockRegistry.HANGER.get(),
 			BlockRegistry.SEEDED_HANGER.get());
+
+		event.register((state, level, pos, tintIndex) -> {
+				if (tintIndex <= 0 && level != null && pos != null) {
+					return IClientFluidTypeExtensions.of(FluidRegistry.SWAMP_WATER_STILL.get()).getTintColor(FluidRegistry.SWAMP_WATER_STILL.get().defaultFluidState(), level, pos);
+				}
+				return 0xFF2981FF;
+			},
+			BlockRegistry.PUDDLE.get());
 
 		event.register((state, level, pos, tintIndex) -> {
 				if (tintIndex == 0) {

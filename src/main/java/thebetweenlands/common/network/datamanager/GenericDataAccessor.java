@@ -44,20 +44,20 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 	private record CustomSerializer<T>(Serializer<T> serializer, Deserializer<T> deserializer) implements EntityDataSerializer<Object> {
 
 		@Override
-			public StreamCodec<? super RegistryFriendlyByteBuf, Object> codec() {
-				return StreamCodec.unit(Unit.INSTANCE);
-			}
-
-			@Override
-			public EntityDataAccessor<Object> createAccessor(int id) {
-				return new EntityDataAccessor<>(id, this);
-			}
-
-			@Override
-			public Object copy(Object value) {
-				return new CustomSerializer<>(this.serializer, this.deserializer);
-			}
+		public StreamCodec<? super RegistryFriendlyByteBuf, Object> codec() {
+			return StreamCodec.unit(Unit.INSTANCE);
 		}
+
+		@Override
+		public EntityDataAccessor<Object> createAccessor(int id) {
+			return new EntityDataAccessor<>(id, this);
+		}
+
+		@Override
+		public Object copy(Object value) {
+			return new CustomSerializer<>(this.serializer, this.deserializer);
+		}
+	}
 
 	private static final Object2IntMap<Class<?>> NEXT_ID_MAP = new Object2IntOpenHashMap<>();
 	private final List<GenericDataAccessor.DataEntry<?>> trackedEntries = new ArrayList<>();
@@ -73,6 +73,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 	/**
 	 * Creates a data parameter with custom de-/serializers. Values will be de-/serialized on the main thread.
+	 *
 	 * @param clazz
 	 * @param serializer
 	 * @param deserializer
@@ -85,15 +86,17 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 				Class<?> callerClass = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
 
 				if (!callerClass.equals(clazz)) {
-					throw new RuntimeException("GenericDataManager#createKey called for: " + clazz + " from " + callerClass);
+					throw new RuntimeException("GenericDataManager#defineId called for: " + clazz + " from " + callerClass);
 				}
-			} catch (ClassNotFoundException ex) { }
+			} catch (ClassNotFoundException ex) {
+			}
 		}
 		return (EntityDataAccessor<T>) new CustomSerializer<>(serializer, deserializer).createAccessor(createFreeId(clazz));
 	}
 
 	/**
 	 * Creates a data parameter with a normal serializer. Values will be de-/serialized on the network thread.
+	 *
 	 * @param clazz
 	 * @param serializer
 	 * @return
@@ -104,9 +107,10 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 				Class<?> callerClass = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
 
 				if (!callerClass.equals(clazz)) {
-					throw new RuntimeException("GenericDataManager#createKey called for: " + clazz + " from " + callerClass);
+					throw new RuntimeException("GenericDataManager#defineId called for: " + clazz + " from " + callerClass);
 				}
-			} catch (ClassNotFoundException ex) { }
+			} catch (ClassNotFoundException ex) {
+			}
 		}
 		return serializer.createAccessor(createFreeId(clazz));
 	}
@@ -165,8 +169,8 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 		entry.trackingTime = time;
 
-		if(time > 0) {
-			if(!this.trackedEntries.contains(entry)) {
+		if (time > 0) {
+			if (!this.trackedEntries.contains(entry)) {
 				this.trackedEntries.add(entry);
 			}
 		} else {
@@ -181,7 +185,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 		GenericDataAccessor.DataEntry<T> entry = new GenericDataAccessor.DataEntry<>(this, key, value);
 
 		EntityDataSerializer<T> serializer = entry.getKey().serializer();
-		if(serializer instanceof CustomSerializer) {
+		if (serializer instanceof CustomSerializer) {
 			entry.serializer = ((CustomSerializer<T>) serializer).serializer;
 			entry.deserializer = ((CustomSerializer<T>) serializer).deserializer;
 		}
@@ -225,7 +229,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 		GenericDataAccessor.DataEntry<T> entry = this.getEntry(key);
 
 		if (ObjectUtils.notEqual(value, entry.getValue())) {
-			if(!(this.owner instanceof IDataManagedObject) || !((IDataManagedObject)this.owner).onParameterChange(key, value, false)) {
+			if (!(this.owner instanceof IDataManagedObject) || !((IDataManagedObject) this.owner).onParameterChange(key, value, false)) {
 				entry.setValue(value);
 			}
 			entry.setDirty(true);
@@ -253,7 +257,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 			entry.serializer.serialize(buf, entry.value);
 			copy.serializedData = new byte[buf.readableBytes()];
 			buf.readBytes(copy.serializedData);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw new DecoderException("Failed serializing data with custom serializer " + entry.serializer.getClass().getName(), ex);
 		} finally {
 			buf.release();
@@ -261,9 +265,8 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 	}
 
 	@Override
-	@Nullable
 	public List<IDataEntry<?>> getDirty() {
-		List<IDataEntry<?>> list = null;
+		List<IDataEntry<?>> list = new ArrayList<>();
 
 		if (this.dirty) {
 			this.lock.readLock().lock();
@@ -272,16 +275,10 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 				for (GenericDataAccessor.DataEntry<?> entry : this.entries.values()) {
 					if (entry.isDirty()) {
 						entry.setDirty(false);
-
-						if (list == null) {
-							list = new ArrayList<>();
-						}
-
 						DataEntry<?> copy = entry.copy();
-
 						list.add(copy);
 
-						if(entry.serializer != null) {
+						if (entry.serializer != null) {
 							this.serializeEntry(entry, copy);
 						}
 					}
@@ -296,22 +293,16 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 	}
 
 	@Override
-	@Nullable
 	public List<IDataEntry<?>> getAll() {
-		List<IDataEntry<?>> list = null;
+		List<IDataEntry<?>> list = new ArrayList<>();
 		this.lock.readLock().lock();
 
 		try {
 			for (GenericDataAccessor.DataEntry<?> entry : this.entries.values()) {
-				if (list == null) {
-					list = new ArrayList<>();
-				}
-
 				DataEntry<?> copy = entry.copy();
-
 				list.add(copy);
 
-				if(entry.serializer != null) {
+				if (entry.serializer != null) {
 					this.serializeEntry(entry, copy);
 				}
 			}
@@ -340,10 +331,10 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 		buf.writeByte(parameter.id());
 
-		if(entry.serializedData != null) {
+		if (entry.serializedData != null) {
 			buf.writeBoolean(true);
 
-			synchronized(entry.serializedData) {
+			synchronized (entry.serializedData) {
 				buf.writeVarInt(entry.serializedData.length);
 				buf.writeBytes(entry.serializedData);
 			}
@@ -361,22 +352,17 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Nullable
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static List<IDataEntry<?>> readEntries(RegistryFriendlyByteBuf buf) {
-		List<IDataEntry<?>> list = null;
+		List<IDataEntry<?>> list = new ArrayList<>();
 		int key;
 
 		while ((key = buf.readUnsignedByte()) != 255) {
-			if (list == null) {
-				list = new ArrayList<>();
-			}
-
 			EntityDataSerializer<?> serializer;
 			Object value = null;
 			byte[] serializedData = null;
 
-			if(buf.readBoolean()) {
+			if (buf.readBoolean()) {
 				serializedData = new byte[buf.readVarInt()];
 
 				buf.readBytes(serializedData);
@@ -413,12 +399,12 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 				if (entry != null) {
 					Object newValue;
-					if(newEntry instanceof DataEntry<?> newGenericEntry && entry.deserializer != null) {
-						if(newGenericEntry.deserializedValue == null) {
+					if (newEntry instanceof DataEntry<?> newGenericEntry && entry.deserializer != null) {
+						if (newGenericEntry.deserializedValue == null) {
 							ByteBuf buf = Unpooled.wrappedBuffer(newGenericEntry.serializedData);
 							try {
 								newGenericEntry.deserializedValue = entry.deserializer.deserialize(new FriendlyByteBuf(buf));
-							} catch(Exception ex) {
+							} catch (Exception ex) {
 								throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
 							} finally {
 								buf.release();
@@ -428,7 +414,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 					} else {
 						newValue = newEntry.getValue();
 					}
-					if(!(this.owner instanceof IDataManagedObject) || !((IDataManagedObject)this.owner).onParameterChange(entry.getKey(), newValue, true)) {
+					if (!(this.owner instanceof IDataManagedObject) || !((IDataManagedObject) this.owner).onParameterChange(entry.getKey(), newValue, true)) {
 						this.setEntryValue(entry, newValue);
 					}
 				}
@@ -465,12 +451,12 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 	@Override
 	public void tick(Level level) {
-		if(!this.trackedEntries.isEmpty()) {
+		if (!this.trackedEntries.isEmpty()) {
 			for (GenericDataAccessor.DataEntry<?> entry : this.trackedEntries) {
-				if(entry.trackingTimer >= 0) {
+				if (entry.trackingTimer >= 0) {
 					entry.trackingTimer--;
 				}
-				if(entry.queuedDirty && entry.trackingTimer < 0) {
+				if (entry.queuedDirty && entry.trackingTimer < 0) {
 					entry.trackingTimer = entry.trackingTime;
 					entry.dirty = true;
 					this.dirty = true;
@@ -489,6 +475,7 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 		/**
 		 * Returns the value of the data parameter
+		 *
 		 * @return
 		 */
 		public T getValue() {
@@ -502,10 +489,11 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 		/**
 		 * Causes the data parameter to sync immediately if it is currently dirty
+		 *
 		 * @return this
 		 */
 		public EntryAccess<T> syncImmediately() {
-			if(this.entry.queuedDirty) {
+			if (this.entry.queuedDirty) {
 				this.entry.dirty = true;
 				this.entry.dataManager.dirty = true;
 				this.entry.queuedDirty = false;
@@ -572,12 +560,12 @@ public class GenericDataAccessor implements GenericDataAccessorAccess {
 
 		@Override
 		public void setDirty(boolean dirtyIn) {
-			if(this.trackingTime > 0 && dirtyIn) {
+			if (this.trackingTime > 0 && dirtyIn) {
 				this.queuedDirty = true;
 			} else {
 				this.queuedDirty = false;
 				this.dirty = dirtyIn;
-				if(dirtyIn) {
+				if (dirtyIn) {
 					this.dataManager.dirty = true;
 				}
 			}

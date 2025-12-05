@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
+import thebetweenlands.client.sky.BLWeatherRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BLSnowLayerBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
@@ -93,7 +94,7 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 						if (level.getRandom().nextInt(Math.max(20 - (int) (this.getSnowingStrength() / 8.0F * 18.0F), 2)) == 0) {
 							BlockState stateAbove = level.getBlockState(pos.above());
 							if (stateAbove.isAir() && BlockRegistry.SNOW.get().defaultBlockState().canSurvive(level, pos.above())) {
-								levelchunk.setBlockState(pos.above(), BlockRegistry.SNOW.get().defaultBlockState(), false);
+								level.setBlockAndUpdate(pos.above(), BlockRegistry.SNOW.get().defaultBlockState());
 							} else if (stateAbove.getBlock() instanceof BLSnowLayerBlock) {
 								int layers = stateAbove.getValue(BLSnowLayerBlock.LAYERS);
 								if (layers < 5) {
@@ -122,7 +123,7 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 				}
 			}
 		} else {
-			this.updateSnowRenderer(level);
+			BLWeatherRenderer.INSTANCE.tickSnow(level);
 		}
 
 		if (!this.isActive()) {
@@ -142,10 +143,6 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 				this.snowingStrength = targetSnowingStrength;
 			}
 		}
-	}
-
-	protected void updateSnowRenderer(Level level) {
-		//BLSnowRenderer.INSTANCE.update(level);
 	}
 
 	@Override

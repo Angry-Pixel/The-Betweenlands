@@ -30,26 +30,30 @@ public record RiftSoundPacket(RiftSoundType soundType) implements CustomPacketPa
 	}
 
 	public static void handle(RiftSoundPacket packet, IPayloadContext context) {
-		Player player = context.player();
-		Level level = player.level();
-		Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(packet.soundType().getSoundEvent().getLocation(), SoundSource.AMBIENT, 1.0F, 1.0F, level.getRandom(), false, 0, SoundInstance.Attenuation.NONE, 0.0F, 0.0F, 0.0F, false) {
-			@Override
-			public float getPitch() {
-				if (player.getY() < TheBetweenlands.CAVE_START) {
-					return (0.5F + (float) player.getY() / TheBetweenlands.CAVE_START * 0.5F) * packet.soundType().getPitch(level);
-				}
+		if (context.flow().isClientbound()) {
+			context.enqueueWork(() -> {
+				Player player = context.player();
+				Level level = player.level();
+				Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(packet.soundType().getSoundEvent().getLocation(), SoundSource.AMBIENT, 1.0F, 1.0F, level.getRandom(), false, 0, SoundInstance.Attenuation.NONE, 0.0F, 0.0F, 0.0F, false) {
+					@Override
+					public float getPitch() {
+						if (player.getY() < TheBetweenlands.CAVE_START) {
+							return (0.5F + (float) player.getY() / TheBetweenlands.CAVE_START * 0.5F) * packet.soundType().getPitch(level);
+						}
 
-				return 1.0F;
-			}
+						return 1.0F;
+					}
 
-			@Override
-			public float getVolume() {
-				if (player.getY() < TheBetweenlands.CAVE_START) {
-					return (0.15F + (float) player.getY() / TheBetweenlands.CAVE_START * 0.85F);
-				}
-				return 1.0F;
-			}
-		});
+					@Override
+					public float getVolume() {
+						if (player.getY() < TheBetweenlands.CAVE_START) {
+							return (0.15F + (float) player.getY() / TheBetweenlands.CAVE_START * 0.85F);
+						}
+						return 1.0F;
+					}
+				});
+			});
+		}
 	}
 
 	public enum RiftSoundType implements StringRepresentable {

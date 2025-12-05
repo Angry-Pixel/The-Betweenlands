@@ -288,6 +288,10 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			return this.withColor((color >> 16 & 0xff) / 255F, (color >> 8 & 0xff) / 255F, (color & 0xff) / 255F, (color >> 24 & 0xff) / 255F);
 		}
 
+		public final T withColor(float alpha, int color) {
+			return this.withColor((color >> 16 & 0xff) / 255F, (color >> 8 & 0xff) / 255F, (color & 0xff) / 255F, alpha);
+		}
+
 		public final T withColor(float[] color) {
 			return this.withColor(color[0], color[1], color[2], color[3]);
 		}
