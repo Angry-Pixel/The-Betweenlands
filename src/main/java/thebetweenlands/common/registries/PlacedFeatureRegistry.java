@@ -22,7 +22,7 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.placement.SimplexPlacementModifier;
+import thebetweenlands.common.world.gen.placement.SimplexColumnsPlacement;
 
 public class PlacedFeatureRegistry {
 
@@ -239,7 +239,7 @@ public class PlacedFeatureRegistry {
 		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE),
 				List.of(
 						CountPlacement.of(1),
-						SimplexPlacementModifier.of(0.16D, 1.0D / 1.6D, 1.8D, 4, true),
+						SimplexColumnsPlacement.of(0.16D, 1.0D / 1.6D, 1.8D, 4, true),
 						HeightmapPlacement.onHeightmap(Types.WORLD_SURFACE_WG),
 						BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.ALGAE.get().defaultBlockState(), BlockPos.ZERO)),
 						BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE),

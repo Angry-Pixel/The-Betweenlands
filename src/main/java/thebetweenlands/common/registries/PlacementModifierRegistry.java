@@ -5,14 +5,14 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.placement.SimplexPlacementModifier;
+import thebetweenlands.common.world.gen.placement.SimplexColumnsPlacement;
 
 public class PlacementModifierRegistry {
 
 	public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, TheBetweenlands.ID);
 
-	public static final DeferredHolder<PlacementModifierType<?>, PlacementModifierType<SimplexPlacementModifier>> SIMPLEX_COLUMNS_PLACEMENT = PLACEMENT_MODIFIER_TYPES.register("simplex_columns", () -> () -> SimplexPlacementModifier.CODEC);
-//	public static final DeferredHolder<PlacementModifierType<?>, PlacementModifierType<SimplexPlacementModifier>> SIMPLEX_COLUMNS_PLACEMENT = register("simplex_columns", SimplexPlacementModifier.CODEC);
+	public static final DeferredHolder<PlacementModifierType<?>, PlacementModifierType<SimplexColumnsPlacement>> SIMPLEX_COLUMNS_PLACEMENT = PLACEMENT_MODIFIER_TYPES.register("simplex_columns", () -> () -> SimplexColumnsPlacement.CODEC);
+//	public static final DeferredHolder<PlacementModifierType<?>, PlacementModifierType<SimplexColumnsPlacement>> SIMPLEX_COLUMNS_PLACEMENT = register("simplex_columns", SimplexColumnsPlacement.CODEC);
 	
 //	private static final <T extends PlacementModifier> DeferredHolder<PlacementModifierType<?>, PlacementModifierType<T>> register(String name, MapCodec<T> codec) {
 //		return PLACEMENT_MODIFIER_TYPES.register(name, () -> () -> codec);

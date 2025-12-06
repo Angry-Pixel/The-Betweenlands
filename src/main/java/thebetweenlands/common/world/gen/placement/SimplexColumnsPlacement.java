@@ -22,16 +22,16 @@ import thebetweenlands.common.world.gen.generators.util.SimplexCache;
 import thebetweenlands.common.world.gen.generators.util.SimplexData;
 import thebetweenlands.util.ExtraCodecs;
 
-public final class SimplexPlacementModifier extends PlacementModifier {
+public final class SimplexColumnsPlacement extends PlacementModifier {
 
-	public static final MapCodec<SimplexPlacementModifier> CODEC = RecordCodecBuilder.mapCodec(
+	public static final MapCodec<SimplexColumnsPlacement> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					ExtraCodecs.POSITIVE_DOUBLE.fieldOf("noise_scale").forGetter(SimplexPlacementModifier::noiseScale),
-					Codec.DOUBLE.fieldOf("noise_value_multiplier").forGetter(SimplexPlacementModifier::noiseValueMultiplier),
-					Codec.DOUBLE.fieldOf("noise_value_offset").forGetter(SimplexPlacementModifier::noiseValueOffset),
-					net.minecraft.util.ExtraCodecs.POSITIVE_INT.fieldOf("octaves").forGetter(SimplexPlacementModifier::octaves),
-					Codec.BOOL.fieldOf("use_biome_weights").forGetter(SimplexPlacementModifier::useBiomeWeights)
-			).apply(instance, SimplexPlacementModifier::new));
+					ExtraCodecs.POSITIVE_DOUBLE.fieldOf("noise_scale").forGetter(SimplexColumnsPlacement::noiseScale),
+					Codec.DOUBLE.fieldOf("noise_value_multiplier").forGetter(SimplexColumnsPlacement::noiseValueMultiplier),
+					Codec.DOUBLE.fieldOf("noise_value_offset").forGetter(SimplexColumnsPlacement::noiseValueOffset),
+					net.minecraft.util.ExtraCodecs.POSITIVE_INT.fieldOf("octaves").forGetter(SimplexColumnsPlacement::octaves),
+					Codec.BOOL.fieldOf("use_biome_weights").forGetter(SimplexColumnsPlacement::useBiomeWeights)
+			).apply(instance, SimplexColumnsPlacement::new));
 
 	private final double noiseScale;
 	private final double noiseValueMultiplier;
@@ -41,7 +41,7 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 
 	private final SimplexCache noiseCache;
 	
-	private SimplexPlacementModifier(double noiseScale, double noiseValueMultiplier, double noiseValueOffset, int octaves, boolean useBiomeWeights) {
+	private SimplexColumnsPlacement(double noiseScale, double noiseValueMultiplier, double noiseValueOffset, int octaves, boolean useBiomeWeights) {
 		this.noiseScale = noiseScale;
 		this.noiseValueMultiplier = noiseValueMultiplier;
 		this.noiseValueOffset = noiseValueOffset;
@@ -51,8 +51,8 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 		this.noiseCache = new SimplexCache(octaves);
 	}
 	
-	public static SimplexPlacementModifier of(double noiseScale, double noiseValueMultiplier, double noiseValueOffset, int octaves, boolean useBiomeWeights) {
-		return new SimplexPlacementModifier(noiseScale, noiseValueMultiplier, noiseValueOffset, octaves, useBiomeWeights);
+	public static SimplexColumnsPlacement of(double noiseScale, double noiseValueMultiplier, double noiseValueOffset, int octaves, boolean useBiomeWeights) {
+		return new SimplexColumnsPlacement(noiseScale, noiseValueMultiplier, noiseValueOffset, octaves, useBiomeWeights);
 	}
 
 	public final double noiseScale() {
