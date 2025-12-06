@@ -26,7 +26,6 @@ import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
 import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.NoisePatchWithLevelFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
 import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
@@ -311,7 +310,8 @@ public class ConfiguredFeatureRegistry {
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
 		
-		context.register(ALGAE, new ConfiguredFeature<>(FeatureRegistry.ALGAE_PATCH.get(), new NoisePatchWithLevelFeatureConfiguration(Optional.empty(), 0.16D, 1.6F, 1.8F)));
+//		context.register(ALGAE, new ConfiguredFeature<>(FeatureRegistry.ALGAE_PATCH.get(), new NoisePatchWithLevelFeatureConfiguration(Optional.empty(), 0.16D, 1.6F, 1.8F)));
+		context.register(ALGAE, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.ALGAE.get()))));
 	}
 
 	private static RandomPatchConfiguration patch(Block block, int spread, int tries) {

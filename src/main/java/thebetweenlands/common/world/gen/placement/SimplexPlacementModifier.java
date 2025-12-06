@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import thebetweenlands.api.world.BiomeWeights;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.PlacementModifierRegistry;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
@@ -49,6 +50,10 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 		
 		this.noiseCache = new SimplexCache(octaves);
 	}
+	
+	public static SimplexPlacementModifier of(double noiseScale, double noiseValueMultiplier, double noiseValueOffset, int octaves, boolean useBiomeWeights) {
+		return new SimplexPlacementModifier(noiseScale, noiseValueMultiplier, noiseValueOffset, octaves, useBiomeWeights);
+	}
 
 	public final double noiseScale() {
 		return this.noiseScale;
@@ -72,10 +77,11 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 	
 	@Override
 	public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
-
+		TheBetweenlands.LOGGER.info("Simplex pos: {}", pos);
+		
 		WorldGenLevel level = context.getLevel();
 		long seed = level.getSeed();
-
+		
 		// Get or create noise generator for this seed
 		SimplexData noise = this.noiseCache.getNoise(seed);
 
@@ -85,8 +91,8 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 		final int offsetZ = pos.getZ() % 16;
 
 		// offset so that the column at [posX, posZ] will has the value of [chunkX * 16, chunkZ * 16]
-		final int noiseX = chunkPos.getMinBlockX() - offsetX;
-		final int noiseZ = chunkPos.getMaxBlockX() - offsetZ;
+		final int noiseX = chunkPos.getBlockX(-offsetX);
+		final int noiseZ = chunkPos.getBlockZ(-offsetZ);
 		
 		// Compute noise values
 		final double[] noiseValues = EarlyGeneratorHelper.computeNoiseRaw(noise.noiseGenerator(), noiseX, noiseZ, this.noiseScale());
@@ -100,7 +106,7 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 		final double noiseValueMultiplier = this.noiseValueMultiplier();
 		final double noiseValueOffset = this.noiseValueOffset();
 		
-		final double noiseValueThreshold = noiseValueOffset / noiseValueMultiplier;
+		final double noiseValueThreshold = -noiseValueOffset / noiseValueMultiplier;
 		
 		Stream.Builder<BlockPos> streamBuilder = Stream.builder();
 		for(int x = 0; x < 16; ++x) {
@@ -113,7 +119,7 @@ public final class SimplexPlacementModifier extends PlacementModifier {
 					continue;
 				}
 				
-				streamBuilder.accept(new BlockPos(chunkPos.getBlockX(x), pos.getY(), chunkPos.getBlockX(z)));
+				streamBuilder.accept(new BlockPos(chunkPos.getBlockX(x), pos.getY(), chunkPos.getBlockZ(z)));
 			}
 		}
 		

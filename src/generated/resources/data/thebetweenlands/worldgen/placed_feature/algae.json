@@ -4,6 +4,37 @@
     {
       "type": "minecraft:count",
       "count": 1
+    },
+    {
+      "type": "thebetweenlands:simplex_columns",
+      "noise_scale": 0.16,
+      "noise_value_multiplier": 0.625,
+      "noise_value_offset": 1.8,
+      "octaves": 4,
+      "use_biome_weights": true
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "thebetweenlands:algae"
+        }
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air"
+      }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

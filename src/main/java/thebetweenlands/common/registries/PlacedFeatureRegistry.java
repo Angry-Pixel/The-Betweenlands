@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -7,13 +9,20 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import thebetweenlands.common.TheBetweenlands;
-
-import java.util.List;
+import thebetweenlands.common.world.gen.placement.SimplexPlacementModifier;
 
 public class PlacedFeatureRegistry {
 
@@ -226,7 +235,16 @@ public class PlacedFeatureRegistry {
 		context.register(BULB_CAPPED_MUSHROOM_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BULB_CAPPED_MUSHROOM_PATCH), bulbCappedMushroomPatch(1)));
 		context.register(BIG_BULB_CAPPED_MUSHROOM, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM), bulbCappedMushroomPatch(1)));
 
-		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE), List.of(CountPlacement.of(1))));
+//		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE), List.of(CountPlacement.of(1))));
+		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE),
+				List.of(
+						CountPlacement.of(1),
+						SimplexPlacementModifier.of(0.16D, 1.0D / 1.6D, 1.8D, 4, true),
+						HeightmapPlacement.onHeightmap(Types.WORLD_SURFACE_WG),
+						BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.ALGAE.get().defaultBlockState(), BlockPos.ZERO)),
+						BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE),
+						BiomeFilter.biome()
+					)));
 	}
 	
 	private static List<PlacementModifier> tree(int count) {

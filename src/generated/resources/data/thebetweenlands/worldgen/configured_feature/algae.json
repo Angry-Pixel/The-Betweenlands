@@ -1,8 +1,11 @@
 {
-  "type": "thebetweenlands:algae_patch",
+  "type": "minecraft:simple_block",
   "config": {
-    "amplifier_factor": 1.6,
-    "amplifier_offset": 1.8,
-    "noise_scale": 0.16
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "thebetweenlands:algae"
+      }
+    }
   }
 }
