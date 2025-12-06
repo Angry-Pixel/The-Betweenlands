@@ -77,8 +77,6 @@ public final class SimplexColumnsPlacement extends PlacementModifier {
 	
 	@Override
 	public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
-		TheBetweenlands.LOGGER.info("Simplex pos: {}", pos);
-		
 		WorldGenLevel level = context.getLevel();
 		long seed = level.getSeed();
 		
