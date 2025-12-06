@@ -86,6 +86,7 @@ public class TheBetweenlands {
 		DataComponentRegistry.COMPONENTS.register(eventbus);
 		RecipeRegistry.RECIPE_TYPES.register(eventbus);
 		RecipeRegistry.RECIPE_SERIALIZERS.register(eventbus);
+		PlacementModifierRegistry.PLACEMENT_MODIFIER_TYPES.register(eventbus);
 		FeatureRegistry.FEATURES.register(eventbus);
 		SimulacrumEffectRegistry.EFFECTS.register(eventbus);
 		EnvironmentEventRegistry.EVENTS.register(eventbus);
