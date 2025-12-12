@@ -325,9 +325,11 @@ public class BiomeRegistry {
 				.build(),
 				
 			BLBiomeData.builder(generatorRegistry, registry, 16, -0.5F, 0.4F, COARSE_ISLANDS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.COARSE_ISLANDS)
 				.build(),
 				
 			BLBiomeData.builder(generatorRegistry, registry, 16, -0.5F, 0.4F, RAISED_ISLES)
+				.addGenerator(EarlyGeneratorRegistry.Configured.COARSE_ISLANDS)
 				.build(),
 				
 			BLBiomeData.builder(generatorRegistry, registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS)

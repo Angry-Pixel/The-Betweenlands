@@ -65,7 +65,7 @@ public class EarlyGeneratorHelper {
 	}
 	
 	public static double[] computeNoiseFromSettings(BLLegacyPerlinSimplexNoise noiseGenerator, int x, int z, SimplexNoiseSettings settings, NoiseWeightGetter weightProvider) {
-		double[] noise = computeNoiseRaw(noiseGenerator, z, x, settings.noiseScale());
+		double[] noise = computeNoiseRaw(noiseGenerator, x, z, settings.noiseScale());
 
 		final double noiseValueMultiplier = settings.noiseValueMultiplier();
 		final double noiseValueOffset = settings.noiseValueOffset();

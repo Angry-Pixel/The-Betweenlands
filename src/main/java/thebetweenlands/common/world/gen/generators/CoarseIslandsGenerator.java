@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
@@ -9,6 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
@@ -16,11 +18,10 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.BlockGenerator;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.generators.config.CoarseIslandsGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.ColumnVolumeResult;
-import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.common.world.gen.generators.util.ColumnVolumeResult.VolumeBlockstateProvider;
+import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.common.world.gen.util.BiSimplexData;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.BlockHeightSelector;
 import thebetweenlands.common.world.gen.util.config.BiSimplexNoiseConfiguration;
@@ -50,7 +51,7 @@ public class CoarseIslandsGenerator extends EarlyGenerator<CoarseIslandsGenerato
 		CoarseIslandVolumeResult columnResult = computeColumnBlocks(context, chunkPos, noise);
 		
 		// Place blocks
-		return this.placeIslandVolumeBlocks(columnResult, chunkAccess, context.blockGenerator(), context.chunkHeightmaps());
+		return this.placeIslandVolumeBlocks(context.config(), columnResult, chunkAccess, context.blockGenerator(), context.chunkHeightmaps());
 	}
 
 	public record CoarseIslandNoise(double[] islandNoiseScaled, double[] cragNoiseScaled) {}
@@ -73,7 +74,7 @@ public class CoarseIslandsGenerator extends EarlyGenerator<CoarseIslandsGenerato
 
 		// Compute crag noise values
 		SimplexNoiseSettings cragNoiseSettings = noiseConfig.secondNoiseSettings();
-		double[] cragNoiseScaled = EarlyGeneratorHelper.computeNoiseFromSettings(noiseData.first(), chunkPos, cragNoiseSettings);
+		double[] cragNoiseScaled = EarlyGeneratorHelper.computeNoiseFromSettings(noiseData.second(), chunkPos, cragNoiseSettings);
 		
 		return new CoarseIslandNoise(islandNoiseScaled, cragNoiseScaled);
 	}
@@ -170,17 +171,25 @@ public class CoarseIslandsGenerator extends EarlyGenerator<CoarseIslandsGenerato
 		return new CoarseIslandVolumeResult(new ColumnVolumeResult(minBlockYOut, maxBlockYOut, minHeightTotal, maxHeightTotal), isColumnCrag);
 	}
 	
-	public boolean placeIslandVolumeBlocks(CoarseIslandVolumeResult volumeResult, ChunkAccess chunkAccess, BlockGenerator blockGenerator, ChunkHeightmaps heightmaps) {
+	public boolean placeIslandVolumeBlocks(CoarseIslandsGeneratorConfiguration config, CoarseIslandVolumeResult volumeResult, ChunkAccess chunkAccess, BlockGenerator blockGenerator, ChunkHeightmaps heightmaps) {
 
 		final boolean[] isColumnCrag = volumeResult.isCrag();
+		final int[] maxYArray = volumeResult.columns().maxBlockY();
+
+		BlockState cragBaseState = config.cragBaseState();
+		List<BlockState> cragTopStates = config.cragTopStates();
 		
 		// Provides the blockstate to place
 		VolumeBlockstateProvider blockstateProvider = (int x, int y, int z) -> {
 			int index = x * 16 + z;
 			
-			// FIXME don't use a hardcoded reference to cragrock here
 			if(isColumnCrag[index]) {
-				return BlockRegistry.CRAGROCK.get().defaultBlockState();
+				int distanceFromTop = maxYArray[index] - y - 1;
+				if(distanceFromTop < cragTopStates.size()) {
+					return cragTopStates.get(distanceFromTop);
+				}
+				
+				return cragBaseState;
 			} else {
 				return blockGenerator.defaultTerrainState();
 			}

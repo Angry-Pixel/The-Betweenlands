@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
@@ -9,6 +11,7 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
 import thebetweenlands.common.world.gen.generators.CoarseIslandsGenerator;
 import thebetweenlands.common.world.gen.generators.FlatLandGenerator;
 import thebetweenlands.common.world.gen.generators.MarshIslandsGenerator;
@@ -58,12 +61,17 @@ public class EarlyGeneratorRegistry {
 		context.register(Configured.COARSE_ISLANDS, new ConfiguredEarlyGenerator<>(COARSE_ISLANDS.get(),
 				new CoarseIslandsGeneratorConfiguration(
 						BiSimplexNoiseConfiguration.of(
-								3, 0.4D, 1.0D / 0.9D, 2.1D,
-								5, 0.55D, 1.0D / 2.1D, 2.0D
+								4, 0.08D * 0.6D, 1.0D / 0.9D, 2.1D,
+								5, 0.1D * 4.5D, 1.0D / 2.1D, 2.0D
 							),
 						new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT), new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG),
 						1.0D, 1,
-						true, false
+						true, false,
+						BlockRegistry.CRAGROCK.get().defaultBlockState(),
+						List.of(
+							BlockRegistry.MOSSY_CRAGROCK_TOP.get().defaultBlockState(),
+							BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get().defaultBlockState().setValue(MossyCragrockBottomBlock.IS_BOTTOM, true)
+						)
 					)));
 	}
 }

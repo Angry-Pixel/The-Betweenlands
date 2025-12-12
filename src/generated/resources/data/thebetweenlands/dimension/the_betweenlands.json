@@ -38,6 +38,9 @@
         },
         {
           "biome": "thebetweenlands:coarse_islands",
+          "generators": [
+            "thebetweenlands:coarse_islands"
+          ],
           "parameters": {
             "depth": -0.5,
             "scale": 0.4,
@@ -46,6 +49,9 @@
         },
         {
           "biome": "thebetweenlands:raised_isles",
+          "generators": [
+            "thebetweenlands:coarse_islands"
+          ],
           "parameters": {
             "depth": -0.5,
             "scale": 0.4,
