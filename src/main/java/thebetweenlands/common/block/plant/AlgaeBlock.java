@@ -2,11 +2,14 @@ package thebetweenlands.common.block.plant;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -38,7 +41,45 @@ public class AlgaeBlock extends PlantBlock implements ConnectedTextureBlock {
 		return new ConnectionRules() {
 			@Override
 			public boolean canTextureConnectTo(BlockAndTintGetter world, BlockPos pos, Direction face, BlockPos to) {
-				return world.getBlockState(to).is(BlockRegistry.ALGAE);
+				// Note: face is the face of this block that is being rendered
+				//  e.g. face == UP controls the top face of this block
+				
+				// Always connect to algae
+				if(world.getBlockState(to).is(BlockRegistry.ALGAE)) {
+					return true;
+				}
+
+				// Check if the block being connected to and the face are on the same plane
+				// (E.g. for the UP or DOWN faces, true only if there is no Y difference)
+				Axis axis = face.getAxis();
+				boolean onSamePlane = (axis != Axis.X || (to.getX() - pos.getX()) == 0) && (axis != Axis.Y || (to.getY() - pos.getY()) == 0) && (axis != Axis.Z || (to.getZ() - pos.getZ()) == 0);
+				
+				if(!onSamePlane) {
+					return false;
+				}
+
+				int xDifference = (to.getX() - pos.getX());
+				int zDifference = (to.getZ() - pos.getZ());
+
+				// The block below this one, so we check the connection to the block that's inline with the water
+				BlockState targetBlock = world.getBlockState(to.below());
+				
+				// Only connect if the block has a full face connected to the algae
+				boolean isSturdy = true;
+				if(xDifference != 0) {
+					// If xDifference > 0, then check the Negative X face (the face on the target block that points back to this block)
+					// If xDifference < 0, then check the Positive X face (the face on the target block that points back to this block)
+					Direction direction = Direction.fromDelta(-xDifference, 0, 0);
+					isSturdy = isSturdy && targetBlock.isFaceSturdy(level, pos, direction, SupportType.FULL);
+				}
+				if(zDifference != 0) {
+					// If zDifference > 0, then check the Negative Z face (the face on the target block that points back to this block)
+					// If zDifference < 0, then check the Positive Z face (the face on the target block that points back to this block)
+					Direction direction = Direction.fromDelta(0, 0, -zDifference);
+					isSturdy = isSturdy && targetBlock.isFaceSturdy(level, pos, direction, SupportType.FULL);
+				}
+				
+				return isSturdy;
 			}
 
 			@Override
