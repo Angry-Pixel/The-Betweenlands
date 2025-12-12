@@ -61,11 +61,11 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 		BiomeSource.CODEC.fieldOf("biome_source").forGetter((object) -> object.biomeSource),
 		NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter((object) -> object.settings),
-		ConfiguredEarlyGenerator.LIST_CODEC.optionalFieldOf("global_generators", HolderSet.empty()).forGetter((object) -> object.globalGenerators)
+		ConfiguredEarlyGenerator.LIST_OF_LISTS_CODEC.optionalFieldOf("global_generators", List.of()).forGetter((object) -> object.globalGenerators)
 	).apply(instance, instance.stable(BetweenlandsChunkGenerator::new)));
 
 	protected final Holder<NoiseGeneratorSettings> settings;
-	protected final HolderSet<ConfiguredEarlyGenerator<?, ?>> globalGenerators;
+	protected final List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators;
 	private final BlockState defaultBlock;
 	private final BlockState defaultFluid;
 	protected final Climate.Sampler sampler;
@@ -76,10 +76,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	// TODO extra settings
 	
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
-		this(biomeSource, settings, HolderSet.empty());
+		this(biomeSource, settings, List.of());
 	}
 
-	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, HolderSet<ConfiguredEarlyGenerator<?, ?>> globalGenerators) {
+	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators) {
 		super(biomeSource, settings);
 
 		// net.minecraft.server.level.ChunkMap gets NoiseGeneratorSettings from this class, and passes it to RandomState.create(...)
@@ -202,13 +202,14 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static record EarlyGeneratorWithBiome(Optional<Holder<Biome>> biomeOptional, ConfiguredEarlyGenerator<?, ?> generator) {}
 	
 	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
-		// TODO feature sorting
+		// TODO better feature sorting
 		
 		// List of all generators to generate in this chunk
 		List<EarlyGeneratorWithBiome> baseGenerators = new ArrayList<>();
 		
 		// Add all global generators
 		this.globalGenerators.stream()
+			.flatMap(HolderSet::stream)
 			.map(Holder::value)
 			.map((generator) -> new EarlyGeneratorWithBiome(Optional.empty(), generator))
 			.forEach(baseGenerators::add);
@@ -220,10 +221,11 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			
 			// Get the generators from every biome
 			for (Holder<Biome> holder : biomeSet) {
-				HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
+				List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> generators = biomeSource.getBiomeGenerators(holder);
 				if(generators.size() != 0) {
 					Optional<Holder<Biome>> biomeOptional = Optional.of(holder);
 					generators.stream()
+						.flatMap(HolderSet::stream)
 						.map(Holder::value)
 						.map((generator) -> new EarlyGeneratorWithBiome(biomeOptional, generator))
 						.forEach(baseGenerators::add);

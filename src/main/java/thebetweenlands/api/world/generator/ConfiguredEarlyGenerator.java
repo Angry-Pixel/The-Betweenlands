@@ -1,5 +1,6 @@
 package thebetweenlands.api.world.generator;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
@@ -16,6 +17,7 @@ public record ConfiguredEarlyGenerator<GC extends EarlyGeneratorConfiguration, G
             .dispatch(configuredGenerator -> configuredGenerator.generator, EarlyGenerator::configuredCodec);
     public static final Codec<Holder<ConfiguredEarlyGenerator<?, ?>>> CODEC = RegistryFileCodec.create(BLRegistries.Keys.CONFIGURED_GENERATORS, DIRECT_CODEC);
     public static final Codec<HolderSet<ConfiguredEarlyGenerator<?, ?>>> LIST_CODEC = RegistryCodecs.homogeneousList(BLRegistries.Keys.CONFIGURED_GENERATORS, DIRECT_CODEC);
+    public static final Codec<List<HolderSet<ConfiguredEarlyGenerator<?, ?>>>> LIST_OF_LISTS_CODEC = LIST_CODEC.listOf();
 
 	public Stream<ConfiguredEarlyGenerator<?, ?>> getGenerators() {
 		return Stream.concat(Stream.of(this), this.configuration.getSubGenerators());

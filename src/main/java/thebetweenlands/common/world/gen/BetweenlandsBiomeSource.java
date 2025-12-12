@@ -110,9 +110,9 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public HolderSet<ConfiguredEarlyGenerator<?, ?>> getBiomeGenerators(Holder<Biome> biome) {
+	public List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> getBiomeGenerators(Holder<Biome> biome) {
 		this.lazyLoad();
-		return this.list.stream().filter(p -> p.biome().is(biome)).map(BLBiomeData::generators).findFirst().orElseGet(HolderSet::empty);
+		return this.list.stream().filter(p -> p.biome().is(biome)).map(BLBiomeData::generators).findFirst().orElseGet(List::of);
 	}
 
 	@SuppressWarnings("deprecation")

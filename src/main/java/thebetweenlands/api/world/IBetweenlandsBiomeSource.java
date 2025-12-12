@@ -1,5 +1,7 @@
 package thebetweenlands.api.world;
 
+import java.util.List;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;
@@ -20,5 +22,5 @@ public interface IBetweenlandsBiomeSource extends BiomeResolver {
 
 	public float getBiomeScale(Holder<Biome> biome);
 
-	public HolderSet<ConfiguredEarlyGenerator<?, ?>> getBiomeGenerators(Holder<Biome> biome);
+	public List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> getBiomeGenerators(Holder<Biome> biome);
 }

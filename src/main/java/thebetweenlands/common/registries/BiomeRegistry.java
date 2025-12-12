@@ -3,7 +3,6 @@ package thebetweenlands.common.registries;
 import java.util.List;
 
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
-import thebetweenlands.common.world.gen.warp.TerrainPoint;
 
 public class BiomeRegistry {
 
@@ -313,26 +311,42 @@ public class BiomeRegistry {
 	}
 
 	// TODO make a builder so this looks nicer
-	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry, HolderGetter<ConfiguredEarlyGenerator<?, ?>> configuredGenerators) {
+	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry, HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry) {
 		return List.of(
-			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
-			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS))),
-			pairBiome(registry, 12, -1.2F, 0.5F, DEEP_WATERS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.DEEP_WATERS_SIMPLEX_TERRAIN))),
-			pairBiome(registry, 16, -0.5F, 0.4F, COARSE_ISLANDS),
-			pairBiome(registry, 16, -0.5F, 0.4F, RAISED_ISLES),
-			pairBiome(registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS))),
-			pairBiome(registry, 4, -0.1F, 0.11F, ERODED_MARSH, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS))),
-			pairBiome(registry, 10, -0.1F, 0.11F, MARSH, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS))),
-			pairBiome(registry, 0, 0.2F, 0.1F, SWAMPLANDS_CLEARING),
-			pairBiome(registry, 0, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
+			BLBiomeData.builder(generatorRegistry, registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 25, -0.2F, 0.1F, SWAMPLANDS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 12, -1.2F, 0.5F, DEEP_WATERS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.DEEP_WATERS_SIMPLEX_TERRAIN)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 16, -0.5F, 0.4F, COARSE_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 16, -0.5F, 0.4F, RAISED_ISLES)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 4, -0.1F, 0.11F, ERODED_MARSH)
+				.addGenerator(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 10, -0.1F, 0.11F, MARSH)
+				.addGenerator(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 0, 0.2F, 0.1F, SWAMPLANDS_CLEARING)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 0, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
+				.build()
 		);
-	}
-
-	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome, HolderSet<ConfiguredEarlyGenerator<?, ?>> generators) {
-		return new BLBiomeData(registry.getOrThrow(biome), new TerrainPoint((short)weight, depth, scale), generators);
-	}
-
-	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
-		return pairBiome(registry, weight, depth, scale, biome, HolderSet.empty());
 	}
 }

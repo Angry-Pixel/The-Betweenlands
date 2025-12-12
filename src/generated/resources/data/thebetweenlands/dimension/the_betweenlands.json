@@ -16,7 +16,9 @@
         },
         {
           "biome": "thebetweenlands:swamplands",
-          "generators": "thebetweenlands:flat_land_swamplands",
+          "generators": [
+            "thebetweenlands:flat_land_swamplands"
+          ],
           "parameters": {
             "depth": -0.2,
             "scale": 0.1,
@@ -25,7 +27,9 @@
         },
         {
           "biome": "thebetweenlands:deep_waters",
-          "generators": "thebetweenlands:deep_waters_simplex_terrain",
+          "generators": [
+            "thebetweenlands:deep_waters_simplex_terrain"
+          ],
           "parameters": {
             "depth": -1.2,
             "scale": 0.5,
@@ -50,7 +54,9 @@
         },
         {
           "biome": "thebetweenlands:sludge_plains",
-          "generators": "thebetweenlands:flat_land_sludge_plains",
+          "generators": [
+            "thebetweenlands:flat_land_sludge_plains"
+          ],
           "parameters": {
             "depth": -0.5,
             "scale": 0.3,
@@ -59,7 +65,9 @@
         },
         {
           "biome": "thebetweenlands:eroded_marsh",
-          "generators": "thebetweenlands:eroded_marsh_islands",
+          "generators": [
+            "thebetweenlands:eroded_marsh_islands"
+          ],
           "parameters": {
             "depth": -0.1,
             "scale": 0.11,
@@ -68,7 +76,9 @@
         },
         {
           "biome": "thebetweenlands:marsh",
-          "generators": "thebetweenlands:marsh_islands",
+          "generators": [
+            "thebetweenlands:marsh_islands"
+          ],
           "parameters": {
             "depth": -0.1,
             "scale": 0.11,
