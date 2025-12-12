@@ -137,6 +137,7 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.RAW_GENERATION, PlacedFeatureRegistry.CRAG_SPIRES)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
 				.build()
 			)

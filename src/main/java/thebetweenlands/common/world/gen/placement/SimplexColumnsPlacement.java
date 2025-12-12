@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import thebetweenlands.api.world.BiomeWeights;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.PlacementModifierRegistry;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;

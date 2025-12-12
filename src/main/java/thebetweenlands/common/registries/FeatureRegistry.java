@@ -6,7 +6,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.feature.AlgaePatchFeature;
 import thebetweenlands.common.world.gen.feature.BarnacleClusterFeature;
 import thebetweenlands.common.world.gen.feature.BigBulbCappedMushroomFeature;
 import thebetweenlands.common.world.gen.feature.BladderwortClusterFeature;
@@ -16,6 +15,7 @@ import thebetweenlands.common.world.gen.feature.CaveHangersFeature;
 import thebetweenlands.common.world.gen.feature.CaveMossFeature;
 import thebetweenlands.common.world.gen.feature.CavePotsFeature;
 import thebetweenlands.common.world.gen.feature.CaveThornsFeature;
+import thebetweenlands.common.world.gen.feature.CragrockSpiresFeature;
 import thebetweenlands.common.world.gen.feature.DeepmanSimulacrumFeature;
 import thebetweenlands.common.world.gen.feature.FluidPoolFeature;
 import thebetweenlands.common.world.gen.feature.LakeCavernSimulacrumFeature;
@@ -37,7 +37,8 @@ import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeat
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockReplacementConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.NoisePatchWithLevelFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.NoisePatchFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PlantConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
@@ -118,9 +119,11 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_BUSH = FEATURES.register("weedwood_bush",
 			() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
 
-	public static final DeferredHolder<Feature<?>, Feature<NoisePatchWithLevelFeatureConfiguration>> ALGAE_PATCH = FEATURES.register("algae_patch",
-		() -> new AlgaePatchFeature(NoisePatchWithLevelFeatureConfiguration.CODEC));
-
+//	public static final DeferredHolder<Feature<?>, Feature<NoisePatchWithLevelFeatureConfiguration>> ALGAE_PATCH = FEATURES.register("algae_patch",
+//		() -> new AlgaePatchFeature(NoisePatchWithLevelFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<CragrockSpiresFeatureConfiguration>> CRAGROCK_SPIRES = FEATURES.register("cragrock_spires",
+		() -> new CragrockSpiresFeature(CragrockSpiresFeatureConfiguration.CODEC));
+	
 	//Structure Features
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> UNDERWATER_RUINS = FEATURES.register("underwater_ruins",
 		() -> new UnderwaterRuinsFeature(NoneFeatureConfiguration.CODEC));

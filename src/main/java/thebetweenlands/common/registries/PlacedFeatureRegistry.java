@@ -22,6 +22,8 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
+import thebetweenlands.common.world.gen.placement.CragSpiresPlacement;
 import thebetweenlands.common.world.gen.placement.SimplexColumnsPlacement;
 
 public class PlacedFeatureRegistry {
@@ -244,6 +246,18 @@ public class PlacedFeatureRegistry {
 						BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.ALGAE.get().defaultBlockState(), BlockPos.ZERO)),
 						BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE),
 						BiomeFilter.biome()
+					)));
+
+		context.register(CRAG_SPIRES, new PlacedFeature(
+				featureGetter.getOrThrow(ConfiguredFeatureRegistry.CRAG_SPIRES),
+				List.of(
+						CountPlacement.of(1),
+						CragSpiresPlacement.of(
+								SimplexNoiseConfiguration.of(0.16D, 4),
+								1.5D, 2.4D,
+								12.0D,
+								4
+							)
 					)));
 	}
 	
