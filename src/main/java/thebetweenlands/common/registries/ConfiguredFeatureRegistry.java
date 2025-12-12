@@ -1,5 +1,6 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMat
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
+import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
 import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
@@ -316,7 +318,6 @@ public class ConfiguredFeatureRegistry {
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
 		
-//		context.register(ALGAE, new ConfiguredFeature<>(FeatureRegistry.ALGAE_PATCH.get(), new NoisePatchWithLevelFeatureConfiguration(Optional.empty(), 0.16D, 1.6F, 1.8F)));
 		context.register(ALGAE, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.ALGAE.get()))));
 
 		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
@@ -327,9 +328,12 @@ public class ConfiguredFeatureRegistry {
 						new ConstantHeightSelector(120),
 						new OffsetHeightSelector(-5, new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG)),
 						true,
-						BlockRegistry.CRAGROCK.get().defaultBlockState()
+						BlockRegistry.CRAGROCK.get().defaultBlockState(),
+						List.of(
+							BlockRegistry.MOSSY_CRAGROCK_TOP.get().defaultBlockState(),
+							BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get().defaultBlockState().setValue(MossyCragrockBottomBlock.IS_BOTTOM, true)
+						)
 					)));
-//		context.register(CRAG_SPIRES, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.CRAGROCK.get()))));
 	}
 
 	private static RandomPatchConfiguration patch(Block block, int spread, int tries) {

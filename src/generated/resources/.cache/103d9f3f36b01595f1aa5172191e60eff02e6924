@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-12T13:48:01.0203859	Registries
+// 1.21.1	2025-12-12T15:01:06.9948791	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -155,7 +155,7 @@ bd4f90bb57040154824dc5b86ab25f9cb834c763 data/thebetweenlands/worldgen/configure
 414c26220a5c652ba08f70f0801d1cc3c6db7f23 data/thebetweenlands/worldgen/configured_feature/cave_pots.json
 a9c83e1ec4da3062b6272b3b0a9b44f7eb0d1b39 data/thebetweenlands/worldgen/configured_feature/cave_thorns.json
 6e292deef15f6dd8dc3c4d65e61dffa322c679c0 data/thebetweenlands/worldgen/configured_feature/copper_iris_patch.json
-ddf8c18e3b90a4586cf7fc6c12c5ce7c11889675 data/thebetweenlands/worldgen/configured_feature/crag_spires.json
+56a84b7bc8fd53a82b0c421cc1699be2ce8785c7 data/thebetweenlands/worldgen/configured_feature/crag_spires.json
 44345cb88b24e97c7afea4b98286ff37cda53bfe data/thebetweenlands/worldgen/configured_feature/dead_weedwood_bush_patch.json
 269837ebd89c45c8622fe05883bf8fbe14548c79 data/thebetweenlands/worldgen/configured_feature/deepman_simulacrum.json
 4947ea39a3d013519995e322ef5aeac69bb3a4b1 data/thebetweenlands/worldgen/configured_feature/deep_water_coral_patch.json

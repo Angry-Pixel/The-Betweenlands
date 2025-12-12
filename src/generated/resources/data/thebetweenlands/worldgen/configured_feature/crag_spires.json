@@ -21,6 +21,17 @@
       "noise_octaves": 4,
       "noise_scale": 0.16
     },
+    "top_states": [
+      {
+        "Name": "thebetweenlands:mossy_cragrock_top"
+      },
+      {
+        "Name": "thebetweenlands:mossy_cragrock_bottom",
+        "Properties": {
+          "is_bottom": "true"
+        }
+      }
+    ],
     "use_biome_weights": true
   }
 }

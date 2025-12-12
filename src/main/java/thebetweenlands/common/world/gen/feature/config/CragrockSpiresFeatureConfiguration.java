@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.gen.feature.config;
 
+import java.util.List;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -15,7 +17,8 @@ public record CragrockSpiresFeatureConfiguration(
 		double spireBaseDepthFactor,
 		BlockHeightSelector sealevelProvider, BlockHeightSelector seafloorProvider,
 		boolean useBiomeWeights,
-		BlockState baseState
+		BlockState baseState,
+		List<BlockState> topStates
 	) implements FeatureConfiguration {
 
 	public static final Codec<CragrockSpiresFeatureConfiguration> CODEC = RecordCodecBuilder.create(
@@ -28,7 +31,8 @@ public record CragrockSpiresFeatureConfiguration(
 					BlockHeightSelectors.codec().fieldOf("sealevel").forGetter(CragrockSpiresFeatureConfiguration::sealevelProvider),
 					BlockHeightSelectors.codec().fieldOf("seafloor").forGetter(CragrockSpiresFeatureConfiguration::seafloorProvider),
 					Codec.BOOL.fieldOf("use_biome_weights").forGetter(CragrockSpiresFeatureConfiguration::useBiomeWeights),
-					BlockState.CODEC.fieldOf("base_state").forGetter(CragrockSpiresFeatureConfiguration::baseState)
+					BlockState.CODEC.fieldOf("base_state").forGetter(CragrockSpiresFeatureConfiguration::baseState),
+					BlockState.CODEC.listOf().fieldOf("top_states").forGetter(CragrockSpiresFeatureConfiguration::topStates)
 			).apply(instance, CragrockSpiresFeatureConfiguration::new));
 	
 }
