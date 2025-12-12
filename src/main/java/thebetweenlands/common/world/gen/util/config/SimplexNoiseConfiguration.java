@@ -21,6 +21,10 @@ public final class SimplexNoiseConfiguration {
 		return new SimplexNoiseConfiguration(SimplexNoiseSettings.of(octaves, noiseScale));
 	}
 
+	public static SimplexNoiseConfiguration of(int octaves, double noiseScale, double noiseValueMultiplier, double noiseValueOffset) {
+		return new SimplexNoiseConfiguration(SimplexNoiseSettings.of(octaves, noiseScale, noiseValueMultiplier, noiseValueOffset));
+	}
+	
 	public SimplexNoiseSettings noiseSettings() {
 		return this.noiseSettings;
 	}
@@ -31,6 +35,14 @@ public final class SimplexNoiseConfiguration {
 
 	public double octaves() {
 		return this.noiseSettings().octaves();
+	}
+
+	public double noiseValueMultiplier() {
+		return this.noiseSettings().noiseValueMultiplier();
+	}
+
+	public double noiseValueOffset() {
+		return this.noiseSettings().noiseValueOffset();
 	}
 	
 	public SimplexData getNoise(long seed) {

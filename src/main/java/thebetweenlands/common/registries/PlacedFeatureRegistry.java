@@ -253,8 +253,7 @@ public class PlacedFeatureRegistry {
 				List.of(
 						CountPlacement.of(1),
 						CragSpiresPlacement.of(
-								SimplexNoiseConfiguration.of(4, 0.16D),
-								1.0D / 1.5D, 2.4D,
+								SimplexNoiseConfiguration.of(4, 0.16D, 1.0D / 1.5D, 2.4D),
 								12.0D,
 								4
 							)

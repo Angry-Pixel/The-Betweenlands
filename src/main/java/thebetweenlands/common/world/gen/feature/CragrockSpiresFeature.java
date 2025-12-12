@@ -61,7 +61,7 @@ public class CragrockSpiresFeature extends Feature<CragrockSpiresFeatureConfigur
 		Optional<BiomeWeights> biomeWeights = config.useBiomeWeights() ? this.biomeWeightsCache.getWeights(context.chunkGenerator(), chunkPos.x, chunkPos.z) : Optional.empty();
 		
 		double weight = biomeWeights.isPresent() ? biomeWeights.get().get(pos.getX() & 15, pos.getZ() & 15) : 1.0F;
-		double noise = rawNoise * weight * config.noiseValueMultiplier() + config.noiseValueOffset();
+		double noise = rawNoise * weight * spireNoise.noiseValueMultiplier() + spireNoise.noiseValueOffset();
 		
 		// The height of the spire above the water level
 		final int spireHeight = Mth.floor(-noise * config.spireHeightFactor());

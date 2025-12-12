@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-12T18:31:04.4043682	Registries
+// 1.21.1	2025-12-12T18:45:04.9020521	Registries
 d481e17b4e0067043702e1a3d0eba1e678fbe1e3 data/thebetweenlands/betweenlands/aspect/item/algae.json
 51b14b9d38a704b8dac9874acfd1c7666d1365f0 data/thebetweenlands/betweenlands/aspect/item/angler_tooth.json
 e3f64b6f9cde2bb07ff48e487f95b9499155f82b data/thebetweenlands/betweenlands/aspect/item/aqua_middle_gem.json
@@ -77,7 +77,7 @@ dc32aa6f2198aafbdc68ad16492ab8b702f4fb05 data/thebetweenlands/betweenlands/aspec
 26a8c9488b6993bb5bff15b7baecf4827325cedd data/thebetweenlands/betweenlands/aspect/type/yeowynn.json
 23f9bcd3036fb0fd67b9cbb61fa3d1150dac817a data/thebetweenlands/betweenlands/aspect/type/yihinren.json
 baa5133d916fcb2aa0129e52f60f079739d4e226 data/thebetweenlands/betweenlands/aspect/type/yunugaz.json
-9acfd0a097e1eb645d1ad225e48288eec2d4d5b5 data/thebetweenlands/betweenlands/configured_generators/coarse_islands.json
+f11ef5d0c295d4b95d36f73dea860b8ed49ed97c data/thebetweenlands/betweenlands/configured_generators/coarse_islands.json
 e34a95ec9e32baa7894c37e04128cecd473452ef data/thebetweenlands/betweenlands/configured_generators/deep_waters_simplex_terrain.json
 97ab369fbb3588f5c38200eb5bc2de0fe167c903 data/thebetweenlands/betweenlands/configured_generators/eroded_marsh_islands.json
 a09f03edd132c88a1f04d07332d2178fc93bc185 data/thebetweenlands/betweenlands/configured_generators/flat_land_sludge_plains.json

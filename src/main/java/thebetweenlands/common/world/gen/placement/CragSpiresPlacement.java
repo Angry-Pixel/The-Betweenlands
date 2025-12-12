@@ -32,8 +32,6 @@ public class CragSpiresPlacement extends PlacementModifier {
 	public static final MapCodec<CragSpiresPlacement> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
 					SimplexNoiseConfiguration.CODEC.fieldOf("spire_noise").forGetter(CragSpiresPlacement::spireNoise),
-					Codec.DOUBLE.fieldOf("noise_value_multiplier").forGetter(CragSpiresPlacement::noiseValueMultiplier),
-					Codec.DOUBLE.fieldOf("noise_value_offset").forGetter(CragSpiresPlacement::noiseValueOffset),
 					Codec.DOUBLE.fieldOf("spire_height_factor").forGetter(CragSpiresPlacement::spireHeightFactor),
 					ExtraCodecs.intRange(0, 16).fieldOf("spire_check_radius").forGetter(CragSpiresPlacement::spireCheckRadius),
 					Codec.BOOL.fieldOf("ignore_biomes").forGetter(CragSpiresPlacement::ignoreBiomes),
@@ -41,17 +39,13 @@ public class CragSpiresPlacement extends PlacementModifier {
 			).apply(instance, CragSpiresPlacement::new));
 
 	private final SimplexNoiseConfiguration spireNoise;
-	private final double noiseValueMultiplier;
-	private final double noiseValueOffset;
 	private final double spireHeightFactor;
 	private final int spireCheckRadius;
 	private final boolean ignoreBiomes;
 	private final boolean useBiomeWeights;
 	
-	public CragSpiresPlacement(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes, boolean useBiomeWeights) {
+	public CragSpiresPlacement(SimplexNoiseConfiguration spireNoise, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes, boolean useBiomeWeights) {
 		this.spireNoise = spireNoise;
-		this.noiseValueMultiplier = noiseValueMultiplier;
-		this.noiseValueOffset = noiseValueOffset;
 		this.spireHeightFactor = spireHeightFactor;
 		this.spireCheckRadius = spireCheckRadius;
 		this.ignoreBiomes = ignoreBiomes;
@@ -59,31 +53,23 @@ public class CragSpiresPlacement extends PlacementModifier {
 	}
 	
 	public static CragSpiresPlacement of(double spireNoiseScale, int spireNoiseOctaves, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius) {
-		return new CragSpiresPlacement(SimplexNoiseConfiguration.of(spireNoiseOctaves, spireNoiseScale), noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, false, true);
+		return new CragSpiresPlacement(SimplexNoiseConfiguration.of(spireNoiseOctaves, spireNoiseScale, noiseValueMultiplier, noiseValueOffset), spireHeightFactor, spireCheckRadius, false, true);
 	}
 	
-	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius) {
-		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, false, true);
+	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double spireHeightFactor, int spireCheckRadius) {
+		return new CragSpiresPlacement(spireNoise, spireHeightFactor, spireCheckRadius, false, true);
 	}
 
-	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes) {
-		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, ignoreBiomes, true);
+	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes) {
+		return new CragSpiresPlacement(spireNoise, spireHeightFactor, spireCheckRadius, ignoreBiomes, true);
 	}
 
-	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes, boolean useBiomeWeights) {
-		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, ignoreBiomes, useBiomeWeights);
+	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes, boolean useBiomeWeights) {
+		return new CragSpiresPlacement(spireNoise, spireHeightFactor, spireCheckRadius, ignoreBiomes, useBiomeWeights);
 	}
 	
 	public SimplexNoiseConfiguration spireNoise() {
 		return this.spireNoise;
-	}
-	
-	public double noiseValueMultiplier() {
-		return this.noiseValueMultiplier;
-	}
-
-	public double noiseValueOffset() {
-		return this.noiseValueOffset;
 	}
 	
 	public double spireHeightFactor() {
@@ -113,6 +99,8 @@ public class CragSpiresPlacement extends PlacementModifier {
 		
 		// length is `noiseSize * noiseSize`
 		double[] spireNoiseValues = EarlyGeneratorHelper.computeNoiseRawWithSize(spireNoiseData.noiseGenerator(), noiseMinX, noiseMinZ, this.spireNoise.noiseScale(), noiseSize);
+		final double noiseValueMultiplier = this.spireNoise().noiseValueMultiplier();
+		final double noiseValueOffset = this.spireNoise().noiseValueOffset();
 		
 		BiomeCheckContext biomeCheckContext = new BiomeCheckContext(context);
 
@@ -136,7 +124,7 @@ public class CragSpiresPlacement extends PlacementModifier {
 				
 				float weight = biomeWeights.isEmpty() ? 1.0F : biomeWeights.get().getWeightsFor(chunkX, chunkZ).get(posX & 15, posZ & 15);
 				
-				double noise = spireNoiseValues[noiseIndex] * weight * this.noiseValueMultiplier + this.noiseValueOffset;
+				double noise = spireNoiseValues[noiseIndex] * weight * noiseValueMultiplier + noiseValueOffset;
 
 				// The height of the spire above the water level
 				final double spireHeight = -noise * this.spireHeightFactor;

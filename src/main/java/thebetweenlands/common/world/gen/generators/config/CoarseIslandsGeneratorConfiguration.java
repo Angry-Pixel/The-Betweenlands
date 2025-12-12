@@ -10,7 +10,7 @@ public record CoarseIslandsGeneratorConfiguration(BiSimplexNoiseConfiguration no
 	
 	public static final Codec<CoarseIslandsGeneratorConfiguration> CODEC = RecordCodecBuilder.create(
 		instance -> instance.group(
-				BiSimplexNoiseConfiguration.CODEC.fieldOf("noise").forGetter(CoarseIslandsGeneratorConfiguration::noiseConfig)
+				BiSimplexNoiseConfiguration.namedCodec("island_noise", "crag_noise").fieldOf("noise").forGetter(CoarseIslandsGeneratorConfiguration::noiseConfig)
 		).apply(instance, CoarseIslandsGeneratorConfiguration::new));
 	
 }

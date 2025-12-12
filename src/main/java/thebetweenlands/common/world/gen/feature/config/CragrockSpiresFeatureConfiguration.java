@@ -13,7 +13,6 @@ import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public record CragrockSpiresFeatureConfiguration(
 		SimplexNoiseConfiguration spireNoise,
-		double noiseValueMultiplier, double noiseValueOffset,
 		double spireHeightFactor,
 		double spireBaseDepthFactor,
 		BlockHeightSelector sealevelProvider, BlockHeightSelector seafloorProvider,
@@ -25,8 +24,6 @@ public record CragrockSpiresFeatureConfiguration(
 	public static final Codec<CragrockSpiresFeatureConfiguration> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(
 					SimplexNoiseConfiguration.CODEC.fieldOf("spire_noise").forGetter(CragrockSpiresFeatureConfiguration::spireNoise),
-					Codec.DOUBLE.fieldOf("noise_value_multiplier").forGetter(CragrockSpiresFeatureConfiguration::noiseValueMultiplier),
-					Codec.DOUBLE.fieldOf("noise_value_offset").forGetter(CragrockSpiresFeatureConfiguration::noiseValueOffset),
 					Codec.DOUBLE.fieldOf("spire_height_factor").forGetter(CragrockSpiresFeatureConfiguration::spireHeightFactor),
 					Codec.DOUBLE.fieldOf("spire_base_depth_factor").forGetter(CragrockSpiresFeatureConfiguration::spireBaseDepthFactor),
 					BlockHeightSelectors.codec().fieldOf("sealevel").forGetter(CragrockSpiresFeatureConfiguration::sealevelProvider),

@@ -322,8 +322,7 @@ public class ConfiguredFeatureRegistry {
 
 		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
 				new CragrockSpiresFeatureConfiguration(
-						SimplexNoiseConfiguration.of(4, 0.16D),
-						1.0D / 1.5D, 2.4,
+						SimplexNoiseConfiguration.of(4, 0.16D, 1.0D / 1.5D, 2.4),
 						12, 3,
 						new ConstantHeightSelector(120),
 						new OffsetHeightSelector(-5, new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG)),

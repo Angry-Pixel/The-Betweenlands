@@ -2,13 +2,13 @@
   "type": "thebetweenlands:coarse_islands",
   "config": {
     "noise": {
-      "first": {
-        "noise_octaves": 3,
-        "noise_scale": 0.4
-      },
-      "second": {
+      "crag_noise": {
         "noise_octaves": 5,
         "noise_scale": 0.55
+      },
+      "island_noise": {
+        "noise_octaves": 3,
+        "noise_scale": 0.4
       }
     }
   }
