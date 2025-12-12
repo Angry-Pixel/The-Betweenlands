@@ -22,9 +22,9 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.placement.CragSpiresPlacement;
 import thebetweenlands.common.world.gen.placement.SimplexColumnsPlacement;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public class PlacedFeatureRegistry {
 
@@ -253,7 +253,7 @@ public class PlacedFeatureRegistry {
 				List.of(
 						CountPlacement.of(1),
 						CragSpiresPlacement.of(
-								SimplexNoiseConfiguration.of(0.16D, 4),
+								SimplexNoiseConfiguration.of(4, 0.16D),
 								1.0D / 1.5D, 2.4D,
 								12.0D,
 								4

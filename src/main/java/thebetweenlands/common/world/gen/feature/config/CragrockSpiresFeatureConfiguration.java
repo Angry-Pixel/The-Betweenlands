@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.BlockHeightSelector;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public record CragrockSpiresFeatureConfiguration(
 		SimplexNoiseConfiguration spireNoise,

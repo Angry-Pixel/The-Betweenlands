@@ -16,10 +16,10 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConfiguration;
-import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.common.world.gen.util.BiomeWeightsCache;
 import thebetweenlands.common.world.gen.util.SimplexData;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public class CragrockSpiresFeature extends Feature<CragrockSpiresFeatureConfiguration> {
 	

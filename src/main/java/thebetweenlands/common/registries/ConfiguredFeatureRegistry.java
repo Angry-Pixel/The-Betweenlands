@@ -33,11 +33,11 @@ import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConf
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
 import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
-import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.ConstantHeightSelector;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.OffsetHeightSelector;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public class ConfiguredFeatureRegistry {
 
@@ -322,7 +322,7 @@ public class ConfiguredFeatureRegistry {
 
 		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
 				new CragrockSpiresFeatureConfiguration(
-						SimplexNoiseConfiguration.of(0.16D, 4),
+						SimplexNoiseConfiguration.of(4, 0.16D),
 						1.0D / 1.5D, 2.4,
 						12, 3,
 						new ConstantHeightSelector(120),

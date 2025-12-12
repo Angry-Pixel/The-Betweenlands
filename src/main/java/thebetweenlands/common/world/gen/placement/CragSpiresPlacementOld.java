@@ -16,11 +16,11 @@ import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import thebetweenlands.common.registries.PlacementModifierRegistry;
-import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.common.world.gen.placement.util.BLPlacementModifierHelper;
 import thebetweenlands.common.world.gen.placement.util.BLPlacementModifierHelper.BiomeCheckContext;
 import thebetweenlands.common.world.gen.util.SimplexData;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public class CragSpiresPlacementOld extends PlacementModifier {
 
