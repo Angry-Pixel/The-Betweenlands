@@ -1,6 +1,8 @@
 {
   "type": "thebetweenlands:coarse_islands",
   "config": {
+    "island_height_scale": 1.0,
+    "island_min_height": 1,
     "noise": {
       "crag_noise": {
         "noise_octaves": 5,
@@ -19,6 +21,7 @@
       "type": "thebetweenlands:heightmap",
       "heightmap": "OCEAN_FLOOR_WG"
     },
-    "sealevel": 120
+    "sealevel": 120,
+    "use_biome_weights": true
   }
 }

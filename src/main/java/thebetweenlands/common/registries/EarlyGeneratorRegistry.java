@@ -61,7 +61,9 @@ public class EarlyGeneratorRegistry {
 								3, 0.4D, 1.0D / 0.9D, 2.1D,
 								5, 0.55D, 1.0D / 2.1D, 2.0D
 							),
-						new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT), new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG)
+						new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT), new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG),
+						1.0D, 1,
+						true, false
 					)));
 	}
 }
