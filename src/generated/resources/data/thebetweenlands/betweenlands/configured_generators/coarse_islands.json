@@ -4,11 +4,15 @@
     "noise": {
       "crag_noise": {
         "noise_octaves": 5,
-        "noise_scale": 0.55
+        "noise_scale": 0.55,
+        "noise_value_multiplier": 0.47619047619047616,
+        "noise_value_offset": 2.0
       },
       "island_noise": {
         "noise_octaves": 3,
-        "noise_scale": 0.4
+        "noise_scale": 0.4,
+        "noise_value_multiplier": 1.1111111111111112,
+        "noise_value_offset": 2.1
       }
     }
   }

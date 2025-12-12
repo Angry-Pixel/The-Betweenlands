@@ -55,6 +55,12 @@ public class EarlyGeneratorRegistry {
 
 		context.register(Configured.DEEP_WATERS_SIMPLEX_TERRAIN, new ConfiguredEarlyGenerator<>(SIMPLEX_TERRAIN.get(), new SimplexTerrainGeneratorConfiguration(new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG), new ConstantHeightSelector(120), 0.05D, true, false)));
 
-		context.register(Configured.COARSE_ISLANDS, new ConfiguredEarlyGenerator<>(COARSE_ISLANDS.get(), new CoarseIslandsGeneratorConfiguration(BiSimplexNoiseConfiguration.of(3, 0.4D, 5, 0.55D))));
+		context.register(Configured.COARSE_ISLANDS, new ConfiguredEarlyGenerator<>(COARSE_ISLANDS.get(),
+				new CoarseIslandsGeneratorConfiguration(
+						BiSimplexNoiseConfiguration.of(
+								3, 0.4D, 1.0D / 0.9D, 2.1D,
+								5, 0.55D, 1.0D / 2.1D, 2.0D
+							)
+					)));
 	}
 }

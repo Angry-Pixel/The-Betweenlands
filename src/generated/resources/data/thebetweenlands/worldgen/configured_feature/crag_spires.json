@@ -4,8 +4,6 @@
     "base_state": {
       "Name": "thebetweenlands:cragrock"
     },
-    "noise_value_multiplier": 0.6666666666666666,
-    "noise_value_offset": 2.4,
     "seafloor": {
       "type": "thebetweenlands:offset",
       "offset": -5,
@@ -19,7 +17,9 @@
     "spire_height_factor": 12.0,
     "spire_noise": {
       "noise_octaves": 4,
-      "noise_scale": 0.16
+      "noise_scale": 0.16,
+      "noise_value_multiplier": 0.6666666666666666,
+      "noise_value_offset": 2.4
     },
     "top_states": [
       {
