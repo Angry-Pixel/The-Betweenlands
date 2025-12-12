@@ -9,14 +9,17 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.generators.CoarseIslandsGenerator;
 import thebetweenlands.common.world.gen.generators.FlatLandGenerator;
 import thebetweenlands.common.world.gen.generators.MarshIslandsGenerator;
 import thebetweenlands.common.world.gen.generators.SimplexTerrainGenerator;
+import thebetweenlands.common.world.gen.generators.config.CoarseIslandsGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.MarshIslandsGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.SimplexTerrainGeneratorConfiguration;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.ConstantHeightSelector;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
+import thebetweenlands.common.world.gen.util.config.BiSimplexNoiseConfiguration;
 
 public class EarlyGeneratorRegistry {
 
@@ -27,6 +30,9 @@ public class EarlyGeneratorRegistry {
 	public static final DeferredHolder<EarlyGenerator<?>, MarshIslandsGenerator> MARSH_ISLANDS = GENERATORS.register("marsh_islands", () -> new MarshIslandsGenerator(MarshIslandsGeneratorConfiguration.CODEC));
 
 	public static final DeferredHolder<EarlyGenerator<?>, SimplexTerrainGenerator> SIMPLEX_TERRAIN = GENERATORS.register("simplex_terrain", () -> new SimplexTerrainGenerator(SimplexTerrainGeneratorConfiguration.CODEC));
+
+	public static final DeferredHolder<EarlyGenerator<?>, CoarseIslandsGenerator> COARSE_ISLANDS = GENERATORS.register("coarse_islands", () -> new CoarseIslandsGenerator(CoarseIslandsGeneratorConfiguration.CODEC));
+	
 	
 	public static final class Configured {
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> FLAT_LAND_SWAMPLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("flat_land_swamplands"));
@@ -36,6 +42,8 @@ public class EarlyGeneratorRegistry {
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> ERODED_MARSH_ISLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("eroded_marsh_islands"));
 
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> DEEP_WATERS_SIMPLEX_TERRAIN = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("deep_waters_simplex_terrain"));
+
+		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> COARSE_ISLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("coarse_islands"));
 	}
 	
 	public static void bootstrapConfigured(BootstrapContext<ConfiguredEarlyGenerator<?, ?>> context) {
@@ -46,5 +54,7 @@ public class EarlyGeneratorRegistry {
 		context.register(Configured.ERODED_MARSH_ISLANDS, new ConfiguredEarlyGenerator<>(MARSH_ISLANDS.get(), new MarshIslandsGeneratorConfiguration(120, 0.5D, 100.5D)));
 
 		context.register(Configured.DEEP_WATERS_SIMPLEX_TERRAIN, new ConfiguredEarlyGenerator<>(SIMPLEX_TERRAIN.get(), new SimplexTerrainGeneratorConfiguration(new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG), new ConstantHeightSelector(120), 0.05D, true, false)));
+
+		context.register(Configured.COARSE_ISLANDS, new ConfiguredEarlyGenerator<>(COARSE_ISLANDS.get(), new CoarseIslandsGeneratorConfiguration(BiSimplexNoiseConfiguration.of(3, 0.4D, 5, 0.55D))));
 	}
 }

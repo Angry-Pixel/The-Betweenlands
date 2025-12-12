@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:coarse_islands",
+  "config": {
+    "noise": {
+      "first": {
+        "noise_octaves": 3,
+        "noise_scale": 0.4
+      },
+      "second": {
+        "noise_octaves": 5,
+        "noise_scale": 0.55
+      }
+    }
+  }
+}
