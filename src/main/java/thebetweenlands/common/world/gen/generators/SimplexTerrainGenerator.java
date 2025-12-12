@@ -104,8 +104,8 @@ public class SimplexTerrainGenerator extends EarlyGenerator<SimplexTerrainGenera
 				}
 				
 				// Get min and max height to blend between
-				final int lowestBlock = minLevelGetter.getHeight(x, z, chunkPos, heightmaps);
-				final int highestBlock = maxLevelGetter.getHeight(x, z, chunkPos, heightmaps);
+				final int lowestBlock = minLevelGetter.getHeightWG(x, z, chunkPos, heightmaps);
+				final int highestBlock = maxLevelGetter.getHeightWG(x, z, chunkPos, heightmaps);
 
 				// Fetch noise values
 				double noise = terrainNoise[index] / 12.0f;

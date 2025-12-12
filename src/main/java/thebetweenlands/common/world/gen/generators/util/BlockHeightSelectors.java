@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
@@ -41,14 +42,23 @@ public class BlockHeightSelectors {
 	
 	public static interface BlockHeightSelector {
 		/**
-		 * Provide a Block Y from the provided context
+		 * Provide a Block Y from the provided context, during early generation
 		 * @param offsetX the X of the target column relative to the chunk (range 0-15)
 		 * @param offsetZ the Z of the target column relative to the chunk (range 0-15)
 		 * @param chunkPos the chunk position
 		 * @param heightmaps the chunk's heightmaps
 		 * @return
 		 */
-		public int getHeight(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps);
+		public int getHeightWG(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps);
+
+		/**
+		 * Provide a Block Y from the provided context
+		 * @param level the level the block is in
+		 * @param offsetX the X of the target column relative to 0, 0
+		 * @param offsetZ the Z of the target column relative to 0, 0
+		 * @return
+		 */
+		public int getHeight(WorldGenLevel level, int x, int z);
 		
 		public ResourceLocation getType();
 	}
@@ -62,9 +72,14 @@ public class BlockHeightSelectors {
 				).apply(instance, ConstantHeightSelector::new));
 		
 		public static final ResourceLocation TYPE = TheBetweenlands.prefix("constant");
-		
+
 		@Override
-		public int getHeight(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
+		public int getHeightWG(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
+			return this.y();
+		}
+
+		@Override
+		public int getHeight(WorldGenLevel level, int x, int z) {
 			return this.y();
 		}
 		
@@ -75,35 +90,23 @@ public class BlockHeightSelectors {
 	}
 
 	public static record HeightmapBasedHeightSelector(Heightmap.Types type) implements BlockHeightSelector {
-		public static final Codec<Heightmap.Types> HEIGHTMAP_TYPE = Codec.stringResolver(
-				(type) -> switch(type) {
-					case WORLD_SURFACE_WG: yield "surface";
-					case OCEAN_FLOOR_WG: yield "ocean_floor";
-					default: yield null;
-				},
-				(string) -> {
-					if("surface".equalsIgnoreCase(string)) return Heightmap.Types.WORLD_SURFACE_WG;
-					if("ocean_floor".equalsIgnoreCase(string)) return Heightmap.Types.OCEAN_FLOOR_WG;
-					return null;
-				}
-			);
-		
 		public static final MapCodec<HeightmapBasedHeightSelector> MAP_CODEC = RecordCodecBuilder.mapCodec(
 				instance -> instance.group(
-						HEIGHTMAP_TYPE.fieldOf("heightmap").forGetter(HeightmapBasedHeightSelector::type)
+						Heightmap.Types.CODEC.fieldOf("heightmap").forGetter(HeightmapBasedHeightSelector::type)
 				).apply(instance, HeightmapBasedHeightSelector::new));
 
 		public static final ResourceLocation TYPE = TheBetweenlands.prefix("heightmap");
 		
 		public HeightmapBasedHeightSelector(Heightmap.Types type) {
-			if(type != Types.WORLD_SURFACE_WG && type != Types.OCEAN_FLOOR_WG) {
-				throw new IllegalArgumentException("Heightmap type must be either WORLD_SURFACE_WG or OCEAN_FLOOR_WG, got " + type);
-			}
 			this.type = type;
 		}
 		
 		@Override
-		public int getHeight(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
+		public int getHeightWG(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
+			if(type != Types.WORLD_SURFACE_WG && type != Types.OCEAN_FLOOR_WG) {
+				throw new IllegalArgumentException("Heightmap type must be either WORLD_SURFACE_WG or OCEAN_FLOOR_WG if used during early generation, got " + type);
+			}
+			
 			switch(this.type()) {
 			case WORLD_SURFACE_WG:
 				return heightmaps.surfaceHeightmap().getHighestTaken(offsetX, offsetZ);
@@ -112,6 +115,11 @@ public class BlockHeightSelectors {
 			default:
 				throw new IllegalStateException("Heightmap type must be either WORLD_SURFACE_WG or OCEAN_FLOOR_WG, got " + this.type);
 			}
+		}
+
+		@Override
+		public int getHeight(WorldGenLevel level, int x, int z) {
+			return level.getHeight(this.type, x, z);
 		}
 		
 		@Override
@@ -132,10 +140,15 @@ public class BlockHeightSelectors {
 		}
 		
 		public static final ResourceLocation TYPE = TheBetweenlands.prefix("offset");
-		
+
 		@Override
-		public int getHeight(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
-			return delegate.getHeight(offsetX, offsetZ, chunkPos, heightmaps) + this.offset();
+		public int getHeightWG(int offsetX, int offsetZ, ChunkPos chunkPos, ChunkHeightmaps heightmaps) {
+			return delegate.getHeightWG(offsetX, offsetZ, chunkPos, heightmaps) + this.offset();
+		}
+
+		@Override
+		public int getHeight(WorldGenLevel level, int x, int z) {
+			return delegate.getHeight(level, x, z) + this.offset();
 		}
 
 		@Override

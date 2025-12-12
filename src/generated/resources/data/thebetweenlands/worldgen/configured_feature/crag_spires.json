@@ -1,11 +1,20 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "thebetweenlands:cragrock_spires",
   "config": {
-    "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "thebetweenlands:cragrock"
-      }
+    "base_state": {
+      "Name": "thebetweenlands:cragrock"
+    },
+    "noise_value_multiplier": 1.5,
+    "noise_value_offset": 2.4,
+    "seafloor": {
+      "type": "thebetweenlands:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    "sealevel": 120,
+    "spire_height_factor": 12.0,
+    "spire_noise": {
+      "noise_octaves": 4,
+      "noise_scale": 0.16
     }
   }
 }

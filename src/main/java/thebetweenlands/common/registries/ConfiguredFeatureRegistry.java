@@ -11,6 +11,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -26,11 +27,14 @@ import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
 import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.NoisePatchFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
 import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
+import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
+import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.ConstantHeightSelector;
+import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
 
 public class ConfiguredFeatureRegistry {
 
@@ -314,8 +318,16 @@ public class ConfiguredFeatureRegistry {
 //		context.register(ALGAE, new ConfiguredFeature<>(FeatureRegistry.ALGAE_PATCH.get(), new NoisePatchWithLevelFeatureConfiguration(Optional.empty(), 0.16D, 1.6F, 1.8F)));
 		context.register(ALGAE, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.ALGAE.get()))));
 
-//		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), new NoisePatchFeatureConfiguration(0.16D, 1.5F, 2.4F)));
-		context.register(CRAG_SPIRES, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.CRAGROCK.get()))));
+		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
+				new CragrockSpiresFeatureConfiguration(
+						SimplexNoiseConfiguration.of(0.16D, 4),
+						1.5, 2.4,
+						12,
+						new ConstantHeightSelector(120),
+						new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG),
+						BlockRegistry.CRAGROCK.get().defaultBlockState()
+					)));
+//		context.register(CRAG_SPIRES, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.CRAGROCK.get()))));
 	}
 
 	private static RandomPatchConfiguration patch(Block block, int spread, int tries) {
