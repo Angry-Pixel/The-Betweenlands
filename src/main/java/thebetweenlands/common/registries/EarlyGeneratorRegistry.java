@@ -15,8 +15,8 @@ import thebetweenlands.common.world.gen.generators.SimplexTerrainGenerator;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.MarshIslandsGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.SimplexTerrainGeneratorConfiguration;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.ConstantHeightSelector;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.ConstantHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
 
 public class EarlyGeneratorRegistry {
 

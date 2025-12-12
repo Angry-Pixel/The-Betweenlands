@@ -4,17 +4,23 @@
     "base_state": {
       "Name": "thebetweenlands:cragrock"
     },
-    "noise_value_multiplier": 1.5,
+    "noise_value_multiplier": 0.6666666666666666,
     "noise_value_offset": 2.4,
     "seafloor": {
-      "type": "thebetweenlands:heightmap",
-      "heightmap": "OCEAN_FLOOR_WG"
+      "type": "thebetweenlands:offset",
+      "offset": -5,
+      "selector": {
+        "type": "thebetweenlands:heightmap",
+        "heightmap": "OCEAN_FLOOR_WG"
+      }
     },
     "sealevel": 120,
+    "spire_base_depth_factor": 3.0,
     "spire_height_factor": 12.0,
     "spire_noise": {
       "noise_octaves": 4,
       "noise_scale": 0.16
-    }
+    },
+    "use_biome_weights": true
   }
 }

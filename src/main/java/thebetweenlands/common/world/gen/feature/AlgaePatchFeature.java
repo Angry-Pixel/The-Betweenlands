@@ -17,8 +17,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.feature.config.NoisePatchWithLevelFeatureConfiguration;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
-import thebetweenlands.common.world.gen.generators.util.SimplexCache;
-import thebetweenlands.common.world.gen.generators.util.SimplexData;
+import thebetweenlands.common.world.gen.util.SimplexCache;
+import thebetweenlands.common.world.gen.util.SimplexData;
 
 public class AlgaePatchFeature extends Feature<NoisePatchWithLevelFeatureConfiguration> {
 
@@ -47,7 +47,6 @@ public class AlgaePatchFeature extends Feature<NoisePatchWithLevelFeatureConfigu
 		MutableBlockPos pos = new MutableBlockPos();
 
 		// TODO get biome weights properly
-		// TODO modify placed feature placement modifiers to filter biomes properly
 		Optional<BiomeWeights> biomeWeights = context.chunkGenerator() instanceof BetweenlandsChunkGenerator generator ? Optional.of(generator.calculateBiomeWeights(chunkPos)) : Optional.empty();
 		
 		for(int x = 0; x < 16; ++x) {

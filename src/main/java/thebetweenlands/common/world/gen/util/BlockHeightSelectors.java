@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.generators.util;
+package thebetweenlands.common.world.gen.util;
 
 import java.util.Map;
 

@@ -17,8 +17,8 @@ import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.common.registries.PlacementModifierRegistry;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
-import thebetweenlands.common.world.gen.generators.util.SimplexCache;
-import thebetweenlands.common.world.gen.generators.util.SimplexData;
+import thebetweenlands.common.world.gen.util.SimplexCache;
+import thebetweenlands.common.world.gen.util.SimplexData;
 import thebetweenlands.util.ExtraCodecs;
 
 public final class SimplexColumnsPlacement extends PlacementModifier {

@@ -33,8 +33,9 @@ import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
 import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.ConstantHeightSelector;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.ConstantHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.OffsetHeightSelector;
 
 public class ConfiguredFeatureRegistry {
 
@@ -321,10 +322,11 @@ public class ConfiguredFeatureRegistry {
 		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
 				new CragrockSpiresFeatureConfiguration(
 						SimplexNoiseConfiguration.of(0.16D, 4),
-						1.5, 2.4,
-						12,
+						1.0D / 1.5D, 2.4,
+						12, 3,
 						new ConstantHeightSelector(120),
-						new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG),
+						new OffsetHeightSelector(-5, new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG)),
+						true,
 						BlockRegistry.CRAGROCK.get().defaultBlockState()
 					)));
 //		context.register(CRAG_SPIRES, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.CRAGROCK.get()))));

@@ -1,24 +1,32 @@
 package thebetweenlands.common.world.gen.feature;
 
+import java.util.Optional;
+
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
-import thebetweenlands.common.world.gen.generators.util.SimplexData;
+import thebetweenlands.common.world.gen.util.BiomeWeightsCache;
+import thebetweenlands.common.world.gen.util.SimplexData;
 
 public class CragrockSpiresFeature extends Feature<CragrockSpiresFeatureConfiguration> {
 	
 	public CragrockSpiresFeature(Codec<CragrockSpiresFeatureConfiguration> codec) {
 		super(codec);
 	}
-
+	
+	// Temp biome weights cache, because this feature will be placed multiple times within a single chunk
+	protected final BiomeWeightsCache biomeWeightsCache = new BiomeWeightsCache();
+	
 	@Override
 	public boolean place(FeaturePlaceContext<CragrockSpiresFeatureConfiguration> context) {
 		CragrockSpiresFeatureConfiguration config = context.config();
@@ -43,14 +51,22 @@ public class CragrockSpiresFeature extends Feature<CragrockSpiresFeatureConfigur
 		SimplexData noiseData = spireNoise.getNoise(seed);
 		
 		double rawNoise = EarlyGeneratorHelper.computeSingleNoiseRaw(noiseData.noiseGenerator(), pos.getX(), pos.getZ(), spireNoise.noiseScale());
+
+		ChunkPos chunkPos = new ChunkPos(pos);
 		
-		double noise = rawNoise * config.noiseValueMultiplier() + config.noiseValueOffset();
+		// TODO get biome weights properly
+		Optional<BiomeWeights> biomeWeights = config.useBiomeWeights() ? this.biomeWeightsCache.getWeights(context.chunkGenerator(), chunkPos.x, chunkPos.z) : Optional.empty();
+		
+		double weight = biomeWeights.isPresent() ? biomeWeights.get().get(pos.getX() & 15, pos.getZ() & 15) : 1.0F;
+		double noise = rawNoise * weight * config.noiseValueMultiplier() + config.noiseValueOffset();
 		
 		// The height of the spire above the water level
-		final double spireHeightDouble = -noise * config.spireHeightFactor();
-		final int spireHeight = Mth.floor(spireHeightDouble);
+		final int spireHeight = Mth.floor(-noise * config.spireHeightFactor());
+		
+		// How deep the spire goes into the sea floor
+		final int spireBaseDepth = Mth.floor(-noise * config.spireBaseDepthFactor());
 
-		final int minY = seafloorY;
+		final int minY = seafloorY - spireBaseDepth;
 		final int maxY = sealevelY + spireHeight;
 
 		if(maxY <= minY) {

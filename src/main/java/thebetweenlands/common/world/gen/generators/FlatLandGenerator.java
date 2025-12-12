@@ -21,10 +21,10 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
-import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
-import thebetweenlands.common.world.gen.generators.util.BiSimplexData;
 import thebetweenlands.common.world.gen.generators.util.ColumnVolumeResult;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
+import thebetweenlands.common.world.gen.util.BiSimplexCache;
+import thebetweenlands.common.world.gen.util.BiSimplexData;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {

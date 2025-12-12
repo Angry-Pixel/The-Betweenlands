@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import thebetweenlands.api.world.generator.EarlyGeneratorConfiguration;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.BlockHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.BlockHeightSelector;
 import thebetweenlands.util.ExtraCodecs;
 
 public record SimplexTerrainGeneratorConfiguration(BlockHeightSelector minLevel, BlockHeightSelector maxLevel, double noiseScale, boolean useBiomeWeights, boolean ignoreBiomeLock) implements EarlyGeneratorConfiguration {

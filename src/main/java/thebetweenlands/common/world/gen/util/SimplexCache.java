@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.generators.util;
+package thebetweenlands.common.world.gen.util;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,9 +23,9 @@ public final class SimplexCache {
 	protected final AtomicReference<SimplexData> noiseCacheReference = new AtomicReference<>();
 
 	public SimplexData getNoise(long seed) {
-		return this.noiseCacheReference.updateAndGet((biSimplexCache) -> {
-			if(biSimplexCache != null && biSimplexCache.worldSeed() == seed) {
-				return biSimplexCache;
+		return this.noiseCacheReference.updateAndGet((simplexCache) -> {
+			if(simplexCache != null && simplexCache.worldSeed() == seed) {
+				return simplexCache;
 			}
 			
 			// If it doesn't exist or has a different seed than expected, create noise with the correct seed

@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.placement;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
@@ -8,18 +9,23 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import thebetweenlands.common.registries.PlacementModifierRegistry;
+import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.feature.config.SimplexNoiseConfiguration;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
-import thebetweenlands.common.world.gen.generators.util.SimplexData;
 import thebetweenlands.common.world.gen.placement.util.BLPlacementModifierHelper;
 import thebetweenlands.common.world.gen.placement.util.BLPlacementModifierHelper.BiomeCheckContext;
+import thebetweenlands.common.world.gen.util.BiomeWeightsMap;
+import thebetweenlands.common.world.gen.util.SimplexData;
 
 public class CragSpiresPlacement extends PlacementModifier {
 
@@ -30,7 +36,8 @@ public class CragSpiresPlacement extends PlacementModifier {
 					Codec.DOUBLE.fieldOf("noise_value_offset").forGetter(CragSpiresPlacement::noiseValueOffset),
 					Codec.DOUBLE.fieldOf("spire_height_factor").forGetter(CragSpiresPlacement::spireHeightFactor),
 					ExtraCodecs.intRange(0, 16).fieldOf("spire_check_radius").forGetter(CragSpiresPlacement::spireCheckRadius),
-					Codec.BOOL.optionalFieldOf("ignore_biomes", false).forGetter(CragSpiresPlacement::ignoreBiomes)
+					Codec.BOOL.fieldOf("ignore_biomes").forGetter(CragSpiresPlacement::ignoreBiomes),
+					Codec.BOOL.fieldOf("use_biome_weights").forGetter(CragSpiresPlacement::useBiomeWeights)
 			).apply(instance, CragSpiresPlacement::new));
 
 	private final SimplexNoiseConfiguration spireNoise;
@@ -39,26 +46,32 @@ public class CragSpiresPlacement extends PlacementModifier {
 	private final double spireHeightFactor;
 	private final int spireCheckRadius;
 	private final boolean ignoreBiomes;
+	private final boolean useBiomeWeights;
 	
-	public CragSpiresPlacement(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes) {
+	public CragSpiresPlacement(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes, boolean useBiomeWeights) {
 		this.spireNoise = spireNoise;
 		this.noiseValueMultiplier = noiseValueMultiplier;
 		this.noiseValueOffset = noiseValueOffset;
 		this.spireHeightFactor = spireHeightFactor;
 		this.spireCheckRadius = spireCheckRadius;
 		this.ignoreBiomes = ignoreBiomes;
+		this.useBiomeWeights = useBiomeWeights;
 	}
 	
 	public static CragSpiresPlacement of(double spireNoiseScale, int spireNoiseOctaves, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius) {
-		return new CragSpiresPlacement(new SimplexNoiseConfiguration(spireNoiseScale, spireNoiseOctaves), noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, false);
+		return new CragSpiresPlacement(new SimplexNoiseConfiguration(spireNoiseScale, spireNoiseOctaves), noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, false, true);
 	}
 	
 	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius) {
-		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, false);
+		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, false, true);
 	}
-	
+
 	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes) {
-		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, ignoreBiomes);
+		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, ignoreBiomes, true);
+	}
+
+	public static CragSpiresPlacement of(SimplexNoiseConfiguration spireNoise, double noiseValueMultiplier, double noiseValueOffset, double spireHeightFactor, int spireCheckRadius, boolean ignoreBiomes, boolean useBiomeWeights) {
+		return new CragSpiresPlacement(spireNoise, noiseValueMultiplier, noiseValueOffset, spireHeightFactor, spireCheckRadius, ignoreBiomes, useBiomeWeights);
 	}
 	
 	public SimplexNoiseConfiguration spireNoise() {
@@ -84,6 +97,10 @@ public class CragSpiresPlacement extends PlacementModifier {
 	public boolean ignoreBiomes() {
 		return this.ignoreBiomes;
 	}
+
+	public boolean useBiomeWeights() {
+		return this.useBiomeWeights;
+	}
 	
 	@Override
 	public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
@@ -98,6 +115,8 @@ public class CragSpiresPlacement extends PlacementModifier {
 		double[] spireNoiseValues = EarlyGeneratorHelper.computeNoiseRawWithSize(spireNoiseData.noiseGenerator(), noiseMinX, noiseMinZ, this.spireNoise.noiseScale(), noiseSize);
 		
 		BiomeCheckContext biomeCheckContext = new BiomeCheckContext(context);
+
+		Optional<BiomeWeightsMap> biomeWeights = this.getBiomeWeights(context.generator(), pos);
 		
 		boolean[] validBlocks = new boolean[256];
 		
@@ -108,8 +127,16 @@ public class CragSpiresPlacement extends PlacementModifier {
 				final int noiseX = x + this.spireCheckRadius;
 				final int noiseZ = z + this.spireCheckRadius;
 				final int noiseIndex = noiseX * noiseSize + noiseZ;
+
+				final int posX = pos.getX() + x;
+				final int posZ = pos.getZ() + z;
+
+				final int chunkX = SectionPos.blockToSectionCoord(posX);
+				final int chunkZ = SectionPos.blockToSectionCoord(posZ);
 				
-				double noise = spireNoiseValues[noiseIndex] * this.noiseValueMultiplier + this.noiseValueOffset;
+				float weight = biomeWeights.isEmpty() ? 1.0F : biomeWeights.get().getWeightsFor(chunkX, chunkZ).get(posX & 15, posZ & 15);
+				
+				double noise = spireNoiseValues[noiseIndex] * weight * this.noiseValueMultiplier + this.noiseValueOffset;
 
 				// The height of the spire above the water level
 				final double spireHeight = -noise * this.spireHeightFactor;
@@ -121,8 +148,6 @@ public class CragSpiresPlacement extends PlacementModifier {
 
 				// If a spire would generate here but this is the wrong biome, continue
 				if(!ignoreBiomes) {
-					final int posX = pos.getX() + x;
-					final int posZ = pos.getZ() + z;
 					mutablePos.set(posX, context.getHeight(Types.OCEAN_FLOOR_WG, posX, posZ), posZ);
 					
 					if(!BLPlacementModifierHelper.checkBiomeAt(context, mutablePos, biomeCheckContext)) {
@@ -169,6 +194,29 @@ public class CragSpiresPlacement extends PlacementModifier {
 		return streamBuilder.build();
 	}
 
+	public Optional<BiomeWeightsMap> getBiomeWeights(ChunkGenerator generator, BlockPos pos) {
+		if(!this.useBiomeWeights || !(generator instanceof BetweenlandsChunkGenerator blGenerator)) {
+			return Optional.empty();
+		}
+
+		final ChunkPos baseChunkPos = new ChunkPos(pos);
+		
+		BiomeWeightsMap regionWeights = new BiomeWeightsMap(baseChunkPos, spireCheckRadius == 0 ? 0 : 1);
+		
+		for(int x = -this.spireCheckRadius; x < 16 + this.spireCheckRadius; ++x) {
+			for(int z = -this.spireCheckRadius; z < 16 + this.spireCheckRadius; ++z) {
+				int chunkX = SectionPos.blockToSectionCoord(pos.getX() + x);
+				int chunkZ = SectionPos.blockToSectionCoord(pos.getZ() + z);
+				
+				if(regionWeights.getWeightsFor(chunkX, chunkZ) == null) {
+					regionWeights.setWeightsFor(chunkX, chunkZ, blGenerator.calculateBiomeWeights(new ChunkPos(chunkX, chunkZ)));
+				}
+			}
+		}
+		
+		return Optional.of(regionWeights);
+	}
+	
 	@Override
 	public PlacementModifierType<?> type() {
 		return PlacementModifierRegistry.CRAG_SPIRES_PLACEMENT.get();

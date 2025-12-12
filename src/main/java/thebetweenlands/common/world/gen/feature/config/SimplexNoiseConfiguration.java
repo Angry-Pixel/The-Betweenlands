@@ -3,8 +3,8 @@ package thebetweenlands.common.world.gen.feature.config;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import thebetweenlands.common.world.gen.generators.util.SimplexCache;
-import thebetweenlands.common.world.gen.generators.util.SimplexData;
+import thebetweenlands.common.world.gen.util.SimplexCache;
+import thebetweenlands.common.world.gen.util.SimplexData;
 import thebetweenlands.util.ExtraCodecs;
 
 public class SimplexNoiseConfiguration {

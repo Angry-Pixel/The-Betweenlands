@@ -18,11 +18,11 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.SimplexTerrainGeneratorConfiguration;
-import thebetweenlands.common.world.gen.generators.util.BlockHeightSelectors.BlockHeightSelector;
 import thebetweenlands.common.world.gen.generators.util.ColumnVolumeResult;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
-import thebetweenlands.common.world.gen.generators.util.SimplexCache;
-import thebetweenlands.common.world.gen.generators.util.SimplexData;
+import thebetweenlands.common.world.gen.util.SimplexCache;
+import thebetweenlands.common.world.gen.util.SimplexData;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.BlockHeightSelector;
 
 public class SimplexTerrainGenerator extends EarlyGenerator<SimplexTerrainGeneratorConfiguration> {
 
