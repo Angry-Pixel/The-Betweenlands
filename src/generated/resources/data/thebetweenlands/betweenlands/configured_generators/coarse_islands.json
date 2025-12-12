@@ -14,6 +14,11 @@
         "noise_value_multiplier": 1.1111111111111112,
         "noise_value_offset": 2.1
       }
-    }
+    },
+    "seafloor": {
+      "type": "thebetweenlands:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    "sealevel": 120
   }
 }

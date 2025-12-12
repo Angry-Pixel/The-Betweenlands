@@ -47,20 +47,21 @@ public class EarlyGeneratorRegistry {
 	}
 	
 	public static void bootstrapConfigured(BootstrapContext<ConfiguredEarlyGenerator<?, ?>> context) {
-		context.register(Configured.FLAT_LAND_SWAMPLANDS, new ConfiguredEarlyGenerator<>(FLAT_LAND.get(), new FlatLandGeneratorConfiguration(120, 8)));
-		context.register(Configured.FLAT_LAND_SLUDGE_PLAINS, new ConfiguredEarlyGenerator<>(FLAT_LAND.get(), new FlatLandGeneratorConfiguration(120, 5)));
+		context.register(Configured.FLAT_LAND_SWAMPLANDS, new ConfiguredEarlyGenerator<>(FLAT_LAND.get(), new FlatLandGeneratorConfiguration(TheBetweenlands.LAYER_HEIGHT, 8)));
+		context.register(Configured.FLAT_LAND_SLUDGE_PLAINS, new ConfiguredEarlyGenerator<>(FLAT_LAND.get(), new FlatLandGeneratorConfiguration(TheBetweenlands.LAYER_HEIGHT, 5)));
 
-		context.register(Configured.MARSH_ISLANDS, new ConfiguredEarlyGenerator<>(MARSH_ISLANDS.get(), new MarshIslandsGeneratorConfiguration(120, 0.16D, 10.5D)));
-		context.register(Configured.ERODED_MARSH_ISLANDS, new ConfiguredEarlyGenerator<>(MARSH_ISLANDS.get(), new MarshIslandsGeneratorConfiguration(120, 0.5D, 100.5D)));
+		context.register(Configured.MARSH_ISLANDS, new ConfiguredEarlyGenerator<>(MARSH_ISLANDS.get(), new MarshIslandsGeneratorConfiguration(TheBetweenlands.LAYER_HEIGHT, 0.16D, 10.5D)));
+		context.register(Configured.ERODED_MARSH_ISLANDS, new ConfiguredEarlyGenerator<>(MARSH_ISLANDS.get(), new MarshIslandsGeneratorConfiguration(TheBetweenlands.LAYER_HEIGHT, 0.5D, 100.5D)));
 
-		context.register(Configured.DEEP_WATERS_SIMPLEX_TERRAIN, new ConfiguredEarlyGenerator<>(SIMPLEX_TERRAIN.get(), new SimplexTerrainGeneratorConfiguration(new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG), new ConstantHeightSelector(120), 0.05D, true, false)));
+		context.register(Configured.DEEP_WATERS_SIMPLEX_TERRAIN, new ConfiguredEarlyGenerator<>(SIMPLEX_TERRAIN.get(), new SimplexTerrainGeneratorConfiguration(new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG), new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT), 0.05D, true, false)));
 
 		context.register(Configured.COARSE_ISLANDS, new ConfiguredEarlyGenerator<>(COARSE_ISLANDS.get(),
 				new CoarseIslandsGeneratorConfiguration(
 						BiSimplexNoiseConfiguration.of(
 								3, 0.4D, 1.0D / 0.9D, 2.1D,
 								5, 0.55D, 1.0D / 2.1D, 2.0D
-							)
+							),
+						new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT), new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG)
 					)));
 	}
 }

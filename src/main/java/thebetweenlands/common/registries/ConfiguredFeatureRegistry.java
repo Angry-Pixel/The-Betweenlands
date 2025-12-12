@@ -324,7 +324,7 @@ public class ConfiguredFeatureRegistry {
 				new CragrockSpiresFeatureConfiguration(
 						SimplexNoiseConfiguration.of(4, 0.16D, 1.0D / 1.5D, 2.4),
 						12, 3,
-						new ConstantHeightSelector(120),
+						new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT),
 						new OffsetHeightSelector(-5, new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG)),
 						true,
 						BlockRegistry.CRAGROCK.get().defaultBlockState(),
