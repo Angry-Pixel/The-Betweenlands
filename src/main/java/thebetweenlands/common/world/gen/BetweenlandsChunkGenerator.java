@@ -353,7 +353,6 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	
 	@SuppressWarnings("unchecked")
 	public BiomeWeights calculateBiomeWeights(ChunkPos pos) {
-		final long startTime = System.nanoTime();
 		// Number of noise cells along either the X or Z axis in a chunk
 		final int cellCountAcross = 16 / this.cellWidth;
 
@@ -366,7 +365,6 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 
 		final int nearestBiomeCheckRadius = 5;
 
-		final long startTimeCache = System.nanoTime();
 		// ======== Cache biomes for quick access ========
 		// Calculate all the biomes now, because otherwise we'd call biomeSource.getNoiseBiome(...) up to 122 times on every single noise cell
 		final int biomeMapCellsAcross = cellCountAcross + 2 * nearestBiomeCheckRadius + 1;
@@ -386,7 +384,6 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			}
 		}
 		// ===============================================
-		final long endTimeCache = System.nanoTime();
 		
 		// ======== Collect values for later interpolation ========
 		final int totalCellCount = (cellCountAcross + 1) * (cellCountAcross + 1);
@@ -395,7 +392,6 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		final float[] terrainBiomeWeights = new float[totalCellCount];
 		final Holder<?>[] noiseBiomes = new Holder[totalCellCount];
 
-		final long startTimeCollect = System.nanoTime();
 		// Calculate the distance to the nearest biome for each noise cell (including the cells at the start of the next chunk)
 		for (int x = 0; x <= cellCountAcross; ++x) {
 			for (int z = 0; z <= cellCountAcross; ++z) {
@@ -431,13 +427,11 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			}
 		}
 		// ========================================================
-		final long endTimeCollect = System.nanoTime();
 		
 		// ======== Interpolate biome weights ========
 		float[] interpolatedBiomeWeights = new float[256];
 		final Holder<?>[] interpolatedBiomes = new Holder[256];
 
-		final long startTimeInterpolation = System.nanoTime();
 		// Note: not sure why we start iterating in z -> x order instead of x -> z order
 		for(int z = 0; z < 16; ++z) {
 			for(int x = 0; x < 16; ++x) {
@@ -468,20 +462,6 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			}
 		}
 		// ===========================================
-		final long endTimeInterpolation = System.nanoTime();
-
-		final long endTime = System.nanoTime();
-		
-		TheBetweenlands.LOGGER.info("Biome weights calculation results: total = [{} nanos ({} milliseconds)], cache = [{} nanos ({} milliseconds)], collection = [{} nanos ({} milliseconds)], interpolation = [{} nanos ({} milliseconds)]",
-				endTime - startTime,
-				TimeUnit.MILLISECONDS.convert(endTime - startTime, TimeUnit.NANOSECONDS),
-				endTimeCache - startTimeCache,
-				TimeUnit.MILLISECONDS.convert(endTimeCache - startTimeCache, TimeUnit.NANOSECONDS),
-				endTimeCollect - startTimeCollect,
-				TimeUnit.MILLISECONDS.convert(endTimeCollect - startTimeCollect, TimeUnit.NANOSECONDS),
-				endTimeInterpolation - startTimeInterpolation,
-				TimeUnit.MILLISECONDS.convert(endTimeInterpolation - startTimeInterpolation, TimeUnit.NANOSECONDS)
-			);
 		
 		return new BiomeWeights(interpolatedBiomeWeights, (Holder<Biome>[])interpolatedBiomes);
 	}
