@@ -22,9 +22,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
+/**
+ * Groups biomes together so they can get special treatment by certain worldgen behaviours
+ */
 public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 	public static final BiomeWeightGroups EMPTY = new BiomeWeightGroups(List.of());
 
+	// ============ Codecs ============
+	
 	public static final MapCodec<BiomeWeightGroups> MAP_CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
 					Biome.LIST_CODEC.listOf().fieldOf("biome_groups").forGetter(BiomeWeightGroups::biomeGroups)
@@ -32,6 +37,23 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 		);
 
 	public static final Codec<BiomeWeightGroups> CODEC = Biome.LIST_CODEC.listOf().xmap(BiomeWeightGroups::new, BiomeWeightGroups::biomeGroups);
+
+	// ================================
+	
+	
+	
+	// ============ Constructor ============
+	
+	public BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
+		// Keep things immutable
+		this.biomeGroups = List.copyOf(biomeGroups);
+	}
+
+	// =====================================
+
+	
+	
+	// ============ Builder ============
 	
 	public static Builder builder(HolderGetter<Biome> biomeRegistry) {
 		return new Builder(biomeRegistry);
@@ -329,4 +351,6 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return new BiomeWeightGroups(biomeGroupSet);
 		}
 	}
+
+	// =================================
 }

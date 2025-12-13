@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.RandomAccess;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import thebetweenlands.api.world.BiomeWeightGroups;
 import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.api.world.ExtraChunkInfo;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
@@ -61,13 +63,11 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 		BiomeSource.CODEC.fieldOf("biome_source").forGetter((object) -> object.biomeSource),
 		NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter((object) -> object.settings),
-		BetweenlandsChunkGeneratorSettings.CODEC.fieldOf("bl_settings").forGetter((object) -> object.blSettings),
-		ConfiguredEarlyGenerator.LIST_OF_LISTS_CODEC.optionalFieldOf("global_generators", List.of()).forGetter((object) -> object.globalGenerators)
+		BetweenlandsChunkGeneratorSettings.CODEC.fieldOf("bl_settings").forGetter((object) -> object.blSettings)
 	).apply(instance, instance.stable(BetweenlandsChunkGenerator::new)));
 
 	protected final Holder<NoiseGeneratorSettings> settings;
 	protected final BetweenlandsChunkGeneratorSettings blSettings;
-	protected final List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators;
 	private final BlockState defaultBlock;
 	private final BlockState defaultFluid;
 	protected final Climate.Sampler sampler;
@@ -76,30 +76,15 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	private final int cellHeight;
 
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
-		this(biomeSource, settings, new BetweenlandsChunkGeneratorSettings(), List.of());
+		this(biomeSource, settings, BetweenlandsChunkGeneratorSettings.DEFAULT);
 	}
 	
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BetweenlandsChunkGeneratorSettings blSettings) {
-		this(biomeSource, settings, blSettings, List.of());
-	}
-
-	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BetweenlandsChunkGeneratorSettings blSettings, List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators) {
 		super(biomeSource, settings);
-
-		// net.minecraft.server.level.ChunkMap gets NoiseGeneratorSettings from this class, and passes it to RandomState.create(...)
-		// RandomState's constructor does settings.getRandomSource().newInstance(levelSeed).forkPositional();
-		// with legacy_random_source set in the noise generator settings, this should be a LegacyPositionalRandomFactory
-		
-		// Info on the blended noise from 1.12.2:
-		// lower noise receives a random with the world seed
-		// upper noise receives a random with the world seed advanced 16 * 262 = 4192 values
-		// blend noise receives a random with the world seed advanced 16 * 262 * 2 = 8384 values
 		
 		this.settings = settings;
 		this.blSettings = blSettings;
-		this.globalGenerators = globalGenerators;
 		if (settings.isBound()) {
-//			NoiseGeneratorSettings settingsValue = settings.value();
 			NoiseSettings noise = settings.value().noiseSettings();
 			this.defaultBlock = settings.value().defaultBlock();
 			this.defaultFluid = settings.value().defaultFluid();
@@ -213,7 +198,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		List<EarlyGeneratorWithBiome> baseGenerators = new ArrayList<>();
 		
 		// Add all global generators
-		this.globalGenerators.stream()
+		this.blSettings.globalGenerators().stream()
 			.flatMap(HolderSet::stream)
 			.map(Holder::value)
 			.map((generator) -> new EarlyGeneratorWithBiome(Optional.empty(), generator))
@@ -340,6 +325,30 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return context.withExtraChunkInfo(extraInfo);
 	}
 	
+	public boolean doBiomesShareBiomeWeightGroup(Holder<Biome> firstBiome, Holder<Biome> secondBiome) {
+		// TODO A single pre-computed map (biome -> set of biomes it's grouped with) could be faster. Benchmark before implementing
+		BiomeWeightGroups biomeWeightGroups = this.blSettings.biomeWeightGroups();
+		List<HolderSet<Biome>> allBiomeGroups = biomeWeightGroups.biomeGroups();
+		
+		if(allBiomeGroups instanceof RandomAccess) {
+			final int size = allBiomeGroups.size();
+			for(int i = 0; i < size; ++i) {
+				final HolderSet<Biome> biomeGroup = allBiomeGroups.get(i);
+				if(biomeGroup.contains(firstBiome) && biomeGroup.contains(secondBiome)) {
+					return true;
+				}
+			}
+		} else {
+			for(final HolderSet<Biome> biomeGroup : allBiomeGroups) {
+				if(biomeGroup.contains(firstBiome) && biomeGroup.contains(secondBiome)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public BiomeWeights calculateBiomeWeights(ChunkPos pos) {
 		final int cellCountX = 16 / this.cellWidth;
@@ -370,7 +379,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 					for (int offsetZ = -5; offsetZ <= 5; ++offsetZ) {
 						Holder<Biome> nearbyBiome = this.biomeSource.getNoiseBiome(noiseCellX + x + offsetX, sealevel, noiseCellZ + z + offsetZ, sampler);
 						
-						if(nearbyBiome != currentBiome) {
+						if(nearbyBiome != currentBiome && !this.doBiomesShareBiomeWeightGroup(currentBiome, nearbyBiome)) {
 							final int distSq = offsetX * offsetX + offsetZ * offsetZ;
 							if(distSq < nearestOtherBiomeSq) {
 								nearestOtherBiomeSq = distSq;
