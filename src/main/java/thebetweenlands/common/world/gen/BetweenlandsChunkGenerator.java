@@ -8,6 +8,7 @@ import java.util.OptionalInt;
 import java.util.RandomAccess;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -51,6 +52,7 @@ import thebetweenlands.api.world.generator.EarlyGenerationContext.BlockGenerator
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGeneratorConfiguration;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.warp.BLLegacyBlendedNoise;
 import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
@@ -351,33 +353,67 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	
 	@SuppressWarnings("unchecked")
 	public BiomeWeights calculateBiomeWeights(ChunkPos pos) {
-		final int cellCountX = 16 / this.cellWidth;
-		final int cellCountZ = 16 / this.cellWidth;
+		final long startTime = System.nanoTime();
+		// Number of noise cells along either the X or Z axis in a chunk
+		final int cellCountAcross = 16 / this.cellWidth;
 
+		// X and Z position of this chunk in the noise plane
 		final int noiseCellX = Math.floorDiv(pos.getMinBlockX(), this.cellWidth);
 		final int noiseCellZ = Math.floorDiv(pos.getMinBlockZ(), this.cellWidth);
 		
 		final int sealevel = this.getSeaLevel();
 		final Climate.Sampler sampler = this.sampler;
+
+		final int nearestBiomeCheckRadius = 5;
+
+		final long startTimeCache = System.nanoTime();
+		// ======== Cache biomes for quick access ========
+		// Calculate all the biomes now, because otherwise we'd call biomeSource.getNoiseBiome(...) up to 122 times on every single noise cell
+		final int biomeMapCellsAcross = cellCountAcross + 2 * nearestBiomeCheckRadius + 1;
 		
-		final int totalCellCount = (cellCountX + 1) * (cellCountZ + 1);
+		final int biomeMapSize = biomeMapCellsAcross * biomeMapCellsAcross;
 		
-		final float[] terrainBiomeWeights = new float[totalCellCount];
-		final Holder<?>[] noiseBiomes = new Holder[totalCellCount];
+		final Holder<Biome>[] biomeMap = new Holder[biomeMapSize];
 		
-		// Calculate the distance to the nearest biome for each noise cell (including the cells at the start of the next chunk)
-		for (int x = 0; x <= cellCountX; ++x) {
-			for (int z = 0; z <= cellCountZ; ++z) {
+		for(int x = -nearestBiomeCheckRadius; x <= cellCountAcross + nearestBiomeCheckRadius; ++x) {
+			for(int z = -nearestBiomeCheckRadius; z <= cellCountAcross + nearestBiomeCheckRadius; ++z) {
+				final int biomeMapX = x + nearestBiomeCheckRadius;
+				final int biomeMapZ = z + nearestBiomeCheckRadius;
 				
 				final Holder<Biome> currentBiome = this.biomeSource.getNoiseBiome(noiseCellX + x, sealevel, noiseCellZ + z, sampler);
+				
+				biomeMap[biomeMapX * biomeMapCellsAcross + biomeMapZ] = currentBiome;
+			}
+		}
+		// ===============================================
+		final long endTimeCache = System.nanoTime();
+		
+		// ======== Collect values for later interpolation ========
+		final int totalCellCount = (cellCountAcross + 1) * (cellCountAcross + 1);
+
+		// Values for interpolation
+		final float[] terrainBiomeWeights = new float[totalCellCount];
+		final Holder<?>[] noiseBiomes = new Holder[totalCellCount];
+
+		final long startTimeCollect = System.nanoTime();
+		// Calculate the distance to the nearest biome for each noise cell (including the cells at the start of the next chunk)
+		for (int x = 0; x <= cellCountAcross; ++x) {
+			for (int z = 0; z <= cellCountAcross; ++z) {
+				final int biomeMapX = x + nearestBiomeCheckRadius;
+				final int biomeMapZ = z + nearestBiomeCheckRadius;
+				
+				final Holder<Biome> currentBiome = biomeMap[biomeMapX * biomeMapCellsAcross + biomeMapZ];
 				
 				int nearestOtherBiomeSq = 50;
 				
 				// TODO could probably iterate over this faster somehow
 				// Calculates the biome terrain weight from an 11x11 area
-				for (int offsetX = -5; offsetX <= 5; ++offsetX) {
-					for (int offsetZ = -5; offsetZ <= 5; ++offsetZ) {
-						Holder<Biome> nearbyBiome = this.biomeSource.getNoiseBiome(noiseCellX + x + offsetX, sealevel, noiseCellZ + z + offsetZ, sampler);
+				for (int offsetX = -nearestBiomeCheckRadius; offsetX <= nearestBiomeCheckRadius; ++offsetX) {
+					for (int offsetZ = -nearestBiomeCheckRadius; offsetZ <= nearestBiomeCheckRadius; ++offsetZ) {
+						final int nearbyBiomeMapX = biomeMapX + offsetX;
+						final int nearbyBiomeMapZ = biomeMapZ + offsetZ;
+						
+						Holder<Biome> nearbyBiome = biomeMap[nearbyBiomeMapX * biomeMapCellsAcross + nearbyBiomeMapZ];
 						
 						if(nearbyBiome != currentBiome && !this.doBiomesShareBiomeWeightGroup(currentBiome, nearbyBiome)) {
 							final int distSq = offsetX * offsetX + offsetZ * offsetZ;
@@ -389,16 +425,19 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				}
 				
 				// Store the weight & biome
-				final int index = x * (cellCountX + 1) + z;
+				final int index = x * (cellCountAcross + 1) + z;
 				terrainBiomeWeights[index] = Mth.clamp((float)(nearestOtherBiomeSq - 2) / 46.0F, 0.0F, 1.0F);
 				noiseBiomes[index] = currentBiome;
 			}
 		}
+		// ========================================================
+		final long endTimeCollect = System.nanoTime();
 		
-		// Interpolate biome weights
+		// ======== Interpolate biome weights ========
 		float[] interpolatedBiomeWeights = new float[256];
 		final Holder<?>[] interpolatedBiomes = new Holder[256];
-		
+
+		final long startTimeInterpolation = System.nanoTime();
 		// Note: not sure why we start iterating in z -> x order instead of x -> z order
 		for(int z = 0; z < 16; ++z) {
 			for(int x = 0; x < 16; ++x) {
@@ -411,10 +450,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				float xFraction = (float)xMod / (float)this.cellWidth;
 				float zFraction = (float)zMod / (float)this.cellWidth;
 
-				float weightXCZC = terrainBiomeWeights[cellX       + cellZ       * (cellCountZ + 1)];
-				float weightXNZC = terrainBiomeWeights[(cellX + 1) + cellZ       * (cellCountZ + 1)];
-				float weightXCZN = terrainBiomeWeights[cellX       + (cellZ + 1) * (cellCountZ + 1)];
-				float weightXNZN = terrainBiomeWeights[(cellX + 1) + (cellZ + 1) * (cellCountZ + 1)];
+				float weightXCZC = terrainBiomeWeights[cellX       + cellZ       * (cellCountAcross + 1)];
+				float weightXNZC = terrainBiomeWeights[(cellX + 1) + cellZ       * (cellCountAcross + 1)];
+				float weightXCZN = terrainBiomeWeights[cellX       + (cellZ + 1) * (cellCountAcross + 1)];
+				float weightXNZN = terrainBiomeWeights[(cellX + 1) + (cellZ + 1) * (cellCountAcross + 1)];
 
 				float interpZAxisXC = weightXCZC + (weightXCZN - weightXCZC) * zFraction;
 				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * zFraction;
@@ -425,9 +464,24 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				// There's probably a really smart algorithm that you could use here
 				int biomeCellX = cellX + Math.round(xFraction);
 				int biomeCellZ = cellZ + Math.round(xFraction);
-				interpolatedBiomes[index] = noiseBiomes[biomeCellX + biomeCellZ * (cellCountZ + 1)];
+				interpolatedBiomes[index] = noiseBiomes[biomeCellX + biomeCellZ * (cellCountAcross + 1)];
 			}
 		}
+		// ===========================================
+		final long endTimeInterpolation = System.nanoTime();
+
+		final long endTime = System.nanoTime();
+		
+		TheBetweenlands.LOGGER.info("Biome weights calculation results: total = [{} nanos ({} milliseconds)], cache = [{} nanos ({} milliseconds)], collection = [{} nanos ({} milliseconds)], interpolation = [{} nanos ({} milliseconds)]",
+				endTime - startTime,
+				TimeUnit.MILLISECONDS.convert(endTime - startTime, TimeUnit.NANOSECONDS),
+				endTimeCache - startTimeCache,
+				TimeUnit.MILLISECONDS.convert(endTimeCache - startTimeCache, TimeUnit.NANOSECONDS),
+				endTimeCollect - startTimeCollect,
+				TimeUnit.MILLISECONDS.convert(endTimeCollect - startTimeCollect, TimeUnit.NANOSECONDS),
+				endTimeInterpolation - startTimeInterpolation,
+				TimeUnit.MILLISECONDS.convert(endTimeInterpolation - startTimeInterpolation, TimeUnit.NANOSECONDS)
+			);
 		
 		return new BiomeWeights(interpolatedBiomeWeights, (Holder<Biome>[])interpolatedBiomes);
 	}
