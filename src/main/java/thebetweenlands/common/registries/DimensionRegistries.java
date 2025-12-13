@@ -14,11 +14,13 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.world.BiomeWeightGroups;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
+import thebetweenlands.common.world.gen.BetweenlandsChunkGeneratorSettings;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -97,8 +99,20 @@ public class DimensionRegistries {
 			4,
 			biome);
 
+
+		BetweenlandsChunkGeneratorSettings blSettings = new BetweenlandsChunkGeneratorSettings(
+				BiomeWeightGroups.builder(biome)
+//					.addBiomeGroup(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH) // Debug to check this actually works
+					.build(),
+				List.of()
+			);
+
 		context.register(LEVEL_STEM_KEY, new LevelStem(
 			dimTypes.getOrThrow(DIMENSION_TYPE_KEY),
-			new BetweenlandsChunkGenerator(biomeSource, noiseGenSettings.getOrThrow(NOISE_SETTINGS_KEY))));
+			new BetweenlandsChunkGenerator(
+					biomeSource,
+					noiseGenSettings.getOrThrow(NOISE_SETTINGS_KEY),
+					blSettings
+				)));
 	}
 }

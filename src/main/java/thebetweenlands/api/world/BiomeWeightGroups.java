@@ -122,20 +122,20 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 
 		// ======== Adding a new unnamed biome groups ========
 
-		public BiomeGroup addBiomeGroup(ResourceKey<Biome> biome) {
+		public BiomeGroup createBiomeGroup(ResourceKey<Biome> biome) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome));
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
+		public BiomeGroup createBiomeGroup(ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome1));
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome2));
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
+		public BiomeGroup createBiomeGroup(ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome1));
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome2));
@@ -143,7 +143,7 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(ResourceKey<?> ...biomes) {
+		public BiomeGroup createBiomeGroup(ResourceKey<?> ...biomes) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			for(ResourceKey<?> key : biomes) {
 				if(key.isFor(Registries.BIOME)) {
@@ -155,20 +155,20 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 		
-		public BiomeGroup addBiomeGroup(Holder<Biome> biome) {
+		public BiomeGroup createBiomeGroup(Holder<Biome> biome) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			biomeGroup.addBiome(biome);
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(Holder<Biome> biome1, Holder<Biome> biome2) {
+		public BiomeGroup createBiomeGroup(Holder<Biome> biome1, Holder<Biome> biome2) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			biomeGroup.addBiome(biome1);
 			biomeGroup.addBiome(biome2);
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
+		public BiomeGroup createBiomeGroup(Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			biomeGroup.addBiome(biome1);
 			biomeGroup.addBiome(biome2);
@@ -176,7 +176,7 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(Holder<?> ...biomes) {
+		public BiomeGroup createBiomeGroup(Holder<?> ...biomes) {
 			BiomeGroup biomeGroup = this.createUnnamedBiomeGroup();
 			for(Holder<?> holder : biomes) {
 				if(holder.getKey().isFor(Registries.BIOME)) {
@@ -186,24 +186,66 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 				}
 			}
 			return biomeGroup;
+		}
+		
+		// -------- Currying Functions --------
+		
+		public Builder addBiomeGroup(ResourceKey<Biome> biome) {
+			this.createBiomeGroup(biome);
+			return this;
+		}
+
+		public Builder addBiomeGroup(ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
+			this.createBiomeGroup(biome1, biome2);
+			return this;
+		}
+
+		public Builder addBiomeGroup(ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
+			this.createBiomeGroup(biome1, biome2, biome3);
+			return this;
+		}
+
+		public Builder addBiomeGroup(ResourceKey<?> ...biomes) {
+			this.createBiomeGroup(biomes);
+			return this;
+		}
+		
+		public Builder addBiomeGroup(Holder<Biome> biome) {
+			this.createBiomeGroup(biome);
+			return this;
+		}
+
+		public Builder addBiomeGroup(Holder<Biome> biome1, Holder<Biome> biome2) {
+			this.createBiomeGroup(biome1, biome2);
+			return this;
+		}
+
+		public Builder addBiomeGroup(Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
+			this.createBiomeGroup(biome1, biome2, biome3);
+			return this;
+		}
+
+		public Builder addBiomeGroup(Holder<?> ...biomes) {
+			this.createBiomeGroup(biomes);
+			return this;
 		}
 
 		// ======== Adding (to) an unnamed biome group by its index ========
 
-		public BiomeGroup addBiomeGroup(int index, ResourceKey<Biome> biome) {
+		public BiomeGroup createBiomeGroup(int index, ResourceKey<Biome> biome) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome));
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(int index, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
+		public BiomeGroup createBiomeGroup(int index, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome1));
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome2));
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(int index, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
+		public BiomeGroup createBiomeGroup(int index, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome1));
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome2));
@@ -211,7 +253,7 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(int index, ResourceKey<?> ...biomes) {
+		public BiomeGroup createBiomeGroup(int index, ResourceKey<?> ...biomes) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			for(ResourceKey<?> key : biomes) {
 				if(key.isFor(Registries.BIOME)) {
@@ -223,20 +265,20 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 		
-		public BiomeGroup addBiomeGroup(int index, Holder<Biome> biome) {
+		public BiomeGroup createBiomeGroup(int index, Holder<Biome> biome) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			biomeGroup.addBiome(biome);
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(int index, Holder<Biome> biome1, Holder<Biome> biome2) {
+		public BiomeGroup createBiomeGroup(int index, Holder<Biome> biome1, Holder<Biome> biome2) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			biomeGroup.addBiome(biome1);
 			biomeGroup.addBiome(biome2);
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(int index, Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
+		public BiomeGroup createBiomeGroup(int index, Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			biomeGroup.addBiome(biome1);
 			biomeGroup.addBiome(biome2);
@@ -244,7 +286,7 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(int index, Holder<?> ...biomes) {
+		public BiomeGroup createBiomeGroup(int index, Holder<?> ...biomes) {
 			BiomeGroup biomeGroup = this.getOrCreateUnnamedBiomeGroup(index);
 			for(Holder<?> holder : biomes) {
 				if(holder.getKey().isFor(Registries.BIOME)) {
@@ -254,24 +296,66 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 				}
 			}
 			return biomeGroup;
+		}
+
+		// -------- Currying Functions --------
+		
+		public Builder addBiomeGroup(int index, ResourceKey<Biome> biome) {
+			this.createBiomeGroup(index, biome);
+			return this;
+		}
+
+		public Builder addBiomeGroup(int index, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
+			this.createBiomeGroup(index, biome1, biome2);
+			return this;
+		}
+
+		public Builder addBiomeGroup(int index, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
+			this.createBiomeGroup(index, biome1, biome2, biome3);
+			return this;
+		}
+
+		public Builder addBiomeGroup(int index, ResourceKey<?> ...biomes) {
+			this.createBiomeGroup(index, biomes);
+			return this;
+		}
+		
+		public Builder addBiomeGroup(int index, Holder<Biome> biome) {
+			this.createBiomeGroup(index, biome);
+			return this;
+		}
+
+		public Builder addBiomeGroup(int index, Holder<Biome> biome1, Holder<Biome> biome2) {
+			this.createBiomeGroup(index, biome1, biome2);
+			return this;
+		}
+
+		public Builder addBiomeGroup(int index, Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
+			this.createBiomeGroup(index, biome1, biome2, biome3);
+			return this;
+		}
+
+		public Builder addBiomeGroup(int index, Holder<?> ...biomes) {
+			this.createBiomeGroup(index, biomes);
+			return this;
 		}
 
 		// ======== Adding (to) a named biome group by its name ========
 
-		public BiomeGroup addBiomeGroup(String name, ResourceKey<Biome> biome) {
+		public BiomeGroup createBiomeGroup(String name, ResourceKey<Biome> biome) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome));
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(String name, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
+		public BiomeGroup createBiomeGroup(String name, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome1));
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome2));
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(String name, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
+		public BiomeGroup createBiomeGroup(String name, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome1));
 			biomeGroup.addBiome(this.biomeRegistry.getOrThrow(biome2));
@@ -279,7 +363,7 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(String name, ResourceKey<?> ...biomes) {
+		public BiomeGroup createBiomeGroup(String name, ResourceKey<?> ...biomes) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			for(ResourceKey<?> key : biomes) {
 				if(key.isFor(Registries.BIOME)) {
@@ -291,20 +375,20 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 		
-		public BiomeGroup addBiomeGroup(String name, Holder<Biome> biome) {
+		public BiomeGroup createBiomeGroup(String name, Holder<Biome> biome) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			biomeGroup.addBiome(biome);
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(String name, Holder<Biome> biome1, Holder<Biome> biome2) {
+		public BiomeGroup createBiomeGroup(String name, Holder<Biome> biome1, Holder<Biome> biome2) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			biomeGroup.addBiome(biome1);
 			biomeGroup.addBiome(biome2);
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(String name, Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
+		public BiomeGroup createBiomeGroup(String name, Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			biomeGroup.addBiome(biome1);
 			biomeGroup.addBiome(biome2);
@@ -312,7 +396,7 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 			return biomeGroup;
 		}
 
-		public BiomeGroup addBiomeGroup(String name, Holder<?> ...biomes) {
+		public BiomeGroup createBiomeGroup(String name, Holder<?> ...biomes) {
 			BiomeGroup biomeGroup = this.getOrCreateNamedBiomeGroup(name);
 			for(Holder<?> holder : biomes) {
 				if(holder.getKey().isFor(Registries.BIOME)) {
@@ -322,6 +406,48 @@ public record BiomeWeightGroups(List<HolderSet<Biome>> biomeGroups) {
 				}
 			}
 			return biomeGroup;
+		}
+
+		// -------- Currying Functions --------
+		
+		public Builder addBiomeGroup(String name, ResourceKey<Biome> biome) {
+			this.createBiomeGroup(name, biome);
+			return this;
+		}
+
+		public Builder addBiomeGroup(String name, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2) {
+			this.createBiomeGroup(name, biome1, biome2);
+			return this;
+		}
+
+		public Builder addBiomeGroup(String name, ResourceKey<Biome> biome1, ResourceKey<Biome> biome2, ResourceKey<Biome> biome3) {
+			this.createBiomeGroup(name, biome1, biome2, biome3);
+			return this;
+		}
+
+		public Builder addBiomeGroup(String name, ResourceKey<?> ...biomes) {
+			this.createBiomeGroup(name, biomes);
+			return this;
+		}
+		
+		public Builder addBiomeGroup(String name, Holder<Biome> biome) {
+			this.createBiomeGroup(name, biome);
+			return this;
+		}
+
+		public Builder addBiomeGroup(String name, Holder<Biome> biome1, Holder<Biome> biome2) {
+			this.createBiomeGroup(name, biome1, biome2);
+			return this;
+		}
+
+		public Builder addBiomeGroup(String name, Holder<Biome> biome1, Holder<Biome> biome2, Holder<Biome> biome3) {
+			this.createBiomeGroup(name, biome1, biome2, biome3);
+			return this;
+		}
+
+		public Builder addBiomeGroup(String name, Holder<?> ...biomes) {
+			this.createBiomeGroup(name, biomes);
+			return this;
 		}
 		
 		// ============ Build the BiomeWeightGroups from this ============
