@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.warp;
 
+@FunctionalInterface
 public interface NoiseModifier {
     NoiseModifier PASS = ((density, height, zWidth, xWidth) -> density);
 
