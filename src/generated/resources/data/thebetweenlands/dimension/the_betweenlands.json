@@ -110,6 +110,10 @@
       ],
       "surface_depth": 0.46875
     },
+    "bl_settings": {
+      "biome_weight_groups": [],
+      "global_generators": []
+    },
     "settings": "thebetweenlands:the_betweenlands"
   }
 }
