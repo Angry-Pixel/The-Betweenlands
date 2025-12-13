@@ -61,10 +61,12 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	public static final MapCodec<BetweenlandsChunkGenerator> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 		BiomeSource.CODEC.fieldOf("biome_source").forGetter((object) -> object.biomeSource),
 		NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter((object) -> object.settings),
+		BetweenlandsChunkGeneratorSettings.CODEC.fieldOf("bl_settings").forGetter((object) -> object.blSettings),
 		ConfiguredEarlyGenerator.LIST_OF_LISTS_CODEC.optionalFieldOf("global_generators", List.of()).forGetter((object) -> object.globalGenerators)
 	).apply(instance, instance.stable(BetweenlandsChunkGenerator::new)));
 
 	protected final Holder<NoiseGeneratorSettings> settings;
+	protected final BetweenlandsChunkGeneratorSettings blSettings;
 	protected final List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators;
 	private final BlockState defaultBlock;
 	private final BlockState defaultFluid;
@@ -73,13 +75,15 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	private final int cellWidth;
 	private final int cellHeight;
 
-	// TODO extra settings
-	
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
-		this(biomeSource, settings, List.of());
+		this(biomeSource, settings, new BetweenlandsChunkGeneratorSettings(), List.of());
+	}
+	
+	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BetweenlandsChunkGeneratorSettings blSettings) {
+		this(biomeSource, settings, blSettings, List.of());
 	}
 
-	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators) {
+	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BetweenlandsChunkGeneratorSettings blSettings, List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators) {
 		super(biomeSource, settings);
 
 		// net.minecraft.server.level.ChunkMap gets NoiseGeneratorSettings from this class, and passes it to RandomState.create(...)
@@ -92,6 +96,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		// blend noise receives a random with the world seed advanced 16 * 262 * 2 = 8384 values
 		
 		this.settings = settings;
+		this.blSettings = blSettings;
 		this.globalGenerators = globalGenerators;
 		if (settings.isBound()) {
 //			NoiseGeneratorSettings settingsValue = settings.value();
