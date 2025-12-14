@@ -2,9 +2,13 @@ package thebetweenlands.common.entity;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.phys.AABB;
 
@@ -30,7 +34,7 @@ public interface ProximitySpawner extends BLEntity {
 	 * @return true to allow player to sneak past. false to deny it.
 	 */
 	boolean canSneakPast();
-
+	
 	/**
 	 * Test if entity needs line of sight to activate
 	 *
@@ -38,26 +42,48 @@ public interface ProximitySpawner extends BLEntity {
 	 */
 	boolean checkSight();
 
+
 	/**
-	 * Test if spawner is just a single use
+	 * Test if spawner is just a single use 
 	 *
 	 * @return true to set dead after spawn. false to deny it.
 	 */
 	boolean isSingleUse();
+	
+	/**
+	 * Action to happen just before entity spawns
+	 *
+	 * Can be used for setting Spawned Entities' position or attributes etc
+	 * By default sets the spawned entity to the same pos as the proximity spawner was.
+	 * Override to change.
+	 */
+
+	default void performPreSpawnaction(@Nullable Entity spawner, @Nullable Entity entitySpawned) {
+		if(spawner != null && entitySpawned != null)
+			entitySpawned.setPos(spawner.blockPosition().getX() + 0.5F, spawner.blockPosition().getY(), spawner.blockPosition().getZ() + 0.5F);
+	}
+
+	/**
+	 * Action to happen just after entity spawns
+	 *
+	 * Entity can be null
+	 */
+
+	default void performPostSpawnaction(@Nullable Entity spawner, @Nullable Entity entitySpawned) { }
 
 	/**
 	 * The Proximity box used
 	 *
 	 * @return an AxisAlignedBB for the proximity area.
 	 */
-	default AABB proximityBox(BlockPos pos) {
-		return new AABB(pos).inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal());
+	default AABB proximityBox(LivingEntity spawner) {
+		return spawner.getBoundingBox().inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal());
 	}
 
 	default <T extends LivingEntity> void checkArea(LivingEntity spawner, Class<T> toDetect) {
-		List<T> list = spawner.level().getEntitiesOfClass(toDetect, this.proximityBox(spawner.blockPosition()), entity -> this.canEntityBeDetected(spawner, entity));
+		List<T> list = spawner.level().getEntitiesOfClass(toDetect, this.proximityBox(spawner), entity -> this.canEntityBeDetected(spawner, entity));
 		for (T entity : list) {
-			if (entity != null) {
+			if (entity != null && entity != this) {
 				this.performDetectionLogic(entity);
 				return;
 			}

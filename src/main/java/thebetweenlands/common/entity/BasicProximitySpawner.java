@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.monster;
+package thebetweenlands.common.entity;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -7,7 +7,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.entity.ProximitySpawner;
 
 public abstract class BasicProximitySpawner extends Mob implements ProximitySpawner {
 

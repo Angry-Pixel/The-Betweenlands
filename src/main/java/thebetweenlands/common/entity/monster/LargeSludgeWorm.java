@@ -1,6 +1,12 @@
 package thebetweenlands.common.entity.monster;
 
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -27,11 +33,6 @@ import thebetweenlands.common.entity.multipart.SludgeWormMultipart;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.util.CatmullRomSpline;
 import thebetweenlands.util.ReparameterizedSpline;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 public class LargeSludgeWorm extends SludgeWorm {
 

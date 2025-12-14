@@ -284,6 +284,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.PYRAD_FLAME.get(), context -> new ThrownItemRenderer<>(context, 1.0F, true));
 		event.registerEntityRenderer(EntityRegistry.GREEBLING_CORPSE.get(), GreeblingCorpseRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.MOVING_WALL.get(), MovingWallRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.TRIGGERED_FALLING_BLOCK.get(), TriggeredFallingBlockRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);

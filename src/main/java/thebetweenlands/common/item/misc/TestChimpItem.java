@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,9 +10,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import thebetweenlands.common.entity.TriggeredFallingBlock;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
-
-import java.util.List;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class TestChimpItem extends Item {
 	public TestChimpItem(Properties properties) {
@@ -202,7 +204,14 @@ public class TestChimpItem extends Item {
 			}
 			*/
 
-			this.makeSomethingHere(context.getLevel(), context.getPlayer());
+			//this.makeSomethingHere(context.getLevel(), context.getPlayer());
+			
+			TriggeredFallingBlock triggeredblock = EntityRegistry.TRIGGERED_FALLING_BLOCK.get().create(context.getLevel());
+			triggeredblock.setPos(context.getClickedPos().getCenter());
+			triggeredblock.setTemporary(false);
+			triggeredblock.setWalkway(false);
+			triggeredblock.setHanging(true);
+			context.getLevel().addFreshEntity(triggeredblock);
 
 		}
 

@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.creature;
 
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -8,7 +10,13 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -24,8 +32,6 @@ import thebetweenlands.common.entity.ProximitySpawner;
 import thebetweenlands.common.registries.DamageTypeRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import java.util.List;
 
 public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner {
 
@@ -208,8 +214,8 @@ public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner 
 	}
 
 	@Override
-	public AABB proximityBox(BlockPos pos) {
-		return new AABB(pos.getX() - 0.5D, pos.getY(), pos.getZ() - 0.5D, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D).inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal()).move(0.0D, this.getProximityVertical() + this.getBbHeight(), 0.0D);
+	public AABB proximityBox(LivingEntity spawner) {
+		return getBoundingBox().inflate(this.getProximityHorizontal(), this.getProximityVertical(), this.getProximityHorizontal()).move(0.0D, this.getProximityVertical() + this.getBbHeight(), 0.0D);
 	}
 
 	@Override
