@@ -1,4 +1,4 @@
-package thebetweenlands.api.world;
+package thebetweenlands.api.world.biome;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;

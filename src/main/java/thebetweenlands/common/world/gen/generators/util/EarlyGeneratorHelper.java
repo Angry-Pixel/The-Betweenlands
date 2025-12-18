@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import thebetweenlands.api.world.BiomeWeights;
+import thebetweenlands.api.world.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.util.config.SimplexNoiseSettings;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 

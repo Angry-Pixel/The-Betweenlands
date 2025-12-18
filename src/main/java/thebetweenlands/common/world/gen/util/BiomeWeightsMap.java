@@ -2,7 +2,7 @@ package thebetweenlands.common.world.gen.util;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
-import thebetweenlands.api.world.BiomeWeights;
+import thebetweenlands.api.world.biome.BiomeWeights;
 
 public class BiomeWeightsMap {
 

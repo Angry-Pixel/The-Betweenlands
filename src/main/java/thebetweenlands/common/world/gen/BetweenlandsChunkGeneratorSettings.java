@@ -8,7 +8,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.HolderSet;
-import thebetweenlands.api.world.BiomeWeightGroups;
+import thebetweenlands.api.world.biome.BiomeWeightGroups;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 
 public record BetweenlandsChunkGeneratorSettings(BiomeWeightGroups biomeWeightGroups, List<HolderSet<ConfiguredEarlyGenerator<?, ?>>> globalGenerators) {

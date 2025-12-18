@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
-import thebetweenlands.api.world.IBetweenlandsBiomeSource;
+import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 
 public class TerrainWarper {

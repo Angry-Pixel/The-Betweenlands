@@ -1,4 +1,4 @@
-package thebetweenlands.api.world;
+package thebetweenlands.api.world.biome;
 
 import java.util.ArrayList;
 import java.util.HashMap;

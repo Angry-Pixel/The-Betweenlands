@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import thebetweenlands.api.world.BiomeWeights;
+import thebetweenlands.api.world.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 
 // TODO this could probably be done better

@@ -11,7 +11,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import thebetweenlands.api.world.BiomeWeights;
+import thebetweenlands.api.world.biome.BiomeWeights;
 import thebetweenlands.common.datagen.tags.BLFluidTagGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;

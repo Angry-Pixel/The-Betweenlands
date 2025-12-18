@@ -14,7 +14,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.world.BiomeWeightGroups;
+import thebetweenlands.api.world.biome.BiomeWeightGroups;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
