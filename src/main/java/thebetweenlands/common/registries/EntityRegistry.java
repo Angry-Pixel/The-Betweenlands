@@ -20,6 +20,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLItemFrame;
 import thebetweenlands.common.entity.BasicProximitySpawner;
 import thebetweenlands.common.entity.BasicProximitySpawnerExtended;
+import thebetweenlands.common.entity.CCGroundSpawner;
 import thebetweenlands.common.entity.DecayPitTarget;
 import thebetweenlands.common.entity.FalseExperienceOrb;
 import thebetweenlands.common.entity.FishVortex;
@@ -217,7 +218,7 @@ public class EntityRegistry {
 	//glowing goop
 	//grappling hoke node
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingCorpse>> GREEBLING_CORPSE = register("greebling_corpse", EntityType.Builder.of(GreeblingCorpse::new, MobCategory.MISC).sized(0.6F, 0.2F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
-	//ground spawner
+	public static final DeferredHolder<EntityType<?>, EntityType<CCGroundSpawner>> CC_GROUND_SPAWNER = registerWithAttributes("cc_ground_spawner", EntityType.Builder.of(CCGroundSpawner::new, MobCategory.MISC).sized(3F, 0.5F).eyeHeight(1F), BasicProximitySpawnerExtended::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BLItemFrame>> ITEM_FRAME = register("item_frame", EntityType.Builder.<BLItemFrame>of(BLItemFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//lightning bolt
 	public static final DeferredHolder<EntityType<?>, EntityType<LurkerSkinRaft>> LURKER_SKIN_RAFT = register("lurker_skin_raft", EntityType.Builder.<LurkerSkinRaft>of(LurkerSkinRaft::new, MobCategory.MISC).sized(1.25F, 0.25F).clientTrackingRange(10));

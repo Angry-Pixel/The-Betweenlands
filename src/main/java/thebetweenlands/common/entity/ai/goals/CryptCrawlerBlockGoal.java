@@ -1,13 +1,14 @@
 package thebetweenlands.common.entity.ai.goals;
 
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.ItemAbilities;
 import thebetweenlands.common.entity.monster.BipedCryptCrawler;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class CryptCrawlerBlockGoal extends Goal {
 

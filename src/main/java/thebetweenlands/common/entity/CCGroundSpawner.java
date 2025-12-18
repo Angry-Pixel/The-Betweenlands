@@ -6,9 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.sk89q.worldedit.jlibnoise.MathHelper;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -35,8 +34,14 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
+import thebetweenlands.common.block.misc.SlopeBlock;
+import thebetweenlands.common.entity.monster.BipedCryptCrawler;
+import thebetweenlands.common.entity.monster.ChiefCryptCrawler;
 import thebetweenlands.common.entity.monster.CryptCrawler;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
@@ -101,8 +106,13 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
+	public PushReaction getPistonPushReaction() {
+		return PushReaction.IGNORE;
+	}
+
+	@Override
 	public boolean canBeCollidedWith() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -120,14 +130,15 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 
 			if (level().getGameTime() % 60 == 0)
 				checkArea(this, LivingEntity.class);
-			List<FallingBlockEntity> listPlug = level().getEntitiesOfClass(FallingBlockEntity.class, getBoundingBox());
+			List<FallingBlockEntity> listPlug = level().getEntitiesOfClass(FallingBlockEntity.class, getBoundingBox().move(0D,0.5D,0D));
 			if (!listPlug.isEmpty()) {
+				System.out.println("should die here");
 				level().setBlock(blockPosition(), Blocks.AIR.defaultBlockState(), 3);
 				kill();
 			}
 		}
 
-		setPos(MathHelper.floor(blockPosition().getX()) + 0.5D, MathHelper.floor(blockPosition().getY()), MathHelper.floor(blockPosition().getZ()) + 0.5D);
+		setPos(Math.floor(blockPosition().getX()) + 0.5D, Math.floor(blockPosition().getY()), Math.floor(blockPosition().getZ()) + 0.5D);
 		xo = xOld;
 		yo = yOld;
 		zo = zOld;
@@ -138,7 +149,8 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	/*	BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
         if(worldStorage.getEnvironmentEventRegistry().bloodSky.isActive())
             return true;
-     */  return false;
+       return false;*/
+		 return true;
 	}
 
 	@Override
@@ -189,39 +201,12 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
         return true;
     }
 
-    // TODO for some dumb fucking reason you have to set the eye height in an event for the entity dimensions now - something Neo/Forge made shitter imo
-	/*
     @Override
-    public float getEyeHeight() {
-        return height + 0.5F; // sort of needed so it can see a bit further
-    }
-*/
-
-/*
-	@Override
-	protected boolean isMovementBlocked() {
-		return true;
-	}
-
-	@Override
-	public void addVelocity(double x, double y, double z) {
-		motionX = 0;
-		motionY = 0;
-		motionZ = 0;
-	}
-
-	@Override
-	public void onKillCommand() {
-		this.kill();
-	}
-
-	@Override
-	public void applyEntityCollision(Entity entity) {
-		if (entity instanceof EntityFallingBlock)
+    protected void doPush(Entity entity) {
+		if (entity instanceof FallingBlockEntity)
 			if (!level().isClientSide())
 				setCanBeRemovedSafely(true);
 	}
-*/
 
 	@Override
 	public boolean isInvulnerable() {
@@ -252,8 +237,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	public void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
 		if(!level().isClientSide()) {
 			this.level().broadcastEntityEvent(this, EVENT_GOOP_PARTICLES);
-			// TODO
-			//entitySpawned.motionY += 0.5D;
+			entitySpawned.setDeltaMovement(entitySpawned.getDeltaMovement().add(0D, 0.5D, 0D));
 			if(isWorldSpawned() && getSpawnCount() >= maxUseCount())
 				setCanBeRemovedSafely(true);
 		}
@@ -293,10 +277,31 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected Entity getEntitySpawned() {
+		boolean isBiped = false;
+		boolean isChief = false;
 		CryptCrawler crawler = new CryptCrawler(EntityRegistry.CRYPT_CRAWLER.get(), level());
-		return crawler;
+		BipedCryptCrawler biped_crawler = new BipedCryptCrawler(EntityRegistry.BIPED_CRYPT_CRAWLER.get(), level());
+		ChiefCryptCrawler chief_crawler = new ChiefCryptCrawler(EntityRegistry.CHIEF_CRYPT_CRAWLER.get(), level());
+		crawler.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
+		biped_crawler.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
+		chief_crawler.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
+
+		if (random.nextInt(3) == 0) {
+			isBiped = true;
+			if (random.nextInt(3) == 0)
+				isChief = true;
+		}
+
+		if (isBiped)
+			if (random.nextFloat() < 0.05F)
+				setLeftHanded(true);
+			else
+				setLeftHanded(false);
+
+		return isBiped && isChief ? chief_crawler : isBiped ? biped_crawler : crawler;
 	}
 
 	@Override
@@ -344,8 +349,8 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 			if(isWorldSpawned())
 				if(getPersistentData().contains("tempBlockTypes"))
 					loadOriginBlocks(level(), getPersistentData());
-		}
         super.kill();
+        }
     }
 
 	@SuppressWarnings("deprecation")
@@ -356,17 +361,28 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		if (!level().isClientSide()) {
 			getOriginBlocks(level(), blockPosition());
 			//TODO HHHHHMNNNNNGGGHHHNNNN
+			
+			level().setBlockAndUpdate(blockPosition(), Blocks.AIR.defaultBlockState());
+			level().setBlockAndUpdate(blockPosition().offset(0, -1, 0), BlockRegistry.COMPACTED_MUD.get().defaultBlockState());
+			level().setBlockAndUpdate(blockPosition().offset(-1, 0, -1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(0, 0, -1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(1, 0, -1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(-1, 0, 1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(0, 0, 1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(1, 0, 1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(-1, 0, 0), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.WEST).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockAndUpdate(blockPosition().offset(1, 0, 0), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.EAST).setValue(SlopeBlock.HALF, Half.BOTTOM));
 		/*
 			level().setBlockState(blockPosition(), blockHelper.AIR);
 			level().setBlockState(blockPosition().add(0, -1, 0), blockHelper.COMPACTED_MUD);
-			level().setBlockState(blockPosition().add(-1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(0, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(-1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(0, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(-1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.WEST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-			level().setBlockState(blockPosition().add(1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.EAST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			level().setBlockState(blockPosition().add(-1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(0, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(-1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(0, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(-1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.WEST).setValue(SlopeBlock.HALF, Half.BOTTOM));
+			level().setBlockState(blockPosition().add(1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.EAST).setValue(SlopeBlock.HALF, Half.BOTTOM));
 		*/
 		}
 		return spawnGroupData;
@@ -384,18 +400,17 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		if (!tagList.isEmpty()) {
 			entityNbt.put("tempBlockTypes", tagList);
 			entityNbt.put("originPos",  NbtUtils.writeBlockPos(pos));
+			
 		}
 		addAdditionalSaveData(entityNbt);
 	}
 
 	public void loadOriginBlocks(Level level, CompoundTag tag) {
-		CompoundTag entityNbt = getPersistentData();
-		BlockPos origin = NbtUtils.readBlockPos(entityNbt, "originPos").orElse(null);
+		BlockPos origin = NbtUtils.readBlockPos(tag, "originPos").orElse(null);
 		List<BlockState> list = new ArrayList<BlockState>();
-		ListTag tagList = entityNbt.getList("tempBlockTypes", Tag.TAG_LIST);
+		ListTag tagList = tag.getList("tempBlockTypes", Tag.TAG_COMPOUND);
 		for (int indexCount = 0; indexCount < tagList.size(); ++indexCount) {
-			CompoundTag nbttagcompound = tagList.getCompound(indexCount);
-			BlockState state = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), nbttagcompound);
+			BlockState state = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), tagList.getCompound(indexCount));
 			list.add(indexCount, state);
 		}
 		int a = 0;

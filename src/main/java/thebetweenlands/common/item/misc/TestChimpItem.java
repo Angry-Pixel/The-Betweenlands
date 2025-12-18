@@ -5,12 +5,14 @@ import java.util.List;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.TriggeredFallingBlock;
+import thebetweenlands.common.entity.CCGroundSpawner;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -202,7 +204,7 @@ public class TestChimpItem extends Item {
 				burrow.onInitialSpawn(worldIn.getDifficultyForLocation(burrow.getPosition()), null);
 				worldIn.spawnEntity(burrow);
 			}
-			*/
+			
 
 			//this.makeSomethingHere(context.getLevel(), context.getPlayer());
 			
@@ -212,6 +214,14 @@ public class TestChimpItem extends Item {
 			triggeredblock.setWalkway(false);
 			triggeredblock.setHanging(true);
 			context.getLevel().addFreshEntity(triggeredblock);
+			*/
+
+			CCGroundSpawner spawner = EntityRegistry.CC_GROUND_SPAWNER.get().create(context.getLevel());
+			if (spawner != null) {
+				spawner.setPos(context.getClickedPos().getCenter());
+				spawner.finalizeSpawn((ServerLevelAccessor)context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), MobSpawnType.NATURAL, null);
+				context.getLevel().addFreshEntity(spawner);
+			}
 
 		}
 
