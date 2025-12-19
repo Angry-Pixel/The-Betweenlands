@@ -26,14 +26,13 @@ import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactoryOld;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
-import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
 import thebetweenlands.common.world.gen.layer.old.BetweenlandsBiomeLayerOld;
 import thebetweenlands.common.world.gen.layer.old.ThinMaskLayer;
 import thebetweenlands.common.world.gen.layer.old.ZoomIncrementLayer;
 import thebetweenlands.common.world.gen.layer.old.util.BigContext;
-import thebetweenlands.common.world.gen.layer.old.util.Layer;
-import thebetweenlands.common.world.gen.layer.old.util.LazyArea;
-import thebetweenlands.common.world.gen.layer.old.util.LazyAreaContext;
+import thebetweenlands.common.world.gen.layer.old.util.LazyAreaContextOld;
+import thebetweenlands.common.world.gen.layer.util.Layer;
+import thebetweenlands.common.world.gen.layer.util.LazyArea;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;
 
@@ -141,7 +140,7 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 	}
 
 	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<BLBiomeData> biomes, int size) {
-		AreaFactoryOld<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context), biomes, registry, size);
+		AreaFactoryOld<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContextOld(25, seed, context), biomes, registry, size);
 		return new Layer(areaFactory);
 	}
 

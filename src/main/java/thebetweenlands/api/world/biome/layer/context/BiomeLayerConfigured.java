@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.resources.ResourceLocation;
+import thebetweenlands.api.world.biome.layer.Area;
+import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver.LongBasedBiomeLayerContextResolver;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver.StringBasedBiomeLayerContextResolver;
@@ -15,6 +17,47 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerContextResol
 			BiomeLayer.CODEC,
 			BiomeLayerContextResolver.CODEC.fieldOf("random_seed").codec()
 		).<BiomeLayerConfigured>xmap(BiomeLayerConfigured::fromPair, (config) -> (Pair)toPair(config));
+
+	/**
+	 * @see BiomeLayer#compose(BiomeLayerContext, BiomeLayerChain)
+	 * @param <A>
+	 * @param context
+	 * @param biomeLayerChain
+	 */
+	public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
+		this.compose(context.getContextFactory(), biomeLayerChain);
+	}
+
+	/**
+	 * @see BiomeLayer#compose(BiomeLayerContext, BiomeLayerChain)
+	 * @param <A>
+	 * @param context
+	 * @param biomeLayerChain
+	 */
+	public <A extends Area> void compose(BiomeLayerContextFactory<A> context, BiomeLayerChain biomeLayerChain) {
+		this.biomeLayer().compose(this.contextResolver().createContext(context), biomeLayerChain);
+	}
+
+	/**
+	 * @see BiomeLayer#createAreaFactory(BiomeLayerContext, BiomeLayerChainState)
+	 * @param <A>
+	 * @param context
+	 * @param biomeLayerChain
+	 */
+	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
+		return this.createAreaFactory(context.getContextFactory(), chainState);
+	}
+
+	/**
+	 * @see BiomeLayer#createAreaFactory(BiomeLayerContext, BiomeLayerChainState)
+	 * @param <A>
+	 * @param context
+	 * @param biomeLayerChain
+	 */
+	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContextFactory<A> context, BiomeLayerChainState chainState) {
+		return this.biomeLayer().createAreaFactory(this.contextResolver().createContext(context), chainState);
+	}
+	
 	
 	public static <T extends BiomeLayerContextResolver> BiomeLayerConfigured fromPair(Pair<BiomeLayer, T> pair) {
 		return new BiomeLayerConfigured(pair.getFirst(), pair.getSecond());

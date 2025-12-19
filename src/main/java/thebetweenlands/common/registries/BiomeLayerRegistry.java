@@ -69,19 +69,29 @@ public class BiomeLayerRegistry {
 		return BiomeLayerConfigured.of(new BetweenlandsBiomeLayer(registry, biomes), seed);
 	}
 
-	public static BiomeLayerConfigured zoom(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int zoom, long seed) {
-		return BiomeLayerConfigured.of(new ZoomBiomeLayer(registry, parent, zoom), seed);
+	public static BiomeLayerConfigured legacyZoom(HolderGetter<Biome> registry, BiomeLayerConfigured parent, long seed) {
+		return BiomeLayerConfigured.of(new ZoomBiomeLayer(registry, parent), seed);
 	}
 
-	public static BiomeLayerConfigured zoom(HolderGetter<Biome> registry, int zoom, long seed) {
-		return zoom(registry, previous(), zoom, seed);
+	public static BiomeLayerConfigured legacyZoom(HolderGetter<Biome> registry, long seed) {
+		return legacyZoom(registry, previous(), seed);
 	}
 
-	public static List<BiomeLayerConfigured> multiZoom(HolderGetter<Biome> registry, int zoom, long seed) {
+	public static BiomeLayerConfigured multiZoom(HolderGetter<Biome> registry, int zoom, long seed) {
+		BiomeLayerConfigured parent = previous();
+		
+		for(int i = 0; i < zoom; ++i) {
+			parent = legacyZoom(registry, parent, seed + i);
+		}
+		
+		return parent;
+	}
+
+	public static List<BiomeLayerConfigured> multiZoomList(HolderGetter<Biome> registry, int zoom, long seed) {
 		List<BiomeLayerConfigured> list = new ArrayList<>(zoom);
 		
 		for(int i = 0; i < zoom; ++i) {
-			list.add(zoom(registry, 1, seed + i));
+			list.add(legacyZoom(registry, seed + i));
 		}
 		
 		return list;
@@ -92,15 +102,15 @@ public class BiomeLayerRegistry {
 				ImmutableList.<BiomeLayerConfigured>builder()
 				.add(
 					betweenlands(registry, biomeParameters, 100L),
-					zoom(registry, 1, 2000L),
-					zoom(registry, 1, 2001L),
+					legacyZoom(registry, 2000L),
+					legacyZoom(registry, 2001L),
 					marker("swamplands_clearing_zoom"),
 					
-					zoom(registry, 1, 2345L),
-					marker("sludge_plains_clearing_zoom")
-				)
-				.addAll(multiZoom(registry, biomeSize - 1, 2345L))
-				.add(
+					legacyZoom(registry, 2345L),
+					marker("sludge_plains_clearing_zoom"),
+					
+					multiZoom(registry, biomeSize - 1, 2345L)
+					
 					// Here you'd put the swamplands clearing and sludge plains clearing mixers
 				)
 				.build()

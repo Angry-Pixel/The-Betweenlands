@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.layer.old.util;
+package thebetweenlands.common.world.gen.layer.util;
 
 import it.unimi.dsi.fastutil.longs.Long2IntLinkedOpenHashMap;
 import net.minecraft.world.level.ChunkPos;

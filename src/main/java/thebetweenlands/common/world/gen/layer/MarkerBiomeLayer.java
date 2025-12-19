@@ -23,7 +23,7 @@ public record MarkerBiomeLayer(String refName) implements BiomeLayer {
 		);
 	
 	@Override
-    public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
+	public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
 		Optional<BiomeLayerRef> previous = biomeLayerChain.getPreviousLayer();
 		if(previous.isPresent()) {
 			biomeLayerChain.addBackwardRef(this.refName(), previous.get());

@@ -72,7 +72,7 @@ public class DimensionRegistries {
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
-				DensityFunctions.zero(), // TODO add a density function
+				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero()

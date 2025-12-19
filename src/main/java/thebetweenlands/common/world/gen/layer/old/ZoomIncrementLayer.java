@@ -17,28 +17,28 @@ public class ZoomIncrementLayer implements AreaTransformer1 {
 
 	@Override
 	public int apply(BigContext<?> context, Area area, int x, int z) {
-		int init = area.get(this.getParentX(x), this.getParentY(z));
+		int initialBiome = area.get(this.getParentX(x), this.getParentY(z));
 		context.initRandom(x >> 1 << 1, z >> 1 << 1);
 		int pX = x & 1;
 		int pZ = z & 1;
 
 		if (pX == 0 && pZ == 0) {
-			return init;
+			return initialBiome;
 		} else {
-			int initZ = area.get(this.getParentX(x), this.getParentY(z + 1));
-			int rand1 = context.random(init, initZ);
+			int initialBiomeZ = area.get(this.getParentX(x), this.getParentY(z + 1));
+			int rand1 = context.random(initialBiome, initialBiomeZ);
 
 			if (pX == 0 && pZ == 1) {
 				return rand1;
 			} else {
-				int initX = area.get(this.getParentX(x + 1), this.getParentY(z));
-				int rand2 = context.random(init, initX);
+				int initialBiomeX = area.get(this.getParentX(x + 1), this.getParentY(z));
+				int rand2 = context.random(initialBiome, initialBiomeX);
 
 				if (pX == 1 && pZ == 0) {
 					return rand2;
 				} else {
-					int initXZ = area.get(this.getParentX(x + 1), this.getParentY(z + 1));
-					return this.modeOrRandom(context, init, initZ, initX, initXZ);
+					int initialBiomeXZ = area.get(this.getParentX(x + 1), this.getParentY(z + 1));
+					return this.modeOrRandom(context, initialBiome, initialBiomeZ, initialBiomeX, initialBiomeXZ);
 				}
 			}
 		}

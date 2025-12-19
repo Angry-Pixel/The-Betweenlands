@@ -5,15 +5,16 @@ import net.minecraft.util.LinearCongruentialGenerator;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import thebetweenlands.api.world.biome.layer.PixelTransformer;
+import thebetweenlands.common.world.gen.layer.util.LazyArea;
 
-public class LazyAreaContext implements BigContext<LazyArea> {
+public class LazyAreaContextOld implements BigContext<LazyArea> {
     private final Long2IntLinkedOpenHashMap cache;
     private final int maxCache;
     private final ImprovedNoise biomeNoise;
     private final long seed;
     private long rval;
 
-    public LazyAreaContext(int pMaxCache, long pSeed, long pSeedModifier) {
+    public LazyAreaContextOld(int pMaxCache, long pSeed, long pSeedModifier) {
         this.seed = mixSeed(pSeed, pSeedModifier);
         this.biomeNoise = new ImprovedNoise(new LegacyRandomSource(pSeed));
         this.cache = new Long2IntLinkedOpenHashMap(16, 0.25F);
