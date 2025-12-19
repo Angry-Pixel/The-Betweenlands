@@ -105,6 +105,7 @@ public class TheBetweenlands {
 		StructureTypeRegistry.TYPES.register(eventbus);
 		StructureTypeRegistry.PIECE_TYPES.register(eventbus);
 		EarlyGeneratorRegistry.GENERATORS.register(eventbus);
+		BiomeLayerRegistry.BIOME_LAYER_TYPE.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
 

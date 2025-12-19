@@ -24,6 +24,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
+import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayerOld;
 import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ThinMaskLayer;
 import thebetweenlands.common.world.gen.layer.ZoomIncrementLayer;
@@ -141,7 +142,7 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 	}
 
 	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<BLBiomeData> biomes, HolderGetter<Biome> registry, int size) {
-		AreaFactory<A> genLayer = new BetweenlandsBiomeLayer(registry, biomes).run(context.apply(100L));
+		AreaFactory<A> genLayer = new BetweenlandsBiomeLayerOld(registry, biomes).run(context.apply(100L));
 		genLayer = BetweenlandsBiomeSource.repeatZoom(2000L, genLayer, 2, context);
 
 //		AreaFactory<A> swamplandsClearingLayer = new SurroundedLayer(registry, BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING, 1, 1).run(context.apply(102L), genLayer);
