@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import thebetweenlands.api.world.biome.layer.AreaFactory;
+import thebetweenlands.api.world.biome.layer.AreaFactoryOld;
 import thebetweenlands.common.TheBetweenlands;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class Layer {
 
     public final LazyArea area;
 
-    public Layer(AreaFactory<LazyArea> area) {
+    public Layer(AreaFactoryOld<LazyArea> area) {
         this.area = area.make();
     }
 

@@ -13,12 +13,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
+import thebetweenlands.api.world.biome.layer.SimpleBiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
-public class BetweenlandsBiomeLayer implements BiomeLayer {
+public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
 	
 	public static final MapCodec<BetweenlandsBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(

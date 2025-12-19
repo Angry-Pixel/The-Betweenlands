@@ -23,7 +23,7 @@ import net.minecraft.world.level.biome.Climate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
 import thebetweenlands.api.world.biome.layer.Area;
-import thebetweenlands.api.world.biome.layer.AreaFactory;
+import thebetweenlands.api.world.biome.layer.AreaFactoryOld;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
 import thebetweenlands.common.world.gen.layer.old.BetweenlandsBiomeLayerOld;
@@ -137,12 +137,12 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 	}
 
 	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<BLBiomeData> biomes, int size) {
-		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context), biomes, registry, size);
+		AreaFactoryOld<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context), biomes, registry, size);
 		return new Layer(areaFactory);
 	}
 
-	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<BLBiomeData> biomes, HolderGetter<Biome> registry, int size) {
-		AreaFactory<A> genLayer = new BetweenlandsBiomeLayerOld(registry, biomes).run(context.apply(100L));
+	public static <A extends Area, C extends BigContext<A>> AreaFactoryOld<A> makeLayers(LongFunction<C> context, List<BLBiomeData> biomes, HolderGetter<Biome> registry, int size) {
+		AreaFactoryOld<A> genLayer = new BetweenlandsBiomeLayerOld(registry, biomes).run(context.apply(100L));
 		genLayer = BetweenlandsBiomeSource.repeatZoom(2000L, genLayer, 2, context);
 
 //		AreaFactory<A> swamplandsClearingLayer = new SurroundedLayer(registry, BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING, 1, 1).run(context.apply(102L), genLayer);
@@ -171,8 +171,8 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		return genLayer;
 	}
 
-	private static <T extends Area, C extends BigContext<T>> AreaFactory<T> repeatZoom(long seed, AreaFactory<T> layer, int count, LongFunction<C> contextFactory) {
-		AreaFactory<T> iareafactory = layer;
+	private static <T extends Area, C extends BigContext<T>> AreaFactoryOld<T> repeatZoom(long seed, AreaFactoryOld<T> layer, int count, LongFunction<C> contextFactory) {
+		AreaFactoryOld<T> iareafactory = layer;
 
 		for(int i = 0; i < count; ++i) {
 			iareafactory = new ZoomIncrementLayer().run(contextFactory.apply(seed + (long)i), iareafactory);
@@ -181,8 +181,8 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		return iareafactory;
 	}
 
-	private static <T extends Area, C extends BigContext<T>> AreaFactory<T> repeatThin(long seed, AreaFactory<T> layer, HolderGetter<Biome> registry, ResourceKey<Biome> biome, int range, float chance, int count, LongFunction<C> contextFactory) {
-		AreaFactory<T> iareafactory = layer;
+	private static <T extends Area, C extends BigContext<T>> AreaFactoryOld<T> repeatThin(long seed, AreaFactoryOld<T> layer, HolderGetter<Biome> registry, ResourceKey<Biome> biome, int range, float chance, int count, LongFunction<C> contextFactory) {
+		AreaFactoryOld<T> iareafactory = layer;
 
 		for (int i = 0; i < count; ++i) {
 			iareafactory = new ThinMaskLayer(registry, biome, range, chance).run(contextFactory.apply(seed + 1), iareafactory);

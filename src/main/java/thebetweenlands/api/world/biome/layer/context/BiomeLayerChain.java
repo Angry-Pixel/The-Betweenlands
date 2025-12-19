@@ -41,6 +41,11 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 */
 	private boolean backwardRefsChanged = false;
 	
+	/**
+	 * If this chain is "finished" (meaning it can no longer be modified or accessed)
+	 */
+	private boolean finished = false;
+	
 	public BiomeLayerChain(Optional<BiomeLayerRef> previousLayer, Map<String, BiomeLayerRef> backwardsRefs) {
 		this.previousLayer = previousLayer;
 		this.backwardsRefs = new Object2ObjectArrayMap<>(backwardsRefs);
@@ -52,12 +57,14 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	
 	@Override
 	public Optional<BiomeLayerRef> getPreviousLayer() {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		this.previousLayerUsed = true;
 		return this.previousLayer;
 	}
 
 	@Override
 	public Optional<BiomeLayerRef> getBackwardsRef(String name) {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		if(this.backwardsRefs.containsKey(name)) {
 			return Optional.of(this.backwardsRefs.get(name));
 		} else {
@@ -71,7 +78,20 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @param biomeLayer the biome layer to reference
 	 */
 	public void addBackwardsRef(String name, BiomeLayer biomeLayer) {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		this.backwardsRefs.put(name, new BiomeLayerRef(biomeLayer, this.immutableCopy()));
+		
+		this.backwardRefsChanged = true;
+	}
+	
+	/**
+	 * Sets the backwards ref with the specified {@code name} to {@code biomeLayerRef}
+	 * @param name the name of the backwards ref
+	 * @param biomeLayerRef the biome layer to reference
+	 */
+	public void addBackwardsRef(String name, BiomeLayerRef biomeLayerRef) {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		this.backwardsRefs.put(name, biomeLayerRef);
 		
 		this.backwardRefsChanged = true;
 	}
@@ -81,6 +101,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @param nextLayer the layer to become the new current layer
 	 */
 	public void nextLayer(BiomeLayer nextLayer) {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		if(this.currentLayer == null) {
 			this.previousLayer = Optional.empty();
 		} else {
@@ -91,6 +112,13 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 		}
 		this.currentLayer = nextLayer;
 		this.previousLayerUsed = false;
+	}
+	
+	/**
+	 * "Finishes" the layer chain, causing any calls to it to throw errors
+	 */
+	public void finish() {
+		this.finished = true;
 	}
 	
 	public FrozenBiomeLayerChainState immutableCopy() {
