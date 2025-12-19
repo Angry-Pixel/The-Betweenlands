@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -47,16 +49,17 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
 
 public class CCGroundSpawner extends BasicProximitySpawnerExtended {
-	private static final byte EVENT_GOOP_PARTICLES = 100;
+	private static final byte EVENT_DIG_PARTICLES = 100;
 	
 	private static final EntityDataAccessor<Boolean> IS_WORLD_SPANWED = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> SPAWN_COUNT = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> CAN_BE_REMOVED_SAFELY = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.BOOLEAN);
 	//private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 
+	// TODO Check Methods marked with TODOs to Enable after testing
+	
 	public CCGroundSpawner(EntityType<? extends BasicProximitySpawnerExtended> type, Level level) {
 		super(type, level);
-		//setSize(3F, 0.5F);
 	}
 
 	@Override
@@ -70,33 +73,26 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	@SuppressWarnings("deprecation")
 	public static boolean canSpawnHere(EntityType<CCGroundSpawner> entity, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource random) {
 		int solidCount = 0;
-		//TODO
-/*
-		if(pos.getY() < WorldProviderBetweenlands.CAVE_START) {
-			return false;
-		}
-*/
+
+		// TODO Enable after testing
+		//if(pos.getY() < TheBetweenlands.CAVE_START) {
+		//return false;
+		//}
+
 		for(int xo = -1; xo <= 1; xo++) {
 			for(int zo = -1; zo <= 1; zo++) {
 				BlockPos offsetPos = pos.offset(xo, 0, zo);
 				BlockState state = level.getBlockState(offsetPos);
-
-				if(state.liquid()) {
+				if(state.liquid())
 					return false;
-				}
-
-				if(SurfaceType.MIXED_GROUND.apply(state)) {
+				if(SurfaceType.MIXED_GROUND.apply(state))
 					solidCount++;
-				} else if(xo == 0 && zo == 0) {
+				else if(xo == 0 && zo == 0)
 					return false;
-				}
-
-				if(!level.isEmptyBlock(offsetPos.above())) {
+				if(!level.isEmptyBlock(offsetPos.above()))
 					return false;
-				}
 			}
 		}
-
 		return solidCount >= 6;
 	}
 
@@ -127,7 +123,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		if (!level().isClientSide()) {
 			if(isWorldSpawned() && !isSpawnEventActive(level()))
 				kill();
-
 			if (level().getGameTime() % 60 == 0)
 				checkArea(this, LivingEntity.class);
 			List<FallingBlockEntity> listPlug = level().getEntitiesOfClass(FallingBlockEntity.class, getBoundingBox().move(0D,0.5D,0D));
@@ -137,20 +132,17 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 				kill();
 			}
 		}
-
 		setPos(Math.floor(blockPosition().getX()) + 0.5D, Math.floor(blockPosition().getY()), Math.floor(blockPosition().getZ()) + 0.5D);
 		xo = xOld;
 		yo = yOld;
 		zo = zOld;
 	}
 
+	// TODO Enable after testing
 	public boolean isSpawnEventActive(Level level) {
-		//TODO
-	/*	BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
-        if(worldStorage.getEnvironmentEventRegistry().bloodSky.isActive())
-            return true;
-       return false;*/
-		 return true;
+		//BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(this.level());
+		//return worldStorage != null && EnvironmentEventRegistry.BLOOD_SKY.get().isActive();
+		return true;
 	}
 
 	@Override
@@ -198,6 +190,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, dead_zone);
 		if(list.stream().filter(e -> e instanceof CryptCrawler).count() >= 1)
 			return false;
+
         return true;
     }
 
@@ -215,9 +208,8 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 
 	@Override
 	public boolean hurt(DamageSource source, float damage) {
-		if (source.isCreativePlayer()) {
+		if (source.isCreativePlayer())
 			setCanBeRemovedSafely(true);
-		}
 		return false;
 	}
 
@@ -236,25 +228,19 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	@Override
 	public void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
 		if(!level().isClientSide()) {
-			this.level().broadcastEntityEvent(this, EVENT_GOOP_PARTICLES);
+			this.level().broadcastEntityEvent(this, EVENT_DIG_PARTICLES);
 			entitySpawned.setDeltaMovement(entitySpawned.getDeltaMovement().add(0D, 0.5D, 0D));
 			if(isWorldSpawned() && getSpawnCount() >= maxUseCount())
 				setCanBeRemovedSafely(true);
 		}
 	}
-	
+
 	@Override
 	public void handleEntityEvent(byte id) {
 		super.handleEntityEvent(id);
-		if(id == EVENT_GOOP_PARTICLES) {
-			//TODO
-	/*		for (int count = 0; count <= 200; ++count) {
-				Particle fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), level, this.posX + (level.rand.nextDouble() - 0.5D) , this.posY + level.rand.nextDouble() + 0.25F, this.posZ + (level.rand.nextDouble() - 0.5D), 0, 0, 0, 0);
-				fx.setRBGColorF(48F, 64F, 91F);
-				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-			}
-	*/
-		}
+		if (id == EVENT_DIG_PARTICLES)
+			for (int count = 0; count <= 200; ++count)
+				level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockRegistry.COMPACTED_MUD.get().defaultBlockState()), false, this.getX() + (this.getRandom().nextDouble() - 0.5D), this.getY() + 1D + this.getRandom().nextDouble(), this.getZ() + (this.getRandom().nextDouble() - 0.5D), 0.0D, 0.0D, 0.0D);
 	}
 
 	@Override
@@ -288,19 +274,16 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		crawler.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
 		biped_crawler.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
 		chief_crawler.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
-
 		if (random.nextInt(3) == 0) {
 			isBiped = true;
 			if (random.nextInt(3) == 0)
 				isChief = true;
 		}
-
 		if (isBiped)
 			if (random.nextFloat() < 0.05F)
 				setLeftHanded(true);
 			else
 				setLeftHanded(false);
-
 		return isBiped && isChief ? chief_crawler : isBiped ? biped_crawler : crawler;
 	}
 
@@ -360,8 +343,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		spawnGroupData = super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
 		if (!level().isClientSide()) {
 			getOriginBlocks(level(), blockPosition());
-			//TODO HHHHHMNNNNNGGGHHHNNNN
-			
 			level().setBlockAndUpdate(blockPosition(), Blocks.AIR.defaultBlockState());
 			level().setBlockAndUpdate(blockPosition().offset(0, -1, 0), BlockRegistry.COMPACTED_MUD.get().defaultBlockState());
 			level().setBlockAndUpdate(blockPosition().offset(-1, 0, -1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
@@ -372,18 +353,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 			level().setBlockAndUpdate(blockPosition().offset(1, 0, 1), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
 			level().setBlockAndUpdate(blockPosition().offset(-1, 0, 0), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.WEST).setValue(SlopeBlock.HALF, Half.BOTTOM));
 			level().setBlockAndUpdate(blockPosition().offset(1, 0, 0), BlockRegistry.COMPACTED_MUD_SLOPE.get().defaultBlockState().setValue(SlopeBlock.FACING, Direction.EAST).setValue(SlopeBlock.HALF, Half.BOTTOM));
-		/*
-			level().setBlockState(blockPosition(), blockHelper.AIR);
-			level().setBlockState(blockPosition().add(0, -1, 0), blockHelper.COMPACTED_MUD);
-			level().setBlockState(blockPosition().add(-1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(0, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.NORTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(-1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(0, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.SOUTH).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(-1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.WEST).setValue(SlopeBlock.HALF, Half.BOTTOM));
-			level().setBlockState(blockPosition().add(1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.setValue(SlopeBlock.FACING, Direction.EAST).setValue(SlopeBlock.HALF, Half.BOTTOM));
-		*/
 		}
 		return spawnGroupData;
 	}
@@ -400,7 +369,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		if (!tagList.isEmpty()) {
 			entityNbt.put("tempBlockTypes", tagList);
 			entityNbt.put("originPos",  NbtUtils.writeBlockPos(pos));
-			
 		}
 		addAdditionalSaveData(entityNbt);
 	}
