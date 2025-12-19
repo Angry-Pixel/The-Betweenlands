@@ -344,6 +344,7 @@ import thebetweenlands.client.renderer.entity.TinySludgeWormRenderer;
 import thebetweenlands.client.renderer.entity.TriggeredFallingBlockRenderer;
 import thebetweenlands.client.renderer.entity.VolatileSoulRenderer;
 import thebetweenlands.client.renderer.entity.WightRenderer;
+import thebetweenlands.client.renderer.entity.WormGroundSpawnerRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
@@ -556,6 +557,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.MOVING_WALL.get(), MovingWallRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.TRIGGERED_FALLING_BLOCK.get(), TriggeredFallingBlockRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.CC_GROUND_SPAWNER.get(), CCGroundSpawnerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.WORM_GROUND_SPAWNER.get(), WormGroundSpawnerRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);

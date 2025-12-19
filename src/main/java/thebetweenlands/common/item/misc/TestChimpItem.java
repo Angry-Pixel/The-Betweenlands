@@ -12,7 +12,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.CCGroundSpawner;
+import thebetweenlands.common.entity.WormGroundSpawner;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -216,7 +216,7 @@ public class TestChimpItem extends Item {
 			context.getLevel().addFreshEntity(triggeredblock);
 			*/
 
-			CCGroundSpawner spawner = EntityRegistry.CC_GROUND_SPAWNER.get().create(context.getLevel());
+			WormGroundSpawner spawner = EntityRegistry.WORM_GROUND_SPAWNER.get().create(context.getLevel());
 			if (spawner != null) {
 				spawner.setPos(context.getClickedPos().getCenter());
 				spawner.finalizeSpawn((ServerLevelAccessor)context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), MobSpawnType.NATURAL, null);
