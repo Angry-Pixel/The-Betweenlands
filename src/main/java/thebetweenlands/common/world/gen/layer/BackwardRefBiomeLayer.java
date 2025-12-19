@@ -13,23 +13,23 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
 
-public record BackwardsRefBiomeLayer(String refName) implements BiomeLayer {
+public record BackwardRefBiomeLayer(String refName) implements BiomeLayer {
 
-	public static final MapCodec<BackwardsRefBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
+	public static final MapCodec<BackwardRefBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					Codec.string(1, 64).fieldOf("ref_name").forGetter(BackwardsRefBiomeLayer::refName)
-				).apply(instance, BackwardsRefBiomeLayer::new)
+					Codec.string(1, 64).fieldOf("ref_name").forGetter(BackwardRefBiomeLayer::refName)
+				).apply(instance, BackwardRefBiomeLayer::new)
 		);
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		Optional<BiomeLayerRef> ref = chainState.getBackwardsRef(this.refName());
+		Optional<BiomeLayerRef> ref = chainState.getBackwardRef(this.refName());
 		if(ref.isPresent()) {
 			BiomeLayer refLayer = ref.get().layer();
 			BiomeLayerChainState refChainState = ref.get().chainState();
 			return refLayer.createAreaFactory(context, refChainState);
 		}
-		throw new IllegalStateException("Missing reference for BackwardsRefBiomeLayer: \"%s\"".formatted(this.refName()));
+		throw new IllegalStateException("Missing reference for BackwardRefBiomeLayer: \"%s\"".formatted(this.refName()));
 	}
 
 	@Override

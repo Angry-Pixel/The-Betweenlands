@@ -26,7 +26,7 @@ public record MarkerBiomeLayer(String refName) implements BiomeLayer {
     public <A extends Area> AreaFactory<A> compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
 		Optional<BiomeLayerRef> previous = biomeLayerChain.getPreviousLayer();
 		if(previous.isPresent()) {
-			biomeLayerChain.addBackwardsRef(this.refName(), previous.get());
+			biomeLayerChain.addBackwardRef(this.refName(), previous.get());
 		}
     	return this.createAreaFactory(context, biomeLayerChain);
 	}
