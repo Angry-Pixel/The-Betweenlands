@@ -11,6 +11,7 @@ import thebetweenlands.common.world.gen.layer.BackwardsRefBiomeLayer;
 import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
 import thebetweenlands.common.world.gen.layer.MarkerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.PreviousLayerBiomeLayer;
+import thebetweenlands.common.world.gen.layer.ZoomBiomeLayer;
 
 public class BiomeLayerRegistry {
 	public static final DeferredRegister<MapCodec<? extends BiomeLayer>> BIOME_LAYER_TYPE = DeferredRegister.create(BLRegistries.Keys.BIOME_LAYER_TYPE, TheBetweenlands.ID);
@@ -22,5 +23,6 @@ public class BiomeLayerRegistry {
 	
 	// Layers that actually place biomes
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<BetweenlandsBiomeLayer>> BETWEENLANDS_BIOME_LAYER = BIOME_LAYER_TYPE.register("betweenlands", () -> BetweenlandsBiomeLayer.CODEC);
+	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<ZoomBiomeLayer>> ZOOM_BIOME_LAYER = BIOME_LAYER_TYPE.register("zoom", () -> ZoomBiomeLayer.CODEC);
 	
 }
