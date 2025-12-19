@@ -1,14 +1,13 @@
 package thebetweenlands.api.world.biome.layer.context;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.common.world.gen.layer.util.PixelTransformer;
 
 public interface BiomeLayerContext<A extends Area> {
-    void initRandom(long x, long z);
+    RandomSource createRandom(long x, long z);
     
-    int nextRandom(int bound);
-
     ImprovedNoise getBiomeNoise();
 
     A createResult(PixelTransformer transformer);
@@ -21,12 +20,12 @@ public interface BiomeLayerContext<A extends Area> {
         return this.createResult(transformer);
     }
 
-    default int random(int first, int second) {
-        return this.nextRandom(2) == 0 ? first : second;
+    default int random(RandomSource random, int first, int second) {
+        return random.nextInt(2) == 0 ? first : second;
     }
 
-    default int random(int first, int second, int third, int fourth) {
-        return switch (this.nextRandom(4)) {
+    default int random(RandomSource random, int first, int second, int third, int fourth) {
+        return switch (random.nextInt(4)) {
             case 0 -> first;
             case 1 -> second;
             case 2 -> third;
