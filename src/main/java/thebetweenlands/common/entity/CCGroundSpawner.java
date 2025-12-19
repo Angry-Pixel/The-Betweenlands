@@ -54,7 +54,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	private static final EntityDataAccessor<Boolean> IS_WORLD_SPANWED = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> SPAWN_COUNT = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> CAN_BE_REMOVED_SAFELY = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.BOOLEAN);
-	//private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 
 	// TODO Check Methods marked with TODOs to Enable after testing
 	
@@ -119,7 +118,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	@Override
 	public void tick() {
 		super.tick();
-
 		if (!level().isClientSide()) {
 			if(isWorldSpawned() && !isSpawnEventActive(level()))
 				kill();
@@ -190,7 +188,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, dead_zone);
 		if(list.stream().filter(e -> e instanceof CryptCrawler).count() >= 1)
 			return false;
-
         return true;
     }
 
@@ -384,9 +381,8 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		int a = 0;
 		for (int x = -1; x <= 1; x++)
 			for (int z = -1; z <= 1; z++)
-				for(int y = 0; y <= 1; y++) {
-				level.setBlock(origin.offset(x, -y, z), list.get(a++), 3);
-			}
+				for(int y = 0; y <= 1; y++)
+					level.setBlock(origin.offset(x, -y, z), list.get(a++), 3);
 		level().playSound(null, origin, SoundRegistry.ROOF_COLLAPSE.get(), SoundSource.BLOCKS, 1F, 1.0F);
 	}
 
