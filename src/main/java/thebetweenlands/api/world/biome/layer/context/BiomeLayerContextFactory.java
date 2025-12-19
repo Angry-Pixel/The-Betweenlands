@@ -6,9 +6,9 @@ import thebetweenlands.api.world.biome.layer.Area;
 public interface BiomeLayerContextFactory<A extends Area> {
 	public SeedMixer getSeedMixer();
 
-	public BiomeLayerContext<A> mixSeed(ResourceLocation location);
+	public BiomeLayerContext<A> createContext(ResourceLocation location);
 	
-	public BiomeLayerContext<A> mixSeed(String string);
+	public BiomeLayerContext<A> createContext(String string);
 	
-	public BiomeLayerContext<A> mixSeed(long seedModifier);
+	public BiomeLayerContext<A> createContext(long seedModifier);
 }
