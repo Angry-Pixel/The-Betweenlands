@@ -12,6 +12,7 @@ import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.SimpleBiomeLayer;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 
 public class ZoomBiomeLayer implements SimpleBiomeLayer {
@@ -19,15 +20,15 @@ public class ZoomBiomeLayer implements SimpleBiomeLayer {
 	public static final MapCodec<ZoomBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
 					RegistryOps.retrieveGetter(Registries.BIOME),
-					BiomeLayer.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.INSTANCE).forGetter(o -> o.parent),
+					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("zoom").forGetter(o -> o.zoom)
 				).apply(instance, ZoomBiomeLayer::new)
 		);
 
-	private final BiomeLayer parent;
+	private final BiomeLayerConfigured parent;
 	private final int zoom;
 	
-	public ZoomBiomeLayer(HolderGetter<Biome> registry, BiomeLayer parent, int zoom) {
+	public ZoomBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int zoom) {
 		this.parent = parent;
 		this.zoom = zoom;
 	}

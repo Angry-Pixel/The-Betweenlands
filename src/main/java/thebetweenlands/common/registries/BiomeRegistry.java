@@ -13,6 +13,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;

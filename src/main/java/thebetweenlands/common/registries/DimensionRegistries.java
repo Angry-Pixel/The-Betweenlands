@@ -21,6 +21,7 @@ import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGeneratorSettings;
+import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -92,8 +93,10 @@ public class DimensionRegistries {
 		HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
 		HolderGetter<ConfiguredEarlyGenerator<?, ?>> generators = context.lookup(BLRegistries.Keys.CONFIGURED_GENERATORS);
 
+		List<BLBiomeData> biomeParameters = BiomeRegistry.biomeParameters(biome, generators);
 		BiomeSource biomeSource = new BetweenlandsBiomeSource(
-			BiomeRegistry.biomeParameters(biome, generators),
+			biomeParameters,
+			BiomeLayerRegistry.betweenlandsBiomeLayers(biome, biomeParameters, 25),
 			0.46875F, //affects the base height of all biomes
 			1.0F,
 			4,

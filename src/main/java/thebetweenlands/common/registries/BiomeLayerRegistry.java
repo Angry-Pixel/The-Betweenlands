@@ -1,11 +1,20 @@
 package thebetweenlands.common.registries;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.spongepowered.include.com.google.common.collect.ImmutableList;
+
 import com.mojang.serialization.MapCodec;
 
+import net.minecraft.core.HolderGetter;
+import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.layer.BackwardRefBiomeLayer;
 import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
@@ -13,6 +22,7 @@ import thebetweenlands.common.world.gen.layer.MarkerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.PreviousLayerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SequenceBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ZoomBiomeLayer;
+import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 public class BiomeLayerRegistry {
 	public static final DeferredRegister<MapCodec<? extends BiomeLayer>> BIOME_LAYER_TYPE = DeferredRegister.create(BLRegistries.Keys.BIOME_LAYER_TYPE, TheBetweenlands.ID);
@@ -33,5 +43,69 @@ public class BiomeLayerRegistry {
 	// Layers that actually place biomes
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<BetweenlandsBiomeLayer>> BETWEENLANDS_BIOME_LAYER = BIOME_LAYER_TYPE.register("betweenlands", () -> BetweenlandsBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<ZoomBiomeLayer>> ZOOM_BIOME_LAYER = BIOME_LAYER_TYPE.register("zoom", () -> ZoomBiomeLayer.CODEC);
+
+
+	public static BiomeLayerConfigured sequence(BiomeLayerConfigured ...layers) {
+		return BiomeLayerConfigured.unconfigured(new SequenceBiomeLayer(Arrays.asList(layers)));
+	}
+
+	public static BiomeLayerConfigured sequence(List<BiomeLayerConfigured> layers) {
+		return BiomeLayerConfigured.unconfigured(new SequenceBiomeLayer(layers));
+	}
+	
+	public static BiomeLayerConfigured previous() {
+		return PreviousLayerBiomeLayer.CONFIGURED_INSTANCE;
+	}
+	
+	public static BiomeLayerConfigured marker(String name) {
+		return BiomeLayerConfigured.unconfigured(new MarkerBiomeLayer(name));
+	}
+
+	public static BiomeLayerConfigured reference(String name) {
+		return BiomeLayerConfigured.unconfigured(new BackwardRefBiomeLayer(name));
+	}
+
+	public static BiomeLayerConfigured betweenlands(HolderGetter<Biome> registry, List<BLBiomeData> biomes, long seed) {
+		return BiomeLayerConfigured.of(new BetweenlandsBiomeLayer(registry, biomes), seed);
+	}
+
+	public static BiomeLayerConfigured zoom(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int zoom, long seed) {
+		return BiomeLayerConfigured.of(new ZoomBiomeLayer(registry, parent, zoom), seed);
+	}
+
+	public static BiomeLayerConfigured zoom(HolderGetter<Biome> registry, int zoom, long seed) {
+		return zoom(registry, previous(), zoom, seed);
+	}
+
+	public static List<BiomeLayerConfigured> multiZoom(HolderGetter<Biome> registry, int zoom, long seed) {
+		List<BiomeLayerConfigured> list = new ArrayList<>(zoom);
+		
+		for(int i = 0; i < zoom; ++i) {
+			list.add(zoom(registry, 1, seed + i));
+		}
+		
+		return list;
+	}
+	
+	public static BiomeLayerConfigured betweenlandsBiomeLayers(HolderGetter<Biome> registry, List<BLBiomeData> biomeParameters, int biomeSize) {
+		return sequence(
+				ImmutableList.<BiomeLayerConfigured>builder()
+				.add(
+					betweenlands(registry, biomeParameters, 100L),
+					zoom(registry, 1, 2000L),
+					zoom(registry, 1, 2001L),
+					marker("swamplands_clearing_zoom"),
+					
+					zoom(registry, 1, 2345L),
+					marker("sludge_plains_clearing_zoom")
+				)
+				.addAll(multiZoom(registry, biomeSize - 1, 2345L))
+				.add(
+					// Here you'd put the swamplands clearing and sludge plains clearing mixers
+				)
+				.build()
+			);
+	}
+	
 	
 }

@@ -8,11 +8,13 @@ import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
 
 public class PreviousLayerBiomeLayer implements BiomeLayer {
 	public static final PreviousLayerBiomeLayer INSTANCE = new PreviousLayerBiomeLayer();
+	public static final BiomeLayerConfigured CONFIGURED_INSTANCE = BiomeLayerConfigured.unconfigured(INSTANCE);
 
 	public static final MapCodec<PreviousLayerBiomeLayer> CODEC = MapCodec.unit(INSTANCE);
 	

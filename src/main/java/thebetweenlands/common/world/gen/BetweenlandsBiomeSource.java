@@ -24,6 +24,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactoryOld;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
 import thebetweenlands.common.world.gen.layer.old.BetweenlandsBiomeLayerOld;
@@ -40,6 +41,7 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 
 	public static final MapCodec<BetweenlandsBiomeSource> BL_CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 		BLBiomeData.CODEC.listOf().fieldOf("biomes").forGetter((object) -> object.list),
+		BiomeLayerConfigured.CODEC.fieldOf("biome_layers").forGetter((object) -> object.genBiomeLayers),
 		Codec.floatRange(0.0F, 1.0F).fieldOf("surface_depth").forGetter((object) -> object.surfaceDepth),
 		Codec.FLOAT.optionalFieldOf("global_factor", 1.0F).forGetter((object) -> object.globalFactor),
 		ExtraCodecs.POSITIVE_INT.fieldOf("biome_size").forGetter((object) -> object.biomeSize),
@@ -48,13 +50,15 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 
 	private Layer genBiomes;
 	private final List<BLBiomeData> list;
+	private final BiomeLayerConfigured genBiomeLayers;
 	private final float surfaceDepth; // The "depth" of the surface, as a factor of the world height: 0.46875 in a 256-high world means the surface is at y = 0.46875 * 256 = 120;
 	private final float globalFactor; // Global multiplier that is used to multiply the output of the biome-related density
 	private final int biomeSize;
 	private final HolderGetter<Biome> registry;
 
-	public BetweenlandsBiomeSource(List<BLBiomeData> list, float surfaceDepth, float globalFactor, int biomeSize, HolderGetter<Biome> registry) {
+	public BetweenlandsBiomeSource(List<BLBiomeData> list, BiomeLayerConfigured genBiomeLayers, float surfaceDepth, float globalFactor, int biomeSize, HolderGetter<Biome> registry) {
 		this.list = list;
+		this.genBiomeLayers = genBiomeLayers;
 		this.surfaceDepth = surfaceDepth;
 		this.globalFactor = globalFactor;
 		this.biomeSize = biomeSize;
