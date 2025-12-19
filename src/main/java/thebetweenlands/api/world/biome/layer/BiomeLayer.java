@@ -19,8 +19,10 @@ public interface BiomeLayer {
 	 * @param context the biome layer context
 	 * @param biomeLayerChain the layer chain, which may be modified in this function
 	 */
-    public default <A extends Area> AreaFactory<A> compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
-    	return this.createAreaFactory(context, biomeLayerChain);
+//    public default <A extends Area> AreaFactory<A> compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
+//    	return this.createAreaFactory(context, biomeLayerChain);
+    public default <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
+    	
     }
     
     /**

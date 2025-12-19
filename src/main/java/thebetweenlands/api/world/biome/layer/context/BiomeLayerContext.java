@@ -6,6 +6,8 @@ import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.PixelTransformer;
 
 public interface BiomeLayerContext<A extends Area> {
+	BiomeLayerContextFactory<A> getContextFactory();
+	
     RandomSource createRandom(long x, long z);
     
     ImprovedNoise getBiomeNoise();
