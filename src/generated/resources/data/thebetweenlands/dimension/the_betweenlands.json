@@ -4,6 +4,264 @@
     "type": "thebetweenlands:bl_chunk_generator",
     "biome_source": {
       "type": "thebetweenlands:bl_biome_source",
+      "biome_layers": {
+        "type": "thebetweenlands:sequence",
+        "layers": [
+          {
+            "type": "thebetweenlands:betweenlands",
+            "biomes": [
+              {
+                "biome": "thebetweenlands:patchy_islands",
+                "parameters": {
+                  "depth": -0.125,
+                  "scale": 0.475,
+                  "weight": 20
+                }
+              },
+              {
+                "biome": "thebetweenlands:swamplands",
+                "generators": [
+                  "thebetweenlands:flat_land_swamplands"
+                ],
+                "parameters": {
+                  "depth": -0.2,
+                  "scale": 0.1,
+                  "weight": 25
+                }
+              },
+              {
+                "biome": "thebetweenlands:deep_waters",
+                "generators": [
+                  "thebetweenlands:deep_waters_simplex_terrain"
+                ],
+                "parameters": {
+                  "depth": -1.2,
+                  "scale": 0.5,
+                  "weight": 12
+                }
+              },
+              {
+                "biome": "thebetweenlands:coarse_islands",
+                "generators": [
+                  "thebetweenlands:coarse_islands"
+                ],
+                "parameters": {
+                  "depth": -0.5,
+                  "scale": 0.4,
+                  "weight": 16
+                }
+              },
+              {
+                "biome": "thebetweenlands:raised_isles",
+                "generators": [
+                  "thebetweenlands:coarse_islands"
+                ],
+                "parameters": {
+                  "depth": -0.5,
+                  "scale": 0.4,
+                  "weight": 16
+                }
+              },
+              {
+                "biome": "thebetweenlands:sludge_plains",
+                "generators": [
+                  "thebetweenlands:flat_land_sludge_plains"
+                ],
+                "parameters": {
+                  "depth": -0.5,
+                  "scale": 0.3,
+                  "weight": 5
+                }
+              },
+              {
+                "biome": "thebetweenlands:eroded_marsh",
+                "generators": [
+                  "thebetweenlands:eroded_marsh_islands"
+                ],
+                "parameters": {
+                  "depth": -0.1,
+                  "scale": 0.11,
+                  "weight": 4
+                }
+              },
+              {
+                "biome": "thebetweenlands:marsh",
+                "generators": [
+                  "thebetweenlands:marsh_islands"
+                ],
+                "parameters": {
+                  "depth": -0.1,
+                  "scale": 0.11,
+                  "weight": 10
+                }
+              },
+              {
+                "biome": "thebetweenlands:swamplands_clearing",
+                "parameters": {
+                  "depth": 0.2,
+                  "scale": 0.1,
+                  "weight": 0
+                }
+              },
+              {
+                "biome": "thebetweenlands:sludge_plains_clearing",
+                "parameters": {
+                  "depth": 0.4,
+                  "scale": 0.05,
+                  "weight": 0
+                }
+              }
+            ],
+            "random_seed": 100
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2000,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2001,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:marker",
+            "random_seed": 0,
+            "ref_name": "swamplands_clearing_zoom"
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2345,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:marker",
+            "random_seed": 0,
+            "ref_name": "sludge_plains_clearing_zoom"
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2345,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2346,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2347,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2348,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2349,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2350,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2351,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2352,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2353,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2354,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2355,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2356,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2357,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2358,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2359,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2360,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2361,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2362,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2363,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2364,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2365,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2366,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2367,
+            "zoom": 1
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2368,
+            "zoom": 1
+          }
+        ],
+        "random_seed": 0
+      },
       "biome_size": 4,
       "biomes": [
         {
