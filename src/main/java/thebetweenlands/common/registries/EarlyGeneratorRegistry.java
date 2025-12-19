@@ -36,7 +36,6 @@ public class EarlyGeneratorRegistry {
 
 	public static final DeferredHolder<EarlyGenerator<?>, CoarseIslandsGenerator> COARSE_ISLANDS = GENERATORS.register("coarse_islands", () -> new CoarseIslandsGenerator(CoarseIslandsGeneratorConfiguration.CODEC));
 	
-	
 	public static final class Configured {
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> FLAT_LAND_SWAMPLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("flat_land_swamplands"));
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> FLAT_LAND_SLUDGE_PLAINS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("flat_land_sludge_plains"));

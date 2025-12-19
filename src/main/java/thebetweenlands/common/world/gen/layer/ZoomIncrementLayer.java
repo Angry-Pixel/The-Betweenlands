@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.layer;
 
+import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.common.world.gen.layer.util.*;
 
 public class ZoomIncrementLayer implements AreaTransformer1 {

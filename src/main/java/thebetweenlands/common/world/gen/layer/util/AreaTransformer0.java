@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.gen.layer.util;
 
+import thebetweenlands.api.world.biome.layer.Area;
+
 public interface AreaTransformer0 {
     default <A extends Area> AreaFactory<A> run(BigContext<A> context) {
         return () -> context.createResult((x, z) -> {

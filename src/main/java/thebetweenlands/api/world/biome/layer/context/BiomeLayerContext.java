@@ -1,9 +1,15 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.api.world.biome.layer.context;
 
+import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import thebetweenlands.api.world.biome.layer.Area;
+import thebetweenlands.common.world.gen.layer.util.PixelTransformer;
 
-public interface BigContext<A extends Area> extends Context {
+public interface BiomeLayerContext<A extends Area> {
     void initRandom(long x, long z);
+    
+    int nextRandom(int bound);
+
+    ImprovedNoise getBiomeNoise();
 
     A createResult(PixelTransformer transformer);
 

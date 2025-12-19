@@ -1,6 +1,6 @@
 package thebetweenlands.common.world.gen.layer;
 
-import thebetweenlands.common.world.gen.layer.util.Area;
+import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.common.world.gen.layer.util.AreaTransformer2;
 import thebetweenlands.common.world.gen.layer.util.Context;
 import thebetweenlands.common.world.gen.layer.util.DimensionOffset0Transformer;

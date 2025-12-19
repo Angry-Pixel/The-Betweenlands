@@ -3,8 +3,8 @@ package thebetweenlands.common.world.gen.layer;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.layer.util.Area;
 import thebetweenlands.common.world.gen.layer.util.AreaTransformer1;
 import thebetweenlands.common.world.gen.layer.util.BigContext;
 
