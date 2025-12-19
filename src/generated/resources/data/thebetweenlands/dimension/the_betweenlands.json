@@ -116,13 +116,11 @@
           },
           {
             "type": "thebetweenlands:zoom",
-            "random_seed": 2000,
-            "zoom": 1
+            "random_seed": 2000
           },
           {
             "type": "thebetweenlands:zoom",
-            "random_seed": 2001,
-            "zoom": 1
+            "random_seed": 2001
           },
           {
             "type": "thebetweenlands:marker",
@@ -131,8 +129,7 @@
           },
           {
             "type": "thebetweenlands:zoom",
-            "random_seed": 2345,
-            "zoom": 1
+            "random_seed": 2345
           },
           {
             "type": "thebetweenlands:marker",
@@ -141,123 +138,99 @@
           },
           {
             "type": "thebetweenlands:zoom",
-            "random_seed": 2345,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2346,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2347,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2348,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2349,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2350,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2351,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2352,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2353,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2354,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2355,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2356,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2357,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2358,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2359,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2360,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2361,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2362,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2363,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2364,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2365,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2366,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2367,
-            "zoom": 1
-          },
-          {
-            "type": "thebetweenlands:zoom",
-            "random_seed": 2368,
-            "zoom": 1
+            "parent": {
+              "type": "thebetweenlands:zoom",
+              "parent": {
+                "type": "thebetweenlands:zoom",
+                "parent": {
+                  "type": "thebetweenlands:zoom",
+                  "parent": {
+                    "type": "thebetweenlands:zoom",
+                    "parent": {
+                      "type": "thebetweenlands:zoom",
+                      "parent": {
+                        "type": "thebetweenlands:zoom",
+                        "parent": {
+                          "type": "thebetweenlands:zoom",
+                          "parent": {
+                            "type": "thebetweenlands:zoom",
+                            "parent": {
+                              "type": "thebetweenlands:zoom",
+                              "parent": {
+                                "type": "thebetweenlands:zoom",
+                                "parent": {
+                                  "type": "thebetweenlands:zoom",
+                                  "parent": {
+                                    "type": "thebetweenlands:zoom",
+                                    "parent": {
+                                      "type": "thebetweenlands:zoom",
+                                      "parent": {
+                                        "type": "thebetweenlands:zoom",
+                                        "parent": {
+                                          "type": "thebetweenlands:zoom",
+                                          "parent": {
+                                            "type": "thebetweenlands:zoom",
+                                            "parent": {
+                                              "type": "thebetweenlands:zoom",
+                                              "parent": {
+                                                "type": "thebetweenlands:zoom",
+                                                "parent": {
+                                                  "type": "thebetweenlands:zoom",
+                                                  "parent": {
+                                                    "type": "thebetweenlands:zoom",
+                                                    "parent": {
+                                                      "type": "thebetweenlands:zoom",
+                                                      "parent": {
+                                                        "type": "thebetweenlands:zoom",
+                                                        "parent": {
+                                                          "type": "thebetweenlands:zoom",
+                                                          "random_seed": 2345
+                                                        },
+                                                        "random_seed": 2346
+                                                      },
+                                                      "random_seed": 2347
+                                                    },
+                                                    "random_seed": 2348
+                                                  },
+                                                  "random_seed": 2349
+                                                },
+                                                "random_seed": 2350
+                                              },
+                                              "random_seed": 2351
+                                            },
+                                            "random_seed": 2352
+                                          },
+                                          "random_seed": 2353
+                                        },
+                                        "random_seed": 2354
+                                      },
+                                      "random_seed": 2355
+                                    },
+                                    "random_seed": 2356
+                                  },
+                                  "random_seed": 2357
+                                },
+                                "random_seed": 2358
+                              },
+                              "random_seed": 2359
+                            },
+                            "random_seed": 2360
+                          },
+                          "random_seed": 2361
+                        },
+                        "random_seed": 2362
+                      },
+                      "random_seed": 2363
+                    },
+                    "random_seed": 2364
+                  },
+                  "random_seed": 2365
+                },
+                "random_seed": 2366
+              },
+              "random_seed": 2367
+            },
+            "random_seed": 2368
           }
         ],
         "random_seed": 0
