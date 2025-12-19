@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.common.world.gen.layer.old.util;
 
 public interface DimensionTransformer {
     int getParentX(int x);

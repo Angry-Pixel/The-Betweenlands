@@ -1,12 +1,12 @@
-package thebetweenlands.common.world.gen.layer;
+package thebetweenlands.common.world.gen.layer.old;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.layer.util.AreaTransformer1;
-import thebetweenlands.common.world.gen.layer.util.BigContext;
+import thebetweenlands.common.world.gen.layer.old.util.AreaTransformer1;
+import thebetweenlands.common.world.gen.layer.old.util.BigContext;
 
 public class CircleMaskLayer implements AreaTransformer1 {
 

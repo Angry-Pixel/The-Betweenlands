@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.common.world.gen.layer.old.util;
 
 import java.util.concurrent.atomic.AtomicLong;
 

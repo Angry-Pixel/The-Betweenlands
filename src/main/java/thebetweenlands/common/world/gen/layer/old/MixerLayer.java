@@ -1,9 +1,9 @@
-package thebetweenlands.common.world.gen.layer;
+package thebetweenlands.common.world.gen.layer.old;
 
 import thebetweenlands.api.world.biome.layer.Area;
-import thebetweenlands.common.world.gen.layer.util.AreaTransformer2;
-import thebetweenlands.common.world.gen.layer.util.Context;
-import thebetweenlands.common.world.gen.layer.util.DimensionOffset0Transformer;
+import thebetweenlands.common.world.gen.layer.old.util.AreaTransformer2;
+import thebetweenlands.common.world.gen.layer.old.util.Context;
+import thebetweenlands.common.world.gen.layer.old.util.DimensionOffset0Transformer;
 
 public enum MixerLayer implements AreaTransformer2, DimensionOffset0Transformer {
 

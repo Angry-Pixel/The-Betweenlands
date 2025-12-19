@@ -8,7 +8,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.util.RandomSource;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
-import thebetweenlands.common.world.gen.layer.util.AreaFactory;
 
 public interface BiomeLayer {
 	public static final Codec<BiomeLayer> CODEC = BLRegistries.BIOME_LAYER_TYPE.byNameCodec().dispatch(BiomeLayer::codec, Function.identity());

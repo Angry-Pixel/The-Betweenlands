@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.common.world.gen.layer.old.util;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.common.TheBetweenlands;
 
 import java.util.Optional;

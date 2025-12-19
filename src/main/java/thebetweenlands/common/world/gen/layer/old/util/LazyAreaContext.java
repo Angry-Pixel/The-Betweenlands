@@ -1,9 +1,10 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.common.world.gen.layer.old.util;
 
 import it.unimi.dsi.fastutil.longs.Long2IntLinkedOpenHashMap;
 import net.minecraft.util.LinearCongruentialGenerator;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
+import thebetweenlands.api.world.biome.layer.PixelTransformer;
 
 public class LazyAreaContext implements BigContext<LazyArea> {
     private final Long2IntLinkedOpenHashMap cache;

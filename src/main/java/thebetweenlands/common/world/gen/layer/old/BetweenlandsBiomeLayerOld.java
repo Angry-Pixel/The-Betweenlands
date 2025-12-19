@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.layer;
+package thebetweenlands.common.world.gen.layer.old;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.layer.util.AreaTransformer0;
-import thebetweenlands.common.world.gen.layer.util.Context;
+import thebetweenlands.common.world.gen.layer.old.util.AreaTransformer0;
+import thebetweenlands.common.world.gen.layer.old.util.Context;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 public class BetweenlandsBiomeLayerOld implements AreaTransformer0 {

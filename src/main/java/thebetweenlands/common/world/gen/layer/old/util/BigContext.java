@@ -1,6 +1,7 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.common.world.gen.layer.old.util;
 
 import thebetweenlands.api.world.biome.layer.Area;
+import thebetweenlands.api.world.biome.layer.PixelTransformer;
 
 public interface BigContext<A extends Area> extends Context {
     void initRandom(long x, long z);

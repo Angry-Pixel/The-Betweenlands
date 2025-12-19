@@ -1,11 +1,11 @@
-package thebetweenlands.common.world.gen.layer;
+package thebetweenlands.common.world.gen.layer.old;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.layer.util.*;
+import thebetweenlands.common.world.gen.layer.old.util.*;
 
 public class SurroundedLayer implements AreaTransformer1 {
 

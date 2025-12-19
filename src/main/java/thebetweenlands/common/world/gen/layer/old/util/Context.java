@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.common.world.gen.layer.old.util;
 
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 

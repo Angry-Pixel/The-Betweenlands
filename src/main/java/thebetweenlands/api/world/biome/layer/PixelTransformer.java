@@ -1,5 +1,6 @@
-package thebetweenlands.common.world.gen.layer.util;
+package thebetweenlands.api.world.biome.layer;
 
+@FunctionalInterface
 public interface PixelTransformer {
     int apply(int x, int z);
 }

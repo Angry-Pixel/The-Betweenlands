@@ -3,7 +3,7 @@ package thebetweenlands.api.world.biome.layer.context;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 import thebetweenlands.api.world.biome.layer.Area;
-import thebetweenlands.common.world.gen.layer.util.PixelTransformer;
+import thebetweenlands.api.world.biome.layer.PixelTransformer;
 
 public interface BiomeLayerContext<A extends Area> {
     RandomSource createRandom(long x, long z);
