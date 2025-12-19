@@ -57,7 +57,7 @@ public class ZoomBiomeLayer implements BiomeLayer {
 
 	public <A extends Area> int apply(BiomeLayerContext<A> context, A area, int x, int z) {
 		int initialBiome = area.get(getParentX(x), getParentY(z));
-		RandomSource random = context.createRandom(x & ~1, z & ~1);
+		RandomSource random = context.createRandom(x >> 1 << 1, z >> 1 << 1);
 		int pX = x & 1;
 		int pZ = z & 1;
 

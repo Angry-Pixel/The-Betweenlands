@@ -94,12 +94,13 @@ public class DimensionRegistries {
 		HolderGetter<ConfiguredEarlyGenerator<?, ?>> generators = context.lookup(BLRegistries.Keys.CONFIGURED_GENERATORS);
 
 		List<BLBiomeData> biomeParameters = BiomeRegistry.biomeParameters(biome, generators);
+		final int biomeSize = 4;
 		BiomeSource biomeSource = new BetweenlandsBiomeSource(
 			biomeParameters,
-			BiomeLayerRegistry.betweenlandsBiomeLayers(biome, biomeParameters, 25),
+			BiomeLayerRegistry.betweenlandsBiomeLayers(biome, biomeParameters, biomeSize),
 			0.46875F, //affects the base height of all biomes
 			1.0F,
-			4,
+			biomeSize,
 			biome);
 
 

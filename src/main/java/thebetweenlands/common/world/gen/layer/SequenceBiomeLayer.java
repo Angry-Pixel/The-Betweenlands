@@ -43,7 +43,7 @@ public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements B
 			chain.nextLayer(layer);
 			
 			layer.compose(childContext, chain);
-			areaFactory = layer.createAreaFactory(context, chainState);
+			areaFactory = layer.createAreaFactory(context, chain);
 		}
 		
 		// Finish the chain

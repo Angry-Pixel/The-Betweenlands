@@ -1,10 +1,10 @@
 package thebetweenlands.common.world.gen.layer.old.util;
 
 import thebetweenlands.api.world.biome.layer.Area;
-import thebetweenlands.api.world.biome.layer.AreaFactoryOld;
+import thebetweenlands.api.world.biome.layer.AreaFactory;
 
 public interface AreaTransformer1 extends DimensionTransformer {
-    default <A extends Area> AreaFactoryOld<A> run(BigContext<A> context, AreaFactoryOld<A> factory) {
+    default <A extends Area> AreaFactory<A> run(BigContext<A> context, AreaFactory<A> factory) {
         return () -> {
             A area = factory.make();
             return context.createResult((x, z) -> {
