@@ -6,9 +6,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerChain;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
+import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
 public interface BiomeLayer {
 	public static final Codec<BiomeLayer> CODEC = BLRegistries.BIOME_LAYER_TYPE.byNameCodec().dispatch(BiomeLayer::codec, Function.identity());

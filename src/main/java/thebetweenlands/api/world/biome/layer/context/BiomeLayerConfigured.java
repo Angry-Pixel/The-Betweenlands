@@ -9,6 +9,7 @@ import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver.LongBasedBiomeLayerContextResolver;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver.StringBasedBiomeLayerContextResolver;
+import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
 public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerContextResolver contextResolver) {
 	

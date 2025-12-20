@@ -9,10 +9,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerChain;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
+import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
 public record MarkerBiomeLayer(String refName) implements BiomeLayer {
 
@@ -24,20 +24,17 @@ public record MarkerBiomeLayer(String refName) implements BiomeLayer {
 	
 	@Override
 	public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
-		Optional<BiomeLayerRef> previous = biomeLayerChain.getPreviousLayer();
-		if(previous.isPresent()) {
-			biomeLayerChain.addBackwardRef(this.refName(), previous.get());
+		Optional<BiomeLayerRef<?>> previousLayer = biomeLayerChain.getPreviousLayer();
+		if(previousLayer.isPresent()) {
+			biomeLayerChain.addBackwardRef(this.refName(), previousLayer.get());
 		}
 	}
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		Optional<BiomeLayerRef> previous = chainState.getPreviousLayer();
-		if(previous.isPresent()) {
-			BiomeLayer previousLayer = previous.get().layer();
-			BiomeLayerChainState previousChainState = previous.get().chainState();
-			// Need to store context as part of the ref as well
-			return previousLayer.createAreaFactory(context, previousChainState);
+		Optional<BiomeLayerRef<?>> previousLayer = chainState.getPreviousLayer();
+		if(previousLayer.isPresent()) {
+			return previousLayer.get().createAreaFactory();
 		}
 		throw new IllegalStateException("A MarkerBiomeLayer layer should always be preceeded by at least one layer");
 	}

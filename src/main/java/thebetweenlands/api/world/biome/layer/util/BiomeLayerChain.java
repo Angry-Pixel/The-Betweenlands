@@ -1,29 +1,36 @@
-package thebetweenlands.api.world.biome.layer.context;
+package thebetweenlands.api.world.biome.layer.util;
 
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
 
 /**
  * Represents a chain of biome layers that is currently in-use
  */
+@NotThreadSafe
 public class BiomeLayerChain implements BiomeLayerChainState {
 
 	/**
 	 * The previous biome layer
 	 */
-	private Optional<BiomeLayerRef> previousLayer;
+	private Optional<BiomeLayerRef<?>> previousLayer;
 	/**
 	 * A mutable map of all backward refs, which is updated as the chain moves
 	 */
-	private final Map<String, BiomeLayerRef> backwardRefs;
+	private final Map<String, BiomeLayerRef<?>> backwardRefs;
 	
 	/**
 	 * The layer currently being processed
 	 */
 	private BiomeLayer currentLayer = null;
+	private BiomeLayerContext<?> currentLayerContext = null;
 	
 	/**
 	 * Used to check if the previous layer was accessed by the currently processing layer
@@ -35,7 +42,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	/**
 	 * An immutable copy of the backward refs, used to save memory in getAllBackwardRefs
 	 */
-	private Map<String, BiomeLayerRef> immutableBackwardRefs = Map.of();
+	private Map<String, BiomeLayerRef<?>> immutableBackwardRefs = Map.of();
 	/**
 	 * Have the backward refs changed since immutableBackwardRefs was last updated?
 	 */
@@ -46,7 +53,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 */
 	private boolean finished = false;
 	
-	public BiomeLayerChain(Optional<BiomeLayerRef> previousLayer, Map<String, BiomeLayerRef> backwardRefs) {
+	public BiomeLayerChain(Optional<BiomeLayerRef<?>> previousLayer, Map<String, BiomeLayerRef<?>> backwardRefs) {
 		this.previousLayer = previousLayer;
 		this.backwardRefs = new Object2ObjectArrayMap<>(backwardRefs);
 	}
@@ -56,14 +63,14 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	}
 	
 	@Override
-	public Optional<BiomeLayerRef> getPreviousLayer() {
+	public Optional<BiomeLayerRef<?>> getPreviousLayer() {
 		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		this.previousLayerUsed = true;
 		return this.previousLayer;
 	}
 
 	@Override
-	public Optional<BiomeLayerRef> getBackwardRef(String name) {
+	public Optional<BiomeLayerRef<?>> getBackwardRef(String name) {
 		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		if(this.backwardRefs.containsKey(name)) {
 			return Optional.of(this.backwardRefs.get(name));
@@ -73,7 +80,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	}
 	
 	@Override
-	public Map<String, BiomeLayerRef> getAllBackwardRefs() {
+	public Map<String, BiomeLayerRef<?>> getAllBackwardRefs() {
 		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		if(this.backwardRefsChanged) {
 			this.immutableBackwardRefs = Map.copyOf(this.backwardRefs);
@@ -88,9 +95,9 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @param name the name of the backward ref
 	 * @param biomeLayer the biome layer to reference
 	 */
-	public void addBackwardRef(String name, BiomeLayer biomeLayer) {
+	public void addBackwardRef(String name, BiomeLayer biomeLayer, BiomeLayerContext<?> layerContext) {
 		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
-		this.backwardRefs.put(name, new BiomeLayerRef(biomeLayer, this.immutableCopy()));
+		this.backwardRefs.put(name, new BiomeLayerRef<>(biomeLayer, layerContext, this.immutableCopy()));
 		
 		this.backwardRefsChanged = true;
 	}
@@ -100,7 +107,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @param name the name of the backward ref
 	 * @param biomeLayerRef the biome layer to reference
 	 */
-	public void addBackwardRef(String name, BiomeLayerRef biomeLayerRef) {
+	public void addBackwardRef(String name, BiomeLayerRef<?> biomeLayerRef) {
 		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
 		this.backwardRefs.put(name, biomeLayerRef);
 		
@@ -108,28 +115,49 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	}
 	
 	/**
-	 * Sets up the chain so that {@code nextLayer} is the current layer.
-	 * @param nextLayer the layer to become the new current layer
+	 * Creates a new ref for the current layer
+	 * @return an optional containing a new ref to the current layer, or empty if there is no current layer.
 	 */
-	public void nextLayer(BiomeLayer nextLayer) {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+	protected Optional<BiomeLayerRef<?>> calculateCurrentRef() {
 		if(this.currentLayer == null) {
-			this.previousLayer = Optional.empty();
+			return Optional.empty();
 		} else {
 			final boolean previousLayerUsed = this.previousLayerUsed;
 			BiomeLayerChainState refState = this.immutableCopy(previousLayerUsed);
 			
-			this.previousLayer = Optional.of(new BiomeLayerRef(this.currentLayer, refState));
+			return Optional.of(new BiomeLayerRef<>(this.currentLayer, this.currentLayerContext, refState));
 		}
+	}
+	
+	/**
+	 * Sets up the chain so that {@code nextLayer} is the current layer.
+	 * @param nextLayer the layer to become the new current layer.
+	 * @param nextLayerContext the context of the layer to become the new current layer.
+	 * @return an optional containing a reference to the layer being replaced, if it exists.
+	 */
+	public Optional<BiomeLayerRef<?>> nextLayer(BiomeLayer nextLayer, BiomeLayerContext<?> nextLayerContext) {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		// Create the ref to the current layer, before it gets replaced
+		final Optional<BiomeLayerRef<?>> layerRef = this.calculateCurrentRef();
+		// Replace the current layer with the new layer
 		this.currentLayer = nextLayer;
+		this.currentLayerContext = nextLayerContext;
+		this.previousLayer = layerRef;
 		this.previousLayerUsed = false;
+		return layerRef;
 	}
 	
 	/**
 	 * "Finishes" the layer chain, causing any calls to it to throw errors
+	 * @return an optional containing a reference to the last layer in the chain, if it exists.
 	 */
-	public void finish() {
+	public Optional<BiomeLayerRef<?>> finish() {
+		// Create the ref to the current layer, before everything becomes inaccessible
+		final Optional<BiomeLayerRef<?>> layerRef = this.calculateCurrentRef();
+		
 		this.finished = true;
+		
+		return layerRef;
 	}
 	
 	public FrozenBiomeLayerChainState immutableCopy() {
@@ -138,22 +166,22 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	
 	public FrozenBiomeLayerChainState immutableCopy(boolean includePreviousLayer) {
 		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
-		Optional<BiomeLayerRef> previousLayer = includePreviousLayer ? this.getPreviousLayer() : Optional.empty();
+		Optional<BiomeLayerRef<?>> previousLayer = includePreviousLayer ? this.getPreviousLayer() : Optional.empty();
 		
-		Map<String, BiomeLayerRef> backwardRefs = this.getAllBackwardRefs();
+		Map<String, BiomeLayerRef<?>> backwardRefs = this.getAllBackwardRefs();
 		
 		return new FrozenBiomeLayerChainState(previousLayer, backwardRefs);
 	}
 	
-	public static record FrozenBiomeLayerChainState(Optional<BiomeLayerRef> previousLayer, Map<String, BiomeLayerRef> backwardRefs) implements BiomeLayerChainState {
+	public static record FrozenBiomeLayerChainState(Optional<BiomeLayerRef<?>> previousLayer, Map<String, BiomeLayerRef<?>> backwardRefs) implements BiomeLayerChainState {
 		
 		@Override
-		public Optional<BiomeLayerRef> getPreviousLayer() {
+		public Optional<BiomeLayerRef<?>> getPreviousLayer() {
 			return this.previousLayer;
 		}
 
 		@Override
-		public Optional<BiomeLayerRef> getBackwardRef(String name) {
+		public Optional<BiomeLayerRef<?>> getBackwardRef(String name) {
 			if(this.backwardRefs.containsKey(name)) {
 				return Optional.of(this.backwardRefs.get(name));
 			} else {
@@ -162,7 +190,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 		}
 		
 		@Override
-		public Map<String, BiomeLayerRef> getAllBackwardRefs() {
+		public Map<String, BiomeLayerRef<?>> getAllBackwardRefs() {
 			return this.backwardRefs;
 		}
 		

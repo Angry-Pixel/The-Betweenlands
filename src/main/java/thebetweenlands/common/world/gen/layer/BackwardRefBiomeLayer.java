@@ -23,7 +23,7 @@ public record BackwardRefBiomeLayer(String refName) implements BiomeLayer {
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		Optional<BiomeLayerRef> ref = chainState.getBackwardRef(this.refName());
+		Optional<BiomeLayerRef<?>> ref = chainState.getBackwardRef(this.refName());
 		if(ref.isPresent()) {
 			BiomeLayer refLayer = ref.get().layer();
 			BiomeLayerChainState refChainState = ref.get().chainState();
