@@ -111,6 +111,10 @@ public class BiomeLayerRegistry {
 					
 					multiZoom(registry, biomeSize - 1, 2345L)
 					
+//				) // Alternative version of multiZoom
+//				.addAll(multiZoomList(registry, biomeSize - 1, 2345L))
+//				.add(
+					
 					// Here you'd put the swamplands clearing and sludge plains clearing mixers
 				)
 				.build()

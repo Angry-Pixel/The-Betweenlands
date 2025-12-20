@@ -53,6 +53,12 @@ public class LinearCongruentialRandomSource implements BitRandomSource {
 			return (int)(originalSeed >> 56 - size);
 		}
 	}
+
+	// Override nextInt with custom behaviour to maintain compatibility with 1.12
+	@Override
+	public int nextInt(int bound) {
+		return Math.floorMod(this.next(32), bound);
+	}
 	
 	@Override
 	public void setSeed(long seed) {

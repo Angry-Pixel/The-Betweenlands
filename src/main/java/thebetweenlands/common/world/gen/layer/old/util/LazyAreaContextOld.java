@@ -11,11 +11,11 @@ public class LazyAreaContextOld implements BigContext<LazyArea> {
     private final Long2IntLinkedOpenHashMap cache;
     private final int maxCache;
     private final ImprovedNoise biomeNoise;
-    private final long seed;
-    private long rval;
+    private final long seedModifier;
+    private long seed;
 
     public LazyAreaContextOld(int pMaxCache, long pSeed, long pSeedModifier) {
-        this.seed = mixSeed(pSeed, pSeedModifier);
+        this.seedModifier = mixSeed(pSeed, pSeedModifier);
         this.biomeNoise = new ImprovedNoise(new LegacyRandomSource(pSeed));
         this.cache = new Long2IntLinkedOpenHashMap(16, 0.25F);
         this.cache.defaultReturnValue(Integer.MIN_VALUE);
@@ -39,18 +39,18 @@ public class LazyAreaContextOld implements BigContext<LazyArea> {
 
     @Override
     public void initRandom(long pX, long pZ) {
-        long i = this.seed;
+        long i = this.seedModifier;
         i = LinearCongruentialGenerator.next(i, pX);
         i = LinearCongruentialGenerator.next(i, pZ);
         i = LinearCongruentialGenerator.next(i, pX);
         i = LinearCongruentialGenerator.next(i, pZ);
-        this.rval = i;
+        this.seed = i;
     }
 
     @Override
     public int nextRandom(int pBound) {
-        int i = Math.floorMod(this.rval >> 24, pBound);
-        this.rval = LinearCongruentialGenerator.next(this.rval, this.seed);
+        int i = Math.floorMod(this.seed >> 24, pBound);
+        this.seed = LinearCongruentialGenerator.next(this.seed, this.seedModifier);
         return i;
     }
 
@@ -59,11 +59,11 @@ public class LazyAreaContextOld implements BigContext<LazyArea> {
         return this.biomeNoise;
     }
 
-    private static long mixSeed(long pLeft, long pRight) {
-        long i = LinearCongruentialGenerator.next(pRight, pRight);
-        i = LinearCongruentialGenerator.next(i, pRight);
-        i = LinearCongruentialGenerator.next(i, pRight);
-        long j = LinearCongruentialGenerator.next(pLeft, i);
+    private static long mixSeed(long worldSeed, long seedModifier) {
+        long i = LinearCongruentialGenerator.next(seedModifier, seedModifier);
+        i = LinearCongruentialGenerator.next(i, seedModifier);
+        i = LinearCongruentialGenerator.next(i, seedModifier);
+        long j = LinearCongruentialGenerator.next(worldSeed, i);
         j = LinearCongruentialGenerator.next(j, i);
         return LinearCongruentialGenerator.next(j, i);
     }
