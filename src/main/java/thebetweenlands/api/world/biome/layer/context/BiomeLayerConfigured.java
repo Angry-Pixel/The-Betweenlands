@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
-import thebetweenlands.api.world.biome.layer.AreaFactoryContext;
+import thebetweenlands.api.world.biome.layer.AreaFactoryContext.AreaFactoryContextSupplier;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.LongBasedBiomeLayerContextResolver;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.StringBasedBiomeLayerContextResolver;
@@ -36,7 +36,7 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerRandomContex
 	 * @param randomContext
 	 * @param biomeLayerChain
 	 */
-	public <A extends Area> void compose(AreaFactoryContext<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerChain biomeLayerChain) {
+	public <A extends Area> void compose(AreaFactoryContextSupplier<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerChain biomeLayerChain) {
 		BiomeLayerRandomContext randomState = this.contextResolver().createContext(randomFactory);
 		this.biomeLayer().compose(new BiomeLayerContext<>(areaFactory, randomState), biomeLayerChain);
 	}
@@ -57,7 +57,7 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerRandomContex
 	 * @param randomContext
 	 * @param biomeLayerChain
 	 */
-	public <A extends Area> AreaFactory<A> createAreaFactory(AreaFactoryContext<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerChainState chainState) {
+	public <A extends Area> AreaFactory<A> createAreaFactory(AreaFactoryContextSupplier<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerChainState chainState) {
 		BiomeLayerRandomContext randomState = this.contextResolver().createContext(randomFactory);
 		return this.biomeLayer().createAreaFactory(new BiomeLayerContext<>(areaFactory, randomState), chainState);
 	}

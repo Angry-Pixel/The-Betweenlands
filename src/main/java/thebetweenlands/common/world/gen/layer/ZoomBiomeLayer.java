@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
+import thebetweenlands.api.world.biome.layer.AreaFactoryContext;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
@@ -39,9 +40,11 @@ public class ZoomBiomeLayer implements BiomeLayer {
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
 		AreaFactory<A> zoomAreaFactory = this.parent.createAreaFactory(context, chainState);
 		
+		AreaFactoryContext<A> areaContext = context.areaContext().get();
+		
 		return () -> {
 			A area = zoomAreaFactory.make();
-			return context.createResult((x, z) -> {
+			return areaContext.createResult((x, z) -> {
 				return this.apply(context, area, x, z);
 			});
 		};

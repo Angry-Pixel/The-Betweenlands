@@ -8,7 +8,8 @@ public interface SimpleBiomeLayer extends BiomeLayer {
 
 	@Override
     public default <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-        return () -> context.createResult((x, z) -> {
+		AreaFactoryContext<A> areaContext = context.areaContext().get();
+        return () -> areaContext.createResult((x, z) -> {
             return this.apply(context, context.createRandom(x, z), x, z);
         });
     }

@@ -24,6 +24,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
+import thebetweenlands.api.world.biome.layer.AreaFactoryContext.AreaFactoryContextSupplier;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
@@ -145,7 +146,7 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		BiomeLayerRandomContextResolver contextResolver = configuredBiomeLayer.contextResolver();
 
 		// Area factory context
-		LazyAreaFactoryContext areaContext = new LazyAreaFactoryContext(25);
+		AreaFactoryContextSupplier<LazyArea> areaContext = () -> new LazyAreaFactoryContext(25);
 		
 		// Random factory context generator
 		LinearCongruentialRandomFactory randomFactory = new LinearCongruentialRandomFactory(worldSeed);
@@ -155,7 +156,7 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		
 		// Layer chain + full context
 		BiomeLayerChain biomeLayerChain = new BiomeLayerChain();
-		BiomeLayerContext<LazyArea> context = new BiomeLayerContext<>(areaContext, randomContext);
+		BiomeLayerContext<LazyArea> context = new BiomeLayerContext<LazyArea>(areaContext, randomContext);
 		
 		// Compose & create area factory
 		biomeLayer.compose(context, biomeLayerChain);
