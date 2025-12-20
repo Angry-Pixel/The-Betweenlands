@@ -40,9 +40,8 @@ public class LinearCongruentialRandomSource implements BitRandomSource {
 	public PositionalRandomFactory forkPositional() {
 		return new LinearCongruentialPositionalRandomFactory(this.nextLong(), this.modifier.get());
 	}
-
-	@Override
-	public int next(int size) {
+	
+	protected long nextBits(int size) {
 		final long originalSeed = this.seed.get();
 		
 		final long nextSeed = LinearCongruentialGenerator.next(originalSeed, this.modifier.get());
@@ -50,14 +49,19 @@ public class LinearCongruentialRandomSource implements BitRandomSource {
 		if (!this.seed.compareAndSet(originalSeed, nextSeed)) {
 			throw ThreadingDetector.makeThreadingException("LinearCongruentialRandomSource", null);
 		} else {
-			return (int)(originalSeed >> 56 - size);
+			return (originalSeed >> (56 - size));
 		}
+	}
+
+	@Override
+	public int next(int size) {
+		return (int)nextBits(size);
 	}
 
 	// Override nextInt with custom behaviour to maintain compatibility with 1.12
 	@Override
 	public int nextInt(int bound) {
-		return Math.floorMod(this.next(32), bound);
+		return Math.floorMod(this.nextBits(32), bound);
 	}
 	
 	@Override
