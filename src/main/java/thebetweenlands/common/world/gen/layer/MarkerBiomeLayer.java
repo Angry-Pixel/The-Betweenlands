@@ -24,7 +24,7 @@ public record MarkerBiomeLayer(String refName) implements BiomeLayer {
 	
 	@Override
 	public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
-		Optional<BiomeLayerRef<?>> previousLayer = biomeLayerChain.getPreviousLayer();
+		Optional<BiomeLayerRef> previousLayer = biomeLayerChain.getPreviousLayer();
 		if(previousLayer.isPresent()) {
 			biomeLayerChain.addBackwardRef(this.refName(), previousLayer.get());
 		}
@@ -32,9 +32,9 @@ public record MarkerBiomeLayer(String refName) implements BiomeLayer {
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		Optional<BiomeLayerRef<?>> previousLayer = chainState.getPreviousLayer();
+		Optional<BiomeLayerRef> previousLayer = chainState.getPreviousLayer();
 		if(previousLayer.isPresent()) {
-			return previousLayer.get().createAreaFactory();
+			return previousLayer.get().createAreaFactory(context.areaContext());
 		}
 		throw new IllegalStateException("A MarkerBiomeLayer layer should always be preceeded by at least one layer");
 	}

@@ -27,6 +27,8 @@ import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContext;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.world.gen.layer.old.BetweenlandsBiomeLayerOld;
@@ -36,7 +38,8 @@ import thebetweenlands.common.world.gen.layer.old.util.BigContext;
 import thebetweenlands.common.world.gen.layer.old.util.LazyAreaContextOld;
 import thebetweenlands.common.world.gen.layer.util.Layer;
 import thebetweenlands.common.world.gen.layer.util.LazyArea;
-import thebetweenlands.common.world.gen.layer.util.LazyAreaContext.LazyAreaContextFactory;
+import thebetweenlands.common.world.gen.layer.util.LazyAreaFactoryContext;
+import thebetweenlands.common.world.gen.layer.util.LinearCongruentialRandomContext.LinearCongruentialRandomFactory;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 import thebetweenlands.common.world.gen.warp.TerrainPoint;
 
@@ -138,13 +141,23 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 
 	public Layer makeLayers(long worldSeed) {
 		BiomeLayerConfigured configuredBiomeLayer = this.genBiomeLayers;
-		LazyAreaContextFactory contextFactory = new LazyAreaContextFactory(25, worldSeed);
-		
 		BiomeLayer biomeLayer = configuredBiomeLayer.biomeLayer();
+		BiomeLayerRandomContextResolver contextResolver = configuredBiomeLayer.contextResolver();
+
+		// Area factory context
+		LazyAreaFactoryContext areaContext = new LazyAreaFactoryContext(25);
 		
+		// Random factory context generator
+		LinearCongruentialRandomFactory randomFactory = new LinearCongruentialRandomFactory(worldSeed);
+		
+		// Random factory context
+		BiomeLayerRandomContext randomContext = contextResolver.createContext(randomFactory);
+		
+		// Layer chain + full context
 		BiomeLayerChain biomeLayerChain = new BiomeLayerChain();
-		BiomeLayerContext<LazyArea> context = configuredBiomeLayer.contextResolver().createContext(contextFactory);
+		BiomeLayerContext<LazyArea> context = new BiomeLayerContext<>(areaContext, randomContext);
 		
+		// Compose & create area factory
 		biomeLayer.compose(context, biomeLayerChain);
 		AreaFactory<LazyArea> areaFactory = biomeLayer.createAreaFactory(context, biomeLayerChain);
 		

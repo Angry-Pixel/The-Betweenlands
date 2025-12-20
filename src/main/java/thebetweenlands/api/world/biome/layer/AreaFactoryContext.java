@@ -1,7 +1,4 @@
-package thebetweenlands.api.world.biome.layer.context;
-
-import thebetweenlands.api.world.biome.layer.Area;
-import thebetweenlands.api.world.biome.layer.PixelTransformer;
+package thebetweenlands.api.world.biome.layer;
 
 public interface AreaFactoryContext<A extends Area> {
 

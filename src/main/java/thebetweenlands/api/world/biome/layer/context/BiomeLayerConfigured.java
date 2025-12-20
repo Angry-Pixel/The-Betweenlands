@@ -6,17 +6,18 @@ import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
+import thebetweenlands.api.world.biome.layer.AreaFactoryContext;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver.LongBasedBiomeLayerContextResolver;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver.StringBasedBiomeLayerContextResolver;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.LongBasedBiomeLayerContextResolver;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.StringBasedBiomeLayerContextResolver;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
-public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerContextResolver contextResolver) {
+public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerRandomContextResolver contextResolver) {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static final Codec<BiomeLayerConfigured> CODEC = Codec.pair(
 			BiomeLayer.CODEC,
-			BiomeLayerContextResolver.CODEC.fieldOf("random_seed").codec()
+			BiomeLayerRandomContextResolver.CODEC.fieldOf("random_seed").codec()
 		).<BiomeLayerConfigured>xmap(BiomeLayerConfigured::fromPair, (config) -> (Pair)toPair(config));
 
 	/**
@@ -26,17 +27,18 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerContextResol
 	 * @param biomeLayerChain
 	 */
 	public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
-		this.compose(context.getContextFactory(), biomeLayerChain);
+		this.compose(context.areaContext(), context.randomContext().getRandomFactory(), biomeLayerChain);
 	}
 
 	/**
 	 * @see BiomeLayer#compose(BiomeLayerContext, BiomeLayerChain)
 	 * @param <A>
-	 * @param context
+	 * @param randomContext
 	 * @param biomeLayerChain
 	 */
-	public <A extends Area> void compose(BiomeLayerContextFactory<A> context, BiomeLayerChain biomeLayerChain) {
-		this.biomeLayer().compose(this.contextResolver().createContext(context), biomeLayerChain);
+	public <A extends Area> void compose(AreaFactoryContext<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerChain biomeLayerChain) {
+		BiomeLayerRandomContext randomState = this.contextResolver().createContext(randomFactory);
+		this.biomeLayer().compose(new BiomeLayerContext<>(areaFactory, randomState), biomeLayerChain);
 	}
 
 	/**
@@ -46,25 +48,26 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerContextResol
 	 * @param biomeLayerChain
 	 */
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		return this.createAreaFactory(context.getContextFactory(), chainState);
+		return this.createAreaFactory(context.areaContext(), context.randomContext().getRandomFactory(), chainState);
 	}
 
 	/**
 	 * @see BiomeLayer#createAreaFactory(BiomeLayerContext, BiomeLayerChainState)
 	 * @param <A>
-	 * @param context
+	 * @param randomContext
 	 * @param biomeLayerChain
 	 */
-	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContextFactory<A> context, BiomeLayerChainState chainState) {
-		return this.biomeLayer().createAreaFactory(this.contextResolver().createContext(context), chainState);
+	public <A extends Area> AreaFactory<A> createAreaFactory(AreaFactoryContext<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerChainState chainState) {
+		BiomeLayerRandomContext randomState = this.contextResolver().createContext(randomFactory);
+		return this.biomeLayer().createAreaFactory(new BiomeLayerContext<>(areaFactory, randomState), chainState);
 	}
 	
 	
-	public static <T extends BiomeLayerContextResolver> BiomeLayerConfigured fromPair(Pair<BiomeLayer, T> pair) {
+	public static <T extends BiomeLayerRandomContextResolver> BiomeLayerConfigured fromPair(Pair<BiomeLayer, T> pair) {
 		return new BiomeLayerConfigured(pair.getFirst(), pair.getSecond());
 	}
 
-	public static Pair<BiomeLayer, ? extends BiomeLayerContextResolver> toPair(BiomeLayerConfigured config) {
+	public static Pair<BiomeLayer, ? extends BiomeLayerRandomContextResolver> toPair(BiomeLayerConfigured config) {
 		return Pair.of(config.biomeLayer(), config.contextResolver());
 	}
 

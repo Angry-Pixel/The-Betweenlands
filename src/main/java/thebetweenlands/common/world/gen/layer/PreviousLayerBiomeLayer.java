@@ -20,9 +20,9 @@ public class PreviousLayerBiomeLayer implements BiomeLayer {
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		Optional<BiomeLayerRef<?>> previousLayer = chainState.getPreviousLayer();
+		Optional<BiomeLayerRef> previousLayer = chainState.getPreviousLayer();
 		if(previousLayer.isPresent()) {
-			return previousLayer.get().createAreaFactory();
+			return previousLayer.get().createAreaFactory(context.areaContext());
 		}
 		throw new IllegalStateException("A PreviousBiomeLayer layer should always be preceeded by at least one layer");
 	}

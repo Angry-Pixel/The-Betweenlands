@@ -12,7 +12,6 @@ import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerContextResolver;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
 public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements BiomeLayer {
@@ -37,8 +36,11 @@ public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements B
 		// Compose every layer in the sequence
 		for(BiomeLayerConfigured configuredLayer : configuredLayers) {
 			BiomeLayer layer = configuredLayer.biomeLayer();
-			BiomeLayerContextResolver resolver = configuredLayer.contextResolver();
-			BiomeLayerContext<A> childContext = resolver.createContext(context.getContextFactory());
+			
+			// Create new context for child
+			BiomeLayerContext<A> childContext = context.useRandomFactory(configuredLayer.contextResolver());
+			
+			// Next Layer
 			chain.nextLayer(layer, childContext);
 			
 			layer.compose(childContext, chain);

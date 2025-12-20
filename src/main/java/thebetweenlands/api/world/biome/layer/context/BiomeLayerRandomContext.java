@@ -3,7 +3,9 @@ package thebetweenlands.api.world.biome.layer.context;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.synth.ImprovedNoise;
 
-public interface RandomFactoryContext {
+public interface BiomeLayerRandomContext {
+	public BiomeLayerRandomFactoryContext getRandomFactory();
+	
     RandomSource createRandom(long x, long z);
     
     ImprovedNoise getBiomeNoise();
