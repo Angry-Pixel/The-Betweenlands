@@ -45,6 +45,10 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 	private final Holder<Biome> surroundingBiome;
 	private final Holder<Biome> surroundedBiome;
 
+	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, float spawnChance, boolean mask, Holder<Biome> surroundingBiome, Holder<Biome> surroundedBiome) {
+		this(registry, parent, checkRange, (int)(spawnChance * 10000), mask, surroundingBiome, surroundedBiome);
+	}
+	
 	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, int spawnChance, boolean mask, Holder<Biome> surroundingBiome, Holder<Biome> surroundedBiome) {
 		this.registry = registry;
 		this.parent = parent;

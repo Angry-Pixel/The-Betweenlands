@@ -22,6 +22,7 @@ import thebetweenlands.common.world.gen.layer.MarkerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.PreviousLayerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SequenceBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SurroundedBiomeLayer;
+import thebetweenlands.common.world.gen.layer.ThinningMaskBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ZoomBiomeLayer;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
@@ -45,6 +46,7 @@ public class BiomeLayerRegistry {
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<BetweenlandsBiomeLayer>> BETWEENLANDS_BIOME_LAYER = BIOME_LAYER_TYPE.register("betweenlands", () -> BetweenlandsBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<ZoomBiomeLayer>> ZOOM_BIOME_LAYER = BIOME_LAYER_TYPE.register("zoom", () -> ZoomBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<SurroundedBiomeLayer>> SURROUNDED_BIOME_LAYER = BIOME_LAYER_TYPE.register("surrounded", () -> SurroundedBiomeLayer.CODEC);
+	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<ThinningMaskBiomeLayer>> THINNING_MASK_BIOME_LAYER = BIOME_LAYER_TYPE.register("thinning_mask", () -> ThinningMaskBiomeLayer.CODEC);
 
 
 	public static BiomeLayerConfigured sequence(BiomeLayerConfigured ...layers) {
