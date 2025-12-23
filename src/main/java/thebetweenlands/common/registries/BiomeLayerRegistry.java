@@ -21,6 +21,7 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.layer.BackwardRefBiomeLayer;
 import thebetweenlands.common.world.gen.layer.BetweenlandsBiomeLayer;
+import thebetweenlands.common.world.gen.layer.CircleMaskBiomeLayer;
 import thebetweenlands.common.world.gen.layer.MarkerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.MaskMixerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.PreviousLayerBiomeLayer;
@@ -52,6 +53,7 @@ public class BiomeLayerRegistry {
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<SurroundedBiomeLayer>> SURROUNDED_BIOME_LAYER = BIOME_LAYER_TYPE.register("surrounded", () -> SurroundedBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<ThinningMaskBiomeLayer>> THINNING_MASK_BIOME_LAYER = BIOME_LAYER_TYPE.register("thinning_mask", () -> ThinningMaskBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<MaskMixerBiomeLayer>> MASK_MIXER_BIOME_LAYER = BIOME_LAYER_TYPE.register("mask_mixer", () -> MaskMixerBiomeLayer.CODEC);
+	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<CircleMaskBiomeLayer>> CIRCLE_MASK_BIOME_LAYER = BIOME_LAYER_TYPE.register("circle_mask", () -> CircleMaskBiomeLayer.CODEC);
 
 
 	public static BiomeLayerConfigured sequence(BiomeLayerConfigured ...layers) {
@@ -182,6 +184,23 @@ public class BiomeLayerRegistry {
 
 	public static List<BiomeLayerConfigured> repeatThinList(HolderGetter<Biome> registry, int checkRange, int removalChance, boolean mask, ResourceKey<Biome> biome, ResourceKey<Biome> removingBiome, int count, long seed) {
 		return repeatThinList(registry, checkRange, removalChance, mask, registry.getOrThrow(biome), registry.getOrThrow(removingBiome), count, seed);
+	}
+	
+
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, Holder<Biome> biome) {
+		return BiomeLayerConfigured.unconfigured(new CircleMaskBiomeLayer(registry, parent, checkRange, biome));
+	}
+
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, ResourceKey<Biome> biome) {
+		return circleMask(registry, parent, checkRange, registry.getOrThrow(biome));
+	}
+
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, int checkRange, Holder<Biome> biome) {
+		return circleMask(registry, previous(), checkRange, biome);
+	}
+
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, int checkRange, ResourceKey<Biome> biome) {
+		return circleMask(registry, previous(), checkRange, registry.getOrThrow(biome));
 	}
 	
 	
