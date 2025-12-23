@@ -19,19 +19,19 @@ public interface BiomeLayer {
 	 * @param context the biome layer context
 	 * @param biomeLayerChain the layer chain, which may be modified in this function
 	 */
-    public default <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
-    	// NO-OP by default
-    }
-    
-    /**
-     * Called to create an AreaFactory for biome processing
-     * @param <A>
-     * @param context the biome layer context
-     * @param chainState the state of the biome chain after {@link BiomeLayer#compose(BiomeLayerContext, BiomeLayerChain) compose()} was called
+	public default <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
+		// NO-OP by default
+	}
+	
+	/**
+	 * Called to create an AreaFactory for biome processing
+	 * @param <A>
+	 * @param context the biome layer context
+	 * @param chainState the state of the biome chain after {@link BiomeLayer#compose(BiomeLayerContext, BiomeLayerChain) compose()} was called
 	 * @return this layer's area factory
-     */
-    public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState);
-    
+	 */
+	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState);
+	
 	/**
 	 * @return a codec for this biome layer
 	 */

@@ -50,14 +50,14 @@ public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
 
 	@Override
 	public <A extends Area> int apply(BiomeLayerContext<A> context, RandomSource random, int x, int z) {
-		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, random.nextInt(totalWeight)).getKey(), registry);
+		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, random.nextInt(totalWeight)));
 	}
 	
 	public Holder<Biome> getRandomItem(List<BLBiomeData> list, int weight) {
 		if (list.isEmpty())
 			return null;
 
-		if(totalWeight == 0)
+		if(this.totalWeight == 0)
 			return list.getFirst().biome();
 
 		for (BLBiomeData obj : list) {

@@ -164,9 +164,15 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		
 		return new Layer(areaFactory);
 	}
-	
+
+	// TODO see how feasible it is to use holders instead of biome ids
 	public static int getBiomeId(ResourceKey<Biome> biome, HolderGetter<Biome> registry) {
 		return ServerLifecycleHooks.getCurrentServer().registryAccess().registryOrThrow(Registries.BIOME).getId(registry.get(biome).get().value());
+	}
+
+	// TODO see how feasible it is to use holders instead of biome ids
+	public static int getBiomeId(Holder<Biome> biome) {
+		return ServerLifecycleHooks.getCurrentServer().registryAccess().registryOrThrow(Registries.BIOME).getId(biome.value());
 	}
 
 	public static long getSeed() {

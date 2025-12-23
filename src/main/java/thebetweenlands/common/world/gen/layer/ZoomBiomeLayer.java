@@ -12,11 +12,12 @@ import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.AreaFactoryContext;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
+import thebetweenlands.api.world.biome.layer.SingleParentBiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 
-public class ZoomBiomeLayer implements BiomeLayer {
+public class ZoomBiomeLayer implements SingleParentBiomeLayer {
 
 	public static final MapCodec<ZoomBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
@@ -32,22 +33,13 @@ public class ZoomBiomeLayer implements BiomeLayer {
 	}
 	
 	@Override
+	public BiomeLayerConfigured getParentLayer() {
+		return this.parent;
+	}
+	
+	@Override
 	public MapCodec<? extends BiomeLayer> codec() {
 		return CODEC;
-	}
-
-	@Override
-	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
-		AreaFactory<A> zoomAreaFactory = this.parent.createAreaFactory(context, chainState);
-		
-		AreaFactoryContext<A> areaContext = context.areaContext().get();
-		
-		return () -> {
-			A area = zoomAreaFactory.make();
-			return areaContext.createResult((x, z) -> {
-				return this.apply(context, area, x, z);
-			});
-		};
 	}
 
 	public static int getParentX(int x) {
@@ -58,8 +50,9 @@ public class ZoomBiomeLayer implements BiomeLayer {
 		return y >> 1;
 	}
 
-	public <A extends Area> int apply(BiomeLayerContext<A> context, A area, int x, int z) {
-		int initialBiome = area.get(getParentX(x), getParentY(z));
+	@Override
+	public <A extends Area> int apply(BiomeLayerContext<A> context, A parentArea, int x, int z) {
+		int initialBiome = parentArea.get(getParentX(x), getParentY(z));
 		RandomSource random = context.createRandom(x >> 1 << 1, z >> 1 << 1);
 		int pX = x & 1;
 		int pZ = z & 1;
@@ -67,19 +60,19 @@ public class ZoomBiomeLayer implements BiomeLayer {
 		if (pX == 0 && pZ == 0) {
 			return initialBiome;
 		} else {
-			int initialBiomeZ = area.get(getParentX(x), getParentY(z + 1));
+			int initialBiomeZ = parentArea.get(getParentX(x), getParentY(z + 1));
 			int rand1 = context.random(random, initialBiome, initialBiomeZ);
 
 			if (pX == 0 && pZ == 1) {
 				return rand1;
 			} else {
-				int initialBiomeX = area.get(getParentX(x + 1), getParentY(z));
+				int initialBiomeX = parentArea.get(getParentX(x + 1), getParentY(z));
 				int rand2 = context.random(random, initialBiome, initialBiomeX);
 
 				if (pX == 1 && pZ == 0) {
 					return rand2;
 				} else {
-					int initialBiomeXZ = area.get(getParentX(x + 1), getParentY(z + 1));
+					int initialBiomeXZ = parentArea.get(getParentX(x + 1), getParentY(z + 1));
 					return this.modeOrRandom(context, random, initialBiome, initialBiomeZ, initialBiomeX, initialBiomeXZ);
 				}
 			}
