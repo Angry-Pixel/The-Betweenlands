@@ -27,7 +27,7 @@ public class ThinningMaskBiomeLayer implements SingleParentBiomeLayer {
 					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("check_range").forGetter(o -> o.checkRange),
-					Codec.xor(Codec.INT, Codec.FLOAT).fieldOf("removal_chance").<Integer>xmap(t -> t.map(Function.identity(), (f) -> (int)(f * 10000)), t -> Either.left(t)).forGetter(o -> o.removalChance),
+					Codec.xor(Codec.intRange(0, 10000), Codec.floatRange(0.0F, 1.0F)).fieldOf("removal_chance").<Integer>xmap(t -> t.map(Function.identity(), (f) -> (int)(f * 10000)), t -> Either.left(t)).forGetter(o -> o.removalChance),
 					Codec.BOOL.fieldOf("mask").forGetter(o -> o.mask),
 					Biome.CODEC.fieldOf("biome").forGetter(o -> o.biome),
 					Biome.CODEC.fieldOf("remove_when_near").forGetter(o -> o.removingBiome)

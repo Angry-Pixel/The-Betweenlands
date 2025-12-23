@@ -57,6 +57,9 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	public BiomeLayerChain(Optional<BiomeLayerRef> previousLayer, Map<String, BiomeLayerRef> backwardRefs) {
 		this.previousLayer = previousLayer;
 		this.backwardRefs = new Object2ObjectArrayMap<>(backwardRefs);
+		if(backwardRefs.size() != 0) {
+			this.immutableBackwardRefs = Map.copyOf(backwardRefs);
+		}
 	}
 
 	public BiomeLayerChain() {

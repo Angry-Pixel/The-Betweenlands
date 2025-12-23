@@ -27,10 +27,10 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("surround_range").forGetter(o -> o.checkRange),
-					Codec.xor(Codec.INT, Codec.FLOAT).fieldOf("spawn_chance").<Integer>xmap(t -> t.map(Function.identity(), (f) -> (int)(f * 10000)), t -> Either.left(t)).forGetter(o -> o.spawnChance),
+					Codec.xor(Codec.intRange(0, 10000), Codec.floatRange(0.0F, 1.0F)).fieldOf("spawn_chance").<Integer>xmap(t -> t.map(Function.identity(), (f) -> (int)(f * 10000)), t -> Either.left(t)).forGetter(o -> o.spawnChance),
 					Codec.BOOL.fieldOf("mask").forGetter(o -> o.mask),
-					Biome.CODEC.fieldOf("surrounding_biome").forGetter(o -> o.surroundingBiome),
-					Biome.CODEC.fieldOf("surrounded_biome").forGetter(o -> o.surroundedBiome)
+					Biome.CODEC.fieldOf("biome").forGetter(o -> o.biome),
+					Biome.CODEC.fieldOf("surrounding_biome").forGetter(o -> o.surroundingBiome)
 				).apply(instance, SurroundedBiomeLayer::new)
 		);
 
@@ -42,21 +42,21 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 	private final int spawnChance;
 	// Whether to return the original value (mask = false) or -1 (mask = true) when the biome isn't placed
 	private final boolean mask;
+	private final Holder<Biome> biome;
 	private final Holder<Biome> surroundingBiome;
-	private final Holder<Biome> surroundedBiome;
 
-	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, float spawnChance, boolean mask, Holder<Biome> surroundingBiome, Holder<Biome> surroundedBiome) {
-		this(registry, parent, checkRange, (int)(spawnChance * 10000), mask, surroundingBiome, surroundedBiome);
+	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, float spawnChance, boolean mask, Holder<Biome> biome, Holder<Biome> surroundingBiome) {
+		this(registry, parent, checkRange, (int)(spawnChance * 10000), mask, biome, surroundingBiome);
 	}
 	
-	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, int spawnChance, boolean mask, Holder<Biome> surroundingBiome, Holder<Biome> surroundedBiome) {
+	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, int spawnChance, boolean mask, Holder<Biome> biome, Holder<Biome> surroundingBiome) {
 		this.registry = registry;
 		this.parent = parent;
 		this.checkRange = checkRange;
 		this.spawnChance = spawnChance;
 		this.mask = mask;
+		this.biome = biome;
 		this.surroundingBiome = surroundingBiome;
-		this.surroundedBiome = surroundedBiome;
 	}
 
 	@Override
@@ -83,9 +83,9 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 			RandomSource random = context.createRandom(x, z);
 			
 			if(random.nextInt(10000) <= this.spawnChance) {
-				int surroundedBiomeId = BetweenlandsBiomeSource.getBiomeId(this.surroundedBiome);
+				int biomeId = BetweenlandsBiomeSource.getBiomeId(this.biome);
 				
-				return surroundedBiomeId;
+				return biomeId;
 			}
 		}
 
