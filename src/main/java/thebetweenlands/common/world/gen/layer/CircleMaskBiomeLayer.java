@@ -24,7 +24,8 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("check_range").forGetter(o -> o.checkRange),
-					Biome.CODEC.fieldOf("biome").forGetter(o -> o.biome)
+					Codec.BOOL.fieldOf("mask").forGetter(o -> o.mask),
+					Biome.CODEC.fieldOf("biome").forGetter(o -> o.maskBiome)
 				).apply(instance, CircleMaskBiomeLayer::new)
 		);
 
@@ -32,14 +33,17 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 	private final BiomeLayerConfigured parent;
 	// How many cells to check are surrounded
 	private final int checkRange;
+	// If false, does not remove cells outside the mask
+	private final boolean mask;
 	// The biome to search for
-	private final Holder<Biome> biome;
+	private final Holder<Biome> maskBiome;
 	
-	public CircleMaskBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, Holder<Biome> biome) {
+	public CircleMaskBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, boolean mask, Holder<Biome> biome) {
 		this.registry = registry;
 		this.parent = parent;
 		this.checkRange = checkRange;
-		this.biome = biome;
+		this.mask = mask;
+		this.maskBiome = biome;
 	}
 	
 	@Override
@@ -49,7 +53,7 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 
 	@Override
 	public <A extends Area> int apply(BiomeLayerContext<A> context, A parentArea, int x, int z) {
-		int maskBiomeId = BetweenlandsBiomeSource.getBiomeId(this.biome);
+		int maskBiomeId = BetweenlandsBiomeSource.getBiomeId(this.maskBiome);
 
 		for(int xo = -this.checkRange; xo <= this.checkRange; xo++) {
 			for(int zo = -this.checkRange; zo <= this.checkRange; zo++) {
@@ -62,7 +66,7 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 			}
 		}
 		
-		return -1;
+		return this.mask ? -1 : parentArea.get(x, z);
 	}
 
 	@Override

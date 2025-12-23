@@ -187,20 +187,20 @@ public class BiomeLayerRegistry {
 	}
 	
 
-	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, Holder<Biome> biome) {
-		return BiomeLayerConfigured.unconfigured(new CircleMaskBiomeLayer(registry, parent, checkRange, biome));
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, boolean mask, Holder<Biome> biome) {
+		return BiomeLayerConfigured.unconfigured(new CircleMaskBiomeLayer(registry, parent, checkRange, mask, biome));
 	}
 
-	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, ResourceKey<Biome> biome) {
-		return circleMask(registry, parent, checkRange, registry.getOrThrow(biome));
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, boolean mask, ResourceKey<Biome> biome) {
+		return circleMask(registry, parent, checkRange, mask, registry.getOrThrow(biome));
 	}
 
-	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, int checkRange, Holder<Biome> biome) {
-		return circleMask(registry, previous(), checkRange, biome);
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, int checkRange, boolean mask, Holder<Biome> biome) {
+		return circleMask(registry, previous(), checkRange, mask, biome);
 	}
 
-	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, int checkRange, ResourceKey<Biome> biome) {
-		return circleMask(registry, previous(), checkRange, registry.getOrThrow(biome));
+	public static BiomeLayerConfigured circleMask(HolderGetter<Biome> registry, int checkRange, boolean mask, ResourceKey<Biome> biome) {
+		return circleMask(registry, previous(), checkRange, mask, registry.getOrThrow(biome));
 	}
 	
 	
@@ -234,18 +234,18 @@ public class BiomeLayerRegistry {
 					// Swamplands Clearing mixer
 					mix(
 							sequence(
-								surrounded(
-										registry,
-											reference("swamplands_clearing_zoom"),
-										1, // 1 check radius
-										10000, // 100.00% placement chance
-										true, // mask (anything that wasn't placed by this is removed)
-										BiomeRegistry.SWAMPLANDS_CLEARING, // place a swamplands clearing
-										BiomeRegistry.SWAMPLANDS, // when it's surrounded by swamplands
-										102L // seed offset
-									),
 								repeatThin(
 										registry,
+										surrounded(
+												registry,
+													reference("swamplands_clearing_zoom"),
+												1, // 1 check radius
+												10000, // 100.00% placement chance
+												true, // mask (anything that wasn't placed by this is removed)
+												BiomeRegistry.SWAMPLANDS_CLEARING, // place a swamplands clearing
+												BiomeRegistry.SWAMPLANDS, // when it's surrounded by swamplands
+												102L // seed offset
+											),
 										3, // 3 check radius
 										2500, // 25.00% removal chance
 										false, // Don't treat this as a mask (though it doesn't matter here)
@@ -256,7 +256,7 @@ public class BiomeLayerRegistry {
 									),
 								legacyZoom(registry, 2345L),
 								multiZoom(registry, biomeSize - 1, 2345L),
-								circleMask(registry, 10, BiomeRegistry.SWAMPLANDS_CLEARING)
+								circleMask(registry, 10, true, BiomeRegistry.SWAMPLANDS_CLEARING)
 							)
 						)
 				)

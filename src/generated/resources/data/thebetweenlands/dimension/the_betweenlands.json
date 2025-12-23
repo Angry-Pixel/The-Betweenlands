@@ -154,20 +154,6 @@
               "type": "thebetweenlands:sequence",
               "layers": [
                 {
-                  "type": "thebetweenlands:surrounded",
-                  "parent": {
-                    "type": "thebetweenlands:reference",
-                    "random_seed": 0,
-                    "ref_name": "swamplands_clearing_zoom"
-                  },
-                  "biome": "thebetweenlands:swamplands_clearing",
-                  "mask": true,
-                  "random_seed": 102,
-                  "spawn_chance": 10000,
-                  "surround_range": 1,
-                  "surrounding_biome": "thebetweenlands:swamplands"
-                },
-                {
                   "type": "thebetweenlands:thinning_mask",
                   "parent": {
                     "type": "thebetweenlands:thinning_mask",
@@ -187,6 +173,20 @@
                                   "type": "thebetweenlands:thinning_mask",
                                   "parent": {
                                     "type": "thebetweenlands:thinning_mask",
+                                    "parent": {
+                                      "type": "thebetweenlands:surrounded",
+                                      "parent": {
+                                        "type": "thebetweenlands:reference",
+                                        "random_seed": 0,
+                                        "ref_name": "swamplands_clearing_zoom"
+                                      },
+                                      "biome": "thebetweenlands:swamplands_clearing",
+                                      "mask": true,
+                                      "random_seed": 102,
+                                      "spawn_chance": 10000,
+                                      "surround_range": 1,
+                                      "surrounding_biome": "thebetweenlands:swamplands"
+                                    },
                                     "biome": "thebetweenlands:swamplands_clearing",
                                     "check_range": 3,
                                     "mask": false,
@@ -277,6 +277,7 @@
                   "type": "thebetweenlands:circle_mask",
                   "biome": "thebetweenlands:swamplands_clearing",
                   "check_range": 10,
+                  "mask": true,
                   "random_seed": 0
                 }
               ],
