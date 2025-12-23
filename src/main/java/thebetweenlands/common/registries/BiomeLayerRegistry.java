@@ -234,18 +234,18 @@ public class BiomeLayerRegistry {
 					// Swamplands Clearing mixer
 					mix(
 							sequence(
+								surrounded(
+										registry,
+											reference("swamplands_clearing_zoom"),
+										1, // 1 check radius
+										10000, // 100.00% placement chance
+										true, // mask (anything that wasn't placed by this is removed)
+										BiomeRegistry.SWAMPLANDS_CLEARING, // place a swamplands clearing
+										BiomeRegistry.SWAMPLANDS, // when it's surrounded by swamplands
+										102L // seed offset
+									),
 								repeatThin(
 										registry,
-										surrounded(
-												registry,
-													reference("swamplands_clearing_zoom"),
-												1, // 1 check radius
-												10000, // 100.00% placement chance
-												true, // mask (anything that wasn't placed by this is removed)
-												BiomeRegistry.SWAMPLANDS_CLEARING, // place a swamplands clearing
-												BiomeRegistry.SWAMPLANDS, // when it's surrounded by swamplands
-												102L // seed offset
-											),
 										3, // 3 check radius
 										2500, // 25.00% removal chance
 										false, // Don't treat this as a mask (though it doesn't matter here)
@@ -255,7 +255,8 @@ public class BiomeLayerRegistry {
 										105L // seed offset
 									),
 								legacyZoom(registry, 2345L),
-								multiZoom(registry, biomeSize - 1, 2345L)
+								multiZoom(registry, biomeSize - 1, 2345L),
+								circleMask(registry, 10, BiomeRegistry.SWAMPLANDS_CLEARING)
 							)
 						)
 				)
