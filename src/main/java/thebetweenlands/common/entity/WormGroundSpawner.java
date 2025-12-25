@@ -86,7 +86,7 @@ public class WormGroundSpawner extends CCGroundSpawner {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected Entity getEntitySpawned() {
+	public Entity getEntitySpawned() {
 		Monster worm = null;
 		int rand = random.nextInt(5);
 
@@ -118,7 +118,7 @@ public class WormGroundSpawner extends CCGroundSpawner {
 	}
 
 	@Override
-	protected int maxUseCount() {
+	public int maxUseCount() {
 		return 8;
 	}
 }

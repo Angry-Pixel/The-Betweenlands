@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.entity.CCGroundSpawner;
+import thebetweenlands.common.entity.monster.RockSnot;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -216,9 +217,9 @@ public class TestChimpItem extends Item {
 			context.getLevel().addFreshEntity(triggeredblock);
 			*/
 
-			CCGroundSpawner spawner = EntityRegistry.CC_GROUND_SPAWNER.get().create(context.getLevel());
+			RockSnot spawner = EntityRegistry.ROCK_SNOT.get().create(context.getLevel());
 			if (spawner != null) {
-				spawner.setPos(context.getClickedPos().getCenter());
+				spawner.setPos(context.getClickedPos().above().getCenter());
 				spawner.finalizeSpawn((ServerLevelAccessor)context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), MobSpawnType.NATURAL, null);
 				context.getLevel().addFreshEntity(spawner);
 			}

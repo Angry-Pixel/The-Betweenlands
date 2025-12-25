@@ -318,6 +318,8 @@ import thebetweenlands.client.renderer.entity.PrimordialMalevolenceSpawnerRender
 import thebetweenlands.client.renderer.entity.PrimordialMalevolenceTeleporterRenderer;
 import thebetweenlands.client.renderer.entity.PrimordialMalevolenceTurretRenderer;
 import thebetweenlands.client.renderer.entity.PyradRenderer;
+import thebetweenlands.client.renderer.entity.RockSnotRenderer;
+import thebetweenlands.client.renderer.entity.RockSnotTendrilRenderer;
 import thebetweenlands.client.renderer.entity.RootSpriteRenderer;
 import thebetweenlands.client.renderer.entity.ShamblerRenderer;
 import thebetweenlands.client.renderer.entity.ShockwaveBlockRenderer;
@@ -558,6 +560,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.TRIGGERED_FALLING_BLOCK.get(), TriggeredFallingBlockRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.CC_GROUND_SPAWNER.get(), CCGroundSpawnerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WORM_GROUND_SPAWNER.get(), WormGroundSpawnerRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ROCK_SNOT.get(), RockSnotRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ROCK_SNOT_TENDRIL.get(), RockSnotTendrilRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);

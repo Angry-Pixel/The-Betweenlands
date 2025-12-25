@@ -36,7 +36,7 @@ public class CCGroundSpawnerRenderer extends EntityRenderer<CCGroundSpawner> {
 		Matrix4f matrix4f = poseStack.last().pose();
 
 		RenderTarget fbo = Minecraft.getInstance().getMainRenderTarget();
-
+/*
 		try(Stencil stencil = Stencil.reserve(fbo)) {
 			if(stencil.isValid()) {
 				GL11.glEnable(GL11.GL_STENCIL_TEST);
@@ -84,7 +84,7 @@ public class CCGroundSpawnerRenderer extends EntityRenderer<CCGroundSpawner> {
 
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
-
+*/
 		//Render visible pass
 		this.renderModel(entity, matrix4f, buffer, packedLight);
 		poseStack.popPose();

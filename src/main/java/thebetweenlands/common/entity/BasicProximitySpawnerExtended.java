@@ -32,7 +32,7 @@ public abstract class BasicProximitySpawnerExtended extends BasicProximitySpawne
 	 * @return an Entity or null.
 	 */
 	@Nullable
-	abstract
+	public abstract
 	Entity getEntitySpawned();
 
 	/**
@@ -40,13 +40,13 @@ public abstract class BasicProximitySpawnerExtended extends BasicProximitySpawne
 	 *
 	 * @return an int amount.
 	 */
-	abstract int getEntitySpawnCount();
+	public abstract int getEntitySpawnCount();
 
 	/**
 	 * How many spawns this does (NYI)
 	 *
 	 * @return amount of uses.
 	 */
-	abstract int maxUseCount();
+	public abstract int maxUseCount();
 
 }

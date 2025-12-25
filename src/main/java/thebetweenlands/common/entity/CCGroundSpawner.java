@@ -262,7 +262,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected Entity getEntitySpawned() {
+	public Entity getEntitySpawned() {
 		boolean isBiped = false;
 		boolean isChief = false;
 		CryptCrawler crawler = new CryptCrawler(EntityRegistry.CRYPT_CRAWLER.get(), level());
@@ -285,7 +285,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-	protected int getEntitySpawnCount() {
+	public int getEntitySpawnCount() {
 		return 1;
 	}
 
@@ -295,7 +295,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-	protected int maxUseCount() {
+	public int maxUseCount() {
 		return 5;
 	}
 
