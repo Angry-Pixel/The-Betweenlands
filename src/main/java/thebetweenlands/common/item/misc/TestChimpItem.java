@@ -221,6 +221,7 @@ public class TestChimpItem extends Item {
 			if (spawner != null) {
 				spawner.setPos(context.getClickedPos().above().getCenter());
 				spawner.finalizeSpawn((ServerLevelAccessor)context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), MobSpawnType.NATURAL, null);
+				spawner.setPlacedByPlayer(true);
 				context.getLevel().addFreshEntity(spawner);
 			}
 

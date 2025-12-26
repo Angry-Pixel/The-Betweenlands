@@ -13,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.Tags;
@@ -72,7 +73,6 @@ public class RockSnotTendril extends Entity {
 			if (getBoundingBox().intersects(parent.getBoundingBox())) {
 				if (getX() != parent.getX() || getZ() != parent.getZ())
 					setPos(parent.getX(), parent.getY() + parent.getBbHeight() * 0.5D, parent.getZ());
-				setDeltaMovement(0, 0, 0);
 
 				if (!level().isClientSide()) {
 					if (isVehicle() && !parent.isVehicle()) {
@@ -94,26 +94,24 @@ public class RockSnotTendril extends Entity {
 
 		if(level().isClientSide() && level().getGameTime()%5 == 0)
 			spawnDrips();
-
-		setDeltaMovement(getDeltaMovement().add(1, 1, 1));
+		
+		move(MoverType.SELF, getDeltaMovement());
 		super.tick();
 	}
 
 	public void moveToTarget(double targetX, double targetY, double targetZ, float velocity) {
 		float distSq = Mth.sqrt((float) (targetX * targetX + targetY * targetY + targetZ * targetZ));
-		targetX = targetX / (double) distSq;
-		targetY = targetY / (double) distSq;
-		targetZ = targetZ / (double) distSq;
-		targetX = targetX * (double) velocity;
-		targetY = targetY * (double) velocity;
-		targetZ = targetZ * (double) velocity;
+		targetX = targetX / (double) distSq * (double) velocity;
+		targetY = targetY / (double) distSq * (double) velocity;
+		targetZ = targetZ / (double) distSq * (double) velocity;
+
 		setDeltaMovement(getDeltaMovement().add(targetX, targetY, targetZ));
 		float angle = (float) Mth.sqrt((float) (targetX * targetX + targetZ * targetZ));
 		setYRot((float) (Mth.atan2(targetX, targetZ) * (180D / Math.PI)));
 		setXRot((float) (Mth.atan2(targetY, (double) angle) * (180D / Math.PI)));
 	}
 
-	protected Entity checkCollision() {
+	public void checkCollision() {
 		if (parent != null) {
 			List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
 			for (int i = 0; i < list.size(); i++) {
@@ -121,7 +119,7 @@ public class RockSnotTendril extends Entity {
 				if (entity != null) {
 					if (entity instanceof LivingEntity && !(entity instanceof RockSnot) && !(entity instanceof RockSnotTendril) && !(entity instanceof Lurker) && !entity.getType().is(Tags.EntityTypes.BOSSES)) {
 						if (entity instanceof Player && parent.getPlacedByPlayer() || parent.isVehicle())
-							return null;
+							return;
 						if (!isVehicle()) {
 							if (!level().isClientSide()) {
 								entity.startRiding(this, true);
@@ -135,7 +133,6 @@ public class RockSnotTendril extends Entity {
 				}
 			}
 		}
-		return null;
 	}
 
 	public void returnToParent() {
@@ -173,6 +170,11 @@ public class RockSnotTendril extends Entity {
 			RockSnot parentEntityIn = (RockSnot) level().getEntity(parentEntityID);
 			this.parent = parentEntityIn;
 		}
+	}
+
+	@Override
+	public boolean canCollideWith(Entity entity) {
+		return !(entity instanceof RockSnot) && super.canCollideWith(entity);
 	}
 
 	@Override	
