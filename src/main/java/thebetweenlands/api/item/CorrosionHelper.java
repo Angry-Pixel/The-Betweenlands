@@ -14,6 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -191,9 +192,9 @@ public class CorrosionHelper {
 	 * Returns whether corrosion is enabled
 	 * @return
 	 */
-	public static boolean isCorrosionEnabled() {
-		// TODO check getting level
-		return TheBetweenlands.getLevelWorkaround(Level.OVERWORLD).getGameRules().getBoolean(TheBetweenlands.CORROSION_GAMERULE) && BetweenlandsConfig.useCorrosion;
+	public static boolean isCorrosionEnabled(@Nullable Level level) {
+		if (level == null) return false;
+		return level.getGameRules().getBoolean(TheBetweenlands.CORROSION_GAMERULE) && BetweenlandsConfig.useCorrosion;
 	}
 
 
@@ -243,7 +244,7 @@ public class CorrosionHelper {
 			}
 
 			int corrosion = getCorrosion(stack);
-			if(!isCorrosionEnabled()) {
+			if(!isCorrosionEnabled(world)) {
 				if(corrosion != 0) {
 					setCorrosion(stack, 0);
 				}
@@ -281,7 +282,7 @@ public class CorrosionHelper {
 		boolean advancedItemTooltips = tooltipFlags.isAdvanced();
 
 		int tooltipIndex = 1;
-		if(isCorrosionEnabled()) {
+		if(isCorrosionEnabled(tooltipContext.level())) {
 			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.corrosion." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
 				String corrosionInfo = " (" +

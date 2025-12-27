@@ -187,7 +187,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	public static boolean isEventActive(Level level, Holder<EnvironmentEvent> event) {
-		return WorldStorageGetter.get(level).map(storage -> storage.getEnvironmentEventRegistry().getActiveEvents().contains(event.value())).orElse(false);
+		return WorldStorageGetter.get(level, true).map(storage -> storage.getEnvironmentEventRegistry().getActiveEvents().contains(event.value())).orElse(false);
 	}
 
 	public List<SpiritTreeKillToken> getSpiritTreeKillTokens() {
