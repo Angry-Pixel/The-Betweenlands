@@ -7,9 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import thebetweenlands.common.entity.monster.PeatMummy;
-import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.SwampHag;
+import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -30,7 +29,7 @@ public class ThrowWormGoal extends Goal {
 
 		if (!this.hag.isRidingMummy())
 			return false;
-		if (this.hag.isRidingMummy() && !((PeatMummy) this.hag.getMummyMount()).isSpawningFinished())
+		if (this.hag.isRidingMummy() && !(this.hag.getMummyMount()).isSpawningFinished())
 			return false;
 		if (this.target == null)
 			return false;

@@ -22,6 +22,7 @@ public class BLModelLayers {
 
 	public static final ModelLayerLocation AMPHIBIOUS_FISHING_SPEAR = register("amphibious_fishing_spear");
 	public static final ModelLayerLocation ANADIA = register("anadia");
+	public static final ModelLayerLocation ANGLER = register("angler");
 	public static final ModelLayerLocation ASH_SPRITE = register("ash_sprite");
 	public static final ModelLayerLocation BARRISHEE = register("barrishee");
 	public static final ModelLayerLocation BIPED_CRYPT_CRAWLER = register("biped_crypt_crawler");

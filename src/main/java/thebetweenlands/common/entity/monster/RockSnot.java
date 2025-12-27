@@ -236,7 +236,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 				else if (checkSight() && !hasLineOfSight(entity))
 					return;
 				else if (getCanShootTendril())
-					setTarget((LivingEntity) entity);
+					setTarget(entity);
 				if (isAlive() && isSingleUse())
 					kill();
 			}

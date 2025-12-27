@@ -105,7 +105,7 @@ public class WormGroundSpawner extends CCGroundSpawner {
 		}
 
 		if(worm != null)
-			((Monster) worm).finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
+			worm.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
 		return worm;
 	}
 	

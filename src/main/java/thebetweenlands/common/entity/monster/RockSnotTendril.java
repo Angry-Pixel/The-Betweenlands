@@ -119,7 +119,7 @@ public class RockSnotTendril extends Entity {
 		targetZ = targetZ / (double) distSq * (double) velocity;
 
 		setDeltaMovement(getDeltaMovement().add(targetX, targetY, targetZ));
-		float angle = (float) Mth.sqrt((float) (targetX * targetX + targetZ * targetZ));
+		float angle = Mth.sqrt((float) (targetX * targetX + targetZ * targetZ));
 		setYRot((float) (Mth.atan2(targetX, targetZ) * (180D / Math.PI)));
 		setXRot((float) (Mth.atan2(targetY, (double) angle) * (180D / Math.PI)));
 	}

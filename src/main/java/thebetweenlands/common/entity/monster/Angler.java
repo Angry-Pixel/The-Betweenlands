@@ -47,7 +47,6 @@ public class Angler extends Monster implements BLEntity {
 
 	public Angler(EntityType<? extends Angler> type, Level level) {
 		super(type, level);
-        //setSize(0.8F, 0.7F);
         moveControl = new Angler.AnglerMoveHelper(this);
 		//setPathPriority(PathNodeType.WALKABLE, -8.0F);
 		//setPathPriority(PathNodeType.BLOCKED, -8.0F);
@@ -161,11 +160,15 @@ public class Angler extends Monster implements BLEntity {
 	@Override
 	public void aiStep() {
 		if (level().isClientSide()) {
-			if (isInWater()) {
-				Vec3 vec3d = getViewVector(0.0F);
-				for (int i = 0; i < 2; ++i)
-					level().addParticle(ParticleTypes.BUBBLE, getX() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() - vec3d.x * 1.5D, getY() + this.random.nextDouble() * (double)this.getBbHeight() - vec3d.y * 1.5D, getZ() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D);
-			}
+			if(level().getGameTime()%5 == 0)
+				if (isInWater()) {
+					for (int i = 0; i < 2; ++i) {
+						double a = Math.toRadians(this.getYRot());
+						double offSetX = -Math.sin(a) * this.getBbWidth() * 0.5D;
+						double offSetZ = Math.cos(a) * this.getBbWidth() * 0.5D;
+						this.level().addParticle(ParticleTypes.BUBBLE, this.getX() + offSetX, this.getY() + this.getBbHeight() * 0.5D + this.getRandom().nextDouble() * 0.5D, this.getZ() + offSetZ, 0.0D, 0.4D, 0.0D);
+					}
+				}
 		}
 
 		if (isInWater()) {

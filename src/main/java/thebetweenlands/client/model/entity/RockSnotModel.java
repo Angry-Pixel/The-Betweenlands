@@ -183,8 +183,8 @@ public class RockSnotModel extends MowzieModelBase<RockSnot> {
 
 	@Override
 	public void setupAnim(RockSnot snot, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-		float chomp = (float) (Mth.sin((ageInTicks + partialTick) * 0.5F) * 0.8F);
-		float chomp2 = (float) (Mth.sin((ageInTicks + partialTick) * 0.25F) * 0.6F);
+		float chomp = Mth.sin((ageInTicks + partialTick) * 0.5F) * 0.8F;
+		float chomp2 = Mth.sin((ageInTicks + partialTick) * 0.25F) * 0.6F;
 		shell_right_main1a.xRot = 0F;
 		shell_left_main1a.xRot = 0F;
 		shell_right_main1a.zRot = 0.136659280431156F +convertDegtoRad(snot.getJawAngle());
