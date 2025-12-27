@@ -18,17 +18,17 @@ public class WorldStorageGetter {
 		return level.getData(AttachmentRegistry.WORLD_STORAGE);
 	}
 
-	public static Optional<BetweenlandsWorldStorage> getExisting(@Nullable LevelAccessor level) {
+	public static Optional<BetweenlandsWorldStorage> getExisting(@Nullable LevelAccessor level, boolean requireInBetweenlands) {
 		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
-		if (betweenlandsLevel != null) {
+		if ((!requireInBetweenlands || level == betweenlandsLevel) && betweenlandsLevel != null) {
 			return getExistingStorage(betweenlandsLevel);
 		}
 		return Optional.empty();
 	}
 
-	public static Optional<BetweenlandsWorldStorage> get(@Nullable LevelAccessor level) {
+	public static Optional<BetweenlandsWorldStorage> get(@Nullable LevelAccessor level, boolean requireInBetweenlands) {
 		Level betweenlandsLevel = TheBetweenlands.getBetweenlands(level);
-		if (betweenlandsLevel != null) {
+		if ((!requireInBetweenlands || level == betweenlandsLevel) && betweenlandsLevel != null) {
 			return Optional.of(getOrCreateStorage(betweenlandsLevel));
 		}
 		return Optional.empty();
@@ -36,7 +36,12 @@ public class WorldStorageGetter {
 
 	@Nullable
 	public static BetweenlandsWorldStorage getNullable(@Nullable LevelAccessor level) {
-		return get(level).orElse(null);
+		return getNullable(level, true);
+	}
+
+	@Nullable
+	public static BetweenlandsWorldStorage getNullable(@Nullable LevelAccessor level, boolean requireInBetweenlands) {
+		return get(level, requireInBetweenlands).orElse(null);
 	}
 
 //	public static BetweenlandsWorldStorage getOrThrow(LevelAccessor level) {

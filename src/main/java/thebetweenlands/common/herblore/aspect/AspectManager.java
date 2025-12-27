@@ -65,7 +65,7 @@ public class AspectManager {
 	 */
 	@Nullable
 	public static AspectManager get(Level level) {
-		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level, false);
 		if (storage != null) {
 			return storage.getAspectManager();
 		} else if (level.isClientSide()) {
