@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-31T19:57:03.112385611	Block States: thebetweenlands
+// 1.21.1	2025-12-27T06:30:21.544390617	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 5e616fe21bb0abaab4f1e2c2a994e516eb5c0af3 assets/thebetweenlands/blockstates/algae.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
@@ -614,6 +614,7 @@ ed2bac7c02ba66235d7896ddc0aa1723e7a2db98 assets/thebetweenlands/blockstates/syrm
 fe3602fc440b44fec3083423ec2346596c674b09 assets/thebetweenlands/blockstates/tall_sludgecreep.json
 2914381858a1a7819d91104c2af1a7aba0a4ceca assets/thebetweenlands/blockstates/tall_swamp_grass.json
 7b3c52fbf7d9bd8057bc4caf6bb252f78a88bb56 assets/thebetweenlands/blockstates/tar.json
+44de0cbcaaf2115431eb63006fce1925f0af9493 assets/thebetweenlands/blockstates/tar_beast_spawner.json
 4ec0645466b04f603a34d689ace86b7a1bfde311 assets/thebetweenlands/blockstates/tar_loot_pot_1.json
 74b060aa0965bbb2cd4b45f2d040f5c6d44a3601 assets/thebetweenlands/blockstates/tar_loot_pot_2.json
 7572bfd67d251a22562247758c364ccb2baf9601 assets/thebetweenlands/blockstates/tar_loot_pot_3.json
@@ -2447,6 +2448,7 @@ b8a9386c23b8548976637bb793e682805e3426c3 assets/thebetweenlands/models/item/syrm
 a1dbf937e3ff0bdb25788c563012c88f22f779b6 assets/thebetweenlands/models/item/tall_cattail.json
 6454ae28d5c2d5dfc94d73e65b4cf3a004811c9f assets/thebetweenlands/models/item/tall_sludgecreep.json
 f4e4c4d966bd165cc8e3d02cc669d877fb9f8630 assets/thebetweenlands/models/item/tall_swamp_grass.json
+8bbf106f17fb861aa04c125f9e5c3544d3d9374f assets/thebetweenlands/models/item/tar_beast_spawner.json
 6c4bedaec33c339680b4aa233dc065a166300b39 assets/thebetweenlands/models/item/tar_loot_pot_1.json
 6c4bedaec33c339680b4aa233dc065a166300b39 assets/thebetweenlands/models/item/tar_loot_pot_2.json
 6c4bedaec33c339680b4aa233dc065a166300b39 assets/thebetweenlands/models/item/tar_loot_pot_3.json

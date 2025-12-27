@@ -53,7 +53,6 @@ public class StructureRegistry {
 	public static void bootstrap(BootstrapContext<Structure> context) {
 		HolderGetter<Biome> biomeLookup = context.lookup(Registries.BIOME);
 		context.register(DRUID_CIRCLE, new DruidCircleStructure(new Structure.StructureSettings.Builder(biomeLookup.getOrThrow(BLBiomeTagProvider.GENERATES_DRUID_CIRCLE)).terrainAdapation(TerrainAdjustment.BEARD_THIN).build()));
-
 		//TODO these only exist for advancement datagen, please get rid of placeholder values eventually
 		context.register(CRAGROCK_TOWER, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
 		context.register(FLOATING_ISLAND, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));

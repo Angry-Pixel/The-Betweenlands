@@ -182,6 +182,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.add(BlockRegistry.LOOT_POT_2.get(), LootTable.lootTable());
 		this.add(BlockRegistry.LOOT_POT_3.get(), LootTable.lootTable());
 		this.add(BlockRegistry.MOB_SPAWNER.get(), LootTable.lootTable());
+		this.dropOther(BlockRegistry.TAR_BEAST_SPAWNER.get(), BlockRegistry.SOLID_TAR);
 		this.dropSelf(BlockRegistry.TEMPLE_PILLAR.get());
 		this.dropSelf(BlockRegistry.BETWEENSTONE_PILLAR.get());
 		this.dropSelf(BlockRegistry.PITSTONE_PILLAR.get());

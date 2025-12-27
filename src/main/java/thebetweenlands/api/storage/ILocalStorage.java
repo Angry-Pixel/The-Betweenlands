@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.network.GenericDataAccessorAccess;
@@ -118,7 +119,7 @@ public interface ILocalStorage {
 	/**
 	 * Called once when the local storage is initially added to the world
 	 */
-	default void onAdded(Level level) {
+	default void onAdded(LevelAccessor level) {
 
 	}
 
@@ -140,7 +141,7 @@ public interface ILocalStorage {
 	/**
 	 * Called before the local storage is being removed
 	 */
-	default void onRemoving(Level level) {
+	default void onRemoving(LevelAccessor level) {
 
 	}
 
@@ -200,11 +201,11 @@ public interface ILocalStorage {
 	 * Unlinks all chunks from this local storage.
 	 * Do not use this to remove local storage since the
 	 * file won't be deleted. To remove a local storage
-	 * use {@link ILocalStorageHandler#removeLocalStorage(Level, ILocalStorage)} instead
+	 * use {@link ILocalStorageHandler#removeLocalStorage(LevelAccessor, ILocalStorage)} instead
 	 *
 	 * @return True if all chunks were successfully unlinked
 	 */
-	boolean unlinkAllChunks(Level level);
+	boolean unlinkAllChunks(LevelAccessor level);
 
 	/**
 	 * Links the specified chunk to this local storage
@@ -220,19 +221,19 @@ public interface ILocalStorage {
 	 *
 	 * @param chunk
 	 */
-	default void linkChunkDeferred(Level level, ChunkPos chunk) {
+	default void linkChunkDeferred(LevelAccessor level, ChunkPos chunk) {
 
 	}
 
 	/**
 	 * Links the specified chunk to this local storage in a safe manner,
 	 * i.e. calls {@link #linkChunk(ChunkAccess)} if the chunk already exists and is loaded,
-	 * and {@link #linkChunkDeferred(Level, ChunkPos)} if the chunk does not yet exist
+	 * and {@link #linkChunkDeferred(LevelAccessor, ChunkPos)} if the chunk does not yet exist
 	 * or is not loaded.
 	 *
 	 * @param chunk
 	 */
-	default void linkChunkSafely(Level level, ChunkPos chunk) {
+	default void linkChunkSafely(LevelAccessor level, ChunkPos chunk) {
 		ChunkAccess instance = level.getChunkSource().getChunkNow(chunk.x, chunk.z);
 		if (instance != null) {
 			this.linkChunk(instance);
@@ -245,7 +246,7 @@ public interface ILocalStorage {
 	 * Unlinks the specified chunk from this local storage
 	 * Do not use this to remove local storage since the
 	 * file won't be deleted. To remove a local storage
-	 * use {@link ILocalStorageHandler#removeLocalStorage(Level, ILocalStorage)} instead
+	 * use {@link ILocalStorageHandler#removeLocalStorage(LevelAccessor, ILocalStorage)} instead
 	 *
 	 * @param chunk
 	 * @return True if the chunk was unlinked successfully

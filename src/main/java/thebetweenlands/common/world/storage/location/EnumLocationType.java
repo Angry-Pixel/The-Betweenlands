@@ -6,6 +6,7 @@ public enum EnumLocationType {
 	HUT("hut"),
 	SHACK("abandoned_shack"),
 	WIGHT_TOWER("wight_tower"),
+	DUNGEON("dungeon"),
 	CRAGROCK_TOWER("cragrock_tower"),
 	GIANT_TREE("giant_tree"),
 	IDOL_HEAD("idol_head"),

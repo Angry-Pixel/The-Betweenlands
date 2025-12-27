@@ -138,13 +138,16 @@ public class PlacedFeatureRegistry {
 	public static final ResourceKey<PlacedFeature> DEAD_TRUNK = makeKey("dead_trunk");
 	public static final ResourceKey<PlacedFeature> LYESTONE = makeKey("lyestone");
 
+
+	public static final ResourceKey<PlacedFeature> TAR_POOL_DUNGEON = makeKey("tar_pool_dungeon");
+
 	private static ResourceKey<PlacedFeature> makeKey(String name) {
 		return ResourceKey.create(Registries.PLACED_FEATURE, TheBetweenlands.prefix(name));
 	}
 
 	public static void bootstrap(BootstrapContext<PlacedFeature> context) {
 		HolderGetter<ConfiguredFeature<?, ?>> featureGetter = context.lookup(Registries.CONFIGURED_FEATURE);
-		
+
 		context.register(SULFUR, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SULFUR), OrePlacements.commonOrePlacement(22, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(128)))));
 		context.register(SYRMORITE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.SYRMORITE), OrePlacements.commonOrePlacement(6, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT + 40), VerticalAnchor.absolute(TheBetweenlands.CAVE_START - 5)))));
 		context.register(BONE_ORE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BONE_ORE), OrePlacements.commonOrePlacement(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.PITSTONE_HEIGHT), VerticalAnchor.absolute(128)))));
@@ -222,6 +225,8 @@ public class PlacedFeatureRegistry {
 
 		context.register(CATTAIL_PATCH_COMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(10)));
 		context.register(CATTAIL_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(5)));
+
+		context.register(TAR_POOL_DUNGEON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.TAR_POOL_DUNGEON), List.of(InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.CAVE_WATER_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.LAYER_HEIGHT)), BiomeFilter.biome())));
 	}
 
 	private static List<PlacementModifier> tree(int count) {

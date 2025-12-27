@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-01T18:54:59.877404222	Item Models: thebetweenlands
+// 1.21.1	2025-12-27T06:30:21.592286606	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -454,6 +454,7 @@ d45443e3fb0aead45baa19bea355585f1de3fc94 assets/thebetweenlands/models/item/ring
 c4856b331320abfde91ee8cd995158f0637a9f67 assets/thebetweenlands/models/item/robust_amphibious_fishing_spear.json
 a94224d242ad130890b888fa9534421c152a90b5 assets/thebetweenlands/models/item/robust_amphibious_fishing_spear_throwing.json
 9ce6c9f20b20229e77aa38ffc33f89ef364afdb5 assets/thebetweenlands/models/item/rock_snot_pearl.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/rock_snot_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/root_sprite_spawn_egg.json
 282349bb444adff759d09a8bc44a7f50b4ee0cfb assets/thebetweenlands/models/item/rotbulb_stalk.json
 df4f7c05f7992257cdd2226747523c203e3921a0 assets/thebetweenlands/models/item/rotten_food.json

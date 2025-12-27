@@ -25,6 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.LevelResource;
@@ -65,11 +66,11 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public boolean addLocalStorage(Level level, ILocalStorage storage) {
+	public boolean addLocalStorage(LevelAccessor level, ILocalStorage storage) {
 		return this.addLocalStorageInternal(level, storage, true);
 	}
 
-	protected boolean addLocalStorageInternal(Level level, ILocalStorage storage, boolean isInitialAdd) {
+	protected boolean addLocalStorageInternal(LevelAccessor level, ILocalStorage storage, boolean isInitialAdd) {
 		if (!this.localStorage.containsKey(storage.getID())) {
 			this.localStorage.put(storage.getID(), storage);
 
@@ -116,7 +117,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public boolean removeLocalStorage(Level level, ILocalStorage storage) {
+	public boolean removeLocalStorage(LevelAccessor level, ILocalStorage storage) {
 		if (this.localStorage.containsKey(storage.getID())) {
 			storage.onRemoving(level);
 
@@ -162,7 +163,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends ILocalStorage> List<T> getLocalStorages(Level level, Class<T> type, double x, double z, @Nullable Predicate<T> filter) {
+	public <T extends ILocalStorage> List<T> getLocalStorages(LevelAccessor level, Class<T> type, double x, double z, @Nullable Predicate<T> filter) {
 		List<T> storages = new ArrayList<>();
 		int cx = Mth.floor(x) >> 4;
 		int cz = Mth.floor(z) >> 4;
@@ -184,7 +185,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends ILocalStorage> List<T> getLocalStorages(Level level, Class<T> type, AABB aabb, @Nullable Predicate<T> filter) {
+	public <T extends ILocalStorage> List<T> getLocalStorages(LevelAccessor level, Class<T> type, AABB aabb, @Nullable Predicate<T> filter) {
 		List<T> storages = new ArrayList<>();
 		int sx = Mth.floor(aabb.minX) >> 4;
 		int sz = Mth.floor(aabb.minZ) >> 4;
@@ -211,11 +212,11 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public void deleteLocalStorageFile(Level level, ILocalStorage storage) {
+	public void deleteLocalStorageFile(LevelAccessor level, ILocalStorage storage) {
 		this.deleteLocalStorageFileInternal(level, storage);
 	}
 
-	private boolean deleteLocalStorageFileInternal(Level level, ILocalStorage storage) {
+	private boolean deleteLocalStorageFileInternal(LevelAccessor level, ILocalStorage storage) {
 		if (storage.getRegion() == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
 			this.saveHandler.queueLocalStorage(file, null);
@@ -237,11 +238,11 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public void saveLocalStorageFile(Level level, ILocalStorage storage) {
+	public void saveLocalStorageFile(LevelAccessor level, ILocalStorage storage) {
 		this.saveLocalStorageFile(level, storage, false);
 	}
 
-	private void saveLocalStorageFile(Level level, ILocalStorage storage, boolean skipRegionUnloading) {
+	private void saveLocalStorageFile(LevelAccessor level, ILocalStorage storage, boolean skipRegionUnloading) {
 		CompoundTag nbt = this.saveLocalStorageToNBT(new CompoundTag(), storage);
 		if (storage.getRegion() == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
@@ -278,7 +279,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Nullable
-	private ILocalStorage loadLocalStorageUnsafe(Level level, LocalStorageReference reference) {
+	private ILocalStorage loadLocalStorageUnsafe(LevelAccessor level, LocalStorageReference reference) {
 		if (!level.isClientSide()) {
 			try {
 				ILocalStorage storage = this.createLocalStorageFromFile(reference);
@@ -302,13 +303,13 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	@Deprecated
 	@Nullable
 	@Override
-	public ILocalStorage loadLocalStorage(Level level, LocalStorageReference reference) {
+	public ILocalStorage loadLocalStorage(LevelAccessor level, LocalStorageReference reference) {
 		return this.loadLocalStorageUnsafe(level, reference);
 	}
 
 	@Nullable
 	@Override
-	public ILocalStorageHandle getOrLoadLocalStorage(Level level, LocalStorageReference reference) {
+	public ILocalStorageHandle getOrLoadLocalStorage(LevelAccessor level, LocalStorageReference reference) {
 		ILocalStorage storage = this.getLocalStorage(reference.getID());
 
 		//If not already loaded try to load from file
@@ -362,13 +363,13 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		}
 	}
 
-	private boolean decrRegionRef(Level level, @Nullable LocalRegionData data, @Nullable StorageID checkID, boolean saveAndUnload) {
+	private boolean decrRegionRef(LevelAccessor level, @Nullable LocalRegionData data, @Nullable StorageID checkID, boolean saveAndUnload) {
 		if (data != null && (checkID == null || data.getLocalStorageNBT(checkID) != null)) {
 			data.decrRefCounter();
 
 			if (!data.hasReferences()) {
 				if (saveAndUnload) {
-					this.pendingUnreferencedRegions.put(data, level.getGameTime());
+					this.pendingUnreferencedRegions.put(data, level.getLevelData().getGameTime());
 				}
 
 				return true;
@@ -379,7 +380,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public boolean unloadLocalStorage(Level level, ILocalStorage storage) {
+	public boolean unloadLocalStorage(LevelAccessor level, ILocalStorage storage) {
 		if (this.localStorage.containsKey(storage.getID())) {
 			//Only save if dirty
 			if (!level.isClientSide() && storage.isDirty()) {
@@ -503,7 +504,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public void queueDeferredOperation(Level level, ChunkPos chunk, IDeferredStorageOperation operation) {
+	public void queueDeferredOperation(LevelAccessor level, ChunkPos chunk, IDeferredStorageOperation operation) {
 		//Run immediately if chunk is already loaded
 		ChunkAccess loadedChunk = level.getChunkSource().getChunkNow(chunk.x, chunk.z);
 		if (loadedChunk != null) {
@@ -544,7 +545,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public void loadDeferredOperations(Level level, IChunkStorage storage) {
+	public void loadDeferredOperations(LevelAccessor level, IChunkStorage storage) {
 		ChunkPos chunk = storage.getChunk().getPos();
 
 		LocalRegion region = LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16);
@@ -593,7 +594,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public void saveAll(Level level) {
+	public void saveAll(LevelAccessor level) {
 		//Save loaded storages
 		for (ILocalStorage localStorage : this.getLoadedStorages()) {
 			//Only save if dirty

@@ -115,6 +115,9 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DEAD_TRUNK = makeKey("dead_trunk");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LYESTONE = makeKey("lyestone");
 
+
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TAR_POOL_DUNGEON = makeKey("tar_pool_dungeon");
+
 	private static ResourceKey<ConfiguredFeature<?, ?>> makeKey(String name) {
 		return ResourceKey.create(Registries.CONFIGURED_FEATURE, TheBetweenlands.prefix(name));
 	}
@@ -283,6 +286,8 @@ public class ConfiguredFeatureRegistry {
 		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), FeatureConfiguration.NONE));
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
+
+		context.register(TAR_POOL_DUNGEON, new ConfiguredFeature<>(FeatureRegistry.TAR_POOL_DUNGEON.get(), FeatureConfiguration.NONE));
 	}
 
 	private static RandomPatchConfiguration patch(Block block, int spread, int tries) {

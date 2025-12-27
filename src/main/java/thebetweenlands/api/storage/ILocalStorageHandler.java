@@ -29,14 +29,14 @@ public interface ILocalStorageHandler {
 	 * @param storage
 	 * @return
 	 */
-	boolean addLocalStorage(Level level, ILocalStorage storage);
+	boolean addLocalStorage(LevelAccessor level, ILocalStorage storage);
 
 	/**
 	 * Removes a local storage from the world
 	 * @param storage
 	 * @return
 	 */
-	boolean removeLocalStorage(Level level, ILocalStorage storage);
+	boolean removeLocalStorage(LevelAccessor level, ILocalStorage storage);
 
 	/**
 	 * Returns the local storage with the specified ID, if currently loaded
@@ -53,7 +53,7 @@ public interface ILocalStorageHandler {
 	 * @param z
 	 * @return
 	 */
-	<T extends ILocalStorage> List<T> getLocalStorages(Level level, Class<T> type, double x, double z, @Nullable Predicate<T> filter);
+	<T extends ILocalStorage> List<T> getLocalStorages(LevelAccessor level, Class<T> type, double x, double z, @Nullable Predicate<T> filter);
 
 	/**
 	 * Returns a list of all local storages of the specified type that intersect with the specified AABB
@@ -61,30 +61,30 @@ public interface ILocalStorageHandler {
 	 * @param type
 	 * @return
 	 */
-	<T extends ILocalStorage> List<T> getLocalStorages(Level level, Class<T> type, AABB aabb, @Nullable Predicate<T> filter);
+	<T extends ILocalStorage> List<T> getLocalStorages(LevelAccessor level, Class<T> type, AABB aabb, @Nullable Predicate<T> filter);
 
 	/**
 	 * Deletes the file (or entry if in a region) of
 	 * the specified local storage
 	 * @param storage
 	 */
-	void deleteLocalStorageFile(Level level, ILocalStorage storage);
+	void deleteLocalStorageFile(LevelAccessor level, ILocalStorage storage);
 
 	/**
 	 * Saves the local storage to a file (or entry if in a region)
 	 * @param storage
 	 */
-	void saveLocalStorageFile(Level level, ILocalStorage storage);
+	void saveLocalStorageFile(LevelAccessor level, ILocalStorage storage);
 
 	/**
-	 * Deprecated. Use {@link #getOrLoadLocalStorage(Level, LocalStorageReference)}!
+	 * Deprecated. Use {@link #getOrLoadLocalStorage(LevelAccessor, LocalStorageReference)}!
 	 * Using this may cause changes made to the location to be lost.
 	 * @param reference
 	 * @return
 	 */
 	@Deprecated
 	@Nullable
-	ILocalStorage loadLocalStorage(Level level, LocalStorageReference reference);
+	ILocalStorage loadLocalStorage(LevelAccessor level, LocalStorageReference reference);
 
 	/**
 	 * Returns a {@link ILocalStorageHandle} of the local storage of the specified reference. If the local storage is already loaded that
@@ -95,14 +95,14 @@ public interface ILocalStorageHandler {
 	 * @return
 	 */
 	@Nullable
-	ILocalStorageHandle getOrLoadLocalStorage(Level level, LocalStorageReference reference);
+	ILocalStorageHandle getOrLoadLocalStorage(LevelAccessor level, LocalStorageReference reference);
 
 	/**
 	 * Unloads a local storage and saves to a file if necessary
 	 * @param storage
 	 * @return True if the storage was successfully unloaded
 	 */
-	boolean unloadLocalStorage(Level level, ILocalStorage storage);
+	boolean unloadLocalStorage(LevelAccessor level, ILocalStorage storage);
 
 	/**
 	 * Returns an unmodifiable list of all currently loaded local storages
@@ -144,13 +144,13 @@ public interface ILocalStorageHandler {
 	 * @param chunk
 	 * @param operation
 	 */
-	void queueDeferredOperation(Level level, ChunkPos chunk, IDeferredStorageOperation operation);
+	void queueDeferredOperation(LevelAccessor level, ChunkPos chunk, IDeferredStorageOperation operation);
 
 	/**
 	 * Loads and runs the deferred storage operations of the specified chunk.
 	 * @param storage
 	 */
-	void loadDeferredOperations(Level level, IChunkStorage storage);
+	void loadDeferredOperations(LevelAccessor level, IChunkStorage storage);
 
 	/**
 	 * Saves a local storage instance to NBT
@@ -163,5 +163,5 @@ public interface ILocalStorageHandler {
 	/**
 	 * Saves all local storages and regions
 	 */
-	void saveAll(Level level);
+	void saveAll(LevelAccessor level);
 }

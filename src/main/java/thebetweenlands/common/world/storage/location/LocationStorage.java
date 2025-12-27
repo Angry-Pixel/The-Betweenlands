@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -143,7 +144,7 @@ public class LocationStorage extends LocalStorageImpl {
 	}
 
 	@Override
-	public void onAdded(Level level) {
+	public void onAdded(LevelAccessor level) {
 		if (!level.isClientSide()) {
 			this.linkChunks(level);
 		}
@@ -156,7 +157,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 *
 	 * @return
 	 */
-	public LocationStorage linkChunks(Level level) {
+	public LocationStorage linkChunks(LevelAccessor level) {
 		for (AABB boundingBox : this.boundingBoxes) {
 			int sx = Mth.floor(boundingBox.minX) >> 4;
 			int sz = Mth.floor(boundingBox.minZ) >> 4;

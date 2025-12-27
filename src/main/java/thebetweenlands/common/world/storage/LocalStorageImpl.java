@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
@@ -143,7 +144,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public void onRemoving(Level level) {
+	public void onRemoving(LevelAccessor level) {
 		//Notify clients when shared storage is removed.
 		//This is done before onRemoved so that the list of watchers is not yet empty.
 		if (!level.isClientSide()) {
@@ -216,7 +217,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public boolean unlinkAllChunks(Level level) {
+	public boolean unlinkAllChunks(LevelAccessor level) {
 		boolean changed = false;
 		boolean allUnlinked = true;
 		List<ChunkPos> chunks = new ArrayList<>(this.linkedChunks.size());
@@ -257,7 +258,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public void linkChunkDeferred(Level level, ChunkPos chunk) {
+	public void linkChunkDeferred(LevelAccessor level, ChunkPos chunk) {
 		if (!this.linkedChunks.contains(chunk) && this.linkedChunks.add(chunk)) {
 			this.setDirty(true);
 			this.worldStorage.getLocalStorageHandler().queueDeferredOperation(level, chunk, new DeferredLinkOperation(new LocalStorageReference(chunk, this.getID(), this.getRegion())));

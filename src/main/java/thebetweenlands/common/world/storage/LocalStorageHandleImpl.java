@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.storage;
 
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.LocalStorageReference;
@@ -14,7 +15,7 @@ public class LocalStorageHandleImpl implements ILocalStorageHandle {
 	@Nullable
 	private final LocalStorageReference handleRef;
 
-	public LocalStorageHandleImpl(Level level, ILocalStorage storage, LocalStorageReference reference) {
+	public LocalStorageHandleImpl(LevelAccessor level, ILocalStorage storage, LocalStorageReference reference) {
 		this.storage = storage;
 
 		if(!level.isClientSide()) {

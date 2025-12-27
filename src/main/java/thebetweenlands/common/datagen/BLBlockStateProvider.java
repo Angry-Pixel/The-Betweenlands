@@ -219,6 +219,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_2, this.modLoc("block/particle/loot_pot_2_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_3, this.modLoc("block/particle/loot_pot_3_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.MOB_SPAWNER, this.modLoc("block/particle/spawner_crystal_particle"), 0.625F, 0.0F);
+		this.simpleBlockWithItem(BlockRegistry.TAR_BEAST_SPAWNER.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/solid_tar")));
 		this.pillarWithItem(BlockRegistry.TEMPLE_PILLAR);
 		this.pillarWithItem(BlockRegistry.BETWEENSTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.PITSTONE_PILLAR);
