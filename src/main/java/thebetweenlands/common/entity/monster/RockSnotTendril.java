@@ -2,6 +2,8 @@ package thebetweenlands.common.entity.monster;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,29 +22,24 @@ import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.creature.Lurker;
-import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class RockSnotTendril extends Entity {
 
-    public RockSnot parent;
+
 	private static final EntityDataAccessor<Boolean> IS_EXTENDING = SynchedEntityData.defineId(RockSnotTendril.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> PARENT_ID = SynchedEntityData.defineId(RockSnotTendril.class, EntityDataSerializers.INT);
 
 	public RockSnotTendril(EntityType<? extends Entity> type, Level level) {
 		super(type, level);
-		this.parent = null;
-	}
-
-	public RockSnotTendril(RockSnot parent) {
-        super(EntityRegistry.ROCK_SNOT_TENDRIL.get(), parent.getWorld());
-        this.parent = parent;
-        noCulling = true;
+		noCulling = true;
 	}
 
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		builder.define(IS_EXTENDING, false);
+		builder.define(PARENT_ID, -1);
 	}
 
 	public boolean getExtending() {
@@ -52,11 +49,27 @@ public class RockSnotTendril extends Entity {
 	public void setExtending(boolean extending) {
 		getEntityData().set(IS_EXTENDING, extending);
 	}
+	
+	public Integer getParentEntityID() {
+		return getEntityData().get(PARENT_ID);
+	}
+	
+	public void setParentEntityID(Integer parentID) {
+		getEntityData().set(PARENT_ID, parentID);
+	}
+
+	@Nullable
+	public RockSnot getParentEntity() {
+		RockSnot parentEntity = (RockSnot) level().getEntity(getEntityData().get(PARENT_ID));
+		return getEntityData().get(PARENT_ID) != -1 ? parentEntity : null;
+	}
 
 	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
 		if (IS_EXTENDING.equals(key))
 			setExtending(getExtending());
+		if (PARENT_ID.equals(key))
+			setParentEntityID(getParentEntityID());
 		super.onSyncedDataUpdated(key);
 	}
 
@@ -68,24 +81,24 @@ public class RockSnotTendril extends Entity {
 
 		checkCollision();
 
-		if (parent != null && !getExtending()) {
+		if (getParentEntity() != null && !getExtending()) {
 				returnToParent();
-			if (getBoundingBox().intersects(parent.getBoundingBox())) {
-				if (getX() != parent.getX() || getZ() != parent.getZ())
-					setPos(parent.getX(), parent.getY() + parent.getBbHeight() * 0.5D, parent.getZ());
+			if (getBoundingBox().intersects(getParentEntity().getBoundingBox())) {
+				if (getX() != getParentEntity().getX() || getZ() != getParentEntity().getZ())
+					setPos(getParentEntity().getX(), getParentEntity().getY() + getParentEntity().getBbHeight() * 0.5D, getParentEntity().getZ());
 
 				if (!level().isClientSide()) {
-					if (isVehicle() && !parent.isVehicle()) {
+					if (isVehicle() && !getParentEntity().isVehicle()) {
 						Entity entity = getPassengers().get(0);
-						entity.startRiding(parent, true);
+						entity.startRiding(getParentEntity(), true);
 					}
 					kill();
-					parent.setTendrilCount(parent.getTendrilCount() - 1);
+					getParentEntity().setTendrilCount(getParentEntity().getTendrilCount() - 1);
 				}
 			}
 		}
 
-		if (parent != null && (!isVehicle() && tickCount > 20) || parent != null && horizontalCollision) {
+		if (getParentEntity() != null && (!isVehicle() && tickCount > 20) || getParentEntity() != null && horizontalCollision) {
 			if (!level().isClientSide()) {
 				if (getExtending())
 					setExtending(false);
@@ -112,13 +125,13 @@ public class RockSnotTendril extends Entity {
 	}
 
 	public void checkCollision() {
-		if (parent != null) {
+		if (getParentEntity() != null) {
 			List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox());
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null) {
 					if (entity instanceof LivingEntity && !(entity instanceof RockSnot) && !(entity instanceof RockSnotTendril) && !(entity instanceof Lurker) && !entity.getType().is(Tags.EntityTypes.BOSSES)) {
-						if (entity instanceof Player && parent.getPlacedByPlayer() || parent.isVehicle())
+						if (entity instanceof Player && getParentEntity().getPlacedByPlayer() || getParentEntity().isVehicle())
 							return;
 						if (!isVehicle()) {
 							if (!level().isClientSide()) {
@@ -136,9 +149,9 @@ public class RockSnotTendril extends Entity {
 	}
 
 	public void returnToParent() {
-		double targetX = parent.getX() - getX();
-		double targetY = parent.getY() + parent.getBbHeight() * 0.5D - getY() + getBbHeight() * 0.5D;
-		double targetZ = parent.getZ() - getZ();
+		double targetX = getParentEntity().getX() - getX();
+		double targetY = getParentEntity().getY() + getParentEntity().getBbHeight() * 0.5D - getY() + getBbHeight() * 0.5D;
+		double targetZ = getParentEntity().getZ() - getZ();
 		moveToTarget(targetX, targetY, targetZ, 0.25F);
 	}
 
@@ -153,10 +166,6 @@ public class RockSnotTendril extends Entity {
 		return false;
 	}
 
-	public RockSnot getParentEntity() {
-		return parent;
-	}
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		if (getParentEntity() != null)
@@ -165,11 +174,8 @@ public class RockSnotTendril extends Entity {
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
-		if(tag.contains("parent", Tag.TAG_INT)) {
-			int parentEntityID = tag.getInt("parent");
-			RockSnot parentEntityIn = (RockSnot) level().getEntity(parentEntityID);
-			this.parent = parentEntityIn;
-		}
+		if(tag.contains("parent", Tag.TAG_INT))
+			setParentEntityID(tag.getInt("parent"));
 	}
 
 	@Override

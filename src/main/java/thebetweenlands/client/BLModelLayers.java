@@ -72,6 +72,8 @@ public class BLModelLayers {
 	public static final ModelLayerLocation PRIMORDIAL_MALEVOLENCE = register("primordial_malevolence");
 	public static final ModelLayerLocation PYRAD = register("pyrad");
 	public static final ModelLayerLocation ROBUST_FISHING_SPEAR = register("robust_fishing_spear");
+	public static final ModelLayerLocation ROCK_SNOT = register("rock_snot");
+	public static final ModelLayerLocation ROCK_SNOT_GRABBER = register("rock_snot_grabber");
 	public static final ModelLayerLocation ROOT_SPRITE = register("root_sprite");
 	public static final ModelLayerLocation SHAMBLER = register("shambler");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");

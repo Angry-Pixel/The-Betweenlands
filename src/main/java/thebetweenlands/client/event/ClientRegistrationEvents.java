@@ -167,6 +167,8 @@ import thebetweenlands.client.model.entity.PeatMummyModel;
 import thebetweenlands.client.model.entity.PrimordialMalevolenceModel;
 import thebetweenlands.client.model.entity.PyradModel;
 import thebetweenlands.client.model.entity.RobustFishingSpearModel;
+import thebetweenlands.client.model.entity.RockSnotGrabberModel;
+import thebetweenlands.client.model.entity.RockSnotModel;
 import thebetweenlands.client.model.entity.RootSpriteModel;
 import thebetweenlands.client.model.entity.ShamblerModel;
 import thebetweenlands.client.model.entity.SiltCrabModel;
@@ -691,6 +693,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.PYRAD, PyradModel::create);
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_CORPSE, GreeblingCorpseModel::create);
 		event.registerLayerDefinition(BLModelLayers.MOVING_WALL, MovingWallModel::create);
+		event.registerLayerDefinition(BLModelLayers.ROCK_SNOT, RockSnotModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.ROCK_SNOT_GRABBER, RockSnotGrabberModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

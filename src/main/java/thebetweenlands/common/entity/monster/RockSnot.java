@@ -196,7 +196,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 					setContainedXP(result);
 					ItemStack pearl = new ItemStack(ItemRegistry.ROCK_SNOT_PEARL.get(), quotient);
 					ItemEntity item = new ItemEntity(level(), blockPosition().getX() + 0.5D, blockPosition().getY() + 0.5D, blockPosition().getZ() + 0.5D, pearl);
-					item.setDeltaMovement(getDeltaMovement().add(0D, 0.4D, 0D));
+					item.setDeltaMovement(getDeltaMovement().add(0D, 0.8D, 0D));
 					level().addFreshEntity(item);
 					level().playSound(null, blockPosition(), SoundRegistry.ROCK_SNOT_SPIT.get(), SoundSource.HOSTILE, 1F, 1F);
 				}
@@ -525,8 +525,9 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 				double targetX = target.getX() - parentEntity.getX();
 				double targetY = target.getBoundingBox().minY + (double) (target.getBbHeight() / 2.0F) - (parentEntity.getY() + (double) (parentEntity.getBbHeight() / 2.0F));
 				double targetZ = target.getZ() - parentEntity.getZ();
-				RockSnotTendril grabber = new RockSnotTendril(parentEntity);
+				RockSnotTendril grabber = new RockSnotTendril(EntityRegistry.ROCK_SNOT_TENDRIL.get(), parentEntity.level());
 				grabber.setPos(parentEntity.getX(), parentEntity.getY() + parentEntity.getBbHeight() * 0.5D, parentEntity.getZ());
+				grabber.setParentEntityID(parentEntity.getId());
 				parentEntity.level().addFreshEntity(grabber);
 				parentEntity.level().playSound(null, parentEntity.blockPosition(), SoundRegistry.ROCK_SNOT_ATTACK.get(), SoundSource.HOSTILE, 1F, 1F);
 				grabber.moveToTarget(targetX, targetY, targetZ, 0.3F);
