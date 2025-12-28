@@ -41,6 +41,7 @@ import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
 import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
 import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 import thebetweenlands.common.world.gen.feature.structure.TarPoolDungeonFeature;
+import thebetweenlands.common.world.gen.feature.structure.UndergroundDungeonFeature;
 import thebetweenlands.common.world.gen.feature.structure.UnderwaterRuinsFeature;
 import thebetweenlands.common.world.gen.feature.tree.HearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.NibbletwigTree;
@@ -121,4 +122,6 @@ public class FeatureRegistry {
 		() -> new UnderwaterRuinsFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> TAR_POOL_DUNGEON = FEATURES.register("tar_pool_dungeon",
 		() -> new TarPoolDungeonFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> UNDERGROUND_DUNGEON = FEATURES.register("underground_dungeon",
+		() -> new UndergroundDungeonFeature(NoneFeatureConfiguration.CODEC));
 }

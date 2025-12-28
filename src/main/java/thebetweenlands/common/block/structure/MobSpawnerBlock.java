@@ -63,7 +63,7 @@ public class MobSpawnerBlock extends SpawnerBlock implements SwampWaterLoggable 
 	}
 
 	@Nullable
-	public static BetweenlandsBaseSpawner getLogic(Level level, BlockPos pos) {
+	public static BetweenlandsBaseSpawner getLogic(LevelAccessor level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof MobSpawnerBlockEntity spawner) {
 			return spawner.getSpawner();
 		}

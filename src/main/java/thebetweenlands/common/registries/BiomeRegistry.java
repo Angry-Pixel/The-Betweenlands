@@ -37,7 +37,9 @@ public class BiomeRegistry {
 	}
 
 	private static BiomeGenerationSettings.Builder addUniversalFeatures(BiomeGenerationSettings.Builder builder) {
-		return addBetweenlandsOres(builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, PlacedFeatureRegistry.TAR_POOL_DUNGEON));
+		return addBetweenlandsOres(builder
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, PlacedFeatureRegistry.TAR_POOL_DUNGEON)
+			.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, PlacedFeatureRegistry.UNDERGROUND_DUNGEON));
 	}
 
 	private static BiomeGenerationSettings.Builder addBetweenlandsOres(BiomeGenerationSettings.Builder builder) {

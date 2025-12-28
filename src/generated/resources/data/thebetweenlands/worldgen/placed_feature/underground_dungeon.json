@@ -1,0 +1,20 @@
+{
+  "feature": "thebetweenlands:underground_dungeon",
+  "placement": [
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "max_inclusive": {
+          "absolute": 120
+        },
+        "min_inclusive": {
+          "absolute": 15
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}
