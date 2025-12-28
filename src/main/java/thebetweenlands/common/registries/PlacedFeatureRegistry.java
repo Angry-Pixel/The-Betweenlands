@@ -140,6 +140,7 @@ public class PlacedFeatureRegistry {
 
 
 	public static final ResourceKey<PlacedFeature> TAR_POOL_DUNGEON = makeKey("tar_pool_dungeon");
+	public static final ResourceKey<PlacedFeature> UNDERGROUND_DUNGEON = makeKey("underground_dungeon");
 
 	private static ResourceKey<PlacedFeature> makeKey(String name) {
 		return ResourceKey.create(Registries.PLACED_FEATURE, TheBetweenlands.prefix(name));
@@ -227,6 +228,7 @@ public class PlacedFeatureRegistry {
 		context.register(CATTAIL_PATCH_UNCOMMON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.CATTAIL_PATCH), patch(5)));
 
 		context.register(TAR_POOL_DUNGEON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.TAR_POOL_DUNGEON), List.of(InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.CAVE_WATER_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.LAYER_HEIGHT)), BiomeFilter.biome())));
+		context.register(UNDERGROUND_DUNGEON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.UNDERGROUND_DUNGEON), List.of(HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.CAVE_WATER_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.LAYER_HEIGHT)), BiomeFilter.biome())));
 	}
 
 	private static List<PlacementModifier> tree(int count) {

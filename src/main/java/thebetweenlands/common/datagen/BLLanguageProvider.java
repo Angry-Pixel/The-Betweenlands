@@ -1128,6 +1128,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.BLOOD_SNAIL, "Blood Snail");
 		this.addEntityAndEgg(EntityRegistry.INFESTATION, "Infestation");
 		this.addEntityAndEgg(EntityRegistry.PYRAD, "Pyrad");
+		this.addEntityAndEgg(EntityRegistry.ROCK_SNOT, "Rock Snot");
+		this.addEntityAndEgg(EntityRegistry.ANGLER, "Angler");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1171,6 +1173,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.PYRAD_FLAME, "Pyrad Flame");
 		this.addEntityType(EntityRegistry.GREEBLING_CORPSE, "Greebling Corpse");
 		this.addEntityType(EntityRegistry.MOVING_WALL, "Moving Wall");
+		this.addEntityType(EntityRegistry.ROCK_SNOT_TENDRIL, "Rock Snot Tendril");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");

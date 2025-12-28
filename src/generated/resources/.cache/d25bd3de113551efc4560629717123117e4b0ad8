@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-27T06:30:21.592286606	Item Models: thebetweenlands
+// 1.21.1	2025-12-28T11:15:35.743820118	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -52,6 +52,7 @@ adae83c4ab9b17891a1c3a6127bc41cf56e8cea0 assets/thebetweenlands/models/item/anci
 4d5b928ad917fd2fc844e127639fc1b30020285d assets/thebetweenlands/models/item/ancient_helmet.json
 7d24344be26cb71b9fd823135312398f0dfd5ee1 assets/thebetweenlands/models/item/ancient_leggings.json
 6c224c0cf26a770a4299385264f4ba77a94707e4 assets/thebetweenlands/models/item/ancient_remnant.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/angler_spawn_egg.json
 121f44ea48b8212a5449105f8c1e40b14f342610 assets/thebetweenlands/models/item/angler_tooth.json
 3ceb2a3aec16dc3c745fd9438487b8b7630cb08e assets/thebetweenlands/models/item/angler_tooth_arrow.json
 582d7d73be572e2a371ef98d1a4f3eebabf2f568 assets/thebetweenlands/models/item/angry_pebble.json

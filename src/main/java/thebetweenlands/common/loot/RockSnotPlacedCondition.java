@@ -8,28 +8,29 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import thebetweenlands.common.entity.monster.Pyrad;
+import thebetweenlands.common.entity.monster.RockSnot;
 import thebetweenlands.common.registries.LootFunctionRegistry;
 
-public record PyradChargingCondition(boolean charging) implements LootItemCondition {
+public record RockSnotPlacedCondition(boolean placed) implements LootItemCondition {
 
-	public static final MapCodec<PyradChargingCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			Codec.BOOL.fieldOf("charging").forGetter(PyradChargingCondition::charging))
-		.apply(instance, PyradChargingCondition::new));
+	public static final MapCodec<RockSnotPlacedCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+			Codec.BOOL.fieldOf("placed").forGetter(RockSnotPlacedCondition::placed))
+		.apply(instance, RockSnotPlacedCondition::new));
 
 	@Override
 	public LootItemConditionType getType() {
-		return LootFunctionRegistry.PYRAD_CHARGING.get();
+		return LootFunctionRegistry.ROCK_SNOT_PLACED.get();
 	}
 
 	@Override
 	public boolean test(LootContext context) {
-		if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Pyrad pyrad) {
-			return pyrad.isCharging() == this.charging();
+		if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof RockSnot rockSnot) {
+			return rockSnot.getPlacedByPlayer() == this.placed();
 		}
 		return false;
 	}
 
-	public static Builder pyradCharging() {
-		return () -> new PyradChargingCondition(true);
+	public static Builder placedByPlayer(boolean placed) {
+		return () -> new RockSnotPlacedCondition(placed);
 	}
 }

@@ -109,13 +109,6 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 		return level.isUnobstructed(this);
 	}
 
-	/*
-		@Nullable
-		@Override
-		protected ResourceLocation getLootTable() {
-			return LootTableRegistry.ROCK_SNOT;
-		}
-	*/
 	@Override
 	public void aiStep() {
 		if (!level().isClientSide()) {
