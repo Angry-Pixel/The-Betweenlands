@@ -68,7 +68,7 @@ public class TriggeredFallingBlock extends BasicProximitySpawnerExtended {
 		}
 		if (isAlive() && isSingleUse())
 			discard();
-		
+
 	}
 
 	public void dustParticles() {
@@ -104,34 +104,6 @@ public class TriggeredFallingBlock extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-	protected boolean isImmobile() {
-		return true;
-	}
-
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
-
-	@Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-	@Override
-	public void kill() {
-		this.discard();
-	}
-
-	@Override
-	public boolean hurt(DamageSource source, float damage) {
-		if (source.isCreativePlayer()) {
-			this.discard();
-		}
-		return false;
-	}
-
-	@Override
 	public float getProximityHorizontal() {
 		return isWalkway() ? 0.0625F : 0.25F;
 	}
@@ -140,15 +112,10 @@ public class TriggeredFallingBlock extends BasicProximitySpawnerExtended {
 	public float getProximityVertical() {
 		return 1F;
 	}
-	
+
 	@Override
 	public AABB proximityBox(LivingEntity spawner) {
 		return getBoundingBox().inflate(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).move(0D, isWalkway() ? 1D : - getProximityVertical () * 2 , 0D);
-	}
-
-	@Override
-	public boolean canSneakPast() {
-		return true;
 	}
 
 	@Override
@@ -172,11 +139,6 @@ public class TriggeredFallingBlock extends BasicProximitySpawnerExtended {
 	@Override
 	public int getEntitySpawnCount() {
 		return 1;
-	}
-
-	@Override
-	public boolean isSingleUse() {
-		return true;
 	}
 
 	@Override

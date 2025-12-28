@@ -102,7 +102,7 @@ public class TinySludgeWormHelper extends TinySludgeWorm implements OwnableEntit
 		if (uuid != null) {
 			try {
 				this.setOwnerUUID(uuid);
-			} catch (Throwable throwable) {
+			} catch (Throwable ignored) {
 			}
 		}
 	}

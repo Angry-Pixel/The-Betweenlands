@@ -50,8 +50,7 @@ public class WormGroundSpawner extends CCGroundSpawner {
 				List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, proximityBox(this));
 				if(list.stream().filter(e -> e instanceof SludgeWorm).count() >= 4)
 					return;
-				for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-					Entity entity = list.get(entityCount);
+				for (Entity entity : list) {
 					if (entity != null)
 						if (entity instanceof Player && !((Player) entity).isSpectator() && !((Player) entity).isCreative()) {
 							if (canSneakPast() && entity.isCrouching())
@@ -79,10 +78,8 @@ public class WormGroundSpawner extends CCGroundSpawner {
     public boolean canBeRemovedNow() {
     	AABB dead_zone = getBoundingBox().inflate(0D, 1D, 0D).move(0D, -0.5D, 0D);
 		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, dead_zone);
-		if(list.stream().filter(e -> e instanceof SludgeWorm).count() >= 1)
-			return false;
-        return true;
-    }
+		return list.stream().noneMatch(e -> e instanceof SludgeWorm);
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -90,25 +87,18 @@ public class WormGroundSpawner extends CCGroundSpawner {
 		Monster worm = null;
 		int rand = random.nextInt(5);
 
-		switch (rand) {
-		case 0:
-			worm = new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level());
-			break;
-		case 1:
-		case 2:
-			worm  = new SludgeWorm(EntityRegistry.SLUDGE_WORM.get(), level());
-			break;
-		case 3:
-		case 4:
-			worm  = new TinySludgeWorm(EntityRegistry.TINY_SLUDGE_WORM.get(), level());
-			break;
-		}
+		worm = switch (rand) {
+			case 0 -> new LargeSludgeWorm(EntityRegistry.LARGE_SLUDGE_WORM.get(), level());
+			case 1, 2 -> new SludgeWorm(EntityRegistry.SLUDGE_WORM.get(), level());
+			case 3, 4 -> new TinySludgeWorm(EntityRegistry.TINY_SLUDGE_WORM.get(), level());
+			default -> worm;
+		};
 
 		if(worm != null)
 			worm.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(blockPosition()), MobSpawnType.SPAWNER, null);
 		return worm;
 	}
-	
+
 	@Override
 	public void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(isWorldSpawned())

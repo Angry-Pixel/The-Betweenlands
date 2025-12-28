@@ -16,7 +16,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.client.model.entity.MovingWallModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
 import thebetweenlands.common.block.structure.DecayPitGroundChainBlock;

@@ -44,7 +44,7 @@ public class LocalRegionData {
 			File backup = new File(file.getAbsolutePath() + ".backup");
 			try {
 				FileUtils.copyFile(file, backup);
-				TheBetweenlands.LOGGER.info(String.format("Created a backup of local region cache at %s", backup.getAbsolutePath()));
+				TheBetweenlands.LOGGER.info("Created a backup of local region cache at {}", backup.getAbsolutePath());
 			} catch (IOException e) {
 				TheBetweenlands.LOGGER.error("Failed creating backup of local region cache", e);
 			}

@@ -33,18 +33,18 @@ public class SecureItemContainer extends ItemContainer {
 	// Use a ThreadLocal so we have a different tracker on both the singleplayer client and server (ThreadLocal is used in a bunch of places in vanilla too)
 	public static final ThreadLocal<ContainerTracker> TRACKER = ThreadLocal.<SecureItemContainer.ContainerTracker>withInitial(ContainerTracker::new);
 
-	public static final ContainerTracker getTrackerUnchecked() { return TRACKER.get(); }
-	public static final ContainerTracker getTracker() {
+	public static ContainerTracker getTrackerUnchecked() { return TRACKER.get(); }
+	public static ContainerTracker getTracker() {
 		TheBetweenlands.ensureOnGameThread();
 		return getTrackerUnchecked();
 	}
 //	public static final ContainerTracker getTracker(boolean isClientSide) { return getTracker(); }
-	public static final ContainerTracker getTracker(Player player) { return getTracker(); }
+	public static ContainerTracker getTracker(Player player) { return getTracker(); }
 
 	// For handling edgecases with modded compound containers
 	public static class ContainerTracker implements Iterable<SecureItemContainer> {
 		// Track number of containers opened on a single bag uuid, the map clears keys when their value is 0
-		public final ZeroCullingObject2IntHashMap<UUID> OPEN_CONTAINERS_BY_UUID = new ZeroCullingObject2IntHashMap<UUID>();
+		public final ZeroCullingObject2IntHashMap<UUID> OPEN_CONTAINERS_BY_UUID = new ZeroCullingObject2IntHashMap<>();
 		public final Set<SecureItemContainer> OPEN_CONTAINERS = new HashSet<>();
 
 		/**
@@ -103,8 +103,8 @@ public class SecureItemContainer extends ItemContainer {
 
 
 	// Track multiple players accessing the same gui in case of fake (simulated) players or admin menu spectator tools
-	protected final Set<UUID> trackingPlayers = new HashSet<UUID>();
-	protected final Map<UUID, ContainerListener> playerListeners = new HashMap<UUID, ContainerListener>();
+	protected final Set<UUID> trackingPlayers = new HashSet<>();
+	protected final Map<UUID, ContainerListener> playerListeners = new HashMap<>();
 	// The ContainerTracker
 	protected final ContainerTracker tracker;
 	// UUID of the ItemStack, used to identify any copies (ItemStack#copy()) in the player's inventory
@@ -171,9 +171,7 @@ public class SecureItemContainer extends ItemContainer {
 		this.trackingPlayers.add(playerUUID);
 		this.startTracking();
 		if(!this.playerListeners.containsKey(playerUUID)) {
-			ContainerListener listener = (container) -> {
-				this.saveTo(getContainerStackFromPlayer(player));
-			};
+			ContainerListener listener = (container) -> this.saveTo(getContainerStackFromPlayer(player));
 			this.addListener(listener);
 			this.playerListeners.put(playerUUID, listener);
 		}

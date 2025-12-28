@@ -1,7 +1,5 @@
 package thebetweenlands.api.world;
 
-import java.lang.reflect.Array;
-
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
 

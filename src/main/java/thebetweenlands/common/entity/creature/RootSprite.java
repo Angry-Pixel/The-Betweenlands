@@ -13,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.FollowTargetGoal;

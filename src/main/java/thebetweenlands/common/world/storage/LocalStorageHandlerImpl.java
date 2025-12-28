@@ -16,7 +16,6 @@ import com.google.common.base.Predicate;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -294,7 +293,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				}
 				return storage;
 			} catch (Exception ex) {
-				TheBetweenlands.LOGGER.error(String.format("Failed loading local storage with ID %s at %s", reference.getID().getStringID(), "[x=" + reference.pos().x + ", z=" + reference.pos().z + "]"), ex);
+				TheBetweenlands.LOGGER.error("Failed loading local storage with ID {} at {}", reference.getID().getStringID(), "[x=" + reference.pos().x + ", z=" + reference.pos().z + "]", ex);
 			}
 		}
 		return null;
@@ -336,7 +335,6 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			File file = new File(this.getLocalStorageDirectory(), reference.getID().getStringID() + ".dat");
 			try {
 				CompoundTag nbt = this.saveHandler.loadFileNbt(file);
-				;
 				if (nbt != null) {
 					return this.createLocalStorageFromNBT(nbt, null);
 				}

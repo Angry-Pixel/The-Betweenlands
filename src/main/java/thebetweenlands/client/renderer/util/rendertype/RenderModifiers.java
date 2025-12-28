@@ -17,12 +17,12 @@ public class RenderModifiers {
 
     public final String name;
     public final ImmutableList<RenderTypeModifier<?>> modifiers;
-    
+
 	public RenderModifiers(String name, List<RenderTypeModifier<?>> modifiers) {
 		this.name = name;
 		this.modifiers = ImmutableList.copyOf(modifiers);
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
@@ -65,26 +65,26 @@ public class RenderModifiers {
 			return this.applyAndConfigure(originalRenderType, configurator);
 		}
 	}
-	
+
 	public MultiBufferSource wrapBufferSourceAndConfigure(MultiBufferSource multiBufferSource, ModifierConfigurator configurator) {
 		return new ProxyMultiBufferSource(multiBufferSource, (a, b) -> this.computeAndConfigure(a, b, configurator));
 	}
-	
+
 	public static Builder build() {
 		return new Builder();
 	}
-	
+
 	public static RenderModifiers create(String name, RenderTypeModifier<?> ...modifiers) {
 		return new RenderModifiers(name, ImmutableList.copyOf(modifiers));
 	}
-	
+
 	public static class Builder {
 		protected final ImmutableList.Builder<RenderTypeModifier<?>> modifiers;
-		
+
 		public Builder() {
 			this.modifiers = ImmutableList.builder();
 		}
-		
+
 		public Builder add(RenderTypeModifier<?> modifier) {
 			this.modifiers.add(modifier);
 			return this;
@@ -97,32 +97,32 @@ public class RenderModifiers {
 		public CachingRenderModifiers buildWithCache(String name) {
 			return new CachingRenderModifiers(name, modifiers.build());
 		}
-		
+
 		public CachingRenderModifiers buildWithCacheAndConfiguration(String name, ModifierConfigurator configurator) {
 			return new CachingRenderModifiers(name, modifiers.build(), configurator);
 		}
 	}
-	
+
 	@FunctionalInterface
-	public static interface ModifierConfigurator {
-		public static final ModifierConfigurator IDENTITY = (originalRenderType, modifiers) -> {};
-		
-		public void configure(RenderType originalRenderType, ModifierSupportedRenderType modifiers);
+	public interface ModifierConfigurator {
+		ModifierConfigurator IDENTITY = (originalRenderType, modifiers) -> {};
+
+		void configure(RenderType originalRenderType, ModifierSupportedRenderType modifiers);
 	}
-	
+
 	public static class CachingRenderModifiers extends RenderModifiers {
-		protected final Map<RenderType, RenderType> cache = new WeakHashMap<RenderType, RenderType>();
+		protected final Map<RenderType, RenderType> cache = new WeakHashMap<>();
 		protected final ModifierConfigurator configurator;
 
 		public CachingRenderModifiers(String name, List<RenderTypeModifier<?>> modifiers) {
 			this(name, modifiers, ModifierConfigurator.IDENTITY);
 		}
-		
+
 		public CachingRenderModifiers(String name, List<RenderTypeModifier<?>> modifiers, ModifierConfigurator configurator) {
 			super(name, modifiers);
 			this.configurator = configurator;
 		}
-		
+
 		@Override
 		public RenderType apply(RenderType renderType) {
 			return this.cache.computeIfAbsent(renderType, (type) -> {
@@ -133,7 +133,7 @@ public class RenderModifiers {
 				return modifiedRenderType;
 			});
 		}
-		
+
 		@Override
 		public RenderType applyAndConfigure(RenderType renderType, ModifierConfigurator configurator) {
 			throw new UnsupportedOperationException("CachingRenderModifiers can not use dynamic configurators");

@@ -8,7 +8,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.sky.BLWeatherRenderer;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
-import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 

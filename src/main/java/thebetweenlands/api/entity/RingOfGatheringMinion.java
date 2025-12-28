@@ -17,14 +17,14 @@ public interface RingOfGatheringMinion {
 	 * @param tag CompoundTag returned by {@link #returnToRing(UUID)}
 	 * @return
 	 */
-	public boolean returnFromRing(Entity user, CompoundTag tag);
+	boolean returnFromRing(Entity user, CompoundTag tag);
 
 	/**
 	 * Called when the entity should be teleported back to the user
 	 * @param user
 	 * @return
 	 */
-	public default void returnToCall(Entity user) {
+	default void returnToCall(Entity user) {
 		((Entity) this).setPos(user.position());
 	}
 

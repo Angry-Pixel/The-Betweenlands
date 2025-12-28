@@ -52,8 +52,7 @@ public class ShockwaveSwordItem extends SwordItem implements UnbreakableItem {
 			if (data.cooldownTimestamp() != -1 && data.cooldownTimestamp() + 60L < level.getGameTime()) {
 				stack.set(DataComponentRegistry.SHOCKWAVE_DATA, ShockwaveSwordData.DEFAULT);
 				data = stack.get(DataComponentRegistry.SHOCKWAVE_DATA);
-				;
-			}
+            }
 
 			if (data.uses() < 3) {
 				double direction = Math.toRadians(context.getPlayer().getYRot());

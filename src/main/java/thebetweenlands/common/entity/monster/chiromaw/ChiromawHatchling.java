@@ -28,7 +28,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
@@ -670,7 +669,7 @@ public class ChiromawHatchling extends PathfinderMob implements OwnableEntity, P
 		if (uuid != null) {
 			try {
 				this.setOwnerUUID(uuid);
-			} catch (Throwable throwable) {
+			} catch (Throwable ignored) {
 			}
 		}
 

@@ -11,8 +11,8 @@ public interface WeedwoodBushPassableEntity {
 	 * @param bush
 	 * @return
 	 */
-	public default boolean canPassThroughBush(BlockGetter level, BlockPos bush) {
+	default boolean canPassThroughBush(BlockGetter level, BlockPos bush) {
 		return true;
 	}
-	
+
 }

@@ -37,7 +37,7 @@ public class ProxyMultiBufferSource implements MultiBufferSource {
 		this.proxyFunction = proxyFunction;
 		this.vertexConsumerProxy = vertexConsumerProxy;
 	}
-	
+
 	public MultiBufferSource getDelegate() {
 		return this.delegate;
 	}
@@ -53,15 +53,15 @@ public class ProxyMultiBufferSource implements MultiBufferSource {
 	public BiFunction<RenderType, RenderType, RenderType> getProxyFunction() {
 		return this.proxyFunction;
 	}
-	
+
 	public VertexConsumerProxy getVertexConsumerProxy() {
 		return this.vertexConsumerProxy;
 	}
-	
+
 	public RenderType getRenderType(RenderType renderType) {
 		return this.proxyCache.compute(renderType, this.proxyFunction);
 	}
-	
+
 	@Override
 	public VertexConsumer getBuffer(RenderType renderType) {
 		RenderType proxyRenderType = this.getRenderType(renderType);
@@ -73,39 +73,39 @@ public class ProxyMultiBufferSource implements MultiBufferSource {
 	}
 
 	@FunctionalInterface
-	public static interface VertexConsumerProxy {
-		public static final VertexConsumerProxy IDENTITY = ((originalRenderType, proxyRenderType, vertexConsumer) -> vertexConsumer);
-		
-		public VertexConsumer apply(RenderType originalRenderType, RenderType proxyRenderType, VertexConsumer vertexConsumer);
+	public interface VertexConsumerProxy {
+		VertexConsumerProxy IDENTITY = ((originalRenderType, proxyRenderType, vertexConsumer) -> vertexConsumer);
+
+		VertexConsumer apply(RenderType originalRenderType, RenderType proxyRenderType, VertexConsumer vertexConsumer);
 	}
-	
+
 	public static final VertexConsumer NULL_CONSUMER = new VertexConsumer() {
-		
+
 		@Override
 		public VertexConsumer setUv2(int u, int v) {
 			return this;
 		}
-		
+
 		@Override
 		public VertexConsumer setUv1(int u, int v) {
 			return this;
 		}
-		
+
 		@Override
 		public VertexConsumer setUv(float u, float v) {
 			return this;
 		}
-		
+
 		@Override
 		public VertexConsumer setNormal(float normalX, float normalY, float normalZ) {
 			return this;
 		}
-		
+
 		@Override
 		public VertexConsumer setColor(int red, int green, int blue, int alpha) {
 			return this;
 		}
-		
+
 		@Override
 		public VertexConsumer addVertex(float x, float y, float z) {
 			return this;

@@ -115,13 +115,10 @@ public class BeamOriginMirrorWorld implements BlockAndTintGetter, LevelHeightAcc
 
 	@Override
 	public int getBrightness(LightLayer lightType, BlockPos blockPos) {
-		switch(lightType) {
-		case BLOCK:
-			return (this.getModelLightValue() & 0xFF) >> 4;
-		case SKY:
-			return ((this.getModelLightValue() >> 8) & 0xFF) >> 4;
-		}
-		return BlockAndTintGetter.super.getBrightness(lightType, blockPos);
+		return switch (lightType) {
+			case BLOCK -> (this.getModelLightValue() & 0xFF) >> 4;
+			case SKY -> ((this.getModelLightValue() >> 8) & 0xFF) >> 4;
+		};
 	}
 
 	public static class MirrorWorldLightEngine extends LevelLightEngine {

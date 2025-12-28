@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity.monster;
 
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
@@ -46,6 +45,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+import javax.annotation.Nullable;
+
 public class RockSnot extends BasicProximitySpawnerExtended {
 	private static final EntityDataAccessor<Integer> TENDRIL_COUNT = SynchedEntityData.defineId(RockSnot.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> JAW_ANGLE = SynchedEntityData.defineId(RockSnot.class, EntityDataSerializers.INT);
@@ -63,16 +64,16 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	public Level getWorld() {
 		return level();
 	}
-	
-    @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundRegistry.CRUNCH.get();
-    }
 
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundRegistry.CRUNCH.get();
-    }
+	@Override
+	protected SoundEvent getHurtSound(DamageSource source) {
+		return SoundRegistry.CRUNCH.get();
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.CRUNCH.get();
+	}
 
 	@Override
 	protected void registerGoals() {
@@ -91,29 +92,30 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Mob.createMobAttributes()
-				.add(Attributes.MAX_HEALTH, 10.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0D)
-				.add(Attributes.ATTACK_DAMAGE, 1D)
-				.add(Attributes.FOLLOW_RANGE, 20.0D)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 1D);
+			.add(Attributes.MAX_HEALTH, 10.0D)
+			.add(Attributes.MOVEMENT_SPEED, 0D)
+			.add(Attributes.ATTACK_DAMAGE, 1D)
+			.add(Attributes.FOLLOW_RANGE, 20.0D)
+			.add(Attributes.KNOCKBACK_RESISTANCE, 1D);
 	}
 
 	@SuppressWarnings("deprecation")
 	public static boolean canSpawnHere(EntityType<RockSnot> entity, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource random) {
-        return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).liquid() && level.getFluidState(pos).is(FluidTags.WATER);
-    }
+		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).liquid() && level.getFluidState(pos).is(FluidTags.WATER);
+	}
 
 	@Override
-    public boolean checkSpawnObstruction(LevelReader level) {
-        return level.isUnobstructed(this);
-    }
-/*
-    @Nullable
-    @Override
-    protected ResourceLocation getLootTable() {
-        return LootTableRegistry.ROCK_SNOT;
-    }
-*/
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.isUnobstructed(this);
+	}
+
+	/*
+		@Nullable
+		@Override
+		protected ResourceLocation getLootTable() {
+			return LootTableRegistry.ROCK_SNOT;
+		}
+	*/
 	@Override
 	public void aiStep() {
 		if (!level().isClientSide()) {
@@ -124,10 +126,10 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-	 public void tick() {
+	public void tick() {
 		if (level().isClientSide()) {
-	            if (isInWater() && !level().getBlockState(blockPosition().below()).isRedstoneConductor(level(), blockPosition().below()))
-	            	setDeltaMovement(getDeltaMovement().add(0D, -0.2D, 0D));
+			if (isInWater() && !level().getBlockState(blockPosition().below()).isRedstoneConductor(level(), blockPosition().below()))
+				setDeltaMovement(getDeltaMovement().add(0D, -0.2D, 0D));
 
 			if (isVehicle() && getJawAngle() == 16)
 				if (level().getGameTime() % 20 == 0)
@@ -165,11 +167,11 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 					if (level().getGameTime() % 20 == 0) {
 						setEatingHeight(getEatingHeight() + 1);
 						level().playSound(null, blockPosition(), SoundRegistry.ROCK_SNOT_EAT.get(), SoundSource.HOSTILE, 1F, 1F);
-						getPassengers().get(0).hurt(damageSources().generic(), 0F);
-						if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
-							setContainedXP(getContainedXP() + Math.round(getXPEaten((LivingEntity) getPassengers().get(0)) * 0.5F));
-							getPassengers().get(0).discard();
-							if(getContainedXP() >= 10)
+						getPassengers().getFirst().hurt(damageSources().generic(), 0F);
+						if (getEatingHeight() == 10 && getPassengers().getFirst() != null) {
+							setContainedXP(getContainedXP() + Math.round(getXPEaten((LivingEntity) getPassengers().getFirst()) * 0.5F));
+							getPassengers().getFirst().discard();
+							if (getContainedXP() >= 10)
 								setPearlTimer(PEARL_CREATION_TIME);
 							setEatingHeight(0);
 							setJawAngle(0);
@@ -180,7 +182,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 				if (isVehicle() && getJawAngle() == 16 && !getPlacedByPlayer())
 					if (level().getGameTime() % 20 == 0) {
 						level().playSound(null, blockPosition(), SoundRegistry.ROCK_SNOT_EAT.get(), SoundSource.HOSTILE, 1F, 1F);
-						getPassengers().get(0).hurt(damageSources().mobAttack(this), (float) getAttributeValue(Attributes.ATTACK_DAMAGE));
+						getPassengers().getFirst().hurt(damageSources().mobAttack(this), (float) getAttributeValue(Attributes.ATTACK_DAMAGE));
 					}
 
 			} else {
@@ -192,7 +194,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 
 				if (getPearlTimer() == 0) {
 					int quotient = getContainedXP() / 10;
-				    int result = getContainedXP() - quotient * 10;
+					int result = getContainedXP() - quotient * 10;
 					setContainedXP(result);
 					ItemStack pearl = new ItemStack(ItemRegistry.ROCK_SNOT_PEARL.get(), quotient);
 					ItemEntity item = new ItemEntity(level(), blockPosition().getX() + 0.5D, blockPosition().getY() + 0.5D, blockPosition().getZ() + 0.5D, pearl);
@@ -206,7 +208,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	}
 
 	public int getXPEaten(LivingEntity entity) {
-		return entity != null ? entity.getExperienceReward((ServerLevel) level(), null) : 0;
+		return entity.getExperienceReward((ServerLevel) level(), null);
 	}
 
 	public int getContainedXP() {
@@ -220,17 +222,11 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	public void checkAreaHere() {
 		if (!level().isClientSide() && level().getDifficulty() != Difficulty.PEACEFUL) {
 			List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, proximityBox(this));
-			for (Iterator<LivingEntity> iterator = list.iterator(); iterator.hasNext();) {
-				LivingEntity entity  = iterator.next();
-				if (entity != null && !canTarget(entity))
-					iterator.remove();
-			}
+			list.removeIf(entity -> entity != null && !canTarget(entity));
 			if (list.isEmpty()) {
 				setTarget(null);
-				return;
-			}
-			if (!list.isEmpty()) {
-				LivingEntity entity = list.get(0);
+			} else {
+				LivingEntity entity = list.getFirst();
 				if (canSneakPast() && entity.isCrouching())
 					return;
 				else if (checkSight() && !hasLineOfSight(entity))
@@ -245,7 +241,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 
 	@Override
 	public boolean doHurtTarget(Entity entity) {
-		return hasLineOfSight(entity) ? super.doHurtTarget(entity) : false;
+		return this.hasLineOfSight(entity) && super.doHurtTarget(entity);
 	}
 
 	protected boolean damageSnot(DamageSource source, float amount) {
@@ -254,14 +250,14 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 
 	@Override
 	public boolean hurt(DamageSource source, float damage) {
-		if(source.is(DamageTypes.DROWN))
+		if (source.is(DamageTypes.DROWN))
 			return false;
-		if(source == damageSources().mobAttack(getLastHurtByMob())) {
-			Entity sourceEntity = source.getDirectEntity();
-			if(!(sourceEntity instanceof Player))
-				if(isVehicle() && getPassengers().get(0) == sourceEntity)
+		if (source.is(DamageTypes.MOB_ATTACK)) {
+			Entity sourceEntity = source.getEntity();
+			if (!(sourceEntity instanceof Player))
+				if (this.isVehicle() && this.getPassengers().getFirst() == sourceEntity)
 					return false;
-			if(sourceEntity instanceof Player && ((Player) sourceEntity).isCreative()) {
+			if (source.isCreativePlayer()) {
 				this.kill();
 			}
 		}
@@ -269,36 +265,34 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	}
 
 	public boolean canTarget(LivingEntity entity) {
-		if((entity instanceof Player && getPlacedByPlayer() ||  entity instanceof Player && ((Player) entity).isSpectator() || entity instanceof Player && ((Player) entity).isCreative()))
+		if ((entity instanceof Player player && (this.getPlacedByPlayer() || player.isSpectator() || player.isCreative())))
 			return false;
-		if(entity instanceof RockSnot)
+		if (entity instanceof RockSnot)
 			return false;
-		if(entity instanceof Lurker)
+		if (entity instanceof Lurker)
 			return false;
-		if(entity.getType().is(Tags.EntityTypes.BOSSES))
+		if (entity.getType().is(Tags.EntityTypes.BOSSES))
 			return false;
-		if(!isInWater())
-			return false;
-		return true;
+		return isInWater();
 	}
 
 	@Override
 	public boolean canAttackType(EntityType<?> type) {
-		if(type == EntityType.PLAYER && getPlacedByPlayer())
+		if (type == EntityType.PLAYER && getPlacedByPlayer())
 			return false;
-		if(type == EntityRegistry.ROCK_SNOT.get() || type ==  EntityRegistry.ROCK_SNOT_TENDRIL.get())
+		if (type == EntityRegistry.ROCK_SNOT.get() || type == EntityRegistry.ROCK_SNOT_TENDRIL.get())
 			return false;
-		if(type == EntityRegistry.LURKER.get())
+		if (type == EntityRegistry.LURKER.get())
 			return false;
 		return super.canAttackType(type);
 	}
 
 	@Override
-	public void setTarget(LivingEntity entity) {
+	public void setTarget(@Nullable LivingEntity entity) {
 		if (getPlacedByPlayer()) {
 			if (!(entity instanceof Player))
 				super.setTarget(entity);
-		} else 
+		} else
 			super.setTarget(entity);
 	}
 
@@ -322,7 +316,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	public void spawnSpittingParticles() {
 		for (int count = 0; count < 5; ++count)
 			for (int more = 0; more < 5; ++more) {
-				if(isInWater())
+				if (isInWater())
 					level().addParticle(ParticleTypes.BUBBLE, getX(), getY() + count * 0.5D, getZ(), 0.0D, 0.1D, 0.0D);
 				else
 					TheBetweenlands.createParticle(ParticleRegistry.RAIN.get(), level(), getX(), getY() + count * 0.5D, getZ(), ParticleFactory.ParticleArgs.get().withColor(FastColor.ARGB32.colorFromFloat(1F, 0.4118F, 0.2745F, 0.1568F)));
@@ -340,9 +334,9 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-    public boolean dismountsUnderwater() {
-        return false;
-    }
+	public boolean dismountsUnderwater() {
+		return false;
+	}
 
 	private int getEatingHeight() {
 		return getEntityData().get(EATING_TIMER);
@@ -414,12 +408,12 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-    public void push(double x, double y, double z) {
+	public void push(double x, double y, double z) {
 		this.jumping = false;
-        this.xxa = 0.0F;
-        this.yya = 0.0F;
-        this.zza = 0.0F; 
-    }
+		this.xxa = 0.0F;
+		this.yya = 0.0F;
+		this.zza = 0.0F;
+	}
 
 	@Override
 	public PushReaction getPistonPushReaction() {
@@ -437,11 +431,6 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-	public boolean isPushable() {
-        return false;
-    }
-
-	@Override
 	public float getProximityHorizontal() {
 		return 4;
 	}
@@ -453,17 +442,7 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 
 	@Override
 	public AABB proximityBox(LivingEntity spawner) {
-		return spawner.getBoundingBox().inflate(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).move(0D, getProximityVertical() + getBbHeight() , 0D);
-	}
-
-	@Override
-	public boolean canSneakPast() {
-		return true;
-	}
-
-	@Override
-	public boolean checkSight() {
-		return true;
+		return spawner.getBoundingBox().inflate(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).move(0D, getProximityVertical() + getBbHeight(), 0D);
 	}
 
 	@Override
@@ -485,14 +464,15 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 	public int maxUseCount() {
 		return 0;
 	}
-	
+
 	@Override
 	public <T extends LivingEntity> void performDetectionLogic(T detected) {
 	}
 
-    static class ShootTendril extends Goal {
-    	RockSnot parentEntity;
-		LivingEntity target;
+	static class ShootTendril extends Goal {
+		private final RockSnot parentEntity;
+		@Nullable
+		private LivingEntity target;
 
 		public ShootTendril(RockSnot parent) {
 			this.parentEntity = parent;
@@ -504,19 +484,12 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 			target = parentEntity.getTarget();
 			if (target == null || parentEntity.isVehicle() || !parentEntity.getCanShootTendril())
 				return false;
-			else if (parentEntity.spawnDelayCounter == 0)
-				return true;
-			else
-				return false;
+			else return parentEntity.spawnDelayCounter == 0;
 		}
 
 		@Override
 		public boolean canContinueToUse() {
 			return target != null && parentEntity.hurtTime <= 40 && parentEntity.getCanShootTendril() && parentEntity.spawnDelayCounter == 0 && !parentEntity.isVehicle();
-		}
-
-		@Override
-		public void start() {
 		}
 
 		@Override
@@ -539,8 +512,8 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 		}
 
 		@Override
-	    public void stop() {
-	        target = null;
-	    }
+		public void stop() {
+			target = null;
+		}
 	}
 }

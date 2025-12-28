@@ -16,7 +16,7 @@ public interface ModifierSupportedRenderType {
 	 * @return the current context for the modifier, or {@code null}
 	 */
 	@Nullable
-	public default <T> T getContext(RenderTypeModifier<T> modifier) {
+	default <T> T getContext(RenderTypeModifier<T> modifier) {
 		return this.getContextOptional(modifier).orElse(null);
 	}
 
@@ -26,7 +26,7 @@ public interface ModifierSupportedRenderType {
 	 * @param modifier the modifier to get the context for
 	 * @return an optional of the current context for the modifier, or an absent one if the modifier does not exist
 	 */
-	public <T> Optional<T> getContextOptional(RenderTypeModifier<T> modifier);
+	<T> Optional<T> getContextOptional(RenderTypeModifier<T> modifier);
 
 	/**
 	 * Get the current context for the modifier with the specified id, if it exists
@@ -35,6 +35,6 @@ public interface ModifierSupportedRenderType {
 	 * @param modifierId the id of the modifier to get the context for
 	 * @return an optional of the current context for the modifier, or an absent one of the modifier does not exist or has an incompatible context type
 	 */
-	public <T> Optional<T> getContextOptional(Class<T> contextType, ResourceLocation modifierId);
-	
+    <T> Optional<T> getContextOptional(Class<T> contextType, ResourceLocation modifierId);
+
 }

@@ -181,9 +181,9 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 			if (!shield.isActive(i)) {
 				continue;
 			}
-			double v3[] = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][0]];
-			double v2[] = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][1]];
-			double v1[] = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][2]];
+			double[] v3 = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][0]];
+			double[] v2 = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][1]];
+			double[] v1 = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][2]];
 			double centerX = (v1[0] + v2[0] + v3[0]) / 3;
 			double centerY = (v1[1] + v2[1] + v3[1]) / 3;
 			double centerZ = (v1[2] + v2[2] + v3[2]) / 3;
@@ -256,7 +256,6 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 
 	public void setFloating(boolean floating) {
 		this.getEntityData().set(FLOATING_STATE, floating);
-		;
 	}
 
 	public record AttackShieldResult(boolean deflected, int shieldHit, @Nullable Vec3 pos, @Nullable Vec3 ray) {

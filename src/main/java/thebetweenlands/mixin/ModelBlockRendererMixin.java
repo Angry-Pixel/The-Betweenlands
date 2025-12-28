@@ -48,8 +48,8 @@ public abstract class ModelBlockRendererMixin {
 			if (!list.isEmpty()) {
 				mutablePos.setWithOffset(pos, direction);
 				if (!checkSides || Block.shouldRenderFace(state, level, pos, direction, mutablePos)) {
-					List<BakedQuad> flatlist = new ArrayList<BakedQuad>();
-					List<BakedQuad> standardlist = new ArrayList<BakedQuad>();
+					List<BakedQuad> flatlist = new ArrayList<>();
+					List<BakedQuad> standardlist = new ArrayList<>();
 
 					// Fetch quad shading flags
 					for (BakedQuad quad : list) {

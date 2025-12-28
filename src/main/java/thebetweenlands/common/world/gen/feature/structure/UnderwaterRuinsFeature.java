@@ -62,11 +62,11 @@ public class UnderwaterRuinsFeature extends WorldGenHelper<NoneFeatureConfigurat
 
 		//Pick a random feature
 		generated = switch (rand.nextInt(5)) {
-			case 1: yield structureArch(level, rand, pos);
-			case 2: yield structurePillars(level, rand, pos);
-			case 3: yield structureRing(level, rand, pos);
-			case 4: yield structureShrine(level, rand, pos);
-			default: yield structureShelter(level, rand, pos);
+			case 1 -> structureArch(level, rand, pos);
+			case 2 -> structurePillars(level, rand, pos);
+			case 3 -> structureRing(level, rand, pos);
+			case 4 -> structureShrine(level, rand, pos);
+			default -> structureShelter(level, rand, pos);
 		};
 
 		if (generated) {

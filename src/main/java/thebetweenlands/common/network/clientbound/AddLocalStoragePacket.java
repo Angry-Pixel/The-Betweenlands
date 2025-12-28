@@ -19,7 +19,6 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.StorageRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class AddLocalStoragePacket implements CustomPacketPayload {

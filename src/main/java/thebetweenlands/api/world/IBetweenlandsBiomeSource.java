@@ -8,17 +8,17 @@ import net.minecraft.world.level.biome.Climate;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 
 public interface IBetweenlandsBiomeSource extends BiomeResolver {
-	public float getSurfaceDepth();
-	
-	public float getGlobalFactor();
-	
-	public float getBiomeDepth(int x, int y, int z, Climate.Sampler sampler);
-	
-	public float getBiomeDepth(Holder<Biome> biome);
+	float getSurfaceDepth();
 
-	public float getBiomeScale(int x, int y, int z, Climate.Sampler sampler);
+	float getGlobalFactor();
 
-	public float getBiomeScale(Holder<Biome> biome);
+	float getBiomeDepth(int x, int y, int z, Climate.Sampler sampler);
 
-	public HolderSet<ConfiguredEarlyGenerator<?, ?>> getBiomeGenerators(Holder<Biome> biome);
+	float getBiomeDepth(Holder<Biome> biome);
+
+	float getBiomeScale(int x, int y, int z, Climate.Sampler sampler);
+
+	float getBiomeScale(Holder<Biome> biome);
+
+	HolderSet<ConfiguredEarlyGenerator<?, ?>> getBiomeGenerators(Holder<Biome> biome);
 }

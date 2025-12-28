@@ -10,8 +10,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.Direction;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +17,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.container.InfuserBlock;
-import thebetweenlands.common.block.container.RubberTapBlock;
 import thebetweenlands.common.block.entity.WaterFilterBlockEntity;
 import thebetweenlands.util.RenderUtils;
 

@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.neoforged.neoforge.event.level.ChunkDataEvent;
 import thebetweenlands.common.TheBetweenlands;
 
 public class LocalStorageSaveHandler implements AutoCloseable {
@@ -100,7 +99,7 @@ public class LocalStorageSaveHandler implements AutoCloseable {
 								file.getParentFile().mkdirs();
 								NbtIo.write(nbt, file.toPath());
 							} catch(Exception ex) {
-								TheBetweenlands.LOGGER.error("Failed to save region or local storage: " + file.getAbsolutePath(), ex);
+								TheBetweenlands.LOGGER.error("Failed to save region or local storage: {}", file.getAbsolutePath(), ex);
 							}
 						}
 					} finally {

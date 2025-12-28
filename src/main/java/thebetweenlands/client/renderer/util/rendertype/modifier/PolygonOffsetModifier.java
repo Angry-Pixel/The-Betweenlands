@@ -17,16 +17,16 @@ public class PolygonOffsetModifier implements RenderTypeModifier<PolygonOffsetMo
 	public static final PolygonOffsetModifier INSTANCE = new PolygonOffsetModifier(TheBetweenlands.prefix("polygon_offset"));
 
 	protected final ResourceLocation id;
-	
+
 	public PolygonOffsetModifier(ResourceLocation id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public ResourceLocation getId() {
 		return id;
 	}
-	
+
 	@Override
 	public void beforeSetupRenderState(RenderType originalRenderType, PolygonOffsetContext context) {
 		// NO-OP
@@ -56,27 +56,27 @@ public class PolygonOffsetModifier implements RenderTypeModifier<PolygonOffsetMo
 	public PolygonOffsetContext createDefaultData(RenderType originalRenderType) {
 		return new PolygonOffsetContext();
 	}
-	
-	public static record PolygonOffset(boolean fillEnabled, boolean lineEnabled, float factor, float units) {
+
+	public record PolygonOffset(boolean fillEnabled, boolean lineEnabled, float factor, float units) {
 		public PolygonOffset() {
 			this(false, false, 0.0f, 0.0f);
 		}
-		
-		public PolygonOffset(boolean fillEnabled, boolean lineEnabled, float factor, float units) { 
+
+		public PolygonOffset(boolean fillEnabled, boolean lineEnabled, float factor, float units) {
 			this.fillEnabled = fillEnabled;
 			this.lineEnabled = lineEnabled;
 			if(fillEnabled || lineEnabled) {
 				if(!Float.isFinite(factor)) {
-					throw new IllegalArgumentException("'factor' must be finite, got " + Float.toString(factor));
+					throw new IllegalArgumentException("'factor' must be finite, got " + factor);
 				}
 				if(!Float.isFinite(units)) {
-					throw new IllegalArgumentException("'units' must be finite, got " + Float.toString(units));
+					throw new IllegalArgumentException("'units' must be finite, got " + units);
 				}
 			}
 			this.factor = factor;
 			this.units = units;
 		}
-		
+
 		public void apply() {
 			if(this.fillEnabled()) {
 				RenderSystem.enablePolygonOffset();
@@ -91,7 +91,7 @@ public class PolygonOffsetModifier implements RenderTypeModifier<PolygonOffsetMo
 			}
 			RenderSystem.polygonOffset(this.factor(), this.units());
 		}
-		
+
 		public static PolygonOffset get() {
 	        RenderSystem.assertOnRenderThread();
 	        GlStateBackup backup = new GlStateBackup();
@@ -103,12 +103,12 @@ public class PolygonOffsetModifier implements RenderTypeModifier<PolygonOffsetMo
 			return new PolygonOffset(fillEnabled, lineEnabled, factor, units);
 		}
 	}
-	
+
 	public static class PolygonOffsetContext {
 		protected Deque<PolygonOffset> stack;
 		protected float factor = 0.0f;
 		protected float units = 0.0f;
-		
+
 		public Deque<PolygonOffset> getStack() {
 			if(this.stack == null) {
 				this.stack = new ArrayDeque<>();
@@ -119,10 +119,10 @@ public class PolygonOffsetModifier implements RenderTypeModifier<PolygonOffsetMo
 		public float getFactor() {
 			return this.factor;
 		}
-		
+
 		public PolygonOffsetContext setFactor(float factor) {
 			if(!Float.isFinite(factor)) {
-				throw new IllegalArgumentException("'factor' must be finite, got " + Float.toString(factor));
+				throw new IllegalArgumentException("'factor' must be finite, got " + factor);
 			}
 			this.factor = factor;
 			return this;
@@ -131,15 +131,15 @@ public class PolygonOffsetModifier implements RenderTypeModifier<PolygonOffsetMo
 		public float getUnits() {
 			return this.units;
 		}
-		
+
 		public PolygonOffsetContext setUnits(float units) {
 			if(!Float.isFinite(units)) {
-				throw new IllegalArgumentException("'units' must be finite, got " + Float.toString(units));
+				throw new IllegalArgumentException("'units' must be finite, got " + units);
 			}
 			this.units = units;
 			return this;
 		}
-		
+
 		public PolygonOffsetContext set(float factor, float units) {
 			this.setFactor(factor);
 			this.setUnits(units);

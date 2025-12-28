@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.storage.operation;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IDeferredStorageOperation;

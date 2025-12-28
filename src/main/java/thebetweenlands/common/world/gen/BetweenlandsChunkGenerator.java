@@ -74,7 +74,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	private final int cellHeight;
 
 	// TODO extra settings
-	
+
 	public BetweenlandsChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings) {
 		this(biomeSource, settings, HolderSet.empty());
 	}
@@ -85,12 +85,12 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		// net.minecraft.server.level.ChunkMap gets NoiseGeneratorSettings from this class, and passes it to RandomState.create(...)
 		// RandomState's constructor does settings.getRandomSource().newInstance(levelSeed).forkPositional();
 		// with legacy_random_source set in the noise generator settings, this should be a LegacyPositionalRandomFactory
-		
+
 		// Info on the blended noise from 1.12.2:
 		// lower noise receives a random with the world seed
 		// upper noise receives a random with the world seed advanced 16 * 262 = 4192 values
 		// blend noise receives a random with the world seed advanced 16 * 262 * 2 = 8384 values
-		
+
 		this.settings = settings;
 		this.globalGenerators = globalGenerators;
 		if (settings.isBound()) {
@@ -195,29 +195,29 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		}
 
 		access = applyEarlyGenerators(blender, structureManager, random, access, oceanfloor, surface, min, max);
-		
+
 		return access;
 	}
-	
-	public static record EarlyGeneratorWithBiome(Optional<Holder<Biome>> biomeOptional, ConfiguredEarlyGenerator<?, ?> generator) {}
-	
+
+	public record EarlyGeneratorWithBiome(Optional<Holder<Biome>> biomeOptional, ConfiguredEarlyGenerator<?, ?> generator) {}
+
 	protected ChunkAccess applyEarlyGenerators(Blender blender, StructureManager structureManager, RandomState random, ChunkAccess access, Heightmap oceanfloorHeightmap, Heightmap surfaceHeightmap, int min, int max) {
 		// TODO feature sorting
-		
+
 		// List of all generators to generate in this chunk
 		List<EarlyGeneratorWithBiome> baseGenerators = new ArrayList<>();
-		
+
 		// Add all global generators
 		this.globalGenerators.stream()
 			.map(Holder::value)
 			.map((generator) -> new EarlyGeneratorWithBiome(Optional.empty(), generator))
 			.forEach(baseGenerators::add);
-		
+
 		// If the biome source supports biome-specific generators
 		if(this.biomeSource instanceof IBetweenlandsBiomeSource biomeSource) {
 			// Get all biomes in the chunk
 			Set<Holder<Biome>> biomeSet = getBiomeSet(access, min * this.cellHeight, max * this.cellHeight);
-			
+
 			// Get the generators from every biome
 			for (Holder<Biome> holder : biomeSet) {
 				HolderSet<ConfiguredEarlyGenerator<?, ?>> generators = biomeSource.getBiomeGenerators(holder);
@@ -232,12 +232,12 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		}
 
 		// If there are generators to generate
-		if(baseGenerators.size() != 0) {
+		if(!baseGenerators.isEmpty()) {
 			// Create context
 			long worldSeed = ((IBetweenlandsRandomStateExtension)(Object)random).thebetweenlands$getLevelSeed();
 			ChunkHeightmaps heightmaps = new ChunkHeightmaps(oceanfloorHeightmap, surfaceHeightmap);
 			EarlyGenerationContext<?> context = new EarlyGenerationContext<>(Optional.empty(), Optional.empty(), this, worldSeed, access, heightmaps, new BlockGenerator(this.defaultBlock, this.defaultFluid, this::generateBaseState), null, new ExtraChunkInfo());
-			
+
 			// Generate all generators
 			for(EarlyGeneratorWithBiome generator : baseGenerators) {
 				context = context.withBiome(generator.biomeOptional());
@@ -246,93 +246,91 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 //				TheBetweenlands.LOGGER.info("New context {}", context);
 			}
 		}
-		
+
 		return access;
 	}
 
 	protected Set<Holder<Biome>> getBiomeSet(ChunkAccess access, int minBlockY, int maxBlockY) {
-		final int minSectionIndex = 
+		final int minSectionIndex =
 			Math.max(
 				access.getSectionIndex(minBlockY),
 				0
 			);
-		
-		final int maxSectionIndex = 
+
+		final int maxSectionIndex =
 				Math.min(
 						access.getSectionIndex(maxBlockY) + 1,
 						access.getSectionsCount()
 					);
 
 		final LevelChunkSection[] sections = access.getSections();
-		
+
 		final Set<Holder<Biome>> set = new ObjectArraySet<>();
 		for (int i = minSectionIndex; i < maxSectionIndex; ++i) {
 			LevelChunkSection levelchunksection = sections[i];
 			levelchunksection.getBiomes().getAll(set::add);
 		}
 		set.retainAll(this.biomeSource.possibleBiomes());
-		
+
 		return set;
 	}
-	
-	
+
+
 	protected EarlyGenerationContext<?> placeBaseGenerator(ConfiguredEarlyGenerator<?, ?> parentGenerator, EarlyGenerationContext<?> context) {
-		
+
 		context = context.withParentGenerator(parentGenerator);
-		
+
 		var iterator = parentGenerator.getGenerators().iterator();
 		while(iterator.hasNext()) {
 			ConfiguredEarlyGenerator<?, ?> configuredGenerator = iterator.next();
 
 			context = placeGenerator(configuredGenerator, context);
 		}
-		
+
 		return context;
-		
+
 	}
-	
+
 	protected <GC extends EarlyGeneratorConfiguration, G extends EarlyGenerator<GC>> EarlyGenerationContext<?> placeGenerator(ConfiguredEarlyGenerator<GC, G> configuredGenerator, EarlyGenerationContext<?> context) {
 		// Get generator & config
 		G generator = configuredGenerator.generator();
 		GC config = configuredGenerator.configuration();
-		
+
 		// Check for any extra required data
 		EnumSet<ExtraChunkInfoTypes> requirements = generator.getRequiredExtraInfo(config);
-		
+
 		// Ensure we have all the extra required data
 		EnumSet<ExtraChunkInfoTypes> existingMask = context.extraChunkInfo().mask();
 		if(!existingMask.containsAll(requirements)) {
 			EnumSet<ExtraChunkInfoTypes> missingRequirements = EnumSet.copyOf(requirements);
 			missingRequirements.removeAll(existingMask);
-			
+
 			context = this.updateExtraInfo(context, missingRequirements);
 		}
 
 		// Set the config in the context
 		final EarlyGenerationContext<GC> newContext;
 		context = newContext = context.withConfig(config);
-		
+
 		// Actually run the generator
 		generator.place(newContext);
-		
+
 		return context;
 	}
-	
+
 	public EarlyGenerationContext<?> updateExtraInfo(EarlyGenerationContext<?> context, EnumSet<ExtraChunkInfoTypes> missingRequirements) {
-		
+
 		ExtraChunkInfo extraInfo = context.extraChunkInfo();
-		
+
 		for(ExtraChunkInfoTypes requirement : missingRequirements) {
-			switch(requirement) {
-				case ExtraChunkInfoTypes.BIOME_WEIGHTS:
-					extraInfo = extraInfo.withBiomeWeights(this.calculateBiomeWeights(context.chunkAccess().getPos()));
-					break;
-			}
+			extraInfo = switch (requirement) {
+				case ExtraChunkInfoTypes.BIOME_WEIGHTS -> extraInfo.withBiomeWeights(this.calculateBiomeWeights(context.chunkAccess().getPos()));
+			};
 		}
-		
+
 		return context.withExtraChunkInfo(extraInfo);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public BiomeWeights calculateBiomeWeights(ChunkPos pos) {
 		final int cellCountX = 16 / this.cellWidth;
@@ -340,29 +338,29 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 
 		final int noiseCellX = Math.floorDiv(pos.getMinBlockX(), this.cellWidth);
 		final int noiseCellZ = Math.floorDiv(pos.getMinBlockZ(), this.cellWidth);
-		
+
 		final int sealevel = this.getSeaLevel();
 		final Climate.Sampler sampler = this.sampler;
-		
+
 		final int totalCellCount = (cellCountX + 1) * (cellCountZ + 1);
-		
+
 		final float[] terrainBiomeWeights = new float[totalCellCount];
 		final Holder<?>[] noiseBiomes = new Holder[totalCellCount];
-		
+
 		// Calculate the distance to the nearest biome for each noise cell (including the cells at the start of the next chunk)
 		for (int x = 0; x <= cellCountX; ++x) {
 			for (int z = 0; z <= cellCountZ; ++z) {
-				
+
 				final Holder<Biome> currentBiome = this.biomeSource.getNoiseBiome(noiseCellX + x, sealevel, noiseCellZ + z, sampler);
-				
+
 				int nearestOtherBiomeSq = 50;
-				
+
 				// TODO could probably iterate over this faster somehow
 				// Calculates the biome terrain weight from an 11x11 area
 				for (int offsetX = -5; offsetX <= 5; ++offsetX) {
 					for (int offsetZ = -5; offsetZ <= 5; ++offsetZ) {
 						Holder<Biome> nearbyBiome = this.biomeSource.getNoiseBiome(noiseCellX + x + offsetX, sealevel, noiseCellZ + z + offsetZ, sampler);
-						
+
 						if(nearbyBiome != currentBiome) {
 							final int distSq = offsetX * offsetX + offsetZ * offsetZ;
 							if(distSq < nearestOtherBiomeSq) {
@@ -371,23 +369,23 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 						}
 					}
 				}
-				
+
 				// Store the weight & biome
 				final int index = x * (cellCountX + 1) + z;
 				terrainBiomeWeights[index] = Mth.clamp((float)(nearestOtherBiomeSq - 2) / 46.0F, 0.0F, 1.0F);
 				noiseBiomes[index] = currentBiome;
 			}
 		}
-		
+
 		// Interpolate biome weights
 		float[] interpolatedBiomeWeights = new float[256];
 		final Holder<?>[] interpolatedBiomes = new Holder[256];
-		
+
 		// Note: not sure why we start iterating in z -> x order instead of x -> z order
 		for(int z = 0; z < 16; ++z) {
 			for(int x = 0; x < 16; ++x) {
 				final int index = x + z * 16;
-				
+
 				int cellX = Math.floorDiv(x, this.cellWidth);
 				int cellZ = Math.floorDiv(z, this.cellWidth);
 				int xMod = Math.floorMod(x, this.cellWidth);
@@ -405,17 +403,17 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				float currentVal = interpZAxisXC + (interpZAxisXN - interpZAxisXC) * xFraction;
 
 				interpolatedBiomeWeights[index] = currentVal;
-				
+
 				// There's probably a really smart algorithm that you could use here
 				int biomeCellX = cellX + Math.round(xFraction);
 				int biomeCellZ = cellZ + Math.round(xFraction);
 				interpolatedBiomes[index] = noiseBiomes[biomeCellX + biomeCellZ * (cellCountZ + 1)];
 			}
 		}
-		
+
 		return new BiomeWeights(interpolatedBiomeWeights, (Holder<Biome>[])interpolatedBiomes);
 	}
-	
+
 	@Override
 	public OptionalInt iterateNoiseColumn(LevelHeightAccessor level, RandomState random, int x, int z, MutableObject<NoiseColumn> column, Predicate<BlockState> stoppingState) {
 		NoiseSettings noise = this.settings.value().noiseSettings().clampToHeightAccessor(level);
@@ -426,7 +424,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 			return OptionalInt.empty();
 		} else {
 			TerrainWarper terrainWarper = this.warper.usingSeed(IBetweenlandsRandomStateExtension.getLevelSeed(random));
-			
+
 			BlockState[] states = null;
 			if (column != null) {
 				states = new BlockState[max * noise.getCellHeight()];
@@ -477,7 +475,7 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	}
 
 	// TODO get rid of worldHeight
-	
+
 	private double[] makeAndFillNoiseColumn(TerrainWarper terrainWarper, int x, int z, int min, int max, int worldHeight) {
 		double[] columns = new double[max + 1];
 		this.fillNoiseColumn(terrainWarper, columns, x, z, min, max, worldHeight);

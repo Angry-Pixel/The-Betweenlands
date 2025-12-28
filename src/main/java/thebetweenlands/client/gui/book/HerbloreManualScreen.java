@@ -152,7 +152,7 @@ public class HerbloreManualScreen extends Screen {
 			if (keyCode == gameSettings.keyLeft.getKey().getValue()) {
 				this.currentCategory.previousPage(this);
 				return true;
-			} else if (keyCode == gameSettings.keyLeft.getKey().getValue()) {
+			} else if (keyCode == gameSettings.keyRight.getKey().getValue()) {
 				this.currentCategory.nextPage(this);
 				return true;
 			}
@@ -165,11 +165,10 @@ public class HerbloreManualScreen extends Screen {
 		if (this.currentCategory != null) {
 			if (scrollY > 0) {
 				this.currentCategory.nextPage(this);
-				return true;
 			} else {
 				this.currentCategory.previousPage(this);
-				return true;
 			}
+			return true;
 		}
 		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}

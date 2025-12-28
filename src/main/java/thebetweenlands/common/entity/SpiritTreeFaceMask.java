@@ -26,8 +26,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class SpiritTreeFaceMask extends HangingEntity implements IEntityWithComplexSpawn {
 	public enum MaskType {
-		LARGE, SMALL;
-	}
+		LARGE, SMALL
+    }
 
 	private MaskType maskType;
 

@@ -286,15 +286,11 @@ public class ObstructionAwareClimberNavigation<T extends ClimbingMob> extends Ob
 	}
 
 	protected static int swizzle(int x, int y, int z, Direction.Axis axis) {
-		switch (axis) {
-			case X:
-				return x;
-			case Y:
-				return y;
-			case Z:
-				return z;
-		}
-		return 0;
+		return switch (axis) {
+			case X -> x;
+			case Y -> y;
+			case Z -> z;
+		};
 	}
 
 	protected static int unswizzle(int x, int y, int z, Direction.Axis ax, Direction.Axis ay, Direction.Axis az, Direction.Axis axis) {

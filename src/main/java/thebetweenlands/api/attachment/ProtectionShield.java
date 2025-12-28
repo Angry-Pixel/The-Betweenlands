@@ -47,7 +47,7 @@ public class ProtectionShield {
 
 	public void unpackActiveData(int packedData) {
 		for(int i = 0; i <= 19; i++) {
-			this.activeShields[i] = ((packedData >> i) & 1) == 1 ? true : false;
+			this.activeShields[i] = ((packedData >> i) & 1) == 1;
 		}
 		this.updateNumActiveShields();
 	}

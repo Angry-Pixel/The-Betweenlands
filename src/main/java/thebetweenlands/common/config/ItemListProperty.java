@@ -336,7 +336,7 @@ public class ItemListProperty {
 		this.itemTagCache.clear();
 
 		for (ResourceLocation location : this.itemTags) {
-			this.itemTagCache.add(new TagKey<Item>(Registries.ITEM, location));
+			this.itemTagCache.add(new TagKey<>(Registries.ITEM, location));
 		}
 
 		for (DataComponentTagPredicate predicate : itemComponents) {

@@ -181,7 +181,7 @@ public class TheBetweenlands {
 	}
 
 	public static boolean isOnGameThread() {
-		return isOnServerGameThread() || (FMLEnvironment.dist.isClient() ? BetweenlandsClient.isOnClientGameThread() : false);
+		return isOnServerGameThread() || (FMLEnvironment.dist.isClient() && BetweenlandsClient.isOnClientGameThread());
 	}
 
 	public static void ensureOnGameThread() {

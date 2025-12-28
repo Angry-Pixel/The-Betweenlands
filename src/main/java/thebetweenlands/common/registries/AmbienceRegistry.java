@@ -1,6 +1,5 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceManager;

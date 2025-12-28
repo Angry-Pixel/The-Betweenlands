@@ -34,7 +34,6 @@ import javax.annotation.Nullable;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;

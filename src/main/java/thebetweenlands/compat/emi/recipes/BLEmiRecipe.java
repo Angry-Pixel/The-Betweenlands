@@ -49,13 +49,13 @@ public abstract class BLEmiRecipe<T extends Recipe<?>> implements EmiRecipe {
 
 	protected void addAdditionalInputs(List<EmiIngredient> inputs) {
 
-	};
+	}
 
 	protected void addAdditionalOutputs(List<EmiStack> outputs) {
 
-	};
+	}
 
-	public T getRecipe() {
+    public T getRecipe() {
 		return this.recipe.value();
 	}
 

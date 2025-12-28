@@ -34,7 +34,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.WaterStrollGoal;

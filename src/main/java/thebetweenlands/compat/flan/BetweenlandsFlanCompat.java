@@ -22,28 +22,28 @@ import thebetweenlands.compat.BLClaimCompatHelper;
 import thebetweenlands.compat.IBetweenlandsModCompat;
 
 public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
-	public static final String MODID = "flan";
-	
-	public static final BetweenlandsFlanCompat INSTANCE = IBetweenlandsModCompat.getService(BetweenlandsFlanCompat.class, MODID).orElseGet(BetweenlandsFlanCompatFallback::new);
-	
-	public static ResourceLocation prefix(String path) { return ResourceLocation.fromNamespaceAndPath(MODID, path); }
-	
-	
+	String MODID = "flan";
+
+	BetweenlandsFlanCompat INSTANCE = IBetweenlandsModCompat.getService(BetweenlandsFlanCompat.class, MODID).orElseGet(BetweenlandsFlanCompatFallback::new);
+
+	static ResourceLocation prefix(String path) { return ResourceLocation.fromNamespaceAndPath(MODID, path); }
+
+
 	@Override
-	public default String getModId() {
+	default String getModId() {
 		return MODID;
 	}
 
-	public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity);
+	boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity);
 
-	public boolean claimRestrictsBlockPlace(ServerLevel level, BlockPos pos, Entity entity);
+	boolean claimRestrictsBlockPlace(ServerLevel level, BlockPos pos, Entity entity);
 
-	public boolean areSameClaim(ServerLevel level, BlockPos pos1, BlockPos pos2);
+	boolean areSameClaim(ServerLevel level, BlockPos pos1, BlockPos pos2);
 
-	public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission);
-	
+	OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission);
+
 	// Static methods
-	public static boolean restrictBlockBreak(Level level, BlockPos pos, @Nullable Entity entity) {
+	static boolean restrictBlockBreak(Level level, BlockPos pos, @Nullable Entity entity) {
 		if(level instanceof ServerLevel serverLevel) {
 			return BetweenlandsFlanCompat.INSTANCE.isModLoaded() && BetweenlandsFlanCompat.INSTANCE.claimRestrictsBlockBreak(serverLevel, pos, entity);
 		} else {
@@ -51,7 +51,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		}
 	}
 
-	public static boolean restrictBlockPlace(Level level, BlockPos pos, @Nullable Entity entity) {
+	static boolean restrictBlockPlace(Level level, BlockPos pos, @Nullable Entity entity) {
 		if(level instanceof ServerLevel serverLevel) {
 			return BetweenlandsFlanCompat.INSTANCE.isModLoaded() && BetweenlandsFlanCompat.INSTANCE.claimRestrictsBlockPlace(serverLevel, pos, entity);
 		} else {
@@ -59,15 +59,15 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		}
 	}
 
-	public static OptionalBoolean areSameClaimOptional(Level level, BlockPos pos1, BlockPos pos2) {
+	static OptionalBoolean areSameClaimOptional(Level level, BlockPos pos1, BlockPos pos2) {
 		if(level instanceof ServerLevel serverLevel && BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {
 			return OptionalBoolean.of(BetweenlandsFlanCompat.INSTANCE.areSameClaim(serverLevel, pos1, pos2));
 		} else {
 			return OptionalBoolean.empty();
 		}
 	}
-	
-	public static boolean areSameClaim(Level level, BlockPos pos1, BlockPos pos2) {
+
+	static boolean areSameClaim(Level level, BlockPos pos1, BlockPos pos2) {
 		return areSameClaimOptional(level, pos1, pos2).orElse(BLClaimCompatHelper.ARE_SAME_CLAIM_DEFAULT);
 	}
 
@@ -79,26 +79,26 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 	 * @param permission The permission to check whether the entity has
 	 * @return an optional representing whether or not the entity has the permission
 	 */
-	public static OptionalBoolean getEntityPermission(Level level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
+	static OptionalBoolean getEntityPermission(Level level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
 		if(level instanceof ServerLevel serverLevel && BetweenlandsFlanCompat.INSTANCE.isModLoaded()) {
 			return BetweenlandsFlanCompat.INSTANCE.canInteract(serverLevel, pos, entity, permission);
 		} else {
 			return OptionalBoolean.empty();
 		}
 	}
-	
+
 	// Different class to avoid issues with ClassNotFoundException/NoClassDefFoundError
 	@AutoService(BetweenlandsFlanCompat.class)
-	public static class BetweenlandsFlanCompatImpl implements BetweenlandsFlanCompat {
+	class BetweenlandsFlanCompatImpl implements BetweenlandsFlanCompat {
 		@Override
 		public VersionRange supportedModVersions() {
 			return ALL_VERSIONS; // Flan uses the same API in 1.21+ as it does in 1.16, so all versions *should* be compatible
 		}
-		
+
 		public static boolean canInteract(ServerLevel level, Entity entity, BlockPos pos, ResourceLocation permission) {
 			return ClaimHandler.getPermissionStorage(level).getForPermissionCheck(pos).canInteract(entity instanceof ServerPlayer player ? player : null, permission, pos);
 		}
-		
+
 		@Override
 		public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity) {
 			return !canInteract(level, entity, pos, BuiltinPermission.BREAK);
@@ -124,7 +124,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 	}
 
 	// Typically shouldn't be necessary with AutoService handling the registering of BetweenlandsFlanCompatImpl, but it's here for futureproofing anyways
-	public static class BetweenlandsFlanCompatFallback implements BetweenlandsFlanCompat, IBetweenlandsModCompat.IFallbackModCompat {
+	class BetweenlandsFlanCompatFallback implements BetweenlandsFlanCompat, IBetweenlandsModCompat.IFallbackModCompat {
 		@Override
 		public boolean claimRestrictsBlockBreak(ServerLevel level, BlockPos pos, Entity entity) {
 			return BLClaimCompatHelper.RESTRICT_BLOCK_BREAK_DEFAULT;
@@ -139,7 +139,7 @@ public interface BetweenlandsFlanCompat extends IBetweenlandsModCompat {
 		public boolean areSameClaim(ServerLevel level, BlockPos pos1, BlockPos pos2) {
 			return BLClaimCompatHelper.ARE_SAME_CLAIM_DEFAULT;
 		}
-		
+
 		@Override
 		public OptionalBoolean canInteract(ServerLevel level, BlockPos pos, @Nullable Entity entity, ResourceLocation permission) {
 			return OptionalBoolean.empty();

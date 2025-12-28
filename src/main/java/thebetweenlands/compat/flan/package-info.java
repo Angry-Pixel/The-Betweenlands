@@ -1,0 +1,9 @@
+@MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
+@ParametersAreNonnullByDefault
+package thebetweenlands.compat.flan;
+
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

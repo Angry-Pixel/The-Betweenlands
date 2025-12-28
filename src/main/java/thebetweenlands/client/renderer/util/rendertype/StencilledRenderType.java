@@ -18,7 +18,7 @@ import thebetweenlands.client.renderer.util.StencilState;
 import thebetweenlands.client.renderer.util.StencilType;
 
 /**
- * Renders as the delegate render type, but only within the 
+ * Renders as the delegate render type, but only within the
  * stencilled area in stencilRenderer
  */
 public class StencilledRenderType extends ProxyRenderType {
@@ -26,11 +26,11 @@ public class StencilledRenderType extends ProxyRenderType {
 	protected final Runnable stencilRenderer;
 	protected final Deque<StencilInfo> stencilStack;
 	protected final StencilType stencilType;
-	
+
 	public StencilledRenderType(RenderType delegate, Runnable stencilRenderer, StencilType stencilType) {
 		this("thebetweenlands:stencilled/" + delegate.name, delegate, stencilRenderer, stencilType);
 	}
-	
+
 	public StencilledRenderType(String name, RenderType delegate, Runnable stencilRenderer, StencilType stencilType) {
 		super(name, delegate);
 		this.stencilRenderer = stencilRenderer;
@@ -42,27 +42,27 @@ public class StencilledRenderType extends ProxyRenderType {
 	public void setupRenderState() {
 		// We can't just wrap this around the base
 		// setupState Runnable if we want compatibility, unfortunately
-		
+
         RenderSystem.assertOnRenderThread();
-        
+
 
 		// TODO get a better RenderTarget
 		Stencil stencil = Stencil.reserve(Minecraft.getInstance().getMainRenderTarget());
 		boolean stencilPushed = false;
-		
+
 		if(stencil != null && stencil.isValid()) {
 			try {
 				// Calculate stencil beforehand to avoid polluting the delegate's render state
 				// (though most things should be covered by the state backup)
 				GlStateBackup backup = new GlStateBackup();
 				RenderSystem.backupGlState(backup);
-				
+
 				StencilState before = StencilState.get();
-				
+
 				// revert any changes to the stencil state (except to the stencil buffer itself) after running
 				try (before) {
 					GL11.glEnable(GL11.GL_STENCIL_TEST);
-					
+
 					if(this.stencilType == StencilType.STENCIL_IS_KEPT) {
 						stencil.setAllZeros();
 						// every time a pixel is drawn in stencilRenderer, the stencil bit will be set to 1
@@ -72,29 +72,29 @@ public class StencilledRenderType extends ProxyRenderType {
 						// every time a pixel is drawn in stencilRenderer, the stencil bit will be set to 0
 						stencil.func(GL11.GL_ALWAYS, false);
 					}
-					
+
 					stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-					
+
 					// draw primitives etc that get converted into the stencil mask
 					this.stencilRenderer.run();
 				}
-				
+
 				// undo (most) changes that could be done by stencilRenderer
 				RenderSystem.restoreGlState(backup);
-	
+
 				// default render state setup
 				super.setupRenderState();
-				
+
 				// cache state after setup
 				StencilState after = StencilState.get();
-				
+
 				// push stencil info to stack so it can be reverted in clearRenderState()
 				this.stencilStack.addLast(new StencilInfo(stencil, before, after));
 				stencilPushed = true;
-				
+
 				// enable stenciling
 				GL11.glEnable(GL11.GL_STENCIL_TEST);
-				// if previous stencil state was compatible (e.g. multiple StencilledRenderType have been applied), 
+				// if previous stencil state was compatible (e.g. multiple StencilledRenderType have been applied),
 				// then we require that both stencils pass
 				if(after.stencilTestEnabled() && after.stencilFunc() == GL11.GL_EQUAL) {
 					@SuppressWarnings("removal")
@@ -103,20 +103,20 @@ public class StencilledRenderType extends ProxyRenderType {
 				} else {
 					stencil.func(GL11.GL_EQUAL, true);
 				}
-				
+
 				// don't change stencils when drawing
 				stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-				
+
 			} catch(Exception e) {
 				// **NOT** a try-with-resources
 				// if there is no exception, we expect the stencil to be closed in clearRenderState()
 				stencil.close();
-				
+
 				// remove this last element off the stencil stack if we got to the point of adding one
 				if(stencilPushed) {
 					this.stencilStack.pollLast();
 				}
-				
+
 				// because it's not impossible for the error to be handled and for clearRenderState()
 				// to be called anyways, we have to keep the stack balanced to not lose the stencils
 				this.stencilStack.addLast(new StencilInfo(Stencil.INVALID, null, null));
@@ -128,33 +128,33 @@ public class StencilledRenderType extends ProxyRenderType {
 			super.setupRenderState();
 		}
 	}
-	
+
 	@Override
 	public void draw(MeshData meshData) {
 		this.setupRenderState();
         BufferUploader.drawWithShader(meshData);
         this.clearRenderState();
 	}
-	
+
 	@Override
 	public void clearRenderState() {
 		StencilInfo stencilInfo = this.stencilStack.pollLast();
-		
+
 		// we no longer need the stencil around, close ASAP
 		stencilInfo.stencil().close();
-		
+
 		// reverse order because working backwards
 		if(stencilInfo.after() != null) {
 			stencilInfo.after().close();
 		}
-		
+
 		super.clearRenderState();
 
 		// reverse order because working backwards
 		if(stencilInfo.before() != null) {
 			stencilInfo.before().close();
-		};
-	}
-	
-	
+		}
+    }
+
+
 }

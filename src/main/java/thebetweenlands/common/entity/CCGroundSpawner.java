@@ -50,13 +50,13 @@ import thebetweenlands.common.world.gen.SurfaceType;
 
 public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	private static final byte EVENT_DIG_PARTICLES = 100;
-	
+
 	private static final EntityDataAccessor<Boolean> IS_WORLD_SPANWED = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> SPAWN_COUNT = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> CAN_BE_REMOVED_SAFELY = SynchedEntityData.defineId(CCGroundSpawner.class, EntityDataSerializers.BOOLEAN);
 
 	// TODO Check Methods marked with TODOs to Enable after testing
-	
+
 	public CCGroundSpawner(EntityType<? extends BasicProximitySpawnerExtended> type, Level level) {
 		super(type, level);
 	}
@@ -96,23 +96,8 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 	}
 
 	@Override
-	protected boolean isImmobile() {
-		return true;
-	}
-
-	@Override
 	public PushReaction getPistonPushReaction() {
 		return PushReaction.IGNORE;
-	}
-
-	@Override
-	public boolean canBeCollidedWith() {
-		return false;
-	}
-
-	@Override
-	public boolean isPushable() {
-		return false;
 	}
 
 	@Override
@@ -158,8 +143,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 				List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, proximityBox(this));
 				if(list.stream().filter(e -> e instanceof CryptCrawler).count() >= 4)
 					return;
-				for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-					Entity entity = list.get(entityCount);
+				for (Entity entity : list) {
 					if (entity != null)
 						if (entity instanceof Player && !((Player) entity).isSpectator() && !((Player) entity).isCreative()) {
 							if (canSneakPast() && entity.isCrouching())
@@ -186,21 +170,14 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
     public boolean canBeRemovedNow() {
     	AABB dead_zone = getBoundingBox().inflate(0D, 1D, 0D).move(0D, -0.5D, 0D);
 		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, dead_zone);
-		if(list.stream().filter(e -> e instanceof CryptCrawler).count() >= 1)
-			return false;
-        return true;
-    }
+		return list.stream().noneMatch(e -> e instanceof CryptCrawler);
+	}
 
     @Override
     protected void doPush(Entity entity) {
 		if (entity instanceof FallingBlockEntity)
 			if (!level().isClientSide())
 				setCanBeRemovedSafely(true);
-	}
-
-	@Override
-	public boolean isInvulnerable() {
-		return true;
 	}
 
 	@Override
@@ -255,11 +232,6 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		return false;
 	}
 
-	@Override
-	public boolean checkSight() {
-		return true;
-	}
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public Entity getEntitySpawned() {
@@ -277,10 +249,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 				isChief = true;
 		}
 		if (isBiped)
-			if (random.nextFloat() < 0.05F)
-				setLeftHanded(true);
-			else
-				setLeftHanded(false);
+			setLeftHanded(random.nextFloat() < 0.05F);
 		return isBiped && isChief ? chief_crawler : isBiped ? biped_crawler : crawler;
 	}
 
@@ -358,7 +327,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 		ListTag tagList = new ListTag();
 		CompoundTag entityNbt = getPersistentData();
 		for (int x = -1; x <= 1; x ++)
-			for (int z = -1; z <= 1; z++) 
+			for (int z = -1; z <= 1; z++)
 				for(int y = 0; y <= 1; y++) {
 				BlockState state = level.getBlockState(pos.offset(x, -y, z));
 				tagList.add(NbtUtils.writeBlockState(state));
@@ -372,7 +341,7 @@ public class CCGroundSpawner extends BasicProximitySpawnerExtended {
 
 	public void loadOriginBlocks(Level level, CompoundTag tag) {
 		BlockPos origin = NbtUtils.readBlockPos(tag, "originPos").orElse(null);
-		List<BlockState> list = new ArrayList<BlockState>();
+		List<BlockState> list = new ArrayList<>();
 		ListTag tagList = tag.getList("tempBlockTypes", Tag.TAG_COMPOUND);
 		for (int indexCount = 0; indexCount < tagList.size(); ++indexCount) {
 			BlockState state = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), tagList.getCompound(indexCount));

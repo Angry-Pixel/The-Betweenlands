@@ -15,15 +15,15 @@ import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.RockSnotTendril;
 
 public class RockSnotGrabberModel extends MowzieModelBase<RockSnotTendril> {
-    public ModelPart grabbybit_base;
-    public ModelPart grabber1a;
-    public ModelPart grabber2a;
-    public ModelPart grabber3a;
-    public ModelPart grabber4a;
-    public ModelPart grabber1b;
-    public ModelPart grabber2b;
-    public ModelPart grabber3b;
-    public ModelPart grabber4b;
+    public final ModelPart grabbybit_base;
+    public final ModelPart grabber1a;
+    public final ModelPart grabber2a;
+    public final ModelPart grabber3a;
+    public final ModelPart grabber4a;
+    public final ModelPart grabber1b;
+    public final ModelPart grabber2b;
+    public final ModelPart grabber3b;
+    public final ModelPart grabber4b;
 
 	public RockSnotGrabberModel(ModelPart root) {
 		super(root, RenderType::entityCutout);
@@ -35,7 +35,7 @@ public class RockSnotGrabberModel extends MowzieModelBase<RockSnotTendril> {
 		grabber3a = grabbybit_base.getChild("grabber3a");
 		grabber3b = grabber3a.getChild("grabber3b");
 		grabber4a = grabbybit_base.getChild("grabber4a");
-		grabber4b = grabber4a.getChild("grabber4b");	
+		grabber4b = grabber4a.getChild("grabber4b");
 	}
 
 	public static LayerDefinition createBodyLayer() {

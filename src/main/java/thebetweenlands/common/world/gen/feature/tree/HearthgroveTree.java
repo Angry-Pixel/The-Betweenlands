@@ -234,6 +234,29 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 		int z = center.getZ();
 
 		switch(size) {
+			case 4:
+				this.rotatedCubeVolume(level, pred, x, y, z, -2, 0, -2, leaves, 5, 1, 5, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, -3, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 3, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, -3, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 3, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				break;
+			case 3:
+				this.rotatedCubeVolume(level, pred, x, y, z, -1, 0, -1, leaves, 3, 1, 3, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, -2, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 2, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, -2, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 2, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				break;
+			case 2:
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 0, leaves, 2, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, -1, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 1, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, -1, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				break;
+			case 1:
+				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
+				break;
 			default:
 				int radius = size - 1;
 				int span = Mth.floor(size / 2.0F);
@@ -267,29 +290,6 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 					this.rotatedCubeVolume(level, fullPred, x, y, z, -(radius-i), 0, -(span+2*i-1)/2, leaves, (radius-i)*2+1, 1, span+2*i, Direction.from3DDataValue(0), consumer);
 					this.rotatedCubeVolume(level, fullPred, x, y, z, -(span+2*i-1)/2, 0, -(radius-i), leaves, span+2*i, 1, (radius-i)*2+1, Direction.from3DDataValue(0), consumer);
 				}
-				break;
-			case 4:
-				this.rotatedCubeVolume(level, pred, x, y, z, -2, 0, -2, leaves, 5, 1, 5, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, -3, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 3, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, -3, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 3, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				break;
-			case 3:
-				this.rotatedCubeVolume(level, pred, x, y, z, -1, 0, -1, leaves, 3, 1, 3, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, -2, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 2, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, -2, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 2, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				break;
-			case 2:
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 0, leaves, 2, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, -1, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 1, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, -1, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
-				break;
-			case 1:
-				this.rotatedCubeVolume(level, pred, x, y, z, 0, 0, 0, leaves, 1, 1, 1, Direction.from3DDataValue(0), postprocessor);
 				break;
 		}
 	}

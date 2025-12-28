@@ -1,7 +1,6 @@
 package thebetweenlands.client.renderer.entity;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -15,7 +14,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import thebetweenlands.client.renderer.util.Stencil;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.CCGroundSpawner;
 
@@ -149,7 +147,7 @@ public class CCGroundSpawnerRenderer extends EntityRenderer<CCGroundSpawner> {
 		texture.addVertex(matrix4f, 1, 0, -1).setColor(1F, 1F, 1F, 1F).setUv(0, 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLight, 240).setNormal(1, 0, 0);
 		texture.addVertex(matrix4f, 1, 0, 2).setColor(1F, 1F, 1F, 1F).setUv(3, 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLight, 240).setNormal(1, 0.5f, 0);
 		texture.addVertex(matrix4f, 2, 1, 2).setColor(1F, 1F, 1F, 1F).setUv(3, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLight, 240).setNormal(1, 0.5f, 0);
-	
+
 		GlStateManager._polygonOffset(0, 0);
 		GlStateManager._disablePolygonOffset();
 		GlStateManager._enableCull();

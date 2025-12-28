@@ -6,13 +6,13 @@ package thebetweenlands.api.world;
  */
 public enum ExtraChunkInfoTypes {
 	BIOME_WEIGHTS(BiomeWeights.class);
-	
+
 	private final Class<?> datatypeClass;
-	
-	private ExtraChunkInfoTypes(Class<?> datatypeClass) {
+
+	ExtraChunkInfoTypes(Class<?> datatypeClass) {
 		this.datatypeClass = datatypeClass;
 	}
-	
+
 	public Class<?> getDatatypeClass() {
 		return this.datatypeClass;
 	}

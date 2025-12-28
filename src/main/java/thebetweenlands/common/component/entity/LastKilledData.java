@@ -7,11 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import thebetweenlands.common.registries.AttachmentRegistry;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

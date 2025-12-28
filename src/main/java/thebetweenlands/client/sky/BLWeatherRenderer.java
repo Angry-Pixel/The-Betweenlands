@@ -29,7 +29,6 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
-import thebetweenlands.common.world.event.SnowfallEvent;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 

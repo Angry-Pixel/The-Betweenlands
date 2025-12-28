@@ -181,11 +181,6 @@ public class DungeonDoorRunesBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
-	protected boolean useShapeForLightOcclusion(BlockState state) {
-		return false;
-	}
-
-	@Override
 	protected float getShadeBrightness(BlockState p_308911_, BlockGetter p_308952_, BlockPos p_308918_) {
 		return 1.0F;
 	}

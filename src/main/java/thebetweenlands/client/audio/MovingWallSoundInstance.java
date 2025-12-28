@@ -1,7 +1,6 @@
 package thebetweenlands.client.audio;
 
 import thebetweenlands.common.entity.MovingWall;
-import thebetweenlands.common.entity.creature.GreeblingVolarpadFloater;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class MovingWallSoundInstance extends DefaultEntitySoundInstance<MovingWall> {

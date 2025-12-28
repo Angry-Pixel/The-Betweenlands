@@ -8,7 +8,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.api.block.Censer;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;

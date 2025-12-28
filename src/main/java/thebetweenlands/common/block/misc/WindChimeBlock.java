@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.block.entity.WindChimeBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class WindChimeBlock extends BaseEntityBlock {

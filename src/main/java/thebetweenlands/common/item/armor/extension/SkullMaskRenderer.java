@@ -1,7 +1,6 @@
 package thebetweenlands.common.item.armor.extension;
 
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 
 public class SkullMaskRenderer extends MaskRenderer {

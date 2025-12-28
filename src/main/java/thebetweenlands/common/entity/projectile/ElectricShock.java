@@ -15,7 +15,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.armor.RubberBootsItem;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;

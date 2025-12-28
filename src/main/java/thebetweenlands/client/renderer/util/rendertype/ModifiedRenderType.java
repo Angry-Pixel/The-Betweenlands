@@ -43,12 +43,12 @@ public class ModifiedRenderType extends ProxyRenderType implements ModifierSuppo
 		final RenderType delegate = this.getDelegate();
 
 		final var modifiers = this.modifierInstances;
-		
+
 		// ImmutableList implements RandomAccess
 		for(int i = modifiers.size() - 1; i >= 0; --i) {
 			modifiers.get(i).beforeSetupRenderState(delegate);
 		}
-		
+
 		super.setupRenderState();
 
 		// ImmutableList implements RandomAccess
@@ -56,26 +56,26 @@ public class ModifiedRenderType extends ProxyRenderType implements ModifierSuppo
 			modifiers.get(i).setupRenderState(delegate);
 		}
 	}
-	
+
 	@Override
 	public void draw(MeshData meshData) {
 		this.setupRenderState();
         BufferUploader.drawWithShader(meshData);
         this.clearRenderState();
 	}
-	
+
 	@Override
 	public void clearRenderState() {
 		final RenderType delegate = this.getDelegate();
 
 		final var modifiers = this.modifierInstances;
-		
+
 		// ImmutableList implements RandomAccess
 		for(int i = modifiers.size() - 1; i >= 0; --i) {
 			// have to be called in the opposite order as setupRenderState
 			modifiers.get(i).clearRenderState(delegate);
 		}
-		
+
 		super.clearRenderState();
 
 		// ImmutableList implements RandomAccess
@@ -84,7 +84,7 @@ public class ModifiedRenderType extends ProxyRenderType implements ModifierSuppo
 			modifiers.get(i).afterClearRenderState(delegate);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Optional<T> getContextOptional(RenderTypeModifier<T> modifier) {
@@ -97,7 +97,7 @@ public class ModifiedRenderType extends ProxyRenderType implements ModifierSuppo
 		}
 		return Optional.empty();
 	}
-	
+
 	@Override
 	public <T> Optional<T> getContextOptional(Class<T> contextType, ResourceLocation modifierId) {
 		Objects.requireNonNull(contextType);
@@ -113,8 +113,8 @@ public class ModifiedRenderType extends ProxyRenderType implements ModifierSuppo
 		}
 		return Optional.empty();
 	}
-	
-	public static record ModifierInstance<T>(RenderTypeModifier<T> modifier, T context) {
+
+	public record ModifierInstance<T>(RenderTypeModifier<T> modifier, T context) {
 		public void beforeSetupRenderState(RenderType originalRenderType) {
 			modifier.beforeSetupRenderState(originalRenderType, context);
 		}
@@ -130,9 +130,9 @@ public class ModifiedRenderType extends ProxyRenderType implements ModifierSuppo
 		public void afterClearRenderState(RenderType originalRenderType) {
 			modifier.afterClearRenderState(originalRenderType, context);
 		}
-		
+
 		public static <T> ModifierInstance<T> create(RenderTypeModifier<T> modifier, RenderType renderType) {
-			return new ModifierInstance<T>(modifier, modifier.createDefaultData(renderType));
+			return new ModifierInstance<>(modifier, modifier.createDefaultData(renderType));
 		}
 	}
 

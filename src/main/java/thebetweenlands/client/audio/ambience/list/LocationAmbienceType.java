@@ -2,7 +2,6 @@ package thebetweenlands.client.audio.ambience.list;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import org.jetbrains.annotations.Contract;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;

@@ -25,16 +25,16 @@ public class ItemComponentTagParser {
     static final DynamicCommandExceptionType ERROR_DUPLICATE_COMPONENT = new DynamicCommandExceptionType(
         componentType -> Component.translatableEscape("arguments.item.component.repeated", componentType)
     );
-    
+
     static final Dynamic2CommandExceptionType ERROR_MALFORMED_COMPONENT = new Dynamic2CommandExceptionType(
         (p_336012_, p_335885_) -> Component.translatableEscape("arguments.item.component.malformed", p_336012_, p_335885_)
     );
-    
+
     static final DynamicCommandExceptionType ERROR_INVALID_COMPONENT = new DynamicCommandExceptionType(
         componentType -> Component.translatableEscape("arguments.item.component.unknown", componentType)
     );
-    
-    public static interface ComponentVisitor {
+
+    public interface ComponentVisitor {
     	/**
     	 * Whether to simply ignore an invalid component type
     	 * @param componentType
@@ -43,11 +43,11 @@ public class ItemComponentTagParser {
         default boolean ignoreInvalidComponent(ResourceLocation componentType) {
         	return true;
         }
-        
+
         <T> void visitComponent(DataComponentType<T> componentType, Tag value);
         <T> void visitRemovedComponent(DataComponentType<T> componentType);
     }
-	
+
 	// Note: brigadier StringReader, not java.io.StringReader
 	private final StringReader reader;
 	private final ComponentVisitor visitor;
@@ -55,7 +55,7 @@ public class ItemComponentTagParser {
 	public ItemComponentTagParser(final String string, final ComponentVisitor visitor) {
 		this(new StringReader(string), visitor);
 	}
-	
+
 	public ItemComponentTagParser(final StringReader reader, final ComponentVisitor visitor) {
 		this.reader = reader;
 		this.visitor = visitor;
@@ -68,37 +68,37 @@ public class ItemComponentTagParser {
 	public void visitComponents() throws CommandSyntaxException {
 		final StringReader reader = this.reader;
 		final ComponentVisitor visitor = this.visitor;
-		
+
 		reader.expect('[');
 		// Set to track which data components have already been used
         Set<DataComponentType<?>> usedComponents = new ReferenceArraySet<>();
 
         while (reader.canRead() && reader.peek() != ']') {
             reader.skipWhitespace();
-            
+
             if(!reader.canRead()) continue;
-            
+
             // Visit a component
             visitSingleComponent(reader, visitor, usedComponents);
-            
+
             reader.skipWhitespace();
-            
+
             // Check whether there's going to be a next component
             if (!reader.canRead() || reader.peek() != ',') {
                 break;
             }
-            
+
             // Skip the comma
             reader.skip();
         }
-        
+
 		reader.expect(']');
 	}
-	
+
 	public void visitSingleComponent() throws CommandSyntaxException {
 		visitSingleComponent(this.reader, this.visitor, null);
 	}
-	
+
 	public static void visitSingleComponent(final StringReader reader, final ComponentVisitor visitor, @Nullable final Set<DataComponentType<?>> usedComponents) throws CommandSyntaxException {
         // Is this a component exclusion?
         if (reader.peek() == '!') {
@@ -111,13 +111,13 @@ public class ItemComponentTagParser {
             	// Don't allow duplicate component types (e.g. [!minecraft:food, minecraft:food={nutrition:5,saturation:5}])
             	if(usedComponents != null && !usedComponents.add(componentType))
             		throw ERROR_DUPLICATE_COMPONENT.create(componentType);
-            	
+
         		visitor.visitRemovedComponent(componentType);
         	}
         } else { // This is a valid component
         	// Read the data component type
         	final DataComponentType<?> componentType = parseComponentOrNull(reader, visitor);
-        	
+
         	// Don't allow duplicate component types (e.g. [!minecraft:food, minecraft:food={nutrition:5,saturation:5}])
         	if(componentType != null && usedComponents != null && !usedComponents.add(componentType))
         		throw ERROR_DUPLICATE_COMPONENT.create(componentType);
@@ -125,12 +125,12 @@ public class ItemComponentTagParser {
         	// Skip to the = sign
             reader.skipWhitespace();
             reader.expect('=');
-            
+
             reader.skipWhitespace();
-            
+
             // Read component contents
             Tag tag = new TagParser(reader).readValue();
-            
+
             // Feed component to the visitor
             // If componentType is null, we'd still have had to consume its contents
             if(componentType != null) {
@@ -138,7 +138,7 @@ public class ItemComponentTagParser {
             }
         }
 	}
-	
+
 	@Nullable
 	public static DataComponentType<?> parseComponentOrNull(final StringReader reader, @Nullable final ComponentVisitor visitor) throws CommandSyntaxException {
 		if (reader.canRead()) {
@@ -155,5 +155,5 @@ public class ItemComponentTagParser {
             return null;
         }
 	}
-	
+
 }

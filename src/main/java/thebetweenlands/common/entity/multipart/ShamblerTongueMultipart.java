@@ -12,13 +12,7 @@ public class ShamblerTongueMultipart extends GenericPartEntity<Shambler> {
         super(parentMob, width, height);
     }
 
-    @Nullable
-    @Override
-    public LivingEntity getControllingPassenger() {
-        return null;
-    }
-
-    @Override
+	@Override
     public boolean canCollideWith(Entity entity) {
         return entity.canBeCollidedWith() && !(entity == this.getParent());
     }

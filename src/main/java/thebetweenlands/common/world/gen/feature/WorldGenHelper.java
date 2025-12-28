@@ -159,21 +159,25 @@ public abstract class WorldGenHelper<T extends FeatureConfiguration> extends Fea
 		x -= width / 2;
 		z -= depth / 2;
 		BlockPos pos;
-		switch (rotation) {
-			case 0:
+		return switch (rotation) {
+			case 0 -> {
 				pos = this.getCheckPos(x + offsetX, y + offsetY, z + offsetZ);
-				return level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
-			case 1:
+				yield level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
+			}
+			case 1 -> {
 				pos = this.getCheckPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1);
-				return level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
-			case 2:
+				yield level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
+			}
+			case 2 -> {
 				pos = this.getCheckPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1);
-				return level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
-			case 3:
+				yield level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
+			}
+			case 3 -> {
 				pos = this.getCheckPos(x + width - offsetZ - 1, y + offsetY, z + offsetX);
-				return level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
-		}
-		return false;
+				yield level.isAreaLoaded(pos, 1) && (level.getBlockState(pos).canBeReplaced() || (replaceable != null && checkReplaceablePredicates(level.getBlockState(pos))));
+			}
+			default -> false;
+		};
 	}
 
 	private boolean checkReplaceablePredicates(BlockState state) {

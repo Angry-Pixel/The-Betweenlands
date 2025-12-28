@@ -12,7 +12,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.util.ExtraCodecs;
 

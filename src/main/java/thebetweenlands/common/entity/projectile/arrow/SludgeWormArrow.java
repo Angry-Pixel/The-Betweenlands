@@ -35,8 +35,7 @@ public class SludgeWormArrow extends AbstractArrow {
 		if (!this.level().isClientSide()) {
 			if (result.getEntity() instanceof LivingEntity)
 				spawnWorm((LivingEntity) result.getEntity());
-			else if (result.getEntity() instanceof PartEntity) {
-				PartEntity part = (PartEntity) result.getEntity();
+			else if (result.getEntity() instanceof PartEntity part) {
 				if (part.getParent() instanceof LivingEntity)
 					spawnWorm((LivingEntity) part.getParent());
 			}

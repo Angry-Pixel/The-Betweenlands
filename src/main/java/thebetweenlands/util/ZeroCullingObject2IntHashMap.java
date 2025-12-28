@@ -1,5 +1,6 @@
 package thebetweenlands.util;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -12,20 +13,20 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 
-public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
+public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer>, Serializable {
 	private static final long serialVersionUID = -2186152713999688544L;
-	
+
 	private final Object2IntOpenHashMap<K> internalMap;
-	
+
 	public ZeroCullingObject2IntHashMap(int expected) {
-		internalMap = new Object2IntOpenHashMap<K>(expected);
+		internalMap = new Object2IntOpenHashMap<>(expected);
 		internalMap.defaultReturnValue(0);
 	}
-	
+
 	public ZeroCullingObject2IntHashMap() {
 		this(Hash.DEFAULT_INITIAL_SIZE);
 	}
-	
+
 	@Override
 	public int size() {
 		return internalMap.size();
@@ -46,7 +47,7 @@ public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	public boolean containsValue(Object value) {
 		return internalMap.containsValue(value);
 	}
-	
+
 	public boolean containsValue(int value) {
 		return internalMap.containsValue(value);
 	}
@@ -72,7 +73,7 @@ public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
 		final Integer out = internalMap.put(key, value);
 		return containsKey ? out : 0;
 	}
-	
+
 	public int put(K key, int value) {
 		return value == 0 ? internalMap.removeInt(key) : internalMap.put(key, value);
 	}
@@ -110,7 +111,7 @@ public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Decreases the value of the key by 1 and returns the new value
 	 * @param key the key.
@@ -131,7 +132,7 @@ public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	public Integer remove(Object key) {
 		return containsKey(key) ? internalMap.remove(key) : 0;
 	}
-	
+
 	public Integer removeInt(Object key) {
 		return internalMap.removeInt(key);
 	}
@@ -140,7 +141,7 @@ public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	@Override
 	public void putAll(Map<? extends K, ? extends Integer> m) {
 		final Object2IntOpenHashMap<K> internalMap = this.internalMap;
-		
+
 		if (m instanceof Object2IntMap) {
 			final ObjectIterator<Object2IntMap.Entry<K>> i = Object2IntMaps.fastIterator((Object2IntMap<K>)m);
 			while (i.hasNext()) {
@@ -192,5 +193,5 @@ public class ZeroCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	public Object2IntMap.FastEntrySet<K> object2IntEntrySet() {
 		return internalMap.object2IntEntrySet();
 	}
-	
+
 }

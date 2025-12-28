@@ -402,11 +402,6 @@ public class StalkerModel extends MowzieModelBase<Stalker> {
 	}
 
 	@Override
-	public ModelPart root() {
-		return this.root;
-	}
-
-	@Override
 	public void setupAnim(Stalker entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
 		this.neck1a.zRot -= (netHeadYaw / Mth.RAD_TO_DEG) / 2.0F;
 		this.head_main.zRot -= (netHeadYaw / Mth.RAD_TO_DEG) / 2.0F;

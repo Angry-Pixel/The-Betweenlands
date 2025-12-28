@@ -1,18 +1,13 @@
 package thebetweenlands.common.entity;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 
 public abstract class BasicProximitySpawnerExtended extends BasicProximitySpawner {
 

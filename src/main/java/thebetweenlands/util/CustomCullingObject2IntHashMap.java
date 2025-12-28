@@ -1,5 +1,6 @@
 package thebetweenlands.util;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +15,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSet;
 
 import javax.annotation.Nullable;
 
-public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
+public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer>, Serializable {
 	private static final long serialVersionUID = -8588233762092841277L;
 
 	private final Object2IntOpenHashMap<K> internalMap;
@@ -22,10 +23,10 @@ public class CustomCullingObject2IntHashMap<K> implements Map<K, Integer> {
 	private final Integer boxedCullValue;
 
 	public CustomCullingObject2IntHashMap(int expected, int value) {
-		internalMap = new Object2IntOpenHashMap<K>(expected);
+		internalMap = new Object2IntOpenHashMap<>(expected);
 		internalMap.defaultReturnValue(value);
 		cullValue = value;
-		boxedCullValue = Integer.valueOf(value);
+		boxedCullValue = value;
 	}
 
 	public CustomCullingObject2IntHashMap(int value) {

@@ -13,7 +13,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.common.TheBetweenlands;
 
 public class LocalRegionCache {
-	private final Map<LocalRegion, LocalRegionData> regionData = new HashMap<LocalRegion, LocalRegionData>();
+	private final Map<LocalRegion, LocalRegionData> regionData = new HashMap<>();
 
 	private final File dir;
 
@@ -99,7 +99,7 @@ public class LocalRegionCache {
 		}
 
 		for(LocalRegionData unloadRegion : unloadRegions) {
-			TheBetweenlands.LOGGER.warn(String.format("Unloading dangling local storage region %s. This should not happen...", unloadRegion.getID()));
+			TheBetweenlands.LOGGER.warn("Unloading dangling local storage region {}. This should not happen...", unloadRegion.getID());
 			this.removeRegion(unloadRegion.getRegion());
 		}
 	}

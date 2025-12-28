@@ -49,11 +49,11 @@ public class RockSnotTendril extends Entity {
 	public void setExtending(boolean extending) {
 		getEntityData().set(IS_EXTENDING, extending);
 	}
-	
+
 	public Integer getParentEntityID() {
 		return getEntityData().get(PARENT_ID);
 	}
-	
+
 	public void setParentEntityID(Integer parentID) {
 		getEntityData().set(PARENT_ID, parentID);
 	}
@@ -89,7 +89,7 @@ public class RockSnotTendril extends Entity {
 
 				if (!level().isClientSide()) {
 					if (isVehicle() && !getParentEntity().isVehicle()) {
-						Entity entity = getPassengers().get(0);
+						Entity entity = getPassengers().getFirst();
 						entity.startRiding(getParentEntity(), true);
 					}
 					kill();
@@ -107,7 +107,7 @@ public class RockSnotTendril extends Entity {
 
 		if(level().isClientSide() && level().getGameTime()%5 == 0)
 			spawnDrips();
-		
+
 		move(MoverType.SELF, getDeltaMovement());
 		super.tick();
 	}
@@ -183,7 +183,7 @@ public class RockSnotTendril extends Entity {
 		return !(entity instanceof RockSnot) && super.canCollideWith(entity);
 	}
 
-	@Override	
+	@Override
     public boolean canBeCollidedWith() {
         return true;
     }

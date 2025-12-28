@@ -44,7 +44,6 @@ import thebetweenlands.api.item.RadialMenuEquippable;
 import thebetweenlands.common.entity.ai.goals.ChiromawShootBarbGoal;
 import thebetweenlands.common.entity.projectile.arrow.ChiromawBarb;
 import thebetweenlands.common.entity.projectile.arrow.ChiromawShockBarb;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.serverbound.ChiromawDoubleJumpPacket;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;

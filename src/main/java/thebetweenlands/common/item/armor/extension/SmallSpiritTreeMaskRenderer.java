@@ -3,14 +3,11 @@ package thebetweenlands.common.item.armor.extension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.SmallSpiritTreeFaceModel;
 import thebetweenlands.common.TheBetweenlands;
 
 public class SmallSpiritTreeMaskRenderer extends MaskRenderer {

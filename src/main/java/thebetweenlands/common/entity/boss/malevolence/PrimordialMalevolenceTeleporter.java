@@ -18,7 +18,6 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.TeleporterSoundInstance;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
 import thebetweenlands.common.registries.EntityRegistry;

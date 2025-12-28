@@ -87,7 +87,7 @@ public class CircleGemHelper {
 
 			if (attacker != null && source != null) {
 				List<CircleGem> attackerGems = CircleGemHelper.getGems(attacker);
-				List<CircleGem> sourceGems = new ArrayList<CircleGem>();
+				List<CircleGem> sourceGems = new ArrayList<>();
 				if (source != attacker) {
 					sourceGems.addAll(CircleGemHelper.getGems(source));
 				}
@@ -161,8 +161,8 @@ public class CircleGemHelper {
 				boolean attackerProcd = false;
 				boolean defenderProcd = false;
 
-				List<CircleGemType> attackerProcdGems = new ArrayList<CircleGemType>();
-				List<CircleGemType> defenderProcdGems = new ArrayList<CircleGemType>();
+				List<CircleGemType> attackerProcdGems = new ArrayList<>();
+				List<CircleGemType> defenderProcdGems = new ArrayList<>();
 
 				//Attacker gems
 				Object2IntMap<CircleGemType> attackerGemCounts = new Object2IntOpenHashMap<>();

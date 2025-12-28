@@ -21,7 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.goals.EntityAIFlyRandomly;

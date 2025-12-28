@@ -2,8 +2,6 @@ package thebetweenlands.api.network;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.network.syncher.EntityDataAccessor;
 import thebetweenlands.api.storage.TickableStorage;
 

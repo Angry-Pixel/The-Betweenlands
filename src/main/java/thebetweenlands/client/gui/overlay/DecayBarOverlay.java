@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.DecayData;
-import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 public class DecayBarOverlay {

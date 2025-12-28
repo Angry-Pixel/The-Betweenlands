@@ -68,18 +68,18 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random, ModelData extraData, @Nullable RenderType renderType) {
-			
-			if(side != null) {
+
+			if (side != null) {
 				return ImmutableList.of();
 			}
-			
+
 			int distUp = Optional.ofNullable(extraData.get(DIST_UP)).orElse(0);
 			int distDown = Optional.ofNullable(extraData.get(DIST_DOWN)).orElse(0);
 
 //			if ((side == Direction.UP && distUp != 0) || (side == Direction.DOWN && distDown != 0)) {
 //				return ImmutableList.of();
 //			}
-			
+
 			boolean noTop = Optional.ofNullable(extraData.get(NO_TOP)).orElse(true);
 			boolean noBottom = Optional.ofNullable(extraData.get(NO_BOTTOM)).orElse(true);
 			int posX = Optional.ofNullable(extraData.get(POS_X)).orElse(0);
@@ -139,21 +139,13 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 			boolean hasOverlay = Optional.ofNullable(extraData.get(HAS_OVERLAY)).orElse(false);
 
-			final int vertexCount = switch(side) {
-			case null:
-				yield hasOverlay ? 40 : 24;
-			case Direction.DOWN:
-			case Direction.UP:
-				yield 4;
-			default:
-				yield hasOverlay ? 8 : 4;
-			};
-			
+			final int vertexCount = hasOverlay ? 40 : 24;
+
 			QuadBuilder builder = new QuadBuilder(vertexCount, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
 
 			// the experimental forge pipeline fixes our ambient occlusion issues (mostly)
 			final boolean experimentalPipelineEnabled = NeoForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.getAsBoolean();
-			
+
 			for (int i = 0; i < (hasOverlay ? 2 : 1); ++i) {
 				if (i == 0) {
 					builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
@@ -176,44 +168,44 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 				}
 
 //				if(side == null || side == Direction.WEST) {
-					// front (negative X - west face)
-					builder.setOrientation(Direction.WEST);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+				// front (negative X - west face)
+				builder.setOrientation(Direction.WEST);
+				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
 //				}
 //				if(side == null || side == Direction.EAST) {
-					// back (positive X - east face)
-					builder.setOrientation(Direction.EAST);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+				// back (positive X - east face)
+				builder.setOrientation(Direction.EAST);
+				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
 //				}
 //				if(side == null || side == Direction.NORTH) {
-					// left (negative Z - north face)
-					builder.setOrientation(Direction.NORTH);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+				// left (negative Z - north face)
+				builder.setOrientation(Direction.NORTH);
+				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
 //				}
 //				if(side == null || side == Direction.SOUTH) {
-					// right (negative Z - south face)
-					builder.setOrientation(Direction.SOUTH);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-//				} 
+				// right (negative Z - south face)
+				builder.setOrientation(Direction.SOUTH);
+				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+//				}
 
 				// Do not render overlay on top/bottom faces
 				if (i == 1) continue;
 
 				// top
 				if (
-						distUp == 0
+					distUp == 0
 //						&& (side == null || side == Direction.UP)
 				) {
 					builder.setOrientation(Direction.UP);
@@ -225,7 +217,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 
 				// bottom
 				if (
-						distDown == 0
+					distDown == 0
 //						&& (side == null || side == Direction.DOWN)
 				) {
 					builder.setOrientation(Direction.DOWN);
@@ -299,7 +291,7 @@ public record RootGeometry(boolean emissiveBase, boolean emissiveOverlay) implem
 			// use experimental forge lighting pipeline for ambient occlusion
 			return NeoForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.getAsBoolean();
 		}
-		
+
 		@Override
 		public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType) {
 			return NeoForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.getAsBoolean() ? TriState.TRUE : IDynamicBakedModel.super.useAmbientOcclusion(state, data, renderType);

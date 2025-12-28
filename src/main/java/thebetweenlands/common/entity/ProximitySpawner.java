@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -34,7 +33,7 @@ public interface ProximitySpawner extends BLEntity {
 	 * @return true to allow player to sneak past. false to deny it.
 	 */
 	boolean canSneakPast();
-	
+
 	/**
 	 * Test if entity needs line of sight to activate
 	 *
@@ -44,15 +43,15 @@ public interface ProximitySpawner extends BLEntity {
 
 
 	/**
-	 * Test if spawner is just a single use 
+	 * Test if spawner is just a single use
 	 *
 	 * @return true to set dead after spawn. false to deny it.
 	 */
 	boolean isSingleUse();
-	
+
 	/**
 	 * Action to happen just before entity spawns
-	 *
+	 * <p>
 	 * Can be used for setting Spawned Entities' position or attributes etc
 	 * By default sets the spawned entity to the same pos as the proximity spawner was.
 	 * Override to change.
@@ -65,7 +64,7 @@ public interface ProximitySpawner extends BLEntity {
 
 	/**
 	 * Action to happen just after entity spawns
-	 *
+	 * <p>
 	 * Entity can be null
 	 */
 

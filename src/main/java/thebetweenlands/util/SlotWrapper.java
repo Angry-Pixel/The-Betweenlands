@@ -24,16 +24,16 @@ public class SlotWrapper<T extends Slot> extends Slot {
 	 * @return A wrapped version of the slot
 	 */
 	public static <T extends Slot> SlotWrapper<T> wrap(T slot) {
-		return new SlotWrapper<T>(Objects.requireNonNull(slot));
+		return new SlotWrapper<>(Objects.requireNonNull(slot));
 	}
-	
+
 	protected final T delegate;
-	
+
 	public SlotWrapper(T slot) {
 		super(slot.container, slot.getSlotIndex(), slot.x, slot.y);
 		this.delegate = slot;
 	}
-	
+
 	public T getDelegate() {
 		return this.delegate;
 	}
@@ -42,7 +42,7 @@ public class SlotWrapper<T extends Slot> extends Slot {
 	public void onQuickCraft(ItemStack oldStack, ItemStack newStack) {
 		this.getDelegate().onQuickCraft(oldStack, newStack);
 	}
-	
+
 	@Override
 	public void onTake(Player player, ItemStack stack) {
 		this.getDelegate().onTake(player, stack);
@@ -124,7 +124,7 @@ public class SlotWrapper<T extends Slot> extends Slot {
 		this.getDelegate().setBackground(atlas, sprite);
 		return this;
 	}
-	
+
 	@Override
 	public Optional<ItemStack> tryRemove(int count, int decrement, Player player) {
 		if (!this.mayPickup(player)) {

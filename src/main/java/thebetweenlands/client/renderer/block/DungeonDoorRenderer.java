@@ -16,9 +16,7 @@ import thebetweenlands.client.model.block.DungeonDoorModel;
 import thebetweenlands.client.model.block.DungeonDoorRunesModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
-import thebetweenlands.common.block.structure.DungeonDoorCombinationBlock;
 import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
-import thebetweenlands.common.registries.ItemRegistry;
 
 public class DungeonDoorRenderer implements BlockEntityRenderer<DungeonDoorRunesBlockEntity> {
 

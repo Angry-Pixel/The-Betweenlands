@@ -565,12 +565,8 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 		} else {
 			patchedBufferSource = BEAM_ORIGIN_MIRROR_WORLD_MODIFIERS.wrapBufferSourceAndConfigure(
 					bufferSource,
-					(RenderType originalRenderType, ModifierSupportedRenderType modifiers) -> {
-						modifiers.getContextOptional(RunnableModifier.INSTANCE)
-							.ifPresent((ctx) -> {
-								ctx.setSetupRenderState(renderStatePatch);
-							});
-					}
+					(RenderType originalRenderType, ModifierSupportedRenderType modifiers) -> modifiers.getContextOptional(RunnableModifier.INSTANCE)
+						.ifPresent((ctx) -> ctx.setSetupRenderState(renderStatePatch))
 				);
 		}
 
@@ -1051,14 +1047,14 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 	}
 
 	@FunctionalInterface
-	public static interface MirrorTriRenderer {
-		public void renderTriangle(Runnable renderStatePatch);
+	public interface MirrorTriRenderer {
+		void renderTriangle(Runnable renderStatePatch);
 
-		public default void renderTriangle() {
+		default void renderTriangle() {
 			this.renderTriangle(() -> {});
 		}
 
-		public default void renderTriangleAsStencil() {
+		default void renderTriangleAsStencil() {
 			this.renderTriangle(() -> {
 				// prevent depth writes, but still require LEQUAL
 				RenderSystem.depthMask(false);
@@ -1070,7 +1066,7 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			});
 		}
 
-		public default void renderTriangleAsDepth() {
+		default void renderTriangleAsDepth() {
 			this.renderTriangle(() -> {
 				// allow depth writes
 				RenderSystem.depthMask(true);

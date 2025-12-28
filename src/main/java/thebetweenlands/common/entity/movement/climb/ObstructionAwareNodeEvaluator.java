@@ -940,9 +940,7 @@ public class ObstructionAwareNodeEvaluator extends WalkNodeEvaluator {
 		boolean isWalkable = false;
 
 		if (nodeType == PathType.OPEN && y >= context.level().getMinBuildHeight() + 1) {
-			for (int i = 0; i < pathableFacings.length; i++) {
-				Direction pathableFacing = pathableFacings[i];
-
+			for (Direction pathableFacing : pathableFacings) {
 				int checkHeight = pathableFacing.getAxis() != Direction.Axis.Y ? Math.min(4, pathingSizeOffsetY - 1) : 0;
 
 				int cx = x + pathableFacing.getStepX() * pathingSizeOffsetX;

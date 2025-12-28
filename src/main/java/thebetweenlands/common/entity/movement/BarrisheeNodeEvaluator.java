@@ -9,7 +9,6 @@ import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.entity.boss.Barrishee;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;

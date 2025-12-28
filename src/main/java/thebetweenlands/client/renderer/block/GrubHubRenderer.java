@@ -1,7 +1,6 @@
 package thebetweenlands.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -16,11 +15,8 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import org.joml.Matrix4f;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.renderer.entity.SpiritTreeFaceMaskRenderer;
 import thebetweenlands.common.TheBetweenlands;

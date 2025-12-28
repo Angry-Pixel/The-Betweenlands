@@ -46,13 +46,13 @@ public class DecayPitTarget extends Entity {
 	public final int MAX_PROGRESS = 768; // max distance of travel from origin so; 768 * 0.0078125F = 6 Blocks
 	public final int MIN_PROGRESS = 0;
 	public final float MOVE_UNIT = 0.0078125F; // unit of movement
-	public DecayPitTargetPart[] shields;
-	public DecayPitTargetPart[] parts;
-	public DecayPitTargetPart target_north;
-	public DecayPitTargetPart target_east;
-	public DecayPitTargetPart target_west;
-	public DecayPitTargetPart target_south;
-	public DecayPitTargetPart bottom;
+	public final DecayPitTargetPart[] shields;
+	public final DecayPitTargetPart[] parts;
+	public final DecayPitTargetPart target_north;
+	public final DecayPitTargetPart target_east;
+	public final DecayPitTargetPart target_west;
+	public final DecayPitTargetPart target_south;
+	public final DecayPitTargetPart bottom;
 
 	private static final EntityDataAccessor<Float> ANIMATION_TICKS = SynchedEntityData.defineId(DecayPitTarget.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Boolean> IS_RAISING = SynchedEntityData.defineId(DecayPitTarget.class, EntityDataSerializers.BOOLEAN);
@@ -65,7 +65,7 @@ public class DecayPitTarget extends Entity {
 	private static final EntityDataAccessor<Boolean> TARGET_W_ACTIVE = SynchedEntityData.defineId(DecayPitTarget.class, EntityDataSerializers.BOOLEAN);
 
 	public int attackDamageTicks = 0;
-	public int[] beamTransparencyTicks = new int[4];
+	public final int[] beamTransparencyTicks = new int[4];
 
 	public DecayPitTarget(EntityType<? extends Entity> type, Level level) {
 		super(type, level);

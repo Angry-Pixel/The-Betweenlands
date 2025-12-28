@@ -12,7 +12,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.CCGroundSpawner;
 import thebetweenlands.common.entity.monster.RockSnot;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -205,10 +204,10 @@ public class TestChimpItem extends Item {
 				burrow.onInitialSpawn(worldIn.getDifficultyForLocation(burrow.getPosition()), null);
 				worldIn.spawnEntity(burrow);
 			}
-			
+
 
 			//this.makeSomethingHere(context.getLevel(), context.getPlayer());
-			
+
 			TriggeredFallingBlock triggeredblock = EntityRegistry.TRIGGERED_FALLING_BLOCK.get().create(context.getLevel());
 			triggeredblock.setPos(context.getClickedPos().getCenter());
 			triggeredblock.setTemporary(false);

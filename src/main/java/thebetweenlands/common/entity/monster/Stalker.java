@@ -42,7 +42,6 @@ import thebetweenlands.common.entity.ai.goals.StalkerDropAttackGoal;
 import thebetweenlands.common.entity.ai.goals.StalkerScreechGoal;
 import thebetweenlands.common.entity.ai.goals.StalkerScurryGoal;
 import thebetweenlands.common.entity.movement.climb.*;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;

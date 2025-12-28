@@ -2,6 +2,7 @@ package thebetweenlands.mixin;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,18 +20,19 @@ import thebetweenlands.util.IBetweenlandsRandomStateExtension;
 @Mixin(RandomState.class)
 public class RandomStateMixin implements IBetweenlandsRandomStateExtension {
 
+	@Mutable
 	@Unique
 	@Final
-	private long levelSeed;
+	private long betweenlands$levelSeed;
 
 	@Inject(method = "<init>(Lnet/minecraft/world/level/levelgen/NoiseGeneratorSettings;Lnet/minecraft/core/HolderGetter;J)V", at = @At("TAIL"))
 	public void setSeed(NoiseGeneratorSettings settings, HolderGetter<?> noiseParametersGetter, final long levelSeed, CallbackInfo ci) {
-		this.levelSeed = levelSeed;
+		this.betweenlands$levelSeed = levelSeed;
 	}
-	
+
 	@Override
 	public long thebetweenlands$getLevelSeed() {
-		return this.levelSeed;
+		return this.betweenlands$levelSeed;
 	}
 
 }
