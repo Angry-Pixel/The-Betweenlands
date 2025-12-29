@@ -15,7 +15,7 @@ public class CorrosiveBootsOverlay implements IItemDecorator {
     public boolean render(GuiGraphics guiGraphics, Font font, ItemStack stack, int xOffset, int yOffset) {
     		if (stack.has(DataComponentRegistry.CORROSIVE.get()))
 				if (stack.get(DataComponentRegistry.CORROSIVE.get()))
-					guiGraphics.blitSprite(TEXTURE, xOffset, yOffset, 16, 16);
+					guiGraphics.blitSprite(TEXTURE, xOffset, yOffset, 200, 16, 16);
 		return true;
     }
 }
