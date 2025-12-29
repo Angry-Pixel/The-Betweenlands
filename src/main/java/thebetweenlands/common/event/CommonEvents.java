@@ -10,7 +10,20 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.component.entity.SwarmedData;
-import thebetweenlands.common.handler.*;
+import thebetweenlands.common.handler.ArmorHandler;
+import thebetweenlands.common.handler.AttackDamageHandler;
+import thebetweenlands.common.handler.CorrosionHandler;
+import thebetweenlands.common.handler.CorrosiveBootsHandler;
+import thebetweenlands.common.handler.ElixirCommonHandler;
+import thebetweenlands.common.handler.EntitySpawnHandler;
+import thebetweenlands.common.handler.EntityUnmountHandler;
+import thebetweenlands.common.handler.EnvironmentEventHandler;
+import thebetweenlands.common.handler.FoodSicknessHandler;
+import thebetweenlands.common.handler.ItemEquipmentHandler;
+import thebetweenlands.common.handler.PlayerDecayHandler;
+import thebetweenlands.common.handler.ShieldHandler;
+import thebetweenlands.common.handler.SimulacrumHandler;
+import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -35,6 +48,7 @@ public class CommonEvents {
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);
 		NeoForge.EVENT_BUS.addListener(EntitySpawnHandler::handleAmuletSpawns);
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onEntityMountEvent);
+		NeoForge.EVENT_BUS.addListener(CorrosiveBootsHandler::onPlayerTick);
 	}
 
 	static void syncAspects(EntityJoinLevelEvent event) {

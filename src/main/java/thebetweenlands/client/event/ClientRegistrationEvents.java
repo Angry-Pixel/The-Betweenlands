@@ -19,12 +19,15 @@ import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
@@ -36,6 +39,7 @@ import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -54,6 +58,7 @@ import thebetweenlands.client.BetweenlandsSpecialEffects;
 import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
 import thebetweenlands.client.gui.overlay.AprilFoolsOverlay;
+import thebetweenlands.client.gui.overlay.CorrosiveBootsOverlay;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.EquipmentOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
@@ -410,6 +415,7 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerPropertyOverrides);
 		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
+		eventbus.addListener(ClientRegistrationEvents::corrosiveBootsLayer);
 		ClientEvents.init();
 
 		eventbus.addListener(BetweenlandsShaders::registerShaders);
@@ -1202,5 +1208,13 @@ public class ClientRegistrationEvents {
 			ItemRegistry.SWAMP_WATER_BUCKET);
 
 		event.register((stack, tint) -> tint == 1 ? InfusionBucketItem.getColor(stack) : -1, ItemRegistry.WEEDWOOD_INFUSION_BUCKET, ItemRegistry.SYRMORITE_INFUSION_BUCKET);
+	}
+	
+	public static void corrosiveBootsLayer(RegisterItemDecorationsEvent event) {
+		for (Item item : BuiltInRegistries.ITEM) {
+			if (item instanceof ArmorItem armorItem && armorItem.getType() == ArmorItem.Type.BOOTS) {
+				event.register(item, new CorrosiveBootsOverlay());
+			}
+		}
 	}
 }
