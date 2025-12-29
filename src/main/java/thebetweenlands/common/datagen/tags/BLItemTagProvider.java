@@ -136,6 +136,44 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.COOKED_OLM_EGG.get(), ItemRegistry.OLMLETTE.get(),
 			ItemRegistry.SILK_GRUB.get());
 
+		this.tag(ItemTags.HEAD_ARMOR).add(
+			ItemRegistry.BONE_HELMET.get(),
+			ItemRegistry.LURKER_SKIN_HELMET.get(),
+			ItemRegistry.SYRMORITE_HELMET.get(),
+			ItemRegistry.VALONITE_HELMET.get(),
+			ItemRegistry.ANCIENT_HELMET.get(),
+			ItemRegistry.AMPHIBIOUS_HELMET.get()
+		);
+
+		this.tag(ItemTags.CHEST_ARMOR).add(
+			ItemRegistry.BONE_CHESTPLATE.get(),
+			ItemRegistry.LURKER_SKIN_CHESTPLATE.get(),
+			ItemRegistry.SYRMORITE_CHESTPLATE.get(),
+			ItemRegistry.VALONITE_CHESTPLATE.get(),
+			ItemRegistry.ANCIENT_CHESTPLATE.get(),
+			ItemRegistry.AMPHIBIOUS_CHESTPLATE.get()
+		);
+
+		this.tag(ItemTags.LEG_ARMOR).add(
+			ItemRegistry.BONE_LEGGINGS.get(),
+			ItemRegistry.LURKER_SKIN_LEGGINGS.get(),
+			ItemRegistry.SYRMORITE_LEGGINGS.get(),
+			ItemRegistry.VALONITE_LEGGINGS.get(),
+			ItemRegistry.ANCIENT_LEGGINGS.get(),
+			ItemRegistry.AMPHIBIOUS_LEGGINGS.get()
+		);
+
+		this.tag(ItemTags.FOOT_ARMOR).add(
+			ItemRegistry.RUBBER_BOOTS.get(),
+			ItemRegistry.MARSH_RUNNER_BOOTS.get(),
+			ItemRegistry.BONE_BOOTS.get(),
+			ItemRegistry.LURKER_SKIN_BOOTS.get(),
+			ItemRegistry.SYRMORITE_BOOTS.get(),
+			ItemRegistry.VALONITE_BOOTS.get(),
+			ItemRegistry.ANCIENT_BOOTS.get(),
+			ItemRegistry.AMPHIBIOUS_BOOTS.get()
+		);
+
 		this.tag(ItemTags.SWORDS).add(
 			ItemRegistry.WEEDWOOD_SWORD.get(),
 			ItemRegistry.BONE_SWORD.get(),

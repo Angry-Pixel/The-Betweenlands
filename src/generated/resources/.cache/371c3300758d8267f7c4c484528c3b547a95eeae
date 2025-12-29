@@ -1,6 +1,10 @@
-// 1.21.1	2025-10-01T20:28:31.866840756	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2025-12-29T08:18:18.445653492	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
+3c8338bc22db2497bf01321405dcacecc18dd51c data/minecraft/tags/item/chest_armor.json
+3f388f071677e76198c50dd19ee2730bc3606782 data/minecraft/tags/item/foot_armor.json
+ca2ef68e7f3aef8983b80de458c0f44483693cee data/minecraft/tags/item/head_armor.json
+a16324761e9d4c783862e23154a594a210fa7644 data/minecraft/tags/item/leg_armor.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
 6d94a07fd1401c7963d0cbd25416072ff5145982 data/minecraft/tags/item/shovels.json
 a4c743895b60b03c27274f97543c63320a2cb51a data/minecraft/tags/item/swords.json

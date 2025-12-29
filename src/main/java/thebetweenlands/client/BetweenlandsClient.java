@@ -53,6 +53,10 @@ public class BetweenlandsClient {
 		return ClientRegistrationEvents.aspectIcons;
 	}
 
+	public static CircleGemTextureManager getCircleGemManager() {
+		return ClientRegistrationEvents.circleGems;
+	}
+
 	public static void openGalleryScreen(GalleryFrame frame) {
 		Minecraft.getInstance().setScreen(new GalleryFrameScreen(frame));
 	}

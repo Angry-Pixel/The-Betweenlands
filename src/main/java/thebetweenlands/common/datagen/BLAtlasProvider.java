@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
+import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.common.TheBetweenlands;
 
 import java.util.Optional;
@@ -24,5 +25,6 @@ public class BLAtlasProvider extends SpriteSourceProvider {
 			.addSource(new DirectoryLister("fluid", "fluid/"))
 			.addSource(new SingleFile(TheBetweenlands.prefix("entity/block/censer_fog"), Optional.empty()));
 		this.atlas(TheBetweenlands.prefix("aspect_icons")).addSource(new DirectoryLister("aspect", ""));
+		this.atlas(CircleGemTextureManager.ATLAS_LOC).addSource(new DirectoryLister("circle_gems/item", ""));
 	}
 }

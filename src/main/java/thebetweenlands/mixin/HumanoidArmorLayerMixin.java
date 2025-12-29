@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
@@ -31,7 +32,7 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, A extends 
 		ItemStack itemstack = entity.getItemBySlot(slot);
 		CircleGemType gem = CircleGemHelper.getGem(itemstack);
 		if (gem != CircleGemType.NONE) {
-			VertexConsumer vertexconsumer = source.getBuffer(RenderType.armorCutoutNoCull(CircleGemTextureManager.getForMaterial(((ArmorItem)itemstack.getItem()).getMaterial(), gem, this.usesInnerModel(slot))));
+			VertexConsumer vertexconsumer = source.getBuffer(RenderType.armorCutoutNoCull(BetweenlandsClient.getCircleGemManager().getForMaterial(((ArmorItem)itemstack.getItem()).getMaterial(), gem, this.usesInnerModel(slot))));
 			model.renderToBuffer(stack, vertexconsumer, light, OverlayTexture.NO_OVERLAY);
 		}
 	}

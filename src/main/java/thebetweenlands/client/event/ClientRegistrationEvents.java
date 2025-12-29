@@ -51,17 +51,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import thebetweenlands.client.AspectIconTextureManager;
-import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.BetweenlandsKeybinds;
-import thebetweenlands.client.BetweenlandsSpecialEffects;
-import thebetweenlands.client.CircleGemTextureManager;
-import thebetweenlands.client.RiftVariantReloadListener;
-import thebetweenlands.client.gui.overlay.AprilFoolsOverlay;
-import thebetweenlands.client.gui.overlay.CorrosiveBootsOverlay;
-import thebetweenlands.client.gui.overlay.DecayBarOverlay;
-import thebetweenlands.client.gui.overlay.EquipmentOverlay;
-import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
+import thebetweenlands.client.*;
+import thebetweenlands.client.gui.overlay.*;
 import thebetweenlands.client.gui.overlay.swarm.SwarmOverlay;
 import thebetweenlands.client.gui.screen.AmphibiousArmorScreen;
 import thebetweenlands.client.gui.screen.AnimatorScreen;
@@ -361,6 +352,7 @@ import thebetweenlands.common.block.container.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.ShockwaveSwordData;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.BasicFluidType;
 import thebetweenlands.common.fluid.ColoredFluidType;
@@ -398,6 +390,7 @@ public class ClientRegistrationEvents {
 
 	public static RiftVariantReloadListener riftVariantListener;
 	public static AspectIconTextureManager aspectIcons;
+	public static CircleGemTextureManager circleGems;
 
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientRegistrationEvents::clientSetup);
@@ -910,9 +903,10 @@ public class ClientRegistrationEvents {
 
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
-		event.registerReloadListener(new CircleGemTextureManager());
 		event.registerReloadListener(BLItemRenderer.INSTANCE.get());
 		event.registerReloadListener(aspectIcons = new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
+		event.registerReloadListener(circleGems = new CircleGemTextureManager(Minecraft.getInstance().getTextureManager()));
+
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
@@ -1209,12 +1203,13 @@ public class ClientRegistrationEvents {
 
 		event.register((stack, tint) -> tint == 1 ? InfusionBucketItem.getColor(stack) : -1, ItemRegistry.WEEDWOOD_INFUSION_BUCKET, ItemRegistry.SYRMORITE_INFUSION_BUCKET);
 	}
-	
+
 	public static void corrosiveBootsLayer(RegisterItemDecorationsEvent event) {
 		for (Item item : BuiltInRegistries.ITEM) {
 			if (item instanceof ArmorItem armorItem && armorItem.getType() == ArmorItem.Type.BOOTS) {
 				event.register(item, new CorrosiveBootsOverlay());
 			}
+			event.register(item, new CircleGemItemOverlay());
 		}
 	}
 }
