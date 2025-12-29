@@ -9,7 +9,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class CorrosiveBootsOverlay implements IItemDecorator {
-    private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/item/corrosive_boots_overlay.png");
+    private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/gui/overlay/corrosive_boots_overlay.png");
 
     @Override
     public boolean render(GuiGraphics guiGraphics, Font font, ItemStack stack, int xOffset, int yOffset) {
