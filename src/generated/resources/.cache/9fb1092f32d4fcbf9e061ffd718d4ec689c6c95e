@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-31T20:45:38.9018106	Recipes
+// 1.21.1	2025-12-29T18:40:11.672	Recipes
 937ab63d71c29fe3ff8aa7b094d93075df2adc8d data/thebetweenlands/advancement/recipes/building_blocks/alembic.json
 e08cfe8707ceec8997d54923df2a0ca86b605a91 data/thebetweenlands/advancement/recipes/building_blocks/ancient_remnant_block.json
 832ce804fb41b3d51420f3058ee570c44f547f42 data/thebetweenlands/advancement/recipes/building_blocks/animator.json
@@ -505,7 +505,7 @@ b2f4117d652ffd7c4256923eb705d36a50c018c8 data/thebetweenlands/advancement/recipe
 0642e7d898a0e37f29dc7977ec5d6acfc6562d27 data/thebetweenlands/advancement/recipes/misc/empty_amulet.json
 76e38cf7b1e5c4329c30302f4ffea462d078426c data/thebetweenlands/advancement/recipes/misc/fabricated_scroll.json
 cd31652500e8de497d309497d8de5e287a2ed7ab data/thebetweenlands/advancement/recipes/misc/fishing_float_and_hook.json
-1edf093dfd3d45e80b130c0fdca0f31fa72affd1 data/thebetweenlands/advancement/recipes/misc/glowing_goop.json
+2385833df549bb4f5e9c42aca9159480a16c3aa8 data/thebetweenlands/advancement/recipes/misc/glowing_goop_item.json
 ac6281c6f0f12bac7a775b10bf68008c84626107 data/thebetweenlands/advancement/recipes/misc/green_amulet.json
 f9775c4c6e4ebd73517390dace3483b5798ab34e data/thebetweenlands/advancement/recipes/misc/green_middle_gem_from_block.json
 12ed52d3bc8afe6d47f636012c0156b08fe77920 data/thebetweenlands/advancement/recipes/misc/herblore_book.json
@@ -860,7 +860,7 @@ b335a6ec5ce7cbd101e6e13b693d31f333e9a176 data/thebetweenlands/recipe/gecko_cage.
 1a7af0c12d97c4a6d17fb973edb22ba581c393a5 data/thebetweenlands/recipe/giant_root_slab.json
 905fe8ada87873a22c4db611ba38f61ccb1d8e79 data/thebetweenlands/recipe/giant_root_stairs.json
 270a70aec418822fc18b0a5fbc046a5263629aae data/thebetweenlands/recipe/giant_root_trapdoor.json
-8457e170d8a42494ee0c1774df44d4009db94376 data/thebetweenlands/recipe/glowing_goop.json
+832c187656d0031652e53a4071e8c3081ebd249f data/thebetweenlands/recipe/glowing_goop_item.json
 af0950a728138c2fd7a04cab49c73253d8f602d7 data/thebetweenlands/recipe/green_amulet.json
 fe8cc8950950bddee04e3e038753a29d02e70f04 data/thebetweenlands/recipe/green_dentrothyst.json
 b7fa5a7e8b7daf3052d542ebc17b5f4b0ac99e36 data/thebetweenlands/recipe/green_dentrothyst_shield.json

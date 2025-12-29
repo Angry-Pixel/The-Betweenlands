@@ -505,7 +505,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.GIANT_ROOT_STAIRS, "Giant Root Stairs");
 		this.addBlock(BlockRegistry.GIANT_ROOT_TRAPDOOR, "Giant Root Trapdoor");
 		this.addBlock(BlockRegistry.GLOWING_BETWEENSTONE_TILE, "Glowing Betweenstone Tile");
-		this.addBlockWithDesc(BlockRegistry.GLOWING_GOOP, "Glowing Goop", "Fish can't hide forever.");
+		
 		this.addBlock(BlockRegistry.GLOWING_SMOOTH_CRAGROCK, "Glowing Smooth Cragrock");
 		this.addBlock(BlockRegistry.GOLDEN_CLUB_FLOWER, "Golden Club Flower");
 		this.addBlock(BlockRegistry.GOLDEN_CLUB_STALK, "Golden Club Stalk");
@@ -1284,6 +1284,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.OCHRE_SNAIL_SHELL, "Ochre Snail Shell");
 		this.addItem(ItemRegistry.COMPOST, "Compost");
 		this.addItem(ItemRegistry.DRAGONFLY_WING, "Dragonfly Wing");
+		this.addItemWithDesc(ItemRegistry.GLOWING_GOOP, "Glowing Goop", "Fish can't hide forever.");
 		this.addItemWithDesc(ItemRegistry.LURKER_SKIN, "Lurker Skin", "Tough and grounded.");
 		this.addItem(ItemRegistry.DRIED_SWAMP_REED, "Dried Swamp Reed");
 		this.addItem(ItemRegistry.REED_ROPE, "Reed Rope");

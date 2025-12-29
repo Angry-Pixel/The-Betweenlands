@@ -1,12 +1,19 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -20,14 +27,12 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import javax.annotation.Nullable;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
-
-import java.util.List;
-import java.util.Map;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLoggable {
 
@@ -87,5 +92,10 @@ public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLogg
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING, WATER_TYPE);
+	}
+	
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+	  return new ItemStack(ItemRegistry.GLOWING_GOOP.get());
 	}
 }

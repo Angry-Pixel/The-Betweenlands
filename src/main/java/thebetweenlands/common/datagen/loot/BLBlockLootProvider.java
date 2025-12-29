@@ -576,7 +576,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.dropSelf(BlockRegistry.CRAB_POT.get());
 		this.dropSelf(BlockRegistry.CRAB_POT_FILTER.get());
 		this.dropSelf(BlockRegistry.SILT_GLASS_JAR.get());
-		this.dropSelf(BlockRegistry.GLOWING_GOOP.get());
+		this.dropOther(BlockRegistry.GLOWING_GOOP.get(), ItemRegistry.GLOWING_GOOP.get());
 		this.dropSelf(BlockRegistry.REED_MAT.get());
 		this.dropSelf(BlockRegistry.LYESTONE.get());
 		this.add(BlockRegistry.MIST_BRIDGE.get(), LootTable.lootTable());

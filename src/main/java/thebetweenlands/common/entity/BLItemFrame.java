@@ -93,7 +93,7 @@ public class BLItemFrame extends ItemFrame {
 					}
 					return InteractionResult.sidedSuccess(this.level().isClientSide());
 				}
-			} else if (itemstack.is(BlockRegistry.GLOWING_GOOP.asItem()) && !this.isFrameGlowing()) {
+			} else if (itemstack.is(ItemRegistry.GLOWING_GOOP) && !this.isFrameGlowing()) {
 				itemstack.shrink(1);
 				this.setGlowing(true);
 				if (player instanceof ServerPlayer sp) {

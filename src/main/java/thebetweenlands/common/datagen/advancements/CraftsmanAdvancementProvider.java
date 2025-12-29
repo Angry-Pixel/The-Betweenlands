@@ -109,7 +109,7 @@ public class CraftsmanAdvancementProvider implements AdvancementGenerator {
 			.requirements(AdvancementRequirements.Strategy.OR)
 			.save(consumer, "thebetweenlands:craftsman/paint_job");
 
-		Advancement.Builder.advancement().parent(dye).display(BlockRegistry.GLOWING_GOOP,
+		Advancement.Builder.advancement().parent(dye).display(ItemRegistry.GLOWING_GOOP,
 				Component.translatable("advancement.thebetweenlands.craftsman.let_it_shine"),
 				Component.translatable("advancement.thebetweenlands.craftsman.let_it_shine.desc"),
 				null, AdvancementType.TASK, true, true, false)

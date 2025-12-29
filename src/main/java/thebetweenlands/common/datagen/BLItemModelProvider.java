@@ -1,5 +1,7 @@
 package thebetweenlands.common.datagen;
 
+import java.util.function.Function;
+
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -19,8 +21,6 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.function.Function;
 
 public class BLItemModelProvider extends ItemModelProvider {
 	public BLItemModelProvider(PackOutput output, ExistingFileHelper helper) {
@@ -255,6 +255,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SHIMMER_STONE);
 		this.basicItem(ItemRegistry.TARMINION);
 		this.basicItem(ItemRegistry.SLUDGE_BALL);
+		this.otherTextureItem(ItemRegistry.GLOWING_GOOP, this.modLoc("glowing_goop"));
 		//rope
 		Function<DeferredItem<?>, ModelFile> pebbleOverlay = item -> this.multiLayerItem(item.getId().getPath() + "_active", this.itemTexture(item), TheBetweenlands.prefix("item/angry_pebble_overlay"));
 		this.basicItem(ItemRegistry.ANGRY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.ANGRY_PEBBLE));

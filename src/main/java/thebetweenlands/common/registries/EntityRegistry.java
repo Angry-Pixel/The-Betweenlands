@@ -105,6 +105,7 @@ import thebetweenlands.common.entity.projectile.AngryPebble;
 import thebetweenlands.common.entity.projectile.BetweenstonePebble;
 import thebetweenlands.common.entity.projectile.ChiromawDroppings;
 import thebetweenlands.common.entity.projectile.ElectricShock;
+import thebetweenlands.common.entity.projectile.GlowingGoop;
 import thebetweenlands.common.entity.projectile.PyradFlame;
 import thebetweenlands.common.entity.projectile.SapSpit;
 import thebetweenlands.common.entity.projectile.ShockwaveBlock;
@@ -221,6 +222,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<FlameJet>> FLAME_JET = register("flame_jet", EntityType.Builder.<FlameJet>of(FlameJet::new, MobCategory.MISC).sized(1.0F, 2.6F).fireImmune().noSummon().noSave());
 	public static final DeferredHolder<EntityType<?>, EntityType<GalleryFrame>> GALLERY_FRAME = register("gallery_frame", EntityType.Builder.<GalleryFrame>of(GalleryFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	//glowing goop
+	public static final DeferredHolder<EntityType<?>, EntityType<GlowingGoop>> GLOWING_GOOP_ENTITY = register("glowing_goop_entity", EntityType.Builder.<GlowingGoop>of(GlowingGoop::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
 	//grappling hoke node
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingCorpse>> GREEBLING_CORPSE = register("greebling_corpse", EntityType.Builder.of(GreeblingCorpse::new, MobCategory.MISC).sized(0.6F, 0.2F).noSummon().clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	public static final DeferredHolder<EntityType<?>, EntityType<CCGroundSpawner>> CC_GROUND_SPAWNER = registerWithAttributes("cc_ground_spawner", EntityType.Builder.of(CCGroundSpawner::new, MobCategory.MISC).sized(3F, 0.5F).eyeHeight(1F), BasicProximitySpawnerExtended::registerAttributes);

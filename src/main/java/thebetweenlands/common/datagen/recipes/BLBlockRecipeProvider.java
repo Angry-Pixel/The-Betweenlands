@@ -437,7 +437,7 @@ public class BLBlockRecipeProvider {
 			.unlockedBy("has_worm", has(ItemRegistry.TINY_SLUDGE_WORM)) //bonus: unlock when a worm is caught
 			.save(output);
 
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, BlockRegistry.GLOWING_GOOP, 4)
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemRegistry.GLOWING_GOOP, 4)
 			.requires(ItemRegistry.SLUDGE_BALL).requires(ItemRegistry.GROUND_BULB_CAPPED_MUSHROOM)
 			.unlockedBy("has_sludge", has(ItemRegistry.SLUDGE_BALL)).unlockedBy("has_mushroom", has(ItemRegistry.GROUND_BULB_CAPPED_MUSHROOM))
 			.save(output);

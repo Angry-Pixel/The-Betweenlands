@@ -566,6 +566,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.WORM_GROUND_SPAWNER.get(), WormGroundSpawnerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ROCK_SNOT.get(), RockSnotRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ROCK_SNOT_TENDRIL.get(), RockSnotTendrilRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.GLOWING_GOOP_ENTITY.get(), context -> new ThrownItemRenderer<>(context, 3.0F, true));
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
