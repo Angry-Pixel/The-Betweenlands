@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thebetweenlands:glowing_goop_item"
+          "name": "thebetweenlands:glowing_goop"
         }
       ],
       "rolls": 1.0

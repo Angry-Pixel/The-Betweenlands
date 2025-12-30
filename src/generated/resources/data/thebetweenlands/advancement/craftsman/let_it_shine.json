@@ -11,7 +11,7 @@
     },
     "icon": {
       "count": 1,
-      "id": "thebetweenlands:glowing_goop_item"
+      "id": "thebetweenlands:glowing_goop"
     },
     "title": {
       "translate": "advancement.thebetweenlands.craftsman.let_it_shine"

@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,18 +29,21 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.common.block.misc.GlowingGoopBlock;
+import thebetweenlands.common.component.item.UpgradeDamage;
 import thebetweenlands.common.entity.projectile.GlowingGoop;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class GlowingGoopItem extends BlockItem {
+
 	public GlowingGoopItem(Block block, Item.Properties properties) {
-		super(BlockRegistry.GLOWING_GOOP.get(), properties);
+		super(block, properties);
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	   public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-		tooltip.add(Component.translatable("tooltip.bl.item.glowing_goop"));
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class GlowingGoopItem extends BlockItem {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player entity, InteractionHand hand) {
-		if(!canUse(entity.getItemInHand(hand)))
+		if (!canUse(entity.getItemInHand(hand)))
 			return InteractionResultHolder.fail(entity.getItemInHand(hand));
 		entity.startUsingItem(hand);
 		return InteractionResultHolder.sidedSuccess(entity.getItemInHand(hand), level.isClientSide());
@@ -63,7 +67,6 @@ public class GlowingGoopItem extends BlockItem {
 	@Override
 	public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
 		if (entity instanceof Player player) {
-			System.out.println("FIRE?");
 			Vec3 forward = player.getLookAngle();
 			float yaw = player.getYRot();
 			float pitch = player.getXRot() - 90;
@@ -82,19 +85,18 @@ public class GlowingGoopItem extends BlockItem {
 
 	@Override
 	public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeCharged) {
-		System.out.println("hello Release?");
-		if(!canUse(stack))
+		if (!canUse(stack))
 			return;
 
 		if (!level.isClientSide() && entity instanceof Player player) {
 			int useTime = this.getUseDuration(stack, player) - timeCharged;
 
-			if(useTime > 20) {
+			if (useTime > 20) {
 				GlowingGoop goop = new GlowingGoop(level, player);
 				goop.shootFromRotation(player, player.getXRot(), player.getYRot(), -10, 1.2F, 3.5F);
 				level.addFreshEntity(goop);
 				level.playSound(null, player.blockPosition(), SoundEvents.SLIME_JUMP, SoundSource.NEUTRAL, 1F, 1F);
-				if(!player.isCreative())
+				if (!player.isCreative())
 					stack.consume(1, player);
 				System.out.println("hello?");
 			}
@@ -124,8 +126,7 @@ public class GlowingGoopItem extends BlockItem {
 	}
 
 	private boolean canUse(ItemStack stack) {
-		//TODO components checking blah
-		//return AmphibiousArmorItem.getUpgradeItemStoredDamage(stack) == 0;
-		return true;
+		UpgradeDamage damage = stack.getOrDefault(DataComponentRegistry.UPGRADE_DAMAGE, UpgradeDamage.EMPTY);
+		return damage.damage() == 0;
 	}
 }

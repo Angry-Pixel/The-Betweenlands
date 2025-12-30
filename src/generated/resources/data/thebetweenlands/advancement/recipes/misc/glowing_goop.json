@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "thebetweenlands:glowing_goop_item"
+        "recipe": "thebetweenlands:glowing_goop"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "thebetweenlands:glowing_goop_item"
+      "thebetweenlands:glowing_goop"
     ]
   }
 }

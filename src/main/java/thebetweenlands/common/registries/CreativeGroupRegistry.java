@@ -536,7 +536,7 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.CRAB_POT);
 			output.accept(BlockRegistry.CRAB_POT_FILTER);
 			output.accept(BlockRegistry.SILT_GLASS_JAR);
-			//output.accept(BlockRegistry.GLOWING_GOOP);
+			output.accept(BlockRegistry.GLOWING_GOOP);
 			output.accept(BlockRegistry.REED_MAT);
 			output.accept(BlockRegistry.LYESTONE);
 			output.accept(BlockRegistry.MIST_BRIDGE);
@@ -759,7 +759,6 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SPIRIT_FRUIT);
 			output.accept(ItemRegistry.SUSHI);
 			output.accept(ItemRegistry.ROCK_SNOT_PEARL);
-			output.accept(ItemRegistry.GLOWING_GOOP);
 			output.accept(ItemRegistry.PEARLED_PEAR);
 			output.accept(ItemRegistry.RAW_ANADIA_MEAT);
 			output.accept(ItemRegistry.COOKED_ANADIA_MEAT);

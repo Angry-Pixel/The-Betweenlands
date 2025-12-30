@@ -93,9 +93,4 @@ public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLogg
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING, WATER_TYPE);
 	}
-	
-	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
-	  return new ItemStack(ItemRegistry.GLOWING_GOOP.get());
-	}
 }
