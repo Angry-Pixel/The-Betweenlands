@@ -258,19 +258,23 @@
                   "remove_when_near": "thebetweenlands:swamplands_clearing"
                 },
                 {
-                  "type": "thebetweenlands:zoom",
+                  "type": "thebetweenlands:spread",
+                  "quadrant": "XNZN",
                   "random_seed": 2345
                 },
                 {
-                  "type": "thebetweenlands:zoom",
+                  "type": "thebetweenlands:spread",
                   "parent": {
-                    "type": "thebetweenlands:zoom",
+                    "type": "thebetweenlands:spread",
                     "parent": {
-                      "type": "thebetweenlands:zoom",
+                      "type": "thebetweenlands:spread",
+                      "quadrant": "XNZN",
                       "random_seed": 2345
                     },
+                    "quadrant": "XNZN",
                     "random_seed": 2346
                   },
+                  "quadrant": "XNZN",
                   "random_seed": 2347
                 },
                 {

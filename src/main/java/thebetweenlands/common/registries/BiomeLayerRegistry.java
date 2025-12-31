@@ -11,7 +11,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -26,6 +25,8 @@ import thebetweenlands.common.world.gen.layer.MarkerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.MaskMixerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.PreviousLayerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SequenceBiomeLayer;
+import thebetweenlands.common.world.gen.layer.SpreadBiomeLayer;
+import thebetweenlands.common.world.gen.layer.SpreadBiomeLayer.Quadrant;
 import thebetweenlands.common.world.gen.layer.SurroundedBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ThinningMaskBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ZoomBiomeLayer;
@@ -54,6 +55,7 @@ public class BiomeLayerRegistry {
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<ThinningMaskBiomeLayer>> THINNING_MASK_BIOME_LAYER = BIOME_LAYER_TYPE.register("thinning_mask", () -> ThinningMaskBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<MaskMixerBiomeLayer>> MASK_MIXER_BIOME_LAYER = BIOME_LAYER_TYPE.register("mask_mixer", () -> MaskMixerBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<CircleMaskBiomeLayer>> CIRCLE_MASK_BIOME_LAYER = BIOME_LAYER_TYPE.register("circle_mask", () -> CircleMaskBiomeLayer.CODEC);
+	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<SpreadBiomeLayer>> SPREAD_BIOME_LAYER = BIOME_LAYER_TYPE.register("spread", () -> SpreadBiomeLayer.CODEC);
 
 
 	public static BiomeLayerConfigured sequence(BiomeLayerConfigured ...layers) {
@@ -88,8 +90,8 @@ public class BiomeLayerRegistry {
 		return BiomeLayerConfigured.of(new BetweenlandsBiomeLayer(registry, biomes), seed);
 	}
 
-	
-	
+
+
 	public static BiomeLayerConfigured legacyZoom(HolderGetter<Biome> registry, BiomeLayerConfigured parent, long seed) {
 		return BiomeLayerConfigured.of(new ZoomBiomeLayer(registry, parent), seed);
 	}
@@ -115,6 +117,38 @@ public class BiomeLayerRegistry {
 		
 		for(int i = 0; i < zoom; ++i) {
 			list.add(legacyZoom(registry, seed + i));
+		}
+		
+		return list;
+	}
+
+
+	// Stand-in for legacy ZoomIncrementLayer with increment = true
+	public static BiomeLayerConfigured legacySpread(HolderGetter<Biome> registry, BiomeLayerConfigured parent, long seed) {
+		return BiomeLayerConfigured.of(new SpreadBiomeLayer(registry, parent, Quadrant.XNZN), seed);
+	}
+
+	public static BiomeLayerConfigured legacySpread(HolderGetter<Biome> registry, long seed) {
+		return legacySpread(registry, previous(), seed);
+	}
+
+	
+	
+	public static BiomeLayerConfigured multiSpread(HolderGetter<Biome> registry, int zoom, long seed) {
+		BiomeLayerConfigured parent = previous();
+		
+		for(int i = 0; i < zoom; ++i) {
+			parent = legacySpread(registry, parent, seed + i);
+		}
+		
+		return parent;
+	}
+
+	public static List<BiomeLayerConfigured> multiSpreadList(HolderGetter<Biome> registry, int zoom, long seed) {
+		List<BiomeLayerConfigured> list = new ArrayList<>(zoom);
+		
+		for(int i = 0; i < zoom; ++i) {
+			list.add(legacySpread(registry, seed + i));
 		}
 		
 		return list;
@@ -254,8 +288,8 @@ public class BiomeLayerRegistry {
 										10, // repeat 10 times
 										105L // seed offset
 									),
-								legacyZoom(registry, 2345L),
-								multiZoom(registry, biomeSize - 1, 2345L),
+								legacySpread(registry, 2345L),
+								multiSpread(registry, biomeSize - 1, 2345L),
 								circleMask(registry, 10, true, BiomeRegistry.SWAMPLANDS_CLEARING)
 							)
 						)

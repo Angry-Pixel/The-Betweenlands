@@ -23,7 +23,7 @@ public class ZoomBiomeLayer implements SingleParentBiomeLayer {
 				).apply(instance, ZoomBiomeLayer::new)
 		);
 
-	private final BiomeLayerConfigured parent;
+	protected final BiomeLayerConfigured parent;
 	
 	public ZoomBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent) {
 		this.parent = parent;
@@ -50,7 +50,7 @@ public class ZoomBiomeLayer implements SingleParentBiomeLayer {
 	@Override
 	public <A extends Area> int apply(BiomeLayerContext<A> context, A parentArea, int x, int z) {
 		int initialBiome = parentArea.get(getParentX(x), getParentY(z));
-		RandomSource random = context.createRandom(x >> 1 << 1, z >> 1 << 1);
+		RandomSource random = context.createRandom(x & ~1, z & ~1);
 		int pX = x & 1;
 		int pZ = z & 1;
 
