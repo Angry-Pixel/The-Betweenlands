@@ -260,11 +260,6 @@ public class BiomeLayerRegistry {
 					
 					multiZoom(registry, biomeSize - 1, 2345L),
 					
-//				) // Alternative version of multiZoom
-//				.addAll(multiZoomList(registry, biomeSize - 1, 2345L))
-//				.add(
-					// Here you'd put the swamplands clearing and sludge plains clearing mixers
-					
 					// Swamplands Clearing mixer
 					mix(
 							sequence(
@@ -274,14 +269,14 @@ public class BiomeLayerRegistry {
 												registry,
 													reference("swamplands_clearing_zoom"),
 												1, // 1 check radius
-												10000, // 100.00% placement chance
+												100_00, // 100.00% placement chance
 												true, // mask (anything that wasn't placed by this is removed)
 												BiomeRegistry.SWAMPLANDS_CLEARING, // place a swamplands clearing
 												BiomeRegistry.SWAMPLANDS, // when it's surrounded by swamplands
 												102L // seed offset
 											),
 										3, // 3 check radius
-										2500, // 25.00% removal chance
+										25_00, // 25.00% removal chance
 										false, // Don't treat this as a mask (though it doesn't matter here)
 										BiomeRegistry.SWAMPLANDS_CLEARING, // when you find a swamplands clearing
 										BiomeRegistry.SWAMPLANDS_CLEARING, // maybe remove if there's a nearby swamplands clearing
@@ -291,6 +286,35 @@ public class BiomeLayerRegistry {
 								legacySpread(registry, 2345L),
 								multiSpread(registry, biomeSize - 1, 2345L),
 								circleMask(registry, 10, true, BiomeRegistry.SWAMPLANDS_CLEARING)
+							)
+						),
+
+					// Sludge Plains Clearing mixer
+					mix(
+							sequence(
+								repeatThin(
+										registry,
+										surrounded(
+												registry,
+													reference("sludge_plains_clearing_zoom"),
+												2, // 2 check radius
+												100_00, // 100.00% placement chance
+												true, // mask (anything that wasn't placed by this is removed)
+												BiomeRegistry.SLUDGE_PLAINS_CLEARING, // place a sludge plains clearing
+												BiomeRegistry.SLUDGE_PLAINS, // when it's surrounded by sludge plains
+												351L // seed offset
+											),
+										4, // 4 check radius
+										15_00, // 15.00% removal chance
+										false, // Don't treat this as a mask (though it doesn't matter here)
+										BiomeRegistry.SLUDGE_PLAINS_CLEARING, // when you find a swamplands clearing
+										BiomeRegistry.SLUDGE_PLAINS_CLEARING, // maybe remove if there's a nearby swamplands clearing
+										20, // repeat 20 times
+										214L // seed offset
+									),
+								multiSpread(registry, biomeSize - 1 - 2, 2345L),
+								circleMask(registry, 3, true, BiomeRegistry.SLUDGE_PLAINS_CLEARING),
+								multiZoom(registry, 2, 2542L)
 							)
 						)
 				)
