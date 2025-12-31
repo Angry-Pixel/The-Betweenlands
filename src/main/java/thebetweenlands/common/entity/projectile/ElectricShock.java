@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.item.armor.RubberBootsItem;
+import thebetweenlands.common.network.clientbound.ShockArrowHitPacket;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;
 
@@ -45,7 +46,7 @@ public class ElectricShock extends Entity {
 		this.damage = 0.0F;
 	}
 
-	public ElectricShock(Level level, Entity source, LivingEntity hit, float damage, boolean isWet) {
+	public ElectricShock(Level level, Entity source, @Nullable LivingEntity hit, float damage, boolean isWet) {
 		super(EntityRegistry.ELECTRIC_SHOCK.get(), level);
 
 		this.moveTo(source.getX(), source.getY(), source.getZ(), 0, 0);
@@ -92,22 +93,17 @@ public class ElectricShock extends Entity {
 			if (this.source == null) {
 				this.discard();
 			} else {
-				Entity shootingEntity;
 				DamageSource damageSource;
 
 				if (this.source instanceof AbstractArrow arrow) {
-					shootingEntity = arrow.getOwner();
-
-					damageSource = this.damageSources().arrow(arrow, Objects.requireNonNullElse(shootingEntity, arrow));
+					damageSource = this.damageSources().arrow(arrow, Objects.requireNonNullElse(arrow.getOwner(), arrow));
 				} else if (this.source instanceof LivingEntity living) {
-					shootingEntity = null;
 					damageSource = this.damageSources().mobAttack(living);
 				} else {
-					shootingEntity = null;
 					damageSource = this.damageSources().generic();
 				}
 
-				List<Pair<Entity, Entity>> chain = new ArrayList<>();
+				List<Pair<Vec3, Vec3>> chain = new ArrayList<>();
 
 				if (this.jumps < this.maxJumps) {
 					if (this.tickCount != 0 && this.tickCount % 3 == 0) {
@@ -133,7 +129,7 @@ public class ElectricShock extends Entity {
 									if (!this.targets.contains(newTarget) && !newTargets.contains(newTarget)) {
 										newTargets.add(newTarget);
 
-										chain.add(Pair.of(entity, newTarget));
+										chain.add(Pair.of(entity.getEyePosition(), newTarget.getEyePosition()));
 
 										float f = Mth.sqrt((float) this.source.getDeltaMovement().dot(this.source.getDeltaMovement()));
 
@@ -180,8 +176,7 @@ public class ElectricShock extends Entity {
 						}
 
 						this.targets.addAll(newTargets);
-						// TODO Add this back for chain attack
-					//PacketDistributor.sendToPlayersTrackingEntity(this, new ShockArrowHitPacket(chain));
+						PacketDistributor.sendToPlayersTrackingEntity(this, new ShockArrowHitPacket(true, chain));
 
 						this.jumps++;
 					}

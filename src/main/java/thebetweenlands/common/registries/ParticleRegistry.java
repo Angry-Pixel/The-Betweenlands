@@ -14,6 +14,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
+import thebetweenlands.client.particle.options.LightningArcParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 
 public class ParticleRegistry {
@@ -59,8 +60,8 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SMOOTH_SMOKE = PARTICLES.register("smooth_smoke", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> LEAF_SWIRL = register("leaf_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_RIPPLE = PARTICLES.register("water_ripple", () -> new SimpleParticleType(false));
-	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LIGHTNING_ARC = PARTICLES.register("lightning_arc", () -> new SimpleParticleType(false));
-	
+	public static final DeferredHolder<ParticleType<?>, ParticleType<LightningArcParticleOptions>> LIGHTNING_ARC = register("lightning_arc", false, type -> LightningArcParticleOptions.CODEC, type -> LightningArcParticleOptions.STREAM_CODEC);
+
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<>(overrideLimiter) {
 			@Override

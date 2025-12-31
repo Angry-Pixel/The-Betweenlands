@@ -246,6 +246,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(WeedwoodBushRustlePacket.TYPE, WeedwoodBushRustlePacket.STREAM_CODEC, WeedwoodBushRustlePacket::handle);
 		registrar.playToClient(WightVolatileParticlesPacket.TYPE, WightVolatileParticlesPacket.STREAM_CODEC, WightVolatileParticlesPacket::handle);
 		registrar.playToClient(RiftSoundPacket.TYPE, RiftSoundPacket.STREAM_CODEC, RiftSoundPacket::handle);
+		registrar.playToClient(ShockArrowHitPacket.TYPE, ShockArrowHitPacket.STREAM_CODEC, ShockArrowHitPacket::handle);
 
 		registrar.playToServer(ChiromawDoubleJumpPacket.TYPE, ChiromawDoubleJumpPacket.STREAM_CODEC, ChiromawDoubleJumpPacket::handle);
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));

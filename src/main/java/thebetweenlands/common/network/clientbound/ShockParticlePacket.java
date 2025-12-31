@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.particle.options.LightningArcParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -38,20 +39,19 @@ public record ShockParticlePacket(int entityID) implements CustomPacketPayload {
 					float ox = (level.getRandom().nextFloat() - 0.5f) * 4;
 					float oy = (level.getRandom().nextFloat() - 0.5f) * 4;
 					float oz = (level.getRandom().nextFloat() - 0.5f) * 4;
-					//TODO
-					TheBetweenlands.createParticle(ParticleRegistry.LIGHTNING_ARC.get(), victim.level(), victim.getX(), victim.getY(), victim.getZ(),
+
+					LightningArcParticleOptions.Builder options = new LightningArcParticleOptions.Builder();
+
+					if (dst > 30) {
+						options.setBaseSize(0.1f);
+						options.setSubdivs(2, 1);
+						options.setSplits(2);
+					}
+
+					TheBetweenlands.createParticle(options.build(), victim.level(), victim.getX(), victim.getY(), victim.getZ(),
 						ParticleArgs.get()
 							.withColor(0.5f, 0.4f, 1.0f, 0.9f)
 							.withData(new Vec3(victim.getX() + ox, victim.getY() + oy, victim.getZ() + oz)));
-
-					if (dst > 30) {
-						// TODO lower quality
-						//particle.setBaseSize(0.1f);
-						//particle.setSubdivs(2, 1);
-						//particle.setSplits(2);
-					}
-
-//					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
 
 					if (dst < 16) {
 						level.playSound(null, victim.blockPosition(), SoundRegistry.ZAP.get(), SoundSource.AMBIENT, 0.85F, 1.0F);
