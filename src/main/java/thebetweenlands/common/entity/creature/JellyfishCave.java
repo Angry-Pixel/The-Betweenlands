@@ -39,7 +39,7 @@ public class JellyfishCave extends Jellyfish implements Enemy {
 		});
 		this.goalSelector.addGoal(0, new MoveTowardsRestrictionGoal(this, 0.4D));
 		this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 0.5D, 20));
-		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, 0, true, true, null));
+		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, 0, true, false, null));
 	}
 
 	@Override
