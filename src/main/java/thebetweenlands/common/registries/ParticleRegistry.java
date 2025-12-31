@@ -1,6 +1,9 @@
 package thebetweenlands.common.registries;
 
+import java.util.function.Function;
+
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -12,8 +15,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
-
-import java.util.function.Function;
 
 public class ParticleRegistry {
 
@@ -58,7 +59,8 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SMOOTH_SMOKE = PARTICLES.register("smooth_smoke", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> LEAF_SWIRL = register("leaf_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_RIPPLE = PARTICLES.register("water_ripple", () -> new SimpleParticleType(false));
-
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LIGHTNING_ARC = PARTICLES.register("lightning_arc", () -> new SimpleParticleType(false));
+	
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<>(overrideLimiter) {
 			@Override

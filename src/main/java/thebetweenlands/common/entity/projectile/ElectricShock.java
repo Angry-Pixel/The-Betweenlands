@@ -1,6 +1,16 @@
 package thebetweenlands.common.entity.projectile;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
@@ -15,12 +25,10 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.item.armor.RubberBootsItem;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class ElectricShock extends Entity {
 	@Nullable
@@ -172,8 +180,8 @@ public class ElectricShock extends Entity {
 						}
 
 						this.targets.addAll(newTargets);
-
-//						PacketDistributor.sendToPlayersTrackingEntity(this, new ShockArrowHitPacket(chain));
+						// TODO Add this back for chain attack
+					//PacketDistributor.sendToPlayersTrackingEntity(this, new ShockArrowHitPacket(chain));
 
 						this.jumps++;
 					}

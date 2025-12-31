@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.projectile.arrow;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -7,11 +9,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectile.ElectricShock;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nullable;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class ShockArrow extends AbstractArrow {
 
@@ -42,14 +46,14 @@ public class ShockArrow extends AbstractArrow {
 			float ox = this.level().getRandom().nextFloat() - 0.5f + (!this.inGround ? (float)this.getDeltaMovement().x() : 0);
 			float oy = this.level().getRandom().nextFloat() - 0.5f + (!this.inGround ? (float)this.getDeltaMovement().y() : 0);
 			float oz = this.level().getRandom().nextFloat() - 0.5f + (!this.inGround ? (float)this.getDeltaMovement().z() : 0);
-
-//			Particle particle = TheBetweenlands.createParticle(ParticleRegistry.LIGHTNING_ARCS.get(), this.level(), this.getX(), this.getY(), this.getZ(),
-//				ParticleFactory.ParticleArgs.get()
-//					.withMotion(!this.inGround ? this.getDeltaMovement().x() : 0, !this.inGround ? this.getDeltaMovement().y() : 0, !this.inGround ? this.getDeltaMovement().z() : 0)
-//					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
-//					.withData(new Vec3(this.getX() + ox, this.getY() + oy, this.getZ() + oz)));
-//
-//			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+			
+			TheBetweenlands.createParticle(ParticleRegistry.LIGHTNING_ARC.get(), this.level(), this.getX(), this.getY(), this.getZ(),
+				ParticleFactory.ParticleArgs.get()
+					.withMotion(!this.inGround ? this.getDeltaMovement().x() : 0, !this.inGround ? this.getDeltaMovement().y() : 0, !this.inGround ? this.getDeltaMovement().z() : 0)
+					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
+					.withData(new Vec3(this.getX() + ox, this.getY() + oy, this.getZ() + oz)));
+			 // TODO Dunno where this is now
+			//BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
 		}
 	}
 

@@ -208,6 +208,7 @@ import thebetweenlands.client.particle.FancyDripParticle;
 import thebetweenlands.client.particle.FishVortexParticle;
 import thebetweenlands.client.particle.GasCloudHazeParticle;
 import thebetweenlands.client.particle.GasCloudParticle;
+import thebetweenlands.client.particle.LightningArcParticle;
 import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.client.particle.SimpleParticle;
 import thebetweenlands.client.particle.SleepingParticle;
@@ -1074,6 +1075,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.SMOOTH_SMOKE.get(), SimpleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.LEAF_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_RIPPLE.get(), WaterRippleParticle.Factory::new);
+		event.registerSpecial(ParticleRegistry.LIGHTNING_ARC.get(), new LightningArcParticle.Factory());
 
 	}
 
