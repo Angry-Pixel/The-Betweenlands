@@ -46,7 +46,7 @@ public record LightningArcParticleOptions(float baseSize, int baseSubdivs, int b
 	);
 
 	public static LightningArcParticleOptions defaultArc() {
-		return new LightningArcParticleOptions(0.0F, 3, 3, 0.3F, 0.1F, 5, 1, 2, 0.25F, 0.8F, true);
+		return new LightningArcParticleOptions(0.04F, 3, 3, 0.3F, 0.1F, 5, 1, 2, 0.25F, 0.8F, true);
 	}
 
 	@Override
