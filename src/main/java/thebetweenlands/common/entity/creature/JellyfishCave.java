@@ -17,9 +17,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.options.LightningArcParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectile.ElectricShock;
-import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class JellyfishCave extends Jellyfish implements Enemy {
@@ -82,7 +82,7 @@ public class JellyfishCave extends Jellyfish implements Enemy {
 			float oy = this.level().getRandom().nextFloat() - 0.5f + (float)this.getDeltaMovement().y();
 			float oz = this.level().getRandom().nextFloat() - 0.5f + (float)this.getDeltaMovement().z();
 
-			TheBetweenlands.createParticle(ParticleRegistry.LIGHTNING_ARC.get(), this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5f, this.getZ(), 
+			TheBetweenlands.createParticle(LightningArcParticleOptions.defaultArc(), this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5f, this.getZ(), 
 					ParticleFactory.ParticleArgs.get()
 					.withMotion(this.getDeltaMovement().x(), this.getDeltaMovement().y(), this.getDeltaMovement().z())
 					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
