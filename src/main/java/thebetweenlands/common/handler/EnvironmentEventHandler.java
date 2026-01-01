@@ -26,56 +26,58 @@ public class EnvironmentEventHandler {
 	}
 
 	private static void tickEvents(LevelTickEvent.Post event) {
-		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(event.getLevel());
-		if (storage != null) {
-			BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
+		if (!event.getLevel().tickRateManager().isFrozen()) {
+			BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(event.getLevel());
+			if (storage != null) {
+				BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
 
-			for (EnvironmentEvent eevent : reg.getEvents().values()) {
-				if (!eevent.isLoaded()) continue;
-				if (reg.isDisabled()) {
-					if (eevent.isActive()) {
-						eevent.setActive(event.getLevel(), false);
-						eevent.setDefaults(event.getLevel(), reg);
+				for (EnvironmentEvent eevent : reg.getEvents().values()) {
+					if (!eevent.isLoaded()) continue;
+					if (reg.isDisabled()) {
+						if (eevent.isActive()) {
+							eevent.setActive(event.getLevel(), false);
+							eevent.setDefaults(event.getLevel(), reg);
+						}
+					} else {
+						eevent.tick(event.getLevel());
 					}
-				} else {
-					eevent.tick(event.getLevel());
-				}
-				if (!event.getLevel().isClientSide()) {
-					GenericDataAccessorAccess dataManager = eevent.getDataManager();
-					if (dataManager != null) {
-						dataManager.tick(event.getLevel());
-						if (dataManager.isDirty()) {
-							PacketDistributor.sendToPlayersInDimension((ServerLevel) event.getLevel(), new SyncEnvironmentEventDataPacket(eevent, false));
+					if (!event.getLevel().isClientSide()) {
+						GenericDataAccessorAccess dataManager = eevent.getDataManager();
+						if (dataManager != null) {
+							dataManager.tick(event.getLevel());
+							if (dataManager.isDirty()) {
+								PacketDistributor.sendToPlayersInDimension((ServerLevel) event.getLevel(), new SyncEnvironmentEventDataPacket(eevent, false));
+							}
 						}
 					}
 				}
-			}
 
-			if (event.getLevel() instanceof ServerLevel level && TheBetweenlands.isBetweenlands(level)) {
-				ServerLevelData data = (ServerLevelData)level.getLevelData();
-				data.setRainTime(2000);
-				data.setThunderTime(2000);
-				data.setRaining(reg.isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId()));
-				data.setThundering(reg.isEventActive(EnvironmentEventRegistry.THUNDERSTORM.getId()));
-				level.setThunderLevel(0.0F);
-				level.oRainLevel = level.rainLevel;
-				float rainingStrength = level.rainLevel;
-				if(reg.isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId())) {
-					if (rainingStrength < 0.5F) {
-						rainingStrength += 0.0125F;
+				if (event.getLevel() instanceof ServerLevel level && TheBetweenlands.isBetweenlands(level)) {
+					ServerLevelData data = (ServerLevelData) level.getLevelData();
+					data.setRainTime(2000);
+					data.setThunderTime(2000);
+					data.setRaining(reg.isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId()));
+					data.setThundering(reg.isEventActive(EnvironmentEventRegistry.THUNDERSTORM.getId()));
+					level.setThunderLevel(0.0F);
+					level.oRainLevel = level.rainLevel;
+					float rainingStrength = level.rainLevel;
+					if (reg.isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId())) {
+						if (rainingStrength < 0.5F) {
+							rainingStrength += 0.0125F;
+						}
+						if (rainingStrength > 0.5F) {
+							rainingStrength = 0.5F;
+						}
+					} else {
+						if (rainingStrength > 0) {
+							rainingStrength -= 0.0125F;
+						}
+						if (rainingStrength < 0) {
+							rainingStrength = 0;
+						}
 					}
-					if (rainingStrength > 0.5F) {
-						rainingStrength = 0.5F;
-					}
-				} else {
-					if (rainingStrength > 0) {
-						rainingStrength -= 0.0125F;
-					}
-					if (rainingStrength < 0) {
-						rainingStrength = 0;
-					}
+					level.rainLevel = rainingStrength;
 				}
-				level.rainLevel = rainingStrength;
 			}
 		}
 	}
