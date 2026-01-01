@@ -6,11 +6,7 @@
   },
   "vertex": "thebetweenlands:starfield/starfield",
   "fragment": "thebetweenlands:starfield/starfield",
-  "samplers": [
-    { "name": "DiffuseSampler" }
-  ],
   "uniforms": [
-    { "name": "OutSize",          "type": "float",      "count": 2,  "values":  [ 1.0, 1.0 ] },
     { "name": "u_msTime",         "type": "float",      "count": 1,  "values":  [ 1.0 ] },
     { "name": "u_timeScale",      "type": "float",      "count": 1,  "values":  [ 1.0 ] },
     { "name": "u_zoom",           "type": "float",      "count": 1,  "values":  [ 1.0 ] },

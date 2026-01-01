@@ -6,12 +6,7 @@
   },
   "vertex": "thebetweenlands:warp/warp",
   "fragment": "thebetweenlands:warp/warp",
-  "samplers": [
-    { "name": "DiffuseSampler" }
-  ],
   "uniforms": [
-    { "name": "u_oneTexel",       "type": "float",      "count": 2,  "values":  [ 0.015625, 0.015625 ] },
-    { "name": "OutSize",          "type": "float",      "count": 2,  "values":  [ 64.0, 64.0 ] },
     { "name": "u_msTime",         "type": "float",      "count": 1,  "values":  [ 1.0 ] },
     { "name": "u_scale",          "type": "float",      "count": 1,  "values":  [ 40.0 ] },
     { "name": "u_timeScale",      "type": "float",      "count": 1,  "values":  [ 0.00004 ] },

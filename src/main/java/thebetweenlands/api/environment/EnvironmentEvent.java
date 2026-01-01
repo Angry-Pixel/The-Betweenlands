@@ -1,14 +1,16 @@
 package thebetweenlands.api.environment;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.network.GenericDataAccessorAccess;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 public interface EnvironmentEvent {
 
@@ -89,6 +91,14 @@ public interface EnvironmentEvent {
 
 	default String getDescriptionId() {
 		return Util.makeDescriptionId("environment_event", BLRegistries.ENVIRONMENT_EVENTS.getKey(this));
+	}
+
+	/**
+	 * Returns the key of this event.
+	 * @return
+	 */
+	default ResourceLocation getEventKey() {
+		return Objects.requireNonNull(BLRegistries.ENVIRONMENT_EVENTS.getKey(this));
 	}
 
 	/**

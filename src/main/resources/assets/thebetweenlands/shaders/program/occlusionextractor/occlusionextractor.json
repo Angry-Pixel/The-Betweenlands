@@ -1,0 +1,13 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "thebetweenlands:occlusionextractor/occlusionextractor",
+  "fragment": "thebetweenlands:occlusionextractor/occlusionextractor",
+  "samplers": [
+    { "name": "s_world_depth" },
+    { "name": "s_clipPlane_depth" }
+  ],
+}

@@ -14,7 +14,7 @@ public class SimulacrumEffectRegistry {
 	public static final DeferredHolder<SimulacrumEffect, NoneSimulacrumEffect> NONE = EFFECTS.register("none", NoneSimulacrumEffect::new);
 	public static final DeferredHolder<SimulacrumEffect, RandomSimulacrumEffect> RANDOM = EFFECTS.register("random", RandomSimulacrumEffect::new);
 	public static final DeferredHolder<SimulacrumEffect, ThemSimulacrumEffect> THEM = EFFECTS.register("them", ThemSimulacrumEffect::new);
-	public static final DeferredHolder<SimulacrumEffect, ImitationSimulacrumEffect> IMITATION = EFFECTS.register("imitation", ImitationSimulacrumEffect::new);
+	//public static final DeferredHolder<SimulacrumEffect, ImitationSimulacrumEffect> IMITATION = EFFECTS.register("imitation", ImitationSimulacrumEffect::new);
 	public static final DeferredHolder<SimulacrumEffect, NoneSimulacrumEffect> WEAKNESS = EFFECTS.register("weakness", NoneSimulacrumEffect::new);
 	public static final DeferredHolder<SimulacrumEffect, NoneSimulacrumEffect> RESURRECTION = EFFECTS.register("resurrection", NoneSimulacrumEffect::new);
 	public static final DeferredHolder<SimulacrumEffect, SanctuarySimulacrumEffect> SANCTUARY = EFFECTS.register("sanctuary", SanctuarySimulacrumEffect::new);

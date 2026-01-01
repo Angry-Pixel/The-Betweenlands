@@ -24,13 +24,18 @@ import thebetweenlands.client.handler.ScreenHandler;
 import thebetweenlands.client.handler.ShaderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
+import thebetweenlands.client.handler.*;
+import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.EntityUnmountHandler;
+import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.SlingshotItem;
 import thebetweenlands.util.RenderUtils;
+
+import java.util.Optional;
 
 public class ClientEvents {
 
@@ -61,6 +66,15 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onRenderHUD);
 		NeoForge.EVENT_BUS.addListener(InputHandler::handleKeybindInputs);
 		NeoForge.EVENT_BUS.addListener(InputHandler::performDoubleJump);
+
+		NeoForge.EVENT_BUS.addListener(BLSkyRenderer::onClientTick);
+
+		NeoForge.EVENT_BUS.addListener(FogHandler::onFogRenderEvent);
+		NeoForge.EVENT_BUS.addListener(FogHandler::onClientTick);
+		NeoForge.EVENT_BUS.addListener(FogHandler::onFogColor);
+		NeoForge.EVENT_BUS.addListener(FogHandler::updateFog);
+
+		NeoForge.EVENT_BUS.addListener(EnvironmentEventHandler::onClientTick);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

@@ -11,6 +11,7 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.client.shader.postprocessing.DiffBlitDepth;
+import thebetweenlands.client.sky.RiftRenderer;
 import thebetweenlands.common.TheBetweenlands;
 
 import javax.annotation.Nullable;
@@ -65,6 +66,7 @@ public class ShaderHandler {
      */
     public static void renderWorldShader(float partialTick) {
 		if (!ShaderHelper.INSTANCE.canUseShaders()) return;
+		ShaderHelper.INSTANCE.getWorldShader().renderPostEffects(partialTick);
 		ShaderHelper.INSTANCE.getWorldShader().uploadUniforms(partialTick);
 		ShaderHelper.INSTANCE.getWorldShader().process(partialTick);
 		ShaderHelper.INSTANCE.getWorldShader().cleanUp();
@@ -123,6 +125,8 @@ public class ShaderHandler {
         }
     }
 
+	//	------------- Mixin hooks -------------
+
 	/**
 	 *  On GameRender.resize
 	 */
@@ -135,6 +139,17 @@ public class ShaderHandler {
 		// World shader targets
 		if (ShaderHelper.INSTANCE.getWorldShader() != null) {
 			ShaderHelper.INSTANCE.getWorldShader().resize(width, height);
+		}
+
+		// Menu shader targets
+		if (ShaderHelper.INSTANCE.menuStarfieldEffect != null) {
+			int renderDimension = (int)(Math.max(width, height) * 0.25);
+			ShaderHelper.INSTANCE.menuStarfieldEffect.resize(renderDimension, renderDimension);
+		}
+
+		// Betweenlands sky rendertarget
+		if (RiftRenderer.skyFbo != null) {
+			RiftRenderer.skyFbo.resize(width, height, Minecraft.ON_OSX);
 		}
 	}
 }

@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,6 +21,7 @@ import thebetweenlands.client.shader.ShaderHelper;
 /* Notes:
 	for renderItemInHand: renderHandsWithItems modifies input posestack invalidating @Local collection of posestack
  */
+@OnlyIn(Dist.CLIENT)
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 

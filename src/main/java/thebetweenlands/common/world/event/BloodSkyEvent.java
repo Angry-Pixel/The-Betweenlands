@@ -64,7 +64,7 @@ public class BloodSkyEvent extends TimedEnvironmentEvent {
 	public void setActive(Level level, boolean active) {
 		super.setActive(level, active);
 		if(active) {
-			if(level.isClientSide() && !this.soundPlayed) {
+			if(!this.soundPlayed) {
 				level.playSound(null, BetweenlandsClient.getClientPlayer().blockPosition(), SoundRegistry.AMBIENT_BLOOD_SKY_ROAR.get(), SoundSource.AMBIENT, 100.0F, 1.0F);
 			}
 			this.soundPlayed = true;

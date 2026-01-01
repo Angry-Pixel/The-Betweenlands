@@ -17,7 +17,7 @@ public interface IRiftSkyRenderer {
 	 * @param partialTicks
 	 * @param level
 	 */
-	void render(ClientLevel level, float partialTicks, Matrix4f projectionMatrix, Camera camera, Matrix4f frustrumMatrix, boolean isFoggy, Runnable skyFogSetup);
+	void render(ClientLevel level, float partialTicks, Matrix4f viewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable skyFogSetup);
 
 	/**
 	 * Returns the sky's relative brightness between 0 and 1

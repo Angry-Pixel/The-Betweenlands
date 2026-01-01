@@ -6,7 +6,7 @@ import org.joml.Matrix4f;
 
 public interface BetweenlandsSky {
 
-	void render(ClientLevel level, float partialTicks, Matrix4f projectionMatrix, Camera camera, Matrix4f frustrumMatrix, boolean isFoggy, Runnable skyFogSetup);
+	void render(ClientLevel level, float partialTicks, Matrix4f viewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable skyFogSetup);
 
 	/**
 	 * Sets the rift renderer that renders the rift

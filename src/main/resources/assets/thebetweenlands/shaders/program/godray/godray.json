@@ -1,0 +1,23 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "thebetweenlands:godray/godray",
+  "fragment": "thebetweenlands:godray/godray",
+  "samplers": [
+    { "name": "DiffuseSampler" },
+    { "name": "s_occlusion" }
+  ],
+  "uniforms": [
+    { "name": "u_godRayX",  "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name": "u_godRayY",  "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name": "u_exposure", "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name": "u_decay",    "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name": "u_density",  "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name": "u_weight",   "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name": "u_color",    "type": "float",     "count": 4,  "values": [ 1.0, 1.0, 1.0, 1.0 ] },
+    { "name": "u_illuminationDecay",    "type": "float",     "count": 1,  "values": [ 1.0 ] }
+  ]
+}

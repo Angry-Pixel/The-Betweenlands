@@ -43,12 +43,10 @@ public class BLTitleScreenBackground {
 				this.fireFlies.add(new ArrayList<>());
 			}
 		}
-
-		this.delete();
 	}
 
 	public void onClose() {
-		this.delete();
+
 	}
 
 	public void tick() {
@@ -93,7 +91,7 @@ public class BLTitleScreenBackground {
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-		this.drawStarfield(partialTicks);
+		this.drawStarfield(graphics, partialTicks);
 
 		for (int i = 0; i < this.layerTextures.length; i++) {
 			if (i >= 1 && this.fireFlies != null) {
@@ -122,29 +120,33 @@ public class BLTitleScreenBackground {
 		graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	protected void drawStarfield(float partialTicks) {
-		if (ShaderHelper.INSTANCE.canUseShaders() && ShaderHelper.INSTANCE.menuStarfieldEffect != null && ShaderHelper.INSTANCE.menuStarfieldEffect.starfieldTexture != null) {
+	protected void drawStarfield(GuiGraphics graphics, float partialTicks) {
+		if (ShaderHelper.INSTANCE.menuStarfieldEffect != null) {
 			ShaderHelper.INSTANCE.menuStarfieldEffect.setOffset((this.layerTick + partialTicks) / 8000.0F, 0, 0);
-			int renderDimension = Math.max(this.width, this.height);
+			ShaderHelper.INSTANCE.menuStarfieldEffect.uploadUniforms(partialTicks);
 			ShaderHelper.INSTANCE.menuStarfieldEffect.process(partialTicks);
 			Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 
-			RenderSystem.bindTexture(ShaderHelper.INSTANCE.menuStarfieldEffect.starfieldTexture.getColorTextureId());
-
-			GL11.glBegin(GL11.GL_TRIANGLES);
-			GL11.glTexCoord2d(0, 1);
-			GL11.glVertex2d(0, 0);
-			GL11.glTexCoord2d(0, 0);
-			GL11.glVertex2d(0, this.height);
-			GL11.glTexCoord2d(1, 0);
-			GL11.glVertex2d(this.width, this.height);
-			GL11.glTexCoord2d(1, 0);
-			GL11.glVertex2d(this.width, this.height);
-			GL11.glTexCoord2d(1, 1);
-			GL11.glVertex2d(this.width, 0);
-			GL11.glTexCoord2d(0, 1);
-			GL11.glVertex2d(0, 0);
-			GL11.glEnd();
+			int renderDimension = Math.max(this.width, this.height);
+			RenderSystem.setShaderTexture(0, ShaderHelper.INSTANCE.menuStarfieldEffect.starfieldTexture.getColorTextureId());
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.depthMask(false);
+			graphics.pose().pushPose();
+			Matrix4f matrix4f = graphics.pose().last().pose();
+			graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+			BufferBuilder builder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+			builder.addVertex(matrix4f, 0, renderDimension, 0).setUv(0, 0);
+			builder.addVertex(matrix4f, renderDimension, renderDimension, 0).setUv(1, 0);
+			builder.addVertex(matrix4f, renderDimension, 0, 0).setUv(1, 1);
+			builder.addVertex(matrix4f, 0, 0, 0).setUv(0, 1);
+			GameRenderer.getPositionTexShader().setDefaultUniforms(VertexFormat.Mode.QUADS, RenderSystem.getModelViewMatrix(), RenderSystem.getProjectionMatrix(), Minecraft.getInstance().getWindow());
+			GameRenderer.getPositionTexShader().apply();
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			BufferUploader.draw(builder.buildOrThrow());
+			GameRenderer.getPositionTexShader().clear();
+			graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+			graphics.pose().popPose();
 		}
 	}
 }

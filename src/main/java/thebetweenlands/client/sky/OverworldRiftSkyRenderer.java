@@ -1,10 +1,13 @@
 package thebetweenlands.client.sky;
 
+import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
+import net.minecraft.client.CloudStatus;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -17,8 +20,6 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-
-import net.minecraft.client.Minecraft;
 import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
@@ -43,11 +44,17 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 	}
 
 	@Override
-	public void render(ClientLevel level, float partialTicks, Matrix4f projectionMatrix, Camera camera, Matrix4f frustrumMatrix, boolean isFoggy, Runnable skyFogSetup) {
+	public void render(ClientLevel level, float partialTicks, Matrix4f viewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable skyFogSetup) {
 		Minecraft minecraft = Minecraft.getInstance();
+		setClearColor(camera, level, partialTicks);
 		skyFogSetup.run();
 		PoseStack posestack = new PoseStack();
-		posestack.mulPose(projectionMatrix);
+		posestack.mulPose(viewMatrix);
+		int skytarget = GlStateManager.getBoundFramebuffer();
+		if (minecraft.levelRenderer.cloudsTarget != null) {
+			minecraft.levelRenderer.cloudsTarget.clear(Minecraft.ON_OSX);
+			GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, skytarget);
+		}
 		if (!isFoggy) {
 			FogType fogtype = camera.getFluidInCamera();
 			if (fogtype != FogType.POWDER_SNOW && fogtype != FogType.LAVA/* && !this.doesMobEffectBlockSky(pCamera)*/) {
@@ -56,13 +63,13 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 				float f = (float)vec3.x;
 				float f1 = (float)vec3.y;
 				float f2 = (float)vec3.z;
-				FogRenderer.levelFogColor();
+				//FogRenderer.levelFogColor();
 				Tesselator tesselator = Tesselator.getInstance();
 				RenderSystem.depthMask(false);
 				RenderSystem.setShaderColor(f, f1, f2, 1.0F);
-				ShaderInstance shaderinstance = RenderSystem.getShader();
+				ShaderInstance shaderinstance = GameRenderer.getPositionShader();
 				this.skyBuffer.bind();
-				this.skyBuffer.drawWithShader(posestack.last().pose(), frustrumMatrix, shaderinstance);
+				this.skyBuffer.drawWithShader(posestack.last().pose(), projectionMatrix, GameRenderer.getPositionShader());
 				VertexBuffer.unbind();
 				RenderSystem.enableBlend();
 
@@ -131,7 +138,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 					RenderSystem.setShaderColor(f10, f10, f10, f10);
 					FogRenderer.setupNoFog();
 					this.starBuffer.bind();
-					this.starBuffer.drawWithShader(posestack.last().pose(), frustrumMatrix, GameRenderer.getPositionShader());
+					this.starBuffer.drawWithShader(posestack.last().pose(), projectionMatrix, GameRenderer.getPositionShader());
 					VertexBuffer.unbind();
 					skyFogSetup.run();
 				}
@@ -146,21 +153,23 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 					posestack.pushPose();
 					posestack.translate(0.0F, 12.0F, 0.0F);
 					this.darkBuffer.bind();
-					this.darkBuffer.drawWithShader(posestack.last().pose(), frustrumMatrix, shaderinstance);
+					this.darkBuffer.drawWithShader(posestack.last().pose(), projectionMatrix, GameRenderer.getPositionShader());
 					VertexBuffer.unbind();
 					posestack.popPose();
 				}
-
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 				RenderSystem.depthMask(true);
 			}
 		}
-
-		if (BetweenlandsConfig.skyRiftClouds) {
+		if (BetweenlandsConfig.skyRiftClouds && minecraft.options.getCloudsType() != CloudStatus.OFF) {
 			skyFogSetup.run();
-			posestack.pushPose();
-			minecraft.levelRenderer.renderClouds(posestack, projectionMatrix, frustrumMatrix, partialTicks, 0, 50, 0);
-			posestack.popPose();
+			PoseStack pose = new PoseStack();
+			minecraft.levelRenderer.renderClouds(pose, viewMatrix, projectionMatrix, partialTicks, 0, 0, 0);
+			if (minecraft.levelRenderer.cloudsTarget != null) {	// check if cloudsTarget is active
+				GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, skytarget);
+				RenderSystem.enableBlend();
+				minecraft.levelRenderer.cloudsTarget.blitToScreen(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), false); // * draw to active frame buffer
+			}
 		}
 	}
 

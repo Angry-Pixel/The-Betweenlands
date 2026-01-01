@@ -1,14 +1,19 @@
 package thebetweenlands.client.shader;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import org.lwjgl.opengl.*;
+import thebetweenlands.client.shader.core.Rift;
 import thebetweenlands.client.shader.postprocessing.Starfield;
 import thebetweenlands.client.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.shader.postprocessing.WorldShader;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.DimensionRegistries;
 
@@ -18,6 +23,10 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
 
+	public ResourceLocation AURORA_SHADER = TheBetweenlands.prefix("aurora/aurora");
+	public ResourceLocation SKYFOG_SHADER = TheBetweenlands.prefix("sky_fog/skyfog");
+	public ResourceLocation RIFT_SHADER = TheBetweenlands.prefix("rift/rift");
+
 	private boolean checked = false;
 	private boolean shadersSupported = false;
 	private boolean gl30Supported = false;
@@ -25,6 +34,16 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 
 	@Nullable
 	private Exception shaderError = null;
+
+	// Core shaders
+	@Nullable
+	private ShaderInstance auroraShader;
+	@Nullable
+	private ShaderInstance skyFogShader;
+	@Nullable
+	private Rift riftShader;
+
+	// Post Processing shaders
 	@Nullable
 	private WorldShader worldShader = null;
 	@Nullable
@@ -43,6 +62,21 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	@Nullable
 	public WorldShader getWorldShader() {
 		return this.worldShader;
+	}
+
+	@Nullable
+	public ShaderInstance getAuroraShader() {
+		return this.auroraShader;
+	}
+
+	@Nullable
+	public ShaderInstance getSkyFogShader() {
+		return this.skyFogShader;
+	}
+
+	@Nullable
+	public Rift getRiftShader() {
+		return this.riftShader;
 	}
 
 	/**
@@ -140,10 +174,35 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 		}
 	}
 
+	public boolean test = false;
+
 	/**
 	 * initializes the main shader if necessary
 	 */
 	public void initShaders(ResourceProvider resourceProvider) {
+		// Core shaders
+		try {
+			auroraShader = new ShaderInstance(resourceProvider, AURORA_SHADER, DefaultVertexFormat.POSITION_TEX_COLOR);
+		} catch(Exception ex) {
+			this.shaderError = ex;
+			ex.printStackTrace();
+		}
+
+		try {
+			skyFogShader = new ShaderInstance(resourceProvider, SKYFOG_SHADER, DefaultVertexFormat.POSITION_TEX_COLOR);
+		} catch(Exception ex) {
+			this.shaderError = ex;
+			ex.printStackTrace();
+		}
+
+		try {
+			riftShader = new Rift(resourceProvider, RIFT_SHADER, DefaultVertexFormat.POSITION_TEX);
+		} catch(Exception ex) {
+			this.shaderError = ex;
+			ex.printStackTrace();
+		}
+
+		// Post-processing shaders
 		if(this.canUseShaders()) {
 			try {
 				if(this.worldShader == null) {
@@ -153,14 +212,21 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 				//if(this.toneMappingShader == null && this.isHDRActive()) {
 				//	this.toneMappingShader = new Tonemapper().init();
 				//}
-				if (menuStarfieldEffect == null) {
-					this.menuStarfieldEffect = new Starfield(Minecraft.getInstance().getTextureManager(), resourceProvider, Minecraft.getInstance().getMainRenderTarget(), false, 1024, 1024);
-					this.menuStarfieldEffect.setTimeScale(0.00000000005F).setZoom(4.8F);
-				}
 			} catch(Exception ex) {
 				this.shaderError = ex;
 				ex.printStackTrace();
 			}
+		}
+
+		try {
+			if (this.menuStarfieldEffect == null) {
+				this.menuStarfieldEffect = new Starfield(Minecraft.getInstance().getTextureManager(), resourceProvider, Minecraft.getInstance().getMainRenderTarget(), false, 1024, 1024);
+				this.menuStarfieldEffect.setTimeScale(0.00000000005F).setZoom(4.8F);
+				this.menuStarfieldEffect.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight());
+			}
+		} catch(Exception ex) {
+			this.shaderError = ex;
+			ex.printStackTrace();
 		}
 	}
 
@@ -191,103 +257,6 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 		RenderSystem.depthMask(false);
 		ShaderHelper.INSTANCE.getWorldShader().uploadUniforms(partialTicks);
 		ShaderHelper.INSTANCE.getWorldShader().process(partialTicks);
-
-		/*
-		if(this.shadersUpdated && this.worldShader != null && this.isRequired() && this.canUseShaders()) {
-			RenderTarget mainFramebuffer = Minecraft.getInstance().getMainRenderTarget();
-
-			RenderTarget blitFramebuffer;
-			RenderTarget targetFramebuffer1;
-			RenderTarget targetFramebuffer2;
-
-			//try(FramebufferStack.State ignored = FramebufferStack.push()) {
-				blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.viewWidth, mainFramebuffer.viewHeight);
-				targetFramebuffer1 = mainFramebuffer;
-				targetFramebuffer2 = blitFramebuffer;
-
-				int renderPasses = Mth.floor(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
-				renderPasses = 1; //Multiple render passes are currently not recommended
-
-				//TODO verify
-				Minecraft.getInstance().levelRenderer.doEntityOutline(); //Minecraft.getInstance().entityRenderer.setupOverlayRendering();
-
-				targetFramebuffer2.clear(Minecraft.ON_OSX);
-
-				for(int i = 0; i < renderPasses; i++) {
-					//Renders the shader to the blitBuffer
-					this.worldShader.setRenderPass(i);
-					this.worldShader.create(targetFramebuffer2)
-					.setSource(targetFramebuffer1.getColorTextureId())
-					.setRestoreGlState(true)
-					.setMirrorY(false)
-					.setClearDepth(true)
-					.setClearColor(false)
-					.render(partialTicks);
-
-					//Ping-pong FBOs
-					RenderTarget previous = targetFramebuffer2;
-					targetFramebuffer2 = targetFramebuffer1;
-					targetFramebuffer1 = previous;
-				}
-
-				//Make sure texture unit is set to default
-				RenderSystem.activeTexture(33984);
-			//}
-
-			//Render last pass to the main framebuffer if necessary
-			if(targetFramebuffer1 != mainFramebuffer) {
-				float renderWidth = (float)targetFramebuffer1.viewWidth;
-				float renderHeight = (float)targetFramebuffer1.viewHeight;
-
-				RenderSystem.viewport(0, 0, (int)renderWidth, (int)renderHeight);
-				GL11.glMatrixMode(GL11.GL_PROJECTION);
-				GL11.glLoadIdentity();
-				GL11.glOrtho(0.0D, renderWidth, renderHeight, 0.0D, 1000.0D, 3000.0D);
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glLoadIdentity();
-				GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-				targetFramebuffer1.bindRead();
-				RenderSystem.depthMask(false);
-				RenderSystem.colorMask(true, true, true, true);
-				Tesselator tessellator = Tesselator.getInstance();
-				BufferBuilder builder = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-				builder.addVertex(0.0F, targetFramebuffer1.viewHeight, 500.0F).setUv(0, 0);
-				builder.addVertex(targetFramebuffer1.viewWidth, targetFramebuffer1.viewHeight, 500.0F).setUv(1, 0);
-				builder.addVertex(targetFramebuffer1.viewWidth, 0.0F, 500.0F).setUv(1, 1);
-				builder.addVertex(0.0F, 0.0F, 500.0F).setUv(0, 1);
-				BufferUploader.drawWithShader(builder.buildOrThrow());
-				RenderSystem.depthMask(true);
-				RenderSystem.colorMask(true, true, true, true);
-			}
-
-			//Render additional post processing effects
-			this.worldShader.setRenderPass(0);
-			this.worldShader.renderPostEffects(partialTicks);
-
-			//Apply Tonemapping if supported
-			if(!this.isHDRActive() && this.toneMappingShader != null) {
-				this.toneMappingShader.delete();
-				this.toneMappingShader = null;
-			}
-			if(this.toneMappingShader != null) {
-				this.toneMappingShader.setExposure(1.0F);
-				this.toneMappingShader.setGamma(1.0F);
-				this.toneMappingShader.create(mainFramebuffer)
-				.setSource(mainFramebuffer.getColorTextureId())
-				.setBlitFramebuffer(blitFramebuffer)
-				.setRestoreGlState(true)
-				.setMirrorY(false)
-				.setClearDepth(false)
-				.setClearColor(false)
-				.render(partialTicks);
-			}
-
-			this.shadersUpdated = false;
-			this.required = false;
-		}
-		*/
 	}
 
 	/**
@@ -329,7 +298,8 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 //				return true;
 //			}
 		}
-		return mc.level != null && mc.level.dimension() == DimensionRegistries.DIMENSION_KEY;
+		return true; // Temp until bl dimension sets require
+		//return mc.level != null && mc.level.dimension() == DimensionRegistries.DIMENSION_KEY;
 	}
 
 	@Override

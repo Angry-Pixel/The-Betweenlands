@@ -1,22 +1,24 @@
 package thebetweenlands.client.sky;
 
-import java.util.List;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
+import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.util.TextureAtlasHelper;
+
+import java.util.List;
 
 public class AuroraRenderer {
 	private static final ResourceLocation AURORA_TEXTURE = TheBetweenlands.prefix("textures/sky/aurora.png");
@@ -26,7 +28,10 @@ public class AuroraRenderer {
 	private final double y;
 	private final double z;
 	private final Vector2d direction;
+	private Vector2d currDirection;
 	private final int tiles;
+
+	private RandomSource rand;
 
 	private final List<Vector4f> colorGradients;
 
@@ -34,6 +39,7 @@ public class AuroraRenderer {
 	private int lastFadeTicks;
 	private boolean active = true;
 	private boolean removed;
+	private VertexBuffer mesh;
 
 	public AuroraRenderer(double x, double y, double z, Vector2d direction, int tiles, List<Vector4f> colorGradients) {
 		this.x = x;
@@ -41,15 +47,16 @@ public class AuroraRenderer {
 		this.z = z;
 		direction.normalize();
 		this.direction = direction;
-		this.tiles = tiles;
+		this.tiles = tiles +14;
 		this.colorGradients = colorGradients;
+		mesh = new VertexBuffer(VertexBuffer.Usage.STATIC);
 	}
 
 	private Vector2d getRotatedVec(double offset, Vector2d direction) {
 		Vector3d upVec = new Vector3d(0, 1, 0);
-		upVec.cross(upVec, new Vector3d(direction.x, 0, direction.y));
+		upVec.cross(new Vector3d(direction.x, 0, direction.y), upVec);
 		Vector2d res = new Vector2d(upVec.x, upVec.z);
-		res.set(res.x() * offset, res.y() * offset);
+		res.mul(offset);
 		return res;
 	}
 
@@ -124,7 +131,7 @@ public class AuroraRenderer {
 		return Mth.lerp(partialTicks, this.lastFadeTicks, this.fadeTicks) / 500.0F;
 	}
 
-	public void render(float partialTicks, float alphaMultiplier, PoseStack stack) {
+	public void render(float partialTicks, float alphaMultiplier, PoseStack stack, Matrix4f projectionMatrix) {
 		//TODO: Only generate vertices once per tick and then interpolate
 
 		alphaMultiplier *= this.getAlpha(partialTicks);
@@ -137,37 +144,38 @@ public class AuroraRenderer {
 		double segmentHeight = 25.0D;
 		int cGradients = this.colorGradients.size();
 
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+		//GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		//GL11.glShadeModel(GL11.GL_SMOOTH);
 
 		stack.pushPose();
 		stack.translate(this.x, 0, this.z);
 
-		RandomSource rand = RandomSource.create(((int)(this.x + this.y + this.z))^((int)(this.x * this.y * this.z)));
+		this.rand = RandomSource.create((long)(((int)(this.x + this.y + this.z))^((int)(this.x * this.y * this.z))));
 
 		int randNoiseOffset = rand.nextInt(100);
 
-		Vector2d currDirection = new Vector2d(this.direction.x, this.direction.y);
-		Vector2d prevDirection;
+		this.currDirection = new Vector2d(this.direction.x, this.direction.y);
+		Vector2d prevDirection = currDirection;
 
+		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderTexture(0, AURORA_TEXTURE);
+		RenderSystem.enableBlend();
 
-		BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
+		BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
 		for(int i = 0; i < segments; i++) {
 			int textureSegment = rand.nextInt(5) + 1;
 
 			for(int si = 0; si < subSegments; si++) {
-				prevDirection = new Vector2d(currDirection.x, currDirection.y);
+				prevDirection = new Vector2d(this.currDirection.x, this.currDirection.y);
 
 				float dirXNoise = this.interpolatedNoise(randNoiseOffset * 10 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 7000000000.0D)))) * 0.1F - 0.05F;
 				float dirYNoise = this.interpolatedNoise(randNoiseOffset * 20 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 7000000000.0D)) * 5)) * 0.1F - 0.05F;
 
-				currDirection = new Vector2d(currDirection.x + dirXNoise, currDirection.y + dirYNoise);
-				currDirection.normalize();
+				this.currDirection = new Vector2d(this.currDirection.x + dirXNoise, this.currDirection.y + dirYNoise);
+				this.currDirection.normalize();
 
 				float offset1 = this.interpolatedNoise(randNoiseOffset + (i + (si) / (float)subSegments) * 2 + (float)(System.nanoTime() / 4000000000.0D)) * 10;
 				float offset2 = this.interpolatedNoise(randNoiseOffset + (i + (si+1) / (float)subSegments) * 2 + (float)(System.nanoTime() / 4000000000.0D)) * 10;
@@ -175,8 +183,8 @@ public class AuroraRenderer {
 				double segStartX = this.x + prevDirection.x * (i + (si) / (float)subSegments) * segmentWidth + this.getRotatedVec(offset1, prevDirection).x;
 				double segStartZ = this.z + prevDirection.y * (i + (si) / (float)subSegments) * segmentWidth + this.getRotatedVec(offset1, prevDirection).y;
 
-				double segStopX = this.x + currDirection.x * (i + (si+1) / (float)subSegments) * segmentWidth + this.getRotatedVec(offset2, currDirection).x;
-				double segStopZ = this.z + currDirection.y * (i + (si+1) / (float)subSegments) * segmentWidth + this.getRotatedVec(offset2, currDirection).y;
+				double segStopX = this.x + this.currDirection.x * (i + (si+1) / (float)subSegments) * segmentWidth + this.getRotatedVec(offset2, this.currDirection).x;
+				double segStopZ = this.z + this.currDirection.y * (i + (si+1) / (float)subSegments) * segmentWidth + this.getRotatedVec(offset2, this.currDirection).y;
 
 				double relUMin = ((si+1) / (float)subSegments);
 				double relUMax = ((si) / (float)subSegments);
@@ -211,11 +219,11 @@ public class AuroraRenderer {
 
 					Entity renderView = Minecraft.getInstance().getCameraEntity();
 
-					double camDist = renderView != null ? renderView.distanceToSqr(segStopX, renderView.getY(), segStopZ) : 0.0D;
-					double camDistNext = renderView != null ? renderView.distanceToSqr(segStartX, renderView.getY(), segStartZ) : 0.0D;
+					double camDist = renderView != null ? Math.sqrt(((renderView.xo - segStopX) * (renderView.xo - segStopX)) + ((renderView.zo - segStopZ) * (renderView.zo - segStopZ))) : 0.0D;
+					double camDistNext = renderView != null ? Math.sqrt(((renderView.xo - segStartX) * (renderView.xo - segStartX)) + ((renderView.zo - segStartZ) * (renderView.zo - segStartZ))) : 0.0D;
 					float alphaGradMultiplier = salphaGradMultiplier;
 					float alphaGradMultiplierNext = salphaGradMultiplierNext;
-					float viewDist = Minecraft.getInstance().options.getEffectiveRenderDistance() * 16.0F - 10.0F;
+					float viewDist = Minecraft.getInstance().options.getEffectiveRenderDistance() * 16.0F  - 10.0F;
 
 					if(camDistNext > viewDist) {
 						alphaGradMultiplier *= (float) (10.0F / (camDistNext - (viewDist - 10.0F)));
@@ -225,27 +233,35 @@ public class AuroraRenderer {
 					}
 
 					//Front face
-					builder.addVertex((float) (segStartX - this.x), (float) segStopY, (float) (segStartZ - this.z)).setUv(umax, vmax).setUv2(238, 238).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier);
-					builder.addVertex((float) (segStopX - this.x), (float) segStopY, (float) (segStopZ - this.z)).setUv(umin, vmax).setUv2(238, 238).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier);
-					builder.addVertex((float) (segStopX - this.x), (float) segStartY, (float) (segStopZ - this.z)).setUv(umin, vmin).setUv2(238, 238).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier);
-					builder.addVertex((float) (segStartX - this.x), (float) segStartY, (float) (segStartZ - this.z)).setUv(umax, vmin).setUv2(238, 238).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier);
+					builder.addVertex((float) (segStartX - this.x), (float) segStopY, (float) (segStartZ - this.z)).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier).setUv(umax, vmax);
+					builder.addVertex((float) (segStopX - this.x), (float) segStopY, (float) (segStopZ - this.z)).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier).setUv(umin, vmax);
+					builder.addVertex((float) (segStopX - this.x), (float) segStartY, (float) (segStopZ - this.z)).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier).setUv(umin, vmin);
+					builder.addVertex((float) (segStartX - this.x), (float) segStartY, (float) (segStartZ - this.z)).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier).setUv(umax, vmin);
 
 					//Back face
-					builder.addVertex((float) (segStartX - this.x), (float) segStopY, (float) (segStartZ - this.z)).setUv(umax, vmax).setUv2(238, 238).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier);
-					builder.addVertex((float) (segStartX - this.x), (float) segStartY, (float) (segStartZ - this.z)).setUv(umax, vmin).setUv2(238, 238).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier);
-					builder.addVertex((float) (segStopX - this.x), (float) segStartY, (float) (segStopZ - this.z)).setUv(umin, vmin).setUv2(238, 238).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier);
-					builder.addVertex((float) (segStopX - this.x), (float) segStopY, (float) (segStopZ - this.z)).setUv(umin, vmax).setUv2(238, 238).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier);
+					//builder.addVertex((float) (segStartX - this.x), (float) segStopY, (float) (segStartZ - this.z)).setUv(umax, vmax).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier);
+					//builder.addVertex((float) (segStartX - this.x), (float) segStartY, (float) (segStartZ - this.z)).setUv(umax, vmin).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier);
+					//builder.addVertex((float) (segStopX - this.x), (float) segStartY, (float) (segStopZ - this.z)).setUv(umin, vmin).setColor(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier);
+					//builder.addVertex((float) (segStopX - this.x), (float) segStopY, (float) (segStopZ - this.z)).setUv(umin, vmax).setColor(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier);
 				}
 			}
 		}
-		BufferUploader.drawWithShader(builder.buildOrThrow());
+		ShaderHelper.INSTANCE.getAuroraShader().setDefaultUniforms(VertexFormat.Mode.QUADS, stack.last().pose(), projectionMatrix, Minecraft.getInstance().getWindow());
+		ShaderHelper.INSTANCE.getAuroraShader().apply();
+		RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+		RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.enableBlend();
+		BufferUploader.draw(builder.buildOrThrow());
+		ShaderHelper.INSTANCE.getAuroraShader().clear();
+		VertexBuffer.unbind();
 
 		//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		//RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.disableBlend();
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		//GL11.glShadeModel(GL11.GL_FLAT);
+		//GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 		RenderSystem.enableCull();
 
 		stack.popPose();

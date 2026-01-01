@@ -1,0 +1,36 @@
+{
+  "targets": [
+    {
+      "name": "swap",
+      "depth": false
+    },
+    {
+      "name": "output",
+      "depth": false
+    },
+    {
+      "name": "s_occlusion",
+      "depth": false
+    }
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:godray/godray",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [
+        {
+          "name": "s_occlusion",
+          "id": "s_occlusion"
+        }
+      ],
+      "use_linear_filter": true
+    },
+    {
+      "name": "minecraft:blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main",
+      "use_linear_filter": true
+    }
+  ]
+}

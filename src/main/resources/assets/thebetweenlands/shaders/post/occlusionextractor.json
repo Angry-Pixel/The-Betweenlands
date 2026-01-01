@@ -1,0 +1,37 @@
+{
+  "targets": [
+    {
+      "name": "output",
+      "depth": true
+    },
+    {
+      "name": "s_world_depth",
+      "depth": true
+    },
+    {
+      "name": "s_clipPlane_depth",
+      "depth": true
+    },
+    {
+      "name": "dummy"
+    }
+  ],
+  "passes": [
+    {
+      "name": "thebetweenlands:occlusionextractor/occlusionextractor",
+      "intarget": "dummy",
+      "outtarget": "output",
+      "auxtargets": [
+        {
+          "name": "s_world_depth",
+          "id": "s_world_depth:depth"
+        },
+        {
+          "name": "s_clipPlane_depth",
+          "id": "s_clipPlane_depth:depth"
+        }
+      ],
+      "use_linear_filter": true
+    }
+  ]
+}

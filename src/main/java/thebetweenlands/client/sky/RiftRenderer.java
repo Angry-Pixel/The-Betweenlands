@@ -1,42 +1,43 @@
 package thebetweenlands.client.sky;
 
-import java.nio.FloatBuffer;
-
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
-import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
 import thebetweenlands.api.sky.IRiftMaskRenderer;
 import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.client.shader.ResizableFramebuffer;
+import thebetweenlands.client.shader.ShaderHelper;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.RiftEvent;
-import thebetweenlands.util.FramebufferStack;
 
 import javax.annotation.Nullable;
 
+import static com.mojang.blaze3d.platform.GlConst.*;
+import static org.lwjgl.opengl.GL11.GL_REPEAT;
+
 public class RiftRenderer implements IRiftRenderer {
-	protected final int skyDomeDispList;
+	protected VertexBuffer skyDomeMesh;
+
+	public static final ResourceLocation RIFT_BACK_TEXTURE = TheBetweenlands.prefix("textures/sky/rifts/sky_rift_mask_back.png");
+	public static final ResourceLocation RIFT_MASK_TEXTURE = TheBetweenlands.prefix("textures/sky/rifts/sky_rift_mask_1.png");
+	public static final ResourceLocation RIFT_OVERLAY_TEXTURE = TheBetweenlands.prefix("textures/sky/rifts/sky_rift_overlay_1.png");
+	public static final ResourceLocation RIFT_ALT_OVERLAY_TEXTURE = TheBetweenlands.prefix("textures/sky/rifts/sky_rift_alt_overlay_1.png");
 
 	@Nullable
 	private static ResizableFramebuffer overworldSkyFbo;
-
-	private final FloatBuffer textureMatrix = BufferUtils.createFloatBuffer(16);
-	private final FloatBuffer modelviewMatrix = BufferUtils.createFloatBuffer(16);
-	private final FloatBuffer projectionMatrix = BufferUtils.createFloatBuffer(16);
-	private final FloatBuffer buffer4f = BufferUtils.createFloatBuffer(16);
 
 	private IRiftMaskRenderer riftMaskRenderer;
 	private IRiftSkyRenderer riftSkyRenderer;
@@ -45,140 +46,132 @@ public class RiftRenderer implements IRiftRenderer {
 	private static RiftMaskRenderer blRiftMaskRenderer;
 	@Nullable
 	private static OverworldRiftSkyRenderer blRiftSkyRenderer;
+	@Nullable
+	public static RenderTarget skyFbo;
 
-	public RiftRenderer(int skyDomeDispList) {
-		this.skyDomeDispList = skyDomeDispList;
+	// Sky render target buffer
+	public RiftRenderer(VertexBuffer skyDomeMesh) {
+		this.skyDomeMesh = skyDomeMesh;
 
 		if (overworldSkyFbo == null) {
 			overworldSkyFbo = new ResizableFramebuffer(true);
 		}
 
 		if (blRiftMaskRenderer == null) {
-			blRiftMaskRenderer = new RiftMaskRenderer(this.skyDomeDispList);
+			blRiftMaskRenderer = new RiftMaskRenderer(this.skyDomeMesh);
 		}
 
 		if (blRiftSkyRenderer == null) {
 			blRiftSkyRenderer = new OverworldRiftSkyRenderer();
 		}
 
+		if (skyFbo == null) {
+			skyFbo = new TextureTarget(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(), true, Minecraft.ON_OSX);
+			skyFbo.setClearColor(0.0F, 0.0F, 0.0F, 0.0F);
+		}
+
 		this.setRiftMaskRenderer(blRiftMaskRenderer);
 		this.setRiftSkyRenderer(blRiftSkyRenderer);
 	}
 
-	private FloatBuffer getBuffer4f(float v1, float v2, float v3, float v4) {
-		this.buffer4f.clear();
-		this.buffer4f.put(v1).put(v2).put(v3).put(v4);
-		this.buffer4f.flip();
-		return this.buffer4f;
-	}
-
 	@Override
-	public void render(ClientLevel level, float partialTicks, Matrix4f projectionMatrix, Camera camera, Matrix4f frustrumMatrix, boolean isFoggy, Runnable skyFogSetup) {
+	public void render(ClientLevel level, float partialTicks, Matrix4f viewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable skyFogSetup) {
 
-		RiftEvent rift = EnvironmentEventRegistry.RIFT.get();
+		RiftEvent event = EnvironmentEventRegistry.RIFT.get();
+		RiftVariant variant = event.getVariant();
 
-		if (rift.getActivationTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
-			RenderTarget skyFbo;
-			float skyBrightness;
-			PoseStack posestack = new PoseStack();
-			posestack.mulPose(projectionMatrix);
+		if (event.getActivationTicks() > 0 && event.getVisibility(partialTicks) > 0) {
 
-			try (FramebufferStack.State state = FramebufferStack.push()) {
-				skyFbo = overworldSkyFbo.getFramebuffer(state.getTarget().viewWidth, state.getTarget().viewHeight);
+			// Set sky draw state
+			BLSkyRenderer.drawOverworldSky = true;
 
-				skyFbo.setClearColor(0, 0, 0, 0);
-				skyFbo.clear(Minecraft.ON_OSX);
-				skyFbo.bindWrite(false);
+			// Set to overworld fog color
+			FogRenderer.setupColor(camera, partialTicks, level, Minecraft.getInstance().options.getEffectiveRenderDistance(), 0.0F);
+			FogRenderer.setupFog(camera, FogRenderer.FogMode.FOG_SKY, Minecraft.getInstance().gameRenderer.getRenderDistance(), false, partialTicks);
+			float skyBrightness = Mth.clamp(Mth.cos(level.getTimeOfDay(partialTicks) * 6.2831855F) * 2.0F + 0.5F, 0.0F, 1.0F);
+			Vec3 fogColor = level.effects().getBrightnessDependentFogColor(Vec3.ZERO, skyBrightness);
+			skyFbo.setClearColor((float)fogColor.x, (float)fogColor.y, (float)fogColor.z, 0.0F);
+			FogRenderer.fogRed = (float)fogColor.x;
+			FogRenderer.fogGreen = (float)fogColor.y;
+			FogRenderer.fogBlue = (float)fogColor.z;
+			FogRenderer.levelFogColor();
 
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.5F);
-				RenderSystem.enableCull();
-				RenderSystem.enableDepthTest();
-				RenderSystem.depthMask(true);
-				RenderSystem.enableBlend();
-				RenderSystem.blendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+			// Render overworld sky
+			skyFbo.clear(Minecraft.ON_OSX);
+			skyFbo.bindWrite(false);
+			this.riftSkyRenderer.render(level, partialTicks, viewMatrix, camera, projectionMatrix, isFoggy, skyFogSetup);
 
-				//Render rift sky
-				posestack.pushPose();
-				this.riftSkyRenderer.setClearColor(camera, level, partialTicks);
-				RenderSystem.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
-				this.riftSkyRenderer.render(level, partialTicks, projectionMatrix, camera, frustrumMatrix, isFoggy, skyFogSetup);
-				posestack.popPose();
+			// Reset sky draw state
+			BLSkyRenderer.drawOverworldSky = false;
+			Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
 
-				skyBrightness = this.riftSkyRenderer.getSkyBrightness(level, partialTicks);
+			// DEBUG: show rift location
+			PoseStack riftView = new PoseStack();
+			riftView.mulPose(viewMatrix);
 
-				RenderSystem.enableBlend();
-				Lighting.setupForFlatItems();
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-				FogRenderer.setupNoFog();
-				RenderSystem.depthMask(false);
-				RenderSystem.setShaderColor(1, 1, 1, 1);
+			PoseStack textureMatrix = new PoseStack();
+			int mirrorU = event.getRiftMirrorU() ? -1 : 1;
+			int mirrorV = event.getRiftMirrorV() ? -1 : 1;
 
-				//Set all alpha to 1 for mask blending
-				RenderSystem.colorMask(false, false, false, true);
-				RenderSystem.clearColor(0, 0, 0, 1);
-				RenderSystem.clearDepth(1.0D);
-				RenderSystem.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
-				RenderSystem.colorMask(true, true, true, true);
+			float scale = event.getRiftScale(partialTicks);
 
-				//Render mask
-				if (GL.getCapabilities().OpenGL14) {
-					RenderSystem.blendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
-				} else {
-					RenderSystem.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
-				}
+			textureMatrix.pushPose();
+			textureMatrix.translate(mirrorU * -0.5f / scale, mirrorV * -0.5f / scale, 0);
+			textureMatrix.scale(mirrorU / scale, mirrorV / scale, 1);
+			textureMatrix.translate(mirrorU * 0.5f * scale, mirrorV * 0.5f * scale, 0);
 
-				this.riftMaskRenderer.renderMask(level, partialTicks, posestack, skyBrightness);
-			}
+			float[] riftAngles = event.getRiftAngles(partialTicks);
 
-			//Reset fog to this world's fog
-			skyFogSetup.run();
+			riftView.pushPose();
+			riftView.translate(0, -1, 0);
+			riftView.mulPose(Axis.YP.rotationDegrees(riftAngles[0]));
+			riftView.mulPose(Axis.ZP.rotationDegrees(riftAngles[1]));
+			riftView.mulPose(Axis.YP.rotationDegrees(riftAngles[2]));
 
-			RenderSystem.blendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.enableBlend();
 			FogRenderer.setupNoFog();
-			RenderSystem.bindTexture(skyFbo.getColorTextureId());
 
-			//Project onto sphere
-			GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, this.modelviewMatrix);
-			GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, this.projectionMatrix);
+			float visibility = event.getVisibility(partialTicks);
+			float visibilitySq = visibility * visibility;
 
-			//Set up UV generator FIXME how do I do this now
-//			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_LINEAR);
-//			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_LINEAR);
-//			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_LINEAR);
-//			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_PLANE, this.getBuffer4f(1.0F, 0.0F, 0.0F, 0.0F));
-//			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_PLANE, this.getBuffer4f(0.0F, 1.0F, 0.0F, 0.0F));
-//			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_PLANE, this.getBuffer4f(0.0F, 0.0F, 1.0F, 0.0F));
-//			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
-//			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
-//			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
+			this.skyDomeMesh.bind();
+			RenderSystem.depthFunc(GL11.GL_ALWAYS);
+			RenderSystem.setShader(ShaderHelper.INSTANCE::getRiftShader);
+			RenderSystem.setShaderColor(visibilitySq,visibilitySq,visibilitySq, visibility);
+			RenderSystem.setShaderTexture(0, skyFbo.getColorTextureId());
+			RenderSystem.setShaderTexture(1, variant.maskTexture());
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			RenderSystem.setShaderTexture(2, variant.overlayTexture());
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			RenderSystem.setShaderTexture(3, variant.altOverlayTexture());
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			ShaderHelper.INSTANCE.getRiftShader().setDefaultUniforms(VertexFormat.Mode.TRIANGLES, riftView.last().pose(), projectionMatrix, Minecraft.getInstance().getWindow());
+			ShaderHelper.INSTANCE.getRiftShader().setTexMatrix(textureMatrix.last().pose());
+			ShaderHelper.INSTANCE.getRiftShader().setOverlay(1.0f - this.riftSkyRenderer.getSkyBrightness(level, partialTicks));
+			ShaderHelper.INSTANCE.getRiftShader().apply();
+			this.skyDomeMesh.draw();
+			ShaderHelper.INSTANCE.getRiftShader().clear();
+			textureMatrix.popPose();
+			riftView.popPose();
 
-			GL11.glMatrixMode(GL11.GL_TEXTURE);
-			posestack.pushPose();
-			GL11.glLoadIdentity();
-			posestack.translate(0.5F, 0.5F, 0.0F);
-			posestack.scale(0.5F, 0.5F, 1.0F);
-			GL11.glMultMatrixf(this.projectionMatrix);
-			GL11.glMultMatrixf(this.modelviewMatrix);
+			// cleanup
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			RenderSystem.setShaderColor(1.0F,1.0F,1.0F,1.0F);
 
-			//Render projection
-			this.riftMaskRenderer.renderRiftProjection(level, partialTicks, camera, skyBrightness);
-
-			GL11.glMatrixMode(GL11.GL_TEXTURE); //Make sure texture matrix is popped
-			posestack.popPose();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-//			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
-//			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
-//			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
-
-			//Render overlay
-			this.riftMaskRenderer.renderOverlay(level, partialTicks, posestack, skyBrightness);
-
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-			RenderSystem.disableBlend();
-			RenderSystem.enableDepthTest();
+			// Set to betweenlands fog color
+			FogRenderer.setupFog(camera, FogRenderer.FogMode.FOG_TERRAIN, Minecraft.getInstance().gameRenderer.getRenderDistance(), false, partialTicks);
+			FogRenderer.setupColor(camera, partialTicks, level, Minecraft.getInstance().options.getEffectiveRenderDistance(), 0.0F);
+			FogRenderer.levelFogColor();
 		}
 	}
 

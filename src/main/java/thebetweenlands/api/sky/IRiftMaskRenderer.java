@@ -3,6 +3,7 @@ package thebetweenlands.api.sky;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
+import org.joml.Matrix4f;
 
 public interface IRiftMaskRenderer {
 	/**
@@ -12,7 +13,7 @@ public interface IRiftMaskRenderer {
 	 * @param stack
 	 * @param skyBrightness
 	 */
-	void renderMask(ClientLevel level, float partialTicks, PoseStack stack, float skyBrightness);
+	void renderMask(ClientLevel level, float partialTicks, PoseStack stack, Matrix4f projectionMatrix, float skyBrightness);
 
 	/**
 	 * Renders the rift overlay

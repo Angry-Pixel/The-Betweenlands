@@ -40,6 +40,7 @@ public class AuroraEvent extends TimedEnvironmentEvent {
 		if(!active || this.canBeActive(level)) {
 			super.setActive(level, active);
 			if(active && !level.isClientSide()) {
+				TheBetweenlands.LOGGER.debug("fading in");
 				this.dataManager.set(AURORA_TYPE, level.getRandom().nextInt(3));
 			}
 		}
@@ -80,7 +81,8 @@ public class AuroraEvent extends TimedEnvironmentEvent {
 			for (EnvironmentEvent event : storage.getEnvironmentEventRegistry().getEventsOfState(true)) {
 				if (event != this && event.getClass() != WinterEvent.class && event.getClass() != SnowfallEvent.class &&
 					event.getClass() != RiftEvent.class) {
-					return false;
+					//TheBetweenlands.LOGGER.debug(event.getClass());
+					return true; // false
 				}
 			}
 		}

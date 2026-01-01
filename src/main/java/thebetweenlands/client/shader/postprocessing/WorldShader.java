@@ -2,23 +2,35 @@ package thebetweenlands.client.shader.postprocessing;
 
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.shaders.Uniform;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.joml.Vector4f;
 import thebetweenlands.client.renderer.GLTextureObjectWrapper;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.postprocessing.GroundFog.GroundFogVolume;
+import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.util.GLUProjection;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -26,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.mojang.blaze3d.platform.GlConst.GL_DEPTH_BUFFER_BIT;
 
 /**
  * TODO: Finish and add Starfield, OcclusionExtractor, Godrays, and Swirl shaders.
@@ -47,10 +61,11 @@ public class WorldShader extends PostChain implements AutoCloseable {
 	private RenderTarget repellerShieldBuffer;
 	private RenderTarget gasParticlesBuffer;
 
-	private Matrix4f invertedModelviewProjectionMatrix;
-	private Matrix4f modelviewProjectionMatrix;
+	private Matrix4f invertedModelviewProjectionMatrix = new Matrix4f();	// NOTE: Transposed matrix
+	private Matrix4f modelviewProjectionMatrix;		// NOTE: Transposed matrix
 	private Matrix4f modelviewMatrix;
 	private Matrix4f projectionMatrix;
+
 
 	public static final int MAX_LIGHT_SOURCES_PER_PASS = 32;
 	private final List<LightSource> lightSources = new ArrayList<>();
@@ -134,8 +149,8 @@ public class WorldShader extends PostChain implements AutoCloseable {
 		// TODO: consider separating from WorldShader into separate PostChain instances.
 		this.gasWarpEffect = new Warp(textureManager, resourceProvider, screenTarget);
 		this.starfieldEffect = new Starfield(textureManager, resourceProvider, screenTarget, true, 1024, 1024);	// TODO: config file manager to set height & width
-		//this.occlusionExtractor;
-		//this.godRayEffect;
+		this.occlusionExtractor = new OcclusionExtractor(textureManager, resourceProvider, screenTarget);
+		this.godRayEffect = new GodRay(textureManager, resourceProvider, screenTarget, this.occlusionExtractor.occlusionOut);
 		//this.swirlEffect;
 		//this.groundFogEffect;
 
@@ -172,44 +187,13 @@ public class WorldShader extends PostChain implements AutoCloseable {
 			this.starfieldEffect.close();
 
 		if (this.occlusionExtractor != null)
-			this.occlusionExtractor.delete();
+			this.occlusionExtractor.close();
 
 		if (this.godRayEffect != null)
-			this.godRayEffect.delete();
+			this.godRayEffect.close();
 
 		if (this.groundFogEffect != null)
 			this.groundFogEffect.delete();
-	}
-
-
-	/**
-	 * TODO: move into constructor once additional effects are ported. <br>
-	 * DEV NOTE: Keep for reference.
-	 */
-	protected boolean initEffect() {
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-
-		//Initialize gas textures and effect
-		//this.gasTextureFramebuffer = new TextureTarget(64, 64, false, Minecraft.ON_OSX);
-		//Minecraft.getInstance().getTextureManager().register(GAS_PARTICLE_TEXTURE, new GLTextureObjectWrapper(this.gasTextureFramebuffer.getColorTextureId()));
-		//this.gasTextureBaseFramebuffer = new TextureTarget(64, 64, false, Minecraft.ON_OSX);
-		//this.gasWarpEffect = new Warp().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F).init();
-
-		//Initialize starfield texture and effect
-		//this.starfieldTextureFramebuffer = new TextureTarget(BetweenlandsConfig.skyResolution, BetweenlandsConfig.skyResolution, false, Minecraft.ON_OSX);
-		//this.starfieldEffect = new Starfield(true).init();
-
-		//Initialize occlusion extractor and god's ray effect
-		this.occlusionExtractor = new OcclusionExtractor().init();
-		this.godRayEffect = new GodRay().init();
-
-		//Initialize swirl effect
-		this.swirlEffect = new Swirl().init();
-
-		//Initialize ground fog effect
-		this.groundFogEffect = new GroundFog().init().setFogVolumes(this.groundFogVolumes);
-
-		return true;
 	}
 
 	private static final Comparator<LightSource> LIGHT_SOURCE_SORTER = (o1, o2) -> {
@@ -231,9 +215,7 @@ public class WorldShader extends PostChain implements AutoCloseable {
 
 	public void uploadUniforms(float partialTicks) {
 		this.invMVPUniform.set(invertedModelviewProjectionMatrix);
-		//this.MVPUniform.set(modelviewProjectionMatrix);
 		this.viewPosUniform.set(this.cameraPos);
-		//this.screenSize.set((float)Minecraft.getInstance().getWindow().getWidth(), (float)Minecraft.getInstance().getWindow().getHeight());
 
 		float[] positionBuff = new float[96];
 		float[] colorBuff = new float[96];
@@ -282,14 +264,15 @@ public class WorldShader extends PostChain implements AutoCloseable {
 	 * Updates following matrices: MV (Modelview), PM (Projection), MVP (Modelview x Projection), INVMVP (Inverted MVP)
 	 */
 	public void updateMatrices(final RenderLevelStageEvent event) {
+		// Collect matrix and camera pos
 		this.cameraPos = event.getCamera().getPosition().toVector3f();
-		this.modelviewMatrix = event.getModelViewMatrix().transpose(new Matrix4f());
-		this.projectionMatrix = event.getProjectionMatrix().transpose(new Matrix4f());
-		this.invertedModelviewProjectionMatrix = new Matrix4f();
+		this.modelviewMatrix = event.getModelViewMatrix();
+		this.projectionMatrix = event.getProjectionMatrix();
 
-		Matrix4f MVP = this.modelviewMatrix.mul(this.projectionMatrix);
-		MVP.invert(this.invertedModelviewProjectionMatrix);
-
+		// Last arg is output and world shader requires matrix to be transposed
+		this.modelviewProjectionMatrix = this.modelviewMatrix.transpose(new Matrix4f()).mul(this.projectionMatrix.transpose(new Matrix4f()));
+		this.modelviewProjectionMatrix.invert(this.invertedModelviewProjectionMatrix);
+		// For some reason matrix math optimisations causes problems, use assume(0) to strip these
 		this.invertedModelviewProjectionMatrix = invertedModelviewProjectionMatrix.assume(0);
 	}
 
@@ -413,6 +396,10 @@ public class WorldShader extends PostChain implements AutoCloseable {
 		return this.gasWarpEffect.gasTextureTarget != null ? this.gasWarpEffect.gasTextureTarget.getColorTextureId() : -1;
 	}
 
+	public OcclusionExtractor getOcclusionExtractor() {
+		return this.occlusionExtractor;
+	}
+
 	/**
 	 * Returns the starfield texture
 	 *
@@ -441,25 +428,21 @@ public class WorldShader extends PostChain implements AutoCloseable {
 		}
 	}
 
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		this.occlusionExtractor.resize(width, height);
+		this.godRayEffect.resize(width, height);
+	}
+
 	/**
 	 * Renders additional post processing effects such as god's rays, swirl etc.
 	 *
 	 * @param partialTicks
 	 */
 	public void renderPostEffects(float partialTicks) {
-		/*
-		Window window = Minecraft.getInstance().getWindow();
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0.0D, window.getWidth(), window.getHeight(), 0.0D, 1000.0D, 3000.0D);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
-		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-
 		//this.applyGroundFog(partialTicks);
-		//this.applyBloodSky(partialTicks);
+		this.applyBloodSky(partialTicks);
 		this.applySwirl(partialTicks);
-		*/
 	}
 
 
@@ -481,7 +464,7 @@ public class WorldShader extends PostChain implements AutoCloseable {
 	}
 
 	private void applyBloodSky(float partialTicks) {
-		/*
+
 		float skyTransparency = 0.0F;
 
 		boolean hasBeat = false;
@@ -501,21 +484,31 @@ public class WorldShader extends PostChain implements AutoCloseable {
 			skyTransparency = 1.0F;
 		}
 
-		Window window = Minecraft.getInstance().getWindow();
-		double renderWidth = window.getWidth();
-		double renderHeight = window.getHeight();
+		//Window
+		float w = Minecraft.getInstance().getWindow().getWidth();
+		float h = Minecraft.getInstance().getWindow().getHeight();
 
+		//Light pos, and apply matrix transformations
 		Vec3 lightPos = new Vec3(45, 40, 30);
+		Vector4f pos = new Vector4f((float)lightPos.x, (float)lightPos.y, (float)lightPos.z, 1.0f);
+		pos.mul(this.modelviewMatrix);
+		pos.mul(this.projectionMatrix);
 
-		//Get screen space coordinates of light source
-		Projection projection = GLUProjection.getInstance().project(lightPos.x, lightPos.y, lightPos.z, ClampMode.ORTHOGONAL, false);
-		Projection projectionUnclamped = GLUProjection.getInstance().project(lightPos.x, lightPos.y, lightPos.z, ClampMode.NONE, false);
+		//Check if light is behind camera
+		boolean flip = pos.w <= 0.0f;
 
-		//Get light source positions in texture coords
-		float rayX = (float) (projection.getX() / renderWidth);
-		float rayY = (float) (projection.getY() / renderHeight);
+		//To NDC, and flip x y if needed
+		pos.set(pos).mul(0.5f / pos.w).add(0.5f,0.5f,0.5f,0.5f);
+		if (flip) {
+			pos.set(1.0f - pos.x, 1.0f - pos.y, pos.z, pos.w);
+		}
 
-		float rayYUnclamped = (float) (projectionUnclamped.getY() / renderWidth);
+		//Collect inverted unclamped y
+		float rayYUnclamped = 1.0f - pos.y;
+
+		//Clamp and collect ray cords
+		float rayX = Math.clamp(pos.x, 0.0f, 1.0f);
+		float rayY = Math.clamp(pos.y, 0.0f, 1.0f);
 
 		//Calculate angle differences
 		Vec3 lookVec = Minecraft.getInstance().player.getViewVector(partialTicks);
@@ -523,7 +516,7 @@ public class WorldShader extends PostChain implements AutoCloseable {
 		lookVec = lookVec.normalize();
 		Vec3 sLightPos = new Vec3(lightPos.x + 0.0001D, 0, lightPos.z + 0.0001D).normalize();
 		float lightXZAngle = (float) Math.toDegrees(Math.acos(sLightPos.dot(lookVec)));
-		float fovX = GLUProjection.getInstance().getFovX() / 2.0F;
+		float fovX = (float) Math.toDegrees(Math.atan((w / h) * Math.tan(Math.toRadians(Minecraft.getInstance().options.fov().get()) * 0.5D)));
 		float angDiff = Math.abs(lightXZAngle);
 
 		float decay = 0.96F;
@@ -544,59 +537,31 @@ public class WorldShader extends PostChain implements AutoCloseable {
 			weight *= mult;
 		}
 
-		int depthTexture = this.depthBuffer.getId();
-		int clipPlaneBuffer = BLSkyRenderer.clipPlaneBuffer.getDepthTexture();
-
+		//Get buffer ids, and check if present
+		int depthTexture = this.occlusionExtractor.worldDepth.frameBufferId;
+		int clipPlaneBuffer = this.occlusionExtractor.clipPlaneDepth.frameBufferId;
 		if (depthTexture < 0 || clipPlaneBuffer < 0) return; //FBOs not yet ready
 
-		RenderTarget mainFramebuffer = Minecraft.getInstance().getMainRenderTarget();
-		RenderTarget blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.viewWidth, mainFramebuffer.viewHeight);
-		RenderTarget occlusionFramebuffer = this.occlusionBuffer.getFramebuffer(mainFramebuffer.viewWidth, mainFramebuffer.viewHeight);
+		//Extract sky occlusion
+		this.occlusionExtractor.setDepthTextures(this.depthBuffer, BLSkyRenderer.clipPlaneBuffer);
+		Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
+		this.occlusionExtractor.process(partialTicks);
+		Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 
-		//Extract occluding objects
-		this.occlusionExtractor.setDepthTextures(depthTexture, clipPlaneBuffer);
-		this.occlusionExtractor.create(occlusionFramebuffer)
-		.setSource(Minecraft.getInstance().getMainRenderTarget().getColorTextureId())
-		.setPreviousFramebuffer(mainFramebuffer)
-		//.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
-		.render(partialTicks);
-
-		//Render god's ray to blitFramebuffer
+		//Render god rays
+		RenderSystem.disableBlend();
 		float beat = 0.0F;
 		if (hasBeat) {
 			beat = Math.abs(((float) Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float) Math.sin(System.nanoTime() / 4000000000.0D) * (float) Math.sin(System.nanoTime() / 4000000000.0D) * (float) Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F) / 4.0F;
 		}
 		float density = 0.1F + beat;
-		this.godRayEffect.setOcclusionMap(occlusionFramebuffer)
-		.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F)
-		.setRayPos(rayX, rayY)
-		.create(blitFramebuffer)
-		.setSource(mainFramebuffer.getColorTextureId())
-		.setPreviousFramebuffer(mainFramebuffer)
-		.render(partialTicks);
-
-		//Render blitFramebuffer to main framebuffer
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.enableBlend();
-		RenderSystem.setShaderColor(0.7F, 0.1F, 0.0F, skyTransparency / 2.5F);
-		RenderSystem.bindTexture(blitFramebuffer.getColorTextureId());
-		GL11.glBegin(GL11.GL_TRIANGLES);
-		GL11.glTexCoord2f(0.0F, 1.0F);
-		GL11.glVertex3f(0, 0, 0);
-		GL11.glTexCoord2f(0.0F, 0.0F);
-		GL11.glVertex3f(0, (float)renderHeight, 0);
-		GL11.glTexCoord2f(1.0F, 0.0F);
-		GL11.glVertex3f((float)renderWidth, (float)renderHeight, 0);
-		GL11.glTexCoord2f(1.0F, 0.0F);
-		GL11.glVertex3f((float)renderWidth, (float)renderHeight, 0);
-		GL11.glTexCoord2f(1.0F, 1.0F);
-		GL11.glVertex3f((float)renderWidth, 0, 0);
-		GL11.glTexCoord2f(0.0F, 1.0F);
-		GL11.glVertex3f(0, 0, 0);
-		GL11.glEnd();
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-		*/
+		this.godRayEffect.setOcclusionMap(this.occlusionExtractor.occlusionOut);
+		this.godRayEffect.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F,
+			new Vector4f(0.7F, 0.1F, 0.0F, skyTransparency / 2.5f))
+			.setRayPos(rayX, rayY)
+			.uploadUniforms(partialTicks);
+		this.godRayEffect.process(partialTicks);
+		Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 	}
 
 	/**
@@ -664,6 +629,7 @@ public class WorldShader extends PostChain implements AutoCloseable {
 		float offX = (float) (Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x() / 8000.0D);
 		float offY = (float) (Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z() / 8000.0D);
 		this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, 0);
+		this.starfieldEffect.uploadUniforms(partialTicks);
 		this.starfieldEffect.process(partialTicks);
 		Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
 	}

@@ -106,10 +106,7 @@ public class RiftEvent extends TimedEnvironmentEvent {
 		if (registry.isDisabled()) {
 			this.dataManager.set(ACTIVATION_TICKS, this.lastActivationTicks = 0).syncImmediately();
 		} else {
-			this.playRiftOpenSound = false;
 			this.setRandomConfiguration(level);
-			this.setActive(level, true);
-			this.playRiftOpenSound = true;
 			this.dataManager.set(ACTIVATION_TICKS, this.lastActivationTicks = MAX_ACTIVATION_TICKS).syncImmediately();
 		}
 	}

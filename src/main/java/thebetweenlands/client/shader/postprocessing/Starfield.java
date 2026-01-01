@@ -80,7 +80,7 @@ public class Starfield extends PostChain implements AutoCloseable {
 		return this;
 	}
 
-	protected void uploadUniforms(float partialTicks) {
+	public void uploadUniforms(float partialTicks) {
 		timeUniform.set(System.nanoTime() / 1000000.0F);
 		timeScaleUniform.set(this.timeScale);
 		zoomUniform.set(this.zoom);
