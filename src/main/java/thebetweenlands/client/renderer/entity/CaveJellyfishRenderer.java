@@ -9,25 +9,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.JellyfishCaveModel;
+import thebetweenlands.client.model.entity.CaveJellyfishModel;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.creature.JellyfishCave;
+import thebetweenlands.common.entity.creature.CaveJellyfish;
 
-public class JellyfishCaveRenderer extends MobRenderer<JellyfishCave, JellyfishCaveModel> {
+public class CaveJellyfishRenderer extends MobRenderer<CaveJellyfish, CaveJellyfishModel> {
 	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/jellyfish_cave.png");
 
-	public JellyfishCaveRenderer(EntityRendererProvider.Context context) {
-		super(context, new JellyfishCaveModel(context.bakeLayer(BLModelLayers.JELLYFISH_CAVE)), 0.5F);
+	public CaveJellyfishRenderer(EntityRendererProvider.Context context) {
+		super(context, new CaveJellyfishModel(context.bakeLayer(BLModelLayers.JELLYFISH_CAVE)), 0.5F);
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(JellyfishCave entity) {
+	public ResourceLocation getTextureLocation(CaveJellyfish entity) {
 		return TEXTURE;
 	}
 
-	protected void addLighting(JellyfishCave entity, float partialTicks) {
+	protected void addLighting(CaveJellyfish entity, float partialTicks) {
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			double interpX = Mth.lerp(partialTicks, entity.xOld, entity.getX());
 			double interpY = Mth.lerp(partialTicks, entity.yOld, entity.getY());
@@ -41,7 +41,7 @@ public class JellyfishCaveRenderer extends MobRenderer<JellyfishCave, JellyfishC
 	}
 
 	@Override
-	protected void scale(JellyfishCave entity, PoseStack stack, float partialTick) {
+	protected void scale(CaveJellyfish entity, PoseStack stack, float partialTick) {
 		stack.scale(entity.getJellyfishSize(), entity.getJellyfishSize() * entity.getJellyfishLength(), entity.getJellyfishSize());
 
 		float limbSwingAmount = entity.walkAnimation.speed(partialTick);
@@ -55,7 +55,7 @@ public class JellyfishCaveRenderer extends MobRenderer<JellyfishCave, JellyfishC
 	}
 
 	@Override
-	protected void setupRotations(JellyfishCave entity, PoseStack stack, float bob, float yBodyRot, float partialTick, float scale) {
+	protected void setupRotations(CaveJellyfish entity, PoseStack stack, float bob, float yBodyRot, float partialTick, float scale) {
 		Vec3 weightPos = entity.getOrientationPos(partialTick);
 
 		double dx = Mth.lerp(partialTick, entity.xOld, entity.getX()) - weightPos.x;

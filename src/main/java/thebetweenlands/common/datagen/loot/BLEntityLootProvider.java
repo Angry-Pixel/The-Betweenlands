@@ -324,6 +324,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
 		this.noLoot(EntityRegistry.FIREFLY);
 		this.noLoot(EntityRegistry.JELLYFISH);
+		this.noLoot(EntityRegistry.CAVE_JELLYFISH);
 		this.addWithSeasonalDrops(EntityRegistry.LURKER.get(), 2, 6, 1, 1, LootTable.lootTable()
 			.withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.LURKER_SKIN)

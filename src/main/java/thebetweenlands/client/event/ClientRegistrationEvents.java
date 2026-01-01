@@ -161,7 +161,7 @@ import thebetweenlands.client.model.entity.GreeblingCorpseModel;
 import thebetweenlands.client.model.entity.GreeblingModel;
 import thebetweenlands.client.model.entity.GreeblingVolarpadFloaterModel;
 import thebetweenlands.client.model.entity.InfestationModel;
-import thebetweenlands.client.model.entity.JellyfishCaveModel;
+import thebetweenlands.client.model.entity.CaveJellyfishModel;
 import thebetweenlands.client.model.entity.JellyfishModel;
 import thebetweenlands.client.model.entity.LargeSludgeWormModel;
 import thebetweenlands.client.model.entity.LargeSpiritTreeFaceModel;

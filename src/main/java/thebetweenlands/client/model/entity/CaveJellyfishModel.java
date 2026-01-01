@@ -13,11 +13,11 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entity.creature.JellyfishCave;
+import thebetweenlands.common.entity.creature.CaveJellyfish;
 
-public class JellyfishCaveModel extends MowzieModelBase<JellyfishCave> {
+public class CaveJellyfishModel extends MowzieModelBase<CaveJellyfish> {
 
-		public JellyfishCaveModel(ModelPart root) {
+		public CaveJellyfishModel(ModelPart root) {
 			super(root, RenderType::entityTranslucent);
 		}
 
@@ -67,8 +67,8 @@ public class JellyfishCaveModel extends MowzieModelBase<JellyfishCave> {
 		}
 
 		@Override
-		public void setupAnim(JellyfishCave entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {}
-		
+		public void setupAnim(CaveJellyfish entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {}
+
 
 		@Override
 		public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {

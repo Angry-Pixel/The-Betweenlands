@@ -22,10 +22,10 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectile.ElectricShock;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class JellyfishCave extends Jellyfish implements Enemy {
+public class CaveJellyfish extends Jellyfish implements Enemy {
 	protected static final byte EVENT_SPARK = 80;
 
-	public JellyfishCave(EntityType<? extends WaterAnimal> type, Level level) {
+	public CaveJellyfish(EntityType<? extends WaterAnimal> type, Level level) {
 		super(type, level);
 	}
 
@@ -82,7 +82,7 @@ public class JellyfishCave extends Jellyfish implements Enemy {
 			float oy = this.level().getRandom().nextFloat() - 0.5f + (float)this.getDeltaMovement().y();
 			float oz = this.level().getRandom().nextFloat() - 0.5f + (float)this.getDeltaMovement().z();
 
-			TheBetweenlands.createParticle(LightningArcParticleOptions.defaultArc(), this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5f, this.getZ(), 
+			TheBetweenlands.createParticle(LightningArcParticleOptions.defaultArc(), this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5f, this.getZ(),
 					ParticleFactory.ParticleArgs.get()
 					.withMotion(this.getDeltaMovement().x(), this.getDeltaMovement().y(), this.getDeltaMovement().z())
 					.withColor(0.3f, 0.5f, 1.0f, 0.9f)

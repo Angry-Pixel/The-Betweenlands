@@ -36,7 +36,7 @@ import thebetweenlands.common.entity.creature.Greebling;
 import thebetweenlands.common.entity.creature.GreeblingCoracle;
 import thebetweenlands.common.entity.creature.GreeblingVolarpadFloater;
 import thebetweenlands.common.entity.creature.Jellyfish;
-import thebetweenlands.common.entity.creature.JellyfishCave;
+import thebetweenlands.common.entity.creature.CaveJellyfish;
 import thebetweenlands.common.entity.creature.Lurker;
 import thebetweenlands.common.entity.creature.MireSnail;
 import thebetweenlands.common.entity.creature.Olm;
@@ -125,7 +125,7 @@ public class EntityRegistry {
 	//boulder sprite
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C, BubblerCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CaveFish>> CAVE_FISH = registerWithEgg("cave_fish", EntityType.Builder.of(CaveFish::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.3F, 0.2F), 0xFF8000, 0xE6E6E6, CaveFish::registerAttributes);
-	//cave jellyfish
+	public static final DeferredHolder<EntityType<?>, EntityType<CaveJellyfish>> CAVE_JELLYFISH = registerWithEgg("cave_jellyfish", EntityType.Builder.of(CaveJellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xE0FFF6, 0x7CFFFF, CaveJellyfish::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Chiromaw>> CHIROMAW = registerWithEgg("chiromaw", EntityType.Builder.of(Chiromaw::new, MobCategory.MONSTER).sized(0.7F, 0.9F), 0x142728, 0x7A4E42, Chiromaw::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawGreeblingRider>> CHIROMAW_GREEBLING_RIDER = registerWithEgg("chiromaw_greebling_rider", EntityType.Builder.of(ChiromawGreeblingRider::new, MobCategory.MONSTER).sized(0.7F, 0.9F), 0x142728, 0x7CB2AA, ChiromawGreeblingRider::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<ChiromawHatchling>> CHIROMAW_HATCHLING = registerWithAttributes("chiromaw_hatchling", EntityType.Builder.of(ChiromawHatchling::new, MobCategory.MONSTER).sized(0.75F, 1.0F), BasicProximitySpawner::registerAttributes);
@@ -147,7 +147,6 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<GreeblingVolarpadFloater>> GREEBLING_VOLARPAD_FLOATER = register("greebling_volarpad_floater", EntityType.Builder.<GreeblingVolarpadFloater>of(GreeblingVolarpadFloater::new, MobCategory.MISC).sized(1.0F, 1.0F).clientTrackingRange(16).noSave().fireImmune().noSummon().canSpawnFarFromPlayer());
 	public static final DeferredHolder<EntityType<?>, EntityType<Infestation>> INFESTATION = registerWithEgg("infestation", EntityType.Builder.<Infestation>of(Infestation::new, MobCategory.MONSTER).sized(0.85F, 0.85F), 0x292B3B, 0xE2D698, Infestation::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
-	public static final DeferredHolder<EntityType<?>, EntityType<JellyfishCave>> JELLYFISH_CAVE = registerWithEgg("jellyfish_cave", EntityType.Builder.of(JellyfishCave::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xE0FFF6, 0x7CFFFF, Jellyfish::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<LargeSludgeWorm>> LARGE_SLUDGE_WORM = registerWithEgg("large_sludge_worm", EntityType.Builder.of(LargeSludgeWorm::new, MobCategory.MONSTER).sized(0.8F, 0.8F).fireImmune(), 0x726459, 0xE2DED9, LargeSludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Leech>> LEECH = registerWithEgg("leech", EntityType.Builder.of(Leech::new, MobCategory.MONSTER).sized(0.7F, 0.3F), 0x804E3D, 0x635940, Leech::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Lurker>> LURKER = registerWithEgg("lurker", EntityType.Builder.of(Lurker::new, MobCategory.CREATURE).sized(1.6F, 0.9F).eyeHeight(0.45F), 0x283320, 0x827856, Lurker::registerAttributes);
