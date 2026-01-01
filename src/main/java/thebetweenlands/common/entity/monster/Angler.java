@@ -48,9 +48,6 @@ public class Angler extends Monster implements BLEntity {
 	public Angler(EntityType<? extends Angler> type, Level level) {
 		super(type, level);
         moveControl = new Angler.AnglerMoveHelper(this);
-		//setPathPriority(PathNodeType.WALKABLE, -8.0F);
-		//setPathPriority(PathNodeType.BLOCKED, -8.0F);
-		//setPathPriority(PathNodeType.WATER, 16.0F);
     }
 
 	@Override

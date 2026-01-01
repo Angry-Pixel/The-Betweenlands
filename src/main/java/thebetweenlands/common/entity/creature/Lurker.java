@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.creature;
 
+import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,10 +17,21 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
@@ -33,19 +48,17 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.LurkerFindBaitGoal;
 import thebetweenlands.common.entity.ai.goals.NearestSmellyAttackableTargetGoal;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
+import thebetweenlands.common.entity.monster.Angler;
 import thebetweenlands.common.entity.movement.LurkerMoveControl;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
-
-import java.util.UUID;
 
 public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy {
 	private static final EntityDataAccessor<Boolean> IS_LEAPING = SynchedEntityData.defineId(Lurker.class, EntityDataSerializers.BOOLEAN);
@@ -112,7 +125,7 @@ public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
 		this.targetSelector.addGoal(1, new NearestSmellyAttackableTargetGoal<>(this, Player.class, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Dragonfly.class, true));
-//		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Angler.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Angler.class, true));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Anadia.class, true) {
 			@Override
 			public boolean canUse() {
@@ -127,12 +140,12 @@ public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy
 			}
 		});
 
-//		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, FreshwaterUrchin.class, true) {
-//			@Override
-//			public boolean canUse() {
-//				return super.canUse() && Lurker.this.huntingTimer <= 0;
-//			}
-//		});
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, FreshwaterUrchin.class, true) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && Lurker.this.huntingTimer <= 0;
+			}
+		});
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
 		this.targetSelector.addGoal(3, new ResetUniversalAngerTargetGoal<>(this, true));
 	}
