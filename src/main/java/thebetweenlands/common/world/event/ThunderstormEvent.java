@@ -6,6 +6,7 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
+import thebetweenlands.common.entity.BLLightningBolt;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -71,7 +73,7 @@ public class ThunderstormEvent extends TimedEnvironmentEvent {
 						}
 
 						if ((pos.getY() > 150 || level.getRandom().nextInt(8) == 0) && level.isRainingAt(pos)) {
-//							level.addFreshEntity(new EntityBLLightningBolt(level, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget, false));
+							level.addFreshEntity(new BLLightningBolt(level, (double)pos.getX() + 0.5D, pos.getY(), (double)pos.getZ() + 0.5D, isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget, false));
 						}
 					}
 				}
@@ -84,7 +86,7 @@ public class ThunderstormEvent extends TimedEnvironmentEvent {
 		Player closestPlayer = null;
 		double closestDistSq = Double.MAX_VALUE;
 		for (Player player : world.players()) {
-			if (player.getY() > 130 && (!player.onGround() || player.isPassenger()) && (player.getY() - world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, player.blockPosition()).getY()) > 8) {
+			if (EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(player) && player.getY() > 130 && !player.isInWater() && (!player.onGround() || player.isPassenger()) && (player.getY() - world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, player.blockPosition()).getY()) > 8) {
 				double dstSq = (blockpos.getX() - player.getX()) * (blockpos.getX() - player.getX()) + (blockpos.getZ() - player.getZ()) * (blockpos.getZ() - player.getZ());
 				if (dstSq < closestDistSq) {
 					closestPlayer = player;

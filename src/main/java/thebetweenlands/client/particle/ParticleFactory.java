@@ -4,6 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -265,6 +266,10 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.motionZ = motionZ;
 			this.motionSet = true;
 			return (T) this;
+		}
+
+		public final T withMotion(Vec3 motion) {
+			return this.withMotion(motion.x(), motion.y(), motion.z());
 		}
 
 		@SuppressWarnings("unchecked")

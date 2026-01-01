@@ -2,7 +2,6 @@ package thebetweenlands.common.handler;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.status.ChunkType;
 import net.neoforged.neoforge.common.NeoForge;
@@ -108,7 +107,7 @@ public class WorldEventHandler {
 		IWorldStorage storage = WorldStorageGetter.getNullable(event.getLevel());
 
 		if (storage != null) {
-			storage.getLocalStorageHandler().saveAll((Level) event.getLevel());
+			storage.getLocalStorageHandler().saveAll(event.getLevel());
 		}
 	}
 

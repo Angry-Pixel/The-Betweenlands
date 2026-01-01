@@ -28,9 +28,11 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
+import thebetweenlands.client.particle.options.LightningArcParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.OctineBlock;
 import thebetweenlands.common.entity.ProximitySpawner;
@@ -311,15 +313,11 @@ public class ChiromawHatchling extends PathfinderMob implements OwnableEntity, P
 			float oy = (this.getRandom().nextFloat() - 0.5f) * 2;
 			float oz = (this.getRandom().nextFloat() - 0.5f) * 2;
 
-			//TODO
-//			ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(this.world, this.getX(), this.getY() + 0.5F + getTransformCount() * 0.02F, this.getZ(),
-//				ParticleArgs.get()
-//					.withMotion(this.motionX, this.motionY, this.motionZ)
-//					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
-//					.withData(new Vec3d(this.getX() + ox, this.getY() + oy, this.getZ() + oz)));
-//			particle.setLighting(false);
-//
-//			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+			TheBetweenlands.createParticle(new LightningArcParticleOptions.Builder().setLighting(false).build(), this.level(), this.getX(), this.getY() + 0.5F + this.getTransformCount() * 0.02F, this.getZ(),
+				ParticleFactory.ParticleArgs.get()
+					.withMotion(this.getDeltaMovement())
+					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
+					.withData(new Vec3(this.getX() + ox, this.getY() + oy, this.getZ() + oz)));
 		}
 	}
 

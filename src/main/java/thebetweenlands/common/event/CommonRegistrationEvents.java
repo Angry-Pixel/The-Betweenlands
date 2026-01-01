@@ -264,6 +264,7 @@ public class CommonRegistrationEvents {
 		event.register(DataMapRegistry.COMPOSTABLE);
 		event.register(DataMapRegistry.DECAY_FOOD);
 		event.register(DataMapRegistry.FLUX_MULTIPLIER);
+		event.register(DataMapRegistry.LIGHTNING_CONVERSION);
 	}
 
 	private static void registerCapabilities(RegisterCapabilitiesEvent event) {

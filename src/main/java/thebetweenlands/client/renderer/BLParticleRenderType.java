@@ -1,6 +1,7 @@
 package thebetweenlands.client.renderer;
 
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -13,6 +14,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.client.event.BetweenlandsShaders;
 import thebetweenlands.client.shader.ShaderHelper;
+import thebetweenlands.common.TheBetweenlands;
 
 @OnlyIn(Dist.CLIENT)
 public interface BLParticleRenderType extends ParticleRenderType {
@@ -71,6 +73,24 @@ public interface BLParticleRenderType extends ParticleRenderType {
 		@Override
 		public String toString() {
 			return "TRANSLUCENT_ALPHA_LENIENT";
+		}
+	};
+
+	BLParticleRenderType BEAM = new BLParticleRenderType() {
+		@Override
+		public BufferBuilder begin(Tesselator tesselator, TextureManager manager) {
+			RenderSystem.setShader(() -> BetweenlandsShaders.PARTICLE_NO_ALPHA_CHECK);
+			RenderSystem.setShaderTexture(0, TheBetweenlands.prefix("textures/particle/beam.png"));
+			RenderSystem.enableBlend();
+			RenderSystem.disableCull();
+			RenderSystem.depthMask(false);
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+		}
+
+		@Override
+		public String toString() {
+			return "BEAM";
 		}
 	};
 }

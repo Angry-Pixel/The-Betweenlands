@@ -1,0 +1,16 @@
+{
+  "values": {
+    "#minecraft:arrows": {
+      "conversion_chance": 0.2,
+      "convert_to": "thebetweenlands:shock_arrow",
+      "max_conversions": 5,
+      "random_conversion_count": true
+    },
+    "thebetweenlands:chirobarb_erupter": {
+      "conversion_chance": 1.0,
+      "convert_to": "thebetweenlands:chirobarb_shock_erupter",
+      "max_conversions": 1,
+      "random_conversion_count": false
+    }
+  }
+}

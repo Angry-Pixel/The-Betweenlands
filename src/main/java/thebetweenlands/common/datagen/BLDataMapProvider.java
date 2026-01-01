@@ -2,6 +2,7 @@ package thebetweenlands.common.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.ItemTags;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
@@ -10,6 +11,7 @@ import thebetweenlands.common.datamap.entity.AmuletSpawn;
 import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.datamap.item.DecayFood;
 import thebetweenlands.common.datamap.item.FluxMultiplier;
+import thebetweenlands.common.datamap.item.LightningConversion;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -109,6 +111,10 @@ public class BLDataMapProvider extends DataMapProvider {
 
 		var fluxMap = this.builder(DataMapRegistry.FLUX_MULTIPLIER);
 		fluxMap.add(Tags.Items.ORES, new FluxMultiplier(0.33F, 2), false);
+
+		var lightningConversion = this.builder(DataMapRegistry.LIGHTNING_CONVERSION);
+		lightningConversion.add(ItemTags.ARROWS, new LightningConversion(ItemRegistry.SHOCK_ARROW, 0.2F, 5, true), false);
+		lightningConversion.add(ItemRegistry.CHIROBARB_ERUPTER, new LightningConversion(ItemRegistry.CHIROBARB_SHOCK_ERUPTER, 1.0F, 1, false), false);
 
 		var compostMap = this.builder(DataMapRegistry.COMPOSTABLE);
 		compostMap.add(ItemRegistry.DRY_BARK, new CompostableItem(30, 12000), false);

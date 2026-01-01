@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -491,7 +492,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> VOODOO_DOLL = ITEMS.register("voodoo_doll", () -> new VoodooDollItem(new Item.Properties().rarity(Rarity.RARE).durability(24).stacksTo(1)));
 	public static final DeferredItem<Item> SWIFT_PICK = ITEMS.register("swift_pick", () -> new SwiftPickItem(ToolMaterialRegistry.VALONITE, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1)));
 	public static final DeferredItem<Item> CHIROBARB_ERUPTER = ITEMS.register("chirobarb_erupter", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(64).stacksTo(1)));
-	public static final DeferredItem<Item> CHIROBARB_SHOCK_ERUPTER = ITEMS.register("chirobarb_shock_erupter", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1)));
+	public static final DeferredItem<Item> CHIROBARB_SHOCK_ERUPTER = ITEMS.register("chirobarb_shock_erupter", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)));
 	public static final DeferredItem<Item> MIST_STAFF = ITEMS.register("mist_staff", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SHADOW_STAFF = ITEMS.register("shadow_staff", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("music_disc_astatos", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ASTATOS)));

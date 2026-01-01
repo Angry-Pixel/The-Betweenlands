@@ -1174,6 +1174,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.GREEBLING_CORPSE, "Greebling Corpse");
 		this.addEntityType(EntityRegistry.MOVING_WALL, "Moving Wall");
 		this.addEntityType(EntityRegistry.ROCK_SNOT_TENDRIL, "Rock Snot Tendril");
+		this.addEntityType(EntityRegistry.LIGHTNING_BOLT, "Lightning Bolt");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");

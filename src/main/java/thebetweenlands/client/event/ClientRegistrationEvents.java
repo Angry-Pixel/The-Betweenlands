@@ -311,7 +311,7 @@ import thebetweenlands.client.renderer.entity.GreeblingCorpseRenderer;
 import thebetweenlands.client.renderer.entity.GreeblingRenderer;
 import thebetweenlands.client.renderer.entity.GreeblingVolarpadFloaterRenderer;
 import thebetweenlands.client.renderer.entity.InfestationRenderer;
-import thebetweenlands.client.renderer.entity.JellyfishCaveRenderer;
+import thebetweenlands.client.renderer.entity.CaveJellyfishRenderer;
 import thebetweenlands.client.renderer.entity.JellyfishRenderer;
 import thebetweenlands.client.renderer.entity.LargeSludgeWormRenderer;
 import thebetweenlands.client.renderer.entity.LeechRenderer;
@@ -522,7 +522,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.DRAGONFLY.get(), DragonflyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FIREFLY.get(), FireflyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.JELLYFISH.get(), JellyfishRenderer::new);
-		event.registerEntityRenderer(EntityRegistry.JELLYFISH_CAVE.get(), JellyfishCaveRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.CAVE_JELLYFISH.get(), CaveJellyfishRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.LURKER.get(), LurkerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SHAMBLER.get(), ShamblerRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FRESHWATER_URCHIN.get(), FreshwaterUrchinRenderer::new);
@@ -580,6 +580,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ROCK_SNOT.get(), RockSnotRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ROCK_SNOT_TENDRIL.get(), RockSnotTendrilRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GLOWING_GOOP_ENTITY.get(), context -> new ThrownItemRenderer<>(context, 3.0F, true));
+		event.registerEntityRenderer(EntityRegistry.LIGHTNING_BOLT.get(), NoopRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -674,7 +675,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.DRAGONFLY, DragonflyModel::create);
 		event.registerLayerDefinition(BLModelLayers.FIREFLY, FireflyModel::create);
 		event.registerLayerDefinition(BLModelLayers.JELLYFISH, JellyfishModel::create);
-		event.registerLayerDefinition(BLModelLayers.JELLYFISH_CAVE, JellyfishCaveModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.JELLYFISH_CAVE, CaveJellyfishModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.LURKER, LurkerModel::create);
 		event.registerLayerDefinition(BLModelLayers.SHAMBLER, ShamblerModel::create);
 		event.registerLayerDefinition(BLModelLayers.FRESHWATER_URCHIN, FreshwaterUrchinModel::create);

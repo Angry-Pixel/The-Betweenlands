@@ -5,21 +5,28 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.options.LightningArcParticleOptions;
+import thebetweenlands.client.renderer.BLParticleRenderType;
 import thebetweenlands.client.renderer.BeamRenderer;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
+import thebetweenlands.common.TheBetweenlands;
 
 public class LightningArcParticle extends Particle {
 	private static class Arc {
@@ -50,15 +57,20 @@ public class LightningArcParticle extends Particle {
 
 	private final LightningArcParticleOptions options;
 
-	protected LightningArcParticle(LightningArcParticleOptions options, ClientLevel level, double xIn, double yIn, double zIn, double mx, double my, double mz, Vec3 target) {
+	protected LightningArcParticle(LightningArcParticleOptions options, ClientLevel level, double xIn, double yIn, double zIn, double mx, double my, double mz, Vec3 target, int lifetime) {
 		super(level, xIn, yIn, zIn);
 		this.xd = mx;
 		this.yd = my;
 		this.zd = mz;
 		this.hasPhysics = false;
 		this.target = target;
-		this.lifetime = 5;
 		this.options = options;
+		this.lifetime = lifetime;
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(float partialTicks) {
+		return AABB.INFINITE;
 	}
 
 	private void addArc(List<Arc> arcs, Arc arc, float offsets, int subdivs) {
@@ -98,7 +110,7 @@ public class LightningArcParticle extends Particle {
 		float scale = ((Mth.sin((this.age + partialTicks) * 0.8f) + 1) * 0.5f * 0.5f + 0.5f) * this.options.baseSize() * (1 - (this.age - 1 + partialTicks) / this.lifetime);
 		PoseStack poseStack = new PoseStack();
 		for (Arc arc : this.arcs) {
-			BeamRenderer.buildBeam(rx + arc.from.x, ry + arc.from.y, rz + arc.from.z, arc.dir, scale * arc.size, 0, 0, rot.x(), rot.z(), rot.y() * rot.z(), rot.x() * rot.y(), rot.y(), (x, y, z, u, v) ->
+			BeamRenderer.buildBeam(rx + arc.from.x, ry + arc.from.y, rz + arc.from.z, arc.dir, scale * arc.size, 0, scale * 10, rot.x(), rot.z(), rot.y() * rot.z(), rot.x() * rot.y(), rot.x() * rot.z(), (x, y, z, u, v) ->
 				buffer.addVertex(poseStack.last(), x, y, z).setUv(u, v).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F));
 		}
 
@@ -164,19 +176,19 @@ public class LightningArcParticle extends Particle {
 
 	@Override
 	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.CUSTOM;
+		return BLParticleRenderType.BEAM;
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, LightningArcParticleOptions> {
 
 		@Override
 		public LightningArcParticle createParticle(LightningArcParticleOptions options, ImmutableParticleArgs args) {
-			return new LightningArcParticle(options, args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getObject(Vec3.class, 0));
+			return new LightningArcParticle(options, args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getObject(Vec3.class, 0), args.data.getInt(1));
 		}
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(Vec3.ZERO);
+			args.withData(Vec3.ZERO, 5);
 		}
 
 	}

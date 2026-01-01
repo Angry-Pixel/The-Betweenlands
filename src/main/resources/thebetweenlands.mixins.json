@@ -8,6 +8,7 @@
     "HumanoidArmorLayerMixin",
     "LevelRendererMixin",
     "ModelBlockRendererMixin",
+    "ParticleEngineMixin",
     "ScreenEffectRendererMixin",
     "ScreenMixin"
   ],
@@ -15,7 +16,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "StateHolderMixin",
-	"RandomStateMixin"
+    "RandomStateMixin",
+    "StateHolderMixin"
   ]
 }

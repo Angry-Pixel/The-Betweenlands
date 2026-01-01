@@ -17,25 +17,7 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.BLItemFrame;
-import thebetweenlands.common.entity.BasicProximitySpawner;
-import thebetweenlands.common.entity.BasicProximitySpawnerExtended;
-import thebetweenlands.common.entity.CCGroundSpawner;
-import thebetweenlands.common.entity.DecayPitTarget;
-import thebetweenlands.common.entity.FalseExperienceOrb;
-import thebetweenlands.common.entity.FishVortex;
-import thebetweenlands.common.entity.FlameJet;
-import thebetweenlands.common.entity.GalleryFrame;
-import thebetweenlands.common.entity.GreeblingCorpse;
-import thebetweenlands.common.entity.LurkerSkinRaft;
-import thebetweenlands.common.entity.MovingWall;
-import thebetweenlands.common.entity.PredatorArrowGuide;
-import thebetweenlands.common.entity.Seat;
-import thebetweenlands.common.entity.ShockwaveSwordItemEntity;
-import thebetweenlands.common.entity.SpiritTreeFaceMask;
-import thebetweenlands.common.entity.SwordEnergy;
-import thebetweenlands.common.entity.TriggeredFallingBlock;
-import thebetweenlands.common.entity.WormGroundSpawner;
+import thebetweenlands.common.entity.*;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
@@ -230,7 +212,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<CCGroundSpawner>> CC_GROUND_SPAWNER = registerWithAttributes("cc_ground_spawner", EntityType.Builder.of(CCGroundSpawner::new, MobCategory.MISC).sized(3F, 0.5F).eyeHeight(1F), BasicProximitySpawnerExtended::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<WormGroundSpawner>> WORM_GROUND_SPAWNER = registerWithAttributes("worm_ground_spawner", EntityType.Builder.of(WormGroundSpawner::new, MobCategory.MISC).sized(3F, 0.5F).eyeHeight(1F), BasicProximitySpawnerExtended::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BLItemFrame>> ITEM_FRAME = register("item_frame", EntityType.Builder.<BLItemFrame>of(BLItemFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
-	//lightning bolt
+	public static final DeferredHolder<EntityType<?>, EntityType<BLLightningBolt>> LIGHTNING_BOLT = register("lightning_bolt", EntityType.Builder.<BLLightningBolt>of(BLLightningBolt::new, MobCategory.MISC).sized(0.0F, 0.0F).noSave().clientTrackingRange(16).updateInterval(Integer.MAX_VALUE));
 	public static final DeferredHolder<EntityType<?>, EntityType<LurkerSkinRaft>> LURKER_SKIN_RAFT = register("lurker_skin_raft", EntityType.Builder.<LurkerSkinRaft>of(LurkerSkinRaft::new, MobCategory.MISC).sized(1.25F, 0.25F).clientTrackingRange(10));
 	//mist bridge
 	public static final DeferredHolder<EntityType<?>, EntityType<MovingWall>> MOVING_WALL = register("moving_wall", EntityType.Builder.<MovingWall>of(MovingWall::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().clientTrackingRange(4).updateInterval(20));

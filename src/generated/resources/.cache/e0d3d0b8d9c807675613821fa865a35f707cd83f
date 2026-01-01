@@ -1,6 +1,7 @@
-// 1.21.1	2025-10-02T06:06:08.884053035	Data Maps
+// 1.21.1	2025-12-31T18:10:49.816135336	Data Maps
 a1d679b1bdb8203f6e452eb3f0a954e136a6c8f7 data/neoforge/data_maps/item/furnace_fuels.json
 02b09d5cd43c8118b0e03de4bc467138c3f1de18 data/thebetweenlands/data_maps/entity_type/amulet_spawn.json
 6b8e6ebf6e957e752822ef6cd5866fb96749429d data/thebetweenlands/data_maps/item/compost_bin_compostables.json
 3b8c2b9a2db5e3d36b6008fd59de957af97e4ac0 data/thebetweenlands/data_maps/item/decay_foods.json
 daec5ad860ee2bc136cef4ff23f590ad99817171 data/thebetweenlands/data_maps/item/flux_multiplier.json
+ae319c64b9c825fe64f3c436dd842de6ab0fa5be data/thebetweenlands/data_maps/item/lightning_conversion.json

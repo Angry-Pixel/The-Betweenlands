@@ -22,6 +22,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.component.entity.LastKilledData;
+import thebetweenlands.common.entity.BLLightningBolt;
 import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
@@ -79,20 +80,19 @@ public class SimulacrumHandler {
 						player.level().addFreshEntity(xpOrb);
 					}
 
-					//TODO lightning
 					if (entity.level().getRandom().nextBoolean()) {
 						BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(player.serverLevel(), location, 8, false, 4, 0, true);
 
 						if (spawnPoint != null) {
 							if (entity.distanceToSqr(Vec3.atCenterOf(spawnPoint)) > 24) {
 								playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-								//entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
+								entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
 							}
 
 							player.teleportTo(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
 
 							playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-							//entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
+							entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
 
 							entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1));
 						} else if (entity instanceof ServerPlayer) {
@@ -100,7 +100,7 @@ public class SimulacrumHandler {
 						}
 					} else {
 						playThunderSounds(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-						//entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
+						entity.level().addFreshEntity(new BLLightningBolt(entity.level(), entity.getX(), entity.getY(), entity.getZ(), 1, false, true));
 					}
 
 					if (player instanceof ServerPlayer sp) {
@@ -125,6 +125,7 @@ public class SimulacrumHandler {
 		if (!entity.level().isClientSide() && !(entity instanceof Player) && entity.level().getRandom().nextInt(4) == 0) {
 			SimulacrumBlockEntity simulacrum = SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, entity.level(), entity.getX(), entity.getY(), entity.getZ(), 16.0D, SimulacrumEffectRegistry.RESURRECTION.get(), null);
 
+			//TODO resurrection
 			if (simulacrum != null) {
 //				entity.setDropItemsWhenDead(false);
 //
