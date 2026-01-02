@@ -1,7 +1,3 @@
 {
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "thebetweenlands:block/weedwood_log_side",
-    "side": "thebetweenlands:block/weedwood_log_side"
-  }
+  "parent": "thebetweenlands:block/weedwood_bark_1"
 }

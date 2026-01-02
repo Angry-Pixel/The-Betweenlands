@@ -1,16 +1,115 @@
 {
   "variants": {
-    "axis=x": {
-      "model": "thebetweenlands:block/weedwood_log_horizontal",
-      "x": 90,
-      "y": 90
-    },
-    "axis=y": {
-      "model": "thebetweenlands:block/weedwood_log"
-    },
-    "axis=z": {
-      "model": "thebetweenlands:block/weedwood_log_horizontal",
-      "x": 90
-    }
+    "axis=x": [
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_1",
+        "weight": 100,
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_2",
+        "weight": 100,
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_3",
+        "weight": 100,
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_4",
+        "weight": 10,
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_5",
+        "weight": 10,
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_6",
+        "weight": 5,
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_7",
+        "weight": 5,
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y": [
+      {
+        "model": "thebetweenlands:block/weedwood_log_1",
+        "weight": 100
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_2",
+        "weight": 100
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_3",
+        "weight": 100
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_4",
+        "weight": 10
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_5",
+        "weight": 10
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_6",
+        "weight": 5
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_7",
+        "weight": 5
+      }
+    ],
+    "axis=z": [
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_1",
+        "weight": 100,
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_2",
+        "weight": 100,
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_3",
+        "weight": 100,
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_4",
+        "weight": 10,
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_5",
+        "weight": 10,
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_6",
+        "weight": 5,
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_log_horizontal_7",
+        "weight": 5,
+        "x": 90
+      }
+    ]
   }
 }

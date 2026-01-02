@@ -6,7 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
-import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
@@ -119,8 +122,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(BlockRegistry.PUDDLE);
 		this.simpleBlockWithItem(BlockRegistry.PEARL_BLOCK);
 		this.simpleBlockWithItem(BlockRegistry.ANCIENT_REMNANT_BLOCK);
-		this.logBlockWithItem(BlockRegistry.WEEDWOOD_LOG); //TODO weedwood has 8 side variants
-		this.barkBlockWithItem(BlockRegistry.WEEDWOOD_BARK, this.modLoc("block/weedwood_log_side"));
+		this.weedwoodLogs();
+		//this.logBlockWithItem(BlockRegistry.WEEDWOOD_LOG); //TODO weedwood has 8 side variants
+		//this.barkBlockWithItem(BlockRegistry.WEEDWOOD_BARK, this.modLoc("block/weedwood_log_side"));
 		this.barkBlockWithItem(BlockRegistry.ROTTEN_BARK, this.modLoc("block/rotten_log_side"));
 		this.simpleBlockWithItem(BlockRegistry.SPREADING_ROTTEN_BARK.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.ROTTEN_BARK.get())));
 		getMultipartBuilder(BlockRegistry.RUBBER_LOG.get())
@@ -1360,5 +1364,68 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_side_3"))).rotationX(90).rotationY(90).nextModel()
 			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_side_4"))).rotationX(90).rotationY(90).addModel();
 		this.simpleBlockItem(BlockRegistry.NIBBLETWIG_BARK.get(), this.models().withExistingParent(BlockRegistry.NIBBLETWIG_BARK.getId().getPath(), this.modLoc("block/" + BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_1")));
+	}
+
+	public void weedwoodLogs() {
+		this.getVariantBuilder(BlockRegistry.WEEDWOOD_LOG.get())
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y).modelForState()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_1", this.modLoc("block/weedwood_log_side"), this.modLoc("block/weedwood_log_end"))).weight(100).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_2", this.modLoc("block/weedwood_log_side_1"), this.modLoc("block/weedwood_log_end"))).weight(100).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_3", this.modLoc("block/weedwood_log_side_2"), this.modLoc("block/weedwood_log_end"))).weight(100).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_4", this.modLoc("block/weedwood_log_side_3"), this.modLoc("block/weedwood_log_end"))).weight(10).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_5", this.modLoc("block/weedwood_log_side_4"), this.modLoc("block/weedwood_log_end"))).weight(10).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_6", this.modLoc("block/weedwood_log_side_5"), this.modLoc("block/weedwood_log_end"))).weight(5).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_7", this.modLoc("block/weedwood_log_side_6"), this.modLoc("block/weedwood_log_end"))).weight(5).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Z).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_1", this.modLoc("block/weedwood_log_side"), this.modLoc("block/weedwood_log_end"))).weight(100).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_2", this.modLoc("block/weedwood_log_side_1"), this.modLoc("block/weedwood_log_end"))).weight(100).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_3", this.modLoc("block/weedwood_log_side_2"), this.modLoc("block/weedwood_log_end"))).weight(100).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_4", this.modLoc("block/weedwood_log_side_3"), this.modLoc("block/weedwood_log_end"))).weight(10).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_5", this.modLoc("block/weedwood_log_side_4"), this.modLoc("block/weedwood_log_end"))).weight(10).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_6", this.modLoc("block/weedwood_log_side_5"), this.modLoc("block/weedwood_log_end"))).weight(5).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_7", this.modLoc("block/weedwood_log_side_6"), this.modLoc("block/weedwood_log_end"))).weight(5).rotationX(90).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.X).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_1", this.modLoc("block/weedwood_log_side"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(100).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_2", this.modLoc("block/weedwood_log_side_1"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(100).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_3", this.modLoc("block/weedwood_log_side_2"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(100).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_4", this.modLoc("block/weedwood_log_side_3"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(10).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_5", this.modLoc("block/weedwood_log_side_4"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(10).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_6", this.modLoc("block/weedwood_log_side_5"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(5).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_horizontal_7", this.modLoc("block/weedwood_log_side_6"), this.modLoc("block/weedwood_log_end"))).rotationX(90).weight(5).rotationY(90).addModel();
+		this.simpleBlockItem(BlockRegistry.WEEDWOOD_LOG.get(), this.models().withExistingParent(BlockRegistry.WEEDWOOD_LOG.getId().getPath(), this.modLoc("block/" + BlockRegistry.WEEDWOOD_LOG.getId().getPath() + "_1")));
+
+		//TODO: barks have 14 models and some of them need a special model
+		this.getVariantBuilder(BlockRegistry.WEEDWOOD_BARK.get())
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y).modelForState()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_1", this.modLoc("block/weedwood_log_side"), this.modLoc("block/weedwood_log_side"))).weight(100).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_2", this.modLoc("block/weedwood_log_side_1"), this.modLoc("block/weedwood_log_side_1"))).weight(100).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_3", this.modLoc("block/weedwood_log_side_2"), this.modLoc("block/weedwood_log_side_2"))).weight(100).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_4", this.modLoc("block/weedwood_log_side_3"), this.modLoc("block/weedwood_log_side_3"))).weight(10).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_5", this.modLoc("block/weedwood_log_side_4"), this.modLoc("block/weedwood_log_side_4"))).weight(10).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_6", this.modLoc("block/weedwood_log_side_5"), this.modLoc("block/weedwood_log_side_5"))).weight(5).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_7", this.modLoc("block/weedwood_log_side_6"), this.modLoc("block/weedwood_log_side_6"))).weight(5).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_8", this.modLoc("block/weedwood_log_side_7"), this.modLoc("block/weedwood_log_side_7"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_9", this.modLoc("block/weedwood_log_side_8"), this.modLoc("block/weedwood_log_side_8"))).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Z).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side"), this.modLoc("block/weedwood_log_side"))).weight(100).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_1"), this.modLoc("block/weedwood_log_side_1"))).weight(100).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_2"), this.modLoc("block/weedwood_log_side_2"))).weight(100).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_3"), this.modLoc("block/weedwood_log_side_3"))).weight(10).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_4"), this.modLoc("block/weedwood_log_side_4"))).weight(10).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_5"), this.modLoc("block/weedwood_log_side_5"))).weight(5).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_6"), this.modLoc("block/weedwood_log_side_6"))).weight(5).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_7"), this.modLoc("block/weedwood_log_side_7"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_8"), this.modLoc("block/weedwood_log_side_8"))).rotationX(90).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.X).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side"), this.modLoc("block/weedwood_log_side"))).weight(100).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_1"), this.modLoc("block/weedwood_log_side_1"))).weight(100).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_2"), this.modLoc("block/weedwood_log_side_2"))).weight(100).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_3"), this.modLoc("block/weedwood_log_side_3"))).weight(10).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_4"), this.modLoc("block/weedwood_log_side_4"))).weight(10).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_5"), this.modLoc("block/weedwood_log_side_5"))).weight(5).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_6"), this.modLoc("block/weedwood_log_side_6"))).weight(5).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_7"), this.modLoc("block/weedwood_log_side_7"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_horizontal", this.modLoc("block/weedwood_log_side_8"), this.modLoc("block/weedwood_log_side_8"))).rotationX(90).rotationY(90).addModel();
+		this.simpleBlockItem(BlockRegistry.WEEDWOOD_BARK.get(), this.models().withExistingParent(BlockRegistry.WEEDWOOD_BARK.getId().getPath(), this.modLoc("block/" + BlockRegistry.WEEDWOOD_BARK.getId().getPath() + "_1")));
 	}
 }
