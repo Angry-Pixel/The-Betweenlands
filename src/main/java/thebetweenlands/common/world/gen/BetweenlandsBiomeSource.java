@@ -3,7 +3,6 @@ package thebetweenlands.common.world.gen;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.LongFunction;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
-import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.AreaFactoryContext.AreaFactoryContextSupplier;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
@@ -32,12 +30,6 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
-import thebetweenlands.common.world.gen.layer.old.BetweenlandsBiomeLayerOld;
-import thebetweenlands.common.world.gen.layer.old.ThinMaskLayer;
-import thebetweenlands.common.world.gen.layer.old.ZoomIncrementLayer;
-import thebetweenlands.common.world.gen.layer.old.util.BigContext;
-import thebetweenlands.common.world.gen.layer.old.util.LazyAreaContextOld;
-import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 import thebetweenlands.common.world.gen.layer.util.Layer;
 import thebetweenlands.common.world.gen.layer.util.LazyArea;
 import thebetweenlands.common.world.gen.layer.util.LazyAreaFactoryContext;
@@ -178,60 +170,5 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 
 	public static long getSeed() {
 		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldData().worldGenOptions().seed();
-	}
-
-	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<BLWeightPoint> biomes, int size) {
-		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContextOld(25, seed, context), biomes, registry, size);
-		return new Layer(areaFactory);
-	}
-
-	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<BLWeightPoint> biomes, HolderGetter<Biome> registry, int size) {
-		AreaFactory<A> genLayer = new BetweenlandsBiomeLayerOld(registry, biomes).run(context.apply(100L));
-		genLayer = BetweenlandsBiomeSource.repeatZoom(2000L, genLayer, 2, context);
-
-//		AreaFactory<A> swamplandsClearingLayer = new SurroundedLayer(registry, BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING, 1, 1).run(context.apply(102L), genLayer);
-//		swamplandsClearingLayer = new MaskLayer(registry, BiomeRegistry.SWAMPLANDS_CLEARING, BiomeRegistry.SWAMPLANDS_CLEARING).run(context.apply(102L), swamplandsClearingLayer);
-//		swamplandsClearingLayer = BetweenlandsBiomeSource.repeatThin(105L, swamplandsClearingLayer, registry, BiomeRegistry.SWAMPLANDS_CLEARING, 3, 0.25F, 10, context);
-
-		genLayer = BetweenlandsBiomeSource.repeatZoom(2345L, genLayer, 1, context);
-//		swamplandsClearingLayer = BetweenlandsBiomeSource.repeatZoom(2345L, swamplandsClearingLayer, 1, context);
-
-//		AreaFactory<A> sludgePlainsClearingLayer = new SurroundedLayer(registry, BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.SLUDGE_PLAINS_CLEARING, 2, 1).run(context.apply(351L), genLayer);
-//		sludgePlainsClearingLayer = new MaskLayer(registry, BiomeRegistry.SWAMPLANDS_CLEARING, BiomeRegistry.SWAMPLANDS_CLEARING).run(context.apply(351L), sludgePlainsClearingLayer);
-//		sludgePlainsClearingLayer = BetweenlandsBiomeSource.repeatThin(214L, sludgePlainsClearingLayer, registry, BiomeRegistry.SWAMPLANDS_CLEARING, 4, 0.15F, 20, context);
-
-		genLayer = BetweenlandsBiomeSource.repeatZoom(2345L, genLayer, size - 1, context);
-//		swamplandsClearingLayer = BetweenlandsBiomeSource.repeatZoom(2345L, swamplandsClearingLayer, size - 1, context);
-//		sludgePlainsClearingLayer = BetweenlandsBiomeSource.repeatZoom(2345L, sludgePlainsClearingLayer, size - 1 - 2, context);
-
-//		sludgePlainsClearingLayer = new CircleMaskLayer(registry, BiomeRegistry.SLUDGE_PLAINS_CLEARING, 10).run(context.apply(103L), sludgePlainsClearingLayer);
-//		sludgePlainsClearingLayer = BetweenlandsBiomeSource.repeatZoom(2345L, sludgePlainsClearingLayer, 2, context);
-
-//		swamplandsClearingLayer = new CircleMaskLayer(registry, BiomeRegistry.SWAMPLANDS_CLEARING, 10).run(context.apply(103L), swamplandsClearingLayer);
-
-//		genLayer = MixerLayer.INSTANCE.run(context.apply(0L), genLayer, swamplandsClearingLayer);
-//		genLayer = MixerLayer.INSTANCE.run(context.apply(0L), genLayer, sludgePlainsClearingLayer);
-
-		return genLayer;
-	}
-
-	private static <T extends Area, C extends BigContext<T>> AreaFactory<T> repeatZoom(long seed, AreaFactory<T> layer, int count, LongFunction<C> contextFactory) {
-		AreaFactory<T> iareafactory = layer;
-
-		for(int i = 0; i < count; ++i) {
-			iareafactory = new ZoomIncrementLayer().run(contextFactory.apply(seed + (long)i), iareafactory);
-		}
-
-		return iareafactory;
-	}
-
-	private static <T extends Area, C extends BigContext<T>> AreaFactory<T> repeatThin(long seed, AreaFactory<T> layer, HolderGetter<Biome> registry, ResourceKey<Biome> biome, int range, float chance, int count, LongFunction<C> contextFactory) {
-		AreaFactory<T> iareafactory = layer;
-
-		for (int i = 0; i < count; ++i) {
-			iareafactory = new ThinMaskLayer(registry, biome, range, chance).run(contextFactory.apply(seed + 1), iareafactory);
-		}
-
-		return iareafactory;
 	}
 }
