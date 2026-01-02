@@ -63,7 +63,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, ParticleType<LightningArcParticleOptions>> LIGHTNING_ARC = register("lightning_arc", false, type -> LightningArcParticleOptions.CODEC, type -> LightningArcParticleOptions.STREAM_CODEC);
 
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
-		return PARTICLES.register(name, () -> new ParticleType<>(overrideLimiter) {
+		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {
 			@Override
 			public MapCodec<T> codec() {
 				return codecGetter.apply(this);

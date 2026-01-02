@@ -19,7 +19,7 @@ public class ParticleEngineMixin {
 	//they really cant make this easy for me huh
 	//IN order to get our lightning arcs rendering properly we need to change the blend func.
 	//Vanilla doesnt allow for the use of ACTUAL rendertypes in particles AND it doesnt properly reset everything at the end of rendering. Just a few select things.
-	@Inject(method = "render(Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/client/Camera;FLnet/minecraft/client/renderer/culling/Frustum;Ljava/util/function/Predicate;)V", at = @At("TAIL"))
+	@Inject(method = "render(Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/client/Camera;FLnet/minecraft/client/renderer/culling/Frustum;Ljava/util/function/Predicate;)V", at = @At("TAIL"), remap = false)
 	public void clearBlendFunc(LightTexture lightTexture, Camera camera, float partialTick, Frustum frustum, Predicate<ParticleRenderType> renderTypePredicate, CallbackInfo ci) {
 		RenderSystem.defaultBlendFunc();
 	}
