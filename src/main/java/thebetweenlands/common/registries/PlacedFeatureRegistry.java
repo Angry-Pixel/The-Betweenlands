@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -7,13 +9,22 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import thebetweenlands.common.TheBetweenlands;
-
-import java.util.List;
+import thebetweenlands.common.world.gen.placement.CragSpiresPlacement;
+import thebetweenlands.common.world.gen.placement.SimplexColumnsPlacement;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public class PlacedFeatureRegistry {
 
@@ -229,14 +240,43 @@ public class PlacedFeatureRegistry {
 
 		context.register(TAR_POOL_DUNGEON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.TAR_POOL_DUNGEON), List.of(InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.CAVE_WATER_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.LAYER_HEIGHT)), BiomeFilter.biome())));
 		context.register(UNDERGROUND_DUNGEON, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.UNDERGROUND_DUNGEON), List.of(HeightRangePlacement.uniform(VerticalAnchor.absolute(TheBetweenlands.CAVE_WATER_HEIGHT), VerticalAnchor.absolute(TheBetweenlands.LAYER_HEIGHT)), BiomeFilter.biome())));
-	}
 
+		context.register(BULB_CAPPED_MUSHROOM_PATCH, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BULB_CAPPED_MUSHROOM_PATCH), bulbCappedMushroomPatch(1)));
+		context.register(BIG_BULB_CAPPED_MUSHROOM, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM), bulbCappedMushroomPatch(1)));
+
+//		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE), List.of(CountPlacement.of(1))));
+		context.register(ALGAE, new PlacedFeature(featureGetter.getOrThrow(ConfiguredFeatureRegistry.ALGAE),
+				List.of(
+						CountPlacement.of(1),
+						SimplexColumnsPlacement.of(0.16D, 1.0D / 1.6D, 1.8D, 4, true),
+						HeightmapPlacement.onHeightmap(Types.WORLD_SURFACE_WG),
+						BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.ALGAE.get().defaultBlockState(), BlockPos.ZERO)),
+						BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE),
+						BiomeFilter.biome()
+					)));
+
+		context.register(CRAG_SPIRES, new PlacedFeature(
+				featureGetter.getOrThrow(ConfiguredFeatureRegistry.CRAG_SPIRES),
+				List.of(
+						CountPlacement.of(1),
+						CragSpiresPlacement.of(
+								SimplexNoiseConfiguration.of(4, 0.16D, 1.0D / 1.5D, 2.4D),
+								12.0D,
+								4
+							)
+					)));
+	}
+	
 	private static List<PlacementModifier> tree(int count) {
 		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome());
 	}
 
 	private static List<PlacementModifier> treeHydrophobic(int count) {
 		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.WEEDWOOD_SAPLING.get().defaultBlockState(), BlockPos.ZERO)), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
+	}
+
+	private static List<PlacementModifier> bulbCappedMushroomPatch(int count) {
+		return List.of(CountPlacement.of(count), InSquarePlacement.spread(), PlacementUtils.FULL_RANGE, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistry.BULB_CAPPED_MUSHROOM.get().defaultBlockState(), BlockPos.ZERO)), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE), BiomeFilter.biome());
 	}
 
 	private static List<PlacementModifier> patch(int count) {

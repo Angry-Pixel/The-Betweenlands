@@ -15,6 +15,7 @@ import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
+import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
@@ -34,6 +35,7 @@ public class BLRegistries {
 
 	// Unsynced registries
 	public static final Registry<EarlyGenerator<?>> EARLY_GENERATORS = new RegistryBuilder<>(Keys.EARLY_GENERATORS).sync(false).create();
+	public static final Registry<MapCodec<? extends BiomeLayer>> BIOME_LAYER_TYPE = new RegistryBuilder<>(Keys.BIOME_LAYER_TYPE).sync(false).create();
 
 	public static final class Keys {
 
@@ -55,5 +57,6 @@ public class BLRegistries {
 		// Unsynced registries
 		public static final ResourceKey<Registry<EarlyGenerator<?>>> EARLY_GENERATORS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("generators"));
 		public static final ResourceKey<Registry<ConfiguredEarlyGenerator<?, ?>>> CONFIGURED_GENERATORS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "configured_generators"));
+		public static final ResourceKey<Registry<MapCodec<? extends BiomeLayer>>> BIOME_LAYER_TYPE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("biome_layer_type"));
 	}
 }

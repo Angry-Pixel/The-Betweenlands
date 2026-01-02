@@ -15,6 +15,7 @@ import thebetweenlands.common.world.gen.feature.CaveHangersFeature;
 import thebetweenlands.common.world.gen.feature.CaveMossFeature;
 import thebetweenlands.common.world.gen.feature.CavePotsFeature;
 import thebetweenlands.common.world.gen.feature.CaveThornsFeature;
+import thebetweenlands.common.world.gen.feature.CragrockSpiresFeature;
 import thebetweenlands.common.world.gen.feature.DeepmanSimulacrumFeature;
 import thebetweenlands.common.world.gen.feature.FluidPoolFeature;
 import thebetweenlands.common.world.gen.feature.LakeCavernSimulacrumFeature;
@@ -32,9 +33,12 @@ import thebetweenlands.common.world.gen.feature.SwampKelpClusterFeature;
 import thebetweenlands.common.world.gen.feature.SwampReedClusterFeature;
 import thebetweenlands.common.world.gen.feature.WaterRootsClusterFeature;
 import thebetweenlands.common.world.gen.feature.WeedwoodBushFeature;
+import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.BlockReplacementConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.NoisePatchFeatureConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PlantConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
@@ -65,8 +69,8 @@ public class FeatureRegistry {
 	//Biome Features
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",
 		() -> new BarnacleClusterFeature(BlockPlaceConfiguration.CODEC));
-	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BIG_BULB_CAPPED_MUSHROOM = FEATURES.register("big_bulb_capped_mushroom",
-		() -> new BigBulbCappedMushroomFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<BigBulbCappedMushroomFeatureConfiguration>> BIG_BULB_CAPPED_MUSHROOM = FEATURES.register("big_bulb_capped_mushroom",
+		() -> new BigBulbCappedMushroomFeature(BigBulbCappedMushroomFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BLADDERWORT_CLUSTER = FEATURES.register("bladderwort_cluster",
 		() -> new BladderwortClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<BlockReplacementConfiguration>> BLOCK_REPLACE_CLUSTER = FEATURES.register("block_replacement_cluster",
@@ -115,8 +119,13 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WATER_ROOTS_CLUSTER = FEATURES.register("water_roots_cluster",
 		() -> new WaterRootsClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_BUSH = FEATURES.register("weedwood_bush",
-		() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
+			() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
 
+//	public static final DeferredHolder<Feature<?>, Feature<NoisePatchWithLevelFeatureConfiguration>> ALGAE_PATCH = FEATURES.register("algae_patch",
+//		() -> new AlgaePatchFeature(NoisePatchWithLevelFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<CragrockSpiresFeatureConfiguration>> CRAGROCK_SPIRES = FEATURES.register("cragrock_spires",
+		() -> new CragrockSpiresFeature(CragrockSpiresFeatureConfiguration.CODEC));
+	
 	//Structure Features
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> UNDERWATER_RUINS = FEATURES.register("underwater_ruins",
 		() -> new UnderwaterRuinsFeature(NoneFeatureConfiguration.CODEC));

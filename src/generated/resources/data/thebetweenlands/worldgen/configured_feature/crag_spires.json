@@ -1,0 +1,37 @@
+{
+  "type": "thebetweenlands:cragrock_spires",
+  "config": {
+    "base_state": {
+      "Name": "thebetweenlands:cragrock"
+    },
+    "seafloor": {
+      "type": "thebetweenlands:offset",
+      "offset": -5,
+      "selector": {
+        "type": "thebetweenlands:heightmap",
+        "heightmap": "OCEAN_FLOOR_WG"
+      }
+    },
+    "sealevel": 120,
+    "spire_base_depth_factor": 3.0,
+    "spire_height_factor": 12.0,
+    "spire_noise": {
+      "noise_octaves": 4,
+      "noise_scale": 0.16,
+      "noise_value_multiplier": 0.6666666666666666,
+      "noise_value_offset": 2.4
+    },
+    "top_states": [
+      {
+        "Name": "thebetweenlands:mossy_cragrock_top"
+      },
+      {
+        "Name": "thebetweenlands:mossy_cragrock_bottom",
+        "Properties": {
+          "is_bottom": "true"
+        }
+      }
+    ],
+    "use_biome_weights": true
+  }
+}

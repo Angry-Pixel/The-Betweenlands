@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.common.TheBetweenlands;
 
 import java.util.Optional;

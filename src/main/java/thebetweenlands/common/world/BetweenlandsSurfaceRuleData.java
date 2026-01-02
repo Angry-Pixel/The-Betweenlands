@@ -17,6 +17,7 @@ public class BetweenlandsSurfaceRuleData extends SurfaceRuleData {
 	public static final SurfaceRules.RuleSource DEAD_SWAMP_GRASS = blockState(BlockRegistry.DEAD_GRASS);
 	public static final SurfaceRules.RuleSource MUD = blockState(BlockRegistry.MUD);
 	public static final SurfaceRules.RuleSource MUD_UNDERWATER = blockState(BlockRegistry.MUD);
+	public static final SurfaceRules.RuleSource COMPACTED_MUD = blockState(BlockRegistry.COMPACTED_MUD);
 	public static final SurfaceRules.RuleSource BETWEENLANDS_BEDROCK = blockState(BlockRegistry.BETWEENLANDS_BEDROCK);
 	public static final SurfaceRules.RuleSource PITSTONE = blockState(BlockRegistry.PITSTONE);
 
@@ -163,7 +164,7 @@ public class BetweenlandsSurfaceRuleData extends SurfaceRuleData {
 			// Top layer: e.g. dirt and grass
 			SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0),
 				SurfaceRules.sequence(
-					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(0, false, CaveSurface.FLOOR), MUD),
+					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(0, false, CaveSurface.FLOOR), COMPACTED_MUD),
 					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(2, false, CaveSurface.FLOOR), SWAMP_DIRT)
 				)
 			),

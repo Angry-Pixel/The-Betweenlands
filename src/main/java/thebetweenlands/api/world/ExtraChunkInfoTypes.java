@@ -1,5 +1,7 @@
 package thebetweenlands.api.world;
 
+import thebetweenlands.api.world.biome.BiomeWeights;
+
 /*
  * Extra info an early generator might need
  * TODO Make extensible eventually

@@ -87,6 +87,7 @@ public class TheBetweenlands {
 		DataComponentRegistry.COMPONENTS.register(eventbus);
 		RecipeRegistry.RECIPE_TYPES.register(eventbus);
 		RecipeRegistry.RECIPE_SERIALIZERS.register(eventbus);
+		PlacementModifierRegistry.PLACEMENT_MODIFIER_TYPES.register(eventbus);
 		FeatureRegistry.FEATURES.register(eventbus);
 		SimulacrumEffectRegistry.EFFECTS.register(eventbus);
 		EnvironmentEventRegistry.EVENTS.register(eventbus);
@@ -105,6 +106,7 @@ public class TheBetweenlands {
 		StructureTypeRegistry.TYPES.register(eventbus);
 		StructureTypeRegistry.PIECE_TYPES.register(eventbus);
 		EarlyGeneratorRegistry.GENERATORS.register(eventbus);
+		BiomeLayerRegistry.BIOME_LAYER_TYPE.register(eventbus);
 
 		BetweenlandsConfigSetup.init(eventbus, dist);
 

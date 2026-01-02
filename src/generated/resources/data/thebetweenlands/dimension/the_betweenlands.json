@@ -4,94 +4,319 @@
     "type": "thebetweenlands:bl_chunk_generator",
     "biome_source": {
       "type": "thebetweenlands:bl_biome_source",
+      "biome_layers": {
+        "type": "thebetweenlands:sequence",
+        "layers": [
+          {
+            "type": "thebetweenlands:betweenlands",
+            "biomes": [
+              {
+                "biome": "thebetweenlands:patchy_islands",
+                "weight": 20
+              },
+              {
+                "biome": "thebetweenlands:swamplands",
+                "weight": 25
+              },
+              {
+                "biome": "thebetweenlands:deep_waters",
+                "weight": 12
+              },
+              {
+                "biome": "thebetweenlands:coarse_islands",
+                "weight": 16
+              },
+              {
+                "biome": "thebetweenlands:raised_isles",
+                "weight": 16
+              },
+              {
+                "biome": "thebetweenlands:sludge_plains",
+                "weight": 5
+              },
+              {
+                "biome": "thebetweenlands:eroded_marsh",
+                "weight": 4
+              },
+              {
+                "biome": "thebetweenlands:marsh",
+                "weight": 10
+              }
+            ],
+            "random_seed": 100
+          },
+          {
+            "type": "thebetweenlands:repeat",
+            "biome_layer": {
+              "type": "thebetweenlands:zoom"
+            },
+            "random_seeds": [
+              2000,
+              2000
+            ]
+          },
+          {
+            "type": "thebetweenlands:marker",
+            "ref_name": "swamplands_clearing_zoom"
+          },
+          {
+            "type": "thebetweenlands:zoom",
+            "random_seed": 2345
+          },
+          {
+            "type": "thebetweenlands:marker",
+            "ref_name": "sludge_plains_clearing_zoom"
+          },
+          {
+            "type": "thebetweenlands:repeat",
+            "biome_layer": {
+              "type": "thebetweenlands:zoom"
+            },
+            "random_seeds": [
+              2345,
+              2345,
+              2345
+            ]
+          },
+          {
+            "type": "thebetweenlands:mask_mixer",
+            "mask_layer": {
+              "type": "thebetweenlands:sequence",
+              "layers": [
+                {
+                  "type": "thebetweenlands:surrounded",
+                  "parent": {
+                    "type": "thebetweenlands:reference",
+                    "ref_name": "swamplands_clearing_zoom"
+                  },
+                  "biome": "thebetweenlands:swamplands_clearing",
+                  "mask": true,
+                  "random_seed": 102,
+                  "spawn_chance": 10000,
+                  "surround_range": 1,
+                  "surrounding_biome": "thebetweenlands:swamplands"
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:thinning_mask",
+                    "biome": "thebetweenlands:swamplands_clearing",
+                    "check_range": 3,
+                    "mask": false,
+                    "removal_chance": 2500,
+                    "remove_when_near": "thebetweenlands:swamplands_clearing"
+                  },
+                  "random_seeds": [
+                    105,
+                    106,
+                    107,
+                    108,
+                    109,
+                    110,
+                    111,
+                    112,
+                    113,
+                    114
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:spread",
+                    "quadrant": "XNZN"
+                  },
+                  "random_seeds": [
+                    2345,
+                    2345,
+                    2345,
+                    2345
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:circle_mask",
+                  "biome": "thebetweenlands:swamplands_clearing",
+                  "check_range": 10,
+                  "mask": true
+                }
+              ]
+            }
+          },
+          {
+            "type": "thebetweenlands:mask_mixer",
+            "mask_layer": {
+              "type": "thebetweenlands:sequence",
+              "layers": [
+                {
+                  "type": "thebetweenlands:surrounded",
+                  "parent": {
+                    "type": "thebetweenlands:reference",
+                    "ref_name": "sludge_plains_clearing_zoom"
+                  },
+                  "biome": "thebetweenlands:sludge_plains_clearing",
+                  "mask": true,
+                  "random_seed": 351,
+                  "spawn_chance": 10000,
+                  "surround_range": 2,
+                  "surrounding_biome": "thebetweenlands:sludge_plains"
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:thinning_mask",
+                    "biome": "thebetweenlands:sludge_plains_clearing",
+                    "check_range": 4,
+                    "mask": false,
+                    "removal_chance": 1500,
+                    "remove_when_near": "thebetweenlands:sludge_plains_clearing"
+                  },
+                  "random_seeds": [
+                    214,
+                    215,
+                    216,
+                    217,
+                    218,
+                    219,
+                    220,
+                    221,
+                    222,
+                    223,
+                    224,
+                    225,
+                    226,
+                    227,
+                    228,
+                    229,
+                    230,
+                    231,
+                    232,
+                    233
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:spread",
+                  "quadrant": "XNZN",
+                  "random_seed": 2345
+                },
+                {
+                  "type": "thebetweenlands:circle_mask",
+                  "biome": "thebetweenlands:sludge_plains_clearing",
+                  "check_range": 3,
+                  "mask": true
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:zoom"
+                  },
+                  "random_seeds": [
+                    2542,
+                    2542
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
       "biome_size": 4,
       "biomes": [
         {
           "biome": "thebetweenlands:patchy_islands",
           "parameters": {
             "depth": -0.125,
-            "scale": 0.475,
-            "weight": 20
+            "scale": 0.475
           }
         },
         {
           "biome": "thebetweenlands:swamplands",
-          "generators": "thebetweenlands:flat_land_swamplands",
+          "generators": [
+            "thebetweenlands:flat_land_swamplands"
+          ],
           "parameters": {
             "depth": -0.2,
-            "scale": 0.1,
-            "weight": 25
+            "scale": 0.1
           }
         },
         {
           "biome": "thebetweenlands:deep_waters",
+          "generators": [
+            "thebetweenlands:deep_waters_simplex_terrain"
+          ],
           "parameters": {
             "depth": -1.2,
-            "scale": 0.5,
-            "weight": 12
+            "scale": 0.5
           }
         },
         {
           "biome": "thebetweenlands:coarse_islands",
+          "generators": [
+            "thebetweenlands:coarse_islands"
+          ],
           "parameters": {
             "depth": -0.5,
-            "scale": 0.4,
-            "weight": 16
+            "scale": 0.4
           }
         },
         {
           "biome": "thebetweenlands:raised_isles",
+          "generators": [
+            "thebetweenlands:coarse_islands"
+          ],
           "parameters": {
             "depth": -0.5,
-            "scale": 0.4,
-            "weight": 16
+            "scale": 0.4
           }
         },
         {
           "biome": "thebetweenlands:sludge_plains",
-          "generators": "thebetweenlands:flat_land_sludge_plains",
+          "generators": [
+            "thebetweenlands:flat_land_sludge_plains"
+          ],
           "parameters": {
             "depth": -0.5,
-            "scale": 0.3,
-            "weight": 5
+            "scale": 0.3
           }
         },
         {
           "biome": "thebetweenlands:eroded_marsh",
-          "generators": "thebetweenlands:eroded_marsh_islands",
+          "generators": [
+            "thebetweenlands:eroded_marsh_islands"
+          ],
           "parameters": {
             "depth": -0.1,
-            "scale": 0.11,
-            "weight": 4
+            "scale": 0.11
           }
         },
         {
           "biome": "thebetweenlands:marsh",
-          "generators": "thebetweenlands:marsh_islands",
+          "generators": [
+            "thebetweenlands:marsh_islands"
+          ],
           "parameters": {
             "depth": -0.1,
-            "scale": 0.11,
-            "weight": 10
+            "scale": 0.11
           }
         },
         {
           "biome": "thebetweenlands:swamplands_clearing",
           "parameters": {
             "depth": 0.2,
-            "scale": 0.1,
-            "weight": 0
+            "scale": 0.1
           }
         },
         {
           "biome": "thebetweenlands:sludge_plains_clearing",
           "parameters": {
             "depth": 0.4,
-            "scale": 0.05,
-            "weight": 0
+            "scale": 0.05
           }
         }
       ],
       "surface_depth": 0.46875
+    },
+    "bl_settings": {
+      "biome_weight_groups": [],
+      "global_generators": []
     },
     "settings": "thebetweenlands:the_betweenlands"
   }

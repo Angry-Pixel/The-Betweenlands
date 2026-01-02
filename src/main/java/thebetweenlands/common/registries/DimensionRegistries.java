@@ -14,11 +14,14 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.world.biome.BiomeWeightGroups;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
+import thebetweenlands.common.world.gen.BetweenlandsChunkGeneratorSettings;
+import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -69,7 +72,7 @@ public class DimensionRegistries {
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
-				DensityFunctions.zero(), // TODO add a density function
+				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero()
@@ -90,15 +93,29 @@ public class DimensionRegistries {
 		HolderGetter<Biome> biome = context.lookup(Registries.BIOME);
 		HolderGetter<ConfiguredEarlyGenerator<?, ?>> generators = context.lookup(BLRegistries.Keys.CONFIGURED_GENERATORS);
 
+		final int biomeSize = 4;
 		BiomeSource biomeSource = new BetweenlandsBiomeSource(
 			BiomeRegistry.biomeParameters(biome, generators),
+			BiomeLayerRegistry.betweenlandsBiomeLayers(biome, BiomeRegistry.biomePlacementWeights(biome), biomeSize),
 			0.46875F, //affects the base height of all biomes
 			1.0F,
-			4,
+			biomeSize,
 			biome);
+
+
+		BetweenlandsChunkGeneratorSettings blSettings = new BetweenlandsChunkGeneratorSettings(
+				BiomeWeightGroups.builder(biome)
+//					.addBiomeGroup(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH) // Debug to check this actually works
+					.build(),
+				List.of()
+			);
 
 		context.register(LEVEL_STEM_KEY, new LevelStem(
 			dimTypes.getOrThrow(DIMENSION_TYPE_KEY),
-			new BetweenlandsChunkGenerator(biomeSource, noiseGenSettings.getOrThrow(NOISE_SETTINGS_KEY))));
+			new BetweenlandsChunkGenerator(
+					biomeSource,
+					noiseGenSettings.getOrThrow(NOISE_SETTINGS_KEY),
+					blSettings
+				)));
 	}
 }

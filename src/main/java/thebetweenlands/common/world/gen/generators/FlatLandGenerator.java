@@ -2,7 +2,6 @@ package thebetweenlands.common.world.gen.generators;
 
 import java.util.EnumSet;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.mojang.serialization.Codec;
 
@@ -16,19 +15,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
-import thebetweenlands.api.world.BiomeWeights;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
+import thebetweenlands.api.world.biome.BiomeWeights;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
-import thebetweenlands.common.world.gen.generators.util.BiSimplexCache;
+import thebetweenlands.common.world.gen.generators.util.ColumnVolumeResult;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
+import thebetweenlands.common.world.gen.util.BiSimplexCache;
+import thebetweenlands.common.world.gen.util.BiSimplexData;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfiguration> {
 
+	// Cache so we don't have to re-create the simplex noise every execution
+	protected final BiSimplexCache noiseCache = new BiSimplexCache(4, 2);
+	
 	public FlatLandGenerator(Codec<FlatLandGeneratorConfiguration> codec) {
 		super(codec);
 	}
@@ -38,47 +41,12 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		return EnumSet.of(ExtraChunkInfoTypes.BIOME_WEIGHTS);
 	}
 
-	// Cache so we don't have to re-create the simplex noise every execution
-	// Technically, one volatile field should be equally safe (and faster) because the data is immutable and only read once.
-	// However, the atomic reference makes it very clear that this data may be read on multiple threads at once, 
-	//          and is much harder to accidentally make thread-unsafe in future.
-	protected final AtomicReference<BiSimplexCache> noiseCacheReference = new AtomicReference<>();
-
-	// Profile results from atomic cache vs creating a new instance each time:
-	//     Without atomic cache (new instance each time):
-	//         Approx 11800000 nanoseconds (~11.8 millis) on the first run of each thread (first 8 chunks generated)
-	//         Approx 300000 nanoseconds (~0.30 millis) on each subsequent run
-	//     With atomic cache:
-	//         Approx 17300000 nanoseconds (~17.3 millis) on the first run of each thread (first 8 chunks generated)
-	//         Approx 2700 nanoseconds (~0.0027 millis) on each subsequent run
-	// Bonus non-atomic cache results:
-	//    Two separate volatile SimplexCache fields:
-	//        Approx 16200000 nanoseconds (~16.2 millis) on the first run of each thread (first 8 chunks generated)
-	//        Approx 1500 nanoseconds (~0.0015 millis) on each subsequent run
-	//    One volatile BiSimplexCache field:
-	//        Approx 16000000 nanoseconds (~16.0 millis) on the first run of each thread (first 8 chunks generated)
-	//        Approx 1000 nanoseconds (~0.0010 millis) on each subsequent run
-	protected BiSimplexCache getNoise(long seed) {
-		return this.noiseCacheReference.updateAndGet((biSimplexCache) -> {
-			if(biSimplexCache != null && biSimplexCache.worldSeed() == seed) {
-				return biSimplexCache;
-			}
-			
-			// If it doesn't exist or has a different seed than expected, create noise with the correct seed
-			LegacyRandomSource random = new LegacyRandomSource(seed);
-
-			BLLegacyPerlinSimplexNoise landNoiseGen = new BLLegacyPerlinSimplexNoise(random, 4);
-			BLLegacyPerlinSimplexNoise riverNoiseGen = new BLLegacyPerlinSimplexNoise(random, 2);
-			return new BiSimplexCache(seed, landNoiseGen, riverNoiseGen);
-		});
-	}
-
 	@Override
 	public boolean place(EarlyGenerationContext<FlatLandGeneratorConfiguration> context) {
 		long seed = context.worldSeed();
 
 		// Get or create noise generators for this seed
-		BiSimplexCache noise = getNoise(seed);
+		BiSimplexData noise = this.noiseCache.getNoise(seed);
 
 		BLLegacyPerlinSimplexNoise landNoiseGen = noise.first();
 		BLLegacyPerlinSimplexNoise riverNoiseGen = noise.second();
@@ -92,26 +60,8 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 
 		double[] landNoise = computeLandNoise(landNoiseGen, chunkPos, config.landNoiseScale());
 		double[] riverNoise = computeRiverNoise(riverNoiseGen, chunkPos, config.riverNoiseScale());
-
-		int[] minBlockY = new int[256];
-		int[] maxBlockY = new int[256];
 		
-		IntIntPair minHeightMaxHeight = computeColumnBlocks(context, chunkPos, landNoise, riverNoise, minBlockY, maxBlockY);
-		int totalMinBlockY = minHeightMaxHeight.leftInt();
-		int totalMaxBlockY = minHeightMaxHeight.rightInt();
-
-//		TheBetweenlands.LOGGER.info("Generated noise values for chunk {}: Global Min = {}, Global Max = {}, Min Array = {}, Max Array = {}", chunkPos, totalMinBlockY, totalMaxBlockY, minBlockY, maxBlockY);
-		
-		// If the min block is above the max block, then no blocks can be placed
-		if(totalMinBlockY + 1 > totalMaxBlockY - 1) {
-			return false;
-		}
-
-		// Minimum section index (inclusive) that needs blocks placed
-		int minSectionIndex = chunkAccess.getSectionIndex(totalMinBlockY + 1);
-
-		// Maximum section index (inclusive) that needs blocks placed
-		int maxSectionIndex = chunkAccess.getSectionIndex(totalMaxBlockY - 1);
+		ColumnVolumeResult columnBlocks = computeColumnBlocks(context, chunkPos, landNoise, riverNoise);
 		
 		// The block we will be setting
 		BlockState terrainBlock = context.blockGenerator().defaultTerrainState();
@@ -119,56 +69,14 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		// The heightmaps (for updating)
 		ChunkHeightmaps heightmaps = context.chunkHeightmaps();
 		
-		for(int sectionIndex = minSectionIndex; sectionIndex <= maxSectionIndex; ++sectionIndex) {
-			// The section we'll be setting blocks in
-			LevelChunkSection section = chunkAccess.getSection(sectionIndex);
-			
-			// The y value of block 0 in this section
-			int sectionMinY = SectionPos.sectionToBlockCoord(chunkAccess.getSectionYFromSectionIndex(sectionIndex));
-			
-			for(int x = 0; x < 16; ++x) {
-				for(int z = 0; z < 16; ++z) {
-					final int index = x * 16 + z;
-					
-					final int yMin = Math.max(
-							minBlockY[index] - sectionMinY + 1,
-							0
-						);
-					
-					// If lowest block for this x/z is above this section, don't place anything
-					if(yMin >= 16) {
-						continue;
-					}
-					
-					final int yMax = Math.min(
-							maxBlockY[index] - sectionMinY - 1,
-							15
-						);
-					
-					// if highest block for this x/z is below this section, don't place anything
-					if(yMax < 0) {
-						continue;
-					}
-					
-					for(int y = yMin; y <= yMax; ++y) {
-						// Important: disable locks since the section was already acquired by the chunk generator
-						section.setBlockState(x, y, z, terrainBlock, false);
-						heightmaps.update(x, sectionMinY + y, z, terrainBlock);
-					}
-				}
-			}
-		}
-		
-		return true;
+		return ColumnVolumeResult.placeColumnVolumeResult(columnBlocks, chunkAccess, terrainBlock, heightmaps);
 	}
 
 	/**
 	 * Computes the min (exclusive) and max (exclusive) height that blocks will need to be placed in each column
-	 * @param minBlockYOut the output array for the minimum height that blocks need to be placed in each column
-	 * @param maxBlockYOut the output array for the maximum height that blocks need to be placed in each column
-	 * @return an int pair containing the global minimum height to set (left) and global maximum height to set (right) of the entire chunk
+	 * @return a {@linkplain ColumnVolumeResult} describing the blocks that need to be placed in each column
 	 */
-	public IntIntPair computeColumnBlocks(EarlyGenerationContext<FlatLandGeneratorConfiguration> context, ChunkPos chunkPos, double[] landNoise, double[] riverNoise, int[] minBlockYOut, int[] maxBlockYOut) {
+	public ColumnVolumeResult computeColumnBlocks(EarlyGenerationContext<FlatLandGeneratorConfiguration> context, ChunkPos chunkPos, double[] landNoise, double[] riverNoise) {
 		// Get info on where these blocks should even go
 		FlatLandGeneratorConfiguration config = context.config();
 		// Use heightmap so we don't have to manually check each block
@@ -183,6 +91,8 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 		
 		int minHeightTotal = waterLevel;
 		int maxHeightTotal = waterLevel;
+		int[] minBlockYOut = new int[256];
+		int[] maxBlockYOut = new int[256];
 		
 		for(int x = 0; x < 16; ++x) {
 			for(int z = 0; z < 16; ++z) {
@@ -239,7 +149,7 @@ public class FlatLandGenerator extends EarlyGenerator<FlatLandGeneratorConfigura
 			}
 		}
 		
-		return IntIntPair.of(minHeightTotal, maxHeightTotal);
+		return new ColumnVolumeResult(minBlockYOut, maxBlockYOut, minHeightTotal, maxHeightTotal);
 	}
 	
 	public static double[] computeLandNoise(BLLegacyPerlinSimplexNoise landNoise, ChunkPos pos, double scale) {

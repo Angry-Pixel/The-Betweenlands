@@ -3,7 +3,6 @@ package thebetweenlands.common.registries;
 import java.util.List;
 
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -16,8 +15,8 @@ import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
-import thebetweenlands.common.world.gen.warp.TerrainPoint;
 
 public class BiomeRegistry {
 
@@ -74,6 +73,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+				
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.HEARTHGROVE_TREE)
@@ -81,6 +82,8 @@ public class BiomeRegistry {
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.TALL_CATTAIL_COMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.CATTAIL_PATCH_UNCOMMON)
+				
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM)
 				.build()
 			)
 			.build());
@@ -100,6 +103,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+				
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_COMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.RUBBER_TREE)
@@ -133,6 +138,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.RAW_GENERATION, PlacedFeatureRegistry.CRAG_SPIRES)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
 				.build()
 			)
 			.build());
@@ -150,6 +157,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+					
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
 
@@ -174,6 +183,8 @@ public class BiomeRegistry {
 				.build())
 			.mobSpawnSettings(MobSpawnSettings.EMPTY)
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ALGAE)
+				
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SAP_TREE_COMMON)
 
@@ -302,27 +313,57 @@ public class BiomeRegistry {
 			.build());
 	}
 
-	// TODO make a builder so this looks nicer
-	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry, HolderGetter<ConfiguredEarlyGenerator<?, ?>> configuredGenerators) {
+	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry, HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry) {
 		return List.of(
-			pairBiome(registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS),
-			pairBiome(registry, 25, -0.2F, 0.1F, SWAMPLANDS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS))),
-			pairBiome(registry, 12, -1.2F, 0.5F, DEEP_WATERS),
-			pairBiome(registry, 16, -0.5F, 0.4F, COARSE_ISLANDS),
-			pairBiome(registry, 16, -0.5F, 0.4F, RAISED_ISLES),
-			pairBiome(registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS))),
-			pairBiome(registry, 4, -0.1F, 0.11F, ERODED_MARSH, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS))),
-			pairBiome(registry, 10, -0.1F, 0.11F, MARSH, HolderSet.direct(configuredGenerators.getOrThrow(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS))),
-			pairBiome(registry, 0, 0.2F, 0.1F, SWAMPLANDS_CLEARING),
-			pairBiome(registry, 0, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
+			BLBiomeData.builder(generatorRegistry, registry, -0.125F, 0.475F, PATCHY_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.2F, 0.1F, SWAMPLANDS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -1.2F, 0.5F, DEEP_WATERS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.DEEP_WATERS_SIMPLEX_TERRAIN)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.5F, 0.4F, COARSE_ISLANDS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.COARSE_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.5F, 0.4F, RAISED_ISLES)
+				.addGenerator(EarlyGeneratorRegistry.Configured.COARSE_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.5F, 0.3F, SLUDGE_PLAINS)
+				.addGenerator(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, ERODED_MARSH)
+				.addGenerator(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, MARSH)
+				.addGenerator(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 0.2F, 0.1F, SWAMPLANDS_CLEARING)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
+				.build()
 		);
 	}
 
-	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome, HolderSet<ConfiguredEarlyGenerator<?, ?>> generators) {
-		return new BLBiomeData(registry.getOrThrow(biome), new TerrainPoint((short)weight, depth, scale), generators);
-	}
-
-	private static BLBiomeData pairBiome(HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
-		return pairBiome(registry, weight, depth, scale, biome, HolderSet.empty());
+	public static List<BLWeightPoint> biomePlacementWeights(HolderGetter<Biome> registry) {
+		return List.of(
+				BLWeightPoint.of(registry, PATCHY_ISLANDS, 20),
+				BLWeightPoint.of(registry, SWAMPLANDS, 25),
+				BLWeightPoint.of(registry, DEEP_WATERS, 12),
+				BLWeightPoint.of(registry, COARSE_ISLANDS, 16),
+				BLWeightPoint.of(registry, RAISED_ISLES, 16),
+				BLWeightPoint.of(registry, SLUDGE_PLAINS, 5),
+				BLWeightPoint.of(registry, ERODED_MARSH, 4),
+				BLWeightPoint.of(registry, MARSH, 10)
+		);
 	}
 }

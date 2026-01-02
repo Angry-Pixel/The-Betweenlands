@@ -1,0 +1,41 @@
+{
+  "type": "thebetweenlands:coarse_islands",
+  "config": {
+    "crag_base_state": {
+      "Name": "thebetweenlands:cragrock"
+    },
+    "crag_top_states": [
+      {
+        "Name": "thebetweenlands:mossy_cragrock_top"
+      },
+      {
+        "Name": "thebetweenlands:mossy_cragrock_bottom",
+        "Properties": {
+          "is_bottom": "true"
+        }
+      }
+    ],
+    "island_height_scale": 1.0,
+    "island_min_height": 1,
+    "noise": {
+      "crag_noise": {
+        "noise_octaves": 5,
+        "noise_scale": 0.45,
+        "noise_value_multiplier": 0.47619047619047616,
+        "noise_value_offset": 2.0
+      },
+      "island_noise": {
+        "noise_octaves": 4,
+        "noise_scale": 0.048,
+        "noise_value_multiplier": 1.1111111111111112,
+        "noise_value_offset": 2.1
+      }
+    },
+    "seafloor": {
+      "type": "thebetweenlands:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    "sealevel": 120,
+    "use_biome_weights": true
+  }
+}

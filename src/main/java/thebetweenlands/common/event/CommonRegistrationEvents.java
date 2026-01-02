@@ -207,6 +207,7 @@ public class CommonRegistrationEvents {
 		event.register(BLRegistries.WORLD_STORAGE);
 
 		event.register(BLRegistries.EARLY_GENERATORS);
+		event.register(BLRegistries.BIOME_LAYER_TYPE);
 	}
 
 	private static void extraRegistration(RegisterEvent event) {

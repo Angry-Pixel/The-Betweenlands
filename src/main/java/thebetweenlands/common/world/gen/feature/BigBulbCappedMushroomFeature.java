@@ -1,100 +1,101 @@
 package thebetweenlands.common.world.gen.feature;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
 
-public class BigBulbCappedMushroomFeature extends Feature<NoneFeatureConfiguration> {
+public class BigBulbCappedMushroomFeature extends Feature<BigBulbCappedMushroomFeatureConfiguration> {
 
-	public static final BlockState HEAD = BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get().defaultBlockState();
-	public static final BlockState STALK = BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState();
-
-	public BigBulbCappedMushroomFeature(Codec<NoneFeatureConfiguration> codec) {
+	public BigBulbCappedMushroomFeature(Codec<BigBulbCappedMushroomFeatureConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-		return generate(context.level(), context.random(), context.origin());
-	}
-
-	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
-		int height = rand.nextInt(2) + 8;
+	public boolean place(FeaturePlaceContext<BigBulbCappedMushroomFeatureConfiguration> context) {
+		WorldGenLevel level = context.level();
+		RandomSource rand = context.random();
+		BlockPos pos = context.origin();
+		BigBulbCappedMushroomFeatureConfiguration config = context.config();
+		
+		int height = rand.nextInt(config.minHeightInclusive(), config.maxHeightInclusive() + 1);
 		int maxRadius = 2;
-		BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-
-		for (int xx = x - maxRadius; xx <= x * maxRadius; xx++) {
-			for (int zz = z - maxRadius; zz <= z * maxRadius; zz++) {
-				for (int yy = y  + 2; yy < y + height; yy++) {
-					if (!level.getBlockState(checkPos.set(xx, yy, zz)).isAir()) {
+		
+		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++) {
+			mutablePos.setX(xx);
+			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++) {
+				mutablePos.setZ(zz);
+				for (int yy = y + 2; yy < y + height; yy++) {
+					mutablePos.setY(yy);
+					if (!level.getBlockState(mutablePos).isAir()) {
 						return false;
 					}
 				}
 			}
 		}
 
+		mutablePos.set(x, 0, z);
 		for (int yy = y; yy < y + height; yy++) {
+			mutablePos.setY(yy);
 			if (yy == y) {
-				level.setBlock(pos.offset(x, yy, z), STALK.setValue(BulbCappedMushroomStemBlock.GROUND, true), 2);
+				level.setBlock(mutablePos, config.stalkBottomState(), 2);
 			} else {
-				level.setBlock(pos.offset(x, yy, z), STALK, 2);
+				level.setBlock(mutablePos, config.stalkState(), 2);
 			}
 
 			if(yy == y + height -1) {
-				generateHead(level, pos.offset(x, yy, z));
+				generateHead(level, mutablePos.immutable(), config.headState());
 			}
 		}
 
-		//TODO: generate bulb capped mushrooms
+		// Generate bulb capped mushrooms
+		config.patchFeature().ifPresent((feature) -> {
+			feature.value().place(context.level(), context.chunkGenerator(), context.random(), context.origin());
+		});
 		return true;
 	}
 
-	private void generateHead(WorldGenLevel level, BlockPos pos) {
-		setHead(level, pos);
-		setHead(level, pos.offset(0, -1, 0));
+	// During world generation, features are provided with a 3x3 region of chunks, centered on the chunk being generated, that they can safely generate into.
+	private void generateHead(WorldGenLevel level, BlockPos pos, BlockState headState) {
+		level.setBlock(pos, headState, 2);
+		level.setBlock(pos.offset(0, -1, 0), headState, 2);
 
-		int startY = pos.getY();
+		final int startX = pos.getX();
+		final int startY = pos.getY();
+		final int startZ = pos.getZ();
+		MutableBlockPos blockPos = pos.mutable();
 		for (int yy = startY; yy >= startY - 4; yy--) {
-			pos = pos.offset(0, yy, 0);
-			setHead(level, pos.offset(1, 0, 0));
-			setHead(level, pos.offset(-1, 0, 0));
-			setHead(level, pos.offset(0, 0, 1));
-			setHead(level, pos.offset(0, 0, -1));
-			setHead(level, pos.offset(1, 0, -1));
-			setHead(level, pos.offset(-1, 0, -1));
-			setHead(level, pos.offset(1, 0, 1));
-			setHead(level, pos.offset(1, 0, -1));
-			setHead(level, pos.offset(-1, 0, -1));
-
-			if (yy >= startY - 3 && yy <= startY - 1) {
-				setHead(level, pos.offset(-2, 0, 0));
-				setHead(level, pos.offset(2, 0, 0));
-				setHead(level, pos.offset(0, 0, -2));
-				setHead(level, pos.offset(0, 0, 2));
-				setHead(level, pos.offset(-2, 0, -1));
-				setHead(level, pos.offset(-2, 0, 1));
-				setHead(level, pos.offset(2, 0, -1));
-				setHead(level, pos.offset(2, 0, 1));
-				setHead(level, pos.offset(-1, 0, 2));
-				setHead(level, pos.offset(1, 0, 2));
-				setHead(level, pos.offset(-1, 0, -2));
-				setHead(level, pos.offset(1, 0, -2));
+			blockPos.setY(yy);
+			
+			int distance = 1;
+			if(yy >= startY - 3 && yy <= startY - 1) {
+				distance = 2;
+			}
+			
+			for(int x = startX - distance; x <= startX + distance; ++x) {
+				blockPos.setX(x);
+				int unedgeDistance = distance;
+				if(x == startX - distance || x == startX + distance) {
+					unedgeDistance = 1;
+				}
+				for(int z = startZ - unedgeDistance; z <= startZ + unedgeDistance; ++z) {
+					blockPos.setZ(z);
+					if(x != startX || z != startZ) {
+						level.setBlock(blockPos, headState, 2);
+					}
+				}
 			}
 		}
-	}
-
-	private void setHead(WorldGenLevel level, BlockPos pos) {
-		level.setBlock(pos, HEAD, 2);
 	}
 }

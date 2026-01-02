@@ -1,0 +1,22 @@
+{
+  "feature": "thebetweenlands:crag_spires",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 1
+    },
+    {
+      "type": "thebetweenlands:crag_spires",
+      "ignore_biomes": false,
+      "spire_check_radius": 4,
+      "spire_height_factor": 12.0,
+      "spire_noise": {
+        "noise_octaves": 4,
+        "noise_scale": 0.16,
+        "noise_value_multiplier": 0.6666666666666666,
+        "noise_value_offset": 2.4
+      },
+      "use_biome_weights": true
+    }
+  ]
+}

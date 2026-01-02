@@ -34,4 +34,5 @@ public abstract class EarlyGenerator<GC extends EarlyGeneratorConfiguration> {
 	}
 	
 	public abstract boolean place(EarlyGenerationContext<GC> context);
+	
 }

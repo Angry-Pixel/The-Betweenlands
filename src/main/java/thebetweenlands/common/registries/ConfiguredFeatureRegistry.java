@@ -1,19 +1,43 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
+
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.*;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.feature.config.*;
+import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
+import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
+import thebetweenlands.common.world.gen.feature.config.BigBulbCappedMushroomFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.CragrockSpiresFeatureConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PoolConfiguration;
+import thebetweenlands.common.world.gen.feature.config.RottenLogConfiguration;
+import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.ConstantHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
+import thebetweenlands.common.world.gen.util.BlockHeightSelectors.OffsetHeightSelector;
+import thebetweenlands.common.world.gen.util.config.SimplexNoiseConfiguration;
 
 public class ConfiguredFeatureRegistry {
 
@@ -127,6 +151,7 @@ public class ConfiguredFeatureRegistry {
 	public static final RuleTest PITSTONE_TEST = new BlockStateMatchTest(BlockRegistry.PITSTONE.get().defaultBlockState());
 
 	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+		
 		context.register(WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_TREE.get(), FeatureConfiguration.NONE));
 		context.register(ROTTEN_WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_WEEDWOOD_TREE.get(), NoneFeatureConfiguration.NONE));
 		context.register(SAP_TREE, new ConfiguredFeature<>(FeatureRegistry.SAP_TREE.get(), FeatureConfiguration.NONE));
@@ -211,8 +236,6 @@ public class ConfiguredFeatureRegistry {
 			new PebbleClusterConfiguration(BlockRegistry.BETWEENSTONE_PEBBLE.get().defaultBlockState(), 8, 128, false)));
 		context.register(PEBBLE_PATCH_WATER, new ConfiguredFeature<>(FeatureRegistry.PEBBLE_CLUSTER.get(),
 			new PebbleClusterConfiguration(BlockRegistry.BETWEENSTONE_PEBBLE.get().defaultBlockState(), 8, 128, true)));
-		context.register(BULB_CAPPED_MUSHROOM_PATCH, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(),
-			FeatureConfiguration.NONE));
 		context.register(NETTLE_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 			patch(BlockRegistry.NETTLE.get(), 3, 128)));
 		context.register(ARROW_ARUM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
@@ -284,12 +307,39 @@ public class ConfiguredFeatureRegistry {
 		context.register(ROTTEN_LOGS, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_LOG.get(),
 			new RottenLogConfiguration(4, 5, 2, 3)));
 
-		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), FeatureConfiguration.NONE));
+		final Holder.Reference<ConfiguredFeature<?, ?>> bulbCappedMushroomPatchHolder = context.register(BULB_CAPPED_MUSHROOM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+			patch(BlockRegistry.BULB_CAPPED_MUSHROOM.get(), 5, 40)));
+		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), 
+				new BigBulbCappedMushroomFeatureConfiguration(
+						8, 9, 
+						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y).setValue(BulbCappedMushroomStemBlock.GROUND, true), 
+						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y), 
+						BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get().defaultBlockState(), 
+						Optional.of(bulbCappedMushroomPatchHolder)
+					)
+				));
+		
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
 
 		context.register(TAR_POOL_DUNGEON, new ConfiguredFeature<>(FeatureRegistry.TAR_POOL_DUNGEON.get(), FeatureConfiguration.NONE));
 		context.register(UNDERGROUND_DUNGEON, new ConfiguredFeature<>(FeatureRegistry.UNDERGROUND_DUNGEON.get(), FeatureConfiguration.NONE));
+		
+		context.register(ALGAE, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.ALGAE.get()))));
+
+		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
+				new CragrockSpiresFeatureConfiguration(
+						SimplexNoiseConfiguration.of(4, 0.16D, 1.0D / 1.5D, 2.4),
+						12, 3,
+						new ConstantHeightSelector(TheBetweenlands.LAYER_HEIGHT),
+						new OffsetHeightSelector(-5, new HeightmapBasedHeightSelector(Heightmap.Types.OCEAN_FLOOR_WG)),
+						true,
+						BlockRegistry.CRAGROCK.get().defaultBlockState(),
+						List.of(
+							BlockRegistry.MOSSY_CRAGROCK_TOP.get().defaultBlockState(),
+							BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get().defaultBlockState().setValue(MossyCragrockBottomBlock.IS_BOTTOM, true)
+						)
+					)));
 	}
 
 	private static RandomPatchConfiguration patch(Block block, int spread, int tries) {

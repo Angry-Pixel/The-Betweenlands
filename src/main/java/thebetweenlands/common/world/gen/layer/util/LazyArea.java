@@ -2,6 +2,8 @@ package thebetweenlands.common.world.gen.layer.util;
 
 import it.unimi.dsi.fastutil.longs.Long2IntLinkedOpenHashMap;
 import net.minecraft.world.level.ChunkPos;
+import thebetweenlands.api.world.biome.layer.Area;
+import thebetweenlands.api.world.biome.layer.PixelTransformer;
 
 public class LazyArea implements Area {
     private final PixelTransformer transformer;

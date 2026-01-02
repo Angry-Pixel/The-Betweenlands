@@ -2,45 +2,62 @@ package thebetweenlands.common.world.gen.layer;
 
 import java.util.List;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
+import thebetweenlands.api.world.biome.layer.Area;
+import thebetweenlands.api.world.biome.layer.BiomeLayer;
+import thebetweenlands.api.world.biome.layer.SimpleBiomeLayer;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.layer.util.AreaTransformer0;
-import thebetweenlands.common.world.gen.layer.util.Context;
-import thebetweenlands.common.world.gen.warp.BLBiomeData;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 
-public class BetweenlandsBiomeLayer implements AreaTransformer0 {
-	private final HolderGetter<Biome> registry;
-	private final List<BLBiomeData> biomes;
-	private int totalWeight = 0;
+public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
+	
+	public static final MapCodec<BetweenlandsBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
+			instance -> instance.group(
+					BLWeightPoint.CODEC.listOf().fieldOf("biomes").forGetter(o -> o.biomes)
+				).apply(instance, BetweenlandsBiomeLayer::new)
+		);
+	
+	private final List<BLWeightPoint> biomes;
+	private final int totalWeight;
 
-	public BetweenlandsBiomeLayer(HolderGetter<Biome> registry, List<BLBiomeData> biomes) {
-		this.registry = registry;
+	public BetweenlandsBiomeLayer(List<BLWeightPoint> biomes) {
 		this.biomes = biomes;
 
-		for (BLBiomeData biome : biomes) {
-			if (biome.terrainPoint().weight() > 0 && !BetweenlandsConfig.debug) {
-				this.totalWeight += biome.terrainPoint().weight();
+		int totalWeight = 0;
+		for (BLWeightPoint biome : biomes) {
+			if (biome.weight() > 0 && !BetweenlandsConfig.debug) {
+				totalWeight += biome.weight();
 			}
 		}
+		this.totalWeight = totalWeight;
 	}
 
 	@Override
-	public int apply(Context context, int x, int z) {
-		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, context.nextRandom(totalWeight)).getKey(), registry);
+	public MapCodec<? extends BiomeLayer> codec() {
+		return CODEC;
 	}
 
-	public Holder<Biome> getRandomItem(List<BLBiomeData> list, int weight) {
+	@Override
+	public <A extends Area> int apply(BiomeLayerContext<A> context, RandomSource random, int x, int z) {
+		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(this.biomes, random.nextInt(this.totalWeight)));
+	}
+	
+	public Holder<Biome> getRandomItem(List<BLWeightPoint> list, int weight) {
 		if (list.isEmpty())
 			return null;
 
-		if(totalWeight == 0)
+		if(this.totalWeight == 0)
 			return list.getFirst().biome();
 
-		for (BLBiomeData obj : list) {
-			weight -= obj.terrainPoint().weight();
+		for (BLWeightPoint obj : list) {
+			weight -= obj.weight();
 			if (weight < 0)
 				return obj.biome();
 		}
