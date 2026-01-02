@@ -12,104 +12,35 @@
             "biomes": [
               {
                 "biome": "thebetweenlands:patchy_islands",
-                "parameters": {
-                  "depth": -0.125,
-                  "scale": 0.475,
-                  "weight": 20
-                }
+                "weight": 20
               },
               {
                 "biome": "thebetweenlands:swamplands",
-                "generators": [
-                  "thebetweenlands:flat_land_swamplands"
-                ],
-                "parameters": {
-                  "depth": -0.2,
-                  "scale": 0.1,
-                  "weight": 25
-                }
+                "weight": 25
               },
               {
                 "biome": "thebetweenlands:deep_waters",
-                "generators": [
-                  "thebetweenlands:deep_waters_simplex_terrain"
-                ],
-                "parameters": {
-                  "depth": -1.2,
-                  "scale": 0.5,
-                  "weight": 12
-                }
+                "weight": 12
               },
               {
                 "biome": "thebetweenlands:coarse_islands",
-                "generators": [
-                  "thebetweenlands:coarse_islands"
-                ],
-                "parameters": {
-                  "depth": -0.5,
-                  "scale": 0.4,
-                  "weight": 16
-                }
+                "weight": 16
               },
               {
                 "biome": "thebetweenlands:raised_isles",
-                "generators": [
-                  "thebetweenlands:coarse_islands"
-                ],
-                "parameters": {
-                  "depth": -0.5,
-                  "scale": 0.4,
-                  "weight": 16
-                }
+                "weight": 16
               },
               {
                 "biome": "thebetweenlands:sludge_plains",
-                "generators": [
-                  "thebetweenlands:flat_land_sludge_plains"
-                ],
-                "parameters": {
-                  "depth": -0.5,
-                  "scale": 0.3,
-                  "weight": 5
-                }
+                "weight": 5
               },
               {
                 "biome": "thebetweenlands:eroded_marsh",
-                "generators": [
-                  "thebetweenlands:eroded_marsh_islands"
-                ],
-                "parameters": {
-                  "depth": -0.1,
-                  "scale": 0.11,
-                  "weight": 4
-                }
+                "weight": 4
               },
               {
                 "biome": "thebetweenlands:marsh",
-                "generators": [
-                  "thebetweenlands:marsh_islands"
-                ],
-                "parameters": {
-                  "depth": -0.1,
-                  "scale": 0.11,
-                  "weight": 10
-                }
-              },
-              {
-                "biome": "thebetweenlands:swamplands_clearing",
-                "parameters": {
-                  "depth": 0.2,
-                  "scale": 0.1,
-                  "weight": 0
-                }
-              },
-              {
-                "biome": "thebetweenlands:sludge_plains_clearing",
-                "parameters": {
-                  "depth": 0.4,
-                  "scale": 0.05,
-                  "weight": 0
-                }
+                "weight": 10
               }
             ],
             "random_seed": 100
@@ -310,8 +241,7 @@
           "biome": "thebetweenlands:patchy_islands",
           "parameters": {
             "depth": -0.125,
-            "scale": 0.475,
-            "weight": 20
+            "scale": 0.475
           }
         },
         {
@@ -321,8 +251,7 @@
           ],
           "parameters": {
             "depth": -0.2,
-            "scale": 0.1,
-            "weight": 25
+            "scale": 0.1
           }
         },
         {
@@ -332,8 +261,7 @@
           ],
           "parameters": {
             "depth": -1.2,
-            "scale": 0.5,
-            "weight": 12
+            "scale": 0.5
           }
         },
         {
@@ -343,8 +271,7 @@
           ],
           "parameters": {
             "depth": -0.5,
-            "scale": 0.4,
-            "weight": 16
+            "scale": 0.4
           }
         },
         {
@@ -354,8 +281,7 @@
           ],
           "parameters": {
             "depth": -0.5,
-            "scale": 0.4,
-            "weight": 16
+            "scale": 0.4
           }
         },
         {
@@ -365,8 +291,7 @@
           ],
           "parameters": {
             "depth": -0.5,
-            "scale": 0.3,
-            "weight": 5
+            "scale": 0.3
           }
         },
         {
@@ -376,8 +301,7 @@
           ],
           "parameters": {
             "depth": -0.1,
-            "scale": 0.11,
-            "weight": 4
+            "scale": 0.11
           }
         },
         {
@@ -387,24 +311,21 @@
           ],
           "parameters": {
             "depth": -0.1,
-            "scale": 0.11,
-            "weight": 10
+            "scale": 0.11
           }
         },
         {
           "biome": "thebetweenlands:swamplands_clearing",
           "parameters": {
             "depth": 0.2,
-            "scale": 0.1,
-            "weight": 0
+            "scale": 0.1
           }
         },
         {
           "biome": "thebetweenlands:sludge_plains_clearing",
           "parameters": {
             "depth": 0.4,
-            "scale": 0.05,
-            "weight": 0
+            "scale": 0.05
           }
         }
       ],

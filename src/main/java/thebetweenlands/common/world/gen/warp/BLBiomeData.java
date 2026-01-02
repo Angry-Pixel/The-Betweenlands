@@ -28,23 +28,21 @@ public record BLBiomeData(Holder<Biome> biome, TerrainPoint terrainPoint, List<H
 		this(biome, terrainPoint, List.of());
 	}
 	
-	public static Builder builder(HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry, HolderGetter<Biome> registry, int weight, float depth, float scale, ResourceKey<Biome> biome) {
-		return new Builder(generatorRegistry, registry.getOrThrow(biome), weight, depth, scale);
+	public static Builder builder(HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry, HolderGetter<Biome> registry, float depth, float scale, ResourceKey<Biome> biome) {
+		return new Builder(generatorRegistry, registry.getOrThrow(biome), depth, scale);
 	}
 	
 	public static final class Builder {
 		private final HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry;
 		private final Holder<Biome> biome;
-		private final int weight;
 		private final float depth;
 		private final float scale;
 		
 		private final List<List<Holder<ConfiguredEarlyGenerator<?, ?>>>> generators;
 		
-		public Builder(HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry, Holder<Biome> biome, int weight, float depth, float scale) {
+		public Builder(HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry, Holder<Biome> biome, float depth, float scale) {
 			this.generatorRegistry = generatorRegistry;
 			this.biome = biome;
-			this.weight = weight;
 			this.depth = depth;
 			this.scale = scale;
 			
@@ -70,7 +68,7 @@ public record BLBiomeData(Holder<Biome> biome, TerrainPoint terrainPoint, List<H
 		}
 
 		public BLBiomeData build() {
-			return new BLBiomeData(biome, new TerrainPoint((short)weight, depth, scale), this.generators.stream().map(HolderSet::direct).collect(ImmutableList.toImmutableList()));
+			return new BLBiomeData(biome, new TerrainPoint(depth, scale), this.generators.stream().map(HolderSet::direct).collect(ImmutableList.toImmutableList()));
 		}
 	}
 }

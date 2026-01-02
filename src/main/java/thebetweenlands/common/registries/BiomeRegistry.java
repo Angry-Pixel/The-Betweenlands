@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 public class BiomeRegistry {
@@ -311,45 +312,57 @@ public class BiomeRegistry {
 			.build());
 	}
 
-	// TODO make a builder so this looks nicer
 	public static List<BLBiomeData> biomeParameters(HolderGetter<Biome> registry, HolderGetter<ConfiguredEarlyGenerator<?, ?>> generatorRegistry) {
 		return List.of(
-			BLBiomeData.builder(generatorRegistry, registry, 20, -0.125F, 0.475F, PATCHY_ISLANDS)
+			BLBiomeData.builder(generatorRegistry, registry, -0.125F, 0.475F, PATCHY_ISLANDS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 25, -0.2F, 0.1F, SWAMPLANDS)
+			BLBiomeData.builder(generatorRegistry, registry, -0.2F, 0.1F, SWAMPLANDS)
 				.addGenerator(EarlyGeneratorRegistry.Configured.FLAT_LAND_SWAMPLANDS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 12, -1.2F, 0.5F, DEEP_WATERS)
+			BLBiomeData.builder(generatorRegistry, registry, -1.2F, 0.5F, DEEP_WATERS)
 				.addGenerator(EarlyGeneratorRegistry.Configured.DEEP_WATERS_SIMPLEX_TERRAIN)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 16, -0.5F, 0.4F, COARSE_ISLANDS)
+			BLBiomeData.builder(generatorRegistry, registry, -0.5F, 0.4F, COARSE_ISLANDS)
 				.addGenerator(EarlyGeneratorRegistry.Configured.COARSE_ISLANDS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 16, -0.5F, 0.4F, RAISED_ISLES)
+			BLBiomeData.builder(generatorRegistry, registry, -0.5F, 0.4F, RAISED_ISLES)
 				.addGenerator(EarlyGeneratorRegistry.Configured.COARSE_ISLANDS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 5, -0.5F, 0.3F, SLUDGE_PLAINS)
+			BLBiomeData.builder(generatorRegistry, registry, -0.5F, 0.3F, SLUDGE_PLAINS)
 				.addGenerator(EarlyGeneratorRegistry.Configured.FLAT_LAND_SLUDGE_PLAINS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 4, -0.1F, 0.11F, ERODED_MARSH)
+			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, ERODED_MARSH)
 				.addGenerator(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 10, -0.1F, 0.11F, MARSH)
+			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, MARSH)
 				.addGenerator(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 0, 0.2F, 0.1F, SWAMPLANDS_CLEARING)
+			BLBiomeData.builder(generatorRegistry, registry, 0.2F, 0.1F, SWAMPLANDS_CLEARING)
 				.build(),
 				
-			BLBiomeData.builder(generatorRegistry, registry, 0, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
+			BLBiomeData.builder(generatorRegistry, registry, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
 				.build()
+		);
+	}
+
+	public static List<BLWeightPoint> biomePlacementWeights(HolderGetter<Biome> registry) {
+		return List.of(
+				BLWeightPoint.of(registry, PATCHY_ISLANDS, 20),
+				BLWeightPoint.of(registry, SWAMPLANDS, 25),
+				BLWeightPoint.of(registry, DEEP_WATERS, 12),
+				BLWeightPoint.of(registry, COARSE_ISLANDS, 16),
+				BLWeightPoint.of(registry, RAISED_ISLES, 16),
+				BLWeightPoint.of(registry, SLUDGE_PLAINS, 5),
+				BLWeightPoint.of(registry, ERODED_MARSH, 4),
+				BLWeightPoint.of(registry, MARSH, 10)
 		);
 	}
 }

@@ -37,6 +37,7 @@ import thebetweenlands.common.world.gen.layer.old.ThinMaskLayer;
 import thebetweenlands.common.world.gen.layer.old.ZoomIncrementLayer;
 import thebetweenlands.common.world.gen.layer.old.util.BigContext;
 import thebetweenlands.common.world.gen.layer.old.util.LazyAreaContextOld;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 import thebetweenlands.common.world.gen.layer.util.Layer;
 import thebetweenlands.common.world.gen.layer.util.LazyArea;
 import thebetweenlands.common.world.gen.layer.util.LazyAreaFactoryContext;
@@ -179,12 +180,12 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldData().worldGenOptions().seed();
 	}
 
-	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<BLBiomeData> biomes, int size) {
+	public static Layer makeLayers(long seed, HolderGetter<Biome> registry, List<BLWeightPoint> biomes, int size) {
 		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContextOld(25, seed, context), biomes, registry, size);
 		return new Layer(areaFactory);
 	}
 
-	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<BLBiomeData> biomes, HolderGetter<Biome> registry, int size) {
+	public static <A extends Area, C extends BigContext<A>> AreaFactory<A> makeLayers(LongFunction<C> context, List<BLWeightPoint> biomes, HolderGetter<Biome> registry, int size) {
 		AreaFactory<A> genLayer = new BetweenlandsBiomeLayerOld(registry, biomes).run(context.apply(100L));
 		genLayer = BetweenlandsBiomeSource.repeatZoom(2000L, genLayer, 2, context);
 

@@ -31,6 +31,7 @@ import thebetweenlands.common.world.gen.layer.SpreadBiomeLayer.Quadrant;
 import thebetweenlands.common.world.gen.layer.SurroundedBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ThinningMaskBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ZoomBiomeLayer;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 public class BiomeLayerRegistry {
@@ -90,7 +91,7 @@ public class BiomeLayerRegistry {
 
 	
 	
-	public static BiomeLayerConfigured betweenlands(HolderGetter<Biome> registry, List<BLBiomeData> biomes, long seed) {
+	public static BiomeLayerConfigured betweenlands(HolderGetter<Biome> registry, List<BLWeightPoint> biomes, long seed) {
 		return BiomeLayerConfigured.of(new BetweenlandsBiomeLayer(registry, biomes), seed);
 	}
 
@@ -273,7 +274,7 @@ public class BiomeLayerRegistry {
 		return BiomeLayerConfigured.unconfigured(new MaskMixerBiomeLayer(previous(), maskLayer));
 	}
 	
-	public static BiomeLayerConfigured betweenlandsBiomeLayers(HolderGetter<Biome> registry, List<BLBiomeData> biomeParameters, int biomeSize) {
+	public static BiomeLayerConfigured betweenlandsBiomeLayers(HolderGetter<Biome> registry, List<BLWeightPoint> biomeParameters, int biomeSize) {
 		
 		return sequence(
 			// Base layers

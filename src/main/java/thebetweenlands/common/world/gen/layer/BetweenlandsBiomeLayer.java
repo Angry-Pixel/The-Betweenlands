@@ -17,28 +17,28 @@ import thebetweenlands.api.world.biome.layer.SimpleBiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
-import thebetweenlands.common.world.gen.warp.BLBiomeData;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 
 public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
 	
 	public static final MapCodec<BetweenlandsBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
 					RegistryOps.retrieveGetter(Registries.BIOME),
-					BLBiomeData.CODEC.listOf().fieldOf("biomes").forGetter(o -> o.biomes)
+					BLWeightPoint.CODEC.listOf().fieldOf("biomes").forGetter(o -> o.biomes)
 				).apply(instance, BetweenlandsBiomeLayer::new)
 		);
 	
 	private final HolderGetter<Biome> registry;
-	private final List<BLBiomeData> biomes;
+	private final List<BLWeightPoint> biomes;
 	private int totalWeight = 0;
 
-	public BetweenlandsBiomeLayer(HolderGetter<Biome> registry, List<BLBiomeData> biomes) {
+	public BetweenlandsBiomeLayer(HolderGetter<Biome> registry, List<BLWeightPoint> biomes) {
 		this.registry = registry;
 		this.biomes = biomes;
 
-		for (BLBiomeData biome : biomes) {
-			if (biome.terrainPoint().weight() > 0 && !BetweenlandsConfig.debug) {
-				this.totalWeight += biome.terrainPoint().weight();
+		for (BLWeightPoint biome : biomes) {
+			if (biome.weight() > 0 && !BetweenlandsConfig.debug) {
+				this.totalWeight += biome.weight();
 			}
 		}
 	}
@@ -50,18 +50,18 @@ public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
 
 	@Override
 	public <A extends Area> int apply(BiomeLayerContext<A> context, RandomSource random, int x, int z) {
-		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, random.nextInt(totalWeight)));
+		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(this.biomes, random.nextInt(this.totalWeight)));
 	}
 	
-	public Holder<Biome> getRandomItem(List<BLBiomeData> list, int weight) {
+	public Holder<Biome> getRandomItem(List<BLWeightPoint> list, int weight) {
 		if (list.isEmpty())
 			return null;
 
 		if(this.totalWeight == 0)
 			return list.getFirst().biome();
 
-		for (BLBiomeData obj : list) {
-			weight -= obj.terrainPoint().weight();
+		for (BLWeightPoint obj : list) {
+			weight -= obj.weight();
 			if (weight < 0)
 				return obj.biome();
 		}

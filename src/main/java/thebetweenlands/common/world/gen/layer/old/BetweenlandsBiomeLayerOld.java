@@ -9,20 +9,21 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.layer.old.util.AreaTransformer0;
 import thebetweenlands.common.world.gen.layer.old.util.Context;
+import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
 import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 public class BetweenlandsBiomeLayerOld implements AreaTransformer0 {
 	private final HolderGetter<Biome> registry;
-	private final List<BLBiomeData> biomes;
+	private final List<BLWeightPoint> biomes;
 	private int totalWeight = 0;
 
-	public BetweenlandsBiomeLayerOld(HolderGetter<Biome> registry, List<BLBiomeData> biomes) {
+	public BetweenlandsBiomeLayerOld(HolderGetter<Biome> registry, List<BLWeightPoint> biomes) {
 		this.registry = registry;
 		this.biomes = biomes;
 
-		for (BLBiomeData biome : biomes) {
-			if (biome.terrainPoint().weight() > 0 && !BetweenlandsConfig.debug) {
-				this.totalWeight += biome.terrainPoint().weight();
+		for (BLWeightPoint biome : biomes) {
+			if (biome.weight() > 0 && !BetweenlandsConfig.debug) {
+				this.totalWeight += biome.weight();
 			}
 		}
 	}
@@ -32,15 +33,15 @@ public class BetweenlandsBiomeLayerOld implements AreaTransformer0 {
 		return BetweenlandsBiomeSource.getBiomeId(this.getRandomItem(biomes, context.nextRandom(totalWeight)).getKey(), registry);
 	}
 
-	public Holder<Biome> getRandomItem(List<BLBiomeData> list, int weight) {
+	public Holder<Biome> getRandomItem(List<BLWeightPoint> list, int weight) {
 		if (list.isEmpty())
 			return null;
 
-		if(totalWeight == 0)
+		if(this.totalWeight == 0)
 			return list.getFirst().biome();
 
-		for (BLBiomeData obj : list) {
-			weight -= obj.terrainPoint().weight();
+		for (BLWeightPoint obj : list) {
+			weight -= obj.weight();
 			if (weight < 0)
 				return obj.biome();
 		}
