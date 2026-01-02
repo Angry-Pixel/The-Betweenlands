@@ -940,7 +940,7 @@
                     "then_run": {
                       "type": "minecraft:block",
                       "result_state": {
-                        "Name": "thebetweenlands:mud",
+                        "Name": "thebetweenlands:compacted_mud",
                         "Properties": {
                           "in_water": "false"
                         }
