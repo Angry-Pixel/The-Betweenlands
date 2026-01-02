@@ -8,9 +8,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
@@ -24,7 +21,6 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 
 	public static final MapCodec<SurroundedBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("surround_range").forGetter(o -> o.checkRange),
 					Codec.xor(Codec.intRange(0, 10000), Codec.floatRange(0.0F, 1.0F)).fieldOf("spawn_chance").<Integer>xmap(t -> t.map(Function.identity(), (f) -> (int)(f * 10000)), t -> Either.left(t)).forGetter(o -> o.spawnChance),
@@ -34,7 +30,6 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 				).apply(instance, SurroundedBiomeLayer::new)
 		);
 
-	private final HolderGetter<Biome> registry;
 	private final BiomeLayerConfigured parent;
 	// How many cells to check are surrounded
 	private final int checkRange;
@@ -45,12 +40,11 @@ public class SurroundedBiomeLayer implements SingleParentBiomeLayer {
 	private final Holder<Biome> biome;
 	private final Holder<Biome> surroundingBiome;
 
-	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, float spawnChance, boolean mask, Holder<Biome> biome, Holder<Biome> surroundingBiome) {
-		this(registry, parent, checkRange, (int)(spawnChance * 10000), mask, biome, surroundingBiome);
+	public SurroundedBiomeLayer(BiomeLayerConfigured parent, int checkRange, float spawnChance, boolean mask, Holder<Biome> biome, Holder<Biome> surroundingBiome) {
+		this(parent, checkRange, (int)(spawnChance * 10000), mask, biome, surroundingBiome);
 	}
 	
-	public SurroundedBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, int spawnChance, boolean mask, Holder<Biome> biome, Holder<Biome> surroundingBiome) {
-		this.registry = registry;
+	public SurroundedBiomeLayer(BiomeLayerConfigured parent, int checkRange, int spawnChance, boolean mask, Holder<Biome> biome, Holder<Biome> surroundingBiome) {
 		this.parent = parent;
 		this.checkRange = checkRange;
 		this.spawnChance = spawnChance;

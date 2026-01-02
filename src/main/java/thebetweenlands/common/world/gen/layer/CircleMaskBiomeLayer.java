@@ -5,9 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
@@ -21,7 +18,6 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 
 	public static final MapCodec<CircleMaskBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("check_range").forGetter(o -> o.checkRange),
 					Codec.BOOL.fieldOf("mask").forGetter(o -> o.mask),
@@ -29,7 +25,6 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 				).apply(instance, CircleMaskBiomeLayer::new)
 		);
 
-	private final HolderGetter<Biome> registry;
 	private final BiomeLayerConfigured parent;
 	// How many cells to check are surrounded
 	private final int checkRange;
@@ -38,8 +33,7 @@ public class CircleMaskBiomeLayer implements SingleParentBiomeLayer {
 	// The biome to search for
 	private final Holder<Biome> maskBiome;
 	
-	public CircleMaskBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, boolean mask, Holder<Biome> biome) {
-		this.registry = registry;
+	public CircleMaskBiomeLayer(BiomeLayerConfigured parent, int checkRange, boolean mask, Holder<Biome> biome) {
 		this.parent = parent;
 		this.checkRange = checkRange;
 		this.mask = mask;

@@ -8,9 +8,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
@@ -24,7 +21,6 @@ public class ThinningMaskBiomeLayer implements SingleParentBiomeLayer {
 
 	public static final MapCodec<ThinningMaskBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					Codec.INT.fieldOf("check_range").forGetter(o -> o.checkRange),
 					Codec.xor(Codec.intRange(0, 10000), Codec.floatRange(0.0F, 1.0F)).fieldOf("removal_chance").<Integer>xmap(t -> t.map(Function.identity(), (f) -> (int)(f * 10000)), t -> Either.left(t)).forGetter(o -> o.removalChance),
@@ -34,7 +30,6 @@ public class ThinningMaskBiomeLayer implements SingleParentBiomeLayer {
 				).apply(instance, ThinningMaskBiomeLayer::new)
 		);
 
-	private final HolderGetter<Biome> registry;
 	private final BiomeLayerConfigured parent;
 	// How many cells to check are surrounded
 	private final int checkRange;
@@ -45,12 +40,11 @@ public class ThinningMaskBiomeLayer implements SingleParentBiomeLayer {
 	private final Holder<Biome> biome;
 	private final Holder<Biome> removingBiome;
 
-	public ThinningMaskBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, float removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome) {
-		this(registry, parent, checkRange, (int)(removalChance * 10000), mask, biome, removingBiome);
+	public ThinningMaskBiomeLayer(BiomeLayerConfigured parent, int checkRange, float removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome) {
+		this(parent, checkRange, (int)(removalChance * 10000), mask, biome, removingBiome);
 	}
 	
-	public ThinningMaskBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, int checkRange, int removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome) {
-		this.registry = registry;
+	public ThinningMaskBiomeLayer(BiomeLayerConfigured parent, int checkRange, int removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome) {
 		this.parent = parent;
 		this.checkRange = checkRange;
 		this.removalChance = removalChance;

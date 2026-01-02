@@ -3,11 +3,7 @@ package thebetweenlands.common.world.gen.layer;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.SingleParentBiomeLayer;
@@ -18,14 +14,13 @@ public class ZoomBiomeLayer implements SingleParentBiomeLayer {
 
 	public static final MapCodec<ZoomBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent)
 				).apply(instance, ZoomBiomeLayer::new)
 		);
 
 	private final BiomeLayerConfigured parent;
 	
-	public ZoomBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent) {
+	public ZoomBiomeLayer(BiomeLayerConfigured parent) {
 		this.parent = parent;
 	}
 	

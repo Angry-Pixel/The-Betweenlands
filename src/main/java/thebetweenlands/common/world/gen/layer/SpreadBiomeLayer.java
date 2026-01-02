@@ -5,12 +5,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.SingleParentBiomeLayer;
@@ -21,7 +17,6 @@ public class SpreadBiomeLayer implements SingleParentBiomeLayer {
 
 	public static final MapCodec<SpreadBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					RegistryOps.retrieveGetter(Registries.BIOME),
 					BiomeLayerConfigured.CODEC.optionalFieldOf("parent", PreviousLayerBiomeLayer.CONFIGURED_INSTANCE).forGetter(o -> o.parent),
 					SpreadBiomeLayer.Quadrant.CODEC.fieldOf("quadrant").forGetter(o -> o.quadrant)
 				).apply(instance, SpreadBiomeLayer::new)
@@ -30,7 +25,7 @@ public class SpreadBiomeLayer implements SingleParentBiomeLayer {
 	private final BiomeLayerConfigured parent;
 	private final Quadrant quadrant;
 	
-	public SpreadBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent, Quadrant quadrant) {
+	public SpreadBiomeLayer(BiomeLayerConfigured parent, Quadrant quadrant) {
 		this.parent = parent;
 		this.quadrant = quadrant;
 	}

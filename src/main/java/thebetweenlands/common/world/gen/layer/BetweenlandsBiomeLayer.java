@@ -6,9 +6,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.api.world.biome.layer.Area;
@@ -23,17 +20,14 @@ public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
 	
 	public static final MapCodec<BetweenlandsBiomeLayer> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
-					RegistryOps.retrieveGetter(Registries.BIOME),
 					BLWeightPoint.CODEC.listOf().fieldOf("biomes").forGetter(o -> o.biomes)
 				).apply(instance, BetweenlandsBiomeLayer::new)
 		);
 	
-	private final HolderGetter<Biome> registry;
 	private final List<BLWeightPoint> biomes;
 	private int totalWeight = 0;
 
-	public BetweenlandsBiomeLayer(HolderGetter<Biome> registry, List<BLWeightPoint> biomes) {
-		this.registry = registry;
+	public BetweenlandsBiomeLayer(List<BLWeightPoint> biomes) {
 		this.biomes = biomes;
 
 		for (BLWeightPoint biome : biomes) {
