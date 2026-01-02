@@ -62,6 +62,52 @@ public class BiomeLayerRegistry {
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<SpreadBiomeLayer>> SPREAD_BIOME_LAYER = BIOME_LAYER_TYPE.register("spread", () -> SpreadBiomeLayer.CODEC);
 
 
+	// Util methods for repeating layers
+	
+	
+	public static long[] createSeeds(int count, long seed, boolean incrementSeed) {
+		if(incrementSeed) {
+			return IntStream.range(0, count)
+					.mapToLong(i -> seed + (long)i)
+					.toArray();
+		} else {
+			long[] seeds = new long[count];
+			Arrays.fill(seeds, seed);
+			return seeds;
+		}
+	}
+
+	/**
+	 * Repeats a biome layer with the specified {@code long} seeds
+	 * @param biomeLayer the biome layer to be repeated
+	 * @param seeds the seeds to use
+	 * @return a configured RepeatBiomeLayer with the specified layer and seeds
+	 */
+	public static BiomeLayerConfigured repeatLayer(BiomeLayer biomeLayer, long[] seeds) {
+		if(seeds.length == 0) {
+			throw new IllegalArgumentException("repeatLayer requires at least one seed");
+		}
+		
+		// Only zooming in once means we don't need the repeater
+		if(seeds.length == 1) {
+			return BiomeLayerConfigured.of(biomeLayer, seeds[0]);
+		}
+
+		// Seeds to use
+		List<ContextResolverHolder> contextResolvers = Arrays.stream(seeds)
+				.mapToObj(ContextResolverHolder::ofLong)
+				.toList();
+		
+		// Repeat original layer with seeds
+		BiomeLayer repeatLayer = new RepeatBiomeLayer(biomeLayer, contextResolvers);
+		
+		return BiomeLayerConfigured.unconfigured(repeatLayer);
+	}
+
+	
+	// Methods for creating biome layers
+	
+	
 	public static BiomeLayerConfigured sequence(BiomeLayerConfigured ...layers) {
 		return BiomeLayerConfigured.unconfigured(new SequenceBiomeLayer(Arrays.asList(layers)));
 	}
@@ -105,39 +151,20 @@ public class BiomeLayerRegistry {
 	}
 
 	// Multi zoom
-	public static BiomeLayerConfigured multiZoom(int zoom, long seed) {
-		if(zoom < 1) {
-			throw new IllegalArgumentException("zoom cannot be zero or negative");
-		}
-		
-		// Seeds to use
-		long[] seeds = IntStream.range(0, zoom).mapToLong(i -> seed + (long)i).toArray();
-
-		return multiZoomVar(seeds);
-	}
-
 	public static BiomeLayerConfigured multiZoomVar(long[] seeds) {
 		if(seeds.length == 0) {
-			throw new IllegalArgumentException("must zoom at least once");
+			throw new IllegalArgumentException("must zoom in at least once");
 		}
 		
-		// Only zooming in once means we don't need the repeater
-		if(seeds.length == 1) {
-			return legacyZoom(seeds[0]);
-		}
+		return repeatLayer(new ZoomBiomeLayer(previous()), seeds);
+	}
 
-		// Biome layer to be repeated
-		BiomeLayer biomeLayer = new ZoomBiomeLayer(previous());
+	public static BiomeLayerConfigured multiZoom(int zoom, long seed, boolean incrementSeed) {
+		return multiZoomVar(createSeeds(zoom, seed, incrementSeed));
+	}
 
-		// Seeds to use
-		List<ContextResolverHolder> contextResolvers = Arrays.stream(seeds)
-				.mapToObj(ContextResolverHolder::ofLong)
-				.toList();
-		
-		// Layer to repeat original layer with seeds
-		BiomeLayer repeatLayer = new RepeatBiomeLayer(biomeLayer, contextResolvers);
-		
-		return BiomeLayerConfigured.unconfigured(repeatLayer);
+	public static BiomeLayerConfigured multiZoom(int zoom, long seed) {
+		return multiZoom(zoom, seed, false);
 	}
 
 
@@ -151,39 +178,32 @@ public class BiomeLayerRegistry {
 	}
 
 	// Multi spread
-	public static BiomeLayerConfigured multiSpread(int spread, long seed) {
-		if(spread < 1) {
-			throw new IllegalArgumentException("spread cannot be zero or negative");
-		}
-		
-		// Seeds to use
-		long[] seeds = IntStream.range(0, spread).mapToLong(i -> seed + (long)i).toArray();
-
-		return multiSpreadVar(seeds);
-	}
-
-	public static BiomeLayerConfigured multiSpreadVar(long[] seeds) {
+	public static BiomeLayerConfigured multiSpreadVar(Quadrant quadrant, long[] seeds) {
 		if(seeds.length == 0) {
 			throw new IllegalArgumentException("must spread at least once");
 		}
 		
-		// Only spreading once means we don't need the repeater
-		if(seeds.length == 1) {
-			return legacySpread(seeds[0]);
-		}
+		return repeatLayer(new SpreadBiomeLayer(previous(), quadrant), seeds);
+	}
 
-		// Biome layer to be repeated
-		BiomeLayer biomeLayer = new SpreadBiomeLayer(previous(), Quadrant.XNZN);
+	public static BiomeLayerConfigured multiSpread(Quadrant quadrant, int count, long seed, boolean incrementSeed) {
+		return multiSpreadVar(quadrant, createSeeds(count, seed, incrementSeed));
+	}
+	
+	public static BiomeLayerConfigured multiSpread(Quadrant quadrant, int count, long seed) {
+		return multiSpread(quadrant, count, seed, false);
+	}
+	
+	public static BiomeLayerConfigured multiSpreadVar(long[] seeds) {
+		return multiSpreadVar(Quadrant.XNZN, seeds);
+	}
 
-		// Seeds to use
-		List<ContextResolverHolder> contextResolvers = Arrays.stream(seeds)
-				.mapToObj(ContextResolverHolder::ofLong)
-				.toList();
-		
-		// Layer to repeat original layer with seeds
-		BiomeLayer repeatLayer = new RepeatBiomeLayer(biomeLayer, contextResolvers);
-		
-		return BiomeLayerConfigured.unconfigured(repeatLayer);
+	public static BiomeLayerConfigured multiSpread(int count, long seed, boolean incrementSeed) {
+		return multiSpread(Quadrant.XNZN, count, seed, incrementSeed);
+	}
+
+	public static BiomeLayerConfigured multiSpread(int count, long seed) {
+		return multiSpread(Quadrant.XNZN, count, seed);
 	}
 	
 
@@ -217,34 +237,20 @@ public class BiomeLayerRegistry {
 		return thin(previous(), checkRange, removalChance, mask, registry.getOrThrow(biome), registry.getOrThrow(removingBiome), seed);
 	}
 
-	public static BiomeLayerConfigured repeatThin(int checkRange, int removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome, int count, long seed) {
-
-		if(count < 1) {
-			throw new IllegalArgumentException("count cannot be zero or negative");
+	public static BiomeLayerConfigured repeatThinVar(int checkRange, int removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome, long[] seeds) {
+		if(seeds.length == 0) {
+			throw new IllegalArgumentException("must thin at least once");
 		}
 		
-		// Only thinning once means we don't need the repeater
-		if(count == 1) {
-			return thin(previous(), checkRange, removalChance, mask, biome, removingBiome, seed);
-		}
-		
-		// Biome layer to be repeated
-		BiomeLayer biomeLayer = new ThinningMaskBiomeLayer(previous(), checkRange, removalChance, mask, biome, removingBiome);
-		
-		// Seeds to use
-		List<ContextResolverHolder> seeds = IntStream.range(0, count)
-				.mapToLong(i -> seed + (long)i)
-				.mapToObj(ContextResolverHolder::ofLong)
-				.toList();
-		
-		// Layer to repeat original layer with seeds
-		BiomeLayer repeatLayer = new RepeatBiomeLayer(biomeLayer, seeds);
-		
-		return BiomeLayerConfigured.unconfigured(repeatLayer);
+		return repeatLayer(new ThinningMaskBiomeLayer(previous(), checkRange, removalChance, mask, biome, removingBiome), seeds);
+	}
+	
+	public static BiomeLayerConfigured repeatThin(int checkRange, int removalChance, boolean mask, Holder<Biome> biome, Holder<Biome> removingBiome, int count, long seed, boolean incrementSeed) {
+		return repeatThinVar(checkRange, removalChance, mask, biome, removingBiome, createSeeds(count, seed, incrementSeed));
 	}
 
-	public static BiomeLayerConfigured repeatThin(HolderGetter<Biome> registry, int checkRange, int removalChance, boolean mask, ResourceKey<Biome> biome, ResourceKey<Biome> removingBiome, int count, long seed) {
-		return repeatThin(checkRange, removalChance, mask, registry.getOrThrow(biome), registry.getOrThrow(removingBiome), count, seed);
+	public static BiomeLayerConfigured repeatThin(HolderGetter<Biome> registry, int checkRange, int removalChance, boolean mask, ResourceKey<Biome> biome, ResourceKey<Biome> removingBiome, int count, long seed, boolean incrementSeed) {
+		return repeatThin(checkRange, removalChance, mask, registry.getOrThrow(biome), registry.getOrThrow(removingBiome), count, seed, incrementSeed);
 	}
 	
 
@@ -278,13 +284,13 @@ public class BiomeLayerRegistry {
 		return sequence(
 			// Base layers
 			betweenlands(biomeParameters, 100L),
-			multiZoom(2, 2000L),
+			multiZoom(2, 2000L, false),
 			marker("swamplands_clearing_zoom"),
 			
+			// Zoom biomeSize times
 			legacyZoom(2345L),
 			marker("sludge_plains_clearing_zoom"),
-			
-			multiZoom(biomeSize - 1, 2345L),
+			multiZoom(biomeSize - 1, 2345L, false),
 			
 			// Swamplands Clearing mixer
 			mix(
@@ -307,9 +313,10 @@ public class BiomeLayerRegistry {
 								BiomeRegistry.SWAMPLANDS_CLEARING, // when you find a swamplands clearing
 								BiomeRegistry.SWAMPLANDS_CLEARING, // maybe remove if there's a nearby swamplands clearing
 								10, // repeat 10 times
-								105L // seed offset
+								105L, // seed offset
+								true
 							),
-						multiSpreadVar(LongStream.concat(LongStream.of(2345L), LongStream.range(2345L, 2345L + biomeSize - 1)).toArray()),
+						multiSpread(biomeSize, 2345L, false),
 						circleMask(registry, 10, true, BiomeRegistry.SWAMPLANDS_CLEARING)
 					)
 				),
@@ -335,11 +342,12 @@ public class BiomeLayerRegistry {
 								BiomeRegistry.SLUDGE_PLAINS_CLEARING, // when you find a swamplands clearing
 								BiomeRegistry.SLUDGE_PLAINS_CLEARING, // maybe remove if there's a nearby swamplands clearing
 								20, // repeat 20 times
-								214L // seed offset
+								214L, // seed offset
+								true
 							),
-						multiSpread(biomeSize - 1 - 2, 2345L),
+						multiSpread(biomeSize - 1 - 2, 2345L, false),
 						circleMask(registry, 3, true, BiomeRegistry.SLUDGE_PLAINS_CLEARING),
-						multiZoom(2, 2542L)
+						multiZoom(2, 2542L, false)
 					)
 				)
 		);
