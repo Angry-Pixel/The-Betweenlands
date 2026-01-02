@@ -8,17 +8,15 @@ import thebetweenlands.api.world.biome.layer.Area;
 import thebetweenlands.api.world.biome.layer.AreaFactory;
 import thebetweenlands.api.world.biome.layer.AreaFactoryContext.AreaFactoryContextSupplier;
 import thebetweenlands.api.world.biome.layer.BiomeLayer;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.LongBasedBiomeLayerContextResolver;
-import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.StringBasedBiomeLayerContextResolver;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.ContextResolverHolder;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
-public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerRandomContextResolver contextResolver) {
+public record BiomeLayerConfigured(BiomeLayer biomeLayer, ContextResolverHolder contextResolver) {
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static final Codec<BiomeLayerConfigured> CODEC = Codec.pair(
 			BiomeLayer.CODEC,
-			BiomeLayerRandomContextResolver.CODEC.fieldOf("random_seed").codec()
-		).<BiomeLayerConfigured>xmap(BiomeLayerConfigured::fromPair, (config) -> (Pair)toPair(config));
+			BiomeLayerRandomContextResolver.ContextResolverHolder.CODEC.optionalFieldOf("random_seed", ContextResolverHolder.unconfigured()).codec()
+		).<BiomeLayerConfigured>xmap(BiomeLayerConfigured::fromPair, BiomeLayerConfigured::toPair);
 
 	/**
 	 * @see BiomeLayer#compose(BiomeLayerContext, BiomeLayerChain)
@@ -63,29 +61,28 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, BiomeLayerRandomContex
 	}
 	
 	
-	public static <T extends BiomeLayerRandomContextResolver> BiomeLayerConfigured fromPair(Pair<BiomeLayer, T> pair) {
+	public static BiomeLayerConfigured fromPair(Pair<BiomeLayer, ContextResolverHolder> pair) {
 		return new BiomeLayerConfigured(pair.getFirst(), pair.getSecond());
 	}
 
-	public static Pair<BiomeLayer, ? extends BiomeLayerRandomContextResolver> toPair(BiomeLayerConfigured config) {
+	public static Pair<BiomeLayer, ContextResolverHolder> toPair(BiomeLayerConfigured config) {
 		return Pair.of(config.biomeLayer(), config.contextResolver());
 	}
 
 	public static BiomeLayerConfigured of(BiomeLayer biomeLayer, long seed) {
-		return new BiomeLayerConfigured(biomeLayer, new LongBasedBiomeLayerContextResolver(seed));
+		return new BiomeLayerConfigured(biomeLayer, ContextResolverHolder.ofLong(seed));
 	}
 
 	public static BiomeLayerConfigured of(BiomeLayer biomeLayer, String seed) {
-		return new BiomeLayerConfigured(biomeLayer, new StringBasedBiomeLayerContextResolver(seed));
+		return new BiomeLayerConfigured(biomeLayer,  ContextResolverHolder.ofString(seed));
 	}
 
 	public static BiomeLayerConfigured of(BiomeLayer biomeLayer, ResourceLocation seed) {
 		return BiomeLayerConfigured.of(biomeLayer, seed.toString());
 	}
 	
-	// TODO proper support for layers without context
 	public static BiomeLayerConfigured unconfigured(BiomeLayer biomeLayer) {
-		return new BiomeLayerConfigured(biomeLayer, new LongBasedBiomeLayerContextResolver(0L));
+		return new BiomeLayerConfigured(biomeLayer, ContextResolverHolder.unconfigured());
 	}
 	
 }

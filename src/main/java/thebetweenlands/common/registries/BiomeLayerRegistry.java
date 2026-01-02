@@ -32,7 +32,6 @@ import thebetweenlands.common.world.gen.layer.SurroundedBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ThinningMaskBiomeLayer;
 import thebetweenlands.common.world.gen.layer.ZoomBiomeLayer;
 import thebetweenlands.common.world.gen.layer.util.BLWeightPoint;
-import thebetweenlands.common.world.gen.warp.BLBiomeData;
 
 public class BiomeLayerRegistry {
 	public static final DeferredRegister<MapCodec<? extends BiomeLayer>> BIOME_LAYER_TYPE = DeferredRegister.create(BLRegistries.Keys.BIOME_LAYER_TYPE, TheBetweenlands.ID);

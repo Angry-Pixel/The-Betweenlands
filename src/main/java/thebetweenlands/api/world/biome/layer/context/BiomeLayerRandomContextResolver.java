@@ -6,14 +6,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
 import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
+import thebetweenlands.api.world.biome.layer.util.UnconfiguredRandomContext;
 
 // TODO clean all of this mess up
 @FunctionalInterface
 public interface BiomeLayerRandomContextResolver {
-	public static final Codec<BiomeLayerRandomContextResolver> CODEC = NeoForgeExtraCodecs.withAlternative(
+	public static final Codec<BiomeLayerRandomContextResolver> CODEC = NeoForgeExtraCodecs.<BiomeLayerRandomContextResolver>withAlternative(
 			LongBasedBiomeLayerContextResolver.CODEC.flatComapMap(Function.identity(), ensureClass(BiomeLayerRandomContextResolver.class, LongBasedBiomeLayerContextResolver.class)),
 			StringBasedBiomeLayerContextResolver.CODEC.flatComapMap(Function.identity(), ensureClass(BiomeLayerRandomContextResolver.class, StringBasedBiomeLayerContextResolver.class))
-		);
+		).orElse(UnconfiguredBiomeLayerContextResolver.INSTANCE);
 	
 	/**
 	 * Create a random context from a random factory
@@ -30,13 +31,35 @@ public interface BiomeLayerRandomContextResolver {
 	// Because generics
 	public static record ContextResolverHolder(BiomeLayerRandomContextResolver value) {
 		public static final Codec<ContextResolverHolder> CODEC = BiomeLayerRandomContextResolver.CODEC.xmap(ContextResolverHolder::new, ContextResolverHolder::value);
+		public static final ContextResolverHolder UNCONFIGURED_INSTANCE = new ContextResolverHolder(UnconfiguredBiomeLayerContextResolver.INSTANCE);
 
+		public BiomeLayerRandomContext createContext(BiomeLayerRandomFactoryContext factory) {
+			return this.value().createContext(factory);
+		}
+		
 		public static ContextResolverHolder ofLong(long seed) {
 			return new ContextResolverHolder(new LongBasedBiomeLayerContextResolver(seed));
 		}
 
 		public static ContextResolverHolder ofString(String seed) {
 			return new ContextResolverHolder(new StringBasedBiomeLayerContextResolver(seed));
+		}
+		
+		public static ContextResolverHolder unconfigured() {
+			return UNCONFIGURED_INSTANCE;
+		}
+	}
+	
+	// Always creates a null random context
+	public static final class UnconfiguredBiomeLayerContextResolver implements BiomeLayerRandomContextResolver {
+		public static final UnconfiguredBiomeLayerContextResolver INSTANCE = new UnconfiguredBiomeLayerContextResolver();
+		public static final Codec<UnconfiguredBiomeLayerContextResolver> CODEC = Codec.unit(INSTANCE);
+
+		private UnconfiguredBiomeLayerContextResolver() {}
+		
+		@Override
+		public BiomeLayerRandomContext createContext(BiomeLayerRandomFactoryContext factory) {
+			return new UnconfiguredRandomContext(factory);
 		}
 	}
 	

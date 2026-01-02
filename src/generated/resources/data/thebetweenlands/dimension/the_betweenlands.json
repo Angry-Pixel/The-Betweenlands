@@ -50,7 +50,6 @@
             "biome_layer": {
               "type": "thebetweenlands:zoom"
             },
-            "random_seed": 0,
             "random_seeds": [
               2000,
               2001
@@ -58,7 +57,6 @@
           },
           {
             "type": "thebetweenlands:marker",
-            "random_seed": 0,
             "ref_name": "swamplands_clearing_zoom"
           },
           {
@@ -67,7 +65,6 @@
           },
           {
             "type": "thebetweenlands:marker",
-            "random_seed": 0,
             "ref_name": "sludge_plains_clearing_zoom"
           },
           {
@@ -75,7 +72,6 @@
             "biome_layer": {
               "type": "thebetweenlands:zoom"
             },
-            "random_seed": 0,
             "random_seeds": [
               2345,
               2346,
@@ -91,7 +87,6 @@
                   "type": "thebetweenlands:surrounded",
                   "parent": {
                     "type": "thebetweenlands:reference",
-                    "random_seed": 0,
                     "ref_name": "swamplands_clearing_zoom"
                   },
                   "biome": "thebetweenlands:swamplands_clearing",
@@ -111,7 +106,6 @@
                     "removal_chance": 2500,
                     "remove_when_near": "thebetweenlands:swamplands_clearing"
                   },
-                  "random_seed": 0,
                   "random_seeds": [
                     105,
                     106,
@@ -131,7 +125,6 @@
                     "type": "thebetweenlands:spread",
                     "quadrant": "XNZN"
                   },
-                  "random_seed": 0,
                   "random_seeds": [
                     2345,
                     2345,
@@ -143,13 +136,10 @@
                   "type": "thebetweenlands:circle_mask",
                   "biome": "thebetweenlands:swamplands_clearing",
                   "check_range": 10,
-                  "mask": true,
-                  "random_seed": 0
+                  "mask": true
                 }
-              ],
-              "random_seed": 0
-            },
-            "random_seed": 0
+              ]
+            }
           },
           {
             "type": "thebetweenlands:mask_mixer",
@@ -160,7 +150,6 @@
                   "type": "thebetweenlands:surrounded",
                   "parent": {
                     "type": "thebetweenlands:reference",
-                    "random_seed": 0,
                     "ref_name": "sludge_plains_clearing_zoom"
                   },
                   "biome": "thebetweenlands:sludge_plains_clearing",
@@ -180,7 +169,6 @@
                     "removal_chance": 1500,
                     "remove_when_near": "thebetweenlands:sludge_plains_clearing"
                   },
-                  "random_seed": 0,
                   "random_seeds": [
                     214,
                     215,
@@ -213,27 +201,22 @@
                   "type": "thebetweenlands:circle_mask",
                   "biome": "thebetweenlands:sludge_plains_clearing",
                   "check_range": 3,
-                  "mask": true,
-                  "random_seed": 0
+                  "mask": true
                 },
                 {
                   "type": "thebetweenlands:repeat",
                   "biome_layer": {
                     "type": "thebetweenlands:zoom"
                   },
-                  "random_seed": 0,
                   "random_seeds": [
                     2542,
                     2543
                   ]
                 }
-              ],
-              "random_seed": 0
-            },
-            "random_seed": 0
+              ]
+            }
           }
-        ],
-        "random_seed": 0
+        ]
       },
       "biome_size": 4,
       "biomes": [

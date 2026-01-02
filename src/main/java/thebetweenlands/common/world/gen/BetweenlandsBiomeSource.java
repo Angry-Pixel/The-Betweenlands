@@ -144,7 +144,7 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 	public Layer makeLayers(long worldSeed) {
 		BiomeLayerConfigured configuredBiomeLayer = this.genBiomeLayers;
 		BiomeLayer biomeLayer = configuredBiomeLayer.biomeLayer();
-		BiomeLayerRandomContextResolver contextResolver = configuredBiomeLayer.contextResolver();
+		BiomeLayerRandomContextResolver contextResolver = configuredBiomeLayer.contextResolver().value();
 
 		// Area factory context
 		AreaFactoryContextSupplier<LazyArea> areaContext = () -> new LazyAreaFactoryContext(25);

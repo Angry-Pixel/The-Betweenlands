@@ -23,6 +23,11 @@ public record BiomeLayerContext<A extends Area>(AreaFactoryContextSupplier<A> ar
 		return new BiomeLayerContext<>(this.areaContext, randomFactory.createContext(this.randomContext().getRandomFactory()));
 	}
 
+	// Creates a new randomContext from a resolver, and swaps it out
+	public BiomeLayerContext<A> useRandomFactory(BiomeLayerRandomContextResolver.ContextResolverHolder randomFactory) {
+		return this.useRandomFactory(randomFactory.value());
+	}
+
 //	// AreaFactory Context methods
 //    public A createResult(PixelTransformer transformer) {
 //    	return this.areaContext().createResult(transformer);
