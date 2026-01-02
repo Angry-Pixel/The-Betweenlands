@@ -24,6 +24,7 @@ import thebetweenlands.common.world.gen.layer.CircleMaskBiomeLayer;
 import thebetweenlands.common.world.gen.layer.MarkerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.MaskMixerBiomeLayer;
 import thebetweenlands.common.world.gen.layer.PreviousLayerBiomeLayer;
+import thebetweenlands.common.world.gen.layer.RepeatBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SequenceBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SpreadBiomeLayer;
 import thebetweenlands.common.world.gen.layer.SpreadBiomeLayer.Quadrant;
@@ -39,9 +40,12 @@ public class BiomeLayerRegistry {
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<MarkerBiomeLayer>> MARKER_LAYER = BIOME_LAYER_TYPE.register("marker", () -> MarkerBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<PreviousLayerBiomeLayer>> PREVIOUS_LAYER = BIOME_LAYER_TYPE.register("previous", () -> PreviousLayerBiomeLayer.CODEC);
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<BackwardRefBiomeLayer>> BACKWARD_REF_LAYER = BIOME_LAYER_TYPE.register("reference", () -> BackwardRefBiomeLayer.CODEC);
-	
+
 	// Sequence, this is where chaining comes from
 	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<SequenceBiomeLayer>> SEQUENCE_LAYER = BIOME_LAYER_TYPE.register("sequence", () -> SequenceBiomeLayer.CODEC);
+
+	// Repeat, calls the same biome layer multiple times with multiple different seeds
+	public static final DeferredHolder<MapCodec<? extends BiomeLayer>, MapCodec<RepeatBiomeLayer>> REPEAT_LAYER = BIOME_LAYER_TYPE.register("repeat", () -> RepeatBiomeLayer.CODEC);
 	
 	static {
 		// Add an alias from thebetweenlands:chain to thebetweenlands:sequence (so "thebetweenlands:chain" gets treated as "thebetweenlands:sequence")
