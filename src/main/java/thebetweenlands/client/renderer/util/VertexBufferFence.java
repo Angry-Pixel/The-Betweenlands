@@ -5,15 +5,11 @@ import java.util.Objects;
 
 import com.mojang.blaze3d.vertex.VertexBuffer;
 
-import net.minecraft.client.renderer.RenderType;
-
 /**
  * "Fence" class for a {@linkplain VertexBuffer}, to make sure its reference isn't lost and ensure it is properly closed
  */
 public class VertexBufferFence {
 
-	public static record VertexBufferData(RenderType renderType, VertexBuffer vertexBuffer) {}
-	
 	/**
 	 * Creates a new fence pair to keep track of a vertex buffer.
 	 * @param data the data to keep track of
