@@ -94,14 +94,6 @@ public interface EnvironmentEvent {
 	}
 
 	/**
-	 * Returns the key of this event.
-	 * @return
-	 */
-	default ResourceLocation getEventKey() {
-		return Objects.requireNonNull(BLRegistries.ENVIRONMENT_EVENTS.getKey(this));
-	}
-
-	/**
 	 * Returns the data manager used to sync data
 	 * @return
 	 */

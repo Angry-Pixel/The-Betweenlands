@@ -35,6 +35,10 @@ public class BetweenlandsClient {
 		return Minecraft.getInstance().player;
 	}
 
+	public static boolean isGamePaused() {
+		return Minecraft.getInstance().isPaused();
+	}
+
 	@Nullable
 	public static Player getCameraPlayer() {
 		// PLEASE stop removing this method, there are actual cases where we need to use it

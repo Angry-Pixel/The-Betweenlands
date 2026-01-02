@@ -73,8 +73,6 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(FogHandler::onClientTick);
 		NeoForge.EVENT_BUS.addListener(FogHandler::onFogColor);
 		NeoForge.EVENT_BUS.addListener(FogHandler::updateFog);
-
-		NeoForge.EVENT_BUS.addListener(EnvironmentEventHandler::onClientTick);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

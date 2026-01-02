@@ -9,6 +9,7 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.network.GenericDataAccessorAccess;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.SyncEnvironmentEventDataPacket;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
@@ -17,12 +18,6 @@ import thebetweenlands.common.world.event.BLEnvironmentEvent;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import thebetweenlands.common.registries.DimensionRegistries;
-
-import java.util.Optional;
 
 public class EnvironmentEventHandler {
 
@@ -32,7 +27,7 @@ public class EnvironmentEventHandler {
 	}
 
 	private static void tickEvents(LevelTickEvent.Post event) {
-		if (!event.getLevel().tickRateManager().isFrozen() && !event.hasTime()) {
+		if (!event.getLevel().tickRateManager().isFrozen() && event.hasTime() && (!event.getLevel().isClientSide() || !BetweenlandsClient.isGamePaused())) {
 			BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(event.getLevel());
 			if (storage != null) {
 				BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
@@ -83,53 +78,6 @@ public class EnvironmentEventHandler {
 						}
 					}
 					level.rainLevel = rainingStrength;
-				}
-			}
-		}
-	}
-
-	/*
-	public static void environmentEventTick(final LevelTickEvent.Pre event) {
-		Level level = event.getLevel();
-		if(level.dimension() == DimensionRegistries.DIMENSION_KEY && !level.isClientSide() && !event.hasTime()) {
-			BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
-			if (storage == null) return;
-			BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
-
-			for(EnvironmentEvent eevent : reg.getEvents().values()) {
-				if(!eevent.isLoaded()) continue;
-				if (reg.isDisabled()) {
-					if(eevent.isActive()) {
-						eevent.setActive(level, false);
-						eevent.setDefaults(level, reg);
-					}
-				} else {
-					eevent.tick(level);
-				}
-				//GenericDataAccessorAccess dataManager = eevent.getDataManager();
-				//if(dataManager != null) {
-				//	dataManager.tick(level);
-				//	if(dataManager.isDirty()) {
-				//		PacketDistributor.sendToPlayersInDimension((ServerLevel) level, new SyncEnvironmentEventDataPacket(eevent, false));
-				//	}
-				//}
-			}
-		}
-	}
-	*/
-
-	public static void onClientTick(ClientTickEvent.Pre event) {
-		Level level = Minecraft.getInstance().level;
-		if (!Minecraft.getInstance().isPaused()) {
-			if (level != null && level.isClientSide()) {
-				BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
-				if (storage == null) return;
-				BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
-
-				for (EnvironmentEvent eevent : reg.getEvents().values()) {
-					if (!eevent.isLoaded())
-						continue;
-					eevent.tick(level);
 				}
 			}
 		}

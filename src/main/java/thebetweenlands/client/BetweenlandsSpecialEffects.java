@@ -5,6 +5,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -12,6 +13,10 @@ import org.joml.Vector3f;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.sky.BLSkyRenderer;
+import thebetweenlands.client.sky.BLWeatherRenderer;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
 public class BetweenlandsSpecialEffects extends DimensionSpecialEffects {
 
@@ -87,5 +92,21 @@ public class BetweenlandsSpecialEffects extends DimensionSpecialEffects {
 	@Override
 	public boolean isFoggyAt(int x, int y) {
 		return false;
+	}
+
+	@Override
+	public boolean renderSnowAndRain(ClientLevel level, int ticks, float partialTick, LightTexture lightTexture, double camX, double camY, double camZ) {
+		boolean snowing = false;
+		BetweenlandsWorldStorage storage = WorldStorageGetter.getNullable(level);
+		if (storage != null) {
+			snowing = storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.SNOWFALL.getId());
+		}
+		BLWeatherRenderer.INSTANCE.render(snowing, level, lightTexture, partialTick, camX, camY, camZ);
+		return true;
+	}
+
+	@Override
+	public boolean tickRain(ClientLevel level, int ticks, Camera camera) {
+		return true;
 	}
 }
