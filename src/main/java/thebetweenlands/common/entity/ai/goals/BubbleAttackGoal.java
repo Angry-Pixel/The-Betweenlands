@@ -4,6 +4,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import thebetweenlands.common.entity.fishing.BubblerCrab;
+import thebetweenlands.common.entity.projectile.BubblerCrabBubble;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class BubbleAttackGoal extends Goal {
@@ -44,10 +45,10 @@ public class BubbleAttackGoal extends Goal {
 						this.attackStep = 0;
 					}
 					if (this.attackStep == 1) {
-//						EntityBubblerCrabBubble entityBubble = new BubblerCrabBubble(this.crab.level(), this.crab);
-//						entityBubble.setPos(this.crab.getX(), this.crab.getY() + this.crab.getBbHeight() + 0.5D, this.crab.getZ());
-//						entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
-//						this.crab.level().addFreshEntity(entityBubble);
+						BubblerCrabBubble entityBubble = new BubblerCrabBubble(this.crab.level(), this.crab);
+						entityBubble.setPos(this.crab.getX(), this.crab.getY() + this.crab.getBbHeight() + 0.5D, this.crab.getZ());
+						entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
+						this.crab.level().addFreshEntity(entityBubble);
 						this.crab.level().playSound(null, this.crab.blockPosition(), SoundRegistry.BUBBLER_SPIT.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
 						this.crab.aggroCooldown = 0;
 					}
