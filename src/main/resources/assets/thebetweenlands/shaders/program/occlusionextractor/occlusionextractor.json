@@ -9,5 +9,5 @@
   "samplers": [
     { "name": "s_world_depth" },
     { "name": "s_clipPlane_depth" }
-  ],
+  ]
 }
