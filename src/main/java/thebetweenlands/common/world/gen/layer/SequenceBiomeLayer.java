@@ -24,6 +24,11 @@ public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements B
 				).apply(instance, SequenceBiomeLayer::new)
 		);
 
+	public SequenceBiomeLayer(List<BiomeLayerConfigured> layers) {
+		// Immutable copy of layers
+		this.layers = layers == null ? null : List.copyOf(layers);
+	}
+	
 	@Override
 	public boolean referencesPreviousLayer() {
 		return true;

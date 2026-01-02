@@ -30,6 +30,14 @@ public interface BiomeLayerRandomContextResolver {
 	// Because generics
 	public static record ContextResolverHolder(BiomeLayerRandomContextResolver value) {
 		public static final Codec<ContextResolverHolder> CODEC = BiomeLayerRandomContextResolver.CODEC.xmap(ContextResolverHolder::new, ContextResolverHolder::value);
+
+		public static ContextResolverHolder ofLong(long seed) {
+			return new ContextResolverHolder(new LongBasedBiomeLayerContextResolver(seed));
+		}
+
+		public static ContextResolverHolder ofString(String seed) {
+			return new ContextResolverHolder(new StringBasedBiomeLayerContextResolver(seed));
+		}
 	}
 	
 	// Creates a random context from a long-based seed
