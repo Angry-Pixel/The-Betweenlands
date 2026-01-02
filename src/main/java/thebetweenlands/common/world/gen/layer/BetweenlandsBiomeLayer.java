@@ -25,16 +25,18 @@ public class BetweenlandsBiomeLayer implements SimpleBiomeLayer {
 		);
 	
 	private final List<BLWeightPoint> biomes;
-	private int totalWeight = 0;
+	private final int totalWeight;
 
 	public BetweenlandsBiomeLayer(List<BLWeightPoint> biomes) {
 		this.biomes = biomes;
 
+		int totalWeight = 0;
 		for (BLWeightPoint biome : biomes) {
 			if (biome.weight() > 0 && !BetweenlandsConfig.debug) {
-				this.totalWeight += biome.weight();
+				totalWeight += biome.weight();
 			}
 		}
+		this.totalWeight = totalWeight;
 	}
 
 	@Override

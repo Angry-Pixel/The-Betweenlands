@@ -13,12 +13,16 @@ public class LinearCongruentialSeedMixer implements SeedMixer {
 	
 	@Override
 	public long mixSeed(long seedModifier) {
-        long i = LinearCongruentialGenerator.next(seedModifier, seedModifier);
-        i = LinearCongruentialGenerator.next(i, seedModifier);
-        i = LinearCongruentialGenerator.next(i, seedModifier);
-        long j = LinearCongruentialGenerator.next(this.worldSeed, i);
-        j = LinearCongruentialGenerator.next(j, i);
-        return LinearCongruentialGenerator.next(j, i);
+		long baseSeed = seedModifier;
+		baseSeed = LinearCongruentialGenerator.next(baseSeed, seedModifier);
+		baseSeed = LinearCongruentialGenerator.next(baseSeed, seedModifier);
+		baseSeed = LinearCongruentialGenerator.next(baseSeed, seedModifier);
+		
+		long mixedSeed = this.worldSeed;
+		mixedSeed = LinearCongruentialGenerator.next(mixedSeed, baseSeed);
+		mixedSeed = LinearCongruentialGenerator.next(mixedSeed, baseSeed);
+		mixedSeed = LinearCongruentialGenerator.next(mixedSeed, baseSeed);
+		return mixedSeed;
 	}
 	
 }
