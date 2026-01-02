@@ -7,6 +7,11 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 public interface SimpleBiomeLayer extends BiomeLayer {
 
 	@Override
+	public default boolean referencesPreviousLayer() {
+		return false;
+	}
+	
+	@Override
 	public default <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {
 		AreaFactoryContext<A> areaContext = context.areaContext().get();
 		return () -> areaContext.createResult((x, z) -> {

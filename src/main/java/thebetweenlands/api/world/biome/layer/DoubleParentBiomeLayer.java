@@ -12,6 +12,11 @@ public interface DoubleParentBiomeLayer extends BiomeLayer {
 	public BiomeLayerConfigured getSecondParentLayer();
 
 	@Override
+	public default boolean referencesPreviousLayer() {
+		return this.getFirstParentLayer().biomeLayer().referencesPreviousLayer() || this.getSecondParentLayer().biomeLayer().referencesPreviousLayer();
+	}
+	
+	@Override
 	public default <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {
 		BiomeLayer.super.compose(context, biomeLayerChain);
 		this.getFirstParentLayer().compose(context, biomeLayerChain);

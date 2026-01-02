@@ -20,6 +20,11 @@ public record BackwardRefBiomeLayer(String refName) implements BiomeLayer {
 					Codec.string(1, 64).fieldOf("ref_name").forGetter(BackwardRefBiomeLayer::refName)
 				).apply(instance, BackwardRefBiomeLayer::new)
 		);
+
+	@Override
+	public boolean referencesPreviousLayer() {
+		return false;
+	}
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {

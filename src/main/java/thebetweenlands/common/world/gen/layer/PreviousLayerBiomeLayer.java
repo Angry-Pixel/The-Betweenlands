@@ -17,6 +17,11 @@ public class PreviousLayerBiomeLayer implements BiomeLayer {
 	public static final BiomeLayerConfigured CONFIGURED_INSTANCE = BiomeLayerConfigured.unconfigured(INSTANCE);
 
 	public static final MapCodec<PreviousLayerBiomeLayer> CODEC = MapCodec.unit(INSTANCE);
+
+	@Override
+	public boolean referencesPreviousLayer() {
+		return true;
+	}
 	
 	@Override
 	public <A extends Area> AreaFactory<A> createAreaFactory(BiomeLayerContext<A> context, BiomeLayerChainState chainState) {

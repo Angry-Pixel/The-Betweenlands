@@ -34,11 +34,9 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	private BiomeLayerRandomContext currentLayerRandomContext = null;
 	
 	/**
-	 * Used to check if the previous layer was accessed by the currently processing layer
-	 * <br/>
-	 * If the previous layer was not accessed by the time the layer is finished, then it is not necessary to store it in this layer's ref.
+	 * Used to determine if the current layer is allowed to access the previous biome layer in its ref.
 	 */
-	private boolean previousLayerUsed = false;
+	private boolean previousLayerAccessible = true;
 	
 	/**
 	 * An immutable copy of the backward refs, used to save memory in getAllBackwardRefs
@@ -66,16 +64,19 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 		this(Optional.empty(), Map.of());
 	}
 	
+	protected void ensureOpen() {
+		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+	}
+	
 	@Override
 	public Optional<BiomeLayerRef> getPreviousLayer() {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
-		this.previousLayerUsed = true;
+		this.ensureOpen();
 		return this.previousLayer;
 	}
 
 	@Override
 	public Optional<BiomeLayerRef> getBackwardRef(String name) {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		this.ensureOpen();
 		if(this.backwardRefs.containsKey(name)) {
 			return Optional.of(this.backwardRefs.get(name));
 		} else {
@@ -85,7 +86,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	
 	@Override
 	public Map<String, BiomeLayerRef> getAllBackwardRefs() {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		this.ensureOpen();
 		if(this.backwardRefsChanged) {
 			this.immutableBackwardRefs = Map.copyOf(this.backwardRefs);
 			this.backwardRefsChanged = false;
@@ -100,7 +101,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @param biomeLayer the biome layer to reference
 	 */
 	public void addBackwardRef(String name, BiomeLayer biomeLayer, BiomeLayerRandomContext layerRandomContext) {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		this.ensureOpen();
 		this.backwardRefs.put(name, new BiomeLayerRef(biomeLayer, layerRandomContext, this.immutableCopy()));
 		
 		this.backwardRefsChanged = true;
@@ -121,7 +122,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @param biomeLayerRef the biome layer to reference
 	 */
 	public void addBackwardRef(String name, BiomeLayerRef biomeLayerRef) {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		this.ensureOpen();
 		this.backwardRefs.put(name, biomeLayerRef);
 		
 		this.backwardRefsChanged = true;
@@ -135,8 +136,7 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 		if(this.currentLayer == null) {
 			return Optional.empty();
 		} else {
-			final boolean previousLayerUsed = this.previousLayerUsed;
-			BiomeLayerChainState refState = this.immutableCopy(previousLayerUsed);
+			BiomeLayerChainState refState = this.immutableCopy(this.previousLayerAccessible);
 			
 			return Optional.of(new BiomeLayerRef(this.currentLayer, this.currentLayerRandomContext, refState));
 		}
@@ -149,14 +149,14 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	 * @return an optional containing a reference to the layer being replaced, if it exists.
 	 */
 	public Optional<BiomeLayerRef> nextLayer(BiomeLayer nextLayer, BiomeLayerRandomContext nextLayerRandomContext) {
-		if(this.finished) { throw new IllegalStateException("Attempt to access a finished BiomeLayerChain"); }
+		this.ensureOpen();
 		// Create the ref to the current layer, before it gets replaced
 		final Optional<BiomeLayerRef> layerRef = this.calculateCurrentRef();
 		// Replace the current layer with the new layer
 		this.currentLayer = nextLayer;
 		this.currentLayerRandomContext = nextLayerRandomContext;
 		this.previousLayer = layerRef;
-		this.previousLayerUsed = false;
+		this.previousLayerAccessible = nextLayer.referencesPreviousLayer();
 		return layerRef;
 	}
 	

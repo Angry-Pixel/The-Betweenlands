@@ -21,6 +21,11 @@ public record MarkerBiomeLayer(String refName) implements BiomeLayer {
 					Codec.string(1, 64).fieldOf("ref_name").forGetter(MarkerBiomeLayer::refName)
 				).apply(instance, MarkerBiomeLayer::new)
 		);
+
+	@Override
+	public boolean referencesPreviousLayer() {
+		return true;
+	}
 	
 	@Override
 	public <A extends Area> void compose(BiomeLayerContext<A> context, BiomeLayerChain biomeLayerChain) {

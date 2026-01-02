@@ -14,6 +14,12 @@ public interface BiomeLayer {
 	public static final Codec<BiomeLayer> CODEC = BLRegistries.BIOME_LAYER_TYPE.byNameCodec().dispatch(BiomeLayer::codec, Function.identity());
 
 	/**
+	 * Whether this biome layer's {@link BiomeLayer#createAreaFactory(BiomeLayerContext, BiomeLayerChainState) createAreaFactory(BiomeLayerContext, BiomeLayerChainState)} method requires a reference to the previous biome layer.
+	 * @return whether this biome layer's area factory will use a reference to the previous biome layer
+	 */
+	public boolean referencesPreviousLayer();
+	
+	/**
 	 * Called once when biome layers are initially processed
 	 * @param <A>
 	 * @param context the biome layer context
