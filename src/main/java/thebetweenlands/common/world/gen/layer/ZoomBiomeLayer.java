@@ -23,7 +23,7 @@ public class ZoomBiomeLayer implements SingleParentBiomeLayer {
 				).apply(instance, ZoomBiomeLayer::new)
 		);
 
-	protected final BiomeLayerConfigured parent;
+	private final BiomeLayerConfigured parent;
 	
 	public ZoomBiomeLayer(HolderGetter<Biome> registry, BiomeLayerConfigured parent) {
 		this.parent = parent;
@@ -49,28 +49,28 @@ public class ZoomBiomeLayer implements SingleParentBiomeLayer {
 
 	@Override
 	public <A extends Area> int apply(BiomeLayerContext<A> context, A parentArea, int x, int z) {
-		int initialBiome = parentArea.get(getParentX(x), getParentY(z));
+		int initialBiomeXNZN = parentArea.get(getParentX(x), getParentY(z));
 		RandomSource random = context.createRandom(x & ~1, z & ~1);
 		int pX = x & 1;
 		int pZ = z & 1;
 
 		if (pX == 0 && pZ == 0) {
-			return initialBiome;
+			return initialBiomeXNZN;
 		} else {
-			int initialBiomeZ = parentArea.get(getParentX(x), getParentY(z + 1));
-			int rand1 = context.random(random, initialBiome, initialBiomeZ);
+			int initialBiomeXNZP = parentArea.get(getParentX(x), getParentY(z + 1));
+			int rand1 = context.random(random, initialBiomeXNZN, initialBiomeXNZP);
 
 			if (pX == 0 && pZ == 1) {
 				return rand1;
 			} else {
-				int initialBiomeX = parentArea.get(getParentX(x + 1), getParentY(z));
-				int rand2 = context.random(random, initialBiome, initialBiomeX);
+				int initialBiomeXPZN = parentArea.get(getParentX(x + 1), getParentY(z));
+				int rand2 = context.random(random, initialBiomeXNZN, initialBiomeXPZN);
 
 				if (pX == 1 && pZ == 0) {
 					return rand2;
 				} else {
-					int initialBiomeXZ = parentArea.get(getParentX(x + 1), getParentY(z + 1));
-					return this.modeOrRandom(context, random, initialBiome, initialBiomeZ, initialBiomeX, initialBiomeXZ);
+					int initialBiomeXPZP = parentArea.get(getParentX(x + 1), getParentY(z + 1));
+					return this.modeOrRandom(context, random, initialBiomeXNZN, initialBiomeXNZP, initialBiomeXPZN, initialBiomeXPZP);
 				}
 			}
 		}
