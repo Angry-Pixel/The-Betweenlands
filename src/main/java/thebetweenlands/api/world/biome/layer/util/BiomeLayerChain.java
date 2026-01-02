@@ -48,6 +48,11 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 	private boolean backwardRefsChanged = false;
 	
 	/**
+	 * If this is the first layer being processed
+	 */
+	private boolean first = true;
+	
+	/**
 	 * If this chain is "finished" (meaning it can no longer be modified or accessed)
 	 */
 	private boolean finished = false;
@@ -155,8 +160,12 @@ public class BiomeLayerChain implements BiomeLayerChainState {
 		// Replace the current layer with the new layer
 		this.currentLayer = nextLayer;
 		this.currentLayerRandomContext = nextLayerRandomContext;
-		this.previousLayer = layerRef;
+		// Replace the previous layer
+		// If this is the first layer being processed (i.e. this is the first layer in a sequence), retain the previous layer
+		// Without this, the first layer in a sequence will always see an empty optional for getPreviousLayer(), making it impossible to access the layers of the parent scope without a marker
+		this.previousLayer = layerRef.isEmpty() && this.first ? this.previousLayer : layerRef;
 		this.previousLayerAccessible = nextLayer.referencesPreviousLayer();
+		this.first = false;
 		return layerRef;
 	}
 	
