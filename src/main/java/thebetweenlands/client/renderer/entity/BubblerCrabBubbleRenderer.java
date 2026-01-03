@@ -11,7 +11,6 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 
-import net.minecraft.client.CameraType;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -36,9 +35,9 @@ public class BubblerCrabBubbleRenderer extends EntityRenderer<BubblerCrabBubble>
 	public void render(BubblerCrabBubble entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource bufferSource, int packedLight) {
 		stack.pushPose();
 
-		float radius = Math.min(entity.swell, 120) * 0.0065f;
+		float radius = Math.min(entity.swell, 120) * 0.0065F;
 		
-		stack.translate(0F, 1 + radius * 0.25f - 0.05f, 0F);
+		stack.translate(0F, 0.25F + radius * 0.25F - 0.05F, 0F);
 		//RenderSystem.enableRescaleNormal();
 		stack.scale(this.scale + radius, this.scale + radius, this.scale + radius);
 		Tesselator tessellator = Tesselator.getInstance();
@@ -50,7 +49,7 @@ public class BubblerCrabBubbleRenderer extends EntityRenderer<BubblerCrabBubble>
 		float minV = 0;
 		float maxV = 1;
 		stack.mulPose(Axis.YP.rotationDegrees(180.0F - renderDispatcher.camera.getYRot()));
-		stack.mulPose(Axis.XP.rotationDegrees((renderDispatcher.options.getCameraType() == CameraType.THIRD_PERSON_FRONT ? -1F : 1F) * - renderDispatcher.camera.getXRot()));
+		stack.mulPose(Axis.XP.rotationDegrees( - renderDispatcher.camera.getXRot()));
 /*
 		if (this.renderOutlines) {
 			RenderSystem.enableColorMaterial();

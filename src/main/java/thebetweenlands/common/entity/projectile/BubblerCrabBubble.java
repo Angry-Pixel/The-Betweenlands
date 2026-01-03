@@ -124,9 +124,9 @@ public class BubblerCrabBubble extends ThrowableProjectile {
 		double newZ = this.getZ();
 		this.setPos(prevPosX, prevPosY, prevPosZ);
 		this.move(MoverType.SELF, new Vec3(newX - prevPosX, newY - prevPosY, newZ - prevPosZ));
-		this.xOld = prevPosX;
-		this.yOld = prevPosY;
-		this.zOld = prevPosZ;
+		this.xOld = this.xo = prevPosX;
+		this.yOld = this.yo = prevPosY;
+		this.zOld = this.zo = prevPosZ;
 
 		if(this.isInWater())
 			this.setDeltaMovement(getDeltaMovement().add(0F, 0.033F, 0F));
@@ -309,11 +309,11 @@ public class BubblerCrabBubble extends ThrowableProjectile {
 					AABB aabb = entity.getBoundingBox();
 
 					Vec3 dir = this.getDeltaMovement().normalize().scale(1.5f);
-					Optional<Vec3> ray = Optional.ofNullable(aabb.clip(this.position().add(0, this.getBbHeight() * 0.5f, 0).subtract(dir), this.position().add(0, this.getBbHeight() * 0.5f, 0)).orElse(null));
-					if (ray == null)
+					Optional<Vec3> ray = aabb.clip(this.position().add(0, this.getBbHeight() * 0.5f, 0).subtract(dir), this.position().add(0, this.getBbHeight() * 0.5f, 0));
+					if (ray.isEmpty())
 						ray = aabb.clip(this.position().add(0, this.getBbHeight() * 0.5f, 0), this.position().add(0, this.getBbHeight() * 0.5f, 0).add(dir));
 
-					if (ray.isPresent() && ray != null) {
+					if (ray.isPresent()) {
 						this.setPos(ray.get().x(), ray.get().y(), ray.get().z());
 						this.startRiding(entity, true);
 					}
