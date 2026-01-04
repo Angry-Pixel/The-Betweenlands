@@ -24,7 +24,7 @@ public class BubblerCrabBubbleRenderer extends EntityRenderer<BubblerCrabBubble>
 	public final static ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/bubbler_crab_bubble.png");
 	protected final EntityRenderDispatcher renderDispatcher;
 	private final float scale;
-	
+
 	public BubblerCrabBubbleRenderer(Context context) {
 		super(context);
 		renderDispatcher = context.getEntityRenderDispatcher();
@@ -34,11 +34,8 @@ public class BubblerCrabBubbleRenderer extends EntityRenderer<BubblerCrabBubble>
 	@Override
 	public void render(BubblerCrabBubble entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource bufferSource, int packedLight) {
 		stack.pushPose();
-
 		float radius = Math.min(entity.swell, 120) * 0.0065F;
-		
 		stack.translate(0F, 0.25F + radius * 0.25F - 0.05F, 0F);
-		//RenderSystem.enableRescaleNormal();
 		stack.scale(this.scale + radius, this.scale + radius, this.scale + radius);
 		Tesselator tessellator = Tesselator.getInstance();
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
@@ -50,27 +47,13 @@ public class BubblerCrabBubbleRenderer extends EntityRenderer<BubblerCrabBubble>
 		float maxV = 1;
 		stack.mulPose(Axis.YP.rotationDegrees(180.0F - renderDispatcher.camera.getYRot()));
 		stack.mulPose(Axis.XP.rotationDegrees( - renderDispatcher.camera.getXRot()));
-/*
-		if (this.renderOutlines) {
-			RenderSystem.enableColorMaterial();
-			RenderSystem.enableOutlineMode(this.getTeamColor(entity));
-		}
-*/
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-
 		buffer.addVertex(stack.last().pose(), -0.25F, -0.25F, 0.0F).setUv(minU, maxV).setColor(1F, 1F, 1F, 1F).setNormal(0.0F, 1.0F, 0.0F);
 		buffer.addVertex(stack.last().pose(), 0.25F, -0.25F, 0.0F).setUv(maxU, maxV).setColor(1F, 1F, 1F, 1F).setNormal(0.0F, 1.0F, 0.0F);
 		buffer.addVertex(stack.last().pose(), 0.25F, 0.25F, 0.0F).setUv(maxU, minV).setColor(1F, 1F, 1F, 1F).setNormal(0.0F, 1.0F, 0.0F);
 		buffer.addVertex(stack.last().pose(), -0.25F, 0.25F, 0.0F).setUv(minU, minV).setColor(1F, 1F, 1F, 1F).setNormal(0.0F, 1.0F, 0.0F);
 		BufferUploader.drawWithShader(buffer.buildOrThrow());
-/*
-		if (this.renderOutlines) {
-			stack.disableOutlineMode();
-			stack.disableColorMaterial();
-		}
-*/
-		//RenderSystem.disableRescaleNormal();
 		RenderSystem.disableBlend();
 		stack.popPose();
 		super.render(entity, entityYaw, partialTick, stack, bufferSource, packedLight);
