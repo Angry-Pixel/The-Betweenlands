@@ -28,13 +28,13 @@ public class WightFortressStructure extends Structure {
 
 	@Override
 	public Optional<Structure.GenerationStub> findGenerationPoint(Structure.GenerationContext context) {
-		return placeAndAccountForBasement(context, Heightmap.Types.WORLD_SURFACE_WG, p_227598_ -> this.generatePieces(p_227598_, context));
+		return placeAndAccountForBasement(context, Heightmap.Types.WORLD_SURFACE_WG, builder -> this.generatePieces(builder, context));
 	}
 
 	private void generatePieces(StructurePiecesBuilder builder, Structure.GenerationContext context) {
 		ChunkPos chunkpos = context.chunkPos();
 		WorldgenRandom worldgenrandom = context.random();
-		BlockPos blockpos = new BlockPos(chunkpos.getMinBlockX(), context.chunkGenerator().getSeaLevel() - 7, chunkpos.getMinBlockZ());
+		BlockPos blockpos = new BlockPos(chunkpos.getMinBlockX(), Math.max(context.heightAccessor().getMinBuildHeight() + 1, context.chunkGenerator().getSeaLevel() - 7), chunkpos.getMinBlockZ());
 		Rotation rotation = Rotation.getRandom(worldgenrandom);
 		builder.addPiece(new WightFortressPiece(context.structureTemplateManager(), PIECE_LOCATION, blockpos, rotation));
 	}
@@ -45,7 +45,7 @@ public class WightFortressStructure extends Structure {
 		ChunkPos chunkpos = context.chunkPos();
 		int i = chunkpos.getMiddleBlockX();
 		int j = chunkpos.getMiddleBlockZ();
-		int k = context.chunkGenerator().getFirstOccupiedHeight(i, j, heightmapTypes, context.heightAccessor(), context.randomState()) - 7;
+		int k = Math.max(context.heightAccessor().getMinBuildHeight() + 1, context.chunkGenerator().getFirstOccupiedHeight(i, j, heightmapTypes, context.heightAccessor(), context.randomState()) - 7);
 		return Optional.of(new Structure.GenerationStub(new BlockPos(i, k, j), generator));
 	}
 
