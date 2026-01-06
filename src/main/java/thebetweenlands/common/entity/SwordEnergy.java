@@ -20,7 +20,7 @@ import thebetweenlands.util.AnimationMathHelper;
 public class SwordEnergy extends Entity implements IEntityWithComplexSpawn {
 
 	private static final AABB RENDER_BOUNDING_BOX = new AABB(-9, -2, -9, 10, 3, 10);
-	public static final float DISTANCE = 3.0F;
+	public static final float DISTANCE = 3.5F;
 
 	private static final EntityDataAccessor<Float> PART_POS_1 = SynchedEntityData.defineId(SwordEnergy.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> PART_POS_2 = SynchedEntityData.defineId(SwordEnergy.class, EntityDataSerializers.FLOAT);

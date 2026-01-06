@@ -8,6 +8,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.structure.DruidCirclePiece;
 import thebetweenlands.common.world.gen.structure.DruidCircleStructure;
+import thebetweenlands.common.world.gen.structure.WightFortressPiece;
+import thebetweenlands.common.world.gen.structure.WightFortressStructure;
 
 public class StructureTypeRegistry {
 	public static final DeferredRegister<StructureType<?>> TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, TheBetweenlands.ID);
@@ -15,6 +17,9 @@ public class StructureTypeRegistry {
 
 	public static final DeferredHolder<StructureType<?>, StructureType<DruidCircleStructure>> DRUID_CIRCLE = TYPES.register("druid_circle", () -> () -> DruidCircleStructure.CODEC);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> DRUID_CIRCLE_PIECE = registerPiece("druid_circle", DruidCirclePiece::new);
+
+	public static final DeferredHolder<StructureType<?>, StructureType<WightFortressStructure>> WIGHT_FORTRESS = TYPES.register("wight_fortress", () -> () -> WightFortressStructure.CODEC);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> WIGHT_FORTRESS_PIECE = registerPiece("wight_fortress", WightFortressPiece::new);
 
 	private static DeferredHolder<StructurePieceType, StructurePieceType> registerPiece(String name, StructurePieceType structurePieceType) {
 		return PIECE_TYPES.register(name, () -> structurePieceType);

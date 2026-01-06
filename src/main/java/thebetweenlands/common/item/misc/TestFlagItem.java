@@ -18,11 +18,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
+import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 import thebetweenlands.common.block.structure.DecayPitGroundChainBlock;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.entity.DecayPitTarget;
 import thebetweenlands.common.entity.GreeblingCorpse;
 import thebetweenlands.common.entity.MovingWall;
+import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.creature.Greebling;
 import thebetweenlands.common.registries.*;
@@ -63,17 +65,17 @@ public class TestFlagItem extends Item {
 		} else if (context.getLevel().getBlockState(context.getClickedPos()).is(BlockRegistry.DECAYED_MUD_TILES) && !context.getLevel().isClientSide()) {
 			this.createWallHall(context.getLevel(), context.getClickedPos(), 20);
 		} else {
-//			int offset = 4;
-//			SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
-//
-//			energy.setPos(context.getClickedPos().above(offset - 1).getCenter());
-//
-//			context.getLevel().addFreshEntity(energy);
-//
-//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
-//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
-//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
-//			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset, 3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
+			int offset = 4;
+			SwordEnergy energy = new SwordEnergy(EntityRegistry.SWORD_ENERGY.get(), context.getLevel());
+
+			energy.setPos(context.getClickedPos().above(offset).getCenter().add(0.5F, 0.0F, 0.5F));
+
+			context.getLevel().addFreshEntity(energy);
+
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset + 1, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 0);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(4, offset + 1, -3), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 1);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(4, offset + 1, 4), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 2);
+			ItemCageBlockEntity.setBlockWithType(context.getLevel(), context.getClickedPos().offset(-3, offset + 1, 4), BlockRegistry.ITEM_CAGE.get().defaultBlockState(), 3);
 		}
 
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());

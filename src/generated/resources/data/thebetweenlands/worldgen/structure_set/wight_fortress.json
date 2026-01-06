@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 748969372,
+    "separation": 20,
+    "spacing": 40,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "thebetweenlands:wight_fortress",
+      "weight": 1
+    }
+  ]
+}

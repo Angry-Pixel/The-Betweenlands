@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.structure.structures.JungleTempleStruc
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.world.gen.structure.DruidCircleStructure;
+import thebetweenlands.common.world.gen.structure.WightFortressStructure;
 
 public class StructureRegistry {
 
@@ -39,6 +40,7 @@ public class StructureRegistry {
 	public static final ResourceKey<Structure> WIGHT_FORTRESS = makeKey("wight_fortress");
 
 	public static final ResourceKey<StructureSet> DRUID_CIRCLE_SET = makeSetKey("druid_circle");
+	public static final ResourceKey<StructureSet> WIGHT_FORTRESS_SET = makeSetKey("wight_fortress");
 
 
 	private static ResourceKey<Structure> makeKey(String name) {
@@ -61,12 +63,13 @@ public class StructureRegistry {
 		context.register(SLUDGE_WORM_DUNGEON, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
 		context.register(SLUDGE_WORM_DUNGEON_MAZE, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
 		context.register(SMALL_RUINS, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
-		context.register(WIGHT_FORTRESS, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
+		context.register(WIGHT_FORTRESS, new WightFortressStructure(new Structure.StructureSettings.Builder(biomeLookup.getOrThrow(BLBiomeTagProvider.GENERATES_WIGHT_FORTRESS)).terrainAdapation(TerrainAdjustment.BEARD_THIN).build()));
 	}
 
 	public static void bootstrapSet(BootstrapContext<StructureSet> context) {
 		HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
 
 		context.register(DRUID_CIRCLE_SET, new StructureSet(structures.getOrThrow(DRUID_CIRCLE), new RandomSpreadStructurePlacement(10, 7, RandomSpreadType.TRIANGULAR, 1696132362)));
+		context.register(WIGHT_FORTRESS_SET, new StructureSet(structures.getOrThrow(WIGHT_FORTRESS), new RandomSpreadStructurePlacement(40, 20, RandomSpreadType.TRIANGULAR, 748969372)));
 	}
 }

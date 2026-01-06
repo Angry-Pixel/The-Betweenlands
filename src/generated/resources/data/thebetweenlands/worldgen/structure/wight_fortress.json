@@ -1,6 +1,7 @@
 {
-  "type": "minecraft:jungle_temple",
-  "biomes": [],
+  "type": "thebetweenlands:wight_fortress",
+  "biomes": "#thebetweenlands:generates_wight_fortress",
   "spawn_overrides": {},
-  "step": "surface_structures"
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin"
 }

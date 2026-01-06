@@ -29,6 +29,7 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 	public static final TagKey<Biome> DREADFUL_PEAT_MUMMY_SUMMONABLE = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("dreadful_peat_mummy_summonable"));
 
 	public static final TagKey<Biome> GENERATES_DRUID_CIRCLE = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("generates_druid_circle"));
+	public static final TagKey<Biome> GENERATES_WIGHT_FORTRESS = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("generates_wight_fortress"));
 
 	public BLBiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, Registries.BIOME, provider, TheBetweenlands.ID, existingFileHelper);
@@ -45,6 +46,7 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 		this.tag(DREADFUL_PEAT_MUMMY_SUMMONABLE).add(BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH);
 
 		this.tag(GENERATES_DRUID_CIRCLE).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP);
+		this.tag(GENERATES_WIGHT_FORTRESS).add(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH);
 
 		this.tag(IN_BETWEENLANDS).add(BiomeRegistry.COARSE_ISLANDS,
 			BiomeRegistry.DEEP_WATERS, BiomeRegistry.ERODED_MARSH, BiomeRegistry.MARSH,
