@@ -82,6 +82,7 @@ import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
+import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
@@ -372,11 +373,7 @@ import thebetweenlands.common.fluid.ColoredFluidType;
 import thebetweenlands.common.fluid.SwampWaterFluidType;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.item.armor.extension.ExplorersHatRenderer;
-import thebetweenlands.common.item.armor.extension.LargeSpiritTreeMaskRenderer;
-import thebetweenlands.common.item.armor.extension.SilkMaskRenderer;
-import thebetweenlands.common.item.armor.extension.SkullMaskRenderer;
-import thebetweenlands.common.item.armor.extension.SmallSpiritTreeMaskRenderer;
+import thebetweenlands.common.item.armor.extension.*;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
 import thebetweenlands.common.item.misc.MobItem;
@@ -638,6 +635,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_MASK, () -> LargeSpiritTreeFaceModel.create(true));
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_MASK, () -> SmallSpiritTreeFaceModel.createFace2(true));
 		event.registerLayerDefinition(BLModelLayers.SILK_MASK, SilkMaskModel::create);
+		event.registerLayerDefinition(BLModelLayers.SYRMORITE_ARMOR, SyrmoriteArmorModel::makeModel);
 
 		event.registerLayerDefinition(BLModelLayers.BONE_SHIELD, BoneShieldModel::create);
 		event.registerLayerDefinition(BLModelLayers.DENTROTHYST_SHIELD, DentrothystShieldModel::create);
@@ -964,6 +962,10 @@ public class ClientRegistrationEvents {
 		event.registerItem(new SilkMaskRenderer(), ItemRegistry.SILK_MASK.get());
 		event.registerItem(new SmallSpiritTreeMaskRenderer(), ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
 		event.registerItem(new LargeSpiritTreeMaskRenderer(), ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
+
+		event.registerItem(new SyrmoriteArmorRenderer(),
+			ItemRegistry.SYRMORITE_HELMET.get(), ItemRegistry.SYRMORITE_CHESTPLATE.get(),
+			ItemRegistry.SYRMORITE_LEGGINGS.get(), ItemRegistry.SYRMORITE_BOOTS.get());
 
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override

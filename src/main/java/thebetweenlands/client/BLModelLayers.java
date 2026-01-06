@@ -11,6 +11,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation LARGE_SPIRIT_TREE_MASK = register("large_spirit_tree_mask");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_MASK = register("small_spirit_tree_mask");
 	public static final ModelLayerLocation SILK_MASK = register("silk_mask");
+	public static final ModelLayerLocation SYRMORITE_ARMOR = register("syrmorite_armor");
 
 	public static final ModelLayerLocation BONE_SHIELD = register("bone_shield");
 	public static final ModelLayerLocation DENTROTHYST_SHIELD = register("dentrothyst_shield");
