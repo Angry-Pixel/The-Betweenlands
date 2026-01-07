@@ -3,9 +3,9 @@
   "textures": {
     "down": "thebetweenlands:block/weedwood_log_side",
     "east": "thebetweenlands:block/weedwood_log_side",
-    "north": "thebetweenlands:block/weedwood_log_side_8",
+    "north": "thebetweenlands:block/weedwood_log_side",
     "south": "thebetweenlands:block/weedwood_log_side",
     "up": "thebetweenlands:block/weedwood_log_side",
-    "west": "thebetweenlands:block/weedwood_log_side"
+    "west": "thebetweenlands:block/weedwood_log_side_7"
   }
 }

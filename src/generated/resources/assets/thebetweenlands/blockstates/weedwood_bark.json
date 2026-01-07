@@ -2,54 +2,84 @@
   "variants": {
     "axis=x": [
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_1",
         "weight": 100,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_2",
         "weight": 100,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_3",
         "weight": 100,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_4",
         "weight": 10,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_5",
         "weight": 10,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_6",
         "weight": 5,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_7",
         "weight": 5,
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_8",
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_9",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_10",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_11",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_12",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_13",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_14",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_15",
         "x": 90,
         "y": 90
       }
@@ -88,50 +118,92 @@
       },
       {
         "model": "thebetweenlands:block/weedwood_bark_9"
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_10"
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_11"
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_12"
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_13"
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_14"
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_15"
       }
     ],
     "axis=z": [
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_1",
         "weight": 100,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_2",
         "weight": 100,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_3",
         "weight": 100,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_4",
         "weight": 10,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_5",
         "weight": 10,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_6",
         "weight": 5,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_7",
         "weight": 5,
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_8",
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/weedwood_bark_horizontal",
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_9",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_10",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_11",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_12",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_13",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_14",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/weedwood_bark_horizontal_15",
         "x": 90
       }
     ]

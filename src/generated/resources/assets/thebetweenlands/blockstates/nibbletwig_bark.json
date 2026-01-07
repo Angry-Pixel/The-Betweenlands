@@ -2,22 +2,22 @@
   "variants": {
     "axis=x": [
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_1",
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_2",
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_2",
         "x": 90,
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_4",
         "x": 90,
         "y": 90
       }
@@ -38,19 +38,19 @@
     ],
     "axis=z": [
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_1",
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_2",
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_2",
         "x": 90
       },
       {
-        "model": "thebetweenlands:block/nibbletwig_bark_horizontal",
+        "model": "thebetweenlands:block/nibbletwig_bark_horizontal_4",
         "x": 90
       }
     ]
