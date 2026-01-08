@@ -1,0 +1,57 @@
+{
+  "variants": {
+    "facing=east": [
+      {
+        "model": "thebetweenlands:block/edge_leaf_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_3",
+        "y": 270
+      }
+    ],
+    "facing=north": [
+      {
+        "model": "thebetweenlands:block/edge_leaf_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_3",
+        "y": 180
+      }
+    ],
+    "facing=south": [
+      {
+        "model": "thebetweenlands:block/edge_leaf_1"
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_2"
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_3"
+      }
+    ],
+    "facing=west": [
+      {
+        "model": "thebetweenlands:block/edge_leaf_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_leaf_3",
+        "y": 90
+      }
+    ]
+  }
+}

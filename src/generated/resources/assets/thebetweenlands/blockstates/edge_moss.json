@@ -1,0 +1,147 @@
+{
+  "variants": {
+    "facing=east": [
+      {
+        "model": "thebetweenlands:block/edge_moss_1",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_2",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_3",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_4",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_5",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_6",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_7",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_8",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_9",
+        "y": 270
+      }
+    ],
+    "facing=north": [
+      {
+        "model": "thebetweenlands:block/edge_moss_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_3",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_4",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_5",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_6",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_7",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_8",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_9",
+        "y": 180
+      }
+    ],
+    "facing=south": [
+      {
+        "model": "thebetweenlands:block/edge_moss_1"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_2"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_3"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_4"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_5"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_6"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_7"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_8"
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_9"
+      }
+    ],
+    "facing=west": [
+      {
+        "model": "thebetweenlands:block/edge_moss_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_3",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_4",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_5",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_6",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_7",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_8",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/edge_moss_9",
+        "y": 90
+      }
+    ]
+  }
+}

@@ -20,6 +20,7 @@ import thebetweenlands.common.block.misc.GlowingGoopBlock;
 import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
 import thebetweenlands.common.block.misc.SamiteCanvasPanelBlock;
 import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
+import thebetweenlands.common.block.plant.EdgePlantBlock;
 import thebetweenlands.common.block.plant.ShelfFungusBlock;
 import thebetweenlands.common.block.structure.*;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
@@ -875,7 +876,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlockWithItem(BlockRegistry.SPIRIT_TREE_SAPLING);
 		this.crossBlock(BlockRegistry.ROOT_POD);
 		this.basicItemTex(BlockRegistry.ROOT_POD, false);
-		//3d model plants
+		this.edgePlant(BlockRegistry.EDGE_LEAF, 3);
+		this.edgePlant(BlockRegistry.EDGE_MOSS, 9);
+		this.edgePlant(BlockRegistry.EDGE_SHROOM, 3);
 		this.crossBlockWithItem(BlockRegistry.MIRE_CORAL);
 		this.crossBlockWithItem(BlockRegistry.DEEP_WATER_CORAL);
 		this.crossBlockWithItem(BlockRegistry.WATER_WEEDS);
@@ -1324,6 +1327,22 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.getMultipartBuilder(dugBlock.get()).part().modelFile(this.models().withExistingParent(dugBlock.getId().toString(), this.modLoc("block/dug_soil_base")).texture("bottom", bottom).texture("side", side)).addModel().end().part().modelFile(this.models().getExistingFile(this.modLoc("block/" + dugBlock.getId().getPath() + "_top"))).addModel().end();
 		var model = this.models().cubeBottomTop(dugBlock.getId().withSuffix("_inventory").toString(), side, bottom, this.modLoc("block/" + dugBlock.getId().getPath().replace("purified_", "") + "_0"));
 		this.itemModels().getBuilder(dugBlock.getId().getPath()).parent(model);
+	}
+
+	public void edgePlant(DeferredBlock<Block> edgePlant, int amount) {
+		this.getVariantBuilder(edgePlant.get()).forAllStates(state -> {
+			ConfiguredModel.Builder<?> builder = ConfiguredModel.builder();
+
+			for (int i = 1; i <= amount; i++) {
+				builder = builder.modelFile(this.models().getExistingFile(this.blockTexture(edgePlant.get()).withSuffix("_" + i)))
+					.rotationY(((int) state.getValue(EdgePlantBlock.FACING).toYRot()) % 360);
+				if (i != amount) {
+					builder = builder.nextModel();
+				}
+			}
+			return builder.build();
+		});
+		this.simpleBlockItem(edgePlant.get(), this.models().getExistingFile(this.blockTexture(edgePlant.get()).withSuffix("_1")));
 	}
 
 	private void flowerPot(DeferredBlock<FlowerPotBlock> block) {
