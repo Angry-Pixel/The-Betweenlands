@@ -591,6 +591,10 @@ public class ClientRegistrationEvents {
 		//Testing stuff
 		event.registerEntityRenderer(EntityRegistry.SWINGING_HAMMER_TRAP.get(), SwingingHammerTrapRenderer::new);
 
+		event.registerEntityRenderer(EntityRegistry.WALL_LAMPREY.get(), WallLampreyRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SLUDGE_WALL_JET.get(), NoopRenderer::new);
+
+
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);
@@ -724,6 +728,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.MOVING_WALL, MovingWallModel::create);
 		event.registerLayerDefinition(BLModelLayers.ROCK_SNOT, RockSnotModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.ROCK_SNOT_GRABBER, RockSnotGrabberModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.WALL_LAMPREY, WallLampreyModel::create);
+		event.registerLayerDefinition(BLModelLayers.WALL_HOLE, WallHoleModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

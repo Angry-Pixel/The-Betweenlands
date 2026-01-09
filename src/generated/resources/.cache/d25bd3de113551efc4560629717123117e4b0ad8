@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-31T19:44:27.902293026	Item Models: thebetweenlands
+// 1.21.1	2026-01-06T19:46:15.673722278	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -610,6 +610,7 @@ e98af232e1724a196a6f326bb5faf6a520f14538 assets/thebetweenlands/models/item/valo
 12be05bb63e73b644d1bace65c1c9e1ec59701d5 assets/thebetweenlands/models/item/volarkite.json
 b926f98106b28a7d767014f2358ec94eaad5d5c7 assets/thebetweenlands/models/item/volarpad_leaf.json
 6feaf98763f89dce36e62cdd10febd05754a46f5 assets/thebetweenlands/models/item/voodoo_doll.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/wall_lamprey_spawn_egg.json
 4ebae04225d530fda9ec9c3dc77a34f6f698bb76 assets/thebetweenlands/models/item/water_weeds_drop.json
 5339aada4b65d896f7f85f553f3ebadc38d8646d assets/thebetweenlands/models/item/weedwood_axe.json
 fd107051d39f370034fd539193a87c2413450e62 assets/thebetweenlands/models/item/weedwood_bow.json

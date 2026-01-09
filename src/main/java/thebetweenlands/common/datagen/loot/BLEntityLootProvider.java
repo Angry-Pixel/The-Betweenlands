@@ -503,6 +503,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
+		this.noLoot(EntityRegistry.WALL_LAMPREY);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

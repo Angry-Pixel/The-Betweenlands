@@ -104,22 +104,8 @@ import thebetweenlands.common.entity.monster.chiromaw.ChiromawHatchling;
 import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.entity.monster.infestation.Infestation;
-import thebetweenlands.common.entity.projectile.AngryPebble;
-import thebetweenlands.common.entity.projectile.BetweenstonePebble;
-import thebetweenlands.common.entity.projectile.BubblerCrabBubble;
-import thebetweenlands.common.entity.projectile.ChiromawDroppings;
-import thebetweenlands.common.entity.projectile.ElectricShock;
-import thebetweenlands.common.entity.projectile.GlowingGoop;
-import thebetweenlands.common.entity.projectile.PyradFlame;
-import thebetweenlands.common.entity.projectile.SapSpit;
-import thebetweenlands.common.entity.projectile.ShockwaveBlock;
-import thebetweenlands.common.entity.projectile.SludgeBall;
-import thebetweenlands.common.entity.projectile.SludgeJet;
-import thebetweenlands.common.entity.projectile.SnailPoisonJet;
-import thebetweenlands.common.entity.projectile.ThrownElixir;
-import thebetweenlands.common.entity.projectile.ThrownTarminion;
-import thebetweenlands.common.entity.projectile.UrchinSpike;
-import thebetweenlands.common.entity.projectile.VolatileSoul;
+import thebetweenlands.common.entity.monster.wall.WallLamprey;
+import thebetweenlands.common.entity.projectile.*;
 import thebetweenlands.common.entity.projectile.arrow.AnglerToothArrow;
 import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
 import thebetweenlands.common.entity.projectile.arrow.ChiromawBarb;
@@ -198,6 +184,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Termite>> TERMITE = registerWithEgg("termite", EntityType.Builder.of(Termite::new, MobCategory.MONSTER).sized(0.9F, 0.6F), 0xD9D7A7, 0xD99830, Termite::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<TinySludgeWorm>> TINY_SLUDGE_WORM = registerWithEgg("tiny_sludge_worm", EntityType.Builder.of(TinySludgeWorm::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F).fireImmune(), 0xDAC2A7, 0x5C4639, TinySludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<TinySludgeWormHelper>> TINY_SLUDGE_WORM_HELPER = registerWithAttributes("tiny_sludge_worm_helper", EntityType.Builder.of(TinySludgeWormHelper::new, MobCategory.CREATURE).sized(0.3125F, 0.3125F).fireImmune(), TinySludgeWormHelper::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<WallLamprey>> WALL_LAMPREY = registerWithAttributes("wall_lamprey", EntityType.Builder.of(WallLamprey::new, MobCategory.MONSTER).sized(0.9F, 0.9F), WallLamprey::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B, Wight::registerAttributes);
 
 	//misc
@@ -255,7 +242,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<ShockwaveSwordItemEntity>> SHOCKWAVE_SWORD_ITEM = register("shockwave_sword_item", EntityType.Builder.<ShockwaveSwordItemEntity>of(ShockwaveSwordItemEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20).noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeBall>> SLUDGE_BALL = register("sludge_ball", EntityType.Builder.<SludgeBall>of(SludgeBall::new, MobCategory.MISC).sized(0.75F, 0.75F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeJet>> SLUDGE_JET = register("sludge_jet", EntityType.Builder.of(SludgeJet::new, MobCategory.MISC).sized(1.0F, 2.5F).fireImmune().noSave().noSummon());
-	//sludge wall jet
+	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWallJet>> SLUDGE_WALL_JET = register("sludge_wall_jet", EntityType.Builder.<SludgeWallJet>of(SludgeWallJet::new, MobCategory.MISC).sized(0.2F, 0.2F).fireImmune().noSave().noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormArrow>> SLUDGE_WORM_ARROW = register("sludge_worm_arrow", EntityType.Builder.<SludgeWormArrow>of(SludgeWormArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<SnailPoisonJet>> SNAIL_POISON_JET = register("snail_poison_jet", EntityType.Builder.<SnailPoisonJet>of(SnailPoisonJet::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
 	//spike wave
