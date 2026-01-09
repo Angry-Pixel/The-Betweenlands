@@ -34,6 +34,7 @@ import thebetweenlands.common.entity.PredatorArrowGuide;
 import thebetweenlands.common.entity.Seat;
 import thebetweenlands.common.entity.ShockwaveSwordItemEntity;
 import thebetweenlands.common.entity.SpiritTreeFaceMask;
+import thebetweenlands.common.entity.SwingingHammerTrap;
 import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.TriggeredFallingBlock;
 import thebetweenlands.common.entity.WormGroundSpawner;
@@ -266,6 +267,9 @@ public class EntityRegistry {
 	//volarkite
 	public static final DeferredHolder<EntityType<?>, EntityType<VolatileSoul>> VOLATILE_SOUL = register("volatile_soul", EntityType.Builder.<VolatileSoul>of(VolatileSoul::new, MobCategory.MISC).sized(0.3F, 0.3F).fireImmune().noSummon());
 	//weedwood rowboat
+	
+	//Testing stuff
+	public static final DeferredHolder<EntityType<?>, EntityType<SwingingHammerTrap>> SWINGING_HAMMER_TRAP = register("swinging_hammer_trap", EntityType.Builder.<SwingingHammerTrap>of(SwingingHammerTrap::new, MobCategory.MISC).sized(0.25F, 0.25F).noSummon().clientTrackingRange(64).updateInterval(20));
 
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor, Supplier<AttributeSupplier.Builder> attributes) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = registerWithAttributes(name, builder, attributes);

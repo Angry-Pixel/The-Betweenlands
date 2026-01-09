@@ -102,8 +102,8 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	 * @return
 	 */
 	public boolean isWorldShaderActive() {
-		//return true;
-		return this.canUseShaders() && this.worldShader != null;
+		return false;
+		//return this.canUseShaders() && this.worldShader != null;
 	}
 
 	/**

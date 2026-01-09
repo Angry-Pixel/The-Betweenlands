@@ -161,6 +161,9 @@ public class BLModelLayers {
 	public static final ModelLayerLocation WAYSTONE = register("waystone");
 	public static final ModelLayerLocation WIND_CHIME = register("wind_chime");
 
+	//Testing stuff
+	public static final ModelLayerLocation SWINGING_HAMMER_TRAP = register("swinging_hammer_trap");
+
 	private static ModelLayerLocation register(String name) {
 		return register(name, "main");
 	}

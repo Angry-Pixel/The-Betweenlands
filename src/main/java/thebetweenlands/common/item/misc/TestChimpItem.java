@@ -5,14 +5,12 @@ import java.util.List;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.monster.RockSnot;
+import thebetweenlands.common.entity.SwingingHammerTrap;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -215,7 +213,7 @@ public class TestChimpItem extends Item {
 			triggeredblock.setHanging(true);
 			context.getLevel().addFreshEntity(triggeredblock);
 			*/
-
+/*
 			RockSnot spawner = EntityRegistry.ROCK_SNOT.get().create(context.getLevel());
 			if (spawner != null) {
 				spawner.setPos(context.getClickedPos().above().getCenter());
@@ -223,7 +221,13 @@ public class TestChimpItem extends Item {
 				spawner.setPlacedByPlayer(true);
 				context.getLevel().addFreshEntity(spawner);
 			}
-
+*/
+			SwingingHammerTrap swinger = EntityRegistry.SWINGING_HAMMER_TRAP.get().create(context.getLevel());
+			if (swinger != null) {
+				swinger.setPos(context.getClickedPos().below().getCenter().add(0D, 0.25D, 0D));
+				context.getLevel().addFreshEntity(swinger);
+				swinger.setYRot(context.getHorizontalDirection().toYRot());
+			}
 		}
 
 		return InteractionResult.SUCCESS;
