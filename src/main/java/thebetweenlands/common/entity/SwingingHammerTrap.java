@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity;
 
+import java.util.List;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -8,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.entity.PartEntity;
@@ -19,17 +22,18 @@ public class SwingingHammerTrap extends Entity {
 	private static final EntityDataAccessor<Integer> SWING_TICKS = SynchedEntityData.defineId(SwingingHammerTrap.class, EntityDataSerializers.INT);
 	public final SwingngTrapMultipart[] impactBox;
 	public int vel = 0;
+
 	public SwingingHammerTrap(EntityType<? extends Entity> type, Level level) {
 		super(type, level);
-		this.impactBox = new SwingngTrapMultipart[] {new SwingngTrapMultipart(this, 0.875F, 0.5F)};
-		this.setId(ENTITY_COUNTER.getAndAdd(this.impactBox.length + 1) + 1);
+		impactBox = new SwingngTrapMultipart[] {new SwingngTrapMultipart(this, 0.875F, 0.5F)};
+		setId(ENTITY_COUNTER.getAndAdd(impactBox.length + 1) + 1);
 	}
 
 	@Override
 	public void setId(int id) {
 		super.setId(id);
-		for (int i = 0; i < this.impactBox.length; i++)
-			this.impactBox[i].setId(id + i + 1);
+		for (int i = 0; i < impactBox.length; i++)
+			impactBox[i].setId(id + i + 1);
 	}
 
 	@Override
@@ -39,19 +43,19 @@ public class SwingingHammerTrap extends Entity {
 	}
 
 	public int getSwingTicks() {
-	return this.getEntityData().get(SWING_TICKS);
+		return getEntityData().get(SWING_TICKS);
 	}
 
 	public void setSwingTicks(int amount) {
-		this.getEntityData().set(SWING_TICKS, amount);
+		getEntityData().set(SWING_TICKS, amount);
 	}
 
 	public boolean isSwinging() {
-	return this.getEntityData().get(SWINGING);
+		return getEntityData().get(SWINGING);
 	}
 
 	public void setSwinging(boolean state) {
-		this.getEntityData().set(SWINGING, state);
+		getEntityData().set(SWINGING, state);
 	}
 
 	@Override
@@ -61,18 +65,18 @@ public class SwingingHammerTrap extends Entity {
 		if (!level().isClientSide()) {
 			if (isSwinging()) {
 				if (getSwingTicks() > 0)
-					vel-=2;
+					vel -= 2;
 				else
-					vel+=2;
+					vel += 2;
 				if (getSwingTicks() >= 70)
 					setSwinging(false);
 				else
 					setSwingTicks(getSwingTicks() + 1 + vel);
 			} else {
 				if (getSwingTicks() < 0)
-					vel+=2;
+					vel += 2;
 				else
-					vel-=2;
+					vel -= 2;
 				if (getSwingTicks() <= -70)
 					setSwinging(true);
 				else
@@ -80,26 +84,52 @@ public class SwingingHammerTrap extends Entity {
 			}
 		}
 		setImpactBox();
+		if (level().getGameTime() % 5 == 0)
+			checkCollision();
 	}
-	
+
 	@Override
 	public boolean isMultipartEntity() {
 		return true;
 	}
-	
+
 	@Override
 	public PartEntity<?>[] getParts() {
-		return this.impactBox;
+		return impactBox;
 	}
 
 	private void setImpactBox() {
 		float swingAngle = convertDegtoRad(getSwingTicks());
 		double swingSin = Math.sin(swingAngle) * -1.375D;
-		Direction facing = this.getDirection();
-		double posX = this.getX() + ((facing == Direction.NORTH || facing == Direction.SOUTH) ?  0 : facing == Direction.WEST ? swingSin : -swingSin);
-		double posY = this.getY() + Math.cos(swingAngle) * -1.375D;
-		double posZ = this.getZ() + ((facing == Direction.EAST || facing == Direction.WEST) ?  0 : facing == Direction.SOUTH ? swingSin : -swingSin);
+		Direction facing = getDirection();
+		double posX = getX() + ((facing == Direction.NORTH || facing == Direction.SOUTH) ?  0 : facing == Direction.WEST ? swingSin : -swingSin);
+		double posY = getY() + Math.cos(swingAngle) * -1.375D;
+		double posZ = getZ() + ((facing == Direction.EAST || facing == Direction.WEST) ?  0 : facing == Direction.SOUTH ? swingSin : -swingSin);
 		impactBox[0].absMoveTo(posX, posY, posZ);		
+	}
+
+	public void checkCollision() {
+		Direction facing = getDirection();
+		double sinDir = Mth.sin(getYRot() * (float) (Math.PI / 180.0));
+		double cosDir = Mth.cos(getYRot() * (float) (Math.PI / 180.0));
+		List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, impactBox[0].getBoundingBox());
+		for (Entity entity : list)
+			if (entity != null)
+				if (entity instanceof LivingEntity entityHit && entityHit.hurtTime <= 0) {
+					entityHit.hurt(damageSources().generic(), 1F);
+
+					if (facing == Direction.EAST || facing == Direction.WEST)
+						if (isSwinging())
+							entityHit.knockback(1.0F, sinDir, -cosDir);
+						else
+							entityHit.knockback(1.0F, -sinDir, cosDir);
+
+					if (facing == Direction.NORTH || facing == Direction.SOUTH)
+						if (isSwinging())
+							entityHit.knockback(1.0F, -sinDir, cosDir);
+						else
+							entityHit.knockback(1.0F, sinDir, -cosDir);
+				}
 	}
 
 	public float convertDegtoRad(float angle) {
@@ -108,7 +138,7 @@ public class SwingingHammerTrap extends Entity {
 
 	@Override
 	public AABB getBoundingBoxForCulling() {
-		return this.getBoundingBox().inflate(16.0D, 16.0D, 16.0D);
+		return getBoundingBox().inflate(16.0D, 16.0D, 16.0D);
 	}
 
 	@Override
