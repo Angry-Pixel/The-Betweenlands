@@ -1,7 +1,15 @@
 package thebetweenlands.common.datagen;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
+
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -16,21 +24,21 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
-import org.apache.commons.lang3.StringUtils;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
+import thebetweenlands.common.registries.AspectTypeRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.util.LangConversionHelper;
 import thebetweenlands.util.LangFormatSplitter;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class BLLanguageProvider extends LanguageProvider {
 
