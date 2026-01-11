@@ -80,6 +80,7 @@ import thebetweenlands.client.gui.screen.SmokingRackScreen;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
+import thebetweenlands.client.model.armor.BoneArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
@@ -477,6 +478,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.BONE_ARMOR, BoneArmorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.EXPLORERS_HAT, ExplorersHatModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_MASK, () -> LargeSpiritTreeFaceModel.create(true));
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_MASK, () -> SmallSpiritTreeFaceModel.createFace2(true));
@@ -811,6 +813,9 @@ public class ClientRegistrationEvents {
 		event.registerItem(new SmallSpiritTreeMaskRenderer(), ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
 		event.registerItem(new LargeSpiritTreeMaskRenderer(), ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
 
+		event.registerItem(new BoneArmorRenderer(), 
+				ItemRegistry.BONE_HELMET, ItemRegistry.BONE_CHESTPLATE,
+				ItemRegistry.BONE_LEGGINGS, ItemRegistry.BONE_BOOTS);
 		event.registerItem(new SyrmoriteArmorRenderer(),
 			ItemRegistry.SYRMORITE_HELMET.get(), ItemRegistry.SYRMORITE_CHESTPLATE.get(),
 			ItemRegistry.SYRMORITE_LEGGINGS.get(), ItemRegistry.SYRMORITE_BOOTS.get());

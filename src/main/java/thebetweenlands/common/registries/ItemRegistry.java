@@ -342,10 +342,10 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().durability(2000)));
 	public static final DeferredItem<Item> SILKY_PEBBLE = ITEMS.register("silky_pebble", () -> new AngryPebbleItem(3.0F, new Item.Properties()));
 
-	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6))));
-	public static final DeferredItem<Item> BONE_CHESTPLATE = ITEMS.register("bone_chestplate", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(6))));
-	public static final DeferredItem<Item> BONE_LEGGINGS = ITEMS.register("bone_leggings", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(6))));
-	public static final DeferredItem<Item> BONE_BOOTS = ITEMS.register("bone_boots", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(6))));
+	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6))));
+	public static final DeferredItem<Item> BONE_CHESTPLATE = ITEMS.register("bone_chestplate", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(6))));
+	public static final DeferredItem<Item> BONE_LEGGINGS = ITEMS.register("bone_leggings", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(6))));
+	public static final DeferredItem<Item> BONE_BOOTS = ITEMS.register("bone_boots", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(6))));
 	public static final DeferredItem<Item> LURKER_SKIN_HELMET = ITEMS.register("lurker_skin_helmet", () -> new LurkerSkinArmorItem(ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(12))));
 	public static final DeferredItem<Item> LURKER_SKIN_CHESTPLATE = ITEMS.register("lurker_skin_chestplate", () -> new LurkerSkinArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(12))));
 	public static final DeferredItem<Item> LURKER_SKIN_LEGGINGS = ITEMS.register("lurker_skin_leggings", () -> new LurkerSkinArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(12))));
