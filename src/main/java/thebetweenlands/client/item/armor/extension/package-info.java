@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
 @ParametersAreNonnullByDefault
-package thebetweenlands.common.item.armor.extension;
+package thebetweenlands.client.item.armor.extension;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;

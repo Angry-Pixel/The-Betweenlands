@@ -7,6 +7,7 @@ public class BLModelLayers {
 
 	public static final ModelLayerLocation AMPHIBIOUS_ARMOR = register("amphibious_armor");
 	public static final ModelLayerLocation ANCIENT_ARMOR = register("ancient_armor");
+	public static final ModelLayerLocation BONE_ARMOR = register("bone_armor");
 	public static final ModelLayerLocation EXPLORERS_HAT = register("explorers_hat");
 	public static final ModelLayerLocation LARGE_SPIRIT_TREE_MASK = register("large_spirit_tree_mask");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_MASK = register("small_spirit_tree_mask");

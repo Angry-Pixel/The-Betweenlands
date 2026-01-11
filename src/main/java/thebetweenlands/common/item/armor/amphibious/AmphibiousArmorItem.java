@@ -1,10 +1,11 @@
 package thebetweenlands.common.item.armor.amphibious;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,18 +26,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
-import javax.annotation.Nullable;
-
 import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.api.item.amphibious.TickingAmphibiousArmorUpgrade;
-import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.AmphibiousUpgrades;
 import thebetweenlands.common.component.item.UpgradeDamage;
@@ -46,8 +45,6 @@ import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.ArmorMaterialRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.List;
 
 public class AmphibiousArmorItem extends ArmorItem {
 
@@ -300,21 +297,5 @@ public class AmphibiousArmorItem extends ArmorItem {
 	@Override
 	public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
 		return TheBetweenlands.prefix("textures/models/armor/amphibious_layer.png");
-	}
-
-	public static final class ArmorRender implements IClientItemExtensions {
-		public static final ArmorRender INSTANCE = new ArmorRender();
-
-		@Override
-		public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> original) {
-			return new AmphibiousArmorModel(slot, Minecraft.getInstance().getEntityModels().bakeLayer(BLModelLayers.AMPHIBIOUS_ARMOR));
-		}
-
-		@Override
-		public void setupModelAnimations(LivingEntity livingEntity, ItemStack stack, EquipmentSlot slot, Model model, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-			if (model instanceof AmphibiousArmorModel armor) {
-				armor.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-			}
-		}
 	}
 }

@@ -1,18 +1,18 @@
-package thebetweenlands.common.item.armor.extension;
+package thebetweenlands.client.item.armor.extension;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import thebetweenlands.client.BLModelLayers;
+import thebetweenlands.client.item.armor.extension.util.BLSimpleCustomArmorRenderer;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 
-public class SyrmoriteArmorRenderer implements IClientItemExtensions {
+public class SyrmoriteArmorRenderer extends BLSimpleCustomArmorRenderer implements IClientItemExtensions {
+	public static final SyrmoriteArmorRenderer INSTANCE = new SyrmoriteArmorRenderer();
 
 	@Override
-	public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> original) {
+	protected HumanoidModel<?> createNewArmorModel(EquipmentSlot slot) {
 		return new SyrmoriteArmorModel(slot, Minecraft.getInstance().getEntityModels().bakeLayer(BLModelLayers.SYRMORITE_ARMOR));
 	}
 }
