@@ -29,6 +29,7 @@ import thebetweenlands.common.entity.FlameJet;
 import thebetweenlands.common.entity.GalleryFrame;
 import thebetweenlands.common.entity.GreeblingCorpse;
 import thebetweenlands.common.entity.LurkerSkinRaft;
+import thebetweenlands.common.entity.MovingShrinkform;
 import thebetweenlands.common.entity.MovingWall;
 import thebetweenlands.common.entity.PredatorArrowGuide;
 import thebetweenlands.common.entity.Seat;
@@ -105,7 +106,23 @@ import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.entity.monster.infestation.Infestation;
 import thebetweenlands.common.entity.monster.wall.WallLamprey;
-import thebetweenlands.common.entity.projectile.*;
+import thebetweenlands.common.entity.projectile.AngryPebble;
+import thebetweenlands.common.entity.projectile.BetweenstonePebble;
+import thebetweenlands.common.entity.projectile.BubblerCrabBubble;
+import thebetweenlands.common.entity.projectile.ChiromawDroppings;
+import thebetweenlands.common.entity.projectile.ElectricShock;
+import thebetweenlands.common.entity.projectile.GlowingGoop;
+import thebetweenlands.common.entity.projectile.PyradFlame;
+import thebetweenlands.common.entity.projectile.SapSpit;
+import thebetweenlands.common.entity.projectile.ShockwaveBlock;
+import thebetweenlands.common.entity.projectile.SludgeBall;
+import thebetweenlands.common.entity.projectile.SludgeJet;
+import thebetweenlands.common.entity.projectile.SludgeWallJet;
+import thebetweenlands.common.entity.projectile.SnailPoisonJet;
+import thebetweenlands.common.entity.projectile.ThrownElixir;
+import thebetweenlands.common.entity.projectile.ThrownTarminion;
+import thebetweenlands.common.entity.projectile.UrchinSpike;
+import thebetweenlands.common.entity.projectile.VolatileSoul;
 import thebetweenlands.common.entity.projectile.arrow.AnglerToothArrow;
 import thebetweenlands.common.entity.projectile.arrow.BasiliskArrow;
 import thebetweenlands.common.entity.projectile.arrow.ChiromawBarb;
@@ -257,7 +274,8 @@ public class EntityRegistry {
 	
 	//Testing stuff
 	public static final DeferredHolder<EntityType<?>, EntityType<SwingingHammerTrap>> SWINGING_HAMMER_TRAP = register("swinging_hammer_trap", EntityType.Builder.<SwingingHammerTrap>of(SwingingHammerTrap::new, MobCategory.MISC).sized(0.25F, 0.25F).noSummon().clientTrackingRange(64).updateInterval(20));
-
+	public static final DeferredHolder<EntityType<?>, EntityType<MovingShrinkform>> MOVING_SHRINKFORM = register("moving_shrinkform", EntityType.Builder.<MovingShrinkform>of(MovingShrinkform::new, MobCategory.MISC).sized(3F, 1F).noSummon().clientTrackingRange(64).updateInterval(20));
+	
 	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor, Supplier<AttributeSupplier.Builder> attributes) {
 		DeferredHolder<EntityType<?>, EntityType<E>> ret = registerWithAttributes(name, builder, attributes);
 		SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));

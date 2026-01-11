@@ -166,6 +166,7 @@ public class BLModelLayers {
 
 	//Testing stuff
 	public static final ModelLayerLocation SWINGING_HAMMER_TRAP = register("swinging_hammer_trap");
+	public static final ModelLayerLocation MOVING_SHRINKFORM = register("moving_shrinkform");
 
 	private static ModelLayerLocation register(String name) {
 		return register(name, "main");

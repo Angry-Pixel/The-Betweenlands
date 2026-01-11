@@ -178,6 +178,7 @@ import thebetweenlands.client.model.entity.LargeSpiritTreeFaceModel;
 import thebetweenlands.client.model.entity.LeechModel;
 import thebetweenlands.client.model.entity.LurkerModel;
 import thebetweenlands.client.model.entity.MireSnailModel;
+import thebetweenlands.client.model.entity.MovingShrinkformModel;
 import thebetweenlands.client.model.entity.MovingWallModel;
 import thebetweenlands.client.model.entity.MummyArmModel;
 import thebetweenlands.client.model.entity.OlmModel;
@@ -332,6 +333,7 @@ import thebetweenlands.client.renderer.entity.LeechRenderer;
 import thebetweenlands.client.renderer.entity.LurkerRenderer;
 import thebetweenlands.client.renderer.entity.LurkerSkinRaftRenderer;
 import thebetweenlands.client.renderer.entity.MireSnailRenderer;
+import thebetweenlands.client.renderer.entity.MovingShrinkformRenderer;
 import thebetweenlands.client.renderer.entity.MovingWallRenderer;
 import thebetweenlands.client.renderer.entity.MummyArmRenderer;
 import thebetweenlands.client.renderer.entity.OctineArrowRenderer;
@@ -595,6 +597,7 @@ public class ClientRegistrationEvents {
 		
 		//Testing stuff
 		event.registerEntityRenderer(EntityRegistry.SWINGING_HAMMER_TRAP.get(), SwingingHammerTrapRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.MOVING_SHRINKFORM.get(), MovingShrinkformRenderer::new);
 
 		event.registerEntityRenderer(EntityRegistry.WALL_LAMPREY.get(), WallLampreyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WALL_JET.get(), NoopRenderer::new);
@@ -808,6 +811,7 @@ public class ClientRegistrationEvents {
 		
 		//Testing stuff
 		event.registerLayerDefinition(BLModelLayers.SWINGING_HAMMER_TRAP, SwingingHammerTrapModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.MOVING_SHRINKFORM, MovingShrinkformModel::createBodyLayer);
 	}
 
 	private static void registerPropertyOverrides(ModelEvent.ModifyBakingResult event) {
