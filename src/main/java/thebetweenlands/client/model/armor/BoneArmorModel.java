@@ -40,7 +40,7 @@ public class BoneArmorModel extends BLArmorModel {
 		// =========== HELMET ===========
 		
 		// Originally "helmet"
-		PartDefinition head = armour.addOrReplaceChild("head", CubeListBuilder.create().texOffs(29, 0).addBox(-5.0F, -8.999F, -1.0436F, 10.0F, 4.0F, 6.0F, CubeDeformation.NONE), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head = armour.addOrReplaceChild("head", CubeListBuilder.create().texOffs(29, 0).addBox(-5.0F, -8.999F, -1.0436F, 10.0F, 4.0F, 6.0F, CubeDeformation.NONE), PartPose.ZERO);
 
 		// -------- HELMET PARTS --------
 		
@@ -98,7 +98,7 @@ public class BoneArmorModel extends BLArmorModel {
 		
 		// Originally "chest"
 		PartDefinition body = armour.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 41).addBox(-1.0F, 1.0F, -4.0F, 2.0F, 5.0F, 1.0F, CubeDeformation.NONE)
-		.texOffs(22, 26).addBox(-4.5F, 1.02F, -1.25F, 9.0F, 10.0F, 4.0F, CubeDeformation.NONE), PartPose.offset(0.0F, 0.0F, 0.0F));
+		.texOffs(22, 26).addBox(-4.5F, 1.02F, -1.25F, 9.0F, 10.0F, 4.0F, CubeDeformation.NONE), PartPose.ZERO);
 
 		// ------ CHESTPLATE PARTS ------
 		

@@ -79,6 +79,7 @@ import thebetweenlands.client.gui.screen.SilkBundleScreen;
 import thebetweenlands.client.gui.screen.SmokingRackScreen;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
+import thebetweenlands.client.item.armor.extension.*;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.armor.BoneArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
@@ -218,7 +219,6 @@ import thebetweenlands.common.fluid.ColoredFluidType;
 import thebetweenlands.common.fluid.SwampWaterFluidType;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorItem;
-import thebetweenlands.common.item.armor.extension.*;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
 import thebetweenlands.common.item.misc.MobItem;
@@ -773,6 +773,15 @@ public class ClientRegistrationEvents {
 		event.registerReloadListener(aspectIcons = new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
 		event.registerReloadListener(circleGems = new CircleGemTextureManager(Minecraft.getInstance().getTextureManager()));
 
+		// Armour extensions
+		event.registerReloadListener(AmphibiousArmorRenderer.INSTANCE);
+		event.registerReloadListener(BoneArmorRenderer.INSTANCE);
+		event.registerReloadListener(SyrmoriteArmorRenderer.INSTANCE);
+		
+		event.registerReloadListener(ExplorersHatRenderer.INSTANCE);
+		event.registerReloadListener(SilkMaskRenderer.INSTANCE);
+		event.registerReloadListener(SmallSpiritTreeMaskRenderer.INSTANCE);
+		event.registerReloadListener(LargeSpiritTreeMaskRenderer.INSTANCE);
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
@@ -803,22 +812,22 @@ public class ClientRegistrationEvents {
 			ItemRegistry.DRAETON.get(), ItemRegistry.DRAETON_ANCHOR_UPGRADE.get(), ItemRegistry.DRAETON_CRAFTING_UPGRADE.get(), ItemRegistry.DRAETON_FURNACE_UPGRADE.get(),
 			ItemRegistry.WEEDWOOD_ROWBOAT.get(), ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE.get());
 
-		event.registerItem(AmphibiousArmorItem.ArmorRender.INSTANCE,
+		event.registerItem(AmphibiousArmorRenderer.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
 			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
-
-		event.registerItem(new ExplorersHatRenderer(), ItemRegistry.EXPLORERS_HAT.get());
-		event.registerItem(new SkullMaskRenderer(), ItemRegistry.SKULL_MASK.get());
-		event.registerItem(new SilkMaskRenderer(), ItemRegistry.SILK_MASK.get());
-		event.registerItem(new SmallSpiritTreeMaskRenderer(), ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
-		event.registerItem(new LargeSpiritTreeMaskRenderer(), ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
-
-		event.registerItem(new BoneArmorRenderer(), 
-				ItemRegistry.BONE_HELMET, ItemRegistry.BONE_CHESTPLATE,
-				ItemRegistry.BONE_LEGGINGS, ItemRegistry.BONE_BOOTS);
-		event.registerItem(new SyrmoriteArmorRenderer(),
+		event.registerItem(BoneArmorRenderer.INSTANCE, 
+			ItemRegistry.BONE_HELMET, ItemRegistry.BONE_CHESTPLATE,
+			ItemRegistry.BONE_LEGGINGS, ItemRegistry.BONE_BOOTS);
+		event.registerItem(SyrmoriteArmorRenderer.INSTANCE,
 			ItemRegistry.SYRMORITE_HELMET.get(), ItemRegistry.SYRMORITE_CHESTPLATE.get(),
 			ItemRegistry.SYRMORITE_LEGGINGS.get(), ItemRegistry.SYRMORITE_BOOTS.get());
+
+		event.registerItem(ExplorersHatRenderer.INSTANCE, ItemRegistry.EXPLORERS_HAT.get());
+		event.registerItem(SkullMaskRenderer.INSTANCE, ItemRegistry.SKULL_MASK.get());
+		event.registerItem(SilkMaskRenderer.INSTANCE, ItemRegistry.SILK_MASK.get());
+		event.registerItem(SmallSpiritTreeMaskRenderer.INSTANCE, ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
+		event.registerItem(LargeSpiritTreeMaskRenderer.INSTANCE, ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
+
 
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override
