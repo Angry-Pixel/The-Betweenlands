@@ -72,6 +72,7 @@ import thebetweenlands.common.entity.monster.Angler;
 import thebetweenlands.common.entity.monster.AshSprite;
 import thebetweenlands.common.entity.monster.BipedCryptCrawler;
 import thebetweenlands.common.entity.monster.BloodSnail;
+import thebetweenlands.common.entity.monster.BonePuppetRanged;
 import thebetweenlands.common.entity.monster.ChiefCryptCrawler;
 import thebetweenlands.common.entity.monster.CryptCrawler;
 import thebetweenlands.common.entity.monster.DarkDruid;
@@ -128,6 +129,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Barrishee>> BARRISHEE = registerWithEgg("barrishee", EntityType.Builder.of(Barrishee::new, MobCategory.MONSTER).sized(2.25F, 1.8F).clientTrackingRange(10), 0x604C30, 0xFFD92C, Barrishee::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BipedCryptCrawler>> BIPED_CRYPT_CRAWLER = registerWithAttributes("biped_crypt_crawler", EntityType.Builder.of(BipedCryptCrawler::new, MobCategory.MONSTER).sized(0.75F, 1.5F), BipedCryptCrawler::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BloodSnail>> BLOOD_SNAIL = registerWithEgg("blood_snail", EntityType.Builder.of(BloodSnail::new, MobCategory.MONSTER).sized(0.7F, 0.5F), 0x8E9456, 0xB3261E, BloodSnail::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<BonePuppetRanged>> BONE_PUPPET_RANGED = registerWithAttributes("bone_puppet_ranged", EntityType.Builder.of(BonePuppetRanged::new, MobCategory.MONSTER).sized(0.6F, 1.8F), BonePuppetRanged::registerAttributes);
 	//boulder sprite
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C, BubblerCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CaveFish>> CAVE_FISH = registerWithEgg("cave_fish", EntityType.Builder.of(CaveFish::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.3F, 0.2F), 0xFF8000, 0xE6E6E6, CaveFish::registerAttributes);
