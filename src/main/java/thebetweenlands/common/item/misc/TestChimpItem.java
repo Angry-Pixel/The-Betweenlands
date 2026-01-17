@@ -216,7 +216,7 @@ public class TestChimpItem extends Item {
 
 			BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
 			if (puppet != null) {
-				puppet.setPos(context.getClickedPos().above().getCenter());
+				puppet.setPos(context.getClickedPos().above().getBottomCenter());
 				context.getLevel().addFreshEntity(puppet);
 			}
 

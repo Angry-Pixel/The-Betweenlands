@@ -62,7 +62,7 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 	private final ModelPart leg_right2;
 
 	public BonePuppetRangedModel(ModelPart root) {
-		super(root, RenderType::entityCutout);
+		super(root, RenderType::entityCutoutNoCull);
 		this.hipbone = root.getChild("hipbone");
 		this.hip_l1 = this.hipbone.getChild("hip_l1");
 		this.hip_l2 = this.hip_l1.getChild("hip_l2");
@@ -258,7 +258,15 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-
+		spine1.xRot = convertDegtoRad(27.5F) + convertDegtoRad(-30F) * entity.getSpawningAnimation(partialTick);
+		spine6.xRot = convertDegtoRad(45F) + convertDegtoRad(-32.5F) * entity.getSpawningAnimation(partialTick);
+		spine7.xRot = convertDegtoRad(20F) + convertDegtoRad(-20F) * entity.getSpawningAnimation(partialTick);
+		arm_lower.xRot = convertDegtoRad(-57.5F) + convertDegtoRad(40F) * entity.getSpawningAnimation(partialTick);
+		leg_right1.xRot = convertDegtoRad(-122.7847F) + convertDegtoRad(117.5F) * entity.getSpawningAnimation(partialTick);
+		leg_right2.xRot = convertDegtoRad(155F) + convertDegtoRad(-155F) * entity.getSpawningAnimation(partialTick);
+		leg_left1.xRot = convertDegtoRad(-127.4374F) + convertDegtoRad(110F) * entity.getSpawningAnimation(partialTick);
+		leg_left_lower.xRot = convertDegtoRad(159.8423F) + convertDegtoRad(-140F) * entity.getSpawningAnimation(partialTick);
+		foot_left.xRot = convertDegtoRad(-39.9929F) + convertDegtoRad(32.5F) * entity.getSpawningAnimation(partialTick);
 	}
 
 	@Override

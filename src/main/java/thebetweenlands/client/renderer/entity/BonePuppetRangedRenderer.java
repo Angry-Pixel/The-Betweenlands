@@ -1,5 +1,7 @@
 package thebetweenlands.client.renderer.entity;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +16,11 @@ public class BonePuppetRangedRenderer<T extends BonePuppetRanged> extends MobRen
 
 	public BonePuppetRangedRenderer(EntityRendererProvider.Context context) {
 		super(context, new BonePuppetRangedModel<>(context.bakeLayer(BLModelLayers.BONE_PUPPET_RANGED)), 0.5F);
+	}
+	
+	@Override
+	protected void scale(BonePuppetRanged entity, PoseStack stack, float partialTick) {
+		stack.translate(0.0D, 1.25D - entity.getSpawningAnimation(partialTick) * 1.25D, 0.0D);
 	}
 
 	@Override

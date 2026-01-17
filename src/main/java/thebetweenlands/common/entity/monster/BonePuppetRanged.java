@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.monster;
 
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -29,6 +31,7 @@ public class BonePuppetRanged extends Monster implements BLEntity {
     private static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BonePuppetRanged.class, EntityDataSerializers.INT);
 
     private int lastSpawningAnimationTicks = 0;
+    private int spawnDuration = 30;
 
     public BonePuppetRanged(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -58,15 +61,32 @@ public class BonePuppetRanged extends Monster implements BLEntity {
     @Override
     public void aiStep() {
         lastSpawningAnimationTicks = getSpawnTimer();
-            if (getSpawnTimer() < 20)
-                setSpawnTimer(getSpawnTimer() +1);
+            if (getSpawnTimer() < spawnDuration)
+                setSpawnTimer(getSpawnTimer() + 1);
+            if(level().isClientSide())
+            	if(getSpawnTimer() < 10)
+            		spawnEmergingParticles();
+
         super.aiStep();
     }
 
-    
-    @Override
+    private void spawnEmergingParticles() {
+		double px = getX();
+		double py = getY();
+		double pz = getZ();
+		for (int i = 0, amount = 5 + level().getRandom().nextInt(2); i < amount; i++) {
+			double ox = level().getRandom().nextDouble() * 0.1F - 0.05F;
+			double oz = level().getRandom().nextDouble() * 0.1F - 0.05F;
+			double motionX = level().getRandom().nextDouble() * 0.2F - 0.1F;
+			double motionY = level().getRandom().nextDouble() * 0.1F + 0.075F;
+			double motionZ = level().getRandom().nextDouble() * 0.2F - 0.1F;
+			level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, getBlockStateOn()), false, px + ox, py, pz + oz, motionX, motionY, motionZ);
+		}
+	}
+
+	@Override
     protected boolean isImmobile() {
-        return super.isImmobile() || getSpawnTimer() < 20;
+        return super.isImmobile() || getSpawnTimer() < spawnDuration;
     }
 
     @Override
@@ -118,7 +138,7 @@ public class BonePuppetRanged extends Monster implements BLEntity {
     }
 
     public boolean isEmerging() {
-        return getEntityData().get(SPAWN_TIMER) < 20;
+        return getEntityData().get(SPAWN_TIMER) < spawnDuration;
     }
 
     public int getSpawnTimer() {
@@ -130,7 +150,7 @@ public class BonePuppetRanged extends Monster implements BLEntity {
     }
 
     public float getSpawningAnimation(float partialTicks) {
-        return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / 20.0F;
+        return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
     }
 
     // May need this for when wights do the thing and stuffs
