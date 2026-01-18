@@ -107,6 +107,7 @@ public class VolatileSoul extends Projectile implements BLEntity {
 					motion = motion.normalize();
 					this.setDeltaMovement(motion.multiply(maxSpeed, maxSpeed, maxSpeed));
 				}
+				hurtMarked = true;
 			}
 			HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
 			if (hitresult.getType() != HitResult.Type.MISS && !EventHooks.onProjectileImpact(this, hitresult)) {

@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.monster;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
@@ -11,11 +15,25 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.entity.EntityAttachments;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -26,7 +44,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.goals.EntityAIMoveToDirect;
@@ -34,9 +51,11 @@ import thebetweenlands.common.entity.ai.goals.WightBuffSwampHagGoal;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.entity.projectile.VolatileSoul;
 import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
-import thebetweenlands.common.registries.*;
-
-import java.util.List;
+import thebetweenlands.common.registries.AttributeRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.FluidTypeRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO fix flight
 public class Wight extends Monster implements BLEntity {
@@ -88,7 +107,7 @@ public class Wight extends Monster implements BLEntity {
                 if (this.entity.volatileTicks >= 20) {
                     LivingEntity target = this.entity.getTarget();
                     if (target != null) {
-                        return new Vec3(target.getX(), target.getEyeY() / 2.0D, target.getZ());
+                        return new Vec3(target.getX(), target.getEyeY(), target.getZ());
                     }
                 }
                 return null;
