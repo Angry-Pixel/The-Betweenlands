@@ -1,7 +1,11 @@
 package thebetweenlands.common.event;
 
+import java.util.Comparator;
+import java.util.concurrent.CompletableFuture;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.HolderLookup;
@@ -30,9 +34,9 @@ import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.neoforged.neoforge.items.VanillaHopperItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -54,19 +58,71 @@ import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.EventCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
 import thebetweenlands.common.command.ResetAspectsCommand;
-import thebetweenlands.common.datagen.*;
+import thebetweenlands.common.datagen.BLAdvancementGenerator;
+import thebetweenlands.common.datagen.BLAtlasProvider;
+import thebetweenlands.common.datagen.BLBlockStateProvider;
+import thebetweenlands.common.datagen.BLDataMapProvider;
+import thebetweenlands.common.datagen.BLItemModelProvider;
+import thebetweenlands.common.datagen.BLLanguageProvider;
+import thebetweenlands.common.datagen.BLRecipeProvider;
+import thebetweenlands.common.datagen.BLRegistryProvider;
+import thebetweenlands.common.datagen.BLSoundDefinitionProvider;
 import thebetweenlands.common.datagen.loot.BLLootProvider;
-import thebetweenlands.common.datagen.tags.*;
+import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
+import thebetweenlands.common.datagen.tags.BLDamageTagProvider;
+import thebetweenlands.common.datagen.tags.BLDimensionTypeTagProvider;
+import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
+import thebetweenlands.common.datagen.tags.BLFluidTagGenerator;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
-import thebetweenlands.common.network.clientbound.*;
-import thebetweenlands.common.network.serverbound.*;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.network.clientbound.AddBetweenlandsBossBarPacket;
+import thebetweenlands.common.network.clientbound.AddLocalStoragePacket;
+import thebetweenlands.common.network.clientbound.AmateMapPacket;
+import thebetweenlands.common.network.clientbound.BlockGuardDataPacket;
+import thebetweenlands.common.network.clientbound.ChangeBlockGuardSectionPacket;
+import thebetweenlands.common.network.clientbound.ClearBlockGuardPacket;
+import thebetweenlands.common.network.clientbound.DruidParticlePacket;
+import thebetweenlands.common.network.clientbound.GemProtectionPacket;
+import thebetweenlands.common.network.clientbound.InfestWeedwoodBushPacket;
+import thebetweenlands.common.network.clientbound.LivingWeedwoodShieldSpitPacket;
+import thebetweenlands.common.network.clientbound.OpenHerbloreBookPacket;
+import thebetweenlands.common.network.clientbound.OpenLoreScrapPacket;
+import thebetweenlands.common.network.clientbound.OpenRenameScreenPacket;
+import thebetweenlands.common.network.clientbound.RemoveLocalStoragePacket;
+import thebetweenlands.common.network.clientbound.RiftSoundPacket;
+import thebetweenlands.common.network.clientbound.ShockArrowHitPacket;
+import thebetweenlands.common.network.clientbound.ShockParticlePacket;
+import thebetweenlands.common.network.clientbound.ShowFoodSicknessPacket;
+import thebetweenlands.common.network.clientbound.SoundRipplePacket;
+import thebetweenlands.common.network.clientbound.SummonPeatMummyParticlesPacket;
+import thebetweenlands.common.network.clientbound.SyncChunkStoragePacket;
+import thebetweenlands.common.network.clientbound.SyncEnvironmentEventDataPacket;
+import thebetweenlands.common.network.clientbound.SyncLocalStorageDataPacket;
+import thebetweenlands.common.network.clientbound.SyncLocalStorageReferencesPacket;
+import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
+import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
+import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
+import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
+import thebetweenlands.common.network.serverbound.ChiromawDoubleJumpPacket;
+import thebetweenlands.common.network.serverbound.ChopFishPacket;
+import thebetweenlands.common.network.serverbound.EquipItemPacket;
+import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
+import thebetweenlands.common.network.serverbound.OpenPouchPacket;
+import thebetweenlands.common.network.serverbound.RenameItemPacket;
+import thebetweenlands.common.network.serverbound.SetGalleryUrlPacket;
+import thebetweenlands.common.network.serverbound.SetLastPageDataPacket;
+import thebetweenlands.common.network.serverbound.UpdateRingStatePacket;
+import thebetweenlands.common.registries.AttributeRegistry;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.DataMapRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
-
-import java.util.Comparator;
-import java.util.concurrent.CompletableFuture;
 
 public class CommonRegistrationEvents {
 
@@ -78,6 +134,7 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::makeDatapackRegistries);
 		bus.addListener(CommonRegistrationEvents::populateVanillaTabs);
 		bus.addListener(CommonRegistrationEvents::registerAttributes);
+		bus.addListener(CommonRegistrationEvents::registerExtraAttributes);
 		bus.addListener(CommonRegistrationEvents::registerBlockEntityValidBlocks);
 		bus.addListener(CommonRegistrationEvents::registerPackets);
 		bus.addListener(CommonRegistrationEvents::registerDataMaps);
@@ -167,6 +224,11 @@ public class CommonRegistrationEvents {
 	@SuppressWarnings("unchecked") //entities added this way will always extend LivingEntity
 	private static void registerAttributes(EntityAttributeCreationEvent event) {
 		EntityRegistry.ATTRIBUTES.forEach((type, builder) -> event.put((EntityType<? extends LivingEntity>) type.value(), builder.get().build()));
+	}
+	
+	private static void registerExtraAttributes(EntityAttributeModificationEvent event) {
+		event.add(EntityType.PLAYER, AttributeRegistry.DECAY_RESISTANCE, 0.0);
+		event.add(EntityType.PLAYER, AttributeRegistry.CORROSION_RESISTANCE, 0.0);
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {

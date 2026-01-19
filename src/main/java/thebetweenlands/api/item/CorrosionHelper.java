@@ -7,6 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +23,7 @@ import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.datagen.tags.BLDimensionTypeTagProvider;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.AttributeRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class CorrosionHelper {
@@ -225,6 +227,29 @@ public class CorrosionHelper {
 		return level.dimensionTypeRegistration().is(BLDimensionTypeTagProvider.CORRODING_AURA);
 	}
 
+	/**
+	 * Calculates the probability of an item increasing in corrosion
+	 * @param stack
+	 * @param world
+	 * @param holder
+	 * @param isHeldItem
+	 * @return the probability of the stack's corrosion increasing
+	 */
+	public static float getCorrosionProbability(@Nullable ItemStack stack, @Nullable Level world, @Nullable Entity holder, boolean isHeldItem) {
+		if(holder == null) {
+			return 0.0007F;
+		}
+		float probability = holder.isInWater() ? 0.0014F : 0.0007F;
+		if (holder instanceof Player player) {
+			probability *= (isHeldItem && !player.getMainHandItem().isEmpty() ? 2.8F : 1.0F);
+			float playerCorruption = player.getData(AttachmentRegistry.DECAY).getDecayLevel(player) / 20.0F;
+			probability *= (float) (1 - Math.pow(playerCorruption, 2) * 0.9F);
+		}
+		if (holder instanceof LivingEntity livingEntity && livingEntity.getAttributes().hasAttribute(AttributeRegistry.CORROSION_RESISTANCE)) {
+			probability *= 1.0 - livingEntity.getAttributeValue(AttributeRegistry.CORROSION_RESISTANCE);
+		}
+		return probability;
+	}
 
 	/**
 	 * Updates the corrosion on the specified item
@@ -238,30 +263,24 @@ public class CorrosionHelper {
 		if (world.isClientSide()) {
 			return;
 		}
-		if(!world.isClientSide() && shouldEntityCorrode(holder)) {
-			if(!isCorrodible(stack)) {
-				return;
+		
+		if(!shouldEntityCorrode(holder) || !isCorrodible(stack)) {
+			return;
+		}
+		
+		int corrosion = getCorrosion(stack);
+		if(!isCorrosionEnabled(world)) {
+			if(corrosion != 0) {
+				setCorrosion(stack, 0);
 			}
-
-			int corrosion = getCorrosion(stack);
-			if(!isCorrosionEnabled(world)) {
-				if(corrosion != 0) {
-					setCorrosion(stack, 0);
-				}
-			} else if (corrosion < getMaximumCorrosion(stack)) {
-				float probability = holder.isInWater() ? 0.0014F : 0.0007F;
-				if (holder instanceof Player player) {
-					probability *= (isHeldItem && !player.getMainHandItem().isEmpty() ? 2.8F : 1.0F);
-					float playerCorruption = player.getData(AttachmentRegistry.DECAY).getDecayLevel(player) / 20.0F;
-					probability *= (float) (1 - Math.pow(playerCorruption, 2) * 0.9F);
-				}
-				if (world.getRandom().nextFloat() < probability) {
-					int coating = getCoating(stack);
-					if(coating > 0) {
-						setCoating(stack, coating - 1);
-					} else {
-						setCorrosion(stack, corrosion + 1);
-					}
+		} else if (corrosion < getMaximumCorrosion(stack)) {
+			float probability = getCorrosionProbability(stack, world, holder, isHeldItem);
+			if (world.getRandom().nextFloat() < probability) {
+				int coating = getCoating(stack);
+				if(coating > 0) {
+					setCoating(stack, coating - 1);
+				} else {
+					setCorrosion(stack, corrosion + 1);
 				}
 			}
 		}
