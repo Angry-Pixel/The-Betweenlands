@@ -220,6 +220,11 @@ public class TestChimpItem extends Item {
 				spawner.finalizeSpawn((ServerLevelAccessor)context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), MobSpawnType.NATURAL, null);
 				spawner.setPlacedByPlayer(true);
 				context.getLevel().addFreshEntity(spawner);
+
+			BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
+			if (puppet != null) {
+				puppet.setPos(context.getClickedPos().above().getBottomCenter());
+				context.getLevel().addFreshEntity(puppet);
 			}
 
 			SwingingHammerTrap swinger = EntityRegistry.SWINGING_HAMMER_TRAP.get().create(context.getLevel());

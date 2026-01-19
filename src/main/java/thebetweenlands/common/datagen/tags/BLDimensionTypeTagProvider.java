@@ -13,6 +13,7 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.DimensionRegistries;
 
 public class BLDimensionTypeTagProvider extends TagsProvider<DimensionType> {
 
@@ -28,9 +29,8 @@ public class BLDimensionTypeTagProvider extends TagsProvider<DimensionType> {
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		//TODO REMOVE OVERWORLD AFTER TESTING
-		this.tag(DECAYING_AURA).add(BuiltinDimensionTypes.OVERWORLD);
-		this.tag(CORRODING_AURA).add(BuiltinDimensionTypes.OVERWORLD);
+		this.tag(DECAYING_AURA).add(DimensionRegistries.DIMENSION_TYPE_KEY);
+		this.tag(CORRODING_AURA).add(DimensionRegistries.DIMENSION_TYPE_KEY);
 
 		this.tag(TAR_BOILS).add(BuiltinDimensionTypes.NETHER);
 		this.tag(TAR_VAPORIZES);

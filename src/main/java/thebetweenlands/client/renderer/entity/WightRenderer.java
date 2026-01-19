@@ -41,7 +41,7 @@ public class WightRenderer<T extends Wight> extends MobRenderer<T, WightModel<T>
 	public void render(T entity, float yaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light) {
 		if (!entity.isVolatile()) {
 			this.model.renderHeadOnly = false;
-			this.renderWithTranslucentFix(entity, partialTicks, stack, buffer, light, FastColor.ARGB32.colorFromFloat(1.0F - entity.getHidingAnimation(partialTicks) * 0.5F, 1.0F, 1.0F, 1.0F));
+			this.renderWithTranslucentFix(entity, partialTicks, stack, buffer, light, FastColor.ARGB32.colorFromFloat(0.5F + entity.getHidingAnimation(partialTicks) * 0.5F, 1.0F, 1.0F, 1.0F));
 		} else {
 			this.model.renderHeadOnly = true;
 

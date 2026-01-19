@@ -74,6 +74,10 @@ public class PlayerDecayHandler {
 						if (armorDecayReduction > 0) {
 							decaySpeed -= decaySpeed * (armorDecayReduction / 4f);
 						}
+						
+						if(player.getAttributes().hasAttribute(AttributeRegistry.DECAY_RESISTANCE)) {
+							decaySpeed *= 1.0 - player.getAttributeValue(AttributeRegistry.DECAY_RESISTANCE);
+						}
 
 						decayData = decayData.addDecayAcceleration(decaySpeed);
 					}

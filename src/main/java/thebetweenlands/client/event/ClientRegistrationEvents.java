@@ -143,6 +143,7 @@ import thebetweenlands.client.model.entity.BLFishHookModel;
 import thebetweenlands.client.model.entity.BarrisheeModel;
 import thebetweenlands.client.model.entity.BipedCryptCrawlerModel;
 import thebetweenlands.client.model.entity.BloodSnailModel;
+import thebetweenlands.client.model.entity.BonePuppetRangedModel;
 import thebetweenlands.client.model.entity.BubblerCrabModel;
 import thebetweenlands.client.model.entity.CaveFishModel;
 import thebetweenlands.client.model.entity.CaveJellyfishModel;
@@ -297,6 +298,7 @@ import thebetweenlands.client.renderer.entity.BLItemFrameRenderer;
 import thebetweenlands.client.renderer.entity.BarrisheeRenderer;
 import thebetweenlands.client.renderer.entity.BipedCryptCrawlerRenderer;
 import thebetweenlands.client.renderer.entity.BloodSnailRenderer;
+import thebetweenlands.client.renderer.entity.BonePuppetRangedRenderer;
 import thebetweenlands.client.renderer.entity.BubblerCrabBubbleRenderer;
 import thebetweenlands.client.renderer.entity.BubblerCrabRenderer;
 import thebetweenlands.client.renderer.entity.CCGroundSpawnerRenderer;
@@ -601,6 +603,7 @@ public class ClientRegistrationEvents {
 
 		event.registerEntityRenderer(EntityRegistry.WALL_LAMPREY.get(), WallLampreyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WALL_JET.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BONE_PUPPET_RANGED.get(), BonePuppetRangedRenderer::new);
 
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
@@ -739,6 +742,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ROCK_SNOT_GRABBER, RockSnotGrabberModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.WALL_LAMPREY, WallLampreyModel::create);
 		event.registerLayerDefinition(BLModelLayers.WALL_HOLE, WallHoleModel::create);
+		event.registerLayerDefinition(BLModelLayers.BONE_PUPPET_RANGED, BonePuppetRangedModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
