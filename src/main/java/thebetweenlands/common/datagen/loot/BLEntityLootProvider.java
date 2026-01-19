@@ -504,6 +504,12 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
 		this.noLoot(EntityRegistry.WALL_LAMPREY);
+		
+		this.add(EntityRegistry.BONE_PUPPET_RANGED.get(), LootTable.lootTable().withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
+			));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
