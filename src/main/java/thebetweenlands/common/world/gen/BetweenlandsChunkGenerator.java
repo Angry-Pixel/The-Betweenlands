@@ -32,7 +32,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ImposterProtoChunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
@@ -44,6 +47,7 @@ import thebetweenlands.api.world.ExtraChunkInfo;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.biome.BiomeWeightGroups;
 import thebetweenlands.api.world.biome.BiomeWeights;
+import thebetweenlands.api.world.biome.CarvingMasks;
 import thebetweenlands.api.world.biome.IBetweenlandsBiomeSource;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
@@ -197,8 +201,10 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		// List of all generators to generate in this chunk
 		List<EarlyGeneratorWithBiome> baseGenerators = new ArrayList<>();
 		
-		// Add all global generators
-		this.blSettings.globalGenerators().stream()
+		GlobalEarlyGenerators globalGenerators = this.blSettings.globalGenerators();
+		
+		// Add all early global generators
+		globalGenerators.earlyGenerators().stream()
 			.flatMap(HolderSet::stream)
 			.map(Holder::value)
 			.map((generator) -> new EarlyGeneratorWithBiome(Optional.empty(), generator))
@@ -222,6 +228,13 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				}
 			}
 		}
+		
+		// Add all late global generators
+		globalGenerators.lateGenerators().stream()
+			.flatMap(HolderSet::stream)
+			.map(Holder::value)
+			.map((generator) -> new EarlyGeneratorWithBiome(Optional.empty(), generator))
+			.forEach(baseGenerators::add);
 
 		// If there are generators to generate
 		if(baseGenerators.size() != 0) {
@@ -237,6 +250,8 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 				context = placeBaseGenerator(generator.generator(), context);
 //				TheBetweenlands.LOGGER.info("New context {}", context);
 			}
+			
+			access = context.chunkAccess();
 		}
 		
 		return access;
@@ -310,14 +325,26 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		return context;
 	}
 	
+	public static ProtoChunk chunkToProtoChunk(ChunkAccess chunk) {
+		if(chunk instanceof ProtoChunk protoChunk) {
+			return protoChunk; // This should always be the case during normal generation
+		} else {
+			return new ImposterProtoChunk((LevelChunk)chunk, true);
+		}
+	}
+	
 	public EarlyGenerationContext<?> updateExtraInfo(EarlyGenerationContext<?> context, EnumSet<ExtraChunkInfoTypes> missingRequirements) {
-		
 		ExtraChunkInfo extraInfo = context.extraChunkInfo();
 		
 		for(ExtraChunkInfoTypes requirement : missingRequirements) {
 			switch(requirement) {
 				case ExtraChunkInfoTypes.BIOME_WEIGHTS:
 					extraInfo = extraInfo.withBiomeWeights(this.calculateBiomeWeights(context.chunkAccess().getPos()));
+					break;
+				case ExtraChunkInfoTypes.CARVING_MASKS:
+					ProtoChunk protoChunk = chunkToProtoChunk(context.chunkAccess());
+					context = context.withChunkAccess(protoChunk);
+					extraInfo = extraInfo.withCarvingMasks(CarvingMasks.from(protoChunk));
 					break;
 			}
 		}

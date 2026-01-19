@@ -1,5 +1,8 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+import java.util.OptionalLong;
+
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -12,7 +15,10 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.*;
+import net.minecraft.world.level.levelgen.DensityFunctions;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.NoiseRouter;
+import net.minecraft.world.level.levelgen.NoiseSettings;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.world.biome.BiomeWeightGroups;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
@@ -21,10 +27,7 @@ import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.world.gen.BetweenlandsBiomeSource;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGenerator;
 import thebetweenlands.common.world.gen.BetweenlandsChunkGeneratorSettings;
-import thebetweenlands.common.world.gen.warp.BLBiomeData;
-
-import java.util.List;
-import java.util.OptionalLong;
+import thebetweenlands.common.world.gen.GlobalEarlyGenerators;
 
 public class DimensionRegistries {
 
@@ -107,7 +110,9 @@ public class DimensionRegistries {
 				BiomeWeightGroups.builder(biome)
 //					.addBiomeGroup(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH) // Debug to check this actually works
 					.build(),
-				List.of()
+				GlobalEarlyGenerators.builder(generators)
+//					.addLateGroup(EarlyGeneratorRegistry.Configured.BETWEENLANDS_CAVES)
+					.build()
 			);
 
 		context.register(LEVEL_STEM_KEY, new LevelStem(

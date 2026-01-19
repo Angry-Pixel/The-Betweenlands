@@ -46,6 +46,8 @@ public class EarlyGeneratorRegistry {
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> DEEP_WATERS_SIMPLEX_TERRAIN = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("deep_waters_simplex_terrain"));
 
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> COARSE_ISLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("coarse_islands"));
+
+		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> BETWEENLANDS_CAVES = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("bl_caves"));
 	}
 	
 	public static void bootstrapConfigured(BootstrapContext<ConfiguredEarlyGenerator<?, ?>> context) {

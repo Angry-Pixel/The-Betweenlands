@@ -316,7 +316,10 @@
     },
     "bl_settings": {
       "biome_weight_groups": [],
-      "global_generators": []
+      "global_generators": {
+        "early": [],
+        "late": []
+      }
     },
     "settings": "thebetweenlands:the_betweenlands"
   }
