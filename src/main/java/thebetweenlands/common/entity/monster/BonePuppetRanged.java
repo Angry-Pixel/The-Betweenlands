@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.monster;
 
+import java.util.List;
+
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -24,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BonePuppetRanged extends Monster implements BLEntity {
@@ -32,6 +36,7 @@ public class BonePuppetRanged extends Monster implements BLEntity {
 
     private int lastSpawningAnimationTicks = 0;
     private int spawnDuration = 30;
+    private int pathingCooldown = 0;
 
     public BonePuppetRanged(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -46,7 +51,8 @@ public class BonePuppetRanged extends Monster implements BLEntity {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !player.isShiftKeyDown()));
+        goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+        targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
@@ -66,6 +72,44 @@ public class BonePuppetRanged extends Monster implements BLEntity {
             if(level().isClientSide())
             	if(getSpawnTimer() < 10)
             		spawnEmergingParticles();
+            
+    		if (this.getTarget() != null && this.hasPassenger(entity -> entity.getType() == EntityRegistry.WIGHT.get())) {    			
+    			List<LivingEntity> targets = level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.6D, 0.6D, 0.6D));
+				LivingEntity closestTarget = null;
+				float lastAngDiff = 0.0F;
+				Wight wight = (Wight) this.getControllingPassenger();
+				for (LivingEntity target : targets) {
+					if (wight.getTarget() == target) {
+						float x = (float) (target.getX() - getX());
+						float z = (float) (target.getZ() - getZ());
+						float angle = (float) (Math.atan2(z, x));
+						float angDiff = (float) Math.abs(this.getYRot() % 360.0F - Math.toDegrees(angle) % 360.0F + 90) % 360.0F;
+						float angDiffWrapped = Math.min(angDiff, Math.abs(360.0F - angDiff));
+						//Only attack mobs in front (+-50 deg.)
+						if (angDiffWrapped <= 50 && (angDiffWrapped < lastAngDiff || closestTarget == null)) {
+							closestTarget = target;
+							lastAngDiff = angDiffWrapped;
+						}
+					}
+				}
+				if (closestTarget != null) {
+					double x = getX() - closestTarget.getX();
+					double z = getZ() - closestTarget.getZ();
+					DamageSource damageSource = damageSources().mobAttack(this);
+					float attackDamage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE);
+					if (closestTarget.hurtTime <= 0 && closestTarget.hurt(damageSource, attackDamage)) 
+						closestTarget.knockback(attackDamage / 2.5F, x, z);
+				}
+    			
+    			if (this.pathingCooldown <= 0) {
+    				//hax
+    				if (!this.getNavigation().moveTo(this.getTarget(), 1D)) {
+    					this.pathingCooldown = 20;
+    				}
+    			} else {
+    				this.pathingCooldown--;
+    			}
+    		}
 
         super.aiStep();
     }
@@ -86,7 +130,7 @@ public class BonePuppetRanged extends Monster implements BLEntity {
 
 	@Override
     protected boolean isImmobile() {
-        return super.isImmobile() || getSpawnTimer() < spawnDuration;
+        return super.isImmobile() || getSpawnTimer() < spawnDuration || !isVehicle(); // change this to only work when has 'master'
     }
 
     @Override

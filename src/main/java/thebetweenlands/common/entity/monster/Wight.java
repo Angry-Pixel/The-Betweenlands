@@ -1,7 +1,5 @@
 package thebetweenlands.common.entity.monster;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -42,6 +40,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.entity.BLEntity;
@@ -49,9 +48,9 @@ import thebetweenlands.common.entity.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.goals.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.ai.goals.WightBuffSwampHagGoal;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
-import thebetweenlands.common.entity.projectile.VolatileSoul;
 import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
 import thebetweenlands.common.registries.AttributeRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -78,6 +77,7 @@ public class Wight extends Monster implements BLEntity {
     private boolean canTurnVolatileOnTarget = false;
     private boolean didTurnVolatileOnPlayer = false;
     private int growCount, prevGrowCount = 40;
+    private boolean scanForBonePiles = true;
 
     public Wight(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -115,9 +115,9 @@ public class Wight extends Monster implements BLEntity {
         });
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.4D));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.3D));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(9, new EntityAIFlyRandomly<>(this) {
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, new EntityAIFlyRandomly<>(this) {
             @Override
             public boolean canUse() {
                 return this.entity.isVolatile() && this.entity.volatileTicks >= 20 && this.entity.getTarget() == null && super.canUse();
@@ -200,9 +200,14 @@ public class Wight extends Monster implements BLEntity {
                 if (this.volatileTicks < this.getAttribute(AttributeRegistry.VOLATILE_LENGTH).getValue()) {
                     this.volatileTicks++;
 
-                    if (this.volatileTicks >= 20) {
-                        this.noPhysics = true;
-                    }
+					if (this.volatileTicks >= 20) {
+						this.noPhysics = true;
+						// TODO Shoehorning this in here until it gets moved to a proper AI
+						// search for bone blocks
+						if (scanForBonePiles)
+							scanForBonePiles();
+					}
+
                 } else {
                     if (!this.level().isClientSide()) {
                         this.setDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.075D, 0.0D));
@@ -244,7 +249,7 @@ public class Wight extends Monster implements BLEntity {
                         this.setYHeadRot(0);
 
 						if (this.tickCount % 5 == 0 && this.hasLineOfSight(this.getTarget()) && !this.isWearingSkullMask(this.getTarget())) {
-							List<VolatileSoul> existingSouls = this.level().getEntitiesOfClass(VolatileSoul.class, this.getBoundingBox().inflate(16.0D));
+						/*	List<VolatileSoul> existingSouls = this.level().getEntitiesOfClass(VolatileSoul.class, this.getBoundingBox().inflate(16.0D));
 							if (existingSouls.size() < 16) {
 								VolatileSoul soul = new VolatileSoul(this.level(), this);
 								float mx = this.level().getRandom().nextFloat() - 0.5F;
@@ -254,7 +259,8 @@ public class Wight extends Monster implements BLEntity {
 								soul.moveTo(this.getX() + dir.x * 0.5D, this.getY() + dir.y * 1.5D, this.getZ() + dir.z * 0.5D, 0, 0);
 								soul.shoot(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
 								this.level().addFreshEntity(soul);
-							}
+						
+							}*/ //This is fucking annoying and too random imo
 						}
                     }
                 }
@@ -287,7 +293,34 @@ public class Wight extends Monster implements BLEntity {
         super.aiStep();
     }
 
-    @Override
+    private void scanForBonePiles() {
+		if(getTarget() != null && getTarget() instanceof Player player) {
+			//Vec3 wightPos = this.position();
+			Vec3 playerPos = player.position();
+			AABB searchBox = new AABB(blockPosition()).expandTowards(playerPos).inflate(4);
+			BlockPos minPos = BlockPos.containing(searchBox.minX, searchBox.minY, searchBox.minZ);
+			BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
+			for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
+			    if (level().getBlockState(pos).is(BlockRegistry.SLIMY_BONE_ORE)) {
+			    	setTarget(null);
+			    	this.moveControl.setWantedPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, getAttributeValue(Attributes.FLYING_SPEED));
+			    }
+				if (level().getBlockState(blockPosition().below()).is(BlockRegistry.SLIMY_BONE_ORE)) {
+					level().destroyBlock(blockPosition().below(), true);
+					BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(level());
+					if (puppet != null) {
+						puppet.setPos(blockPosition().below().getBottomCenter());
+						puppet.setYRot(this.getYRot());
+						level().addFreshEntity(puppet);
+						startRiding(puppet, true);
+					}
+					scanForBonePiles = false;
+				}
+			}
+		}
+	}
+
+	@Override
     public void travel(Vec3 travelVector) {
         if (this.isVolatile()) {
             //[VanillaCopy] of FlyingMob.travel (for easier porting)
@@ -492,15 +525,18 @@ public class Wight extends Monster implements BLEntity {
         return (int) this.getAttribute(AttributeRegistry.VOLATILE_COOLDOWN).getValue();
     }
 
-    public boolean canPossess(LivingEntity entity) {
-        if (entity instanceof SwampHag) {
-            return true;
-        }
-        if (entity instanceof Player) {
-            return !this.isWearingSkullMask(entity);
-        }
-        return false;
-    }
+	public boolean canPossess(LivingEntity entity) {
+		if (entity instanceof SwampHag)
+			return true;
+
+		if (entity instanceof BonePuppetRanged)
+			return true;
+
+		if (entity instanceof Player)
+			return !this.isWearingSkullMask(entity);
+
+		return false;
+	}
 
     public boolean isWearingSkullMask(LivingEntity entity) {
         ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
