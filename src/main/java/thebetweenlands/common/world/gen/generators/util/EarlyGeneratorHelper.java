@@ -163,7 +163,7 @@ public class EarlyGeneratorHelper {
 	public static NoiseSampler3D createConfiguredSampler3D(FractalOpenSimplexNoise noise, FractalOpenSimplexNoiseSettings3D settings) {
 		final double noiseScaleX = settings.noiseScaleX();
 		final double noiseScaleY = settings.noiseScaleY();
-		final double noiseScaleZ = settings.noiseScaleY();
+		final double noiseScaleZ = settings.noiseScaleZ();
 		final double noiseValueMultiplier = settings.noiseValueMultiplier();
 		final double noiseValueOffset = settings.noiseValueOffset();
 		
@@ -179,7 +179,7 @@ public class EarlyGeneratorHelper {
 	public static NoiseSampler3D createConfiguredSampler3DNormalized(FractalOpenSimplexNoise noise, FractalOpenSimplexNoiseSettings3D settings) {
 		final double noiseScaleX = settings.noiseScaleX();
 		final double noiseScaleY = settings.noiseScaleY();
-		final double noiseScaleZ = settings.noiseScaleY();
+		final double noiseScaleZ = settings.noiseScaleZ();
 		final double noiseValueMultiplier = settings.noiseValueMultiplier();
 		final double noiseValueOffset = settings.noiseValueOffset();
 		
