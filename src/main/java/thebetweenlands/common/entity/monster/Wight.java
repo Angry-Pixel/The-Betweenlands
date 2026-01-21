@@ -40,17 +40,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.goals.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.ai.goals.WightBuffSwampHagGoal;
+import thebetweenlands.common.entity.ai.goals.WightSeekBonePileGoal;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
 import thebetweenlands.common.registries.AttributeRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -77,7 +76,7 @@ public class Wight extends Monster implements BLEntity {
     private boolean canTurnVolatileOnTarget = false;
     private boolean didTurnVolatileOnPlayer = false;
     private int growCount, prevGrowCount = 40;
-    private boolean scanForBonePiles = true;
+	private boolean ignoreCurrentPath = false;
 
     public Wight(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -99,25 +98,32 @@ public class Wight extends Monster implements BLEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new WightAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(2, new WightBuffSwampHagGoal(this));
-        this.goalSelector.addGoal(3, new EntityAIMoveToDirect<>(this, this.getAttributeValue(Attributes.FLYING_SPEED)) {
+        this.goalSelector.addGoal(2, new WightSeekBonePileGoal(this));
+        this.goalSelector.addGoal(3, new WightBuffSwampHagGoal(this));
+        this.goalSelector.addGoal(4, new EntityAIMoveToDirect<>(this, this.getAttributeValue(Attributes.FLYING_SPEED)) {
+        	@Override
+        	public boolean canUse() {
+        		return this.getTarget() != null && !this.entity.ignoreCurrentPath;
+        	}
+
             @Nullable
             @Override
             protected Vec3 getTarget() {
                 if (this.entity.volatileTicks >= 20) {
                     LivingEntity target = this.entity.getTarget();
                     if (target != null) {
+                    	// TODO squeeze in something here for pathing to bone blocks instead?
                         return new Vec3(target.getX(), target.getEyeY(), target.getZ());
                     }
                 }
                 return null;
             }
         });
-        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.4D));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.3D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(8, new EntityAIFlyRandomly<>(this) {
+        this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.4D));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.3D));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(9, new EntityAIFlyRandomly<>(this) {
             @Override
             public boolean canUse() {
                 return this.entity.isVolatile() && this.entity.volatileTicks >= 20 && this.entity.getTarget() == null && super.canUse();
@@ -202,10 +208,6 @@ public class Wight extends Monster implements BLEntity {
 
 					if (this.volatileTicks >= 20) {
 						this.noPhysics = true;
-						// TODO Shoehorning this in here until it gets moved to a proper AI
-						// search for bone blocks
-						if (scanForBonePiles)
-							scanForBonePiles();
 					}
 
                 } else {
@@ -219,7 +221,6 @@ public class Wight extends Monster implements BLEntity {
                             this.didTurnVolatileOnPlayer = false;
                         }
                     }
-
                     this.noPhysics = false;
                 }
 
@@ -227,7 +228,7 @@ public class Wight extends Monster implements BLEntity {
                     this.moveControl.setWantedPosition(this.getX(), this.getY() + 1.0D, this.getZ(), 0.15D);
                 }
 
-                if (this.getTarget() != null) {
+                if (this.getTarget() != null && !ignoreCurrentPath) {
                     LivingEntity attackTarget = this.getTarget();
 
                     if (this.getVehicle() == null && this.distanceTo(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
@@ -292,33 +293,6 @@ public class Wight extends Monster implements BLEntity {
         }
         super.aiStep();
     }
-
-    private void scanForBonePiles() {
-		if(getTarget() != null && getTarget() instanceof Player player) {
-			//Vec3 wightPos = this.position();
-			Vec3 playerPos = player.position();
-			AABB searchBox = new AABB(blockPosition()).expandTowards(playerPos).inflate(4);
-			BlockPos minPos = BlockPos.containing(searchBox.minX, searchBox.minY, searchBox.minZ);
-			BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
-			for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
-			    if (level().getBlockState(pos).is(BlockRegistry.SLIMY_BONE_ORE)) {
-			    	setTarget(null);
-			    	this.moveControl.setWantedPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, getAttributeValue(Attributes.FLYING_SPEED));
-			    }
-				if (level().getBlockState(blockPosition().below()).is(BlockRegistry.SLIMY_BONE_ORE)) {
-					level().destroyBlock(blockPosition().below(), true);
-					BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(level());
-					if (puppet != null) {
-						puppet.setPos(blockPosition().below().getBottomCenter());
-						puppet.setYRot(this.getYRot());
-						level().addFreshEntity(puppet);
-						startRiding(puppet, true);
-					}
-					scanForBonePiles = false;
-				}
-			}
-		}
-	}
 
 	@Override
     public void travel(Vec3 travelVector) {
@@ -595,4 +569,8 @@ public class Wight extends Monster implements BLEntity {
             return !this.wight.isVolatile() && !this.wight.isHiding() && super.canContinueToUse();
         }
     }
+
+	public void setOverrideMovement(boolean state) {
+		this.ignoreCurrentPath = state;
+	}
 }
