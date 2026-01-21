@@ -2,12 +2,13 @@ package thebetweenlands.common.registries;
 
 import java.util.List;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.BLRegistries;
@@ -85,8 +86,11 @@ public class EarlyGeneratorRegistry {
 						)
 					)));
 		
+		HolderGetter<Block> blockRegistry = context.lookup(Registries.BLOCK);
+		
 		context.register(Configured.BETWEENLANDS_CAVES, new ConfiguredEarlyGenerator<>(BETWEENLANDS_CAVES.get(),
 				new BetweenlandsCavesGeneratorConfiguration(
+						blockRegistry.getOrThrow(BLBlockTagProvider.THEBETWEENLANDS_CARVER_REPLACABLES),
 						// Cave noise
 						new FractalOpenSimplexNoiseSettings3D(1, true, 0.08, 0.15, 0.08, 1.0, 0.0),
 						// Surface Opening noise
@@ -102,7 +106,7 @@ public class EarlyGeneratorRegistry {
 						// Cave water height
 						15,
 						// Buffer blocks
-						BlockPredicate.matchesTag(BLBlockTagProvider.BL_CAVE_BUFFER_REPLACABLE), 0.25,
+						blockRegistry.getOrThrow(BLBlockTagProvider.BL_CAVE_BUFFER_REPLACABLE), 0.25,
 						// Biomes without surface openings
 						HolderSet.direct(
 								context.lookup(Registries.BIOME)::getOrThrow,

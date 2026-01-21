@@ -13,10 +13,7 @@
       "thebetweenlands:sludge_plains_clearing"
     ],
     "buffer_noise_limit": 0.25,
-    "buffer_replace_predicate": {
-      "type": "minecraft:matching_block_tag",
-      "tag": "thebetweenlands:bl_caves_buffer_replacable"
-    },
+    "buffer_replaceable": "#thebetweenlands:bl_caves_buffer_replacable",
     "cave_noise": {
       "additive_octave_seed": true,
       "noise_octaves": 1,
@@ -37,9 +34,11 @@
       "type": "thebetweenlands:heightmap",
       "heightmap": "OCEAN_FLOOR_WG"
     },
+    "max_cave_height_taper_distance": 20,
     "min_cave_height": 0,
     "min_cave_height_taper_distance": 10,
     "no_surface_opening_noise_offset": 2.975,
+    "replaceable": "#thebetweenlands:thebetweenlands_carver_replaceables",
     "surface_opening_noise": {
       "additive_octave_seed": true,
       "noise_octaves": 1,

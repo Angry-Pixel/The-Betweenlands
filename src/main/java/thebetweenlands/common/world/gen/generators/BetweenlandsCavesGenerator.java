@@ -10,20 +10,18 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.CarvingMask;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.biome.BiomeWeights;
 import thebetweenlands.api.world.biome.CarvingMasks;
 import thebetweenlands.api.world.generator.EarlyGenerationContext;
 import thebetweenlands.api.world.generator.EarlyGenerationContext.ChunkHeightmaps;
 import thebetweenlands.api.world.generator.EarlyGenerator;
-import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.generators.config.BetweenlandsCavesGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper;
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper.NoiseSampler2D;
@@ -54,8 +52,12 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final int chunkHeight = access.getHeight();
 		final int chunkMinHeight = access.getMinBuildHeight();
 
+		// Default states to replace with
 		BlockState defaultTerrainState = context.blockGenerator().defaultTerrainState();
 		BlockState defaultLiquidState  = context.blockGenerator().defaultLiquidState();
+
+		// Which blocks can we replace?
+		final HolderSet<Block> replaceable = config.replaceable();
 		
 		// Get BiomeWeights and Carving Masks
 		final BiomeWeights biomeWeights = context.extraChunkInfo().biomeWeights().get();
@@ -92,14 +94,16 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final int caveWaterHeight = config.caveWaterHeight();
 		
 		// Get buffer info (for replacing water that is too close to the caves)
-		final BlockPredicate bufferPredicate = config.bufferBlockReplacePredicate();
+		final HolderSet<Block> bufferReplaceable = config.bufferReplaceable();
 		final double bufferNoiseLimit = config.bufferNoiseLimit();
 		
 		// Get surface opening biome info
 		final HolderSet<Biome> biomesWithoutSurfaceOpenings = config.biomesWithoutSurfaceOpenings();
 		final double noSurfaceOpeningNoiseOffset = config.noSurfaceOpeningNoiseOffset();
-		
+
 		final BitSet bufferPlacedBlocksMask = new BitSet(16 * 16 * chunkHeight);
+		final BitSet carvedLiquidBlocksMask = new BitSet(16 * 16 * chunkHeight);
+		final BitSet carvedTerrainBlocksMask = new BitSet(16 * 16 * chunkHeight);
 		
 		for (int x = 0; x < 8; x++) {
 			int indexXC = x * 9; //1
@@ -127,7 +131,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 						caveMinHeights[xo * 2 + zo] = minCaveHeight;
 						
 						// Get height of surface in this column
-						int surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
+						int surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
 						
 						caveMaxHeights[xo * 2 + zo] = surfaceLevel;
 						
@@ -189,6 +193,8 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 
 								int by = y + yo;
 
+								final int maskBitIndex = (bx & 15) | (bz & 15) << 4 | (by) << 8;
+								
 								double limit = baseNoiseLimit;
 								int bottomDist = by - minCaveHeight;
 								if (bottomDist <= minCaveHeightTaperDistance) {
@@ -203,19 +209,21 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 
 								BlockPos blockPos = new BlockPos(bx, by, bz);
 								BlockState state = access.getBlockState(blockPos);
-								// TODO this should check the buffer predicate (once the predicate is fixed)
-								if (noise < limit + bufferNoiseLimit && noise > limit && state.is(BlockRegistry.SWAMP_WATER.get())) {
-									bufferPlacedBlocksMask.set((bx & 15) | (bz & 15) << 4 | (by) << 8);
+								
+								if (noise < limit + bufferNoiseLimit && noise > limit && state.is(bufferReplaceable)) {
+									bufferPlacedBlocksMask.set(maskBitIndex);
 									// Update heightmaps (even though we haven't actually placed the block yet)
 									chunkHeightmaps.update(bx, by, bz, defaultTerrainState);
 									// Update min/max heights for this column
-									caveMinHeights[xo * 2 + zo] = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
-									caveMaxHeights[xo * 2 + zo] = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
-								} else if (noise < limit && state.is(BLBlockTagProvider.THEBETWEENLANDS_CARVER_REPLACABLES)) {
+									caveMinHeights[xo * 2 + zo] = minCaveHeight = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
+									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
+								} else if (noise < limit && state.is(replaceable)) {
 									if(by <= caveWaterHeight) {
 										liquidCarvingMask.set(bx, by + chunkMinHeight, bz);
+										carvedLiquidBlocksMask.set(maskBitIndex);
 									} else {
 										airCarvingMask.set(bx, by + chunkMinHeight, bz);
+										carvedTerrainBlocksMask.set(maskBitIndex);
 									}
 								}
 							}
@@ -245,14 +253,12 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 				for(int x = 0; x < SectionPos.SECTION_SIZE; ++x) {
 					for(int z = 0; z < SectionPos.SECTION_SIZE; ++z) {
 						final int bitIndex = (x & 15) | (z & 15) << 4 | (y) << 8;
-
-						// Note: temp code, will be removed soon
-						if(liquidCarvingMask.get(x, y + chunkMinHeight, z)) {
+						
+						if(carvedLiquidBlocksMask.get(bitIndex)) {
 							section.setBlockState(x, sectionY, z, defaultLiquidState, false);
-						} else if(airCarvingMask.get(x, y + chunkMinHeight, z)) {
+						} else if(carvedTerrainBlocksMask.get(bitIndex)) {
 							section.setBlockState(x, sectionY, z, Blocks.CAVE_AIR.defaultBlockState(), false);
-						} else 
-						if(bufferPlacedBlocksMask.get(bitIndex)) {
+						} else if(bufferPlacedBlocksMask.get(bitIndex)) {
 							section.setBlockState(x, sectionY, z, defaultTerrainState, false);
 						}
 					}
