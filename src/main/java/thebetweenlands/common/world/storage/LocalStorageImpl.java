@@ -10,6 +10,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
+
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import thebetweenlands.api.storage.*;
 import thebetweenlands.common.network.clientbound.AddLocalStoragePacket;
 import thebetweenlands.common.network.clientbound.RemoveLocalStoragePacket;
@@ -28,7 +30,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	private final List<LocalStorageReference> loadedReferences = new ArrayList<>();
 
 	private final List<ServerPlayer> watchers = new ArrayList<>();
-	private final List<ServerPlayer> duplicateWatchers = new ArrayList<>();
+	private final Set<ServerPlayer> duplicateWatchers = new ObjectArraySet<>();
 
 	private boolean loaded = false;
 
