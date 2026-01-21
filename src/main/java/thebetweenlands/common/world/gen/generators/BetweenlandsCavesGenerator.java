@@ -11,7 +11,6 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.CarvingMask;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -54,7 +53,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 
 		// Default states to replace with
 		BlockState defaultTerrainState = context.blockGenerator().defaultTerrainState();
-		BlockState defaultLiquidState  = context.blockGenerator().defaultLiquidState();
+//		BlockState defaultLiquidState  = context.blockGenerator().defaultLiquidState();
 
 		// Which blocks can we replace?
 		final HolderSet<Block> replaceable = config.replaceable();
@@ -66,7 +65,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final CarvingMask liquidCarvingMask = carvingMasks.liquidCarvingMask();
 		
 		// Calculate vertical size of chunk noise field
-		final int fieldHeight = chunkHeight >> 1;//(access.getMaxBuildHeight() - access.getMinBuildHeight()) >> 1;
+		final int fieldHeight = chunkHeight >> 1;
 		final int noiseHeight = fieldHeight + 1;
 		
 		// Get noise data
@@ -102,8 +101,8 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final double noSurfaceOpeningNoiseOffset = config.noSurfaceOpeningNoiseOffset();
 
 		final BitSet bufferPlacedBlocksMask = new BitSet(16 * 16 * chunkHeight);
-		final BitSet carvedLiquidBlocksMask = new BitSet(16 * 16 * chunkHeight);
-		final BitSet carvedTerrainBlocksMask = new BitSet(16 * 16 * chunkHeight);
+//		final BitSet carvedLiquidBlocksMask = new BitSet(16 * 16 * chunkHeight);
+//		final BitSet carvedTerrainBlocksMask = new BitSet(16 * 16 * chunkHeight);
 		
 		for (int x = 0; x < 8; x++) {
 			int indexXC = x * 9; //1
@@ -131,7 +130,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 						caveMinHeights[xo * 2 + zo] = minCaveHeight;
 						
 						// Get height of surface in this column
-						int surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
+						int surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
 						
 						caveMaxHeights[xo * 2 + zo] = surfaceLevel;
 						
@@ -216,14 +215,14 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 									chunkHeightmaps.update(bx, by, bz, defaultTerrainState);
 									// Update min/max heights for this column
 									caveMinHeights[xo * 2 + zo] = minCaveHeight = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
-									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
+									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
 								} else if (noise < limit && state.is(replaceable)) {
 									if(by <= caveWaterHeight) {
 										liquidCarvingMask.set(bx, by + chunkMinHeight, bz);
-										carvedLiquidBlocksMask.set(maskBitIndex);
+//										carvedLiquidBlocksMask.set(maskBitIndex);
 									} else {
 										airCarvingMask.set(bx, by + chunkMinHeight, bz);
-										carvedTerrainBlocksMask.set(maskBitIndex);
+//										carvedTerrainBlocksMask.set(maskBitIndex);
 									}
 								}
 							}
@@ -246,20 +245,21 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		for(int sectionIndex = 0; sectionIndex < access.getSectionsCount(); ++sectionIndex) {
 			LevelChunkSection section = access.getSection(sectionIndex);
 
-			int minY = sectionIndex * 16;
+//			int sectionMinY = SectionPos.sectionToBlockCoord(access.getSectionYFromSectionIndex(sectionIndex));
+			int sectionMinY = SectionPos.sectionToBlockCoord(sectionIndex);
 			
-			for(int sectionY = 0; sectionY < SectionPos.SECTION_SIZE; ++sectionY) {
-				final int y = minY + sectionY;
+			for(int y = 0; y < SectionPos.SECTION_SIZE; ++y) {
 				for(int x = 0; x < SectionPos.SECTION_SIZE; ++x) {
 					for(int z = 0; z < SectionPos.SECTION_SIZE; ++z) {
-						final int bitIndex = (x & 15) | (z & 15) << 4 | (y) << 8;
+						final int bitIndex = (x & 15) | (z & 15) << 4 | (sectionMinY + y) << 8;
 						
-						if(carvedLiquidBlocksMask.get(bitIndex)) {
-							section.setBlockState(x, sectionY, z, defaultLiquidState, false);
-						} else if(carvedTerrainBlocksMask.get(bitIndex)) {
-							section.setBlockState(x, sectionY, z, Blocks.CAVE_AIR.defaultBlockState(), false);
-						} else if(bufferPlacedBlocksMask.get(bitIndex)) {
-							section.setBlockState(x, sectionY, z, defaultTerrainState, false);
+//						if(carvedLiquidBlocksMask.get(bitIndex)) {
+//							section.setBlockState(x, y, z, defaultLiquidState, false);
+//						} else if(carvedTerrainBlocksMask.get(bitIndex)) {
+//							section.setBlockState(x, y, z, Blocks.CAVE_AIR.defaultBlockState(), false);
+//						} else
+						if(bufferPlacedBlocksMask.get(bitIndex)) {
+							section.setBlockState(x, y, z, defaultTerrainState, false);
 						}
 					}
 				}
@@ -279,6 +279,8 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		NoiseSampler3D caveNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler3D(caveNoise, config.caveNoiseSettings());
 		NoiseSampler3D formNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler3D(formNoise, config.formNoiseSettings());
 		
+//		boolean shouldLog = chunkPos.x == -34 && chunkPos.z == 34;
+		
 		//Generate cave noise field (9 x 9 x noiseHeight)
 		for (int x = 0; x < 9; x++) {
 			for (int z = 0; z < 9; z++) {
@@ -286,6 +288,10 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 					int index = ((x * 9) + z) * noiseHeight + y;
 					int bx = cx + x * 2;
 					int bz = cz + z * 2;
+//					if(shouldLog) {
+//						TheBetweenlands.LOGGER.info("Cave Noise at {}, {}, {}: {}", bx, y, bz, caveNoiseSampler.eval(bx, y, bz));
+//						TheBetweenlands.LOGGER.info("Form Noise at {}, {}, {}: {}", bx, y, bz, formNoiseSampler.eval(bx, y, bz));
+//					}
 					noiseField[index] = caveNoiseSampler.eval(bx, y, bz) + formNoiseSampler.eval(bx, y, bz);
 				}
 			}
@@ -301,9 +307,14 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 
 		NoiseSampler2D surfaceOpeningNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler2DNormalized(surfaceOpeningNoise, config.surfaceOpeningNoiseSettings());
 
+//		boolean shouldLog = chunkPos.x == -34 && chunkPos.z == 34;
+		
 		//Generate sea break noise field
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
+//				if(shouldLog) {
+//					TheBetweenlands.LOGGER.info("Weighted Opening noise at {}, {}: {}", (cx+x), (cz+z), surfaceOpeningNoiseSampler.eval(cx + x, cz + z));
+//				}
 				surfaceOpeningNoiseField[x * 16 + z] = surfaceOpeningNoiseSampler.eval(cx + x, cz + z);
 			}
 		}

@@ -20,16 +20,20 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.SectionPos;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.CarvingMask;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ImposterProtoChunk;
@@ -42,6 +46,7 @@ import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.GenerationStep.Carving;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import thebetweenlands.api.world.ExtraChunkInfo;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
@@ -489,6 +494,46 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 		// ===========================================
 		
 		return new BiomeWeights(interpolatedBiomeWeights, (Holder<Biome>[])interpolatedBiomes);
+	}
+	
+	@Override
+	public void applyCarvers(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk, Carving step) {
+		ProtoChunk protoChunk = (ProtoChunk)chunk;
+		CarvingMask carvingMask = protoChunk.getCarvingMask(step);
+		
+		// Probably an Early Generator put stuff in the carving mask, so we're going to carve it out for them
+		// This is probably bad practice, so we should find another way to do this
+		if(carvingMask != null) {
+			final BlockState carvedOutState;
+			if(step == Carving.LIQUID) {
+				carvedOutState = this.defaultFluid;
+			} else {
+				carvedOutState = Blocks.CAVE_AIR.defaultBlockState();
+			}
+
+			for(int sectionIndex = 0; sectionIndex < chunk.getSectionsCount(); ++sectionIndex) {
+				LevelChunkSection section = chunk.getSection(sectionIndex);
+
+				section.acquire();
+				
+				int sectionMinY = SectionPos.sectionToBlockCoord(chunk.getSectionYFromSectionIndex(sectionIndex));
+				
+				for(int y = 0; y < SectionPos.SECTION_SIZE; ++y) {
+					int globalY = y + sectionMinY;
+					for(int x = 0; x < SectionPos.SECTION_SIZE; ++x) {
+						for(int z = 0; z < SectionPos.SECTION_SIZE; ++z) {
+							if(carvingMask.get(x, globalY, z)) {
+								section.setBlockState(x, y, z, carvedOutState, false);
+							}
+						}
+					}
+				}
+				
+				section.release();
+			}
+		}
+		
+		super.applyCarvers(level, seed, random, biomeManager, structureManager, chunk, step);
 	}
 	
 	@Override
