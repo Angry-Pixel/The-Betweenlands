@@ -111,7 +111,7 @@ public class DimensionRegistries {
 //					.addBiomeGroup(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH) // Debug to check this actually works
 					.build(),
 				GlobalEarlyGenerators.builder(generators)
-//					.addLateGroup(EarlyGeneratorRegistry.Configured.BETWEENLANDS_CAVES)
+					.addLateGroup(EarlyGeneratorRegistry.Configured.BETWEENLANDS_CAVES)
 					.build()
 			);
 

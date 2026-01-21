@@ -2,9 +2,12 @@ package thebetweenlands.common.registries;
 
 import java.util.List;
 
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.api.BLRegistries;
@@ -12,10 +15,13 @@ import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.api.world.generator.EarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
+import thebetweenlands.common.world.gen.generators.BetweenlandsCavesGenerator;
 import thebetweenlands.common.world.gen.generators.CoarseIslandsGenerator;
 import thebetweenlands.common.world.gen.generators.FlatLandGenerator;
 import thebetweenlands.common.world.gen.generators.MarshIslandsGenerator;
 import thebetweenlands.common.world.gen.generators.SimplexTerrainGenerator;
+import thebetweenlands.common.world.gen.generators.config.BetweenlandsCavesGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.CoarseIslandsGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.FlatLandGeneratorConfiguration;
 import thebetweenlands.common.world.gen.generators.config.MarshIslandsGeneratorConfiguration;
@@ -23,6 +29,8 @@ import thebetweenlands.common.world.gen.generators.config.SimplexTerrainGenerato
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.ConstantHeightSelector;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.HeightmapBasedHeightSelector;
 import thebetweenlands.common.world.gen.util.config.BiSimplexNoiseConfiguration;
+import thebetweenlands.common.world.gen.util.config.FractalOpenSimplexNoiseSettings2D;
+import thebetweenlands.common.world.gen.util.config.FractalOpenSimplexNoiseSettings3D;
 
 public class EarlyGeneratorRegistry {
 
@@ -35,6 +43,8 @@ public class EarlyGeneratorRegistry {
 	public static final DeferredHolder<EarlyGenerator<?>, SimplexTerrainGenerator> SIMPLEX_TERRAIN = GENERATORS.register("simplex_terrain", () -> new SimplexTerrainGenerator(SimplexTerrainGeneratorConfiguration.CODEC));
 
 	public static final DeferredHolder<EarlyGenerator<?>, CoarseIslandsGenerator> COARSE_ISLANDS = GENERATORS.register("coarse_islands", () -> new CoarseIslandsGenerator(CoarseIslandsGeneratorConfiguration.CODEC));
+
+	public static final DeferredHolder<EarlyGenerator<?>, BetweenlandsCavesGenerator> BETWEENLANDS_CAVES = GENERATORS.register("bl_caves", () -> new BetweenlandsCavesGenerator(BetweenlandsCavesGeneratorConfiguration.CODEC));
 	
 	public static final class Configured {
 		public static final ResourceKey<ConfiguredEarlyGenerator<?, ?>> FLAT_LAND_SWAMPLANDS = ResourceKey.create(BLRegistries.Keys.CONFIGURED_GENERATORS, TheBetweenlands.prefix("flat_land_swamplands"));
@@ -73,6 +83,41 @@ public class EarlyGeneratorRegistry {
 							BlockRegistry.MOSSY_CRAGROCK_TOP.get().defaultBlockState(),
 							BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get().defaultBlockState().setValue(MossyCragrockBottomBlock.IS_BOTTOM, true)
 						)
+					)));
+		
+		context.register(Configured.BETWEENLANDS_CAVES, new ConfiguredEarlyGenerator<>(BETWEENLANDS_CAVES.get(),
+				new BetweenlandsCavesGeneratorConfiguration(
+						// Cave noise
+						new FractalOpenSimplexNoiseSettings3D(1, true, 0.08, 0.15, 0.08, 1.0, 0.0),
+						// Surface Opening noise
+						new FractalOpenSimplexNoiseSettings2D(1, true, 0.05, 0.05, 0.85, 0),
+						// Form noise
+						new FractalOpenSimplexNoiseSettings3D(4, false, 0.5 * 0.1, 0.3 * 0.1, 0.5 * 0.1, 0.4 * 2.0, 0.0),
+						// Min cave height + taper distance
+						new ConstantHeightSelector(0), 10,
+						// Max cave height + taper distance
+						new HeightmapBasedHeightSelector(Types.OCEAN_FLOOR_WG), 20,
+						// Default noise limit
+						-0.3,
+						// Cave water height
+						15,
+						// Buffer blocks
+						BlockPredicate.matchesTag(BLBlockTagProvider.BL_CAVE_BUFFER_REPLACABLE), 0.25,
+						// Biomes without surface openings
+						HolderSet.direct(
+								context.lookup(Registries.BIOME)::getOrThrow,
+								BiomeRegistry.DEEP_WATERS,
+								BiomeRegistry.COARSE_ISLANDS,
+								BiomeRegistry.RAISED_ISLES,
+								BiomeRegistry.MARSH,
+								BiomeRegistry.ERODED_MARSH,
+								BiomeRegistry.PATCHY_ISLANDS,
+								BiomeRegistry.SLUDGE_PLAINS,
+								BiomeRegistry.SWAMPLANDS_CLEARING,
+								BiomeRegistry.SLUDGE_PLAINS_CLEARING
+							),
+						// How much to increase the noise limit near the surface of biomes without surface openings
+						3.5 * 0.85
 					)));
 	}
 }

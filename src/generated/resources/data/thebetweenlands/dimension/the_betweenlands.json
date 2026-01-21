@@ -317,7 +317,9 @@
     "bl_settings": {
       "biome_weight_groups": [],
       "global_generators": {
-        "early": [],
+        "early": [
+          "thebetweenlands:bl_caves"
+        ],
         "late": []
       }
     },

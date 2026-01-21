@@ -46,6 +46,11 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> SPIKE_TRAPS_BLOCKED_BY = tag("spike_traps_blocked_by");
 	public static final TagKey<Block> SPIKE_TRAPS_IGNORE = tag("spike_traps_ignore");
 
+	public static final TagKey<Block> BASE_STONE_THEBETWEENLANDS = tag("base_stone_thebetweenlands");
+	public static final TagKey<Block> THEBETWEENLANDS_CARVER_REPLACABLES = tag("thebetweenlands_carver_replaceables");
+
+	public static final TagKey<Block> BL_CAVE_BUFFER_REPLACABLE = tag("bl_caves_buffer_replacable");
+	
 	public static final TagKey<Block> DYED_DULL_LAVENDER = commonTag("dyed/dull_lavender");
 	public static final TagKey<Block> DYED_MAROON = commonTag("dyed/maroon");
 	public static final TagKey<Block> DYED_SHADOW_GREEN = commonTag("dyed/shadow_green");
@@ -576,6 +581,16 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(STORAGE_BLOCKS_ANCIENT_REMNANT).add(BlockRegistry.ANCIENT_REMNANT_BLOCK.get());
 		this.tag(STORAGE_BLOCKS_RUBBER).add(BlockRegistry.RUBBER_BLOCK.get());
 		this.tag(STORAGE_BLOCKS_COMPOST).add(BlockRegistry.COMPOST_BLOCK.get());
+		
+		this.tag(BASE_STONE_THEBETWEENLANDS).add(BlockRegistry.BETWEENSTONE.get(), BlockRegistry.PITSTONE.get());
+		this.tag(THEBETWEENLANDS_CARVER_REPLACABLES)
+			.addTag(BASE_STONE_THEBETWEENLANDS)
+			.addTag(BlockTags.DIRT)
+			.addTag(BlockTags.SAND)
+			.add(BlockRegistry.SWAMP_WATER.get());
+		
+		this.tag(BL_CAVE_BUFFER_REPLACABLE)
+			.add(BlockRegistry.SWAMP_WATER.get());
 	}
 
 	public static TagKey<Block> tag(String tagName) {

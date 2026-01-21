@@ -34,7 +34,7 @@ public class TriFractalOpenSimplexNoiseConfiguration3D {
 		this.noiseSettings1 = noiseSettings1;
 		this.noiseSettings2 = noiseSettings2;
 		this.noiseSettings3 = noiseSettings3;
-		this.noiseCache = new TriFractalOpenSimplexCache(noiseSettings1.octaves(), noiseSettings1.noiseOctaveScale(), noiseSettings2.octaves(), noiseSettings2.noiseOctaveScale(), noiseSettings3.octaves(), noiseSettings3.noiseOctaveScale());
+		this.noiseCache = new TriFractalOpenSimplexCache(noiseSettings1.octaves(), noiseSettings1.additiveSeed(), noiseSettings2.octaves(), noiseSettings2.additiveSeed(), noiseSettings3.octaves(), noiseSettings3.additiveSeed());
 	}
 	
 	public FractalOpenSimplexNoiseSettings3D noiseSettings1() {

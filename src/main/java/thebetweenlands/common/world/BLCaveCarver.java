@@ -25,13 +25,17 @@ import java.util.function.Function;
 public class BLCaveCarver extends WorldCarver<CaveCarverConfiguration> {
 
 	private static final int CHUNK_SIZE = 16;
+	// Cave noise settings
 	private static final double XZ_CAVE_SCALE = 0.08;
 	private static final double Y_CAVE_SCALE = 0.15;
-	private static final double XZ_FORM_SCALE = 0.5;
-	private static final double Y_FORM_SCALE = 0.3;
+	// Form noise settings
+	private static final double XZ_FORM_SCALE = 0.5 * 0.1;
+	private static final double Y_FORM_SCALE = 0.3 * 0.1;
 	private static final double FORM_SCALE = 0.4;
+	// Surface opening noise settings
 	private static final double XZ_BREAK_SCALE = 0.05;
 	private static final double BREAK_SCALE = 0.85;
+	// Default limit
 	private static final double BASE_LIMIT = -0.3;
 	private static final int LOWER_BOUND = 10;
 	private static final int UPPER_BOUND = 20;
@@ -47,7 +51,7 @@ public class BLCaveCarver extends WorldCarver<CaveCarverConfiguration> {
 		super(codec);
 		this.cave = new OpenSimplexNoise(0);
 		this.seaLevelBreak = new OpenSimplexNoise(1);
-		this.form = new FractalOpenSimplexNoise(2, 4, 0.1);
+		this.form = new FractalOpenSimplexNoise(2, 4);
 	}
 
 	@Override

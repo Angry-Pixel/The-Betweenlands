@@ -1,0 +1,51 @@
+{
+  "type": "thebetweenlands:bl_caves",
+  "config": {
+    "biomes_without_surface_openings": [
+      "thebetweenlands:deep_waters",
+      "thebetweenlands:coarse_islands",
+      "thebetweenlands:raised_isles",
+      "thebetweenlands:marsh",
+      "thebetweenlands:eroded_marsh",
+      "thebetweenlands:patchy_islands",
+      "thebetweenlands:sludge_plains",
+      "thebetweenlands:swamplands_clearing",
+      "thebetweenlands:sludge_plains_clearing"
+    ],
+    "buffer_noise_limit": 0.25,
+    "buffer_replace_predicate": {
+      "type": "minecraft:matching_block_tag",
+      "tag": "thebetweenlands:bl_caves_buffer_replacable"
+    },
+    "cave_noise": {
+      "additive_octave_seed": true,
+      "noise_octaves": 1,
+      "noise_scale_x": 0.08,
+      "noise_scale_y": 0.15,
+      "noise_scale_z": 0.08
+    },
+    "cave_water_height": 20,
+    "default_noise_limit": -0.3,
+    "form_noise": {
+      "noise_octaves": 4,
+      "noise_scale_x": 0.05,
+      "noise_scale_y": 0.03,
+      "noise_scale_z": 0.05,
+      "noise_value_multiplier": 0.8
+    },
+    "max_cave_height": {
+      "type": "thebetweenlands:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    "min_cave_height": 0,
+    "min_cave_height_taper_distance": 10,
+    "no_surface_opening_noise_offset": 2.975,
+    "surface_opening_noise": {
+      "additive_octave_seed": true,
+      "noise_octaves": 1,
+      "noise_scale_x": 0.05,
+      "noise_scale_y": 0.05,
+      "noise_value_multiplier": 0.85
+    }
+  }
+}
