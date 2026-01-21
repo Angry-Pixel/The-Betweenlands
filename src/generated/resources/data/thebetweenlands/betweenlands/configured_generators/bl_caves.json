@@ -21,7 +21,7 @@
       "noise_scale_y": 0.15,
       "noise_scale_z": 0.08
     },
-    "cave_water_height": 20,
+    "cave_water_height": 15,
     "default_noise_limit": -0.3,
     "form_noise": {
       "noise_octaves": 4,

@@ -57,7 +57,7 @@ public final record BetweenlandsCavesGeneratorConfiguration(
 					
 					Codec.DOUBLE.fieldOf("default_noise_limit").forGetter(BetweenlandsCavesGeneratorConfiguration::defaultNoiseLimit),
 					
-					Codec.INT.fieldOf("cave_water_height").forGetter(BetweenlandsCavesGeneratorConfiguration::maxCaveHeightTaperDistance),
+					Codec.INT.fieldOf("cave_water_height").forGetter(BetweenlandsCavesGeneratorConfiguration::caveWaterHeight),
 
 					RegistryCodecs.homogeneousList(Registries.BLOCK).fieldOf("buffer_replaceable").forGetter(BetweenlandsCavesGeneratorConfiguration::bufferReplaceable),
 					Codec.DOUBLE.fieldOf("buffer_noise_limit").forGetter(BetweenlandsCavesGeneratorConfiguration::bufferNoiseLimit),
