@@ -75,7 +75,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final FractalOpenSimplexNoise formNoise = noiseCache.noise3();
 		
 		// Calculate noise values
-		final double[] noiseField = sampleNoiseField(chunkPos, config, caveNoise, formNoise, fieldHeight);
+		final double[] noiseField = sampleNoiseField(chunkPos, config, caveNoise, formNoise, noiseHeight);
 		final double[] surfaceOpeningNoiseField = sampleSurfaceOpeningNoiseField(chunkPos, config, surfaceOpeningNoise);
 
 		// Get min cave height values
@@ -103,7 +103,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final BitSet bufferPlacedBlocksMask = new BitSet(16 * 16 * chunkHeight);
 //		final BitSet carvedLiquidBlocksMask = new BitSet(16 * 16 * chunkHeight);
 //		final BitSet carvedTerrainBlocksMask = new BitSet(16 * 16 * chunkHeight);
-		
+
 		for (int x = 0; x < 8; x++) {
 			int indexXC = x * 9; //1
 			int indexXN = (x + 1) * 9; //2
@@ -217,12 +217,10 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 									caveMinHeights[xo * 2 + zo] = minCaveHeight = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
 									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
 								} else if (noise < limit && state.is(replaceable)) {
+									final int my = by + chunkMinHeight;
+									airCarvingMask.set(bx, my, bz);
 									if(by <= caveWaterHeight) {
-										liquidCarvingMask.set(bx, by + chunkMinHeight, bz);
-//										carvedLiquidBlocksMask.set(maskBitIndex);
-									} else {
-										airCarvingMask.set(bx, by + chunkMinHeight, bz);
-//										carvedTerrainBlocksMask.set(maskBitIndex);
+										liquidCarvingMask.set(bx, my, bz);
 									}
 								}
 							}
@@ -269,8 +267,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		return true;
 	}
 	
-	protected double[] sampleNoiseField(ChunkPos chunkPos, BetweenlandsCavesGeneratorConfiguration config, FractalOpenSimplexNoise caveNoise, FractalOpenSimplexNoise formNoise, int fieldHeight) {
-		final int noiseHeight = fieldHeight + 1;
+	protected double[] sampleNoiseField(ChunkPos chunkPos, BetweenlandsCavesGeneratorConfiguration config, FractalOpenSimplexNoise caveNoise, FractalOpenSimplexNoise formNoise, int noiseHeight) {
 		final double[] noiseField = new double[9 * 9 * noiseHeight];
 
 		final int cx = chunkPos.x * 16;
@@ -279,8 +276,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		NoiseSampler3D caveNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler3D(caveNoise, config.caveNoiseSettings());
 		NoiseSampler3D formNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler3D(formNoise, config.formNoiseSettings());
 		
-//		boolean shouldLog = chunkPos.x == -34 && chunkPos.z == 34;
-		
 		//Generate cave noise field (9 x 9 x noiseHeight)
 		for (int x = 0; x < 9; x++) {
 			for (int z = 0; z < 9; z++) {
@@ -288,11 +283,8 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 					int index = ((x * 9) + z) * noiseHeight + y;
 					int bx = cx + x * 2;
 					int bz = cz + z * 2;
-//					if(shouldLog) {
-//						TheBetweenlands.LOGGER.info("Cave Noise at {}, {}, {}: {}", bx, y, bz, caveNoiseSampler.eval(bx, y, bz));
-//						TheBetweenlands.LOGGER.info("Form Noise at {}, {}, {}: {}", bx, y, bz, formNoiseSampler.eval(bx, y, bz));
-//					}
-					noiseField[index] = caveNoiseSampler.eval(bx, y, bz) + formNoiseSampler.eval(bx, y, bz);
+					int by = y;
+					noiseField[index] = caveNoiseSampler.eval(bx, by, bz) + formNoiseSampler.eval(bx, by, bz);
 				}
 			}
 		}
@@ -307,14 +299,9 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 
 		NoiseSampler2D surfaceOpeningNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler2DNormalized(surfaceOpeningNoise, config.surfaceOpeningNoiseSettings());
 
-//		boolean shouldLog = chunkPos.x == -34 && chunkPos.z == 34;
-		
 		//Generate sea break noise field
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-//				if(shouldLog) {
-//					TheBetweenlands.LOGGER.info("Weighted Opening noise at {}, {}: {}", (cx+x), (cz+z), surfaceOpeningNoiseSampler.eval(cx + x, cz + z));
-//				}
 				surfaceOpeningNoiseField[x * 16 + z] = surfaceOpeningNoiseSampler.eval(cx + x, cz + z);
 			}
 		}

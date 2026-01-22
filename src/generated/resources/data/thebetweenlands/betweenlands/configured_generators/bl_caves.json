@@ -28,7 +28,7 @@
       "noise_scale_x": 0.05,
       "noise_scale_y": 0.03,
       "noise_scale_z": 0.05,
-      "noise_value_multiplier": 0.8
+      "noise_value_multiplier": 0.4
     },
     "max_cave_height": {
       "type": "thebetweenlands:heightmap",

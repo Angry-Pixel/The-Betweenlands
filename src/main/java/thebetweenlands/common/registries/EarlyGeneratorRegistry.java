@@ -96,7 +96,7 @@ public class EarlyGeneratorRegistry {
 						// Surface Opening noise
 						new FractalOpenSimplexNoiseSettings2D(1, true, 0.05, 0.05, 0.85, 0),
 						// Form noise
-						new FractalOpenSimplexNoiseSettings3D(4, false, 0.5 * 0.1, 0.3 * 0.1, 0.5 * 0.1, 0.4 * 2.0, 0.0),
+						new FractalOpenSimplexNoiseSettings3D(4, false, 0.5 * 0.1, 0.3 * 0.1, 0.5 * 0.1, 0.4, 0.0),
 						// Min cave height + taper distance
 						new ConstantHeightSelector(0), 10,
 						// Max cave height + taper distance
