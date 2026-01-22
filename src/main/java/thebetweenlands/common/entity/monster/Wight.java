@@ -1,9 +1,12 @@
 package thebetweenlands.common.entity.monster;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -61,9 +64,9 @@ public class Wight extends Monster implements BLEntity {
     protected static final EntityDataAccessor<Boolean> HIDING_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> VOLATILE_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> GROW_TIMER = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.INT);
-
-    private static final EntityDimensions VOLATILE_DIMENSIONS = EntityDimensions.scalable(0.7F, 0.7F)
-            .withAttachments(EntityAttachments.builder().attach(EntityAttachment.VEHICLE, new Vec3(0.0F, 0.5F, 0.0F)));
+    private static final EntityDimensions VOLATILE_DIMENSIONS = EntityDimensions.scalable(0.7F, 0.7F).withAttachments(EntityAttachments.builder().attach(EntityAttachment.VEHICLE, new Vec3(0.0F, 0.5F, 0.0F)));
+	
+    public static final EntityDataAccessor<Optional<BlockPos>> TARGET_BLOCK = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
     protected final MoveControl flightMoveControl;
     protected final MoveControl groundMoveControl;
@@ -76,7 +79,7 @@ public class Wight extends Monster implements BLEntity {
     private boolean canTurnVolatileOnTarget = false;
     private boolean didTurnVolatileOnPlayer = false;
     private int growCount, prevGrowCount = 40;
-	private boolean ignoreCurrentPath = false;
+	public boolean canTransformInToShaman = true;
 
     public Wight(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -92,6 +95,7 @@ public class Wight extends Monster implements BLEntity {
         builder.define(HIDING_STATE_DW, false);
         builder.define(VOLATILE_STATE_DW, false);
         builder.define(GROW_TIMER, this.growCount);
+        builder.define(TARGET_BLOCK, Optional.empty()); //temp to stop null crash (should probably make it optional)
     }
 
     @Override
@@ -103,21 +107,19 @@ public class Wight extends Monster implements BLEntity {
         this.goalSelector.addGoal(4, new EntityAIMoveToDirect<>(this, this.getAttributeValue(Attributes.FLYING_SPEED)) {
         	@Override
         	public boolean canUse() {
-        		return this.getTarget() != null && !this.entity.ignoreCurrentPath;
+        		return this.entity.getTarget() != null;
         	}
-
+        	
             @Nullable
             @Override
-            protected Vec3 getTarget() {
-                if (this.entity.volatileTicks >= 20) {
-                    LivingEntity target = this.entity.getTarget();
-                    if (target != null) {
-                    	// TODO squeeze in something here for pathing to bone blocks instead?
-                        return new Vec3(target.getX(), target.getEyeY(), target.getZ());
-                    }
-                }
-                return null;
-            }
+			protected Vec3 getTarget() {
+				if (this.entity.volatileTicks >= 20) {
+					LivingEntity target = this.entity.getTarget();
+					if (target != null)
+						return new Vec3(target.getX(), target.getEyeY(), target.getZ());
+				}
+				return null;
+			}
         });
         this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.4D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.3D));
@@ -139,18 +141,18 @@ public class Wight extends Monster implements BLEntity {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
-    public static AttributeSupplier.Builder registerAttributes() {
-        return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 76.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.33D)
-                .add(Attributes.FLYING_SPEED, 0.32D)
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(AttributeRegistry.VOLATILE_COOLDOWN)
-                .add(AttributeRegistry.VOLATILE_HEALTH_START)
-                .add(AttributeRegistry.VOLATILE_MAX_DAMAGE)
-                .add(AttributeRegistry.VOLATILE_LENGTH);
-    }
+	public static AttributeSupplier.Builder registerAttributes() {
+		return Mob.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 76.0D)
+				.add(Attributes.MOVEMENT_SPEED, 0.33D)
+				.add(Attributes.FLYING_SPEED, 0.32D)
+				.add(Attributes.ATTACK_DAMAGE, 6.0D)
+				.add(Attributes.FOLLOW_RANGE, 64.0D)
+				.add(AttributeRegistry.VOLATILE_COOLDOWN)
+				.add(AttributeRegistry.VOLATILE_HEALTH_START)
+				.add(AttributeRegistry.VOLATILE_MAX_DAMAGE)
+				.add(AttributeRegistry.VOLATILE_LENGTH);
+	}
 
     @Override
     public void aiStep() {
@@ -228,7 +230,7 @@ public class Wight extends Monster implements BLEntity {
                     this.moveControl.setWantedPosition(this.getX(), this.getY() + 1.0D, this.getZ(), 0.15D);
                 }
 
-                if (this.getTarget() != null && !ignoreCurrentPath) {
+                if (this.getTarget() != null) {
                     LivingEntity attackTarget = this.getTarget();
 
                     if (this.getVehicle() == null && this.distanceTo(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
@@ -423,6 +425,10 @@ public class Wight extends Monster implements BLEntity {
         compound.putBoolean("can_turn_volatile", this.canTurnVolatile);
         compound.putBoolean("turned_volatile_on_player", this.didTurnVolatileOnPlayer);
         compound.putInt("grow_timer", this.getGrowTimer());
+        compound.putBoolean("can_transform_in_to_shaman", this.canTransformInToShaman);	
+        getTargetBlock().ifPresent(blockpos -> {
+        	compound.put("targetBlock", NbtUtils.writeBlockPos(blockpos));
+        });
     }
 
     @Override
@@ -436,6 +442,9 @@ public class Wight extends Monster implements BLEntity {
         this.canTurnVolatile = compound.getBoolean("can_turn_volatile");
         this.didTurnVolatileOnPlayer = compound.getBoolean("turned_volatile_on_player");
         this.setGrowTimer(compound.getInt("grow_timer"));
+        this.canTransformInToShaman = compound.getBoolean("can_transform_in_to_shaman");
+        if (compound.contains("targetBlock", 99))
+        	this.setTargetBlock(NbtUtils.readBlockPos(compound, "targetBlock").get());
     }
 
     @Override
@@ -497,6 +506,18 @@ public class Wight extends Monster implements BLEntity {
 
     public int getMaxVolatileCooldown() {
         return (int) this.getAttribute(AttributeRegistry.VOLATILE_COOLDOWN).getValue();
+    }
+
+    public Optional<BlockPos> getTargetBlock() {
+    	return this.getEntityData().get(TARGET_BLOCK);
+	}
+
+    public void setTargetBlock(BlockPos pos) {
+    	this.getEntityData().set(TARGET_BLOCK, Optional.of(pos));
+	}
+
+    public void clearTargetBlock() {
+        this.entityData.set(TARGET_BLOCK, Optional.empty());
     }
 
 	public boolean canPossess(LivingEntity entity) {
@@ -569,8 +590,4 @@ public class Wight extends Monster implements BLEntity {
             return !this.wight.isVolatile() && !this.wight.isHiding() && super.canContinueToUse();
         }
     }
-
-	public void setOverrideMovement(boolean state) {
-		this.ignoreCurrentPath = state;
-	}
 }
