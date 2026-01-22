@@ -12,7 +12,7 @@ import thebetweenlands.common.TheBetweenlands;
 // TODO do you think we could get at least a little structure here?
 public class BetweenlandsConfig {
 
-	public static final boolean debug = false;
+	public static boolean debug = false;
 	public static final ResourceKey<Level> returnDimension = Level.OVERWORLD;
 	public static final boolean seasonalEvents = true;
 	public static final int portalMaxLinkDist = 1500;
