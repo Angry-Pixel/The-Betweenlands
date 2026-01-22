@@ -41,7 +41,8 @@ public class WightSeekBonePileGoal extends Goal {
 
 	@Override
 	public boolean canUse() {
-		return wight.getTarget() != null && !wight.isPassenger() && wight.isVolatile() && wight.canTransformInToShaman;
+		cooldown--;
+		return wight.getTarget() != null && !wight.isPassenger() && wight.isVolatile() && wight.canTransformInToShaman && cooldown <= 0;
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class WightSeekBonePileGoal extends Goal {
 
 	@Override
 	public void stop() {
-		navigation.stop();
+		//navigation.stop();
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class WightSeekBonePileGoal extends Goal {
 		if (wight.getTargetBlock().isPresent()) {
 			if (!wight.isPassenger()) {
 				wight.getMoveControl().setWantedPosition(wight.getTargetBlock().get().getX() + 0.5D, wight.getTargetBlock().get().getY() + 1D, wight.getTargetBlock().get().getZ() + 0.5D, wight.getAttributeValue(Attributes.FLYING_SPEED));
-				if (level.getBlockState(wight.blockPosition().below()).is(bonePile)) {
+				if (level.getBlockState(wight.blockPosition().below()).is(bonePile)) { // jank but pos check isn't working atm
 					level.destroyBlock(wight.blockPosition().below(), true);
 					BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(level);
 					if (puppet != null) {
@@ -91,13 +92,16 @@ public class WightSeekBonePileGoal extends Goal {
 			BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
 			// add counter and cache for 3 or more blocks then pick one at random as spawn target
 			for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
-				if (level.getBlockState(pos).is(bonePile))
-					list.add(pos);
+				if (level.getBlockState(pos).is(bonePile)) {
+					list.add(new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
+				}
 			}
 			if (!list.isEmpty() && list.size() >= 3) {
 				Collections.shuffle(list);
 				wight.setTargetBlock(list.get(0));
 			}
+			else
+				cooldown = 20;
 		}
 	}
 }

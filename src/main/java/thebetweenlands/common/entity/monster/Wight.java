@@ -95,7 +95,7 @@ public class Wight extends Monster implements BLEntity {
         builder.define(HIDING_STATE_DW, false);
         builder.define(VOLATILE_STATE_DW, false);
         builder.define(GROW_TIMER, this.growCount);
-        builder.define(TARGET_BLOCK, Optional.empty()); //temp to stop null crash (should probably make it optional)
+        builder.define(TARGET_BLOCK, Optional.empty());
     }
 
     @Override
