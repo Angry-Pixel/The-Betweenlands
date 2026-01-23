@@ -69,8 +69,9 @@ public class WightSeekBonePileGoal extends Goal {
 					if (puppet != null) {
 						puppet.setPos(wight.blockPosition().below().getBottomCenter());
 						puppet.setYRot(wight.getYRot());
+						puppet.setParentEntityID(wight.getId());
 						level.addFreshEntity(puppet);
-						wight.startRiding(puppet, true);
+						wight.setVolatile(false);
 						wight.clearTargetBlock();
 						wight.canTransformInToShaman = false; // setting this so it only happens once
 					}

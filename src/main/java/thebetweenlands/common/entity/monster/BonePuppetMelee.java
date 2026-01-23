@@ -12,9 +12,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class BonePuppetRanged extends BonePuppetBase {
+public class BonePuppetMelee extends BonePuppetBase {
 
-    public BonePuppetRanged(EntityType<? extends Monster> type, Level level) {
+    public BonePuppetMelee(EntityType<? extends Monster> type, Level level) {
         super(type, level);
     }
 
@@ -33,4 +33,5 @@ public class BonePuppetRanged extends BonePuppetBase {
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
     }
+
 }
