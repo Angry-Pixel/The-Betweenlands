@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +25,6 @@ public class WightSeekBonePileGoal extends Goal {
 
 	protected final Wight wight;
 	protected final Level level;
-	protected final PathNavigation navigation;
 	protected int cooldown;
 
 	protected DeferredBlock<Block> bonePile = BlockRegistry.SLIMY_BONE_ORE;
@@ -34,7 +32,6 @@ public class WightSeekBonePileGoal extends Goal {
 	public WightSeekBonePileGoal(Wight wight) {
 		this.wight = wight;
 		level = wight.level();
-		navigation = wight.getNavigation();
 		this.cooldown = 10;
 		setFlags(EnumSet.of(Flag.MOVE, Flag.TARGET));
 	}
@@ -58,14 +55,14 @@ public class WightSeekBonePileGoal extends Goal {
 
 	@Override
 	public void stop() {
-		//navigation.stop();
 	}
 
 	@Override
 	public void tick() {
 		if (wight.getTargetBlock().isPresent()) {
+			BlockPos target = wight.getTargetBlock().get();
 			if (!wight.isPassenger()) {
-				wight.getMoveControl().setWantedPosition(wight.getTargetBlock().get().getX() + 0.5D, wight.getTargetBlock().get().getY() + 1D, wight.getTargetBlock().get().getZ() + 0.5D, wight.getAttributeValue(Attributes.FLYING_SPEED));
+				wight.getMoveControl().setWantedPosition(target.getX() + 0.5D, target.getY() + 1D, target.getZ() + 0.5D, wight.getAttributeValue(Attributes.FLYING_SPEED));
 				if (level.getBlockState(wight.blockPosition().below()).is(bonePile)) { // jank but pos check isn't working atm
 					level.destroyBlock(wight.blockPosition().below(), true);
 					BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(level);
@@ -92,7 +89,7 @@ public class WightSeekBonePileGoal extends Goal {
 			BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
 			// add counter and cache for 3 or more blocks then pick one at random as spawn target
 			for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
-				if (level.getBlockState(pos).is(bonePile)) {
+				if (level.getBlockState(pos).is(bonePile) && level.isEmptyBlock(pos.above())) {
 					list.add(new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
 				}
 			}
