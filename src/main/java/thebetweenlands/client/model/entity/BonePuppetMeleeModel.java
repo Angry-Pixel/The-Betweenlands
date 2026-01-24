@@ -11,6 +11,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.BonePuppetMelee;
 
@@ -402,7 +403,26 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-
+		// for testing static speed with no AIs active
+		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
+		float cos = Mth.cos(ageInTicks * 0.25F) * 0.8F;
+		
+		spine2.xRot = -0.1309F + sin * 0.0625F;
+		arm10.yRot = 0.3702F + sin * 0.125F;
+		arm4.yRot = -0.2532F - cos * 0.125F;
+		arm7.yRot = 0.0798F + cos * 0.125F;
+		
+		hipbone.y = Math.max(11.45F, 11.45F -cos * 2.25F);
+		hipbone.z = -3F + cos * 0.25F;
+		
+		leg_left1.xRot = -0.5233F + cos * 0.125F;
+		leg_left_lower.xRot = 1.0881F - cos * 0.25F;
+		foot_left.xRot = -0.3926F + cos * 0.125F;
+		
+		leg_right1.xRot = -0.5233F + cos * 0.125F;
+		leg_right_lower.xRot = 1.0881F - cos * 0.25F;
+		foot_right.xRot = -0.3926F + cos * 0.125F;
+		
 	}
 
 	@Override

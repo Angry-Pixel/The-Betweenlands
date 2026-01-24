@@ -20,10 +20,11 @@ public class BonePuppetMelee extends BonePuppetBase {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(0, new FloatGoal(this));
+     /*   goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        */
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
