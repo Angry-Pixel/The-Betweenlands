@@ -50,6 +50,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 	private VertexBuffer starMesh;
 	private VertexBuffer skyDomeMesh;
 	private VertexBuffer spoopyDomeMesh;
+	private VertexBuffer flatSkyMesh;
 
 	@Nullable
 	public static RenderTarget clipPlaneBuffer;
@@ -107,6 +108,17 @@ public class BLSkyRenderer implements BetweenlandsSky {
 			VertexBuffer.unbind();
 		}
 
+		if (flatSkyMesh == null) {
+			if (this.flatSkyMesh != null) {
+				this.flatSkyMesh.close();
+			}
+
+			this.flatSkyMesh = new VertexBuffer(VertexBuffer.Usage.STATIC);
+			this.flatSkyMesh.bind();
+			this.flatSkyMesh.upload(this.createFlatSky(Tesselator.getInstance()));
+			VertexBuffer.unbind();
+		}
+
 		if (blRiftRenderer == null) {
 			blRiftRenderer = new RiftRenderer(this.skyDomeMesh);
 		}
@@ -127,7 +139,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 
 		this.riftRenderer.render(level, partialTicks, viewMatrix, camera, projectionMatrix, isFoggy, skyFogSetup);
 
-		this.renderFog(partialTicks, viewMatrix, projectionMatrix, posestack, skyFogSetup);
+		this.renderFog(partialTicks, posestack, projectionMatrix, skyFogSetup);
 
 		this.renderAuroras(partialTicks, posestack, projectionMatrix, Minecraft.getInstance());
 	}
@@ -172,7 +184,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 			GameRenderer.getPositionTexShader().clear();
 
 			//Render sky clip plane
-			this.renderFlatSky(posestack, projectionMatrix,true, false);
+			this.renderFlatSky(posestack, projectionMatrix, false);
 		} else {
 			if(Minecraft.getInstance().options.graphicsMode().get() != GraphicsStatus.FAST) {
 				//Render fancy non-shader sky dome
@@ -189,7 +201,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 			}
 			else {
 				//Render flat sky
-				this.renderFlatSky(posestack, projectionMatrix, false, false);
+				this.renderFlatSky(posestack, projectionMatrix, false);
 			}
 		}
 		RenderSystem.setShaderColor(1f,1f,1f,1f);
@@ -209,81 +221,52 @@ public class BLSkyRenderer implements BetweenlandsSky {
 				this.spoopyDomeMesh.draw();
 			}
 			else {
-				this.renderFlatSky(posestack, projectionMatrix, false, true);
+				this.renderFlatSky(posestack, projectionMatrix, true);
 			}
 		}
 		posestack.popPose();
 	}
 
-	protected void renderFlatSky(PoseStack stack, Matrix4f projectionMatrix, boolean renderClipPlane, boolean spoopy) {
+	protected void renderFlatSky(PoseStack posestack, Matrix4f projectionMatrix, boolean spoopy) {
+		// Setup state
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		RenderSystem.depthMask(false);
-
-		Tesselator tesselator = Tesselator.getInstance();
-
-		stack.pushPose();
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		if (!renderClipPlane) {
-			if (spoopy) {
-				RenderSystem.setShaderTexture(0, SKY_SPOOPY_TEXTURE);
-			} else {
-				boolean shaderTexture = false;
-				if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-					WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
-					if (shader != null && shader.getStarfieldTexture() >= 0) {
-						RenderSystem.setShaderTexture(0, shader.getStarfieldTexture());
-						shaderTexture = true;
-					}
-				}
+		posestack.pushPose();
 
-				if (!shaderTexture) {
-					RenderSystem.setShaderTexture(0, SKY_TEXTURE);
-				}
-			}
-
-			float uscale = 1.0f;
-			float vscale = 1.0f;
-			if (spoopy) {
-				uscale = 2.0f;
-				vscale = 2.0f;
-			}
-			float uoffset = -0.5f * uscale + 0.5f;
-			float voffset = -0.5f * vscale + 0.5f;
-
-			BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-			buffer.addVertex(-90.0F, -50.0F, -90.0F).setUv(uoffset, voffset);
-			buffer.addVertex(-90.0F, -50.0F, 90.0F).setUv(uoffset, voffset + vscale);
-			buffer.addVertex(90.0F, -50.0F, 90.0F).setUv(uoffset + uscale, voffset + vscale);
-			buffer.addVertex(90.0F, -50.0F, -90.0F).setUv(uoffset + uscale, voffset);
-			BufferUploader.drawWithShader(buffer.buildOrThrow());
+		// Set texture and view matrix
+		if (spoopy) {
+			RenderSystem.setShaderTexture(0, SKY_SPOOPY_TEXTURE);
+			posestack.scale(0.5f, 1.0f, 0.5f);
 		} else {
-			//Render clip plane (for god rays)
-			RenderSystem.depthMask(true);
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			boolean shaderTexture = false;
+			if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+				WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
+				if (shader != null && shader.getStarfieldTexture() >= 0) {
+					RenderSystem.setShaderTexture(0, shader.getStarfieldTexture());
+					shaderTexture = true;
+				}
+			}
 
-			RenderTarget mcFbo = Minecraft.getInstance().getMainRenderTarget();
-			clipPlaneBuffer.resize(mcFbo.viewWidth, mcFbo.viewHeight, false);
-			clipPlaneBuffer.bindWrite(false);
-			clipPlaneBuffer.clear(false);
-
-			BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-			buffer.addVertex(-9000.0F, -90.0F, -9000.0F).setColor(255, 255, 255, 255);
-			buffer.addVertex(-9000.0F, -90.0F, 9000.0F).setColor(255, 255, 255, 255);
-			buffer.addVertex(9000.0F, -90.0F, 9000.0F).setColor(255, 255, 255, 255);
-			buffer.addVertex(9000.0F, -90.0F, -9000.0F).setColor(255, 255, 255, 255);
-			BufferUploader.drawWithShader(buffer.buildOrThrow());
-			mcFbo.bindWrite(false);
+			if (!shaderTexture) {
+				RenderSystem.setShaderTexture(0, SKY_TEXTURE);
+			}
 		}
 
+		// Draw
+		flatSkyMesh.bind();
+		GameRenderer.getPositionTexShader().setDefaultUniforms(VertexFormat.Mode.QUADS, posestack.last().pose(), projectionMatrix, Minecraft.getInstance().getWindow());
+		GameRenderer.getPositionTexShader().apply();
+		flatSkyMesh.draw();
+
+		// Cleanup
+		GameRenderer.getPositionTexShader().clear();
 		RenderSystem.depthMask(true);
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		stack.popPose();
+		posestack.popPose();
 	}
 
-	protected void renderFog(float partialTicks, Matrix4f projectionMatrix, Matrix4f frustrumMatrix, PoseStack stack, Runnable skyFogSetup) {
+	protected void renderFog(float partialTicks, PoseStack stack, Matrix4f projectionMatrix, Runnable skyFogSetup) {
 		//Render sky dome with fog texture for fog noise illusion
 		float renderTicks = this.ticks + partialTicks;
 
@@ -309,7 +292,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 		RenderSystem.depthMask(false);
 
 		this.skyDomeMesh.bind();
-		ShaderHelper.INSTANCE.getSkyFogShader().setDefaultUniforms(VertexFormat.Mode.TRIANGLES, stack.last().pose(), frustrumMatrix, Minecraft.getInstance().getWindow());
+		ShaderHelper.INSTANCE.getSkyFogShader().setDefaultUniforms(VertexFormat.Mode.TRIANGLES, stack.last().pose(), projectionMatrix, Minecraft.getInstance().getWindow());
 		ShaderHelper.INSTANCE.getSkyFogShader().FOG_COLOR.set(FogRenderer.fogRed, FogRenderer.fogGreen, FogRenderer.fogBlue);
 		ShaderHelper.INSTANCE.getSkyFogShader().apply();
 		this.skyDomeMesh.draw();
@@ -391,6 +374,15 @@ public class BLSkyRenderer implements BetweenlandsSky {
 		return bufferbuilder.buildOrThrow();
 	}
 
+	protected MeshData createFlatSky(Tesselator tesselator) {
+		BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(-90.0F, -50.0F, -90.0F).setUv(0.0f, 1.0f);
+		buffer.addVertex(-90.0F, -50.0F, 90.0F).setUv(0.0f, 0.0f);
+		buffer.addVertex(90.0F, -50.0F, 90.0F).setUv(1.0f, 0.0f);
+		buffer.addVertex(90.0F, -50.0F, -90.0F).setUv(1.0f, 1.0f);
+		return buffer.buildOrThrow();
+	}
+
 	/**
 	 * Mimics FFPL scaling texture matrix, by baking coordinate scale into mesh.
 	 * @param tesselator
@@ -470,8 +462,7 @@ public class BLSkyRenderer implements BetweenlandsSky {
 		if (storage != null) {
 			this.spoopy = BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.SPOOPY);
 
-			if (BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)) { // BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)
-				//TheBetweenlands.LOGGER.debug("open");
+			if (BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)) {
 				RandomSource rand = level.getRandom();
 				double newAuroraPosX = mc.player.getX() + rand.nextInt(160) - 80;
 				double newAuroraPosZ = mc.player.getZ() + rand.nextInt(160) - 80;

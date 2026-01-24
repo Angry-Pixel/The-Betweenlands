@@ -443,13 +443,14 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		}
 
 		if (!level.isClientSide()) {
-			for (ILocalStorage localStorage : this.pendingUnreferencedStorages) {
+			for (ILocalStorage localStorage : new ArrayList<>(this.pendingUnreferencedStorages)) {
 				if (localStorage.getLoadedReferences().isEmpty() && this.getLocalStorage(localStorage.getID()) != null) {
 					//Storage is not referenced by any chunk and being added for the first time.
 					//Linking probably deferred. Save and unload storage until needed.
 					this.unloadLocalStorage(level, localStorage);
 				}
 			}
+			this.pendingUnreferencedStorages.clear();
 			//FIXME
 //			TObjectLongIterator<LocalRegionData> pendingUnreferencedRegionsIT = this.pendingUnreferencedRegions.iterator();
 //			while (pendingUnreferencedRegionsIT.hasNext()) {

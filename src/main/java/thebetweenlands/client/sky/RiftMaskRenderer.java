@@ -19,27 +19,17 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.RiftEvent;
 
+// unused
 public class RiftMaskRenderer implements IRiftMaskRenderer {
 	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = TheBetweenlands.prefix("textures/sky/rifts/sky_rift_mask_back.png");
 
 	protected VertexBuffer skyDomeMesh;
 
-	//FIXME GLU is :crab:
-	//private Sphere projectionSphere = new Sphere();
-
 	public RiftMaskRenderer(VertexBuffer skyDomeMesh) {
-		if (this.skyDomeMesh == null) {
-			if (this.skyDomeMesh != null) {
-				this.skyDomeMesh.close();
-			}
-
-			this.skyDomeMesh = new VertexBuffer(VertexBuffer.Usage.STATIC);
-			this.skyDomeMesh.bind();
-			this.skyDomeMesh.upload(this.createSkyDome(Tesselator.getInstance()));
-			VertexBuffer.unbind();
-		}
-
-		//this.projectionSphere.setTextureFlag(false);
+		this.skyDomeMesh = new VertexBuffer(VertexBuffer.Usage.STATIC);
+		this.skyDomeMesh.bind();
+		this.skyDomeMesh.upload(this.createSkyDome(Tesselator.getInstance()));
+		VertexBuffer.unbind();
 	}
 
 	protected MeshData createSkyDome(Tesselator tesselator) {

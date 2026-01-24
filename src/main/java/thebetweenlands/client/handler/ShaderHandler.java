@@ -66,10 +66,13 @@ public class ShaderHandler {
      */
     public static void renderWorldShader(float partialTick) {
 		if (!ShaderHelper.INSTANCE.canUseShaders()) return;
+		// Upload and render
 		ShaderHelper.INSTANCE.getWorldShader().renderPostEffects(partialTick);
 		ShaderHelper.INSTANCE.getWorldShader().uploadUniforms(partialTick);
 		ShaderHelper.INSTANCE.getWorldShader().process(partialTick);
+		// Clean up
 		ShaderHelper.INSTANCE.getWorldShader().cleanUp();
+		Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
     }
 
 	/**
@@ -78,12 +81,11 @@ public class ShaderHandler {
 	public static void onPreRenderDebug(PoseStack poseStack, MultiBufferSource buffer, Camera camera) {
 		// Fast & Fancy only
 		if (!ShaderHelper.INSTANCE.canUseShaders() || Minecraft.getInstance().levelRenderer.transparencyChain != null) return;
-
 		// Composite changes after translucent batch on top of base buffer
 		ShaderHandler.diffBlitDepth.AfterTarget.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
 		RenderSystem.enableDepthTest();
 		ShaderHandler.diffBlitDepth.process(Minecraft.getInstance().getTimer().getRealtimeDeltaTicks());
-		// Set worldShader depth to diffBlitDepth output
+		// Copy worldShader depth to diffBlitDepth output
 		ShaderHelper.INSTANCE.getWorldShader().getDepthBuffer().copyDepthFrom(ShaderHandler.diffBlitDepth.Output);
 		// Clean up
 		Minecraft.getInstance().getMainRenderTarget().bindWrite(false);

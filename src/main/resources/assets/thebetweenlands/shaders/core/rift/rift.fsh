@@ -1,15 +1,22 @@
 #version 150
 
+#moj_import <fog.glsl>
+
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
 uniform sampler2D Sampler2;
 uniform sampler2D Sampler3;
+
+uniform float FogStart;
+uniform float FogEnd;
+uniform vec4 FogColor;
 
 uniform float OverlayBlend;
 uniform vec4 ColorModulator;
 uniform vec2 ScreenSize;
 
 in vec3 projUV;
+in float vertexDistance;
 out vec4 fragColor;
 
 void main() {
@@ -24,5 +31,5 @@ void main() {
     vec3 rgb = mix(sky.rgb, overlay.rgb, mask);
     float alpha = clamp(1.0f - mask + overlay.a, 0.0, 1.0);
 
-    fragColor = vec4(rgb, alpha) * ColorModulator;
+    fragColor = linear_fog(vec4(rgb, alpha) * ColorModulator, vertexDistance, FogStart * 0.5f, FogEnd * 0.5f, FogColor);
 }
