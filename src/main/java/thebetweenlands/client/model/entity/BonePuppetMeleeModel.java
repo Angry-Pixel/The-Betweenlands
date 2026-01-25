@@ -419,11 +419,15 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 		
 		hipbone.y = Math.min(12.55F, 12.55F - cosWalkFaster * 2F);
 		hipbone.z = 3F - cosWalkFaster * 0.5F;
+		hipbone.yRot = 0F - cosWalk * 0.125F;
+		spine1.yRot = 0F + cosWalk * 0.125F;
 		
+		leg_left1.yRot = -0.0131F + cosWalk * 0.125F;
 		leg_left1.xRot = -0.5233F + cosWalk * 0.5F;
 		leg_left_lower.xRot = 1.0881F - cosWalk * 0.25F;
 		foot_left.xRot = -0.3926F - cosWalk * 0.125F;
 		
+		leg_right1.yRot = 0.0131F + cosWalk * 0.125F;
 		leg_right1.xRot = -0.5233F - cosWalk * 0.5F;
 		leg_right_lower.xRot = 1.0881F + cosWalk * 0.25F;
 		foot_right.xRot = -0.3926F + cosWalk * 0.125F;
