@@ -406,22 +406,27 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 		// for testing static speed with no AIs active
 		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
 		float cos = Mth.cos(ageInTicks * 0.25F) * 0.8F;
+		//float cosFaster = Mth.cos(ageInTicks * 0.5F) * 0.4F;
+		
+		//float sinWalk = Mth.sin(limbSwing * 0.6662F) * 2F * limbSwingAmount;
+		float cosWalk = Mth.cos(limbSwing * 0.6662F) * 2F * limbSwingAmount;
+		float cosWalkFaster = Mth.cos(limbSwing * 1.3324F) * 1F * limbSwingAmount;
 		
 		spine2.xRot = -0.1309F + sin * 0.0625F;
 		arm10.yRot = 0.3702F + sin * 0.125F;
 		arm4.yRot = -0.2532F - cos * 0.125F;
 		arm7.yRot = 0.0798F + cos * 0.125F;
 		
-		hipbone.y = Math.max(11.45F, 11.45F -cos * 2.25F);
-		hipbone.z = -3F + cos * 0.25F;
+		hipbone.y = Math.min(12.55F, 12.55F - cosWalkFaster * 2F);
+		hipbone.z = 3F - cosWalkFaster * 0.5F;
 		
-		leg_left1.xRot = -0.5233F + cos * 0.125F;
-		leg_left_lower.xRot = 1.0881F - cos * 0.25F;
-		foot_left.xRot = -0.3926F + cos * 0.125F;
+		leg_left1.xRot = -0.5233F + cosWalk * 0.5F;
+		leg_left_lower.xRot = 1.0881F - cosWalk * 0.25F;
+		foot_left.xRot = -0.3926F - cosWalk * 0.125F;
 		
-		leg_right1.xRot = -0.5233F + cos * 0.125F;
-		leg_right_lower.xRot = 1.0881F - cos * 0.25F;
-		foot_right.xRot = -0.3926F + cos * 0.125F;
+		leg_right1.xRot = -0.5233F - cosWalk * 0.5F;
+		leg_right_lower.xRot = 1.0881F + cosWalk * 0.25F;
+		foot_right.xRot = -0.3926F + cosWalk * 0.125F;
 		
 	}
 
