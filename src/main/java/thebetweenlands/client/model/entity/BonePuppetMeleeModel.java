@@ -403,35 +403,43 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-		// for testing static speed with no AIs active
 		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
 		float cos = Mth.cos(ageInTicks * 0.25F) * 0.8F;
-		//float cosFaster = Mth.cos(ageInTicks * 0.5F) * 0.4F;
-		
-		//float sinWalk = Mth.sin(limbSwing * 0.6662F) * 2F * limbSwingAmount;
-		float cosWalk = Mth.cos(limbSwing * 0.6662F) * 2F * limbSwingAmount;
-		float cosWalkFaster = Mth.cos(limbSwing * 1.3324F) * 1F * limbSwingAmount;
-		
-		spine2.xRot = -0.1309F + sin * 0.0625F;
-		arm10.yRot = 0.3702F + sin * 0.125F;
-		arm4.yRot = -0.2532F - cos * 0.125F;
-		arm7.yRot = 0.0798F + cos * 0.125F;
-		
-		hipbone.y = Math.min(12.55F, 12.55F - cosWalkFaster * 2F);
-		hipbone.z = 3F - cosWalkFaster * 0.5F;
-		hipbone.yRot = 0F - cosWalk * 0.125F;
-		spine1.yRot = 0F + cosWalk * 0.125F;
-		
-		leg_left1.yRot = -0.0131F + cosWalk * 0.125F;
-		leg_left1.xRot = -0.5233F + cosWalk * 0.5F;
-		leg_left_lower.xRot = 1.0881F - cosWalk * 0.25F;
-		foot_left.xRot = -0.3926F - cosWalk * 0.125F;
-		
-		leg_right1.yRot = 0.0131F + cosWalk * 0.125F;
-		leg_right1.xRot = -0.5233F - cosWalk * 0.5F;
-		leg_right_lower.xRot = 1.0881F + cosWalk * 0.25F;
-		foot_right.xRot = -0.3926F + cosWalk * 0.125F;
-		
+		float sinWalk = Mth.sin(limbSwing * 0.6662F) * 2F * limbSwingAmount;
+		float sinWalkFaster = Mth.sin(limbSwing * 1.3324F) * 1F * limbSwingAmount;
+
+		spine2.xRot = -0.1309F + cos * 0.0625F;
+		arm10.yRot = 0.3702F + cos * 0.125F; // back right arm
+		arm4.yRot = -0.2532F - sin * 0.125F; // left arm
+		arm7.yRot = 0.0798F + sin * 0.125F; // front right arm
+
+		hipbone.y = Math.min(12.55F, 12.55F - sinWalkFaster * 2F);
+		hipbone.z = 3F - sinWalkFaster * 0.5F;
+		hipbone.yRot = 0F - sinWalk * 0.125F;
+		spine1.yRot = 0F + sinWalk * 0.125F;
+
+		leg_left1.yRot = -0.0131F + sinWalk * 0.125F;
+		leg_left1.xRot = -0.5233F + sinWalk * 0.5F;
+		leg_left_lower.xRot = 1.0881F - sinWalk * 0.25F;
+		foot_left.xRot = -0.3926F - sinWalk * 0.125F;
+
+		leg_right1.yRot = 0.0131F + sinWalk * 0.125F;
+		leg_right1.xRot = -0.5233F - sinWalk * 0.5F;
+		leg_right_lower.xRot = 1.0881F + sinWalk * 0.25F;
+		foot_right.xRot = -0.3926F + sinWalk * 0.125F;
+
+		if (entity.getAttackTimer() > 0) {
+			float attackProgress = (float)entity.getAttackTimer() / 20.0f;
+		    arm4.xRot = -1.1937F - 1F * (float)Math.sin(attackProgress * Math.PI);
+		    arm4.yRot = -0.2532F - 1F * (float)Math.sin(attackProgress * Math.PI);
+		    spine1.yRot = 0F + 0.5F * (float)Math.sin(attackProgress * Math.PI);
+		    arm_lower2.yRot = 0F - 0.5F * (float)Math.sin(attackProgress * Math.PI);
+		    hand2.yRot = 0F - 1F * (float)Math.sin(attackProgress * Math.PI);
+		    hand2.zRot = 0.0873F + 0.5F * (float)Math.sin(attackProgress * Math.PI);
+		    arm10.yRot = 0.3702F + 1F * (float)Math.sin(attackProgress * Math.PI);
+			arm7.yRot = 0.0798F + 1F * (float)Math.sin(attackProgress * Math.PI);
+		}
+
 	}
 
 	@Override
