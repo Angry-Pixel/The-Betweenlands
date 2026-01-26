@@ -94,10 +94,11 @@ public class BonePuppetMelee extends BonePuppetBase {
 		@Override
 		protected void checkAndPerformAttack(LivingEntity target) {
 			if (canPerformAttack(target)) {
-				resetAttackCooldown();
 				puppet.setAttacking(true);
-				if (puppet.getAttackTimer() == 0) //?
+				if (puppet.getAttackTimer() >= 10) {
 					puppet.doHurtTarget(target);
+					resetAttackCooldown();
+				}
 			}
 		}
 	}
