@@ -329,7 +329,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new TarminionItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16)));
 	public static final DeferredItem<Item> SLUDGE_BALL = ITEMS.register("sludge_ball", () -> new Item(new Item.Properties()));
 	//rope
-	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, new Item.Properties()));
+	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, SoundRegistry.SORRY, new Item.Properties()));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new HoverTextItem(new Item.Properties()));
 	public static final DeferredItem<Item> SHAMBLER_TONGUE = ITEMS.register("shambler_tongue", () -> new Item(new Item.Properties()));
@@ -378,7 +378,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PHEROMONE_THORAX = ITEMS.register("pheromone_thorax", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().durability(2000)));
-	public static final DeferredItem<Item> SILKY_PEBBLE = ITEMS.register("silky_pebble", () -> new AngryPebbleItem(3.0F, new Item.Properties()));
+	public static final DeferredItem<Item> SILKY_PEBBLE = ITEMS.register("silky_pebble", () -> new AngryPebbleItem(3.0F, SoundRegistry.SILKY_PEBBLE_THROW, new Item.Properties()));
 
 	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6))));
 	public static final DeferredItem<Item> BONE_CHESTPLATE = ITEMS.register("bone_chestplate", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(6))));

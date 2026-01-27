@@ -32,6 +32,13 @@ public class AngryPebble extends ThrowableItemProjectile {
 		this.setItem(this.stack);
 	}
 
+	public AngryPebble(Level level, double x, double y, double z, ItemStack displayStack, float explosionRadius) {
+		super(EntityRegistry.ANGRY_PEBBLE.get(), x, y, z, level);
+		this.stack = displayStack;
+		this.explosionRadius = explosionRadius;
+		this.setItem(this.stack);
+	}
+
 	@Override
 	public void tick() {
 		super.tick();

@@ -1,27 +1,40 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.function.Supplier;
+
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.entity.projectile.AngryPebble;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.util.CustomDispenseSoundItem;
+import thebetweenlands.util.CustomSoundProjectileDispenseBehavior;
 
-public class AngryPebbleItem extends Item {
+public class AngryPebbleItem extends Item implements ProjectileItem, CustomDispenseSoundItem {
+	protected final Supplier<SoundEvent> soundEventHolder;
+	protected final float explosionPower;
 
-	private final float explosionPower;
-
-	public AngryPebbleItem(float explosionPower, Properties properties) {
+	public AngryPebbleItem(float explosionPower, Supplier<SoundEvent> soundEventHolder, Properties properties) {
 		super(properties);
 		this.explosionPower = explosionPower;
+		this.soundEventHolder = soundEventHolder;
+		DispenserBlock.registerBehavior(this, new CustomSoundProjectileDispenseBehavior(this));
 	}
 
 	@Override
@@ -69,12 +82,35 @@ public class AngryPebbleItem extends Item {
 			int useTime = this.getUseDuration(stack, entity) - timeCharged;
 
 			if(useTime > 20) {
-				level.playSound(null, player.blockPosition(), SoundRegistry.SORRY.get(), SoundSource.PLAYERS, 0.7F, 0.8F);
+				level.playSound(null, player.blockPosition(), this.soundEventHolder.get(), SoundSource.PLAYERS, 0.7F, 0.8F);
 				AngryPebble pebble = new AngryPebble(player, level, stack, this.explosionPower);
 				pebble.shootFromRotation(player, player.getXRot(), player.getYRot(), -10, 1.2F, 3.5F);
 				level.addFreshEntity(pebble);
 				stack.consume(1, player);
 			}
 		}
+	}
+
+	@Override
+	public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
+		return new AngryPebble(level, pos.x(), pos.y(), pos.z(), stack, this.explosionPower);
+	}
+	
+	@Override
+	public void shoot(Projectile projectile, double x, double y, double z, float velocity, float inaccuracy) {
+		ProjectileItem.super.shoot(projectile, x, y, z, velocity, inaccuracy);
+	}
+	
+	@Override
+	public DispenseConfig createDispenseConfig() {
+		return DispenseConfig.builder()
+				.power(1.2F)
+				.uncertainty(3.5F)
+				.build();
+	}
+
+	@Override
+	public void playSound(BlockSource blockSource) {
+		blockSource.level().playSound(null, blockSource.pos(), this.soundEventHolder.get(), SoundSource.PLAYERS, 0.7F, 0.8F);
 	}
 }
