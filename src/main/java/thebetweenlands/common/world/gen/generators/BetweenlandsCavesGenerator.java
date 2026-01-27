@@ -130,7 +130,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 						caveMinHeights[xo * 2 + zo] = minCaveHeight;
 						
 						// Get height of surface in this column
-						int surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
+						int surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
 						
 						caveMaxHeights[xo * 2 + zo] = surfaceLevel;
 						
@@ -215,7 +215,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 									chunkHeightmaps.update(bx, by, bz, defaultTerrainState);
 									// Update min/max heights for this column
 									caveMinHeights[xo * 2 + zo] = minCaveHeight = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
-									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
+									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
 								} else if (noise < limit && state.is(replaceable)) {
 									final int my = by + chunkMinHeight;
 									airCarvingMask.set(bx, my, bz);
