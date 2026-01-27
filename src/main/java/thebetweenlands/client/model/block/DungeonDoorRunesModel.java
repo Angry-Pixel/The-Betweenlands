@@ -4,11 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -17,11 +14,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -44,14 +39,20 @@ public class DungeonDoorRunesModel {
 		TheBetweenlands.prefix("textures/entity/block/rune_overlay_8.png"));
 	public static final ResourceLocation TEXTURE_RUNE_GLOW = TheBetweenlands.prefix("textures/entity/block/dungeon_runes_glow.png");
 
+	// UVs for the rune cube textures
 	private static final UVSquare TOP_RUNE_TOP_FACE_UVS   = UVSquare.of(5, 0,  19, 5,  32f); // [5, 0] to [19, 5] in a 32x32 image
-	private static final UVSquare TOP_RUNE_FRONT_FACE_UVS = UVSquare.of(5, 5,  19, 10,  32f); // [5, 5] to [19, 10] in a 32x32 image
+	private static final UVSquare TOP_RUNE_FRONT_FACE_UVS = UVSquare.of(5, 5,  19, 10, 32f); // [5, 5] to [19, 10] in a 32x32 image
 	
 	private static final UVSquare MIDDLE_RUNE_TOP_FACE_UVS   = UVSquare.of(5, 11,  19, 15,  32f); // [5, 11] to [19, 15] in a 32x32 image
 	private static final UVSquare MIDDLE_RUNE_FRONT_FACE_UVS = UVSquare.of(5, 15,  19, 19,  32f); // [5, 15] to [19, 19] in a 32x32 image
 
 	private static final UVSquare BOTTOM_RUNE_TOP_FACE_UVS   = UVSquare.of(5, 20,  19, 25,  32f); // [5, 20] to [19, 25] in a 32x32 image
 	private static final UVSquare BOTTOM_RUNE_FRONT_FACE_UVS = UVSquare.of(5, 25,  19, 30,  32f); // [5, 25] to [19, 30] in a 32x32 image
+
+	// UVs for the rune glow texture
+	private static final UVSquare TOP_RUNE_UVS    = UVSquare.of(16, 2,    48, 12,   64f, 32f); // [16, 2] to [48, 12] in a 64x32 image
+	private static final UVSquare MIDDLE_RUNE_UVS = UVSquare.of(16, 12,   48, 20,   64f, 32f); // [16, 12] to [48, 20] in a 64x32 image
+	private static final UVSquare BOTTOM_RUNE_UVS = UVSquare.of(16, 20,   48, 30,   64f, 32f); // [16, 20] to [48, 30] in a 64x32 image
 	
 	private final ModelPart top;
 	private final ModelPart middle;
@@ -88,7 +89,7 @@ public class DungeonDoorRunesModel {
 			this.top.xRot = 0;
 			hideTopFace = true;
 		}
-		this.renderRune(this.top, stack, buffer, texture, ticks, partialTick, light, overlay, TOP_RUNE_FRONT_FACE_UVS, hideTopFace ? null : TOP_RUNE_TOP_FACE_UVS);
+		this.renderRune(this.top, stack, buffer, texture, ticks, partialTick, light, overlay, TOP_RUNE_FRONT_FACE_UVS, hideTopFace ? null : TOP_RUNE_TOP_FACE_UVS, TOP_RUNE_UVS);
 	}
 
 	public void renderMiddleLayer(BlockEntity entity, ResourceLocation texture, int ticks, float partialTick, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
@@ -105,7 +106,7 @@ public class DungeonDoorRunesModel {
 			this.middle.xRot = 0;
 			hideTopFace = true;
 		}
-		this.renderRune(this.middle, stack, buffer, texture, ticks, partialTick, light, overlay, MIDDLE_RUNE_FRONT_FACE_UVS, hideTopFace ? null : MIDDLE_RUNE_TOP_FACE_UVS);
+		this.renderRune(this.middle, stack, buffer, texture, ticks, partialTick, light, overlay, MIDDLE_RUNE_FRONT_FACE_UVS, hideTopFace ? null : MIDDLE_RUNE_TOP_FACE_UVS, MIDDLE_RUNE_UVS);
 	}
 
 	public void renderBottomLayer(BlockEntity entity, ResourceLocation texture, int ticks, float partialTick, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
@@ -122,12 +123,14 @@ public class DungeonDoorRunesModel {
 			this.bottom.xRot = 0;
 			hideTopFace = true;
 		}
-		this.renderRune(this.bottom, stack, buffer, texture, ticks, partialTick, light, overlay, BOTTOM_RUNE_FRONT_FACE_UVS, hideTopFace ? null : BOTTOM_RUNE_TOP_FACE_UVS);
+		this.renderRune(this.bottom, stack, buffer, texture, ticks, partialTick, light, overlay, BOTTOM_RUNE_FRONT_FACE_UVS, hideTopFace ? null : BOTTOM_RUNE_TOP_FACE_UVS, BOTTOM_RUNE_UVS);
 	}
 
+	private static final int RUNE_GLOW_PASSES = 3;
+	
 	private void renderRune(ModelPart box, PoseStack stack, MultiBufferSource buffer, ResourceLocation texture,
 			int ticks, float partialTick, int light, int overlay,
-			@Nullable UVSquare frontFaceUVs, @Nullable UVSquare topFaceUVs) {
+			@Nullable UVSquare frontFaceUVs, @Nullable UVSquare topFaceUVs, UVSquare initialGlowUVs) {
 		// Render outer box
 		box.render(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(texture)), light, overlay);
 
@@ -140,172 +143,196 @@ public class DungeonDoorRunesModel {
 			return;
 		}
 		
-		// Render runes
+		// Setup stack for box
 		stack.pushPose();
-		
-		RenderType glowType = BLRenderTypes.dungeonDoorRunes(texture);
-		VertexConsumer consumer = buffer.getBuffer(glowType);
 
 		stack.scale(box.xScale, box.yScale, box.zScale);
 		
+		// Render cube layers
+		float renderTicks = ticks + partialTick;
+
+		// Render bottom rune layers (translucent transparency, no depth writes)
+		RenderType normalGlowType = BLRenderTypes.dungeonDoorRunes(texture);
+		VertexConsumer normalConsumer = buffer.getBuffer(normalGlowType);
+		
 		box.visit(stack, (pose, path, index, cube) -> {
-			this.renderCubeRuneGlow(pose, cube, consumer, ticks, partialTick, frontFaceUVs, topFaceUVs);
+			AABB aabb = new AABB(cube.minX / 16.0, cube.minY / 16.0, cube.minZ / 16.0, cube.maxX / 16.0, cube.maxY / 16.0, cube.maxZ / 16.0);
+			
+			for(int i = 0; i < RUNE_GLOW_PASSES - 1; ++i) {
+				this.renderCubeGlowLayer(pose, cube, normalConsumer, renderTicks, frontFaceUVs, topFaceUVs, initialGlowUVs, i, aabb);
+			}
+		});
+		
+		// Render top rune layer (additive transparency, depth writes enabled)
+		RenderType additiveGlowType = BLRenderTypes.dungeonDoorRunesAdditive(texture);
+		VertexConsumer additiveConsumer = buffer.getBuffer(additiveGlowType);
+
+		box.visit(stack, (pose, path, index, cube) -> {
+			AABB aabb = new AABB(cube.minX / 16.0, cube.minY / 16.0, cube.minZ / 16.0, cube.maxX / 16.0, cube.maxY / 16.0, cube.maxZ / 16.0);
+			
+			this.renderCubeGlowLayer(pose, cube, additiveConsumer, renderTicks, frontFaceUVs, topFaceUVs, initialGlowUVs, RUNE_GLOW_PASSES - 1, aabb);
 		});
 		
 		stack.popPose();
 	}
-
-	private static final int RUNE_GLOW_PASSES = 3;
 	
-	private void renderCubeRuneGlow(PoseStack.Pose pose, ModelPart.Cube cube, VertexConsumer consumer, int ticks, float partialTick, @Nullable UVSquare frontFaceUVs, @Nullable UVSquare topFaceUVs) {
-		float renderTicks = ticks + partialTick;
+	private void renderCubeGlowLayer(PoseStack.Pose pose, ModelPart.Cube cube,
+			VertexConsumer consumer,
+			float renderTicks,
+			@Nullable UVSquare frontFaceUVs, @Nullable UVSquare topFaceUVs, UVSquare initialGlowUVs,
+			int i, AABB aabb) {
 		float texOffset = renderTicks * 0.0015F;
 
-		AABB aabb = new AABB(cube.minX / 16.0, cube.minY / 16.0, cube.minZ / 16.0, cube.maxX / 16.0, cube.maxY / 16.0, cube.maxZ / 16.0);
+		float alpha = 0.3f + (Mth.sin(renderTicks / 10.0f + i * Mth.PI * 2.0f / (float)RUNE_GLOW_PASSES) + 1) / 2.0f * 0.3f;
+
+		float dirU = Mth.cos(i * Mth.PI * 2.0f / (float)RUNE_GLOW_PASSES);
+		float dirV = Mth.sin(i * Mth.PI * 2.0f / (float)RUNE_GLOW_PASSES);
+
+		float uTranslation = dirU * texOffset;
+		float vTranslation = dirV * texOffset;
 		
-		for(int i = 0; i < RUNE_GLOW_PASSES; ++i) {
-			float alpha = 0.3f + (Mth.sin(renderTicks / 10.0f + i * Mth.PI * 2.0f / (float)RUNE_GLOW_PASSES) + 1) / 2.0f * 0.3f;
+		// This could be made cleaner using abstractions like Matrix2f and Vector2f, but I don't feel like it right now.
+		
+		float scaleU = RUNE_GLOW_PASSES - i;
+		float scaleV = scaleU;
+		
+		double rotationRadians = (renderTicks / 30.0) * (Math.PI / 180);
+		
+		float centreU = 0.5f;
+		float centreV = 0.5f;
 
-			float dirU = Mth.cos(i * Mth.PI * 2.0f / (float)RUNE_GLOW_PASSES);
-			float dirV = Mth.sin(i * Mth.PI * 2.0f / (float)RUNE_GLOW_PASSES);
+		// Min/Max U/V values (before transformation)
+		float baseMinU = initialGlowUVs.start().u();
+		float baseMaxU = initialGlowUVs.end().u();
+		float baseMinV = initialGlowUVs.start().v();
+		float baseMaxV = initialGlowUVs.end().v();
+		
+		
+		// Center UVs on 0, 0
+		baseMinU -= centreU;
+		baseMaxU -= centreU;
+		baseMinV -= centreV;
+		baseMaxV -= centreV;
+		
+		centreU = 0.0f;
+		centreV = 0.0f;
 
-			float uTranslation = dirU * texOffset;
-			float vTranslation = dirV * texOffset;
-			
-			// This could be made cleaner using abstractions like Matrix2f and Vector2f, but I don't feel like it right now.
-			
-			float scaleU = RUNE_GLOW_PASSES - i;
-			float scaleV = scaleU / 2.0f;
-			
-			double rotationRadians = (renderTicks / 30.0) * (Math.PI / 180);
+		// Scale V by 2x because it's a 64x32 image (not square)
+		baseMinV = (baseMinV - centreU) / 2.0f + centreU;
+		baseMaxV = (baseMaxV - centreV) / 2.0f + centreV;
+		scaleV = scaleV * 2.0f;
+		
+		// Split into separate UVs for each vertex, so they can be properly rotated
+		float topLeftU = baseMinU;
+		float topLeftV = baseMinV;
+		
+		float topRightU = baseMinU;
+		float topRightV = baseMaxV;
 
-			float centreU = 0.5f;
-			float centreV = 0.5f;
-			
-			// Min/Max U/V values (before rotation)
-			float baseMinU = 0.0f;
-			float baseMaxU = 1.0f;
-			float baseMinV = 0.0f;
-			float baseMaxV = 1.0f;
-			
-			// Center UVs on 0, 0
-			baseMinU -= centreU;
-			baseMaxU -= centreU;
-			baseMinV -= centreV;
-			baseMaxV -= centreV;
-			
-			centreU = 0.0f;
-			centreV = 0.0f;
+		float bottomRightU = baseMaxU;
+		float bottomRightV = baseMaxV;
 
-			// Split into separate UVs for each vertex, so they can be properly rotated
-			float topLeftU = baseMinU;
-			float topLeftV = baseMinV;
-			
-			float topRightU = baseMinU;
-			float topRightV = baseMaxV;
+		float bottomLeftU = baseMaxU;
+		float bottomLeftV = baseMinV;
 
-			float bottomRightU = baseMaxU;
-			float bottomRightV = baseMaxV;
 
-			float bottomLeftU = baseMaxU;
-			float bottomLeftV = baseMinV;
 
-			// Apply rotation
-			// -----------------       -----       --------------------------- 
-			// | cos θ, -sin θ |       | u |       | u * cos(θ) - v * sin(θ) | 
-			// |               |   X   |   |   =   |                         | 
-			// | sin θ,  cos θ |       | v |       | u * sin(θ) + v * cos(θ) | 
-			// -----------------       -----       --------------------------- 
-			final float cosPart = (float)Math.cos(rotationRadians);
-			final float sinPart = (float)Math.sin(rotationRadians);
-			
-			// Note: Buffer variables are there to prevent the U assignment messing with the V calculation
-			
-			// Rotate top left vertex
-			final float rotatedTopLeftU = ((topLeftU - centreU) * cosPart - (topLeftV - centreV) * sinPart) + centreU;
-			final float rotatedTopLeftV = ((topLeftU - centreU) * sinPart + (topLeftV - centreV) * cosPart) + centreV;
-			topLeftU = rotatedTopLeftU;
-			topLeftV = rotatedTopLeftV;
-			
-			// Rotate top right vertex
-			final float rotatedTopRightU = ((topRightU - centreU) * cosPart - (topRightV - centreV) * sinPart) + centreU;
-			final float rotatedTopRightV = ((topRightU - centreU) * sinPart + (topRightV - centreV) * cosPart) + centreV;
-			topRightU = rotatedTopRightU;
-			topRightV = rotatedTopRightV;
+		// Apply rotation
+		// -----------------       -----       --------------------------- 
+		// | cos θ, -sin θ |       | u |       | u * cos(θ) - v * sin(θ) | 
+		// |               |   X   |   |   =   |                         | 
+		// | sin θ,  cos θ |       | v |       | u * sin(θ) + v * cos(θ) | 
+		// -----------------       -----       --------------------------- 
+		final float cosPart = (float)Math.cos(rotationRadians);
+		final float sinPart = (float)Math.sin(rotationRadians);
 
-			// Rotate bottom right vertex
-			final float rotatedBottomRightU = ((bottomRightU - centreU) * cosPart - (bottomRightV - centreV) * sinPart) + centreU;
-			final float rotatedBottomRightV = ((bottomRightU - centreU) * sinPart + (bottomRightV - centreV) * cosPart) + centreV;
-			bottomRightU = rotatedBottomRightU;
-			bottomRightV = rotatedBottomRightV;
+		// Note: Buffer variables are there to prevent the U assignment messing with the V calculation
 
-			// Rotate bottom left vertex
-			final float rotatedBottomLeftU = ((bottomLeftU - centreU) * cosPart - (bottomLeftV - centreV) * sinPart) + centreU;
-			final float rotatedBottomLeftV = ((bottomLeftU - centreU) * sinPart + (bottomLeftV - centreV) * cosPart) + centreV;
-			bottomLeftU = rotatedBottomLeftU;
-			bottomLeftV = rotatedBottomLeftV;
-			
-			
-			
-			// Apply scale
-			topLeftU     = (topLeftU - centreU) / scaleU + centreU;
-			topRightU    = (topRightU - centreU) / scaleU + centreU;
-			bottomRightU = (bottomRightU - centreU) / scaleU + centreU;
-			bottomLeftU  = (bottomLeftU - centreU) / scaleU + centreU;
-			
-			topLeftV     = (topLeftV - centreV) / scaleV + centreV;
-			topRightV    = (topRightV - centreV) / scaleV + centreV;
-			bottomRightV = (bottomRightV - centreV) / scaleV + centreV;
-			bottomLeftV  = (bottomLeftV - centreV) / scaleV + centreV;
-			
-			
-			// Apply translation
-			final float uOffset = uTranslation;
-			final float vOffset = vTranslation;
+		// Rotate top left vertex
+		final float rotatedTopLeftU = ((topLeftU - centreU) * cosPart - (topLeftV - centreV) * sinPart) + centreU;
+		final float rotatedTopLeftV = ((topLeftU - centreU) * sinPart + (topLeftV - centreV) * cosPart) + centreV;
+		topLeftU = rotatedTopLeftU;
+		topLeftV = rotatedTopLeftV;
 
-			topLeftU     += uOffset;
-			topRightU    += uOffset;
-			bottomRightU += uOffset;
-			bottomLeftU  += uOffset;
-			centreU      += uOffset;
+		// Rotate top right vertex
+		final float rotatedTopRightU = ((topRightU - centreU) * cosPart - (topRightV - centreV) * sinPart) + centreU;
+		final float rotatedTopRightV = ((topRightU - centreU) * sinPart + (topRightV - centreV) * cosPart) + centreV;
+		topRightU = rotatedTopRightU;
+		topRightV = rotatedTopRightV;
 
-			topLeftV     += vOffset;
-			topRightV    += vOffset;
-			bottomRightV += vOffset;
-			bottomLeftV  += vOffset;
-			centreV      += vOffset;
+		// Rotate bottom right vertex
+		final float rotatedBottomRightU = ((bottomRightU - centreU) * cosPart - (bottomRightV - centreV) * sinPart) + centreU;
+		final float rotatedBottomRightV = ((bottomRightU - centreU) * sinPart + (bottomRightV - centreV) * cosPart) + centreV;
+		bottomRightU = rotatedBottomRightU;
+		bottomRightV = rotatedBottomRightV;
 
-			
-			
-			// Reset UV center
-			centreU += 0.5f;
-			centreV += 0.5f;
-			
-			topLeftU     += centreU;
-			topRightU    += centreU;
-			bottomRightU += centreU;
-			bottomLeftU  += centreU;
+		// Rotate bottom left vertex
+		final float rotatedBottomLeftU = ((bottomLeftU - centreU) * cosPart - (bottomLeftV - centreV) * sinPart) + centreU;
+		final float rotatedBottomLeftV = ((bottomLeftU - centreU) * sinPart + (bottomLeftV - centreV) * cosPart) + centreV;
+		bottomLeftU = rotatedBottomLeftU;
+		bottomLeftV = rotatedBottomLeftV;
 
-			topLeftV     += centreV;
-			topRightV    += centreV;
-			bottomRightV += centreV;
-			bottomLeftV  += centreV;
-			
-			
-			
-			// Render cube
-			this.renderCube(pose, aabb, consumer,
-					topLeftU, topLeftV,
-					topRightU, topRightV,
-					bottomRightU, bottomRightV,
-					bottomLeftU, bottomLeftV,
-					
-					// Colour
-					1.0f, 1.0f, 1.0f, alpha,
-					// Mask texture UVs
-					frontFaceUVs, topFaceUVs,
-					ticks, partialTick);
-		}
+		
+		
+		// Apply translation
+		final float uOffset = uTranslation;
+		final float vOffset = vTranslation;
+
+		topLeftU     += uOffset;
+		topRightU    += uOffset;
+		bottomRightU += uOffset;
+		bottomLeftU  += uOffset;
+		centreU      += uOffset;
+
+		topLeftV     += vOffset;
+		topRightV    += vOffset;
+		bottomRightV += vOffset;
+		bottomLeftV  += vOffset;
+		centreV      += vOffset;
+
+
+
+		// Apply scale
+		topLeftU     = (topLeftU - centreU) * scaleU + centreU;
+		topRightU    = (topRightU - centreU) * scaleU + centreU;
+		bottomRightU = (bottomRightU - centreU) * scaleU + centreU;
+		bottomLeftU  = (bottomLeftU - centreU) * scaleU + centreU;
+		
+		topLeftV     = (topLeftV - centreV) * scaleV + centreV;
+		topRightV    = (topRightV - centreV) * scaleV + centreV;
+		bottomRightV = (bottomRightV - centreV) * scaleV + centreV;
+		bottomLeftV  = (bottomLeftV - centreV) * scaleV + centreV;
+		
+		
+		
+		// Reset UV center
+		centreU += 0.5f;
+		centreV += 0.5f;
+		
+		topLeftU     += 0.5f;
+		topRightU    += 0.5f;
+		bottomRightU += 0.5f;
+		bottomLeftU  += 0.5f;
+
+		topLeftV     += 0.5f;
+		topRightV    += 0.5f;
+		bottomRightV += 0.5f;
+		bottomLeftV  += 0.5f;
+
+		
+		
+		// Render cube
+		this.renderCube(pose, aabb, consumer,
+				topLeftU, topLeftV,
+				topRightU, topRightV,
+				bottomRightU, bottomRightV,
+				bottomLeftU, bottomLeftV,
+				
+				// Colour
+				// Note: 1.12's runes were affected by a constant lightmap UV of [238.0f, 238.0f], replicate that here with a set colour
+				196f / 256f, 196f / 256f, 196f / 256f, alpha,
+				// Mask texture UVs
+				frontFaceUVs, topFaceUVs);
 	}
 	
 	private void renderCube(PoseStack.Pose pose, AABB aabb, VertexConsumer buffer,
@@ -315,8 +342,7 @@ public class DungeonDoorRunesModel {
 			float bottomLeftU,  float bottomLeftV,
 			
 			float r, float g, float b, float a,
-			@Nullable UVSquare frontFaceUVs, @Nullable UVSquare topFaceUVs,
-			int ticks, float partialTick) {
+			@Nullable UVSquare frontFaceUVs, @Nullable UVSquare topFaceUVs) {
 
 		final float minX = (float)aabb.minX;
 		final float minY = (float)aabb.minY;
@@ -362,31 +388,6 @@ public class DungeonDoorRunesModel {
 			buffer.addVertex(pose, minX, maxY, minZ).setColor(r, g, b, a).setUv(topRightU,    topRightV)   .setUv1(frontFaceMinU2, frontFaceMaxV2).setNormal(pose, 0.0f, 0.0f, -1.0f);
 			buffer.addVertex(pose, maxX, maxY, minZ).setColor(r, g, b, a).setUv(bottomRightU, bottomRightV).setUv1(frontFaceMaxU2, frontFaceMaxV2).setNormal(pose, 0.0f, 0.0f, -1.0f);
 			buffer.addVertex(pose, maxX, minY, minZ).setColor(r, g, b, a).setUv(bottomLeftU,  bottomLeftV) .setUv1(frontFaceMaxU2, frontFaceMinV2).setNormal(pose, 0.0f, 0.0f, -1.0f);
-		}
-	}
-
-	private void renderRuneGlow(ModelPart box, PoseStack stack, VertexConsumer consumer, int ticks, float partialTick, int overlay) {
-		float renderTicks = ticks + partialTick;
-		float texOffset = renderTicks * 0.0015F;
-		int passes = 3;
-
-		for(int i = 0; i < passes; i++) {
-			RenderSystem.depthMask(i == passes - 1);
-			if(i == passes - 1) {
-				RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-			}
-
-			float alpha = 0.3f + (Mth.sin(renderTicks / 10.0f + i * Mth.PI * 2.0f / passes) + 1) / 2.0f * 0.3f;
-
-			float dirU = Mth.cos(i * Mth.PI * 2.0f / passes);
-			float dirV = Mth.sin(i * Mth.PI * 2.0f / passes);
-
-			stack.translate(dirU * texOffset, dirV * texOffset, 0);
-			stack.scale(1.0F, 2.0F, 1.0F); //V needs to be scaled x2 because texture is not square
-			stack.scale(passes - i, passes - i, 1);
-			stack.mulPose(Axis.ZP.rotationDegrees(renderTicks / 30.0f));
-			box.render(stack, consumer, LightTexture.FULL_BRIGHT, overlay, FastColor.ARGB32.color(FastColor.as8BitChannel(alpha), -1));
-			RenderSystem.defaultBlendFunc();
 		}
 	}
 }

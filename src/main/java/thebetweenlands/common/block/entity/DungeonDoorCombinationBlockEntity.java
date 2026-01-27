@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.Random;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -12,7 +14,7 @@ public class DungeonDoorCombinationBlockEntity extends SyncedBlockEntity {
 	public int topCode = 0;
 	public int midCode = 0;
 	public int bottomCode = 0;
-	public int renderTicks = 0;
+	public int renderTicks = 0; // Only used for the rune glow animation
 
 	public DungeonDoorCombinationBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.DUNGEON_DOOR_COMBINATION.get(), pos, state);
@@ -22,6 +24,14 @@ public class DungeonDoorCombinationBlockEntity extends SyncedBlockEntity {
 		entity.renderTicks++;
 	}
 
+	@Override
+	public void onLoad() {
+		super.onLoad();
+		
+		// Random render offset for the rune glow
+		this.renderTicks = new Random(this.getBlockPos().asLong()).nextInt(12000);
+	}
+	
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);

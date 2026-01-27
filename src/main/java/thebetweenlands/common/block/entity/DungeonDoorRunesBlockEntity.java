@@ -16,6 +16,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.RandomSupport;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
@@ -27,6 +28,7 @@ import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
+import java.util.Random;
 
 public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements ScreenShaker {
 
@@ -37,7 +39,7 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 	public int top_state_prev, mid_state_prev, bottom_state_prev = 0;
 	public int top_rotate, mid_rotate, bottom_rotate = 0;
 	public int lastTickTopRotate, lastTickMidRotate, lastTickBottomRotate = 0;
-	public int renderTicks = 0;
+	public int renderTicks = 0; // Only used for the rune glow animation
 	public boolean animate_open = false;
 	public boolean animate_open_recess = false;
 	public boolean animate_tile_recess = false;
@@ -381,6 +383,14 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 		}
 	}
 
+	@Override
+	public void onLoad() {
+		super.onLoad();
+		
+		// Random render offset for the rune glow
+		this.renderTicks = new Random(this.getBlockPos().asLong()).nextInt(12000);
+	}
+	
 	public void shake(int shakeTimerMax) {
 		this.shakingTimerMax = shakeTimerMax;
 		this.prev_shake_timer = this.shake_timer;
