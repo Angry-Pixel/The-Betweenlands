@@ -12,9 +12,9 @@ public class CustomSoundProjectileDispenseBehavior extends ProjectileDispenseBeh
 		super(projectile);
 		if(projectile instanceof CustomDispenseSoundItem customSoundItem) {
 			this.customSoundItem = customSoundItem;
-        } else {
-            throw new IllegalArgumentException(projectile + " not instance of " + CustomDispenseSoundItem.class.getSimpleName());
-        }
+		} else {
+			throw new IllegalArgumentException(projectile + " not instance of " + CustomDispenseSoundItem.class.getSimpleName());
+		}
 	}
 	
 	@Override
