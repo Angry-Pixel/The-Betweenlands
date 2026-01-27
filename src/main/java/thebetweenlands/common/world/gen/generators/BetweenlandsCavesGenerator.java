@@ -53,7 +53,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 
 		// Default states to replace with
 		BlockState defaultTerrainState = context.blockGenerator().defaultTerrainState();
-//		BlockState defaultLiquidState  = context.blockGenerator().defaultLiquidState();
 
 		// Which blocks can we replace?
 		final HolderSet<Block> replaceable = config.replaceable();
@@ -101,8 +100,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final double noSurfaceOpeningNoiseOffset = config.noSurfaceOpeningNoiseOffset();
 
 		final BitSet bufferPlacedBlocksMask = new BitSet(16 * 16 * chunkHeight);
-//		final BitSet carvedLiquidBlocksMask = new BitSet(16 * 16 * chunkHeight);
-//		final BitSet carvedTerrainBlocksMask = new BitSet(16 * 16 * chunkHeight);
 
 		for (int x = 0; x < 8; x++) {
 			int indexXC = x * 9; //1
@@ -191,8 +188,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 								double noise = currentValYC += stepYAxis;
 
 								int by = y + yo;
-
-								final int maskBitIndex = (bx & 15) | (bz & 15) << 4 | (by) << 8;
 								
 								double limit = baseNoiseLimit;
 								int bottomDist = by - minCaveHeight;
@@ -210,6 +205,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 								BlockState state = access.getBlockState(blockPos);
 								
 								if (noise < limit + bufferNoiseLimit && noise > limit && state.is(bufferReplaceable)) {
+									final int maskBitIndex = (bx & 15) | (bz & 15) << 4 | (by) << 8;
 									bufferPlacedBlocksMask.set(maskBitIndex);
 									// Update heightmaps (even though we haven't actually placed the block yet)
 									chunkHeightmaps.update(bx, by, bz, defaultTerrainState);
@@ -243,7 +239,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		for(int sectionIndex = 0; sectionIndex < access.getSectionsCount(); ++sectionIndex) {
 			LevelChunkSection section = access.getSection(sectionIndex);
 
-//			int sectionMinY = SectionPos.sectionToBlockCoord(access.getSectionYFromSectionIndex(sectionIndex));
 			int sectionMinY = SectionPos.sectionToBlockCoord(sectionIndex);
 			
 			for(int y = 0; y < SectionPos.SECTION_SIZE; ++y) {
@@ -251,11 +246,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 					for(int z = 0; z < SectionPos.SECTION_SIZE; ++z) {
 						final int bitIndex = (x & 15) | (z & 15) << 4 | (sectionMinY + y) << 8;
 						
-//						if(carvedLiquidBlocksMask.get(bitIndex)) {
-//							section.setBlockState(x, y, z, defaultLiquidState, false);
-//						} else if(carvedTerrainBlocksMask.get(bitIndex)) {
-//							section.setBlockState(x, y, z, Blocks.CAVE_AIR.defaultBlockState(), false);
-//						} else
 						if(bufferPlacedBlocksMask.get(bitIndex)) {
 							section.setBlockState(x, y, z, defaultTerrainState, false);
 						}
