@@ -498,11 +498,24 @@ public class BetweenlandsChunkGenerator extends NoiseBasedChunkGenerator {
 	
 	@Override
 	public void applyCarvers(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk, Carving step) {
+		// Hack to get around 1.21.1 vanilla not calling applyCarvers for the Carving.LIQUID step
+		if(step == Carving.AIR) {
+			this.applyCarversFor(level, seed, random, biomeManager, structureManager, chunk, Carving.AIR);
+			this.applyCarversFor(level, seed, random, biomeManager, structureManager, chunk, Carving.LIQUID);
+		} else if(step == Carving.LIQUID) {
+			// NO-OP for if some other mod fixes the bug that causes it to not call Carving.LIQUID
+		} else {
+			// Default handling for any modded case
+			this.applyCarversFor(level, seed, random, biomeManager, structureManager, chunk, step);
+		}
+	}
+	
+	protected void applyCarversFor(WorldGenRegion level, long seed, RandomState random, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk, Carving step) {
 		ProtoChunk protoChunk = (ProtoChunk)chunk;
 		CarvingMask carvingMask = protoChunk.getCarvingMask(step);
 		
 		// Probably an Early Generator put stuff in the carving mask, so we're going to carve it out for them
-		// This is probably bad practice, so we should find another way to do this
+		// This is bad practice, so we should find another way to do this
 		if(carvingMask != null) {
 			final BlockState carvedOutState;
 			if(step == Carving.LIQUID) {
