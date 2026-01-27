@@ -24,6 +24,10 @@ public class PyradFlame extends SmallFireball {
 		super(level, owner, movement);
 	}
 
+	public PyradFlame(Level level, double x, double y, double z, Vec3 movement) {
+		super(level, x, y, z, movement);
+	}
+
 	public void setY(double y) {
 		this.setPos(this.getX(), y, this.getZ());
 	}
