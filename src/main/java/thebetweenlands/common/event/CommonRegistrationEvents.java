@@ -75,6 +75,7 @@ import thebetweenlands.common.datagen.tags.BLDimensionTypeTagProvider;
 import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.datagen.tags.BLFluidTagGenerator;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
+import thebetweenlands.common.dispenser.BetweenlandsDispenserBehaviours;
 import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.clientbound.AddBetweenlandsBossBarPacket;
@@ -147,6 +148,8 @@ public class CommonRegistrationEvents {
 
 	private static void commonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
+			BetweenlandsDispenserBehaviours.registerBehaviours();
+			
 			FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
 
 			pot.addPlant(BlockRegistry.WEEDWOOD_SAPLING.getId(), BlockRegistry.POTTED_WEEDWOOD_SAPLING);

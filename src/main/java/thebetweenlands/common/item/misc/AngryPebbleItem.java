@@ -19,12 +19,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.Vec3;
+import thebetweenlands.common.dispenser.CustomDispenseSoundItem;
 import thebetweenlands.common.entity.projectile.AngryPebble;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.util.CustomDispenseSoundItem;
-import thebetweenlands.util.CustomSoundProjectileDispenseBehavior;
 
 public class AngryPebbleItem extends Item implements ProjectileItem, CustomDispenseSoundItem {
 	protected final Supplier<SoundEvent> soundEventHolder;
@@ -34,7 +32,6 @@ public class AngryPebbleItem extends Item implements ProjectileItem, CustomDispe
 		super(properties);
 		this.explosionPower = explosionPower;
 		this.soundEventHolder = soundEventHolder;
-		DispenserBlock.registerBehavior(this, new CustomSoundProjectileDispenseBehavior(this));
 	}
 
 	@Override

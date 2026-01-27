@@ -2,8 +2,6 @@ package thebetweenlands.common.item.misc;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
-import net.minecraft.core.dispenser.BlockSource;
-import net.minecraft.core.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -25,7 +23,6 @@ public class PyradFlameItem extends Item implements ProjectileItem {
 	
 	public PyradFlameItem(Properties properties) {
 		super(properties);
-		DispenserBlock.registerBehavior(this, new PyradFlameDispenseBehaviour(this));
 	}
 
 	@Override
@@ -70,36 +67,5 @@ public class PyradFlameItem extends Item implements ProjectileItem {
 			.power(1.0F)
 			.overrideDispenseEvent(1018)
 			.build();
-	}
-	
-	public static class PyradFlameDispenseBehaviour extends ProjectileDispenseBehavior {
-		public PyradFlameDispenseBehaviour(Item projectile) {
-			super(projectile);
-		}
-
-		@Override
-		public ItemStack execute(BlockSource blockSource, ItemStack item) {
-			Level level = blockSource.level();
-			Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
-			Position position = this.dispenseConfig.positionFunction().getDispensePosition(blockSource, direction);
-			
-			RandomSource random = level.getRandom();
-			for (int i = 0; i < random.nextInt(6) + 1; ++i) {
-				Projectile projectile = this.projectileItem.asProjectile(level, position, item, direction);
-				this.projectileItem
-					.shoot(
-						projectile,
-						(double)direction.getStepX(),
-						(double)direction.getStepY(),
-						(double)direction.getStepZ(),
-						this.dispenseConfig.power(),
-						this.dispenseConfig.uncertainty()
-					);
-				level.addFreshEntity(projectile);
-			}
-			item.shrink(1);
-			return item;
-		}
-
 	}
 }

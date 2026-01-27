@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.misc.bucket;
+package thebetweenlands.common.dispenser;
 
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;

@@ -1,4 +1,4 @@
-package thebetweenlands.util;
+package thebetweenlands.common.dispenser;
 
 import net.minecraft.core.dispenser.BlockSource;
 
