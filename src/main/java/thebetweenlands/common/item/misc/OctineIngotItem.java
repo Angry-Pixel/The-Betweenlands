@@ -102,18 +102,34 @@ public class OctineIngotItem extends HoverTextItem {
 			return TinderResult.EMPTY;
 		}
 
+		// Check if the block is tinder
 		BlockState blockState = level.getBlockState(pos);
 		if (isTinder(ItemStack.EMPTY, blockState)) {
 			return new TinderResult(true, true, List.of(), pos);
 		}
 		
-		BlockPos itemPos = face == null ? pos : pos.relative(face);
-		List<ItemEntity> tinderItems = level.getEntitiesOfClass(ItemEntity.class, new AABB(itemPos), entity -> entity.isAlive() && !entity.getItem().isEmpty() && isTinder(entity.getItem(), null));
-		if (!tinderItems.isEmpty()) {
-			return new TinderResult(true, false, tinderItems, itemPos);
+		// If we can replace the block (or no face was specified), check for tinder items inside it
+		if(face == null || blockState.canBeReplaced()) {
+			List<ItemEntity> tinderItems = getTinderItems(level, pos);
+			if(!tinderItems.isEmpty()) {
+				return new TinderResult(true, false, tinderItems, pos);
+			}
 		}
-
+		
+		// If a face was specified, check for tinder items in the block adjacent to that face
+		if(face != null) {
+			BlockPos itemPos = pos.relative(face);
+			List<ItemEntity> tinderItems = getTinderItems(level, itemPos);
+			if(!tinderItems.isEmpty()) {
+				return new TinderResult(true, false, tinderItems, itemPos);
+			}
+		}
+		
 		return TinderResult.EMPTY;
+	}
+	
+	public static List<ItemEntity> getTinderItems(Level level, BlockPos pos) {
+		return level.getEntitiesOfClass(ItemEntity.class, new AABB(pos), entity -> entity.isAlive() && !entity.getItem().isEmpty() && isTinder(entity.getItem(), null));
 	}
 	
 	public static boolean isTinder(ItemStack stack, @Nullable BlockState state) {
