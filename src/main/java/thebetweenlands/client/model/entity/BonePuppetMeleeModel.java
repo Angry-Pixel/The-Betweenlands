@@ -429,7 +429,7 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 		foot_right.xRot = -0.3926F + sinWalk * 0.125F;
 
 		if (entity.getAttackTimer() > 0) {
-			float attackProgress = (float)entity.getAttackTimer() / 20.0f;
+			float attackProgress = (float)entity.getAttackTimer() / 20.0f + ((float)entity.getAttackTimer() / 20.0f - (float)entity.prevAttackTimer / 20F) * partialTick;
 		    arm4.xRot = -1.1937F - 1F * (float)Math.sin(attackProgress * Math.PI);
 		    arm4.yRot = -0.2532F - 1F * (float)Math.sin(attackProgress * Math.PI);
 		    if (entity.getAttackTimer() <= 5) 
