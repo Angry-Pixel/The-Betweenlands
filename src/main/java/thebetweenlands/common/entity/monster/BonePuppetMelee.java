@@ -22,6 +22,7 @@ public class BonePuppetMelee extends BonePuppetBase {
 	private static final EntityDataAccessor<Boolean> MELEE_ATTACK = SynchedEntityData.defineId(BonePuppetMelee.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BonePuppetMelee.class, EntityDataSerializers.INT);
 	public int prevAttackTimer;
+
 	public BonePuppetMelee(EntityType<? extends Monster> type, Level level) {
         super(type, level);
     }
@@ -50,7 +51,7 @@ public class BonePuppetMelee extends BonePuppetBase {
                 .add(Attributes.ATTACK_KNOCKBACK, 2.0D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
     }
-    
+
 	@Override
 	public void aiStep() {
 		super.aiStep();
@@ -79,7 +80,7 @@ public class BonePuppetMelee extends BonePuppetBase {
     public boolean isAttacking() {
         return entityData.get(MELEE_ATTACK);
     }
-    
+
     public void setAttackTimer(int progress) {
         entityData.set(ATTACK_TIMER, progress);
     }
