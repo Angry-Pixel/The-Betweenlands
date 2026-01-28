@@ -62,10 +62,10 @@ public class BLNoiseInterpolator {
 		this.fillSlice(this.slice1, this.firstX + advance + 1);
 	}
 
-	private void fillSlice(double[][] slices, int cell) {
+	private void fillSlice(double[][] slices, int cellX) {
 		for (int width = 0; width < this.cellCountZ + 1; width++) {
-			int cellWidth = this.firstZ + width;
-			this.noiseFiller.fillNoiseColumn(slices[width], cell, cellWidth, this.cellMinY, this.cellCountY);
+			int cellZ = this.firstZ + width;
+			this.noiseFiller.fillNoiseColumn(slices[width], cellX, cellZ, this.cellMinY, this.cellCountY);
 		}
 	}
 

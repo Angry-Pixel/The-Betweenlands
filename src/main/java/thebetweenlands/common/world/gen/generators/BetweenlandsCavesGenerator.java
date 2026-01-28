@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.CarvingMask;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import thebetweenlands.api.world.ExtraChunkInfoTypes;
 import thebetweenlands.api.world.biome.BiomeWeights;
 import thebetweenlands.api.world.biome.CarvingMasks;
@@ -27,6 +29,7 @@ import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper.Noi
 import thebetweenlands.common.world.gen.generators.util.EarlyGeneratorHelper.NoiseSampler3D;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.BlockHeightSelector;
 import thebetweenlands.common.world.gen.util.TriFractalOpenSimplexData;
+import thebetweenlands.common.world.gen.warp.BLNoiseInterpolator;
 import thebetweenlands.util.FractalOpenSimplexNoise;
 
 public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCavesGeneratorConfiguration> {
@@ -48,7 +51,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final ChunkAccess access = context.chunkAccess();
 		final ChunkPos chunkPos = access.getPos();
 		final ChunkHeightmaps chunkHeightmaps = context.chunkHeightmaps();
-		final int chunkHeight = access.getHeight();
 		final int chunkMinHeight = access.getMinBuildHeight();
 
 		// Default states to replace with
@@ -63,9 +65,6 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final CarvingMask airCarvingMask = carvingMasks.airCarvingMask();
 		final CarvingMask liquidCarvingMask = carvingMasks.liquidCarvingMask();
 		
-		// Calculate vertical size of chunk noise field
-		final int fieldHeight = chunkHeight >> 1;
-		final int noiseHeight = fieldHeight + 1;
 		
 		// Get noise data
 		final TriFractalOpenSimplexData noiseCache = config.noiseCache().getNoise(context.worldSeed());
@@ -73,9 +72,9 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		final FractalOpenSimplexNoise surfaceOpeningNoise = noiseCache.noise2();
 		final FractalOpenSimplexNoise formNoise = noiseCache.noise3();
 		
-		// Calculate noise values
-		final double[] noiseField = sampleNoiseField(chunkPos, config, caveNoise, formNoise, noiseHeight);
-		final double[] surfaceOpeningNoiseField = sampleSurfaceOpeningNoiseField(chunkPos, config, surfaceOpeningNoise);
+		// Get generation bounds
+		final VerticalAnchor minHeight = config.minNoiseHeight();
+		final VerticalAnchor maxHeight = config.maxNoiseHeight();
 
 		// Get min cave height values
 		final BlockHeightSelector minCaveHeightSampler = config.minCaveHeight();
@@ -84,33 +83,41 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		// Get max cave height values
 		final BlockHeightSelector maxCaveHeightSampler = config.maxCaveHeight();
 		final int maxCaveHeightTaperDistance = config.maxCaveHeightTaperDistance();
-		
-		// Get base limit
+
+		// Get base noise limit
 		final double baseNoiseLimit = config.defaultNoiseLimit();
 		
 		// Cave water height
 		final int caveWaterHeight = config.caveWaterHeight();
-		
+
 		// Get buffer info (for replacing water that is too close to the caves)
 		final HolderSet<Block> bufferReplaceable = config.bufferReplaceable();
 		final double bufferNoiseLimit = config.bufferNoiseLimit();
-		
+
 		// Get surface opening biome info
 		final HolderSet<Biome> biomesWithoutSurfaceOpenings = config.biomesWithoutSurfaceOpenings();
 		final double noSurfaceOpeningNoiseOffset = config.noSurfaceOpeningNoiseOffset();
+		
+		
+		// Calculate vertical size of chunk noise field
+		WorldGenerationContext worldgenContext = new WorldGenerationContext(context.chunkGenerator(), access);
+		final int noiseMin = minHeight.resolveY(worldgenContext);
+		final int noiseMax = maxHeight.resolveY(worldgenContext);
+		final int fieldHeight = noiseMax - noiseMin;
+		
+		// Calculate noise values
+		final double[] surfaceOpeningNoiseField = sampleSurfaceOpeningNoiseField(chunkPos, config, surfaceOpeningNoise);
+		final BLNoiseInterpolator noiseInterpolator = createNoiseInterpolator(chunkPos, config, caveNoise, formNoise, fieldHeight, noiseMin);
+		
+		// Buffer for setting buffer placed blocks
+		final BitSet bufferPlacedBlocksMask = new BitSet(16 * 16 * fieldHeight);
 
-		final BitSet bufferPlacedBlocksMask = new BitSet(16 * 16 * chunkHeight);
-
+		noiseInterpolator.initialiseFirstX();
+		
 		for (int x = 0; x < 8; x++) {
-			int indexXC = x * 9; //1
-			int indexXN = (x + 1) * 9; //2
+			noiseInterpolator.advanceX(x);
 
 			for (int z = 0; z < 8; z++) {
-				int indexXCZC = (indexXC + z) * noiseHeight; //1
-				int indexXCZN = (indexXC + z + 1) * noiseHeight; //2
-				int indexXNZC = (indexXN + z) * noiseHeight; //3
-				int indexXNZN = (indexXN + z + 1) * noiseHeight; //4
-
 				// Don't recalculate min/max heights for every single y value of every single column
 				int[] caveMinHeights = new int[2 * 2];
 				int[] caveMaxHeights = new int[2 * 2];
@@ -139,104 +146,73 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 				}
 				
 				for (int y = 0; y < fieldHeight; y++) {
-					//Values
-					double valXCZCYC = noiseField[indexXCZC + y]; //1
-					double valXCZNYC = noiseField[indexXCZN + y]; //2
-					double valXNZCYC = noiseField[indexXNZC + y]; //3
-					double valXNZNYC = noiseField[indexXNZN + y]; //4
-					double valXCZCYN = noiseField[indexXCZC + y + 1]; //5
-					double valXCZNYN = noiseField[indexXCZN + y + 1]; //6
-					double valXNZCYN = noiseField[indexXNZC + y + 1]; //7
-					double valXNZNYN = noiseField[indexXNZN + y + 1]; //8
-
-					//Step along X axis
-					double stepXAxisYCZC = (valXNZCYC - valXCZCYC) * 0.5D;
-					double stepXAxisYCZN = (valXNZNYC - valXCZNYC) * 0.5D;
-					double stepXAxisYNZC = (valXNZCYN - valXCZCYN) * 0.5D;
-					double stepXAxisYNZN = (valXNZNYN - valXCZNYN) * 0.5D;
-
-					double currentValXCZCYC = valXCZCYC;
-					double currentValXCZNYC = valXCZNYC;
-					double currentValXCZCYN = valXCZCYN;
-					double currentValXCZNYN = valXCZNYN;
+					noiseInterpolator.selectYZ(y, z);
+					noiseInterpolator.updateY(1.0);
 
 					//Step X axis
 					for (int xo = 0; xo < 2; xo++) {
-						double currentValYCZC = currentValXCZCYC;
-						double currentValYNZC = currentValXCZCYN;
-
-						//Step along Z axis
-						double stepZAxisYC = (currentValXCZNYC - currentValXCZCYC) * 0.5D;
-						double stepZAxisYN = (currentValXCZNYN - currentValXCZCYN) * 0.5D;
+						noiseInterpolator.updateX((double)xo / 2.0);
 
 						int bx = x * 2 + xo;
 
 						//Step Z axis
 						for (int zo = 0; zo < 2; zo++) {
-							//Step along Y axis
-							double stepYAxis = (currentValYNZC - currentValYCZC) * 0.5D;
-
-							double currentValYC = currentValYNZC - stepYAxis;
+							double noise = noiseInterpolator.updateZ((double)zo / 2.0);
 
 							int bz = z * 2 + zo;
 
 							int minCaveHeight = caveMinHeights[xo * 2 + zo];
 							int surfaceLevel = caveMaxHeights[xo * 2 + zo];
 
-							//Step Y axis
-							for (int yo = 0; yo < 1; yo++) { // yo < 1? should this be yo <= 1 or yo < 2? it only runs one time currently
-								double noise = currentValYC += stepYAxis;
+							// This would be "Step Y axis", but the step is always zero
+							int yo = 0;
 
-								int by = y + yo;
-								
-								double limit = baseNoiseLimit;
-								int bottomDist = by - minCaveHeight;
-								if (bottomDist <= minCaveHeightTaperDistance) {
-									limit = (limit + 1) / minCaveHeightTaperDistance * bottomDist - 1;
-								}
-								int surfaceDist = surfaceLevel - by;
-								if (surfaceDist <= maxCaveHeightTaperDistance) {
-									final double nearSurfaceNoiseOffset = nearSurfaceNoiseOffsets[xo * 2 + zo];
-									final double surfaceOpeningNoiseValue = surfaceOpeningNoiseField[bx * 16 + bz];
-									noise += (nearSurfaceNoiseOffset + surfaceOpeningNoiseValue) * (1 - surfaceDist / (float) maxCaveHeightTaperDistance);
-								}
-
-								BlockPos blockPos = new BlockPos(bx, by, bz);
-								BlockState state = access.getBlockState(blockPos);
-								
-								if (noise < limit + bufferNoiseLimit && noise > limit && state.is(bufferReplaceable)) {
-									final int maskBitIndex = (bx & 15) | (bz & 15) << 4 | (by) << 8;
-									bufferPlacedBlocksMask.set(maskBitIndex);
-									// Update heightmaps (even though we haven't actually placed the block yet)
-									chunkHeightmaps.update(bx, by, bz, defaultTerrainState);
-									// Update min/max heights for this column
-									caveMinHeights[xo * 2 + zo] = minCaveHeight = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
-									caveMaxHeights[xo * 2 + zo] = surfaceLevel = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
-								} else if (noise < limit && state.is(replaceable)) {
-									final int my = by + chunkMinHeight;
-									airCarvingMask.set(bx, my, bz);
-									if(by <= caveWaterHeight) {
-										liquidCarvingMask.set(bx, my, bz);
-									}
-								}
+							int by = y + yo;
+							
+							double limit = baseNoiseLimit;
+							int bottomDist = by - minCaveHeight;
+							if (bottomDist <= minCaveHeightTaperDistance) {
+								limit = (limit + 1) / minCaveHeightTaperDistance * bottomDist - 1;
+							}
+							int surfaceDist = surfaceLevel - by;
+							if (surfaceDist <= maxCaveHeightTaperDistance) {
+								final double nearSurfaceNoiseOffset = nearSurfaceNoiseOffsets[xo * 2 + zo];
+								final double surfaceOpeningNoiseValue = surfaceOpeningNoiseField[bx * 16 + bz];
+								noise += (nearSurfaceNoiseOffset + surfaceOpeningNoiseValue) * (1 - surfaceDist / (float) maxCaveHeightTaperDistance);
 							}
 
-							currentValYCZC += stepZAxisYC;
-							currentValYNZC += stepZAxisYN;
+							BlockPos blockPos = new BlockPos(bx, by, bz);
+							BlockState state = access.getBlockState(blockPos);
+							
+							if (noise < limit + bufferNoiseLimit && noise > limit && state.is(bufferReplaceable)) {
+								final int maskBitIndex = (bx & 15) | (bz & 15) << 4 | (by) << 8;
+								bufferPlacedBlocksMask.set(maskBitIndex);
+								// Update heightmaps (even though we haven't actually placed the block yet)
+								chunkHeightmaps.update(bx, by, bz, defaultTerrainState);
+								// Update min/max heights for this column
+								caveMinHeights[xo * 2 + zo] = minCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps);
+								caveMaxHeights[xo * 2 + zo] = maxCaveHeightSampler.getHeightWG(bx, bz, chunkPos, chunkHeightmaps) + 1;
+							} else if (noise < limit && state.is(replaceable)) {
+								final int my = by + chunkMinHeight;
+								airCarvingMask.set(bx, my, bz);
+								if(by <= caveWaterHeight) {
+									liquidCarvingMask.set(bx, my, bz);
+								}
+							}
 						}
-
-						currentValXCZCYC += stepXAxisYCZC;
-						currentValXCZNYC += stepXAxisYCZN;
-						currentValXCZCYN += stepXAxisYNZC;
-						currentValXCZNYN += stepXAxisYNZN;
 					}
 				}
 			}
+			
+			noiseInterpolator.swapSlices();
 		}
 
+		int minSection = access.getSectionIndex(noiseMin);
+		int maxSection = access.getSectionIndex(noiseMax);
+		
 		// Set all buffer blocks
 		// Note: separated from main code because ChunkAccess.setBlockState() will deadlock
-		for(int sectionIndex = 0; sectionIndex < access.getSectionsCount(); ++sectionIndex) {
+		for(int sectionIndex = minSection; sectionIndex <= maxSection; ++sectionIndex) {
 			LevelChunkSection section = access.getSection(sectionIndex);
 
 			int sectionMinY = SectionPos.sectionToBlockCoord(sectionIndex);
@@ -244,7 +220,7 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 			for(int y = 0; y < SectionPos.SECTION_SIZE; ++y) {
 				for(int x = 0; x < SectionPos.SECTION_SIZE; ++x) {
 					for(int z = 0; z < SectionPos.SECTION_SIZE; ++z) {
-						final int bitIndex = (x & 15) | (z & 15) << 4 | (sectionMinY + y) << 8;
+						final int bitIndex = (x & 15) | (z & 15) << 4 | (sectionMinY + y + noiseMin) << 8;
 						
 						if(bufferPlacedBlocksMask.get(bitIndex)) {
 							section.setBlockState(x, y, z, defaultTerrainState, false);
@@ -257,29 +233,22 @@ public class BetweenlandsCavesGenerator extends EarlyGenerator<BetweenlandsCaves
 		return true;
 	}
 	
-	protected double[] sampleNoiseField(ChunkPos chunkPos, BetweenlandsCavesGeneratorConfiguration config, FractalOpenSimplexNoise caveNoise, FractalOpenSimplexNoise formNoise, int noiseHeight) {
-		final double[] noiseField = new double[9 * 9 * noiseHeight];
-
-		final int cx = chunkPos.x * 16;
-		final int cz = chunkPos.z * 16;
-
+	protected BLNoiseInterpolator createNoiseInterpolator(ChunkPos chunkPos, BetweenlandsCavesGeneratorConfiguration config, FractalOpenSimplexNoise caveNoise, FractalOpenSimplexNoise formNoise, int fieldHeight, int noiseMin) {
 		NoiseSampler3D caveNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler3D(caveNoise, config.caveNoiseSettings());
 		NoiseSampler3D formNoiseSampler = EarlyGeneratorHelper.createConfiguredSampler3D(formNoise, config.formNoiseSettings());
 		
-		//Generate cave noise field (9 x 9 x noiseHeight)
-		for (int x = 0; x < 9; x++) {
-			for (int z = 0; z < 9; z++) {
-				for (int y = 0; y < noiseHeight; y++) {
-					int index = ((x * 9) + z) * noiseHeight + y;
-					int bx = cx + x * 2;
-					int bz = cz + z * 2;
-					int by = y;
-					noiseField[index] = caveNoiseSampler.eval(bx, by, bz) + formNoiseSampler.eval(bx, by, bz);
-				}
-			}
+		return new BLNoiseInterpolator(8, fieldHeight, 8, chunkPos, noiseMin,
+				(column, cellX, cellZ, minYOffset, columnSize) -> this.sampleNoiseColumn(column, cellX, cellZ, minYOffset, columnSize, caveNoiseSampler, formNoiseSampler));
+	}
+	
+	protected double[] sampleNoiseColumn(double[] column, int cellX, int cellZ, int minYOffset, int columnSize, NoiseSampler3D caveNoiseSampler, NoiseSampler3D formNoiseSampler) {
+		for (int y = 0; y < columnSize; y++) {
+			int bx = cellX * 2;
+			int bz = cellZ * 2;
+			int by = y;
+			column[y] = caveNoiseSampler.eval(bx, by, bz) + formNoiseSampler.eval(bx, by, bz);
 		}
-		
-		return noiseField;
+		return column;
 	}
 
 	protected double[] sampleSurfaceOpeningNoiseField(ChunkPos chunkPos, BetweenlandsCavesGeneratorConfiguration config, FractalOpenSimplexNoise surfaceOpeningNoise) {

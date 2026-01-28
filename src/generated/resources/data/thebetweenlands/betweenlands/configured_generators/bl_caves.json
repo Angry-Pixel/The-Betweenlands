@@ -35,8 +35,14 @@
       "heightmap": "OCEAN_FLOOR_WG"
     },
     "max_cave_height_taper_distance": 20,
+    "max_noise_height": {
+      "below_top": 0
+    },
     "min_cave_height": 0,
     "min_cave_height_taper_distance": 10,
+    "min_noise_height": {
+      "above_bottom": 0
+    },
     "no_surface_opening_noise_offset": 2.975,
     "replaceable": "#thebetweenlands:thebetweenlands_carver_replaceables",
     "surface_opening_noise": {

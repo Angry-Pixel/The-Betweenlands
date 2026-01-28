@@ -9,6 +9,7 @@ import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import thebetweenlands.api.world.generator.EarlyGeneratorConfiguration;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors;
 import thebetweenlands.common.world.gen.util.BlockHeightSelectors.BlockHeightSelector;
@@ -24,6 +25,8 @@ public final record BetweenlandsCavesGeneratorConfiguration(
 		// formNoiseSettings - Noise settings for the "form" noise (roughly controls the shape of the caves)
 		// noiseSettings - Thread-safe cache for noise
 		BLCaveNoiseSettings noiseSettings,
+		// Minimum/maximum height bounds we even generate noise in
+		VerticalAnchor minNoiseHeight, VerticalAnchor maxNoiseHeight,
 		// "Bottom" of the caves
 		BlockHeightSelector minCaveHeight,
 		// How far from the bottom should the caves start tapering off
@@ -49,6 +52,9 @@ public final record BetweenlandsCavesGeneratorConfiguration(
 					
 					BLCaveNoiseSettings.CODEC.forGetter(BetweenlandsCavesGeneratorConfiguration::noiseSettings),
 					
+					VerticalAnchor.CODEC.fieldOf("min_noise_height").forGetter(BetweenlandsCavesGeneratorConfiguration::minNoiseHeight),
+					VerticalAnchor.CODEC.fieldOf("max_noise_height").forGetter(BetweenlandsCavesGeneratorConfiguration::maxNoiseHeight),
+					
 					BlockHeightSelectors.codec().fieldOf("min_cave_height").forGetter(BetweenlandsCavesGeneratorConfiguration::minCaveHeight),
 					Codec.INT.fieldOf("min_cave_height_taper_distance").forGetter(BetweenlandsCavesGeneratorConfiguration::minCaveHeightTaperDistance),
 					
@@ -71,6 +77,7 @@ public final record BetweenlandsCavesGeneratorConfiguration(
 			FractalOpenSimplexNoiseSettings3D caveNoiseSettings,
 			FractalOpenSimplexNoiseSettings2D surfaceOpeningNoiseSettings,
 			FractalOpenSimplexNoiseSettings3D formNoiseSettings,
+			VerticalAnchor minNoiseHeight, VerticalAnchor maxNoiseHeight,
 			BlockHeightSelector minCaveHeight, int minCaveHeightTaperDistance,
 			BlockHeightSelector maxCaveHeight, int maxCaveHeightTaperDistance,
 			double defaultNoiseLimit,
@@ -82,6 +89,7 @@ public final record BetweenlandsCavesGeneratorConfiguration(
 		this(
 				replaceable,
 				new BLCaveNoiseSettings(caveNoiseSettings, surfaceOpeningNoiseSettings, formNoiseSettings),
+				minNoiseHeight, maxNoiseHeight,
 				minCaveHeight, minCaveHeightTaperDistance,
 				maxCaveHeight, maxCaveHeightTaperDistance,
 				defaultNoiseLimit,
