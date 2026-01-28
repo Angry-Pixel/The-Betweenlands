@@ -30,7 +30,6 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 
     public int lastSpawningAnimationTicks = 0;
     public int spawnDuration = 30;
-    public int pathingCooldown = 0;
 
     public BonePuppetBase(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -48,7 +47,7 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 		Wight parentEntity = (Wight) level().getEntity(getEntityData().get(PARENT_ID));
 		return getEntityData().get(PARENT_ID) != -1 ? parentEntity : null;
 	}
-	
+
 	@Override
 	public void tick() {
 		super.tick();
@@ -127,19 +126,16 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
     @Override
     protected SoundEvent getAmbientSound() {
 		return null;
-        //return SoundRegistry.WIGHT_MOAN.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return null;
-        //return SoundRegistry.WIGHT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
 		return null;
-       // return SoundRegistry.WIGHT_DEATH.get();
     }
 
     public boolean isEmerging() {
