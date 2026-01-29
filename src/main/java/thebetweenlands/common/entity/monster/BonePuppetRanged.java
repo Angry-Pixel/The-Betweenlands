@@ -1,14 +1,19 @@
 package thebetweenlands.common.entity.monster;
 
+import java.util.EnumSet;
+
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -35,7 +40,8 @@ public class BonePuppetRanged extends BonePuppetBase {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+        goalSelector.addGoal(1, new ThrowBoneGoal(this, 1D, 8F));
+       // goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
@@ -84,5 +90,79 @@ public class BonePuppetRanged extends BonePuppetBase {
 
     public int getReloadTimer() {
         return getEntityData().get(RELOAD_TIMER);
+    }
+
+    public static class ThrowBoneGoal extends Goal {
+        public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
+        private final BonePuppetRanged puppet;
+        private final double speedModifier;
+        private final float attackRadiusSqr;
+        private int updatePathDelay;
+
+        public ThrowBoneGoal(BonePuppetRanged puppet, double speedModifier, float range) {
+            this.puppet = puppet;
+            this.speedModifier = speedModifier;
+            attackRadiusSqr = range * range;
+            setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            return isValidTarget();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return isValidTarget() || !puppet.getNavigation().isDone();
+        }
+
+        private boolean isValidTarget() {
+            return puppet.getTarget() != null && puppet.getTarget().isAlive();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+		@Override
+		public void tick() {
+			LivingEntity livingentity = puppet.getTarget();
+			if (livingentity != null) {
+				boolean canSee = puppet.getSensing().hasLineOfSight(livingentity);
+				if (canSee) {
+					double distanceToTarget = puppet.distanceToSqr(livingentity);
+					boolean outOfRange = distanceToTarget > (double) attackRadiusSqr;
+					if (outOfRange) {
+						updatePathDelay--;
+						if (updatePathDelay <= 0) {
+							puppet.getNavigation().moveTo(livingentity, speedModifier);
+							updatePathDelay = PATHFINDING_DELAY_RANGE.sample(puppet.getRandom());
+						}
+					} else {
+						updatePathDelay = 0;
+						puppet.getNavigation().stop();
+					}
+
+					puppet.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+					throwBone(livingentity);
+				}
+			}
+		}
+
+		private void throwBone(LivingEntity target) {
+			if (canPerformAttack(target)) {
+				puppet.setAttacking(true);
+				if (puppet.getAttackTimer() == 20) {
+					//throw projectile here
+					System.out.println("Throwing Stuff at you.");
+					puppet.setReloading(true);
+				}
+			}
+		}
+		
+	    protected boolean canPerformAttack(LivingEntity entity) {
+	        return !puppet.isReloading() && puppet.getSensing().hasLineOfSight(entity);
+	    }
     }
 }
