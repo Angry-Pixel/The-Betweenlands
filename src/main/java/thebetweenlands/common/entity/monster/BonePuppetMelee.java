@@ -1,8 +1,5 @@
 package thebetweenlands.common.entity.monster;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -19,19 +16,8 @@ import net.minecraft.world.level.Level;
 
 public class BonePuppetMelee extends BonePuppetBase {
 
-	private static final EntityDataAccessor<Boolean> MELEE_ATTACK = SynchedEntityData.defineId(BonePuppetMelee.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BonePuppetMelee.class, EntityDataSerializers.INT);
-	public int prevAttackTimer;
-
 	public BonePuppetMelee(EntityType<? extends Monster> type, Level level) {
         super(type, level);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(MELEE_ATTACK, false);
-        builder.define(ATTACK_TIMER, 0);
     }
 
     @Override
@@ -50,43 +36,6 @@ public class BonePuppetMelee extends BonePuppetBase {
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 2.0D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
-    }
-
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		if (level().isClientSide()) {
-			prevAttackTimer = getAttackTimer();
-			if (getAttackTimer() == 0)
-				prevAttackTimer = 0;
-		}
-
-		if (!level().isClientSide()) {
-			if (isAttacking()) {
-				setAttackTimer(getAttackTimer() + 1);
-				if (getAttackTimer() > 20) {
-					setAttackTimer(0);
-					setAttacking(false);
-				}
-			} else
-				setAttackTimer(0);
-		}
-	}
-
-    public void setAttacking(boolean attacking) {
-        entityData.set(MELEE_ATTACK, attacking);
-    }
-
-    public boolean isAttacking() {
-        return entityData.get(MELEE_ATTACK);
-    }
-
-    public void setAttackTimer(int progress) {
-        entityData.set(ATTACK_TIMER, progress);
-    }
-
-    public int getAttackTimer() {
-        return entityData.get(ATTACK_TIMER);
     }
 
 	public static class PuppetMeleeAttackGoal extends MeleeAttackGoal {

@@ -26,10 +26,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 public abstract class BonePuppetBase extends Monster implements BLEntity {
 
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> PARENT_ID = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> PARENT_ID = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> IS_ATTACKING = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.BOOLEAN);
 
     public int lastSpawningAnimationTicks = 0;
     public int spawnDuration = 30;
+    public int prevAttackTimer;
 
     public BonePuppetBase(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -40,6 +43,8 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
         super.defineSynchedData(builder);
         builder.define(SPAWN_TIMER, 0);
         builder.define(PARENT_ID, -1);
+        builder.define(ATTACK_TIMER, 0);
+        builder.define(IS_ATTACKING, false);
     }
 
 	@Nullable
@@ -68,6 +73,23 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
             		spawnEmergingParticles();
 
         super.aiStep();
+
+		if (level().isClientSide()) {
+			prevAttackTimer = getAttackTimer();
+			if (getAttackTimer() == 0)
+				prevAttackTimer = 0;
+		}
+
+		if (!level().isClientSide()) {
+			if (isAttacking()) {
+				setAttackTimer(getAttackTimer() + 1);
+				if (getAttackTimer() > 20) {
+					setAttackTimer(0);
+					setAttacking(false);
+				}
+			} else
+				setAttackTimer(0);
+		}
     }
 
     public void spawnEmergingParticles() {
@@ -157,7 +179,23 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 	public void setParentEntityID(Integer parentID) {
 		getEntityData().set(PARENT_ID, parentID);
 	}
-	
+
+    public void setAttackTimer(int progress) {
+    	getEntityData().set(ATTACK_TIMER, progress);
+    }
+
+    public int getAttackTimer() {
+        return getEntityData().get(ATTACK_TIMER);
+    }
+
+    public void setAttacking(boolean attacking) {
+    	getEntityData().set(IS_ATTACKING, attacking);
+    }
+
+    public boolean isAttacking() {
+        return getEntityData().get(IS_ATTACKING);
+    }
+
 	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
 		if (PARENT_ID.equals(key))

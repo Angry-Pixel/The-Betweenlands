@@ -215,18 +215,18 @@ public class TestChimpItem extends Item {
 			context.getLevel().addFreshEntity(triggeredblock);
 			*/
 
-			//BonePuppetRanged puppet1 = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
-			BonePuppetMelee puppet2 = EntityRegistry.BONE_PUPPET_MELEE.get().create(context.getLevel());
+			BonePuppetRanged puppet1 = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
+			//BonePuppetMelee puppet2 = EntityRegistry.BONE_PUPPET_MELEE.get().create(context.getLevel());
 			//if (context.getLevel().getRandom().nextBoolean()) {
-			//	if (puppet1 != null) {
-			//		puppet1.setPos(context.getClickedPos().above().getBottomCenter());
-				//	context.getLevel().addFreshEntity(puppet1);
-				//}
+				if (puppet1 != null) {
+					puppet1.setPos(context.getClickedPos().above().getBottomCenter());
+					context.getLevel().addFreshEntity(puppet1);
+				}
 			//} else
-		if (puppet2 != null) {
-				puppet2.setPos(context.getClickedPos().above().getBottomCenter());
-				context.getLevel().addFreshEntity(puppet2);
-			}
+		//if (puppet2 != null) {
+				//puppet2.setPos(context.getClickedPos().above().getBottomCenter());
+			//	context.getLevel().addFreshEntity(puppet2);
+			//}
 		}
 
 		return InteractionResult.SUCCESS;
