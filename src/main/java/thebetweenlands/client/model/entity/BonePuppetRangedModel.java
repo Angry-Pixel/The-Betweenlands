@@ -272,6 +272,25 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
+		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
+		float cos = Mth.cos(ageInTicks * 0.25F) * 0.8F;
+		float sinWalk = Mth.sin(limbSwing * 0.6662F) * 2F * limbSwingAmount;
+		float sinWalkFaster = Mth.sin(limbSwing * 1.3324F) * 1F * limbSwingAmount;
+
+		spine2.xRot = -0.1309F + cos * 0.0625F;
+		hipbone.y = Math.min(10.5F, 10.5F - sinWalkFaster * 2F);
+		hipbone.z = 3F - sinWalkFaster * 0.5F;
+		hipbone.yRot = 0.0076F - sinWalk * 0.125F;
+		spine1.yRot = 0F + sinWalk * 0.125F;
+
+		leg_left1.yRot = 0.0262F + sinWalk * 0.125F;
+		leg_left1.xRot = -0.3043F + sinWalk * 0.5F;
+		leg_left_lower.xRot = 0.3463F - sinWalk * 0.25F;
+		foot_left.xRot = -0.1308F - sinWalk * 0.125F;
+
+		leg_right1.yRot = -0.365F + sinWalk * 0.125F;
+		leg_right1.xRot = -0.0922F - sinWalk * 0.25F;
+		
 		if(entity.isEmerging()) {
 			spine1.xRot = convertDegtoRad(27.5F) + convertDegtoRad(-30F) * entity.getSpawningAnimation(partialTick);
 			spine6.xRot = convertDegtoRad(45F) + convertDegtoRad(-32.5F) * entity.getSpawningAnimation(partialTick);
@@ -283,6 +302,22 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 			leg_left_lower.xRot = convertDegtoRad(159.8423F) + convertDegtoRad(-140F) * entity.getSpawningAnimation(partialTick);
 			foot_left.xRot = convertDegtoRad(-39.9929F) + convertDegtoRad(32.5F) * entity.getSpawningAnimation(partialTick);
 		}
+		
+		if (entity.getReloadTimer() > 0) {
+			float reloadProgress = Mth.lerp(partialTick, entity.prevReloadTimer / 20.0f, entity.getReloadTimer() / 20.0f);
+			arm1.xRot = convertDegtoRad(-24.9164F) + convertDegtoRad(-40F) * (float)Math.sin(reloadProgress * Math.PI);
+			arm1.zRot = convertDegtoRad(-29.5336F) + convertDegtoRad(22.5F) * (float)Math.sin(reloadProgress * Math.PI); 
+			arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(32.5F) * (float)Math.sin(reloadProgress * Math.PI);
+			arm_lower.yRot = convertDegtoRad(0F) + convertDegtoRad(47.5F) * (float)Math.sin(reloadProgress * Math.PI);
+			arm_lower.zRot = convertDegtoRad(0F) + convertDegtoRad(102.5F) * (float)Math.sin(reloadProgress * Math.PI);
+			hand.yRot = convertDegtoRad(0F) + convertDegtoRad(90F) * (float)Math.sin(reloadProgress * Math.PI);
+			spine1.yRot = convertDegtoRad(0F) + convertDegtoRad(-20F) * (float)Math.sin(reloadProgress * Math.PI);
+			if (entity.getReloadTimer() < 12)
+				weapon.visible = false;
+			else
+				weapon.visible = true;
+		}
+
 		if (entity.getAttackTimer() > 0) {
 			float attackProgress = Mth.lerp(partialTick, entity.prevAttackTimer / 20.0f, entity.getAttackTimer() / 20.0f);
 			arm1.xRot = convertDegtoRad(-24.9164F) + convertDegtoRad(-112.5F) * (float)Math.sin(attackProgress * Math.PI);
@@ -290,6 +325,7 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 			arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(-75F) * (float)Math.sin(attackProgress * Math.PI);
 			spine1.xRot = convertDegtoRad(-2.5F) + convertDegtoRad(-15F) * (float)Math.sin(attackProgress * Math.PI);
 			spine6.xRot = convertDegtoRad(12.5F) + convertDegtoRad(-2.5F) * (float)Math.sin(attackProgress * Math.PI);
+			//spine1.yRot = convertDegtoRad(0F) + convertDegtoRad(20F) * (float)Math.sin(attackProgress * Math.PI);
 			if (entity.getAttackTimer() > 17)
 				weapon.visible = false;
 			else
