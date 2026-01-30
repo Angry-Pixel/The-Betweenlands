@@ -11,6 +11,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.BonePuppetRanged;
 
@@ -258,15 +259,25 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-		spine1.xRot = convertDegtoRad(27.5F) + convertDegtoRad(-30F) * entity.getSpawningAnimation(partialTick);
-		spine6.xRot = convertDegtoRad(45F) + convertDegtoRad(-32.5F) * entity.getSpawningAnimation(partialTick);
-		spine7.xRot = convertDegtoRad(20F) + convertDegtoRad(-20F) * entity.getSpawningAnimation(partialTick);
-		arm_lower.xRot = convertDegtoRad(-57.5F) + convertDegtoRad(40F) * entity.getSpawningAnimation(partialTick);
-		leg_right1.xRot = convertDegtoRad(-122.7847F) + convertDegtoRad(117.5F) * entity.getSpawningAnimation(partialTick);
-		leg_right2.xRot = convertDegtoRad(155F) + convertDegtoRad(-155F) * entity.getSpawningAnimation(partialTick);
-		leg_left1.xRot = convertDegtoRad(-127.4374F) + convertDegtoRad(110F) * entity.getSpawningAnimation(partialTick);
-		leg_left_lower.xRot = convertDegtoRad(159.8423F) + convertDegtoRad(-140F) * entity.getSpawningAnimation(partialTick);
-		foot_left.xRot = convertDegtoRad(-39.9929F) + convertDegtoRad(32.5F) * entity.getSpawningAnimation(partialTick);
+		if(entity.isEmerging()) {
+			spine1.xRot = convertDegtoRad(27.5F) + convertDegtoRad(-30F) * entity.getSpawningAnimation(partialTick);
+			spine6.xRot = convertDegtoRad(45F) + convertDegtoRad(-32.5F) * entity.getSpawningAnimation(partialTick);
+			spine7.xRot = convertDegtoRad(20F) + convertDegtoRad(-20F) * entity.getSpawningAnimation(partialTick);
+			arm_lower.xRot = convertDegtoRad(-57.5F) + convertDegtoRad(40F) * entity.getSpawningAnimation(partialTick);
+			leg_right1.xRot = convertDegtoRad(-122.7847F) + convertDegtoRad(117.5F) * entity.getSpawningAnimation(partialTick);
+			leg_right2.xRot = convertDegtoRad(155F) + convertDegtoRad(-155F) * entity.getSpawningAnimation(partialTick);
+			leg_left1.xRot = convertDegtoRad(-127.4374F) + convertDegtoRad(110F) * entity.getSpawningAnimation(partialTick);
+			leg_left_lower.xRot = convertDegtoRad(159.8423F) + convertDegtoRad(-140F) * entity.getSpawningAnimation(partialTick);
+			foot_left.xRot = convertDegtoRad(-39.9929F) + convertDegtoRad(32.5F) * entity.getSpawningAnimation(partialTick);
+		}
+		if (entity.getAttackTimer() > 0) {
+			float attackProgress = Mth.lerp(partialTick, entity.prevAttackTimer / 20.0f, entity.getAttackTimer() / 20.0f);
+			arm1.xRot = convertDegtoRad(-24.9164F) + convertDegtoRad(-112.5F) * (float)Math.sin(attackProgress * Math.PI);
+			arm1.zRot = convertDegtoRad(-29.5336F) + convertDegtoRad(22.5F) * (float)Math.sin(attackProgress * Math.PI); 
+			arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(-75F) * (float)Math.sin(attackProgress * Math.PI);
+			spine1.xRot = convertDegtoRad(-2.5F) + convertDegtoRad(-15F) * (float)Math.sin(attackProgress * Math.PI);
+			spine6.xRot = convertDegtoRad(12.5F) + convertDegtoRad(-2.5F) * (float)Math.sin(attackProgress * Math.PI);
+		}
 	}
 
 	@Override
