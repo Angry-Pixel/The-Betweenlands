@@ -37,6 +37,7 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 	private final ModelPart arm_lower;
 	private final ModelPart arm2;
 	private final ModelPart hand;
+	private final ModelPart weapon;
 	private final ModelPart finger_i;
 	private final ModelPart finger_i2;
 	private final ModelPart fingers;
@@ -62,6 +63,7 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 	private final ModelPart leg_right1;
 	private final ModelPart leg_right2;
 
+
 	public BonePuppetRangedModel(ModelPart root) {
 		super(root, RenderType::entityCutoutNoCull);
 		this.hipbone = root.getChild("hipbone");
@@ -85,6 +87,7 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 		this.arm_lower = this.arm1.getChild("arm_lower");
 		this.arm2 = this.arm_lower.getChild("arm2");
 		this.hand = this.arm2.getChild("hand");
+		this.weapon = this.hand.getChild("weapon");
 		this.finger_i = this.hand.getChild("finger_i");
 		this.finger_i2 = this.finger_i.getChild("finger_i2");
 		this.fingers = this.hand.getChild("fingers");
@@ -178,6 +181,16 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 
 		PartDefinition hand = arm2.addOrReplaceChild("hand", CubeListBuilder.create().texOffs(31, 15).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, 5.0F, -0.5F, 0.0F, 0.0F, 0.0873F));
 
+		PartDefinition weapon = hand.addOrReplaceChild("weapon", CubeListBuilder.create().texOffs(30, 41).addBox(-1.0F, -0.6F, -4.0F, 1.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.25F, 3.5F, -2.5F, 2.9196F, -0.0253F, 1.6518F));
+
+		PartDefinition slime1_r1 = weapon.addOrReplaceChild("slime1_r1", CubeListBuilder.create().texOffs(29, 27).addBox(-1.0F, 0.4F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.1742F, -1.0F, 2.2963F, 0.6545F, 0.4363F, 0.0F));
+
+		PartDefinition slime1_r2 = weapon.addOrReplaceChild("slime1_r2", CubeListBuilder.create().texOffs(29, 27).addBox(-1.0F, -0.6F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.2961F, 0.0F, 4.1563F, -0.1309F, -0.3054F, 0.0F));
+
+		PartDefinition bone_r1 = weapon.addOrReplaceChild("bone_r1", CubeListBuilder.create().texOffs(27, 33).addBox(-2.0F, -0.6F, 0.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.5968F, 0.0F, 3.2026F, 0.0F, -0.3054F, 0.0F));
+
+		PartDefinition bone_r2 = weapon.addOrReplaceChild("bone_r2", CubeListBuilder.create().texOffs(24, 48).addBox(0.0F, -0.6F, 0.0F, 1.0F, 1.0F, 4.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(-1.0F, 0.0F, 0.0F, 0.0F, 0.4363F, 0.0F));
+
 		PartDefinition finger_i = hand.addOrReplaceChild("finger_i", CubeListBuilder.create().texOffs(29, 15).addBox(0.0F, 0.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, 2.0F, 0.0F, -0.125F, -0.056F, -0.211F));
 
 		PartDefinition finger_i2 = finger_i.addOrReplaceChild("finger_i2", CubeListBuilder.create().texOffs(29, 16).addBox(0.0F, 0.0F, -1.0F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.48F));
@@ -198,7 +211,7 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 
 		PartDefinition slime2_r1 = ribs2.addOrReplaceChild("slime2_r1", CubeListBuilder.create().texOffs(8, 0).addBox(0.0F, 0.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, 1.0F, -3.0F, -0.7652F, -0.876F, 0.8962F));
 
-		PartDefinition slime1_r1 = ribs2.addOrReplaceChild("slime1_r1", CubeListBuilder.create().texOffs(8, 0).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, 0.0F, -2.0F, 0.0F, 0.7418F, 0.0F));
+		PartDefinition slime1_r3 = ribs2.addOrReplaceChild("slime1_r3", CubeListBuilder.create().texOffs(8, 0).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, 0.0F, -2.0F, 0.0F, 0.7418F, 0.0F));
 
 		PartDefinition ribs1_r2 = ribs2.addOrReplaceChild("ribs1_r2", CubeListBuilder.create().texOffs(15, 3).addBox(0.0F, -2.0F, -3.0F, 0.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, 0.0F, -3.0F, 0.0F, -1.0908F, 0.0F));
 
@@ -277,6 +290,10 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 			arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(-75F) * (float)Math.sin(attackProgress * Math.PI);
 			spine1.xRot = convertDegtoRad(-2.5F) + convertDegtoRad(-15F) * (float)Math.sin(attackProgress * Math.PI);
 			spine6.xRot = convertDegtoRad(12.5F) + convertDegtoRad(-2.5F) * (float)Math.sin(attackProgress * Math.PI);
+			if (entity.getAttackTimer() > 17)
+				weapon.visible = false;
+			else
+				weapon.visible = true;
 		}
 	}
 
