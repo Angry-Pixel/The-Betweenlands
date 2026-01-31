@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import thebetweenlands.common.entity.projectile.ThrownBone;
 
 public class BonePuppetRanged extends BonePuppetBase {
 
@@ -152,15 +153,26 @@ public class BonePuppetRanged extends BonePuppetBase {
 
 		private void throwBone(LivingEntity target) {
 			if (canPerformAttack(target)) {
-				puppet.setAttacking(true);
-				if (puppet.getAttackTimer() == 20) {
-					//throw projectile here
-					System.out.println("Throwing Stuff at you.");
-					puppet.setReloading(true);
+				if(!puppet.level().isClientSide()) {
+					puppet.setAttacking(true);
+					if (puppet.getAttackTimer() == 17) {
+						Level level = puppet.level();
+						ThrownBone bone = new ThrownBone(level, puppet, 0F/*(float) puppet.getAttributeValue(Attributes.ATTACK_DAMAGE)*/);
+						double targetX = target.getX() + target.getDeltaMovement().x() - puppet.getX();
+						double targetY = target.getY() - puppet.getY() + 0.5D;
+						double targetZ = target.getZ() + target.getDeltaMovement().z() - puppet.getZ();
+						
+						double direction = Math.toRadians(puppet.getYRot());
+						//bone.setPos(puppet.getX() + -Math.sin(direction) * 0.8D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.8D);
+						bone.absMoveTo(puppet.getX() + -Math.sin(direction) * 0.5D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.5D, puppet.getYRot(), 0F);
+						level.addFreshEntity(bone);
+						bone.shoot(targetX, targetY, targetZ, 0.3F, 0.0F);
+						puppet.setReloading(true);
+					}
 				}
 			}
 		}
-		
+
 	    protected boolean canPerformAttack(LivingEntity entity) {
 	        return !puppet.isReloading() && puppet.getSensing().hasLineOfSight(entity);
 	    }
