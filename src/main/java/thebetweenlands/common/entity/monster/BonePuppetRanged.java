@@ -166,7 +166,7 @@ public class BonePuppetRanged extends BonePuppetBase {
 						//bone.setPos(puppet.getX() + -Math.sin(direction) * 0.8D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.8D);
 						bone.absMoveTo(puppet.getX() + -Math.sin(direction) * 0.5D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.5D, puppet.getYRot(), 0F);
 						level.addFreshEntity(bone);
-						bone.shoot(targetX, targetY, targetZ, 0.3F, 0.0F);
+						bone.shoot(targetX, targetY, targetZ, 0.5F, 0.0F);
 						puppet.setReloading(true);
 					}
 				}

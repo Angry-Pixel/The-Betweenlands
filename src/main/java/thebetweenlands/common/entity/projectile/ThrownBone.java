@@ -71,7 +71,7 @@ public class ThrownBone extends ThrowableProjectile {
 
 	@Override
 	protected double getDefaultGravity() {
-		return 0.005F;
+		return 0.01F;
 	}
 	
 	@Override
