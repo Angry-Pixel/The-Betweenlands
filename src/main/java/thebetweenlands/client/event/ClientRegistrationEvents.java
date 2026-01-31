@@ -207,6 +207,7 @@ import thebetweenlands.client.model.entity.SwordEnergyModel;
 import thebetweenlands.client.model.entity.TarBeastModel;
 import thebetweenlands.client.model.entity.TarminionModel;
 import thebetweenlands.client.model.entity.TermiteModel;
+import thebetweenlands.client.model.entity.ThrownBoneModel;
 import thebetweenlands.client.model.entity.TinySludgeWormModel;
 import thebetweenlands.client.model.entity.WallHoleModel;
 import thebetweenlands.client.model.entity.WallLampreyModel;
@@ -371,6 +372,7 @@ import thebetweenlands.client.renderer.entity.TameChiromawRenderer;
 import thebetweenlands.client.renderer.entity.TarBeastRenderer;
 import thebetweenlands.client.renderer.entity.TarminionRenderer;
 import thebetweenlands.client.renderer.entity.TermiteRenderer;
+import thebetweenlands.client.renderer.entity.ThrownBoneRenderer;
 import thebetweenlands.client.renderer.entity.ThrownTarminionRenderer;
 import thebetweenlands.client.renderer.entity.TinySludgeWormRenderer;
 import thebetweenlands.client.renderer.entity.TriggeredFallingBlockRenderer;
@@ -598,6 +600,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WALL_JET.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BONE_PUPPET_MELEE.get(), BonePuppetMeleeRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BONE_PUPPET_RANGED.get(), BonePuppetRangedRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.THROWN_BONE.get(), ThrownBoneRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -737,6 +740,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.WALL_HOLE, WallHoleModel::create);
 		event.registerLayerDefinition(BLModelLayers.BONE_PUPPET_MELEE, BonePuppetMeleeModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.BONE_PUPPET_RANGED, BonePuppetRangedModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.THROWN_BONE, ThrownBoneModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

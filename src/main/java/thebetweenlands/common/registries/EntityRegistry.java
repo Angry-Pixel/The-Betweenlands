@@ -119,6 +119,7 @@ import thebetweenlands.common.entity.projectile.SludgeBall;
 import thebetweenlands.common.entity.projectile.SludgeJet;
 import thebetweenlands.common.entity.projectile.SludgeWallJet;
 import thebetweenlands.common.entity.projectile.SnailPoisonJet;
+import thebetweenlands.common.entity.projectile.ThrownBone;
 import thebetweenlands.common.entity.projectile.ThrownElixir;
 import thebetweenlands.common.entity.projectile.ThrownTarminion;
 import thebetweenlands.common.entity.projectile.UrchinSpike;
@@ -267,6 +268,7 @@ public class EntityRegistry {
 	//spike wave
 	public static final DeferredHolder<EntityType<?>, EntityType<SpiritTreeFaceMask>> SPIRIT_TREE_FACE_MASK = register("spirit_tree_face_mask", EntityType.Builder.<SpiritTreeFaceMask>of(SpiritTreeFaceMask::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE).noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<SwordEnergy>> SWORD_ENERGY = register("sword_energy", EntityType.Builder.of(SwordEnergy::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().fireImmune().canSpawnFarFromPlayer());
+	public static final DeferredHolder<EntityType<?>, EntityType<ThrownBone>> THROWN_BONE = register("thown_bone", EntityType.Builder.<ThrownBone>of(ThrownBone::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<ThrownTarminion>> THROWN_TARMINION = register("thrown_tarminion", EntityType.Builder.<ThrownTarminion>of(ThrownTarminion::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormEggSac>> SLUDGE_WORM_EGG_SAC = registerWithAttributes("sludge_worm_egg_sac", EntityType.Builder.of(SludgeWormEggSac::new, MobCategory.MISC).sized(1.0F, 0.5F), BasicProximitySpawner::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<UrchinSpike>> URCHIN_SPIKE = register("urchin_spike", EntityType.Builder.<UrchinSpike>of(UrchinSpike::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
