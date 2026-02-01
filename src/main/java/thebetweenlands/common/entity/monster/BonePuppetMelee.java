@@ -24,14 +24,14 @@ public class BonePuppetMelee extends BonePuppetBase {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new PuppetMeleeAttackGoal(this, 1D, true));
-        goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.7D));
+        goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MAX_HEALTH, 40.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.33D)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 2.0D)

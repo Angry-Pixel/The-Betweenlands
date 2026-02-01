@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -42,6 +43,7 @@ public class BonePuppetRanged extends BonePuppetBase {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ThrowBoneGoal(this, 1D, 8F));
+        goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }

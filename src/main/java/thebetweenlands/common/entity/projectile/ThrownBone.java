@@ -8,11 +8,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import thebetweenlands.common.entity.monster.BonePuppetBase;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 
 public class ThrownBone extends ThrowableProjectile {
@@ -27,7 +25,7 @@ public class ThrownBone extends ThrowableProjectile {
 		super(EntityRegistry.THROWN_BONE.get(), owner, level);
 		this.damage = damage;
 	}
-	
+
 	@Override
 	protected void defineSynchedData(Builder builder) {}
 
@@ -65,7 +63,7 @@ public class ThrownBone extends ThrowableProjectile {
 	public void breakBone() {
 		if (!level().isClientSide()) {
 			discard();
-			level().levelEvent(null, 2001, getOnPos(), Block.getId(BlockRegistry.SLIMY_BONE_ORE.get().defaultBlockState()));
+			//level().levelEvent(null, 2001, getOnPos(), Block.getId(BlockRegistry.SLIMY_BONE_ORE.get().defaultBlockState()));
 		}
 	}
 
@@ -73,7 +71,7 @@ public class ThrownBone extends ThrowableProjectile {
 	protected double getDefaultGravity() {
 		return 0.01F;
 	}
-	
+
 	@Override
 	protected boolean canHitEntity(Entity target) {
 		return super.canHitEntity(target) && !(target instanceof BonePuppetBase); //shaman too?

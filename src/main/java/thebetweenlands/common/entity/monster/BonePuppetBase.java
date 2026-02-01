@@ -21,6 +21,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -78,7 +79,6 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 			if (level().isClientSide())
 				if (getSpawnTimer() < 10)
 					spawnEmergingParticles();
-			System.out.println("ticking death");
 		}
 	}
 
@@ -101,9 +101,13 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 			prevAttackTimer = getAttackTimer();
 			if (getAttackTimer() == 0)
 				prevAttackTimer = 0;
+			if (isDeadOrDying())
+				setDeltaMovement(Vec3.ZERO);
 		}
 
 		if (!level().isClientSide()) {
+			if (isDeadOrDying())
+				getNavigation().stop();
 			if (isAlive()) {
 				if (isAttacking()) {
 					setAttackTimer(getAttackTimer() + 1);
