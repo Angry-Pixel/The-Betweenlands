@@ -428,6 +428,29 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 		leg_right_lower.xRot = 1.0881F + sinWalk * 0.25F;
 		foot_right.xRot = -0.3926F + sinWalk * 0.125F;
 
+		if(entity.isEmerging()) {
+			leg_left1.xRot = convertDegtoRad(-94.9844F) + convertDegtoRad(65F) * entity.getSpawningAnimation(partialTick);
+			leg_left_lower.xRot = convertDegtoRad(147.3423F) + convertDegtoRad(-85F) * entity.getSpawningAnimation(partialTick);
+			
+			leg_right1.xRot = convertDegtoRad(-94.9844F) + convertDegtoRad(65F) * entity.getSpawningAnimation(partialTick);
+			leg_right_lower.xRot = convertDegtoRad(147.3423F) + convertDegtoRad(-85F) * entity.getSpawningAnimation(partialTick);
+			
+			arm4.xRot = convertDegtoRad(106.6035F) + convertDegtoRad(-175.0015F) * entity.getSpawningAnimation(partialTick);
+			arm_lower2.xRot = convertDegtoRad(-100F) + convertDegtoRad(65F) * entity.getSpawningAnimation(partialTick);
+			
+			arm7.xRot = convertDegtoRad(101.4126F) + convertDegtoRad(-185F) * entity.getSpawningAnimation(partialTick);
+			arm_lower3.xRot = convertDegtoRad(-6.1549F) + convertDegtoRad(-11.34511F) * entity.getSpawningAnimation(partialTick);
+			arm_lower3.yRot = convertDegtoRad(-16.4137F) + convertDegtoRad(16.4137F) * entity.getSpawningAnimation(partialTick);
+			arm_lower3.zRot = convertDegtoRad(-69.115F) + convertDegtoRad(69.115F) * entity.getSpawningAnimation(partialTick);
+			
+			arm10.xRot = convertDegtoRad(67.1463F) + convertDegtoRad(-127.5F) * entity.getSpawningAnimation(partialTick);
+			arm_lower4.xRot = convertDegtoRad(-47.9826F) + convertDegtoRad(-8.8914F) * entity.getSpawningAnimation(partialTick);
+			arm_lower4.yRot = convertDegtoRad(-36.6102F) + convertDegtoRad(26.0323F) * entity.getSpawningAnimation(partialTick);
+			arm_lower4.zRot = convertDegtoRad(-28.2491F) + convertDegtoRad(21.4562F) * entity.getSpawningAnimation(partialTick);
+			
+			spine1.xRot = convertDegtoRad(57.5F) + convertDegtoRad(-60F) * entity.getSpawningAnimation(partialTick);
+			}
+
 		if (entity.getAttackTimer() > 0) {
 			float attackProgress = Mth.lerp(partialTick, entity.prevAttackTimer / 20.0f, entity.getAttackTimer() / 20.0f);
 		    arm4.xRot = -1.1937F - 1F * (float)Math.sin(attackProgress * Math.PI);

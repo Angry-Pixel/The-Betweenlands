@@ -22,7 +22,7 @@ public class BonePuppetMelee extends BonePuppetBase {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(0, new FloatGoal(this));
+    	goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new PuppetMeleeAttackGoal(this, 1D, true));
         goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
