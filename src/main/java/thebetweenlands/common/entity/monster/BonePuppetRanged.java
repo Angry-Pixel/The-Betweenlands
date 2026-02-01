@@ -42,7 +42,6 @@ public class BonePuppetRanged extends BonePuppetBase {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ThrowBoneGoal(this, 1D, 8F));
-       // goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
@@ -55,9 +54,9 @@ public class BonePuppetRanged extends BonePuppetBase {
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
+	@Override
+	public void aiStep() {
+		super.aiStep();
 
 		if (level().isClientSide()) {
 			prevReloadTimer = getReloadTimer();
@@ -66,16 +65,22 @@ public class BonePuppetRanged extends BonePuppetBase {
 		}
 
 		if (!level().isClientSide()) {
-			if (isReloading()) {
-				setReloadTimer(getReloadTimer() + 1);
-				if (getReloadTimer() > 20) {
+			if (isAlive()) {
+				if (isReloading()) {
+					setReloadTimer(getReloadTimer() + 1);
+					if (getReloadTimer() > 20) {
+						setReloadTimer(0);
+						setReloading(false);
+					}
+				} else
 					setReloadTimer(0);
-					setReloading(false);
-				}
-			} else
+			}
+			else {
 				setReloadTimer(0);
+				setReloading(false);
+			}
 		}
-    }
+	}
 
     public void setReloading(boolean attacking) {
     	getEntityData().set(RELOADING, attacking);
@@ -157,13 +162,11 @@ public class BonePuppetRanged extends BonePuppetBase {
 					puppet.setAttacking(true);
 					if (puppet.getAttackTimer() == 17) {
 						Level level = puppet.level();
-						ThrownBone bone = new ThrownBone(level, puppet, 0F/*(float) puppet.getAttributeValue(Attributes.ATTACK_DAMAGE)*/);
+						ThrownBone bone = new ThrownBone(level, puppet, (float) puppet.getAttributeValue(Attributes.ATTACK_DAMAGE));
 						double targetX = target.getX() + target.getDeltaMovement().x() - puppet.getX();
 						double targetY = target.getY() - puppet.getY() + 0.5D;
 						double targetZ = target.getZ() + target.getDeltaMovement().z() - puppet.getZ();
-						
 						double direction = Math.toRadians(puppet.getYRot());
-						//bone.setPos(puppet.getX() + -Math.sin(direction) * 0.8D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.8D);
 						bone.absMoveTo(puppet.getX() + -Math.sin(direction) * 0.5D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.5D, puppet.getYRot(), 0F);
 						level.addFreshEntity(bone);
 						bone.shoot(targetX, targetY, targetZ, 0.5F, 0.0F);

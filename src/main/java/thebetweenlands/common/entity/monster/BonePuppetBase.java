@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -63,16 +64,38 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 	*/
 	}
 
-    @Override
-    public void aiStep() {
-        lastSpawningAnimationTicks = getSpawnTimer();
-            if (getSpawnTimer() < spawnDuration)
-                setSpawnTimer(getSpawnTimer() + 1);
-            if(level().isClientSide())
-            	if(getSpawnTimer() < 10)
-            		spawnEmergingParticles();
+	@Override
+	protected void tickDeath() {
+		if (onGround()) {
+			lastSpawningAnimationTicks = getSpawnTimer();
+			if (!level().isClientSide()) {
+				if (getSpawnTimer() > 0)
+					setSpawnTimer(getSpawnTimer() - 1);
+				if (getSpawnTimer() == 0)
+					remove(Entity.RemovalReason.KILLED);
+			}
 
-        super.aiStep();
+			if (level().isClientSide())
+				if (getSpawnTimer() < 10)
+					spawnEmergingParticles();
+			System.out.println("ticking death");
+		}
+	}
+
+	@Override
+	public void aiStep() {
+		if (isAlive()) {
+			lastSpawningAnimationTicks = getSpawnTimer();
+			if (!level().isClientSide()) {
+				if (getSpawnTimer() < spawnDuration)
+					setSpawnTimer(getSpawnTimer() + 1);
+			}
+			if (level().isClientSide())
+				if (getSpawnTimer() < 10)
+					spawnEmergingParticles();
+		}
+
+		super.aiStep();
 
 		if (level().isClientSide()) {
 			prevAttackTimer = getAttackTimer();
@@ -81,16 +104,21 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 		}
 
 		if (!level().isClientSide()) {
-			if (isAttacking()) {
-				setAttackTimer(getAttackTimer() + 1);
-				if (getAttackTimer() > 20) {
+			if (isAlive()) {
+				if (isAttacking()) {
+					setAttackTimer(getAttackTimer() + 1);
+					if (getAttackTimer() > 20) {
+						setAttackTimer(0);
+						setAttacking(false);
+					}
+				} else
 					setAttackTimer(0);
-					setAttacking(false);
-				}
-			} else
+			}
+			else {
 				setAttackTimer(0);
+			}
 		}
-    }
+	}
 
     public void spawnEmergingParticles() {
 		double px = getX();
@@ -108,7 +136,7 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 
 	@Override
     protected boolean isImmobile() {
-        return super.isImmobile() || getSpawnTimer() < spawnDuration;
+        return isAlive() && (super.isImmobile() || getSpawnTimer() < spawnDuration);
     }
 
     @Override

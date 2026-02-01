@@ -24,6 +24,11 @@ public class BonePuppetMeleeRenderer<T extends BonePuppetMelee> extends MobRende
 	}
 
 	@Override
+	protected float getFlipDegrees(BonePuppetMelee livingEntity) {
+		return 0F;
+	}
+
+	@Override
 	public ResourceLocation getTextureLocation(BonePuppetMelee entity) {
 		return TEXTURE;
 	}
