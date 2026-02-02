@@ -272,7 +272,6 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float partialTick, float netHeadYaw, float headPitch) {
-		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
 		float cos = Mth.cos(ageInTicks * 0.25F) * 0.8F;
 		float sinWalk = Mth.sin(limbSwing * 0.6662F) * 2F * limbSwingAmount;
 		float sinWalkFaster = Mth.sin(limbSwing * 1.3324F) * 1F * limbSwingAmount;
@@ -325,7 +324,6 @@ public class BonePuppetRangedModel<T extends BonePuppetRanged> extends MowzieMod
 			arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(-75F) * (float)Math.sin(attackProgress * Math.PI);
 			spine1.xRot = convertDegtoRad(-2.5F) + convertDegtoRad(-15F) * (float)Math.sin(attackProgress * Math.PI);
 			spine6.xRot = convertDegtoRad(12.5F) + convertDegtoRad(-2.5F) * (float)Math.sin(attackProgress * Math.PI);
-			//spine1.yRot = convertDegtoRad(0F) + convertDegtoRad(20F) * (float)Math.sin(attackProgress * Math.PI);
 			if (entity.getAttackTimer() > 17)
 				weapon.visible = false;
 			else

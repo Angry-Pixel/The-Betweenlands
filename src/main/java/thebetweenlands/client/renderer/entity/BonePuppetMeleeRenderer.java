@@ -17,10 +17,11 @@ public class BonePuppetMeleeRenderer<T extends BonePuppetMelee> extends MobRende
 	public BonePuppetMeleeRenderer(EntityRendererProvider.Context context) {
 		super(context, new BonePuppetMeleeModel<>(context.bakeLayer(BLModelLayers.BONE_PUPPET_MELEE)), 0.5F);
 	}
-	
+
 	@Override
 	protected void scale(BonePuppetMelee entity, PoseStack stack, float partialTick) {
 		stack.translate(0.0D, 1.25D - entity.getSpawningAnimation(partialTick) * 1.25D, 0.0D);
+		shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
 	}
 
 	@Override

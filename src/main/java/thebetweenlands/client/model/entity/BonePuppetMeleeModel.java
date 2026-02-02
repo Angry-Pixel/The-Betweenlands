@@ -431,9 +431,11 @@ public class BonePuppetMeleeModel<T extends BonePuppetMelee> extends MowzieModel
 		if(entity.isEmerging()) {
 			leg_left1.xRot = convertDegtoRad(-94.9844F) + convertDegtoRad(65F) * entity.getSpawningAnimation(partialTick);
 			leg_left_lower.xRot = convertDegtoRad(147.3423F) + convertDegtoRad(-85F) * entity.getSpawningAnimation(partialTick);
-			
+			foot_left.xRot = convertDegtoRad(-49.4929F) + convertDegtoRad(27F) * entity.getSpawningAnimation(partialTick);
+
 			leg_right1.xRot = convertDegtoRad(-94.9844F) + convertDegtoRad(65F) * entity.getSpawningAnimation(partialTick);
 			leg_right_lower.xRot = convertDegtoRad(147.3423F) + convertDegtoRad(-85F) * entity.getSpawningAnimation(partialTick);
+			foot_right.xRot = convertDegtoRad(-49.4929F) + convertDegtoRad(27F) * entity.getSpawningAnimation(partialTick);
 			
 			arm4.xRot = convertDegtoRad(106.6035F) + convertDegtoRad(-175.0015F) * entity.getSpawningAnimation(partialTick);
 			arm_lower2.xRot = convertDegtoRad(-100F) + convertDegtoRad(65F) * entity.getSpawningAnimation(partialTick);
