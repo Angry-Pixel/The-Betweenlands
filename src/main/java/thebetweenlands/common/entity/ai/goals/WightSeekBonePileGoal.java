@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.registries.DeferredBlock;
-import thebetweenlands.common.entity.monster.BonePuppetRanged;
+import thebetweenlands.common.entity.monster.BoneShaman;
 import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -65,15 +65,17 @@ public class WightSeekBonePileGoal extends Goal {
 				wight.getMoveControl().setWantedPosition(target.getX() + 0.5D, target.getY() + 1D, target.getZ() + 0.5D, wight.getAttributeValue(Attributes.FLYING_SPEED));
 				if (level.getBlockState(wight.blockPosition().below()).is(bonePile)) { // jank but pos check isn't working atm
 					level.destroyBlock(wight.blockPosition().below(), true);
-					BonePuppetRanged puppet = EntityRegistry.BONE_PUPPET_RANGED.get().create(level);
-					if (puppet != null) {
-						puppet.setPos(wight.blockPosition().below().getBottomCenter());
-						puppet.setYRot(wight.getYRot());
-						puppet.setParentEntityID(wight.getId());
-						level.addFreshEntity(puppet);
-						wight.setVolatile(false);
-						wight.clearTargetBlock();
-						wight.canTransformInToShaman = false; // setting this so it only happens once
+					BoneShaman shaman = EntityRegistry.BONE_SHAMAN.get().create(level);
+					if (shaman != null) {
+						shaman.setPos(wight.blockPosition().below().getBottomCenter());
+						shaman.setYRot(wight.getYRot());
+						//puppet.setParentEntityID(wight.getId());
+						level.addFreshEntity(shaman);
+						wight.discard();
+						shaman.jumpFromGround();
+						//wight.setVolatile(false);
+						//wight.clearTargetBlock();
+						//wight.canTransformInToShaman = false; // setting this so it only happens once
 					}
 				}
 			}

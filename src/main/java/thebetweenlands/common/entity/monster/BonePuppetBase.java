@@ -50,8 +50,8 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
     }
 
 	@Nullable
-	public Wight getParentEntity() {
-		Wight parentEntity = (Wight) level().getEntity(getEntityData().get(PARENT_ID));
+	public BoneShaman getParentEntity() {
+		BoneShaman parentEntity = (BoneShaman) level().getEntity(getEntityData().get(PARENT_ID));
 		return getEntityData().get(PARENT_ID) != -1 ? parentEntity : null;
 	}
 
