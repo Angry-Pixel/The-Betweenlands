@@ -78,34 +78,7 @@ import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.dispenser.BetweenlandsDispenserBehaviours;
 import thebetweenlands.common.entity.creature.frog.FrogVariant;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
-import thebetweenlands.common.network.clientbound.AddBetweenlandsBossBarPacket;
-import thebetweenlands.common.network.clientbound.AddLocalStoragePacket;
-import thebetweenlands.common.network.clientbound.AmateMapPacket;
-import thebetweenlands.common.network.clientbound.BlockGuardDataPacket;
-import thebetweenlands.common.network.clientbound.ChangeBlockGuardSectionPacket;
-import thebetweenlands.common.network.clientbound.ClearBlockGuardPacket;
-import thebetweenlands.common.network.clientbound.DruidParticlePacket;
-import thebetweenlands.common.network.clientbound.GemProtectionPacket;
-import thebetweenlands.common.network.clientbound.InfestWeedwoodBushPacket;
-import thebetweenlands.common.network.clientbound.LivingWeedwoodShieldSpitPacket;
-import thebetweenlands.common.network.clientbound.OpenHerbloreBookPacket;
-import thebetweenlands.common.network.clientbound.OpenLoreScrapPacket;
-import thebetweenlands.common.network.clientbound.OpenRenameScreenPacket;
-import thebetweenlands.common.network.clientbound.RemoveLocalStoragePacket;
-import thebetweenlands.common.network.clientbound.RiftSoundPacket;
-import thebetweenlands.common.network.clientbound.ShockArrowHitPacket;
-import thebetweenlands.common.network.clientbound.ShockParticlePacket;
-import thebetweenlands.common.network.clientbound.ShowFoodSicknessPacket;
-import thebetweenlands.common.network.clientbound.SoundRipplePacket;
-import thebetweenlands.common.network.clientbound.SummonPeatMummyParticlesPacket;
-import thebetweenlands.common.network.clientbound.SyncChunkStoragePacket;
-import thebetweenlands.common.network.clientbound.SyncEnvironmentEventDataPacket;
-import thebetweenlands.common.network.clientbound.SyncLocalStorageDataPacket;
-import thebetweenlands.common.network.clientbound.SyncLocalStorageReferencesPacket;
-import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
-import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
-import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
-import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
+import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.network.serverbound.ChiromawDoubleJumpPacket;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
 import thebetweenlands.common.network.serverbound.EquipItemPacket;
@@ -149,7 +122,7 @@ public class CommonRegistrationEvents {
 	private static void commonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			BetweenlandsDispenserBehaviours.registerBehaviours();
-			
+
 			FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
 
 			pot.addPlant(BlockRegistry.WEEDWOOD_SAPLING.getId(), BlockRegistry.POTTED_WEEDWOOD_SAPLING);
@@ -228,7 +201,7 @@ public class CommonRegistrationEvents {
 	private static void registerAttributes(EntityAttributeCreationEvent event) {
 		EntityRegistry.ATTRIBUTES.forEach((type, builder) -> event.put((EntityType<? extends LivingEntity>) type.value(), builder.get().build()));
 	}
-	
+
 	private static void registerExtraAttributes(EntityAttributeModificationEvent event) {
 		event.add(EntityType.PLAYER, AttributeRegistry.DECAY_RESISTANCE, 0.0);
 		event.add(EntityType.PLAYER, AttributeRegistry.CORROSION_RESISTANCE, 0.0);
@@ -310,6 +283,8 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(SyncStaticAspectsPacket.TYPE, SyncStaticAspectsPacket.STREAM_CODEC, SyncStaticAspectsPacket::handle);
 		registrar.playToClient(SummonPeatMummyParticlesPacket.TYPE, SummonPeatMummyParticlesPacket.STREAM_CODEC, SummonPeatMummyParticlesPacket::handle);
 		registrar.playToClient(AddBetweenlandsBossBarPacket.TYPE, AddBetweenlandsBossBarPacket.STREAM_CODEC, AddBetweenlandsBossBarPacket::handle);
+		registrar.playToClient(UpdateBetweenlandsBossBarPacket.TYPE, UpdateBetweenlandsBossBarPacket.STREAM_CODEC, UpdateBetweenlandsBossBarPacket::handle);
+		registrar.playToClient(RemoveBetweenlandsBossBarPacket.TYPE, RemoveBetweenlandsBossBarPacket.STREAM_CODEC, RemoveBetweenlandsBossBarPacket::handle);
 		registrar.playToClient(WeedwoodBushRustlePacket.TYPE, WeedwoodBushRustlePacket.STREAM_CODEC, WeedwoodBushRustlePacket::handle);
 		registrar.playToClient(WightVolatileParticlesPacket.TYPE, WightVolatileParticlesPacket.STREAM_CODEC, WightVolatileParticlesPacket::handle);
 		registrar.playToClient(RiftSoundPacket.TYPE, RiftSoundPacket.STREAM_CODEC, RiftSoundPacket::handle);

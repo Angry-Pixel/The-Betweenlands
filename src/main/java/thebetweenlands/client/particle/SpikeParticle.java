@@ -11,18 +11,21 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import thebetweenlands.client.particle.options.SpikeParticleOptions;
 import thebetweenlands.client.renderer.SpikeRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import javax.annotation.Nullable;
 
-public class UrchinSpikeParticle extends Particle {
-	private final RenderType renderType = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/urchin_spike.png"));
+public class SpikeParticle extends Particle {
+
+	public static final ResourceLocation URCHIN_TEXTURE = TheBetweenlands.prefix("textures/entity/urchin_spike.png");
+	public static final ResourceLocation ROOT_TEXTURE = TheBetweenlands.prefix("textures/block/spirit_tree_log_side.png");
 
 	@Nullable
 	private SpikeRenderer renderer;
@@ -34,9 +37,10 @@ public class UrchinSpikeParticle extends Particle {
 
 	private double prevMotionX, prevMotionY, prevMotionZ;
 
+	private final ResourceLocation texture;
 	private boolean sound;
 
-	protected UrchinSpikeParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int length, float width, float scale, long seed) {
+	protected SpikeParticle(SpikeParticleOptions options, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int length, float width, float scale, long seed) {
 		super(level, x, y, z);
 		this.prevMotionX = this.xd = xSpeed;
 		this.prevMotionY = this.yd = ySpeed;
@@ -47,7 +51,8 @@ public class UrchinSpikeParticle extends Particle {
 		this.seed = seed;
 		this.gravity = 1;
 		this.lifetime = 20 * 3;
-		this.sound = level.getRandom().nextInt(15) == 0;
+		this.texture = options.texture();
+		this.sound = options.playSound();
 	}
 
 	@Override
@@ -101,8 +106,8 @@ public class UrchinSpikeParticle extends Particle {
 		stack.translate(0, -0.5F * this.scale, 0);
 		stack.scale(this.scale, this.scale, this.scale);
 		MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-		VertexConsumer vertexconsumer = source.getBuffer(this.renderType);
-		this.renderer.build(stack.last(), vertexconsumer, i, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
+		VertexConsumer vertexconsumer = source.getBuffer(RenderType.entityTranslucent(this.texture));
+		this.renderer.render(stack.last(), vertexconsumer, i, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(alpha, 1.0F, 1.0F, 1.0F));
 		source.endBatch();
 	}
 
@@ -111,11 +116,11 @@ public class UrchinSpikeParticle extends Particle {
 		return ParticleRenderType.CUSTOM;
 	}
 
-	public static final class Factory extends ParticleFactory<Factory, SimpleParticleType> {
+	public static final class Factory extends ParticleFactory<Factory, SpikeParticleOptions> {
 
 		@Override
-		public UrchinSpikeParticle createParticle(SimpleParticleType type, ImmutableParticleArgs args) {
-			return new UrchinSpikeParticle(args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(2), args.scale, args.data.getLong(1));
+		public SpikeParticle createParticle(SpikeParticleOptions options, ImmutableParticleArgs args) {
+			return new SpikeParticle(options, args.level, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(2), args.scale, args.data.getLong(1));
 		}
 
 		@Override

@@ -1,0 +1,144 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:bark_amulet"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:small_spirit_tree_face_mask"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 8
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:spirit_tree_sapling"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "thebetweenlands:loot_multiplier",
+          "key": "strength",
+          "range": 1.2
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:spirit_tree_sapling"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 5
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "thebetweenlands:loot_multiplier",
+          "key": "strength",
+          "range": 1.4
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:spirit_tree_sapling"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 4
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "thebetweenlands:loot_multiplier",
+          "key": "strength",
+          "range": 1.6
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:spirit_tree_sapling"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 3
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "thebetweenlands:loot_multiplier",
+          "key": "strength",
+          "range": 1.8
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:spirit_tree_sapling"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "thebetweenlands:loot_multiplier",
+          "key": "strength",
+          "range": 1.95
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:spirit_tree_sapling"
+        },
+        {
+          "type": "minecraft:empty"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:entities/large_spirit_tree_face"
+}

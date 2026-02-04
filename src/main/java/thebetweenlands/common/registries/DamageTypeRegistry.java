@@ -11,6 +11,7 @@ public class DamageTypeRegistry {
 	public static final ResourceKey<DamageType> FLAME_JET = create("flame_jet");
 	public static final ResourceKey<DamageType> SHOCKWAVE = create("shockwave");
 	public static final ResourceKey<DamageType> SWARM = create("swarm");
+	public static final ResourceKey<DamageType> SPIKE_WAVE = create("spike_wave");
 	public static final ResourceKey<DamageType> URCHIN_SPIKE = create("urchin_spike");
 	public static final ResourceKey<DamageType> VOODOO = create("voodoo");
 	public static final ResourceKey<DamageType> SUFFOCATION = create("suffocation");
@@ -23,6 +24,7 @@ public class DamageTypeRegistry {
 		context.register(FLAME_JET, new DamageType("thebetweenlands.flame_jet", 0.1F));
 		context.register(SHOCKWAVE, new DamageType("thebetweenlands.shockwave", 0.1F));
 		context.register(SWARM, new DamageType("thebetweenlands.swarm", 0.1F));
+		context.register(SPIKE_WAVE, new DamageType("thebetweenlands.spike_wave", 0.1F));
 		context.register(URCHIN_SPIKE, new DamageType("thebetweenlands.urchin_spike", 0.1F));
 		context.register(VOODOO, new DamageType("thebetweenlands.voodoo", 0.1F));
 		context.register(SUFFOCATION, new DamageType("thebetweenlands.suffocation", 0.1F));

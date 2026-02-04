@@ -504,12 +504,42 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 				.when(LootItemKilledByPlayerCondition.killedByPlayer())));
 		this.noLoot(EntityRegistry.WALL_LAMPREY);
-		
+
+		this.add(EntityRegistry.SMALL_SPIRIT_TREE_FACE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SAP_SPIT)
+					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
+				.add(EmptyLootItem.emptyItem().setWeight(2)))
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK))
+				.add(EmptyLootItem.emptyItem().setWeight(8))));
+
+		this.add(EntityRegistry.SMALL_TAMED_SPIRIT_TREE_FACE.get(), this.fromEntityLootTable(EntityRegistry.SMALL_SPIRIT_TREE_FACE.get()));
+
+		this.add(EntityRegistry.LARGE_SPIRIT_TREE_FACE.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.BARK_AMULET)))
+			.withPool(LootPool.lootPool()
+				.add(LootItem.lootTableItem(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK))
+				.add(EmptyLootItem.emptyItem().setWeight(8)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(5)).when(LootMultiplierCondition.lootMultiplier("strength", 1.2F)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(4)).when(LootMultiplierCondition.lootMultiplier("strength", 1.4F)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(3)).when(LootMultiplierCondition.lootMultiplier("strength", 1.6F)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(2)).when(LootMultiplierCondition.lootMultiplier("strength", 1.8F)))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(1)).when(LootMultiplierCondition.lootMultiplier("strength", 1.95F))));
+
+		//TODO temp
 		this.add(EntityRegistry.BONE_PUPPET_RANGED.get(), LootTable.lootTable().withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
 					.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 			));
+
+		this.add(EntityRegistry.BONE_PUPPET_MELEE.get(), LootTable.lootTable().withPool(LootPool.lootPool()
+			.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
+		));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
+import thebetweenlands.client.renderer.entity.SmallSpiritTreeFaceRenderer;
 import thebetweenlands.client.renderer.entity.SpiritTreeFaceMaskRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.GrubHubBlockEntity;
@@ -27,9 +28,9 @@ import java.util.SplittableRandom;
 
 public class GrubHubRenderer implements BlockEntityRenderer<GrubHubBlockEntity> {
 
-	private final RenderType MASK_TYPE = RenderType.entityCutout(SpiritTreeFaceMaskRenderer.TEXTURE_SMALL);
-	private final RenderType EYE_TYPE = RenderType.EYES.apply(TheBetweenlands.prefix("textures/entity/small_spirit_tree_face_glow.png"), RenderType.TRANSLUCENT_TRANSPARENCY);
-	private static final RenderType TEXTURE_BLOCKS = RenderType.entityTranslucent(InventoryMenu.BLOCK_ATLAS);
+	private final RenderType MASK_TYPE = RenderType.entityCutout(SmallSpiritTreeFaceRenderer.TEXTURE);
+	private final RenderType EYE_TYPE = RenderType.EYES.apply(SmallSpiritTreeFaceRenderer.GLOW_TEXTURE, RenderType.TRANSLUCENT_TRANSPARENCY);
+
 	private final ModelPart mask;
 	private final ItemRenderer itemRenderer;
 

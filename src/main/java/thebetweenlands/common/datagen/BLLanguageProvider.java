@@ -1178,6 +1178,11 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.ROCK_SNOT_TENDRIL, "Rock Snot Tendril");
 		this.addEntityType(EntityRegistry.LIGHTNING_BOLT, "Lightning Bolt");
 		this.addEntityType(EntityRegistry.SLUDGE_WALL_JET, "Sludge Spit");
+		this.addEntityType(EntityRegistry.SMALL_SPIRIT_TREE_FACE, "Small Spirit Tree Face");
+		this.addEntityType(EntityRegistry.SMALL_TAMED_SPIRIT_TREE_FACE, "Tamed Spirit Tree Face");
+		this.addEntityType(EntityRegistry.LARGE_SPIRIT_TREE_FACE, "Large Spirit Tree Face");
+		this.addEntityType(EntityRegistry.ROOT_GRABBER, "Root Grabber");
+		this.addEntityType(EntityRegistry.SPIKE_WAVE, "Spike Wave");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -2012,7 +2017,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("death.attack.thebetweenlands.swarm", "%s was decomposed by infestation");
 		this.add("death.attack.thebetweenlands.urchin_spike", "%s was impaled by urchin spikes");
 		this.add("death.attack.thebetweenlands.suffocation", "%s was suffocated by a Shallowbreath");
-		this.add("death.attack.thebetweenlands.spikewave", "%s was impaled by roots");
+		this.add("death.attack.thebetweenlands.spike_wave", "%s was impaled by roots");
 		this.add("death.attack.thebetweenlands.voodoo", "%s was taken out by Voodoo magic");
 
 		this.add("event.thebetweenlands.winter.message", "You hear the sound of sleigh bells in the distance...");

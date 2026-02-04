@@ -1,8 +1,12 @@
 package thebetweenlands.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.resources.model.ModelBakery;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.wall.AbstractWallCreature;
 
@@ -21,5 +25,11 @@ public abstract class WallFaceRenderer<T extends AbstractWallCreature, M extends
 	@Override
 	protected void setupRotations(T entity, PoseStack stack, float bob, float yBodyRot, float partialTick, float scale) {
 		stack.mulPose(Axis.YP.rotationDegrees(180.0F - yBodyRot));
+	}
+
+	public void renderBreakingOverlay(Model model, int damage, PoseStack stack, int light, int overlay) {
+		if (damage > 0 && damage <= 10) {
+			model.renderToBuffer(stack, new SheetedDecalTextureGenerator(Minecraft.getInstance().renderBuffers().crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(damage - 1)), stack.last(), 1.0F), light, overlay);
+		}
 	}
 }

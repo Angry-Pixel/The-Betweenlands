@@ -17,26 +17,7 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.BLItemFrame;
-import thebetweenlands.common.entity.BLLightningBolt;
-import thebetweenlands.common.entity.BasicProximitySpawner;
-import thebetweenlands.common.entity.BasicProximitySpawnerExtended;
-import thebetweenlands.common.entity.CCGroundSpawner;
-import thebetweenlands.common.entity.DecayPitTarget;
-import thebetweenlands.common.entity.FalseExperienceOrb;
-import thebetweenlands.common.entity.FishVortex;
-import thebetweenlands.common.entity.FlameJet;
-import thebetweenlands.common.entity.GalleryFrame;
-import thebetweenlands.common.entity.GreeblingCorpse;
-import thebetweenlands.common.entity.LurkerSkinRaft;
-import thebetweenlands.common.entity.MovingWall;
-import thebetweenlands.common.entity.PredatorArrowGuide;
-import thebetweenlands.common.entity.Seat;
-import thebetweenlands.common.entity.ShockwaveSwordItemEntity;
-import thebetweenlands.common.entity.SpiritTreeFaceMask;
-import thebetweenlands.common.entity.SwordEnergy;
-import thebetweenlands.common.entity.TriggeredFallingBlock;
-import thebetweenlands.common.entity.WormGroundSpawner;
+import thebetweenlands.common.entity.*;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
@@ -105,6 +86,9 @@ import thebetweenlands.common.entity.monster.chiromaw.ChiromawHatchling;
 import thebetweenlands.common.entity.monster.chiromaw.ChiromawMatriarch;
 import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.entity.monster.infestation.Infestation;
+import thebetweenlands.common.entity.monster.spirit_tree.LargeSpiritTreeFace;
+import thebetweenlands.common.entity.monster.spirit_tree.SmallSpiritTreeFace;
+import thebetweenlands.common.entity.monster.spirit_tree.SmallTamedSpiritTreeFace;
 import thebetweenlands.common.entity.monster.wall.WallLamprey;
 import thebetweenlands.common.entity.projectile.AngryPebble;
 import thebetweenlands.common.entity.projectile.BetweenstonePebble;
@@ -175,6 +159,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Infestation>> INFESTATION = registerWithEgg("infestation", EntityType.Builder.<Infestation>of(Infestation::new, MobCategory.MONSTER).sized(0.85F, 0.85F), 0x292B3B, 0xE2D698, Infestation::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Jellyfish>> JELLYFISH = registerWithEgg("jellyfish", EntityType.Builder.of(Jellyfish::new, MobCategory.WATER_AMBIENT).sized(0.8F, 0.8F), 0xFFEBE5, 0xFF506B, Jellyfish::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<LargeSludgeWorm>> LARGE_SLUDGE_WORM = registerWithEgg("large_sludge_worm", EntityType.Builder.of(LargeSludgeWorm::new, MobCategory.MONSTER).sized(0.8F, 0.8F).fireImmune(), 0x726459, 0xE2DED9, LargeSludgeWorm::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<LargeSpiritTreeFace>> LARGE_SPIRIT_TREE_FACE = registerWithAttributes("large_spirit_tree_face", EntityType.Builder.of(LargeSpiritTreeFace::new, MobCategory.MONSTER).sized(1.8F, 1.8F), LargeSpiritTreeFace::createAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Leech>> LEECH = registerWithEgg("leech", EntityType.Builder.of(Leech::new, MobCategory.MONSTER).sized(0.7F, 0.3F), 0x804E3D, 0x635940, Leech::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Lurker>> LURKER = registerWithEgg("lurker", EntityType.Builder.of(Lurker::new, MobCategory.CREATURE).sized(1.6F, 0.9F).eyeHeight(0.45F), 0x283320, 0x827856, Lurker::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<MireSnail>> MIRE_SNAIL = registerWithEgg("mire_snail", EntityType.Builder.of(MireSnail::new, MobCategory.CREATURE).sized(0.75F, 0.6F), 0x8E9456, 0xF2FA96, MireSnail::registerAttributes);
@@ -193,7 +178,8 @@ public class EntityRegistry {
 	//sludge menace
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWorm>> SLUDGE_WORM = registerWithEgg("sludge_worm", EntityType.Builder.of(SludgeWorm::new, MobCategory.MONSTER).sized(0.4375F, 0.3125F).fireImmune(), 0x6D3D39, 0x301411, SludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<SmolSludge>> SMOL_SLUDGE = registerWithEgg("smol_sludge", EntityType.Builder.of(SmolSludge::new, MobCategory.MONSTER).sized(0.7F, 0.7F).fireImmune(), 0x726459, 0x726459, SmolSludge::registerAttributes);
-	//spirit tree faces (small, large, tame)
+	public static final DeferredHolder<EntityType<?>, EntityType<SmallSpiritTreeFace>> SMALL_SPIRIT_TREE_FACE = registerWithAttributes("small_spirit_tree_face", EntityType.Builder.of(SmallSpiritTreeFace::new, MobCategory.MONSTER).sized(0.9F, 0.9F), SmallSpiritTreeFace::createAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<SmallTamedSpiritTreeFace>> SMALL_TAMED_SPIRIT_TREE_FACE = registerWithAttributes("small_tamed_spirit_tree_face", EntityType.Builder.of(SmallTamedSpiritTreeFace::new, MobCategory.CREATURE).sized(0.9F, 0.9F), SmallTamedSpiritTreeFace::createAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Splodeshroom>> SPLODESHROOM = registerWithEgg("splodeshroom", EntityType.Builder.of(Splodeshroom::new, MobCategory.MONSTER).sized(0.5F, 1.0F), 0xC8527D, 0x792B48, Mob::createMobAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Sporeling>> SPORELING = registerWithEgg("sporeling", EntityType.Builder.of(Sporeling::new, MobCategory.CREATURE).sized(0.3F, 0.6F), 0x696144, 0xFFFB00, Sporeling::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Stalker>> STALKER = registerWithEgg("stalker", EntityType.Builder.of(Stalker::new, MobCategory.MONSTER).sized(0.85F, 0.85F).clientTrackingRange(10), 0xE4DCC9, 0xD58888, Stalker::registerAttributes);
@@ -253,7 +239,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<PyradFlame>> PYRAD_FLAME = register("pyrad_flame", EntityType.Builder.<PyradFlame>of(PyradFlame::new, MobCategory.MISC).sized(0.3125F, 0.3125F));
 	//resurrection
 	public static final DeferredHolder<EntityType<?>, EntityType<RobustFishingSpear>> ROBUST_FISHING_SPEAR = register("robust_fishing_spear", EntityType.Builder.of(RobustFishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
-	//root grabber
+	public static final DeferredHolder<EntityType<?>, EntityType<RootGrabber>> ROOT_GRABBER = register("root_grabber", EntityType.Builder.<RootGrabber>of(RootGrabber::new, MobCategory.MISC).sized(2.0F, 2.0F));
 	//rope node
 	public static final DeferredHolder<EntityType<?>, EntityType<SapSpit>> SAP_SPIT = register("sap_spit", EntityType.Builder.<SapSpit>of(SapSpit::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<Seat>> SEAT = register("seat", EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
@@ -265,7 +251,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWallJet>> SLUDGE_WALL_JET = register("sludge_wall_jet", EntityType.Builder.<SludgeWallJet>of(SludgeWallJet::new, MobCategory.MISC).sized(0.2F, 0.2F).fireImmune().noSave().noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormArrow>> SLUDGE_WORM_ARROW = register("sludge_worm_arrow", EntityType.Builder.<SludgeWormArrow>of(SludgeWormArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<SnailPoisonJet>> SNAIL_POISON_JET = register("snail_poison_jet", EntityType.Builder.<SnailPoisonJet>of(SnailPoisonJet::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(20));
-	//spike wave
+	public static final DeferredHolder<EntityType<?>, EntityType<SpikeWave>> SPIKE_WAVE = register("spike_wave", EntityType.Builder.of(SpikeWave::new, MobCategory.MISC).sized(0.0F, 0.0F));
 	public static final DeferredHolder<EntityType<?>, EntityType<SpiritTreeFaceMask>> SPIRIT_TREE_FACE_MASK = register("spirit_tree_face_mask", EntityType.Builder.<SpiritTreeFaceMask>of(SpiritTreeFaceMask::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE).noSummon());
 	public static final DeferredHolder<EntityType<?>, EntityType<SwordEnergy>> SWORD_ENERGY = register("sword_energy", EntityType.Builder.of(SwordEnergy::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().fireImmune().canSpawnFarFromPlayer());
 	public static final DeferredHolder<EntityType<?>, EntityType<ThrownBone>> THROWN_BONE = register("thown_bone", EntityType.Builder.<ThrownBone>of(ThrownBone::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(1).setShouldReceiveVelocityUpdates(true));

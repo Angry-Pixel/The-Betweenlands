@@ -51,7 +51,7 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 	private static final EntityDataAccessor<Direction> MOVE_FACING_UP = SynchedEntityData.defineId(AbstractWallCreature.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<BlockPos> MOVE_ANCHOR = SynchedEntityData.defineId(AbstractWallCreature.class, EntityDataSerializers.BLOCK_POS);
 	private static final EntityDataAccessor<Byte> MOVE_REASON = SynchedEntityData.defineId(AbstractWallCreature.class, EntityDataSerializers.BYTE);
-	private static final EntityDataAccessor<Boolean> ANCHORED = SynchedEntityData.defineId(AbstractWallCreature.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> ANCHORED = SynchedEntityData.defineId(AbstractWallCreature.class, EntityDataSerializers.BOOLEAN);
 
 	protected float lookMoveSpeedMultiplier = 1.0F;
 
@@ -66,14 +66,14 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 
 	public AbstractWallCreature(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
-		this.lookControl = new LookHelper(this);
-		this.moveControl = new MoveHelper(this);
+		this.lookControl = new WallCreatureLookControl(this);
+		this.moveControl = new WallCreatureMoveControl(this);
 		this.noCulling = true;
 	}
 
 	@Override
-	public LookHelper getLookControl() {
-		return (LookHelper) super.getLookControl();
+	public WallCreatureLookControl getLookControl() {
+		return (WallCreatureLookControl) super.getLookControl();
 	}
 
 	@Override
@@ -202,7 +202,7 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 		} else {
 			Vec3 vec3 = this.getFrontCenter();
 			Vec3 vec31 = new Vec3(entity.getX(), entity.getEyeY(), entity.getZ());
-			return !(vec31.distanceTo(vec3) > 128.0) && this.level().clip(new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
+			return this.level().clip(new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
 		}
 	}
 
@@ -357,7 +357,7 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 								this.setMoveReason(MoveReason.POSITION_AND_LOOK);
 							} else if (isPositionDifferent) {
 								this.setMoveReason(MoveReason.POSITION);
-							} else if (isLookDifferent) {
+							} else {
 								this.setMoveReason(MoveReason.LOOK);
 							}
 
@@ -394,7 +394,7 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 			if (movementProgress < 0.5F) {
 				Vec3 offset = this.getOffset(movementProgress);
 				Vec3 position = this.getCenter().add(offset);
-				this.setPosRaw(position.x, position.y - this.getBbHeight() / 2.0D, position.z);
+				this.setPos(position.x, position.y - this.getBbHeight() / 2.0D, position.z);
 			} else {
 				this.getEntityData().set(ANCHOR, this.getEntityData().get(MOVE_ANCHOR));
 				this.getEntityData().set(FACING, this.getEntityData().get(MOVE_FACING));
@@ -405,9 +405,9 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 				double px = this.getX();
 				double py = this.getY();
 				double pz = this.getZ();
-				this.setPosRaw(position.x, position.y - this.getBbHeight() / 2.0D, position.z);
+				this.setPos(position.x, position.y - this.getBbHeight() / 2.0D, position.z);
 				if ((this.getX() - px) * (this.getX() - px) + (this.getY() - py) * (this.getY() - py) + (this.getZ() - pz) * (this.getZ() - pz) >= 1.0D) {
-					this.setPos(this.getX(), this.getY(), this.getZ());
+					this.teleportTo(this.getX(), this.getY(), this.getZ());
 				}
 			}
 			if (this.moveProgress >= 1.0F) {
@@ -446,7 +446,7 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 	public Vec3 getOffset(float movementProgress) {
 		float offsetLength = this.getHalfMovementProgressFromRegular(movementProgress);
 		Vec3i normal = this.getFacing().getNormal();
-		return new Vec3(normal.getX() - 1.65D, normal.getY() - 1.65D, normal.getZ() - 1.65D).scale(this.getPeek() + (this.getFacing().getAxis().isHorizontal() ? (this.getBlockWidth() - this.getBbWidth()) : (this.getBlockHeight() - this.getBbHeight())) / 2.0D).scale(offsetLength);
+		return new Vec3(normal.getX(), normal.getY(), normal.getZ()).scale(this.getPeek() + (this.getFacing().getAxis().isHorizontal() ? (this.getBlockWidth() - this.getBbWidth()) : (this.getBlockHeight() - this.getBbHeight())) / 2.0D).scale(offsetLength);
 	}
 
 	public int getBlockWidth() {
@@ -474,13 +474,13 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 	}
 
 	public Vec3 getCenter() {
-		return Vec3.atCenterOf(this.getAnchor()).add(this.getBlockWidth() / 2.0D, this.getBlockHeight() / 2.0D, this.getBlockWidth() / 2.0D);
+		return Vec3.atCenterOf(this.getAnchor()).subtract(0.5D, 0.5D, 0.5D).add(this.getBlockWidth() / 2.0D, this.getBlockHeight() / 2.0D, this.getBlockWidth() / 2.0D);
 	}
 
 	public Vec3 getFrontCenter() {
 		Direction facing = this.getFacing();
 		Vec3 center = this.getCenter();
-		return center.add(this.getOffset(this.getMovementProgress(1))).add(facing.getStepX() * this.getBbWidth() / 2.0F, facing.getStepY() * this.getBbHeight() / 2.0F, facing.getStepY() * this.getBbWidth() / 2.0F);
+		return center.add(this.getOffset(this.getMovementProgress(1))).add(facing.getStepX() * this.getBbWidth() / 2.0F, facing.getStepY() * this.getBbHeight() / 2.0F, facing.getStepZ() * this.getBbWidth() / 2.0F);
 	}
 
 	public boolean isAnchored() {
@@ -680,14 +680,14 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 
 	}
 
-	public static final class LookHelper extends LookControl {
+	public static final class WallCreatureLookControl extends LookControl {
 		private final AbstractWallCreature face;
 
 		private int lookingMode = 0;
 
 		private double x, y, z;
 
-		private LookHelper(AbstractWallCreature entity) {
+		private WallCreatureLookControl(AbstractWallCreature entity) {
 			super(entity);
 			this.face = entity;
 		}
@@ -767,10 +767,10 @@ public abstract class AbstractWallCreature extends PathfinderMob implements BLEn
 		}
 	}
 
-	public static class MoveHelper extends MoveControl {
+	public static class WallCreatureMoveControl extends MoveControl {
 		private final AbstractWallCreature face;
 
-		private MoveHelper(AbstractWallCreature entity) {
+		private WallCreatureMoveControl(AbstractWallCreature entity) {
 			super(entity);
 			this.face = entity;
 		}

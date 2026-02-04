@@ -125,7 +125,7 @@ public abstract class AbstractMovingWallCreature extends AbstractWallCreature {
 	public static double calculateAABBDistance(AABB aabb1, AABB aabb2) {
 		double dist;
 
-		if(aabb1.intersects(aabb2)) {
+		if (aabb1.intersects(aabb2)) {
 			double dx = Math.max(aabb1.minX - aabb2.maxX, aabb2.minX - aabb1.maxX);
 			double dy = Math.max(aabb1.minY - aabb2.maxY, aabb2.minY - aabb1.maxY);
 			double dz = Math.max(aabb1.minZ - aabb2.maxZ, aabb2.minZ - aabb1.maxZ);
@@ -134,7 +134,7 @@ public abstract class AbstractMovingWallCreature extends AbstractWallCreature {
 			double dx = Math.max(0, Math.max(aabb1.minX - aabb2.maxX, aabb2.minX - aabb1.maxX));
 			double dy = Math.max(0, Math.max(aabb1.minY - aabb2.maxY, aabb2.minY - aabb1.maxY));
 			double dz = Math.max(0, Math.max(aabb1.minZ - aabb2.maxZ, aabb2.minZ - aabb1.maxZ));
-			dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+			dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 		}
 
 		return dist;
@@ -305,7 +305,7 @@ public abstract class AbstractMovingWallCreature extends AbstractWallCreature {
 
 					BlockPos pos = this.trackingBlocks.remove(this.entity.getRandom().nextInt(this.trackingBlocks.size()));
 
-					if (this.entity.distanceToSqr(Vec3.atCenterOf(pos)) <= this.rangeSq && this.entity.isWithinRestriction(pos)) {
+					if (pos.distToCenterSqr(this.entity.getX(), this.entity.getY(), this.entity.getZ()) <= this.rangeSq && this.entity.isWithinRestriction(pos)) {
 						Vec3 center = new Vec3(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
 						double dx = this.entity.getRandom().nextDouble() - 0.5D;
 						double dy = this.entity.getRandom().nextDouble() - 0.5D;

@@ -16,16 +16,12 @@ import thebetweenlands.common.entity.SpiritTreeFaceMask;
 
 public class SpiritTreeFaceMaskRenderer extends EntityRenderer<SpiritTreeFaceMask> {
 
-	//TODO move these to proper entity renderers when theyre added
-	public static final ResourceLocation TEXTURE_LARGE = TheBetweenlands.prefix("textures/entity/large_spirit_tree_face.png");
-	public static final ResourceLocation TEXTURE_SMALL = TheBetweenlands.prefix("textures/entity/small_spirit_tree_face.png");
-
 	private final LargeSpiritTreeFaceModel largeModel;
-	private final SmallSpiritTreeFaceModel smallModel;
+	private final SmallSpiritTreeFaceModel<?> smallModel;
 
 	public SpiritTreeFaceMaskRenderer(EntityRendererProvider.Context context) {
 		super(context);
-		this.smallModel = new SmallSpiritTreeFaceModel(context.bakeLayer(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2));
+		this.smallModel = new SmallSpiritTreeFaceModel<>(context.bakeLayer(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2));
 		this.largeModel = new LargeSpiritTreeFaceModel(context.bakeLayer(BLModelLayers.LARGE_SPIRIT_TREE_FACE));
 	}
 
@@ -52,6 +48,6 @@ public class SpiritTreeFaceMaskRenderer extends EntityRenderer<SpiritTreeFaceMas
 
 	@Override
 	public ResourceLocation getTextureLocation(SpiritTreeFaceMask entity) {
-		return entity.getMaskType() == SpiritTreeFaceMask.MaskType.LARGE ? TEXTURE_LARGE : TEXTURE_SMALL;
+		return entity.getMaskType() == SpiritTreeFaceMask.MaskType.LARGE ? LargeSpiritTreeFaceRenderer.TEXTURE : SmallSpiritTreeFaceRenderer.TEXTURE;
 	}
 }

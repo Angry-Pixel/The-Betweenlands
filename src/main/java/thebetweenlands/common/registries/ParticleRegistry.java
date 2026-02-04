@@ -15,6 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.client.particle.options.LightningArcParticleOptions;
+import thebetweenlands.client.particle.options.SpikeParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 
 public class ParticleRegistry {
@@ -37,7 +38,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FANCY_BUBBLE = PARTICLES.register("fancy_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<DripParticleOptions>> FANCY_DRIP = register("fancy_drip", false, type -> DripParticleOptions.CODEC, type -> DripParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> RAIN = PARTICLES.register("rain", () -> new SimpleParticleType(false));
-	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> URCHIN_SPIKE = PARTICLES.register("urchin_spike", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, ParticleType<SpikeParticleOptions>> SPIKE = register("spike", false, type -> SpikeParticleOptions.CODEC, type -> SpikeParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> FISH_VORTEX = register("fish_vortex", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INFUSER_BUBBLE = PARTICLES.register("infuser_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PURIFIER_BUBBLE = PARTICLES.register("purifier_bubble", () -> new SimpleParticleType(false));

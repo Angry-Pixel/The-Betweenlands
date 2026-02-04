@@ -1,21 +1,16 @@
 package thebetweenlands.client.model.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidArmorModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
+import thebetweenlands.client.model.MowzieModelBase;
+import thebetweenlands.common.entity.monster.spirit_tree.LargeSpiritTreeFace;
 
-public class LargeSpiritTreeFaceModel extends Model {
-
-	private final ModelPart root;
+public class LargeSpiritTreeFaceModel extends MowzieModelBase<LargeSpiritTreeFace> {
 
 	public LargeSpiritTreeFaceModel(ModelPart root) {
-		super(RenderType::entityCutoutNoCull);
-		this.root = root;
+		super(root);
 	}
 
 	public static LayerDefinition create(boolean headModel) {
@@ -89,10 +84,5 @@ public class LargeSpiritTreeFaceModel extends Model {
 			PartPose.offsetAndRotation(4.0F, 5.0F, -0.02F, 0.0F, 0.0F, 0.22759093446006054F));
 
 		return LayerDefinition.create(definition, 128, 128);
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		this.root.render(stack, consumer, light, overlay, color);
 	}
 }

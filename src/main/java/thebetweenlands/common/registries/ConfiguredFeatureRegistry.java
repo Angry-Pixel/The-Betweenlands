@@ -48,7 +48,7 @@ public class ConfiguredFeatureRegistry {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RUBBER_TREE = makeKey("rubber_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> NIBBLETWIG_TREE = makeKey("nibbletwig_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> HEARTHGROVE_TREE = makeKey("hearthgrove_tree");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> SPIRIT_TREE = makeKey("spirit_tree");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_SPIRIT_TREE = makeKey("spirit_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOT_POD = makeKey("root_pod");
 
 	//ores
@@ -151,13 +151,14 @@ public class ConfiguredFeatureRegistry {
 	public static final RuleTest PITSTONE_TEST = new BlockStateMatchTest(BlockRegistry.PITSTONE.get().defaultBlockState());
 
 	public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-		
+
 		context.register(WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.WEEDWOOD_TREE.get(), FeatureConfiguration.NONE));
 		context.register(ROTTEN_WEEDWOOD_TREE, new ConfiguredFeature<>(FeatureRegistry.ROTTEN_WEEDWOOD_TREE.get(), NoneFeatureConfiguration.NONE));
 		context.register(SAP_TREE, new ConfiguredFeature<>(FeatureRegistry.SAP_TREE.get(), FeatureConfiguration.NONE));
 		context.register(RUBBER_TREE, new ConfiguredFeature<>(FeatureRegistry.RUBBER_TREE.get(), FeatureConfiguration.NONE));
 		context.register(NIBBLETWIG_TREE, new ConfiguredFeature<>(FeatureRegistry.NIBBLETWIG_TREE.get(), FeatureConfiguration.NONE));
 		context.register(HEARTHGROVE_TREE, new ConfiguredFeature<>(FeatureRegistry.HEARTHGROVE_TREE.get(), FeatureConfiguration.NONE));
+		context.register(SMALL_SPIRIT_TREE, new ConfiguredFeature<>(FeatureRegistry.SMALL_SPIRIT_TREE.get(), FeatureConfiguration.NONE));
 
 		context.register(SULFUR,
 			new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(BETWEENSTONE_TEST, BlockRegistry.SULFUR_ORE.get().defaultBlockState(), 14)));
@@ -309,25 +310,25 @@ public class ConfiguredFeatureRegistry {
 
 		final Holder.Reference<ConfiguredFeature<?, ?>> bulbCappedMushroomPatchHolder = context.register(BULB_CAPPED_MUSHROOM_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 			patch(BlockRegistry.BULB_CAPPED_MUSHROOM.get(), 5, 40)));
-		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(), 
+		context.register(BIG_BULB_CAPPED_MUSHROOM, new ConfiguredFeature<>(FeatureRegistry.BIG_BULB_CAPPED_MUSHROOM.get(),
 				new BigBulbCappedMushroomFeatureConfiguration(
-						8, 9, 
-						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y).setValue(BulbCappedMushroomStemBlock.GROUND, true), 
-						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y), 
-						BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get().defaultBlockState(), 
+						8, 9,
+						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y).setValue(BulbCappedMushroomStemBlock.GROUND, true),
+						BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get().defaultBlockState().setValue(BulbCappedMushroomStemBlock.AXIS, Direction.Axis.Y),
+						BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get().defaultBlockState(),
 						Optional.of(bulbCappedMushroomPatchHolder)
 					)
 				));
-		
+
 		context.register(SMALL_HOLLOW_LOG, new ConfiguredFeature<>(FeatureRegistry.SMALL_HOLLOW_LOG.get(), FeatureConfiguration.NONE));
 		context.register(LYESTONE, new ConfiguredFeature<>(FeatureRegistry.LYESTONE.get(), new ChanceConfiguration(5)));
 
 		context.register(TAR_POOL_DUNGEON, new ConfiguredFeature<>(FeatureRegistry.TAR_POOL_DUNGEON.get(), FeatureConfiguration.NONE));
 		context.register(UNDERGROUND_DUNGEON, new ConfiguredFeature<>(FeatureRegistry.UNDERGROUND_DUNGEON.get(), FeatureConfiguration.NONE));
-		
+
 		context.register(ALGAE, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.ALGAE.get()))));
 
-		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(), 
+		context.register(CRAG_SPIRES, new ConfiguredFeature<>(FeatureRegistry.CRAGROCK_SPIRES.get(),
 				new CragrockSpiresFeatureConfiguration(
 						SimplexNoiseConfiguration.of(4, 0.16D, 1.0D / 1.5D, 2.4),
 						12, 3,

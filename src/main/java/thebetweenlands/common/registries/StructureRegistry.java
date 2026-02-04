@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.structure.structures.JungleTempleStruc
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.world.gen.structure.DruidCircleStructure;
+import thebetweenlands.common.world.gen.structure.SpiritTreeStructure;
 import thebetweenlands.common.world.gen.structure.WightFortressStructure;
 
 public class StructureRegistry {
@@ -55,6 +56,8 @@ public class StructureRegistry {
 	public static void bootstrap(BootstrapContext<Structure> context) {
 		HolderGetter<Biome> biomeLookup = context.lookup(Registries.BIOME);
 		context.register(DRUID_CIRCLE, new DruidCircleStructure(new Structure.StructureSettings.Builder(biomeLookup.getOrThrow(BLBiomeTagProvider.GENERATES_DRUID_CIRCLE)).terrainAdapation(TerrainAdjustment.BEARD_THIN).build()));
+		context.register(WIGHT_FORTRESS, new WightFortressStructure(new Structure.StructureSettings.Builder(biomeLookup.getOrThrow(BLBiomeTagProvider.GENERATES_WIGHT_FORTRESS)).terrainAdapation(TerrainAdjustment.BEARD_THIN).build()));
+		context.register(SPIRIT_TREE, new SpiritTreeStructure(new Structure.StructureSettings(biomeLookup.getOrThrow(BLBiomeTagProvider.GENERATES_SPIRIT_TREE))));
 		//TODO these only exist for advancement datagen, please get rid of placeholder values eventually
 		context.register(CRAGROCK_TOWER, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
 		context.register(FLOATING_ISLAND, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
@@ -63,7 +66,6 @@ public class StructureRegistry {
 		context.register(SLUDGE_WORM_DUNGEON, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
 		context.register(SLUDGE_WORM_DUNGEON_MAZE, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
 		context.register(SMALL_RUINS, new JungleTempleStructure(new Structure.StructureSettings(HolderSet.empty())));
-		context.register(WIGHT_FORTRESS, new WightFortressStructure(new Structure.StructureSettings.Builder(biomeLookup.getOrThrow(BLBiomeTagProvider.GENERATES_WIGHT_FORTRESS)).terrainAdapation(TerrainAdjustment.BEARD_THIN).build()));
 	}
 
 	public static void bootstrapSet(BootstrapContext<StructureSet> context) {

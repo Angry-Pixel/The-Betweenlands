@@ -1,5 +1,6 @@
 package thebetweenlands.api.entity.bossbar;
 
+import java.util.UUID;
 import java.util.function.IntFunction;
 
 import io.netty.buffer.ByteBuf;
@@ -8,8 +9,12 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.world.phys.Vec3;
 
-public interface BetweenlandsBossBar {
-	BetweenlandsServerBossBar getBar();
+import javax.annotation.Nullable;
+
+public interface BetweenlandsBoss {
+
+	@Nullable
+	UUID getBossBarId();
 
 	default float getMiniBossTagSize(float partialTicks) {
 		return 0.5F;

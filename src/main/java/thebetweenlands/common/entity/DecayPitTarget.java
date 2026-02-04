@@ -27,6 +27,7 @@ import thebetweenlands.common.block.entity.DecayPitHangingChainBlockEntity;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
 import thebetweenlands.common.entity.multipart.DecayPitTargetPart;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.RotationMatrix;
 
@@ -408,15 +409,13 @@ public class DecayPitTarget extends Entity {
 			return true;
 		} else if (wasBlocked) {
 			if (!this.level().isClientSide()) {
-				//TODO
-//				if (source instanceof EntityDamageSourceIndirect) {
-//					Entity sourceEntity = ((EntityDamageSourceIndirect) source).getTrueSource();
-//					if (sourceEntity != null && !world.isAirBlock(sourceEntity.getPosition().down())) {
-//						EntityRootGrabber grabber = new EntityRootGrabber(this.world, true);
-//						grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
-//						getEntityWorld().spawnEntity(grabber);
-//					}
-//				}
+				if (immediateEntity != null) {
+					if (sourceEntity != null && !level().isEmptyBlock(sourceEntity.blockPosition().below())) {
+						RootGrabber grabber = new RootGrabber(EntityRegistry.ROOT_GRABBER.get(), this.level(), true);
+						grabber.setPosAndDelay(sourceEntity.blockPosition().below(), 40);
+						this.level().addFreshEntity(grabber);
+					}
+				}
 				this.moveUp();
 			}
 			return false;

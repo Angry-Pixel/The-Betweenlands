@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "thebetweenlands:entities/small_spirit_tree_face"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:entities/small_tamed_spirit_tree_face"
+}

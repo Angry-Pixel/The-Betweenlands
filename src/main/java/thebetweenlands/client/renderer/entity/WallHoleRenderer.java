@@ -3,6 +3,7 @@ package thebetweenlands.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -173,9 +174,7 @@ public abstract class WallHoleRenderer<T extends AbstractWallCreature, M extends
 				this.modelNormal.renderToBuffer(stack, buffer.getBuffer(RenderType.entityTranslucent(WALL_TEXTURE_OVERLAY)), packedLight, overlay);
 
 				int damage = Mth.ceil((1.0F - entity.getHealth() / entity.getMaxHealth()) * 10.0F);
-				if (damage > 0 && damage < 10) {
-					this.modelNormal.renderToBuffer(stack, Minecraft.getInstance().renderBuffers().crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(damage)), packedLight, overlay);
-				}
+				this.renderBreakingOverlay(this.modelNormal, damage, stack, packedLight, overlay);
 			} else {
 				this.model.renderToBuffer(stack, buffer.getBuffer(type), packedLight, overlay, color);
 			}

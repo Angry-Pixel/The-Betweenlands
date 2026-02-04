@@ -1,0 +1,6 @@
+{
+  "type": "thebetweenlands:spirit_tree",
+  "biomes": "#thebetweenlands:generates_spirit_tree",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

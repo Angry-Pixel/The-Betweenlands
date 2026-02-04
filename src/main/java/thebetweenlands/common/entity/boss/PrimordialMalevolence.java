@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.attachment.ProtectionShield;
 import thebetweenlands.api.entity.MusicPlayer;
-import thebetweenlands.api.entity.bossbar.BetweenlandsBossBar;
+import thebetweenlands.api.entity.bossbar.BetweenlandsBoss;
 import thebetweenlands.api.entity.bossbar.BetweenlandsServerBossBar;
 import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.entity.BLEntity;
@@ -48,15 +48,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class PrimordialMalevolence extends Monster implements BLEntity, BetweenlandsBossBar, MusicPlayer {
-	private final BetweenlandsServerBossBar bossInfo = new BetweenlandsServerBossBar(this.getDisplayName(), BossType.NORMAL_BOSS);
+public class PrimordialMalevolence extends Monster implements BLEntity, BetweenlandsBoss, MusicPlayer {
+	private final BetweenlandsServerBossBar bossInfo;
 	protected static final EntityDataAccessor<Integer> SHIELD_STATE = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Float> SHIELD_ROTATION = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.FLOAT);
 	protected static final EntityDataAccessor<Boolean> FLOATING_STATE = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.BOOLEAN);
 	protected static final EntityDataAccessor<Boolean> GROUND_ATTACK_STATE = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.BOOLEAN);
 	protected static final EntityDataAccessor<BlockPos> ANCHOR = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.BLOCK_POS);
 	protected static final EntityDataAccessor<Float> ANCHOR_RADIUS = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.FLOAT);
-	private static final EntityDataAccessor<Optional<UUID>> BOSSINFO_ID = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.OPTIONAL_UUID);
+	private static final EntityDataAccessor<Optional<UUID>> BOSS_BAR_ID = SynchedEntityData.defineId(PrimordialMalevolence.class, EntityDataSerializers.OPTIONAL_UUID);
 
 	public static final double SHIELD_OFFSET_X = 0.0D;
 	public static final double SHIELD_OFFSET_Y = 1D;
@@ -111,6 +111,7 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 		for (int i = 0; i < 20; i++) {
 			this.shield.setActive(i, true);
 		}
+		this.bossInfo = new BetweenlandsServerBossBar(this.getDisplayName(), BossType.NORMAL_BOSS);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -128,7 +129,7 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 		builder.define(GROUND_ATTACK_STATE, false);
 		builder.define(ANCHOR, BlockPos.ZERO);
 		builder.define(ANCHOR_RADIUS, 0.0F);
-		builder.define(BOSSINFO_ID, Optional.empty());
+		builder.define(BOSS_BAR_ID, Optional.empty());
 	}
 
 	public float getShieldExplosion(float partialTicks) {
@@ -451,10 +452,12 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 	}
 
 	@Override
-	protected void customServerAiStep() {
+	public void customServerAiStep() {
 		super.customServerAiStep();
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-		this.getEntityData().set(BOSSINFO_ID, Optional.of(this.bossInfo.getId()));
+		if (this.bossInfo.getId() != this.getBossBarId()) {
+			this.getEntityData().set(BOSS_BAR_ID, Optional.of(this.bossInfo.getId()));
+		}
 	}
 
 	@Override
@@ -860,8 +863,9 @@ public class PrimordialMalevolence extends Monster implements BLEntity, Betweenl
 		return EntityMusicLayers.BOSS;
 	}
 
+	@Nullable
 	@Override
-	public BetweenlandsServerBossBar getBar() {
-		return this.bossInfo;
+	public UUID getBossBarId() {
+		return this.getEntityData().get(BOSS_BAR_ID).orElse(null);
 	}
 }
