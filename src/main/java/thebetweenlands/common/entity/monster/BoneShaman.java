@@ -25,9 +25,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -62,8 +62,8 @@ public class BoneShaman extends FlyingMonster {
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new BoneShamanHoverAttackGoal(this, 1D, 8F));
-		goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
+		goalSelector.addGoal(1, new BoneShamanHoverAttackGoal(this, 1D, 10F, 6F));
+		//goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
 		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
@@ -91,7 +91,7 @@ public class BoneShaman extends FlyingMonster {
 			if (level().isClientSide()) {
 				if (getSpawnTimer() < 10)
 					spawnEmergingParticles();
-				
+
 				if (isAlive() && !isEmerging()) {
 					if (this.getRandom().nextInt(4) == 0) {
 						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
@@ -241,12 +241,14 @@ public class BoneShaman extends FlyingMonster {
 	        private final BoneShaman shaman;
 	        private final double speedModifier;
 	        private final float attackRadiusSqr;
+	        private final float repositionRadiusSqr;
 	        private int updatePathDelay;
 
-	        public BoneShamanHoverAttackGoal(BoneShaman shaman, double speedModifier, float range) {
+	        public BoneShamanHoverAttackGoal(BoneShaman shaman, double speedModifier, float range, float near) {
 	            this.shaman = shaman;
 	            this.speedModifier = speedModifier;
 	            attackRadiusSqr = range * range;
+				repositionRadiusSqr = near * near;
 	            setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 	        }
 
@@ -276,19 +278,36 @@ public class BoneShaman extends FlyingMonster {
 					shaman.setDeltaMovement(shaman.getDeltaMovement().add(0D, 0.01D, 0D));
 					shaman.hurtMarked = true;
 				}
+				else{
+					shaman.setDeltaMovement(shaman.getDeltaMovement().subtract(0D, 0.01D, 0D));
+					shaman.hurtMarked = true;
+					}
 				LivingEntity livingentity = shaman.getTarget();
 				if (livingentity != null) {
 					boolean canSee = shaman.getSensing().hasLineOfSight(livingentity);
 					if (canSee) {
 						double distanceToTarget = shaman.distanceToSqr(livingentity);
 						boolean outOfRange = distanceToTarget > (double) attackRadiusSqr;
+						boolean tooNear = distanceToTarget < (double) repositionRadiusSqr;
 						if (outOfRange) {
 							updatePathDelay--;
 							if (updatePathDelay <= 0) {
 								shaman.getNavigation().moveTo(livingentity.getX(), Math.max(groundHeight + 4, livingentity.getY() + 4), livingentity.getZ(), speedModifier);
 								updatePathDelay = PATHFINDING_DELAY_RANGE.sample(shaman.getRandom());
 							}
-						} else {
+						}
+						else if(tooNear) {
+							updatePathDelay--;
+							if (updatePathDelay <= 0) {
+								Vec3 view = shaman.getViewVector(0.0F);
+								Vec3 newTarget = AirAndWaterRandomPos.getPos(shaman, 8, 0, 0, view.x, view.z, 0F);
+								if (newTarget != null) {
+									shaman.getNavigation().moveTo(newTarget.x, Math.max(groundHeight + 4, livingentity.getY() + 4), newTarget.z, speedModifier);
+									updatePathDelay = PATHFINDING_DELAY_RANGE.sample(shaman.getRandom());
+								}
+							}	
+						}
+						else {
 							updatePathDelay = 0;
 							shaman.getNavigation().stop();
 						}
