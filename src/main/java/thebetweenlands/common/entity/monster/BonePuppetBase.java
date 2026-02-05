@@ -58,9 +58,9 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		//TODO temp disable for test, add  boolean and count-down for de-spawn animation etc
+		//TODO temp disable for test
 	/*	if (!this.level().isClientSide())
-			if (getParentEntity() == null || !getParentEntity().isAlive())
+			if (getParentEntity() == null || getParentEntity().isDeadOrDying())
 				kill();
 	*/
 	}

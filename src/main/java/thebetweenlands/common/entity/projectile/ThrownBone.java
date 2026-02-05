@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import thebetweenlands.common.entity.monster.BonePuppetBase;
+import thebetweenlands.common.entity.monster.BoneShaman;
 import thebetweenlands.common.registries.EntityRegistry;
 
 public class ThrownBone extends ThrowableProjectile {
@@ -56,7 +57,7 @@ public class ThrownBone extends ThrowableProjectile {
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
-		if (result.getEntity() instanceof LivingEntity &&  !(result.getEntity() instanceof BonePuppetBase))
+		if (result.getEntity() instanceof LivingEntity &&  (!(result.getEntity() instanceof BonePuppetBase) || !(result.getEntity() instanceof BoneShaman)))
 			(result.getEntity()).hurt(this.damageSources().thrown(this, getOwner()), this.damage);
 	}
 
@@ -74,7 +75,7 @@ public class ThrownBone extends ThrowableProjectile {
 
 	@Override
 	protected boolean canHitEntity(Entity target) {
-		return super.canHitEntity(target) && !(target instanceof BonePuppetBase); //shaman too?
+		return super.canHitEntity(target) && (!(target instanceof BonePuppetBase)  || !(target instanceof BoneShaman));
 	}
 
 	@Override

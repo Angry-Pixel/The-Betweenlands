@@ -64,9 +64,9 @@ public class BoneShaman extends Monster implements BLEntity {
 
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Mob.createMobAttributes()
-				.add(Attributes.MAX_HEALTH, 2.0D)
+				.add(Attributes.MAX_HEALTH, 200.0D)
 				.add(Attributes.MOVEMENT_SPEED, 0.33D)
-				.add(Attributes.ATTACK_DAMAGE, 0.5D)
+				.add(Attributes.ATTACK_DAMAGE, 2.5D)
 				.add(Attributes.ATTACK_KNOCKBACK, 2.0D)
 				.add(Attributes.FOLLOW_RANGE, 64.0D);
 	}
