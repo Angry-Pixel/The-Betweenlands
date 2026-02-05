@@ -8,6 +8,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
@@ -71,8 +72,7 @@ public class WightSeekBonePileGoal extends Goal {
 						shaman.setYRot(wight.getYRot());
 						//puppet.setParentEntityID(wight.getId());
 						level.addFreshEntity(shaman);
-						wight.discard();
-						shaman.jumpFromGround();
+						wight.remove(RemovalReason.DISCARDED); // TODO save to NBT of shaman for later revival 
 						//wight.setVolatile(false);
 						//wight.clearTargetBlock();
 						//wight.canTransformInToShaman = false; // setting this so it only happens once
