@@ -10,8 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.monster.BonePuppetMelee;
-import thebetweenlands.common.entity.monster.BonePuppetRanged;
+import thebetweenlands.common.entity.monster.BoneShaman;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -214,7 +213,7 @@ public class TestChimpItem extends Item {
 			triggeredblock.setHanging(true);
 			context.getLevel().addFreshEntity(triggeredblock);
 			*/
-
+/*
 			BonePuppetRanged puppet1 = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
 			BonePuppetMelee puppet2 = EntityRegistry.BONE_PUPPET_MELEE.get().create(context.getLevel());
 			if (context.getLevel().getRandom().nextBoolean()) {
@@ -226,6 +225,13 @@ public class TestChimpItem extends Item {
 		if (puppet2 != null) {
 				puppet2.setPos(context.getClickedPos().above().getBottomCenter());
 				context.getLevel().addFreshEntity(puppet2);
+			}
+			*/
+
+			BoneShaman shaman = EntityRegistry.BONE_SHAMAN.get().create(context.getLevel());
+			if (shaman != null) {
+				shaman.setPos(context.getClickedPos().above().getBottomCenter());
+				context.getLevel().addFreshEntity(shaman);
 			}
 		}
 

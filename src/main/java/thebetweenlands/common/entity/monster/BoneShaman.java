@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.monster;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
@@ -12,6 +13,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +24,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -31,15 +34,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
-public class BoneShaman extends Monster implements BLEntity {
+public class BoneShaman extends FlyingMonster {
 
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
-
 	public int lastSpawningAnimationTicks = 0;
 	public int spawnDuration = 30;
 
@@ -56,7 +62,7 @@ public class BoneShaman extends Monster implements BLEntity {
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new MeleeAttackGoal(this, 1D, true));
+		goalSelector.addGoal(1, new BoneShamanHoverAttackGoal(this, 1D, 8F));
 		goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
 		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -64,13 +70,14 @@ public class BoneShaman extends Monster implements BLEntity {
 
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Mob.createMobAttributes()
-				.add(Attributes.MAX_HEALTH, 200.0D)
+				.add(Attributes.MAX_HEALTH, 2.0D)
 				.add(Attributes.MOVEMENT_SPEED, 0.33D)
-				.add(Attributes.ATTACK_DAMAGE, 2.5D)
+				.add(Attributes.FLYING_SPEED, 0.32D)
+				.add(Attributes.ATTACK_DAMAGE, 0.5D)
 				.add(Attributes.ATTACK_KNOCKBACK, 2.0D)
 				.add(Attributes.FOLLOW_RANGE, 64.0D);
 	}
-	
+
 	@Override
 	public void aiStep() {
 		if (isAlive()) {
@@ -78,12 +85,21 @@ public class BoneShaman extends Monster implements BLEntity {
 			if (!level().isClientSide()) {
 				if (getSpawnTimer() < spawnDuration)
 					setSpawnTimer(getSpawnTimer() + 1);
-				if (getSpawnTimer() == spawnDuration -1) //Temp 
-					spawnPuppets();
+				//if (getSpawnTimer() == spawnDuration -1) //Temp 
+				//	spawnPuppets();
 			}
-			if (level().isClientSide())
+			if (level().isClientSide()) {
 				if (getSpawnTimer() < 10)
 					spawnEmergingParticles();
+				
+				if (isAlive() && !isEmerging()) {
+					if (this.getRandom().nextInt(4) == 0) {
+						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
+						args.withColor(1F, 0.65F, 0.25F, 1);
+						TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.LEAF_SWIRL.get()), this.level(), this.getX(), this.getY(), this.getZ(), args);
+					}
+				}
+			}
 		}
 
 		super.aiStep();
@@ -219,5 +235,82 @@ public class BoneShaman extends Monster implements BLEntity {
 		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
 		return !helmet.isEmpty() && helmet.is(ItemRegistry.SKULL_MASK);
 	}
+
+	 public static class BoneShamanHoverAttackGoal extends Goal {
+	        public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
+	        private final BoneShaman shaman;
+	        private final double speedModifier;
+	        private final float attackRadiusSqr;
+	        private int updatePathDelay;
+
+	        public BoneShamanHoverAttackGoal(BoneShaman shaman, double speedModifier, float range) {
+	            this.shaman = shaman;
+	            this.speedModifier = speedModifier;
+	            attackRadiusSqr = range * range;
+	            setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+	        }
+
+	        @Override
+	        public boolean canUse() {
+	            return isValidTarget();
+	        }
+
+	        @Override
+	        public boolean canContinueToUse() {
+	            return isValidTarget() || !shaman.getNavigation().isDone();
+	        }
+
+	        private boolean isValidTarget() {
+	            return shaman.getTarget() != null && shaman.getTarget().isAlive();
+	        }
+
+	        @Override
+	        public boolean requiresUpdateEveryTick() {
+	            return true;
+	        }
+
+			@Override
+			public void tick() {
+				int groundHeight = BLFlightMoveControl.getGroundHeight(shaman.level(), shaman.blockPosition(), 16, shaman.blockPosition()).getY();
+				if(shaman.blockPosition().getY() - groundHeight < 4 ) {
+					shaman.setDeltaMovement(shaman.getDeltaMovement().add(0D, 0.01D, 0D));
+					shaman.hurtMarked = true;
+				}
+				LivingEntity livingentity = shaman.getTarget();
+				if (livingentity != null) {
+					boolean canSee = shaman.getSensing().hasLineOfSight(livingentity);
+					if (canSee) {
+						double distanceToTarget = shaman.distanceToSqr(livingentity);
+						boolean outOfRange = distanceToTarget > (double) attackRadiusSqr;
+						if (outOfRange) {
+							updatePathDelay--;
+							if (updatePathDelay <= 0) {
+								shaman.getNavigation().moveTo(livingentity.getX(), Math.max(groundHeight + 4, livingentity.getY() + 4), livingentity.getZ(), speedModifier);
+								updatePathDelay = PATHFINDING_DELAY_RANGE.sample(shaman.getRandom());
+							}
+						} else {
+							updatePathDelay = 0;
+							shaman.getNavigation().stop();
+						}
+
+						shaman.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+						//shootStuff(livingentity);
+					}
+				}
+			}
+/*	
+			private void shootStuff(LivingEntity target) {
+			if (canPerformAttack(target)) {
+					if(!shaman.level().isClientSide()) {
+						//TODO ADD SOME ATTACKS
+						}
+					}
+				
+			}
+
+		    protected boolean canPerformAttack(LivingEntity entity) {
+		        return shaman.getSensing().hasLineOfSight(entity);
+		    }}*/
+	    }
 
 }
