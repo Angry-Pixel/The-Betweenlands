@@ -42,6 +42,7 @@ public class WatcherEyes extends BasicProximitySpawnerExtended {
 
 	public WatcherEyes(EntityType<? extends BasicProximitySpawner> type, Level level) {
 		super(type, level);
+		setNoGravity(true);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class WatcherEyes extends BasicProximitySpawnerExtended {
 
 	@Override
 	public void tick() {
-		//super.tick();
+		super.tick();
 		if (!level().isClientSide() && level().getGameTime() % 5 == 0) {
 				checkArea();
 		}
@@ -253,6 +254,11 @@ public class WatcherEyes extends BasicProximitySpawnerExtended {
 	@Override
 	public int maxUseCount() {
 		return 0;
+	}
+
+	@Override
+	protected double getDefaultGravity() {
+		return 0F;
 	}
 
 	@Override

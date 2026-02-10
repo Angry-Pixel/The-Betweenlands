@@ -16,46 +16,46 @@ import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.WatcherEyes;
 
 public class WatcherEyesModel extends MowzieModelBase<WatcherEyes> {
-	private final ModelPart eye_main;
-	private final ModelPart eye_main_lens;
-	private final ModelPart smoll_eye_top_l;
-	private final ModelPart smoll_eye_top_l_lens;
-	private final ModelPart smoll_eye_top_r;
-	private final ModelPart smoll_eye_top_r_lens;
-	private final ModelPart smoll_eye_mid_r;
-	private final ModelPart smoll_eye_mid_r_lens;
-	private final ModelPart smoll_eye_mid_l;
-	private final ModelPart smoll_eye_mid_l_lens;
-	private final ModelPart smoll_eye_bot_l;
-	private final ModelPart smoll_eye_bot_l_lens;
-	private final ModelPart smoll_eye_bot_r;
-	private final ModelPart smoll_eye_bot_r_lens;
-	private final ModelPart teeny_eye_top_mid;
-	private final ModelPart teeny_eye_top_mid_lens;
-	private final ModelPart teeny_eye_bot_mid;
-	private final ModelPart teeny_eye_bot_mid_lens;
+	public final ModelPart eye_main;
+	public final ModelPart smoll_eye_top_l;
+	public final ModelPart smoll_eye_top_r;
+	public final ModelPart smoll_eye_mid_r;
+	public final ModelPart smoll_eye_mid_l;
+	public final ModelPart smoll_eye_bot_l;
+	public final ModelPart smoll_eye_bot_r;
+	public final ModelPart teeny_eye_top_mid;
+	public final ModelPart teeny_eye_bot_mid;
+	public final ModelPart eye_main_lens;
+	public final ModelPart smoll_eye_top_l_lens;
+	public final ModelPart smoll_eye_top_r_lens;
+	public final ModelPart smoll_eye_mid_r_lens;
+	public final ModelPart smoll_eye_mid_l_lens;
+	public final ModelPart smoll_eye_bot_l_lens;
+	public final ModelPart smoll_eye_bot_r_lens;
+	public final ModelPart teeny_eye_top_mid_lens;
+	public final ModelPart teeny_eye_bot_mid_lens;
 
 
 	public WatcherEyesModel(ModelPart root) {
 		super(root, RenderType::entityCutoutNoCull);
 		this.eye_main = root.getChild("eye_main");
-		this.eye_main_lens = this.eye_main.getChild("eye_main_lens");
 		this.smoll_eye_top_l = root.getChild("smoll_eye_top_l");
-		this.smoll_eye_top_l_lens = this.smoll_eye_top_l.getChild("smoll_eye_top_l_lens");
 		this.smoll_eye_top_r = root.getChild("smoll_eye_top_r");
-		this.smoll_eye_top_r_lens = this.smoll_eye_top_r.getChild("smoll_eye_top_r_lens");
 		this.smoll_eye_mid_r = root.getChild("smoll_eye_mid_r");
-		this.smoll_eye_mid_r_lens = this.smoll_eye_mid_r.getChild("smoll_eye_mid_r_lens");
 		this.smoll_eye_mid_l = root.getChild("smoll_eye_mid_l");
-		this.smoll_eye_mid_l_lens = this.smoll_eye_mid_l.getChild("smoll_eye_mid_l_lens");
 		this.smoll_eye_bot_l = root.getChild("smoll_eye_bot_l");
-		this.smoll_eye_bot_l_lens = this.smoll_eye_bot_l.getChild("smoll_eye_bot_l_lens");
 		this.smoll_eye_bot_r = root.getChild("smoll_eye_bot_r");
-		this.smoll_eye_bot_r_lens = this.smoll_eye_bot_r.getChild("smoll_eye_bot_r_lens");
 		this.teeny_eye_top_mid = root.getChild("teeny_eye_top_mid");
-		this.teeny_eye_top_mid_lens = this.teeny_eye_top_mid.getChild("teeny_eye_top_mid_lens");
 		this.teeny_eye_bot_mid = root.getChild("teeny_eye_bot_mid");
-		this.teeny_eye_bot_mid_lens = this.teeny_eye_bot_mid.getChild("teeny_eye_bot_mid_lens");
+		this.eye_main_lens = root.getChild("eye_main_lens");
+		this.smoll_eye_top_l_lens = root.getChild("smoll_eye_top_l_lens");
+		this.smoll_eye_top_r_lens = root.getChild("smoll_eye_top_r_lens");
+		this.smoll_eye_mid_r_lens = root.getChild("smoll_eye_mid_r_lens");
+		this.smoll_eye_mid_l_lens = root.getChild("smoll_eye_mid_l_lens");
+		this.smoll_eye_bot_l_lens = root.getChild("smoll_eye_bot_l_lens");
+		this.smoll_eye_bot_r_lens = root.getChild("smoll_eye_bot_r_lens");
+		this.teeny_eye_top_mid_lens = root.getChild("teeny_eye_top_mid_lens");
+		this.teeny_eye_bot_mid_lens = root.getChild("teeny_eye_bot_mid_lens");
 
 	}
 
@@ -63,44 +63,43 @@ public class WatcherEyesModel extends MowzieModelBase<WatcherEyes> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition eye_main = partdefinition.addOrReplaceChild("eye_main", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, 0.0F, 0.0F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 12.0F, -6.0F));
+		PartDefinition eye_main = partdefinition.addOrReplaceChild("eye_main", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, 0.0F, -5.0F, 7.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 13.0F, -6.0F));
 
-		PartDefinition eye_main_lens = eye_main.addOrReplaceChild("eye_main_lens", CubeListBuilder.create().texOffs(0, 11).addBox(-2.5F, 5.01F, 0.0F, 5.0F, 0.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_top_l = partdefinition.addOrReplaceChild("smoll_eye_top_l", CubeListBuilder.create().texOffs(0, 11).addBox(-2.0F, 0.0F, -3.0F, 4.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 9.0F, -7.0F));
 
-		PartDefinition smoll_eye_top_l = partdefinition.addOrReplaceChild("smoll_eye_top_l", CubeListBuilder.create().texOffs(13, 17).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.5F, 9.0F, -7.0F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_top_r = partdefinition.addOrReplaceChild("smoll_eye_top_r", CubeListBuilder.create().texOffs(15, 18).addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.5F, 10.0F, -7.5F));
 
-		PartDefinition smoll_eye_top_l_lens = smoll_eye_top_l.addOrReplaceChild("smoll_eye_top_l_lens", CubeListBuilder.create().texOffs(7, 24).addBox(-1.5F, 0.0F, -3.01F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_mid_r = partdefinition.addOrReplaceChild("smoll_eye_mid_r", CubeListBuilder.create().texOffs(15, 23).addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.5F, 14.0F, -7.5F));
 
-		PartDefinition smoll_eye_top_r = partdefinition.addOrReplaceChild("smoll_eye_top_r", CubeListBuilder.create().texOffs(23, 14).addBox(-1.0F, 0.0F, -2.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, 10.0F, -7.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_mid_l = partdefinition.addOrReplaceChild("smoll_eye_mid_l", CubeListBuilder.create().texOffs(0, 24).addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(6.5F, 15.0F, -7.5F));
 
-		PartDefinition smoll_eye_top_r_lens = smoll_eye_top_r.addOrReplaceChild("smoll_eye_top_r_lens", CubeListBuilder.create().texOffs(23, 10).addBox(-1.0F, 0.0F, -2.01F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_bot_l = partdefinition.addOrReplaceChild("smoll_eye_bot_l", CubeListBuilder.create().texOffs(25, 0).addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(4.5F, 19.0F, -7.5F));
 
-		PartDefinition smoll_eye_mid_r = partdefinition.addOrReplaceChild("smoll_eye_mid_r", CubeListBuilder.create().texOffs(21, 5).addBox(-1.0F, 0.0F, -2.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.0F, 14.0F, -7.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_bot_r = partdefinition.addOrReplaceChild("smoll_eye_bot_r", CubeListBuilder.create().texOffs(15, 11).addBox(-2.0F, 0.0F, -3.0F, 4.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 19.0F, -7.0F));
 
-		PartDefinition smoll_eye_mid_r_lens = smoll_eye_mid_r.addOrReplaceChild("smoll_eye_mid_r_lens", CubeListBuilder.create().texOffs(10, 17).addBox(-1.0F, 0.0F, -2.04F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition teeny_eye_top_mid = partdefinition.addOrReplaceChild("teeny_eye_top_mid", CubeListBuilder.create().texOffs(26, 22).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 9.0F, -7.5F));
 
-		PartDefinition smoll_eye_mid_l = partdefinition.addOrReplaceChild("smoll_eye_mid_l", CubeListBuilder.create().texOffs(16, 11).addBox(-1.0F, 0.0F, -2.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 15.0F, -7.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition teeny_eye_bot_mid = partdefinition.addOrReplaceChild("teeny_eye_bot_mid", CubeListBuilder.create().texOffs(26, 25).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 21.0F, -7.5F));
 
-		PartDefinition smoll_eye_mid_l_lens = smoll_eye_mid_l.addOrReplaceChild("smoll_eye_mid_l_lens", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 0.0F, -2.01F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition eye_main_lens = partdefinition.addOrReplaceChild("eye_main_lens", CubeListBuilder.create().texOffs(0, 18).addBox(-3.5F, 0.01F, -5.01F, 7.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 13.0F, -6.0F));
 
-		PartDefinition smoll_eye_bot_l = partdefinition.addOrReplaceChild("smoll_eye_bot_l", CubeListBuilder.create().texOffs(16, 0).addBox(-1.0F, 0.0F, -2.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 20.0F, -7.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_top_l_lens = partdefinition.addOrReplaceChild("smoll_eye_top_l_lens", CubeListBuilder.create().texOffs(25, 5).addBox(-2.0F, 0.0F, -3.01F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 9.0F, -7.0F));
 
-		PartDefinition smoll_eye_bot_l_lens = smoll_eye_bot_l.addOrReplaceChild("smoll_eye_bot_l_lens", CubeListBuilder.create().texOffs(0, 11).addBox(-1.0F, 0.0F, -2.01F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_top_r_lens = partdefinition.addOrReplaceChild("smoll_eye_top_r_lens", CubeListBuilder.create().texOffs(11, 28).addBox(-1.5F, 0.0F, -2.01F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.5F, 10.0F, -7.5F));
 
-		PartDefinition smoll_eye_bot_r = partdefinition.addOrReplaceChild("smoll_eye_bot_r", CubeListBuilder.create().texOffs(0, 17).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.5F, 18.0F, -7.0F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_mid_r_lens = partdefinition.addOrReplaceChild("smoll_eye_mid_r_lens", CubeListBuilder.create().texOffs(18, 28).addBox(-1.5F, 0.0F, -2.04F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.5F, 14.0F, -7.5F));
 
-		PartDefinition smoll_eye_bot_r_lens = smoll_eye_bot_r.addOrReplaceChild("smoll_eye_bot_r_lens", CubeListBuilder.create().texOffs(0, 24).addBox(-1.5F, 0.0F, -3.01F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_mid_l_lens = partdefinition.addOrReplaceChild("smoll_eye_mid_l_lens", CubeListBuilder.create().texOffs(0, 29).addBox(-1.5F, 0.0F, -2.01F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(6.5F, 15.0F, -7.5F));
 
-		PartDefinition teeny_eye_top_mid = partdefinition.addOrReplaceChild("teeny_eye_top_mid", CubeListBuilder.create().texOffs(19, 24).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, 9.0F, -7.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_bot_l_lens = partdefinition.addOrReplaceChild("smoll_eye_bot_l_lens", CubeListBuilder.create().texOffs(25, 28).addBox(-1.5F, 0.0F, -2.01F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(4.5F, 19.0F, -7.5F));
 
-		PartDefinition teeny_eye_top_mid_lens = teeny_eye_top_mid.addOrReplaceChild("teeny_eye_top_mid_lens", CubeListBuilder.create().texOffs(0, 14).addBox(-0.5F, 0.0F, -1.01F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition smoll_eye_bot_r_lens = partdefinition.addOrReplaceChild("smoll_eye_bot_r_lens", CubeListBuilder.create().texOffs(26, 18).addBox(-2.0F, 0.0F, -3.01F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 19.0F, -7.0F));
 
-		PartDefinition teeny_eye_bot_mid = partdefinition.addOrReplaceChild("teeny_eye_bot_mid", CubeListBuilder.create().texOffs(14, 24).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, 21.0F, -7.5F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition teeny_eye_top_mid_lens = partdefinition.addOrReplaceChild("teeny_eye_top_mid_lens", CubeListBuilder.create().texOffs(25, 9).addBox(-1.0F, 0.0F, -1.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 9.0F, -7.5F));
 
-		PartDefinition teeny_eye_bot_mid_lens = teeny_eye_bot_mid.addOrReplaceChild("teeny_eye_bot_mid_lens", CubeListBuilder.create().texOffs(0, 3).addBox(-0.5F, 0.0F, -1.01F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition teeny_eye_bot_mid_lens = partdefinition.addOrReplaceChild("teeny_eye_bot_mid_lens", CubeListBuilder.create().texOffs(30, 9).addBox(-1.0F, 0.0F, -1.01F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 21.0F, -7.5F));
 
-		return LayerDefinition.create(meshdefinition, 32, 32);
-
+		return LayerDefinition.create(meshdefinition, 64, 64);
 
 	}
 
@@ -114,7 +113,7 @@ public class WatcherEyesModel extends MowzieModelBase<WatcherEyes> {
 		int eyeGroupPick2 = eyes.eyeGroupPick2;
 		int eyeGroupPick3 = eyes.eyeGroupPick3;
 
-		eye_main.xRot = 0F - open;
+		eye_main.xRot = 1.5708F - open;
 		smoll_eye_top_l.xRot = 1.5708F - open;
 		smoll_eye_top_r.xRot = 1.5708F - open;
 		smoll_eye_mid_r.xRot = 1.5708F - open;
@@ -123,68 +122,58 @@ public class WatcherEyesModel extends MowzieModelBase<WatcherEyes> {
 		smoll_eye_bot_r.xRot = 1.5708F - open;
 		teeny_eye_top_mid.xRot = 1.5708F - open;
 		teeny_eye_bot_mid.xRot = 1.5708F - open;
-
-		eye_main.yRot = 0F;
-		smoll_eye_top_l.yRot = 0F;
-		smoll_eye_top_r.yRot = 0F;
-		smoll_eye_mid_r.yRot = 0F;
-		smoll_eye_mid_l.yRot = 0F;
-		smoll_eye_bot_l.yRot = 0F;
-		smoll_eye_bot_r.yRot = 0F;
-		teeny_eye_top_mid.yRot = 0F;
-		teeny_eye_bot_mid.yRot = 0F;
-
-		eye_main.zRot = 0F;
-		smoll_eye_top_l.zRot = 0F;
-		smoll_eye_top_r.zRot = 0F;
-		smoll_eye_mid_r.zRot = 0F;
-		smoll_eye_mid_l.zRot = 0F;
-		smoll_eye_bot_l.zRot = 0F;
-		smoll_eye_bot_r.zRot = 0F;
-		teeny_eye_top_mid.zRot = 0F;
-		teeny_eye_bot_mid.zRot = 0F;
+		
+		eye_main_lens.xRot = 1.5708F - open;
+		smoll_eye_top_l_lens.xRot = 1.5708F - open;
+		smoll_eye_top_r_lens.xRot = 1.5708F - open;
+		smoll_eye_mid_r_lens.xRot = 1.5708F - open;
+		smoll_eye_mid_l_lens.xRot = 1.5708F - open;
+		smoll_eye_bot_l_lens.xRot = 1.5708F - open;
+		smoll_eye_bot_r_lens.xRot = 1.5708F - open;
+		teeny_eye_top_mid_lens.xRot = 1.5708F - open;
+		teeny_eye_bot_mid_lens.xRot = 1.5708F - open;
 
 		if (eyeGroupPick1 == 0) {
-			eye_main_lens.zScale = 1F - scale1;
-			eye_main_lens.z = 0F + scale1 * 2.5F;
+			eye_main_lens.yScale = 1F - scale1;
+			eye_main_lens.y += scale1 * 2.5F;
 		}
 		if (eyeGroupPick1 == 1) {
 			smoll_eye_top_l_lens.yScale = 1F - scale2;
-			smoll_eye_top_l_lens.y = 0F + scale2 * 1.5F;
+			smoll_eye_top_l_lens.y += scale2 * 1.5F;
 		}
 		if (eyeGroupPick1 == 2) {
 			smoll_eye_top_r_lens.yScale = 1F - scale3;
-			smoll_eye_top_r_lens.y = 0F + scale3 * 1F;
+			smoll_eye_top_r_lens.y += scale3 * 1F;
 		}
 		if (eyeGroupPick2 == 0) {
 			smoll_eye_mid_r_lens.yScale = 1F - scale1;
-			smoll_eye_mid_r_lens.y = 0F + scale1 * 1F;
+			smoll_eye_mid_r_lens.y += scale1 * 1F;
 		}
 		if (eyeGroupPick2 == 1) {
 			smoll_eye_mid_l_lens.yScale = 1F - scale2;
-			smoll_eye_mid_l_lens.y = 0F + scale2 * 1F;
+			smoll_eye_mid_l_lens.y += scale2 * 1F;
 		}
 		if (eyeGroupPick2 == 2) {
 			smoll_eye_bot_l_lens.yScale = 1F - scale3;
-			smoll_eye_bot_l_lens.y = 0F + scale3 * 1F;
+			smoll_eye_bot_l_lens.y += scale3 * 1F;
 		}
 		if (eyeGroupPick3 == 0) {
 			smoll_eye_bot_r_lens.yScale = 1F - scale1;
-			smoll_eye_bot_r_lens.y = 0F + scale1 * 1.5F;
+			smoll_eye_bot_r_lens.y += scale1 * 1.5F;
 		}
 		if (eyeGroupPick3 == 1) {
 			teeny_eye_top_mid_lens.yScale = 1F - scale2;
-			teeny_eye_top_mid_lens.y = 0F + scale2 * 0.5F;
+			teeny_eye_top_mid_lens.y += scale2 * 0.5F;
 		}
 		if (eyeGroupPick3 == 2) {
 			teeny_eye_bot_mid_lens.yScale = 1F - scale3;
-			teeny_eye_bot_mid_lens.y = 0F + scale3 * 0.5F;
+			teeny_eye_bot_mid_lens.y += scale3 * 0.5F;
 		}
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		eye_main.render(stack, consumer, light, overlay, color);
+	   	eye_main.render(stack, consumer, light, overlay, color);
 		smoll_eye_top_l.render(stack, consumer, light, overlay, color);
 		smoll_eye_top_r.render(stack, consumer, light, overlay, color);
 		smoll_eye_mid_r.render(stack, consumer, light, overlay, color);
@@ -193,5 +182,17 @@ public class WatcherEyesModel extends MowzieModelBase<WatcherEyes> {
 		smoll_eye_bot_r.render(stack, consumer, light, overlay, color);
 		teeny_eye_top_mid.render(stack, consumer, light, overlay, color);
 		teeny_eye_bot_mid.render(stack, consumer, light, overlay, color);
+	}
+
+	public void renderEyesToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
+		eye_main_lens.render(stack, consumer, light, overlay, color);
+		smoll_eye_top_l_lens.render(stack, consumer, light, overlay, color);
+		smoll_eye_top_r_lens.render(stack, consumer, light, overlay, color);
+		smoll_eye_mid_r_lens.render(stack, consumer, light, overlay, color);
+		smoll_eye_mid_l_lens.render(stack, consumer, light, overlay, color);
+		smoll_eye_bot_l_lens.render(stack, consumer, light, overlay, color);
+		smoll_eye_bot_r_lens.render(stack, consumer, light, overlay, color);
+		teeny_eye_top_mid_lens.render(stack, consumer, light, overlay, color);
+		teeny_eye_bot_mid_lens.render(stack, consumer, light, overlay, color);
 	}
 }
