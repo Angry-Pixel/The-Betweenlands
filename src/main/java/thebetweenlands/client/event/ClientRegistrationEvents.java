@@ -212,6 +212,7 @@ import thebetweenlands.client.model.entity.ThrownBoneModel;
 import thebetweenlands.client.model.entity.TinySludgeWormModel;
 import thebetweenlands.client.model.entity.WallHoleModel;
 import thebetweenlands.client.model.entity.WallLampreyModel;
+import thebetweenlands.client.model.entity.WatcherEyesModel;
 import thebetweenlands.client.model.entity.WeedwoodRowboatModel;
 import thebetweenlands.client.model.entity.WightModel;
 import thebetweenlands.client.model.item.BoneShieldModel;
@@ -384,6 +385,7 @@ import thebetweenlands.client.renderer.entity.TinySludgeWormRenderer;
 import thebetweenlands.client.renderer.entity.TriggeredFallingBlockRenderer;
 import thebetweenlands.client.renderer.entity.VolatileSoulRenderer;
 import thebetweenlands.client.renderer.entity.WallLampreyRenderer;
+import thebetweenlands.client.renderer.entity.WatcherEyesRenderer;
 import thebetweenlands.client.renderer.entity.WightRenderer;
 import thebetweenlands.client.renderer.entity.WormGroundSpawnerRenderer;
 import thebetweenlands.common.TheBetweenlands;
@@ -613,6 +615,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.LARGE_SPIRIT_TREE_FACE.get(), LargeSpiritTreeFaceRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ROOT_GRABBER.get(), RootGrabberRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SPIKE_WAVE.get(), SpikeWaveRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.WATCHER_EYES.get(), WatcherEyesRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -755,6 +758,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.BONE_PUPPET_RANGED, BonePuppetRangedModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.THROWN_BONE, ThrownBoneModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.BONE_SHAMAN, BoneShamanModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.WATCHER_EYES, WatcherEyesModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

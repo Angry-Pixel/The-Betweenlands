@@ -38,6 +38,7 @@ import thebetweenlands.common.entity.SpikeWave;
 import thebetweenlands.common.entity.SpiritTreeFaceMask;
 import thebetweenlands.common.entity.SwordEnergy;
 import thebetweenlands.common.entity.TriggeredFallingBlock;
+import thebetweenlands.common.entity.WatcherEyes;
 import thebetweenlands.common.entity.WormGroundSpawner;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.boss.DreadfulPeatMummy;
@@ -214,6 +215,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<TinySludgeWorm>> TINY_SLUDGE_WORM = registerWithEgg("tiny_sludge_worm", EntityType.Builder.of(TinySludgeWorm::new, MobCategory.MONSTER).sized(0.3125F, 0.3125F).fireImmune(), 0xDAC2A7, 0x5C4639, TinySludgeWorm::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<TinySludgeWormHelper>> TINY_SLUDGE_WORM_HELPER = registerWithAttributes("tiny_sludge_worm_helper", EntityType.Builder.of(TinySludgeWormHelper::new, MobCategory.CREATURE).sized(0.3125F, 0.3125F).fireImmune(), TinySludgeWormHelper::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<WallLamprey>> WALL_LAMPREY = registerWithAttributes("wall_lamprey", EntityType.Builder.of(WallLamprey::new, MobCategory.MONSTER).sized(0.9F, 0.9F), WallLamprey::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<WatcherEyes>> WATCHER_EYES = registerWithAttributes("watcher_eyes", EntityType.Builder.of(WatcherEyes::new, MobCategory.MISC).sized(1F, 1F), BasicProximitySpawnerExtended::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B, Wight::registerAttributes);
 
 	//misc
