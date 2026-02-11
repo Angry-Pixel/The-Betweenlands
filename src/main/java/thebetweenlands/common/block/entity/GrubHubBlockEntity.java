@@ -15,6 +15,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.common.block.container.GrubHubBlock;
 import thebetweenlands.common.network.clientbound.InfestWeedwoodBushPacket;
 import thebetweenlands.common.registries.*;
 
@@ -31,18 +32,21 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	public static void tick(Level level, BlockPos pos, BlockState state, GrubHubBlockEntity entity) {
 		if (level instanceof ServerLevel serverLevel && level.getGameTime() % 10 == 0)
-			entity.checkCanInfestOrHarvest(serverLevel, pos.below());
+			entity.checkCanInfestOrHarvest(serverLevel, pos.below(), state);
 
 		if (level.isClientSide() && entity.switchTextureCount > 0)
 			entity.switchTextureCount--;
 	}
 
-	private void checkCanInfestOrHarvest(ServerLevel level, BlockPos pos) {
+	private void checkCanInfestOrHarvest(ServerLevel level, BlockPos pos, BlockState state) {
+		if(state.getValue(GrubHubBlock.POWERED)) { // Do not harvest grubs or spread extract when powered
+			return;
+		}
 		for (BlockPos checkPos : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))) {
-			BlockState state = level.getBlockState(checkPos);
-			if (state.is(BlockRegistry.WEEDWOOD_BUSH) && this.getTankFluidAmount() >= 50) {
+			BlockState bushState = level.getBlockState(checkPos);
+			if (bushState.is(BlockRegistry.WEEDWOOD_BUSH) && this.getTankFluidAmount() >= 50) {
 				this.infestBush(level, checkPos);
-			} else if (state.is(BlockRegistry.GRUB_INFESTED_WEEDWOOD_BUSH) && this.canAddGrub()) {
+			} else if (bushState.is(BlockRegistry.GRUB_INFESTED_WEEDWOOD_BUSH) && this.canAddGrub()) {
 				this.harvestGrub(level, checkPos);
 			}
 		}
