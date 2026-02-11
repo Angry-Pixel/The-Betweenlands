@@ -94,9 +94,10 @@ public class BoneShaman extends FlyingMonster {
 
 				if (isAlive() && !isEmerging()) {
 					if (this.getRandom().nextInt(4) == 0) {
-						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-						args.withColor(1F, 0.65F, 0.25F, 1);
-						TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.LEAF_SWIRL.get()), this.level(), this.getX(), this.getY(), this.getZ(), args);
+						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withData(400, this.getRandom().nextFloat(), this);
+						args.withScale((1.5F + this.getRandom().nextFloat() * 1.5F) * 0.5f);
+						args.withColor(1F, 1F, 1F, 0.5F);
+						TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.FLY_SWIRL.get()), this.level(), this.getX(), this.getY(), this.getZ(), args);
 					}
 				}
 			}
