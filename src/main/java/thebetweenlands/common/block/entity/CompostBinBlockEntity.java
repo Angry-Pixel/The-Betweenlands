@@ -103,7 +103,7 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	 * @return
 	 */
 	public CompostResult addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate) {
-		int clampedAmount = this.getTotalCompostAmount() + compostAmount <= MAX_COMPOST_AMOUNT ? compostAmount : MAX_COMPOST_AMOUNT - this.getTotalCompostAmount();
+		int clampedAmount = this.getClampedCompostAmount(compostAmount);
 		if (clampedAmount > 0) {
 			for (int i = 0; i < this.getContainerSize(); i++) {
 				if (this.getItem(i).isEmpty()) {
@@ -126,8 +126,16 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 		return CompostResult.FULL;
 	}
 
-	private boolean canAddItemToBin(int compostAmount, int index) {
-		return this.getItem(index).isEmpty() && (this.getTotalCompostAmount() + compostAmount <= MAX_COMPOST_AMOUNT ? compostAmount : MAX_COMPOST_AMOUNT - this.getTotalCompostAmount()) > 0;
+	public int getClampedCompostAmount(int compostAmount) {
+		return this.getTotalCompostAmount() + compostAmount <= this.getMaximimumCompostAmount() ? compostAmount : this.getMaximimumCompostAmount() - this.getTotalCompostAmount();
+	}
+	
+	public boolean canAddCompostToBin(int compostAmount) {
+		return this.getClampedCompostAmount(compostAmount) > 0;
+	}
+
+	public boolean canAddItemToBin(int compostAmount, int index) {
+		return this.getItem(index).isEmpty() && this.canAddCompostToBin(compostAmount);
 	}
 
 	@Override
@@ -198,6 +206,15 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	 */
 	public int getCompostedAmount() {
 		return this.compostedAmount;
+	}
+	
+	/**
+	 * Returns the maximum amount of compost that this bin can support at the end of the process
+	 * 
+	 * @return
+	 */
+	public int getMaximimumCompostAmount() {
+		return MAX_COMPOST_AMOUNT;
 	}
 
 	public enum CompostResult {
