@@ -208,7 +208,6 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		this.toes_right1 = this.foot_right.getChild("toes_right1");
 		this.toes_right2 = this.toes_right1.getChild("toes_right2");
 		this.leg_right3 = this.leg_right_lower.getChild("leg_right3");
-
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -224,9 +223,13 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		PartDefinition spine1a = hipbone.addOrReplaceChild("spine1a", CubeListBuilder.create().texOffs(0, 32).addBox(-1.0F, -4.0F, -2.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.01F))
 		.texOffs(1, 37).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 0.0F, 1.0F, -0.1745F, 0.0F, 0.0F));
 
+		PartDefinition slime1_r1 = spine1a.addOrReplaceChild("slime1_r1", CubeListBuilder.create().texOffs(33, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -4.0F, 0.0F, -0.7418F, 0.0F, 0.0F));
+
 		PartDefinition spine1b = spine1a.addOrReplaceChild("spine1b", CubeListBuilder.create().texOffs(0, 31).addBox(0.0F, -1.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, -4.0F, -1.0F, 0.0F, 0.0F, 0.0873F));
 
 		PartDefinition spine1c = spine1b.addOrReplaceChild("spine1c", CubeListBuilder.create().texOffs(0, 28).addBox(-1.0F, -3.0F, -2.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(1.0F, -1.0F, 1.0F, 0.1309F, 0.0F, 0.0F));
+
+		PartDefinition slime8_r1 = spine1c.addOrReplaceChild("slime8_r1", CubeListBuilder.create().texOffs(34, 1).addBox(0.0F, -1.0F, 0.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0F, 0.6981F, 0.0F));
 
 		PartDefinition ribs3a = spine1c.addOrReplaceChild("ribs3a", CubeListBuilder.create().texOffs(8, 31).addBox(-3.0F, -3.0F, -2.0F, 6.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -1.0F));
 
@@ -238,13 +241,21 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		PartDefinition rib_slime2_r_r1 = ribs2a.addOrReplaceChild("rib_slime2_r_r1", CubeListBuilder.create().texOffs(36, 22).addBox(0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 0.0F, -3.0F, 0.0F, 0.0F, -0.1309F));
 
+		PartDefinition slime10_r1 = ribs2a.addOrReplaceChild("slime10_r1", CubeListBuilder.create().texOffs(34, 1).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 1.0F, -2.0F, 0.0F, 2.1817F, 0.0F));
+
 		PartDefinition ribs2b_l = ribs2a.addOrReplaceChild("ribs2b_l", CubeListBuilder.create().texOffs(30, 26).addBox(-4.0F, -3.0F, 0.0F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 0.0F, -3.0F, 0.0F, -0.4363F, 0.0F));
+
+		PartDefinition slime2s_r1 = ribs2b_l.addOrReplaceChild("slime2s_r1", CubeListBuilder.create().texOffs(33, -1).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 0.0F, 0.0F, 0.6109F, 0.0F, 0.0F));
+
+		PartDefinition slime1_r2 = ribs2b_l.addOrReplaceChild("slime1_r2", CubeListBuilder.create().texOffs(34, -1).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.3927F, 0.0F));
 
 		PartDefinition rib_slime1_l_r1 = ribs2b_l.addOrReplaceChild("rib_slime1_l_r1", CubeListBuilder.create().texOffs(30, 29).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
 		PartDefinition ribs2b_r = ribs2a.addOrReplaceChild("ribs2b_r", CubeListBuilder.create().texOffs(38, 26).addBox(0.0F, -3.0F, 0.0F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 0.0F, -3.0F, 0.0F, 0.4363F, 0.0F));
 
 		PartDefinition rib_slime1_r_r1 = ribs2b_r.addOrReplaceChild("rib_slime1_r_r1", CubeListBuilder.create().texOffs(38, 29).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+
+		PartDefinition slime9_r1 = ribs2b_r.addOrReplaceChild("slime9_r1", CubeListBuilder.create().texOffs(33, -1).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -1.0F, 0.0F, -0.6981F, 0.0F, 0.0F));
 
 		PartDefinition spine1e = spine1d.addOrReplaceChild("spine1e", CubeListBuilder.create().texOffs(0, 20).addBox(-1.0F, -4.0F, -2.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, -4.0F, 0.0F, 0.1309F, 0.0F, 0.0F));
 
@@ -255,6 +266,8 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		PartDefinition ribs1b_l = ribs1a.addOrReplaceChild("ribs1b_l", CubeListBuilder.create().texOffs(40, 20).addBox(-4.0F, -4.0F, 0.0F, 4.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.5F, 0.0F, -3.0F, 0.0F, -0.48F, 0.0F));
 
 		PartDefinition ribs1c_r1 = ribs1b_l.addOrReplaceChild("ribs1c_r1", CubeListBuilder.create().texOffs(48, 20).addBox(-2.0F, -4.0F, 0.0F, 2.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.95F, 0.0F, 0.0F, 0.0F, 0.48F, 0.0F));
+
+		PartDefinition slime3_r1 = ribs1b_l.addOrReplaceChild("slime3_r1", CubeListBuilder.create().texOffs(34, 1).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0F, -0.3927F, 0.0F));
 
 		PartDefinition neck = spine1e.addOrReplaceChild("neck", CubeListBuilder.create().texOffs(0, 17).addBox(-1.0F, -3.0F, 0.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -4.0F, -2.0F, -0.1309F, 0.0F, 0.0F));
 
@@ -271,15 +284,21 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		PartDefinition shoulder_blade_left = spine1e.addOrReplaceChild("shoulder_blade_left", CubeListBuilder.create().texOffs(15, 79).addBox(0.0F, -1.0F, -1.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(1.0F, -3.0F, 0.0F, -0.1745F, -0.1309F, 0.0F));
 
+		PartDefinition slime4_r1 = shoulder_blade_left.addOrReplaceChild("slime4_r1", CubeListBuilder.create().texOffs(34, -1).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, -1.0F, -1.0F, 0.7399F, 0.5148F, 1.0762F));
+
 		PartDefinition collar_bone_r1 = shoulder_blade_left.addOrReplaceChild("collar_bone_r1", CubeListBuilder.create().texOffs(13, 84).addBox(-5.0F, -1.0F, 0.0F, 5.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 0.0F, -1.0F, 0.0F, -0.6981F, 0.0F));
 
 		PartDefinition arm1 = shoulder_blade_left.addOrReplaceChild("arm1", CubeListBuilder.create().texOffs(19, 86).addBox(-0.5F, -0.5F, -1.5F, 1.0F, 8.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(4.0F, 0.0F, -1.0F, 0.0F, 0.0F, -0.143F));
 
 		PartDefinition arm1_r1 = arm1.addOrReplaceChild("arm1_r1", CubeListBuilder.create().texOffs(13, 86).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, -0.5F, -0.5F, 0.0F, 0.0F, -0.1745F));
 
+		PartDefinition slime5_r1 = arm1.addOrReplaceChild("slime5_r1", CubeListBuilder.create().texOffs(33, 3).addBox(0.0F, 0.0F, -1.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, 4.5F, -1.5F, -0.5236F, 0.0F, 0.0F));
+
 		PartDefinition arm_lower = arm1.addOrReplaceChild("arm_lower", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 7.5F, 0.0F, -0.3054F, 0.0F, 0.0F));
 
 		PartDefinition arm2 = arm_lower.addOrReplaceChild("arm2", CubeListBuilder.create().texOffs(21, 96).addBox(0.0F, 0.0F, -1.0F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.25F, -0.5F, 0.0F, -0.0869F, -0.0076F, 0.1312F));
+
+		PartDefinition slime6_r1 = arm2.addOrReplaceChild("slime6_r1", CubeListBuilder.create().texOffs(34, 0).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 2.0F, -1.0F, 0.0F, -0.7418F, 0.0F));
 
 		PartDefinition hand = arm2.addOrReplaceChild("hand", CubeListBuilder.create().texOffs(19, 105).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, 8.0F, -0.5F, 0.0F, 0.0F, 0.0873F));
 
@@ -297,6 +316,8 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		PartDefinition arm3 = arm_lower.addOrReplaceChild("arm3", CubeListBuilder.create().texOffs(17, 96).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, -0.5F, 0.5F, -0.1308F, 0.0057F, -0.0004F));
 
+		PartDefinition slime7_r1 = arm3.addOrReplaceChild("slime7_r1", CubeListBuilder.create().texOffs(33, 2).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, 2.0F, 0.0F, 0.6545F, 0.0F, 0.0F));
+
 		PartDefinition cloth_up_left1a = shoulder_blade_left.addOrReplaceChild("cloth_up_left1a", CubeListBuilder.create().texOffs(26, 82).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -1.0F, 0.0F, 0.1309F, 0.0F, 0.0F));
 
 		PartDefinition cloth_up_left1b = cloth_up_left1a.addOrReplaceChild("cloth_up_left1b", CubeListBuilder.create().texOffs(26, 88).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 6.0F, 0.0F, 0.1309F, 0.0F, 0.0F));
@@ -312,6 +333,10 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		PartDefinition arm_lower2 = arm4.addOrReplaceChild("arm_lower2", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 7.5F, 0.0F, -0.6545F, 0.0F, 0.0F));
 
 		PartDefinition arm5 = arm_lower2.addOrReplaceChild("arm5", CubeListBuilder.create().texOffs(0, 96).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.25F, -0.5F, 0.0F, -0.0869F, 0.0076F, -0.1312F));
+
+		PartDefinition slime11_r1 = arm5.addOrReplaceChild("slime11_r1", CubeListBuilder.create().texOffs(34, 2).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 3.0F, -1.0F, 0.0F, 0.9163F, 0.0F));
+
+		PartDefinition slime12_r1 = arm5.addOrReplaceChild("slime12_r1", CubeListBuilder.create().texOffs(34, 0).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 7.0F, 0.0F, 0.0F, 0.0F, -0.6545F));
 
 		PartDefinition hand2 = arm5.addOrReplaceChild("hand2", CubeListBuilder.create().texOffs(0, 105).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, 8.0F, -0.5F, -0.3491F, 0.0F, -0.0873F));
 
@@ -331,6 +356,14 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		PartDefinition staff1a = hand2.addOrReplaceChild("staff1a", CubeListBuilder.create().texOffs(26, 55).addBox(0.0F, -4.0F, -2.0F, 2.0F, 14.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.25F, 2.25F, 0.5F, 1.2489F, -0.0485F, -0.399F));
 
+		PartDefinition slime18_r1 = staff1a.addOrReplaceChild("slime18_r1", CubeListBuilder.create().texOffs(33, 3).addBox(0.0F, 0.0F, -1.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 5.0F, -2.0F, -0.8727F, 0.0F, 0.0F));
+
+		PartDefinition slime17_r1 = staff1a.addOrReplaceChild("slime17_r1", CubeListBuilder.create().texOffs(34, 1).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 8.0F, -2.0F, 0.0F, 2.3562F, 0.0F));
+
+		PartDefinition slime16_r1 = staff1a.addOrReplaceChild("slime16_r1", CubeListBuilder.create().texOffs(34, 1).addBox(0.0F, -1.0F, 0.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 5.0F, 0.0F, 0.0F, -0.48F, 0.0F));
+
+		PartDefinition slime15_r1 = staff1a.addOrReplaceChild("slime15_r1", CubeListBuilder.create().texOffs(33, 1).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, -3.0F, 0.0F, 0.6981F, 0.0F, 0.0F));
+
 		PartDefinition staff1d = staff1a.addOrReplaceChild("staff1d", CubeListBuilder.create().texOffs(26, 69).addBox(0.0F, 0.0F, -2.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 10.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
 
 		PartDefinition staff1e = staff1d.addOrReplaceChild("staff1e", CubeListBuilder.create().texOffs(27, 77).addBox(0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, -1.0F));
@@ -341,6 +374,10 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		PartDefinition staff1b = staff1a.addOrReplaceChild("staff1b", CubeListBuilder.create().texOffs(26, 48).addBox(0.0F, -7.0F, 0.0F, 2.0F, 7.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, -4.0F, -2.0F, -0.0873F, 0.0F, 0.0F));
 
+		PartDefinition slime13_r1 = staff1b.addOrReplaceChild("slime13_r1", CubeListBuilder.create().texOffs(34, -1).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.0F, 0.0F, 0.0F, 0.9163F, 0.0F));
+
+		PartDefinition slime14_r1 = staff1b.addOrReplaceChild("slime14_r1", CubeListBuilder.create().texOffs(32, 3).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -6.0F, 2.0F, 0.0F, 0.0F, 0.7854F));
+
 		PartDefinition staff1c = staff1b.addOrReplaceChild("staff1c", CubeListBuilder.create().texOffs(26, 41).addBox(0.0F, -7.0F, 0.0F, 2.0F, 7.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -7.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
 
 		PartDefinition nub_r1 = staff1c.addOrReplaceChild("nub_r1", CubeListBuilder.create().texOffs(35, 72).addBox(-2.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, -1.0F, 2.0F, 0.7586F, 0.3706F, 0.7825F));
@@ -348,6 +385,8 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		PartDefinition staff_slime1_r1 = staff1c.addOrReplaceChild("staff_slime1_r1", CubeListBuilder.create().texOffs(35, 41).addBox(0.0F, -9.0F, -2.0F, 0.0F, 9.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 0.0F, 0.0F, 0.1309F, 0.0F, 0.0F));
 
 		PartDefinition staff_slime4_r1 = staff1c.addOrReplaceChild("staff_slime4_r1", CubeListBuilder.create().texOffs(35, 52).addBox(0.0F, -6.0F, -1.0F, 0.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, -6.0F, 0.0F, -0.0436F, 0.0F, 0.0F));
+
+		PartDefinition slime19_r1 = staff1c.addOrReplaceChild("slime19_r1", CubeListBuilder.create().texOffs(33, 2).addBox(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -5.0F, 2.0F, 0.9599F, 0.0F, 0.0F));
 
 		PartDefinition staff_t_a = staff1c.addOrReplaceChild("staff_t_a", CubeListBuilder.create().texOffs(34, 41).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(1.0F, -7.0F, 1.0F, 0.2618F, 0.0F, 0.0F));
 
@@ -417,6 +456,8 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		PartDefinition heel_r1 = foot_left.addOrReplaceChild("heel_r1", CubeListBuilder.create().texOffs(15, 59).addBox(-1.0F, -2.0F, 0.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, 1.0F, 1.0F, 0.1745F, 0.0F, 0.0F));
 
+		PartDefinition slime20_r1 = foot_left.addOrReplaceChild("slime20_r1", CubeListBuilder.create().texOffs(34, 0).addBox(0.0F, -1.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.9599F));
+
 		PartDefinition toe_left1 = foot_left.addOrReplaceChild("toe_left1", CubeListBuilder.create().texOffs(12, 62).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -2.0F, 0.079F, 0.1775F, -0.0288F));
 
 		PartDefinition toe_left2 = toe_left1.addOrReplaceChild("toe_left2", CubeListBuilder.create().texOffs(11, 63).addBox(-1.0F, 0.0F, -2.0F, 1.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.0F, 0.3054F, 0.0F, 0.0F));
@@ -426,6 +467,8 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		PartDefinition toes_left2 = toes_left1.addOrReplaceChild("toes_left2", CubeListBuilder.create().texOffs(13, 63).addBox(0.0F, 0.0F, -2.0F, 2.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.0F, 0.3054F, 0.0F, 0.0F));
 
 		PartDefinition leg_left3 = leg_left_lower.addOrReplaceChild("leg_left3", CubeListBuilder.create().texOffs(17, 65).addBox(-1.0F, -0.5F, 0.0F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.25F, 0.0F, 0.0F, 0.0436F, 0.0F, -0.1309F));
+
+		PartDefinition slime21_r1 = leg_left3.addOrReplaceChild("slime21_r1", CubeListBuilder.create().texOffs(34, 1).addBox(0.0F, -1.0F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 5.5F, 1.0F, -0.7854F, 0.0F, 0.0F));
 
 		PartDefinition leg_right1 = hipbone.addOrReplaceChild("leg_right1", CubeListBuilder.create().texOffs(0, 55).addBox(-1.0F, 0.0F, -1.0F, 1.0F, 8.0F, 2.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(-3.5F, -0.5F, -1.0F, -0.1754F, 0.1363F, -0.1553F));
 
@@ -450,7 +493,6 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		PartDefinition leg_right3 = leg_right_lower.addOrReplaceChild("leg_right3", CubeListBuilder.create().texOffs(4, 65).addBox(0.0F, -0.5F, 0.0F, 1.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.25F, -1.0F, 0.0F, 0.0436F, 0.0F, 0.1309F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
-
 	}
 
 	@Override
