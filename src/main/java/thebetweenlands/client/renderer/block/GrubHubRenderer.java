@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -46,13 +47,19 @@ public class GrubHubRenderer implements BlockEntityRenderer<GrubHubBlockEntity> 
 
 		for (Direction dir : Direction.Plane.HORIZONTAL) {
 			stack.pushPose();
-			stack.translate(0.5F + (0.9F * dir.getStepX()), 0.0F, 0.5F + (0.9F * dir.getStepZ()));
+			stack.translate(0.5F + (0.4F * dir.getStepX()), 0.5F, 0.5F + (0.4F * dir.getStepZ()));
 			stack.scale(1.0F, -1.0F, -1.0F);
 			stack.mulPose(Axis.YP.rotationDegrees(dir.toYRot()));
 			this.mask.render(stack, buffer.getBuffer(MASK_TYPE), light, overlay);
-			if (entity.switchTextureCount > 0) {
-				float opacity = Math.min(1.0F, entity.switchTextureCount / 10.0F);
-				this.mask.render(stack, buffer.getBuffer(EYE_TYPE), light, overlay, FastColor.ARGB32.colorFromFloat(opacity, 1.0F, 1.0F, 1.0F));
+			if (entity.renderDisabledEyes || entity.switchTextureCount > 0) {
+				final int eyeColour;
+				if(entity.renderDisabledEyes) {
+					eyeColour = FastColor.ARGB32.colorFromFloat(1.0F, 1.0F, 0.0F, 0.0F);
+				} else {
+					float opacity = Math.min(1.0F, entity.switchTextureCount / 10.0F);
+					eyeColour = FastColor.ARGB32.colorFromFloat(opacity, 1.0F, 1.0F, 1.0F);
+				}
+				this.mask.render(stack, buffer.getBuffer(EYE_TYPE), light, overlay, eyeColour);
 			}
 			stack.popPose();
 		}

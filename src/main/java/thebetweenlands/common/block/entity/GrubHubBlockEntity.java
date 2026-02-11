@@ -25,6 +25,7 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 	private NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
 	public int switchTextureCount = 0;
+	public boolean renderDisabledEyes = false;
 
 	public GrubHubBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.GRUB_HUB.get(), pos, state);
@@ -34,8 +35,12 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 		if (level instanceof ServerLevel serverLevel && level.getGameTime() % 10 == 0)
 			entity.checkCanInfestOrHarvest(serverLevel, pos.below(), state);
 
-		if (level.isClientSide() && entity.switchTextureCount > 0)
-			entity.switchTextureCount--;
+		if (level.isClientSide()) {
+			entity.renderDisabledEyes = state.getValue(GrubHubBlock.POWERED);
+			if(entity.switchTextureCount > 0) {
+				entity.switchTextureCount--;
+			}
+		}
 	}
 
 	private void checkCanInfestOrHarvest(ServerLevel level, BlockPos pos, BlockState state) {
