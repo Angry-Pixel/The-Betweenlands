@@ -84,11 +84,11 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 							case CompostBinBlockEntity.CompostResult.ADDED:
 								bin.addItemToBin(stack, amount, time, false);
 								stack.consume(1, player);
-								break;
+								return ItemInteractionResult.SUCCESS;
 							case CompostBinBlockEntity.CompostResult.FULL:
 							default:
 								player.displayClientMessage(Component.translatable("block.thebetweenlands.compost_bin.full"), true);
-								break;
+								return ItemInteractionResult.CONSUME;
 						}
 					} else {
 						player.displayClientMessage(Component.translatable("block.thebetweenlands.compost_bin.not_compostable"), true);
