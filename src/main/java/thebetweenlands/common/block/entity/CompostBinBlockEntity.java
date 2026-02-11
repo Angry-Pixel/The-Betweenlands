@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -141,6 +142,7 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
 		tag.putIntArray("processes", this.processes);
 		tag.putIntArray("compost_amounts", this.compostAmounts);
 		tag.putIntArray("compost_times", this.compostTimes);
@@ -152,6 +154,8 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
+		this.items.clear();
+		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.processes = readIntArrayFixedSize("processes", this.items.size(), tag);
 		this.compostAmounts = readIntArrayFixedSize("compost_amounts", this.items.size(), tag);
 		this.compostTimes = readIntArrayFixedSize("compost_times", this.items.size(), tag);
