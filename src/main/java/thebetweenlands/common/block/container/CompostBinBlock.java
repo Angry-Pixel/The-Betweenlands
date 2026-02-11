@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -8,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -25,14 +28,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
+import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nullable;
 
 public class CompostBinBlock extends HorizontalBaseEntityBlock {
 
@@ -67,18 +69,15 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (state.getValue(OPEN)) {
 			if (level.getBlockEntity(pos) instanceof CompostBinBlockEntity bin) {
-				boolean interacted = false;
-
 				if (bin.getCompostedAmount() > 0) {
 					if (bin.removeCompost(CompostBinBlockEntity.COMPOST_PER_ITEM)) {
-						if (!player.getInventory().add(new ItemStack(ItemRegistry.COMPOST.get()))) {
-							player.drop(new ItemStack(ItemRegistry.COMPOST.get()), false);
-						}
-						interacted = true;
+						ItemStack compostStack = new ItemStack(ItemRegistry.COMPOST.get());
+						ItemHandlerHelper.giveItemToPlayer(player, compostStack);
+						return ItemInteractionResult.SUCCESS;
 					}
 				}
 
-				if (!interacted && !stack.isEmpty()) {
+				if (!stack.isEmpty()) {
 					CompostableItem data = stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE);
 					if (data != null) {
 						int amount = data.amount();
