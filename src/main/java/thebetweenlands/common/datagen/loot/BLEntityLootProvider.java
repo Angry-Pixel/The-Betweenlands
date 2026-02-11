@@ -276,9 +276,8 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.FISHING_FLOAT_AND_HOOK).setWeight(4))
 				.add(LootItem.lootTableItem(ItemRegistry.WEEDWOOD_BOWL).setWeight(4))
 				.add(LootItem.lootTableItem(ItemRegistry.AMATE_MAP).setWeight(2))
-				//TODO
-//				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.72F))))
-//				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
+				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.72F))))
+				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
 				.add(LootItem.lootTableItem(ItemRegistry.FABRICATED_SCROLL))));
 
 		this.addWithSeasonalDrops(EntityRegistry.CRYPT_CRAWLER.get(), 1, 6, 1, 1, LootTable.lootTable()
@@ -541,6 +540,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 		));
+		this.noLoot(EntityRegistry.BONE_SHAMAN);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {
