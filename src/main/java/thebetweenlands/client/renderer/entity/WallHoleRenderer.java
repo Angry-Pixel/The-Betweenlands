@@ -29,7 +29,7 @@ public abstract class WallHoleRenderer<T extends AbstractWallCreature, M extends
 	private static final ResourceLocation WALL_TEXTURE_OVERLAY = TheBetweenlands.prefix("textures/entity/wall_hole_overlay.png");
 	private static final ResourceLocation WALL_TEXTURE = TheBetweenlands.prefix("textures/block/mud_bricks.png");
 
-	private final ResourceLocation modelTexture;
+	protected final ResourceLocation modelTexture;
 
 	//private final TexturedWallHoleModel texturedHoleModel;
 	private final WallHoleModel<?> modelNormal;

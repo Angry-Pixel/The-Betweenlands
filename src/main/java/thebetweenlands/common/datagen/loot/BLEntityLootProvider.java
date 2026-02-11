@@ -528,6 +528,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(2)).when(LootMultiplierCondition.lootMultiplier("strength", 1.8F)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(1)).when(LootMultiplierCondition.lootMultiplier("strength", 1.95F))));
 
+		this.noLoot(EntityRegistry.WALL_ROOT);
 		//TODO temp
 		this.add(EntityRegistry.BONE_PUPPET_RANGED.get(), LootTable.lootTable().withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)

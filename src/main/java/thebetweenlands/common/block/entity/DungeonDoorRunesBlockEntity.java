@@ -386,11 +386,11 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 	@Override
 	public void onLoad() {
 		super.onLoad();
-		
+
 		// Random render offset for the rune glow
 		this.renderTicks = new Random(this.getBlockPos().asLong()).nextInt(12000);
 	}
-	
+
 	public void shake(int shakeTimerMax) {
 		this.shakingTimerMax = shakeTimerMax;
 		this.prev_shake_timer = this.shake_timer;
@@ -404,39 +404,45 @@ public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements Sc
 	}
 
 	public void cycleTopState(Level level, BlockPos pos) {
-		top_state_prev = top_state;
-		top_state++;
-		if (top_state > 7)
-			top_state = 0;
-		this.setChanged();
-		this.playLockSound(level, pos);
+		if (this.top_rotate == 0) {
+			this.top_state_prev = this.top_state;
+			this.top_state++;
+			if (this.top_state > 7)
+				this.top_state = 0;
+			this.setChanged();
+			this.playLockSound(level, pos);
+		}
 	}
 
 	public void cycleMidState(Level level, BlockPos pos) {
-		mid_state_prev = mid_state;
-		mid_state++;
-		if (mid_state > 7)
-			mid_state = 0;
-		this.setChanged();
-		this.playLockSound(level, pos);
+		if (this.mid_rotate == 0) {
+			this.mid_state_prev = this.mid_state;
+			this.mid_state++;
+			if (this.mid_state > 7)
+				this.mid_state = 0;
+			this.setChanged();
+			this.playLockSound(level, pos);
+		}
 	}
 
 	public void cycleBottomState(Level level, BlockPos pos) {
-		bottom_state_prev = bottom_state;
-		bottom_state++;
-		if (bottom_state > 7)
-			bottom_state = 0;
-		this.setChanged();
-		this.playLockSound(level, pos);
+		if (this.bottom_rotate == 0) {
+			this.bottom_state_prev = this.bottom_state;
+			this.bottom_state++;
+			if (this.bottom_state > 7)
+				this.bottom_state = 0;
+			this.setChanged();
+			this.playLockSound(level, pos);
+		}
 	}
 
 	public void enterLockCode(Level level, BlockPos pos) {
-		top_code = top_state;
-		mid_code = mid_state;
-		bottom_code = bottom_state;
-		top_state_prev = top_state = 0;
-		mid_state_prev = mid_state = 0;
-		bottom_state_prev = bottom_state = 0;
+		this.top_code = this.top_state;
+		this.mid_code = this.mid_state;
+		this.bottom_code = this.bottom_state;
+		this.top_state_prev = this.top_state = 0;
+		this.mid_state_prev = this.mid_state = 0;
+		this.bottom_state_prev = this.bottom_state = 0;
 		level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
 		this.setChanged();
 	}
