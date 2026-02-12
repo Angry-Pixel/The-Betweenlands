@@ -146,6 +146,7 @@ import thebetweenlands.client.model.entity.BloodSnailModel;
 import thebetweenlands.client.model.entity.BonePuppetMeleeModel;
 import thebetweenlands.client.model.entity.BonePuppetRangedModel;
 import thebetweenlands.client.model.entity.BoneShamanModel;
+import thebetweenlands.client.model.entity.BoneShamanProjectileModel;
 import thebetweenlands.client.model.entity.BubblerCrabModel;
 import thebetweenlands.client.model.entity.CaveFishModel;
 import thebetweenlands.client.model.entity.CaveJellyfishModel;
@@ -302,6 +303,7 @@ import thebetweenlands.client.renderer.entity.BipedCryptCrawlerRenderer;
 import thebetweenlands.client.renderer.entity.BloodSnailRenderer;
 import thebetweenlands.client.renderer.entity.BonePuppetMeleeRenderer;
 import thebetweenlands.client.renderer.entity.BonePuppetRangedRenderer;
+import thebetweenlands.client.renderer.entity.BoneShamanProjectileRenderer;
 import thebetweenlands.client.renderer.entity.BoneShamanRenderer;
 import thebetweenlands.client.renderer.entity.BubblerCrabBubbleRenderer;
 import thebetweenlands.client.renderer.entity.BubblerCrabRenderer;
@@ -616,6 +618,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ROOT_GRABBER.get(), RootGrabberRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SPIKE_WAVE.get(), SpikeWaveRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WATCHER_EYES.get(), WatcherEyesRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BONE_SHAMAN_PROJECTILE.get(), BoneShamanProjectileRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -759,6 +762,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.THROWN_BONE, ThrownBoneModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.BONE_SHAMAN, BoneShamanModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.WATCHER_EYES, WatcherEyesModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.BONE_SHAMAN_PROJECTILE, BoneShamanProjectileModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

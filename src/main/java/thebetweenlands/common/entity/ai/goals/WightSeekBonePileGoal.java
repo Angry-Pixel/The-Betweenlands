@@ -65,7 +65,7 @@ public class WightSeekBonePileGoal extends Goal {
 			if (!wight.isPassenger()) {
 				wight.getMoveControl().setWantedPosition(target.getX() + 0.5D, target.getY() + 1D, target.getZ() + 0.5D, wight.getAttributeValue(Attributes.FLYING_SPEED));
 				if (level.getBlockState(wight.blockPosition().below()).is(bonePile)) { // jank but pos check isn't working atm
-					level.destroyBlock(wight.blockPosition().below(), true);
+					level.destroyBlock(wight.blockPosition().below(), false);
 					BoneShaman shaman = EntityRegistry.BONE_SHAMAN.get().create(level);
 					if (shaman != null) {
 						shaman.setPos(wight.blockPosition().below().getBottomCenter());

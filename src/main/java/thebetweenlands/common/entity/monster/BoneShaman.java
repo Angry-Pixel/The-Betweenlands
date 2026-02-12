@@ -38,6 +38,7 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
+import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -46,6 +47,12 @@ import thebetweenlands.common.registries.ParticleRegistry;
 public class BoneShaman extends FlyingMonster {
 
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> RELOADING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Integer> RELOAD_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> IS_ATTACKING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+	public int prevReloadTimer;
+	public int prevAttackTimer;
 	public int lastSpawningAnimationTicks = 0;
 	public int spawnDuration = 30;
 
@@ -57,13 +64,17 @@ public class BoneShaman extends FlyingMonster {
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
 		builder.define(SPAWN_TIMER, 0);
+		builder.define(RELOADING, false);
+		builder.define(RELOAD_TIMER, 0);
+		builder.define(ATTACK_TIMER, 0);
+		builder.define(IS_ATTACKING, false);
 	}
 
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
 		goalSelector.addGoal(1, new BoneShamanHoverAttackGoal(this, 1D, 10F, 6F));
-		//goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
+		// goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
 		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
 	}
@@ -85,19 +96,27 @@ public class BoneShaman extends FlyingMonster {
 			if (!level().isClientSide()) {
 				if (getSpawnTimer() < spawnDuration)
 					setSpawnTimer(getSpawnTimer() + 1);
-				//if (getSpawnTimer() == spawnDuration -1) //Temp 
-				//	spawnPuppets();
+				if (getSpawnTimer() == spawnDuration - 1) // Temp
+					spawnPuppets();
+				if (isReloading()) {
+					setReloadTimer(getReloadTimer() + 1);
+					if (getReloadTimer() > 60) {
+						setReloadTimer(0);
+						setReloading(false);
+					}
+				} else
+					setReloadTimer(0);
 			}
 			if (level().isClientSide()) {
 				if (getSpawnTimer() < 10)
 					spawnEmergingParticles();
 
 				if (isAlive() && !isEmerging()) {
-					if (this.getRandom().nextInt(4) == 0) {
-						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withData(400, this.getRandom().nextFloat(), this);
-						args.withScale((1.5F + this.getRandom().nextFloat() * 1.5F) * 0.5f);
+					if (getRandom().nextInt(4) == 0) {
+						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withData(400, getRandom().nextFloat(), this);
+						args.withScale((1.5F + getRandom().nextFloat() * 1.5F) * 0.5f);
 						args.withColor(1F, 1F, 1F, 0.5F);
-						TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.FLY_SWIRL.get()), this.level(), this.getX(), this.getY(), this.getZ(), args);
+						TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.FLY_SWIRL.get()), level(), getX(), getY(), getZ(), args);
 					}
 				}
 			}
@@ -106,44 +125,63 @@ public class BoneShaman extends FlyingMonster {
 		super.aiStep();
 
 		if (level().isClientSide()) {
+			prevReloadTimer = getReloadTimer();
+			prevAttackTimer = getAttackTimer();
+			if (getAttackTimer() == 0)
+				prevAttackTimer = 0;
+			if (getReloadTimer() == 0)
+				prevReloadTimer = 0;
 			if (isDeadOrDying())
 				setDeltaMovement(Vec3.ZERO);
 		}
 
 		if (!level().isClientSide()) {
-			if (isDeadOrDying())
+			if (isDeadOrDying()) {
 				getNavigation().stop();
+				setReloadTimer(0);
+				setReloading(false);
+				setAttackTimer(0);
+			}
+			if (isAlive()) {
+				if (isAttacking()) {
+					setAttackTimer(getAttackTimer() + 1);
+					if (getAttackTimer() > 20) {
+						setAttackTimer(0);
+						setAttacking(false);
+					}
+				} else
+					setAttackTimer(0);
+			}
 		}
 	}
 
-    private void spawnPuppets() {
-    	//TODO clean up later
-    	List<BlockPos> list = new ArrayList<>();
+	private void spawnPuppets() {
+		// TODO clean up later
+		List<BlockPos> list = new ArrayList<>();
 		AABB searchBox = new AABB(blockPosition()).inflate(8D, 8D, 8D);
 		BlockPos minPos = BlockPos.containing(searchBox.minX, searchBox.minY, searchBox.minZ);
 		BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
 		for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
-			if (level().getBlockState(pos).is(BlockRegistry.SLIMY_BONE_ORE) && level().isEmptyBlock(pos.above())) {
+			if (level().getBlockState(pos).is(BlockRegistry.SLIMY_BONE_ORE) && level().isEmptyBlock(pos.above()))
 				list.add(new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
-			}
 		}
 		if (!list.isEmpty()) {// && list.size() >= 4) { TODO a nice way to set amounts
 			for (int spawn = 0; spawn < list.size(); spawn++) {
 				BonePuppetRanged puppet1 = new BonePuppetRanged(EntityRegistry.BONE_PUPPET_RANGED.get(), level());
 				BonePuppetMelee puppet2 = new BonePuppetMelee(EntityRegistry.BONE_PUPPET_MELEE.get(), level());
-				level().destroyBlock(list.get(spawn), true);
+				level().destroyBlock(list.get(spawn), false);
 				if (level().getRandom().nextBoolean()) {
 					if (puppet1 != null) {
 						puppet1.setPos(list.get(spawn).getBottomCenter());
-						puppet1.setYRot(this.getYRot());
-						puppet1.setParentEntityID(this.getId());
+						puppet1.setYRot(getYRot());
+						puppet1.setParentEntityID(getId());
 						level().addFreshEntity(puppet1);
 					}
 				} else {
 					if (puppet2 != null) {
 						puppet2.setPos(list.get(spawn).getBottomCenter());
-						puppet2.setYRot(this.getYRot());
-						puppet2.setParentEntityID(this.getId());
+						puppet2.setYRot(getYRot());
+						puppet2.setParentEntityID(getId());
 						level().addFreshEntity(puppet2);
 					}
 				}
@@ -166,20 +204,20 @@ public class BoneShaman extends FlyingMonster {
 	}
 
 	@Override
-    protected boolean isImmobile() {
-        return isAlive() && (super.isImmobile() || getSpawnTimer() < spawnDuration);
-    }
+	protected boolean isImmobile() {
+		return isAlive() && (super.isImmobile() || getSpawnTimer() < spawnDuration);
+	}
 
-    @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-        boolean isCreative = source.getEntity() instanceof Player player && player.isCreative();
-        return (isEmerging() && !isCreative) || super.isInvulnerableTo(source);
-    }
+	@Override
+	public boolean isInvulnerableTo(DamageSource source) {
+		boolean isCreative = source.getEntity() instanceof Player player && player.isCreative();
+		return (isEmerging() && !isCreative) || super.isInvulnerableTo(source);
+	}
 
-    @Override
-    public boolean isPushable() {
-        return !isEmerging() && super.isPushable();
-    }
+	@Override
+	public boolean isPushable() {
+		return !isEmerging() && super.isPushable();
+	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
@@ -188,32 +226,32 @@ public class BoneShaman extends FlyingMonster {
 		return super.hurt(source, amount);
 	}
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("spawn_timer", getSpawnTimer());
-    }
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putInt("spawn_timer", getSpawnTimer());
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        setSpawnTimer(compound.getInt("spawn_timer"));
-    }
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		setSpawnTimer(compound.getInt("spawn_timer"));
+	}
 
-    @Override
-    protected SoundEvent getAmbientSound() {
+	@Override
+	protected SoundEvent getAmbientSound() {
 		return null;
-    }
+	}
 
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return null;
-    }
+	}
 
-    @Override
-    protected SoundEvent getDeathSound() {
+	@Override
+	protected SoundEvent getDeathSound() {
 		return null;
-    }
+	}
 
 	public boolean isEmerging() {
 		return getEntityData().get(SPAWN_TIMER) < spawnDuration;
@@ -227,9 +265,41 @@ public class BoneShaman extends FlyingMonster {
 		getEntityData().set(SPAWN_TIMER, timer);
 	}
 
-    public float getSpawningAnimation(float partialTicks) {
-        return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
-    }
+	public void setReloading(boolean attacking) {
+		getEntityData().set(RELOADING, attacking);
+	}
+
+	public boolean isReloading() {
+		return getEntityData().get(RELOADING);
+	}
+
+	public void setReloadTimer(int progress) {
+		getEntityData().set(RELOAD_TIMER, progress);
+	}
+
+	public int getReloadTimer() {
+		return getEntityData().get(RELOAD_TIMER);
+	}
+
+	public void setAttackTimer(int progress) {
+		getEntityData().set(ATTACK_TIMER, progress);
+	}
+
+	public int getAttackTimer() {
+		return getEntityData().get(ATTACK_TIMER);
+	}
+
+	public void setAttacking(boolean attacking) {
+		getEntityData().set(IS_ATTACKING, attacking);
+	}
+
+	public boolean isAttacking() {
+		return getEntityData().get(IS_ATTACKING);
+	}
+
+	public float getSpawningAnimation(float partialTicks) {
+		return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
+	}
 
 	// May need this for things and stuffs
 	public boolean isWearingSkullMask(LivingEntity entity) {
@@ -237,100 +307,107 @@ public class BoneShaman extends FlyingMonster {
 		return !helmet.isEmpty() && helmet.is(ItemRegistry.SKULL_MASK);
 	}
 
-	 public static class BoneShamanHoverAttackGoal extends Goal {
-	        public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
-	        private final BoneShaman shaman;
-	        private final double speedModifier;
-	        private final float attackRadiusSqr;
-	        private final float repositionRadiusSqr;
-	        private int updatePathDelay;
+	public static class BoneShamanHoverAttackGoal extends Goal {
+		public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
+		private final BoneShaman shaman;
+		private final double speedModifier;
+		private final float attackRadiusSqr;
+		private final float repositionRadiusSqr;
+		private int updatePathDelay;
 
-	        public BoneShamanHoverAttackGoal(BoneShaman shaman, double speedModifier, float range, float near) {
-	            this.shaman = shaman;
-	            this.speedModifier = speedModifier;
-	            attackRadiusSqr = range * range;
-				repositionRadiusSqr = near * near;
-	            setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-	        }
+		public BoneShamanHoverAttackGoal(BoneShaman shaman, double speedModifier, float range, float near) {
+			this.shaman = shaman;
+			this.speedModifier = speedModifier;
+			attackRadiusSqr = range * range;
+			repositionRadiusSqr = near * near;
+			setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+		}
 
-	        @Override
-	        public boolean canUse() {
-	            return isValidTarget();
-	        }
+		@Override
+		public boolean canUse() {
+			return isValidTarget();
+		}
 
-	        @Override
-	        public boolean canContinueToUse() {
-	            return isValidTarget() || !shaman.getNavigation().isDone();
-	        }
+		@Override
+		public boolean canContinueToUse() {
+			return isValidTarget() || !shaman.getNavigation().isDone();
+		}
 
-	        private boolean isValidTarget() {
-	            return shaman.getTarget() != null && shaman.getTarget().isAlive();
-	        }
+		private boolean isValidTarget() {
+			return shaman.getTarget() != null && shaman.getTarget().isAlive();
+		}
 
-	        @Override
-	        public boolean requiresUpdateEveryTick() {
-	            return true;
-	        }
+		@Override
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-			@Override
-			public void tick() {
-				int groundHeight = BLFlightMoveControl.getGroundHeight(shaman.level(), shaman.blockPosition(), 16, shaman.blockPosition()).getY();
-				if(shaman.blockPosition().getY() - groundHeight < 4 ) {
-					shaman.setDeltaMovement(shaman.getDeltaMovement().add(0D, 0.01D, 0D));
-					shaman.hurtMarked = true;
-				}
-				else{
-					shaman.setDeltaMovement(shaman.getDeltaMovement().subtract(0D, 0.01D, 0D));
-					shaman.hurtMarked = true;
-					}
-				LivingEntity livingentity = shaman.getTarget();
-				if (livingentity != null) {
-					boolean canSee = shaman.getSensing().hasLineOfSight(livingentity);
-					if (canSee) {
-						double distanceToTarget = shaman.distanceToSqr(livingentity);
-						boolean outOfRange = distanceToTarget > (double) attackRadiusSqr;
-						boolean tooNear = distanceToTarget < (double) repositionRadiusSqr;
-						if (outOfRange) {
-							updatePathDelay--;
-							if (updatePathDelay <= 0) {
-								shaman.getNavigation().moveTo(livingentity.getX(), Math.max(groundHeight + 4, livingentity.getY() + 4), livingentity.getZ(), speedModifier);
+		@Override
+		public void tick() {
+			int groundHeight = BLFlightMoveControl.getGroundHeight(shaman.level(), shaman.blockPosition(), 16, shaman.blockPosition()).getY();
+			if (shaman.blockPosition().getY() - groundHeight < 4) {
+				shaman.setDeltaMovement(shaman.getDeltaMovement().add(0D, 0.01D, 0D));
+				shaman.hurtMarked = true;
+			} else {
+				shaman.setDeltaMovement(shaman.getDeltaMovement().subtract(0D, 0.01D, 0D));
+				shaman.hurtMarked = true;
+			}
+			LivingEntity livingentity = shaman.getTarget();
+			if (livingentity != null) {
+				boolean canSee = shaman.getSensing().hasLineOfSight(livingentity);
+				if (canSee) {
+					double distanceToTarget = shaman.distanceToSqr(livingentity);
+					boolean outOfRange = distanceToTarget > (double) attackRadiusSqr;
+					boolean tooNear = distanceToTarget < (double) repositionRadiusSqr;
+					if (outOfRange) {
+						updatePathDelay--;
+						if (updatePathDelay <= 0) {
+							shaman.getNavigation().moveTo(livingentity.getX(), Math.max(groundHeight + 4, livingentity.getY() + 4), livingentity.getZ(), speedModifier);
+							updatePathDelay = PATHFINDING_DELAY_RANGE.sample(shaman.getRandom());
+						}
+					} else if (tooNear) {
+						updatePathDelay--;
+						if (updatePathDelay <= 0) {
+							Vec3 view = shaman.getViewVector(0.0F);
+							Vec3 newTarget = AirAndWaterRandomPos.getPos(shaman, 8, 0, 0, view.x, view.z, 0F);
+							if (newTarget != null) {
+								shaman.getNavigation().moveTo(newTarget.x, Math.max(groundHeight + 4, livingentity.getY() + 4), newTarget.z, speedModifier);
 								updatePathDelay = PATHFINDING_DELAY_RANGE.sample(shaman.getRandom());
 							}
 						}
-						else if(tooNear) {
-							updatePathDelay--;
-							if (updatePathDelay <= 0) {
-								Vec3 view = shaman.getViewVector(0.0F);
-								Vec3 newTarget = AirAndWaterRandomPos.getPos(shaman, 8, 0, 0, view.x, view.z, 0F);
-								if (newTarget != null) {
-									shaman.getNavigation().moveTo(newTarget.x, Math.max(groundHeight + 4, livingentity.getY() + 4), newTarget.z, speedModifier);
-									updatePathDelay = PATHFINDING_DELAY_RANGE.sample(shaman.getRandom());
-								}
-							}	
-						}
-						else {
-							updatePathDelay = 0;
-							shaman.getNavigation().stop();
-						}
+					} else {
+						updatePathDelay = 0;
+						shaman.getNavigation().stop();
+					}
 
-						shaman.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
-						//shootStuff(livingentity);
+					shaman.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+					shootStuff(livingentity);
+				}
+			}
+		}
+
+		private void shootStuff(LivingEntity target) {
+			if (canPerformAttack(target)) {
+				if (!shaman.level().isClientSide()) {
+					shaman.setAttacking(true);
+					if (shaman.getAttackTimer() == 20) { // will need to adjust to match animation
+						Level level = shaman.level();
+						BoneShamanProjectile skull = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
+						double targetX = target.getX() + target.getDeltaMovement().x() - shaman.getX();
+						double targetY = target.getY() + target.getDeltaMovement().y() - shaman.getY() - shaman.getBbHeight();
+						double targetZ = target.getZ() + target.getDeltaMovement().z() - shaman.getZ();
+						double direction = Math.toRadians(shaman.getYRot());
+						skull.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
+						level.addFreshEntity(skull);
+						skull.shoot(targetX, targetY, targetZ, 0.75F, 0.0F);
+						shaman.setReloading(true);
 					}
 				}
 			}
-/*	
-			private void shootStuff(LivingEntity target) {
-			if (canPerformAttack(target)) {
-					if(!shaman.level().isClientSide()) {
-						//TODO ADD SOME ATTACKS
-						}
-					}
-				
-			}
+		}
 
-		    protected boolean canPerformAttack(LivingEntity entity) {
-		        return shaman.getSensing().hasLineOfSight(entity);
-		    }}*/
-	    }
-
+		protected boolean canPerformAttack(LivingEntity entity) {
+			return !shaman.isReloading() && shaman.getSensing().hasLineOfSight(entity);
+		}
+	}
 }

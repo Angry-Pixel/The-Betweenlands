@@ -32,6 +32,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation BONE_PUPPET_MELEE = register("bone_puppet_melee");
 	public static final ModelLayerLocation BONE_PUPPET_RANGED = register("bone_puppet_ranged");
 	public static final ModelLayerLocation BONE_SHAMAN = register("bone_shaman");
+	public static final ModelLayerLocation BONE_SHAMAN_PROJECTILE = register("bone_shaman_projectile");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
 	public static final ModelLayerLocation CAVE_FISH = register("cave_fish");
 	public static final ModelLayerLocation CHIROMAW = register("chiromaw");

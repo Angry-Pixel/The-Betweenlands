@@ -15,16 +15,16 @@ import thebetweenlands.common.entity.monster.BonePuppetRanged;
 import thebetweenlands.common.entity.monster.BoneShaman;
 import thebetweenlands.common.registries.EntityRegistry;
 
-public class ThrownBone extends ThrowableProjectile {
+public class BoneShamanProjectile extends ThrowableProjectile {
 	protected float damage;
 	public int animationTicks, prevAnimationTicks;
 
-	public ThrownBone(EntityType<ThrownBone> type, Level level) {
+	public BoneShamanProjectile(EntityType<BoneShamanProjectile> type, Level level) {
 		super(type, level);
 	}
 
-	public ThrownBone(Level level, LivingEntity owner, float damage) {
-		super(EntityRegistry.THROWN_BONE.get(), owner, level);
+	public BoneShamanProjectile(Level level, LivingEntity owner, float damage) {
+		super(EntityRegistry.BONE_SHAMAN_PROJECTILE.get(), owner, level);
 		this.damage = damage;
 	}
 
@@ -65,13 +65,12 @@ public class ThrownBone extends ThrowableProjectile {
 	public void breakBone() {
 		if (!level().isClientSide()) {
 			discard();
-			//level().levelEvent(null, 2001, getOnPos(), Block.getId(BlockRegistry.SLIMY_BONE_ORE.get().defaultBlockState()));
 		}
 	}
 
 	@Override
 	protected double getDefaultGravity() {
-		return 0.01F;
+		return 0.001F;
 	}
 
 	@Override

@@ -115,6 +115,7 @@ import thebetweenlands.common.entity.monster.spirit_tree.SmallTamedSpiritTreeFac
 import thebetweenlands.common.entity.monster.wall.WallLamprey;
 import thebetweenlands.common.entity.projectile.AngryPebble;
 import thebetweenlands.common.entity.projectile.BetweenstonePebble;
+import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 import thebetweenlands.common.entity.projectile.BubblerCrabBubble;
 import thebetweenlands.common.entity.projectile.ChiromawDroppings;
 import thebetweenlands.common.entity.projectile.ElectricShock;
@@ -156,7 +157,8 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<BloodSnail>> BLOOD_SNAIL = registerWithEgg("blood_snail", EntityType.Builder.of(BloodSnail::new, MobCategory.MONSTER).sized(0.7F, 0.5F), 0x8E9456, 0xB3261E, BloodSnail::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BonePuppetMelee>> BONE_PUPPET_MELEE = registerWithAttributes("bone_puppet_melee", EntityType.Builder.of(BonePuppetMelee::new, MobCategory.MONSTER).sized(0.7F, 1.6F), BonePuppetMelee::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<BonePuppetRanged>> BONE_PUPPET_RANGED = registerWithAttributes("bone_puppet_ranged", EntityType.Builder.of(BonePuppetRanged::new, MobCategory.MONSTER).sized(0.6F, 1.8F), BonePuppetRanged::registerAttributes);
-	public static final DeferredHolder<EntityType<?>, EntityType<BoneShaman>> BONE_SHAMAN = registerWithAttributes("bone_shaman", EntityType.Builder.of(BoneShaman::new, MobCategory.MONSTER).sized(0.6F, 1.8F), BoneShaman::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<BoneShaman>> BONE_SHAMAN = registerWithAttributes("bone_shaman", EntityType.Builder.of(BoneShaman::new, MobCategory.MONSTER).sized(0.6F, 3F), BoneShaman::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<BoneShamanProjectile>> BONE_SHAMAN_PROJECTILE = register("bone_shaman_projectile", EntityType.Builder.<BoneShamanProjectile>of(BoneShamanProjectile::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(1).setShouldReceiveVelocityUpdates(true));
 	//boulder sprite
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C, BubblerCrab::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<CaveFish>> CAVE_FISH = registerWithEgg("cave_fish", EntityType.Builder.of(CaveFish::new, MobCategory.UNDERGROUND_WATER_CREATURE).sized(0.3F, 0.2F), 0xFF8000, 0xE6E6E6, CaveFish::registerAttributes);
