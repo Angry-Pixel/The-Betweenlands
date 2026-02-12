@@ -37,8 +37,8 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.boss.malevolence.PrimordialMalevolenceProjectile;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
-import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -112,11 +112,12 @@ public class BoneShaman extends FlyingMonster {
 					spawnEmergingParticles();
 
 				if (isAlive() && !isEmerging()) {
-					if (getRandom().nextInt(4) == 0) {
+					if (getRandom().nextInt(3) == 0) {
 						ParticleFactory.ParticleArgs<?> args = ParticleFactory.ParticleArgs.get().withData(400, getRandom().nextFloat(), this);
-						args.withScale((1.5F + getRandom().nextFloat() * 1.5F) * 0.5f);
+						args.withScale((1.5F + getRandom().nextFloat() * 1.5F) * 0.5F);
 						args.withColor(1F, 1F, 1F, 0.5F);
-						TheBetweenlands.createParticle(EntitySwirlParticleOptions.defaultSwirl(ParticleRegistry.FLY_SWIRL.get()), level(), getX(), getY(), getZ(), args);
+						TheBetweenlands.createParticle(new EntitySwirlParticleOptions(ParticleRegistry.WIGHT_FACE_SWIRL.get(), new Vec3(0, -2D, 0), new Vec3(0, 0, 0), Vec3.ZERO, Vec3.ZERO, 4.0D, true), level(), getX(), getY(), getZ(), args);
+						TheBetweenlands.createParticle(new EntitySwirlParticleOptions(ParticleRegistry.FLY_SWIRL.get(), new Vec3(0, -2D, 0), new Vec3(0, 0, 0), Vec3.ZERO, Vec3.ZERO, 2.0D, true), level(), getX(), getY(), getZ(), args);
 					}
 				}
 			}
@@ -392,14 +393,25 @@ public class BoneShaman extends FlyingMonster {
 					shaman.setAttacking(true);
 					if (shaman.getAttackTimer() == 20) { // will need to adjust to match animation
 						Level level = shaman.level();
-						BoneShamanProjectile skull = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
+						double direction = Math.toRadians(shaman.getYRot());
+						Vec3 diff = (new Vec3(shaman.position().x, shaman.position().y + shaman.getBbHeight(), shaman.position().z))
+								.subtract(new Vec3(target.getBoundingBox().minX + (target.getBoundingBox().maxX - target.getBoundingBox().minX) / 2.0D,
+									target.getBoundingBox().minY + (target.getBoundingBox().maxY - target.getBoundingBox().minY) / 2.0D,
+									target.getBoundingBox().minZ + (target.getBoundingBox().maxZ - target.getBoundingBox().minZ) / 2.0D)).normalize();
+							PrimordialMalevolenceProjectile projectile = new PrimordialMalevolenceProjectile(level, shaman);
+							projectile.setDeflectable(true);
+							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
+							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.5F, 0F);
+							level.addFreshEntity(projectile);
+					/*	PrimordialMalevolenceProjectile projectile = new PrimordialMalevolenceProjectile(level, shaman);
 						double targetX = target.getX() + target.getDeltaMovement().x() - shaman.getX();
 						double targetY = target.getY() + target.getDeltaMovement().y() - shaman.getY() - shaman.getBbHeight();
 						double targetZ = target.getZ() + target.getDeltaMovement().z() - shaman.getZ();
 						double direction = Math.toRadians(shaman.getYRot());
-						skull.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
-						level.addFreshEntity(skull);
-						skull.shoot(targetX, targetY, targetZ, 0.75F, 0.0F);
+						projectile.setDeflectable(true);
+						projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
+						projectile.shoot(targetX, targetY, targetZ, 0.75F, 0.0F);
+						level.addFreshEntity(projectile);*/
 						shaman.setReloading(true);
 					}
 				}

@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.WatcherEyes;
+import thebetweenlands.common.entity.monster.BoneShaman;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -227,19 +227,19 @@ public class TestChimpItem extends Item {
 				context.getLevel().addFreshEntity(puppet2);
 			}
 			
-
+*/
 			BoneShaman shaman = EntityRegistry.BONE_SHAMAN.get().create(context.getLevel());
 			if (shaman != null) {
 				shaman.setPos(context.getClickedPos().above().getBottomCenter());
 				context.getLevel().addFreshEntity(shaman);
-			}*/
+			}
 			
-			WatcherEyes spy_eye = EntityRegistry.WATCHER_EYES.get().create(context.getLevel());
+		/*	WatcherEyes spy_eye = EntityRegistry.WATCHER_EYES.get().create(context.getLevel());
 			if (spy_eye != null) {
 				spy_eye.setPos(context.getClickedPos().getBottomCenter());
 				context.getLevel().addFreshEntity(spy_eye);
 				spy_eye.setYRot(context.getHorizontalDirection().getOpposite().toYRot());
-			}
+			}*/
 		}
 
 		return InteractionResult.SUCCESS;

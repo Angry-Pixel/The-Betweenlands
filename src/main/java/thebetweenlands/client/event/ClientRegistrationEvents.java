@@ -1157,6 +1157,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.WATER_RIPPLE.get(), WaterRippleParticle.Factory::new);
 		event.registerSpecial(ParticleRegistry.LIGHTNING_ARC.get(), new LightningArcParticle.Factory());
 		event.registerSpriteSet(ParticleRegistry.FLY_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
+		event.registerSpriteSet(ParticleRegistry.WIGHT_FACE_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 
 	}
 
