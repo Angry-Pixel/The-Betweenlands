@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -39,6 +40,7 @@ import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.boss.malevolence.PrimordialMalevolenceProjectile;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
+import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -398,20 +400,20 @@ public class BoneShaman extends FlyingMonster {
 								.subtract(new Vec3(target.getBoundingBox().minX + (target.getBoundingBox().maxX - target.getBoundingBox().minX) / 2.0D,
 									target.getBoundingBox().minY + (target.getBoundingBox().maxY - target.getBoundingBox().minY) / 2.0D,
 									target.getBoundingBox().minZ + (target.getBoundingBox().maxZ - target.getBoundingBox().minZ) / 2.0D)).normalize();
-							PrimordialMalevolenceProjectile projectile = new PrimordialMalevolenceProjectile(level, shaman);
-							projectile.setDeflectable(true);
+						
+						Projectile projectile;
+						projectile = new BoneShamanProjectile(level, shaman, 2F);
+						if (level.getRandom().nextBoolean()) {
+							projectile = new PrimordialMalevolenceProjectile(level, shaman);
+							((PrimordialMalevolenceProjectile) projectile).setDeflectable(true);
 							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
 							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.5F, 0F);
-							level.addFreshEntity(projectile);
-					/*	PrimordialMalevolenceProjectile projectile = new PrimordialMalevolenceProjectile(level, shaman);
-						double targetX = target.getX() + target.getDeltaMovement().x() - shaman.getX();
-						double targetY = target.getY() + target.getDeltaMovement().y() - shaman.getY() - shaman.getBbHeight();
-						double targetZ = target.getZ() + target.getDeltaMovement().z() - shaman.getZ();
-						double direction = Math.toRadians(shaman.getYRot());
-						projectile.setDeflectable(true);
-						projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
-						projectile.shoot(targetX, targetY, targetZ, 0.75F, 0.0F);
-						level.addFreshEntity(projectile);*/
+						}
+						else {
+							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
+							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.75F, 0F);
+						}
+						level.addFreshEntity(projectile);
 						shaman.setReloading(true);
 					}
 				}

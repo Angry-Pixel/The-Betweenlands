@@ -146,7 +146,6 @@ import thebetweenlands.client.model.entity.BloodSnailModel;
 import thebetweenlands.client.model.entity.BonePuppetMeleeModel;
 import thebetweenlands.client.model.entity.BonePuppetRangedModel;
 import thebetweenlands.client.model.entity.BoneShamanModel;
-import thebetweenlands.client.model.entity.BoneShamanProjectileModel;
 import thebetweenlands.client.model.entity.BubblerCrabModel;
 import thebetweenlands.client.model.entity.CaveFishModel;
 import thebetweenlands.client.model.entity.CaveJellyfishModel;
@@ -764,7 +763,6 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.THROWN_BONE, ThrownBoneModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.BONE_SHAMAN, BoneShamanModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.WATCHER_EYES, WatcherEyesModel::createBodyLayer);
-		event.registerLayerDefinition(BLModelLayers.BONE_SHAMAN_PROJECTILE, BoneShamanProjectileModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);

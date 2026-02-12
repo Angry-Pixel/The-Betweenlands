@@ -10,28 +10,30 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.BoneShamanProjectileModel;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
+import thebetweenlands.client.renderer.SpikeRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 
 public class BoneShamanProjectileRenderer extends EntityRenderer<BoneShamanProjectile> {
-	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/bone_shaman_projectile.png");
-	private final BoneShamanProjectileModel<BoneShamanProjectile> skull;
-
+	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/urchin_spike.png");
+	private SpikeRenderer skull;
+	
 	public BoneShamanProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        skull = new BoneShamanProjectileModel<BoneShamanProjectile>(context.bakeLayer(BLModelLayers.BONE_SHAMAN_PROJECTILE));
+        skull = new SpikeRenderer(3, 0.25F, 0.5F, 0.25F, 0);
     }
 
 	 @Override
 	 public void render(BoneShamanProjectile entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
-		VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+		VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(TEXTURE));
 		stack.pushPose();
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getYRot()));
+		stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
+		stack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + 90.0F));
 		stack.scale(1F, -1F, -1F);
 		stack.translate(0F, -1.5F, 0F);
-		skull.renderToBuffer(stack, consumer, packedLight, OverlayTexture.NO_OVERLAY);
+		skull.render(stack.last(), consumer,  packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1F, 1.0F, 1.0F, 1.0F));
 		stack.popPose();
 	}
 
