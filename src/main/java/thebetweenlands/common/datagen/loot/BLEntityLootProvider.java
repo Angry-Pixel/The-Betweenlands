@@ -276,9 +276,8 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.FISHING_FLOAT_AND_HOOK).setWeight(4))
 				.add(LootItem.lootTableItem(ItemRegistry.WEEDWOOD_BOWL).setWeight(4))
 				.add(LootItem.lootTableItem(ItemRegistry.AMATE_MAP).setWeight(2))
-				//TODO
-//				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.72F))))
-//				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
+				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.72F))))
+				.add(LootItem.lootTableItem(ItemRegistry.FISHING_SPEAR).apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(0.2F))))
 				.add(LootItem.lootTableItem(ItemRegistry.FABRICATED_SCROLL))));
 
 		this.addWithSeasonalDrops(EntityRegistry.CRYPT_CRAWLER.get(), 1, 6, 1, 1, LootTable.lootTable()
@@ -528,6 +527,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(2)).when(LootMultiplierCondition.lootMultiplier("strength", 1.8F)))
 			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(BlockRegistry.SPIRIT_TREE_SAPLING)).add(EmptyLootItem.emptyItem().setWeight(1)).when(LootMultiplierCondition.lootMultiplier("strength", 1.95F))));
 
+		this.noLoot(EntityRegistry.WALL_ROOT);
 		//TODO temp
 		this.add(EntityRegistry.BONE_PUPPET_RANGED.get(), LootTable.lootTable().withPool(LootPool.lootPool()
 				.add(LootItem.lootTableItem(ItemRegistry.SLIMY_BONE)
@@ -540,6 +540,7 @@ public class BLEntityLootProvider extends EntityLootSubProvider {
 				.apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)))
 				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1))))
 		));
+		this.noLoot(EntityRegistry.BONE_SHAMAN);
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

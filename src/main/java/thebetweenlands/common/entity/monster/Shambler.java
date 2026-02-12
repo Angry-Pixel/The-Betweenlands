@@ -268,11 +268,7 @@ public class Shambler extends Monster implements BLEntity {
 		double tongueLength = lengthIncrement;
 
 		for (ShamblerTongueMultipart part : this.tongue_array) {
-			part.yRotO = part.getYRot();
-			part.xRotO = part.getXRot();
-			part.xOld = part.xo = part.getX();
-			part.yOld = part.yo = part.getY();
-			part.zOld = part.zo = part.getZ();
+			part.setOldPosAndRot();
 
 			part.setPos(getX() + offSetX + (vector.x * this.getTongueLength() * tongueLength), getY() + getEyeHeight() - 0.32 + offsetY + (vector.y * this.getTongueLength() * tongueLength), getZ() + offSetZ + (vector.z * this.getTongueLength() * tongueLength));
 			part.setYRot(getYRot());

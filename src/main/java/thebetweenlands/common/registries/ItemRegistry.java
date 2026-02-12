@@ -447,6 +447,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> WEEDWOOD_BOW = ITEMS.register("weedwood_bow", () -> new WeedwoodBowItem(new Item.Properties().durability(600)));
 	public static final DeferredItem<Item> PREDATOR_BOW = ITEMS.register("predator_bow", () -> new PredatorBowItem(new Item.Properties().durability(600).rarity(Rarity.RARE)));
 	//ancient weapons
+	public static final DeferredItem<Item> ANCIENT_GREATSWORD = ITEMS.register("ancient_greatsword", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().durability(32)));
 	public static final DeferredItem<Item> SMALL_LURKER_SKIN_POUCH = ITEMS.register("small_lurker_skin_pouch", () -> new LurkerSkinPouchItem(9, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(9))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
@@ -710,4 +711,5 @@ public class ItemRegistry {
 	//special spawn eggs
 	public static final DeferredItem<Item> CRYPT_CRAWLER_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("crypt_crawler_spawn_egg", () -> new CryptCrawlerSpawnEggItem(new Item.Properties()));
 	public static final DeferredItem<Item> WALL_LAMPREY_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("wall_lamprey_spawn_egg", () -> new WallCreatureSpawnEgg(EntityRegistry.WALL_LAMPREY, 0x646B3E, 0x4B4335, new Item.Properties()));
+	public static final DeferredItem<Item> WALL_ROOT_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("wall_root_spawn_egg", () -> new WallCreatureSpawnEgg(EntityRegistry.WALL_ROOT, 0x30251C, 0x67614A, new Item.Properties()));
 }

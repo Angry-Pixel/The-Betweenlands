@@ -22,6 +22,7 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.renderer.entity.SmallSpiritTreeFaceRenderer;
 import thebetweenlands.client.renderer.entity.SpiritTreeFaceMaskRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.GrubHubBlock;
 import thebetweenlands.common.block.entity.GrubHubBlockEntity;
 import thebetweenlands.util.RenderUtils;
 
@@ -51,10 +52,11 @@ public class GrubHubRenderer implements BlockEntityRenderer<GrubHubBlockEntity> 
 			stack.scale(1.0F, -1.0F, -1.0F);
 			stack.mulPose(Axis.YP.rotationDegrees(dir.toYRot()));
 			this.mask.render(stack, buffer.getBuffer(MASK_TYPE), light, overlay);
-			if (entity.renderDisabledEyes || entity.switchTextureCount > 0) {
+			boolean powered = entity.getBlockState().getValue(GrubHubBlock.POWERED);
+			if (powered || entity.switchTextureCount > 0) {
 				final int eyeColour;
-				if(entity.renderDisabledEyes) {
-					eyeColour = FastColor.ARGB32.colorFromFloat(1.0F, 1.0F, 0.0F, 0.0F);
+				if (powered) {
+					eyeColour = FastColor.ARGB32.colorFromFloat(0.75F, 0.75F, 0.0F, 0.0F);
 				} else {
 					float opacity = Math.min(1.0F, entity.switchTextureCount / 10.0F);
 					eyeColour = FastColor.ARGB32.colorFromFloat(opacity, 1.0F, 1.0F, 1.0F);

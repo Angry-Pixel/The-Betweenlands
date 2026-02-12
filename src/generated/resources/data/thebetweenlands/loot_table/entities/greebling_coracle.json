@@ -161,6 +161,28 @@
         },
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": 0.72,
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "thebetweenlands:fishing_spear"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": 0.2,
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "thebetweenlands:fishing_spear"
+        },
+        {
+          "type": "minecraft:item",
           "name": "thebetweenlands:fabricated_scroll"
         }
       ],
