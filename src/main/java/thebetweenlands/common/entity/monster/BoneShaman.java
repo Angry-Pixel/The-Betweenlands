@@ -402,7 +402,7 @@ public class BoneShaman extends FlyingMonster {
 									target.getBoundingBox().minZ + (target.getBoundingBox().maxZ - target.getBoundingBox().minZ) / 2.0D)).normalize();
 						
 						Projectile projectile;
-						projectile = new BoneShamanProjectile(level, shaman, 2F);
+						projectile = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
 						if (level.getRandom().nextBoolean()) {
 							projectile = new PrimordialMalevolenceProjectile(level, shaman);
 							((PrimordialMalevolenceProjectile) projectile).setDeflectable(true);
@@ -411,7 +411,7 @@ public class BoneShaman extends FlyingMonster {
 						}
 						else {
 							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
-							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.75F, 0F);
+							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.5F, 0F);
 						}
 						level.addFreshEntity(projectile);
 						shaman.setReloading(true);

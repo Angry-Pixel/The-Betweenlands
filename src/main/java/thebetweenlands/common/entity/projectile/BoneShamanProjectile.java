@@ -18,9 +18,11 @@ import thebetweenlands.common.registries.EntityRegistry;
 public class BoneShamanProjectile extends ThrowableProjectile {
 	protected float damage;
 	public int animationTicks, prevAnimationTicks;
+	private int ticksInAir = 0;
 
 	public BoneShamanProjectile(EntityType<BoneShamanProjectile> type, Level level) {
 		super(type, level);
+		this.noPhysics = true;
 	}
 
 	public BoneShamanProjectile(Level level, LivingEntity owner, float damage) {
@@ -34,14 +36,20 @@ public class BoneShamanProjectile extends ThrowableProjectile {
 	@Override
 	public void tick() {
 		super.tick();
-		if (!level().isClientSide())
-			if (level().getDifficulty() == Difficulty.PEACEFUL)
+		if (!level().isClientSide()) {
+			if (level().getDifficulty() == Difficulty.PEACEFUL || (getOwner() != null && !getOwner().isAlive()))
 				discard();
+			if (isAlive()) {
+				ticksInAir++;
+				if (ticksInAir > 200)
+					discard();
+			}
+		}
 
 		if (level().isClientSide()) {
 			prevAnimationTicks = animationTicks;
 			if (animationTicks < 360)
-				animationTicks += 10;
+				animationTicks += 15;
 			if (animationTicks >= 360) {
 				animationTicks -= 360;
 				prevAnimationTicks -= 360;
@@ -70,7 +78,7 @@ public class BoneShamanProjectile extends ThrowableProjectile {
 
 	@Override
 	protected double getDefaultGravity() {
-		return 0.001F;
+		return 0.00001F;
 	}
 
 	@Override
