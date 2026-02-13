@@ -17,23 +17,24 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 
 public class BoneShamanProjectileRenderer extends EntityRenderer<BoneShamanProjectile> {
-	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/urchin_spike.png");
-	private SpikeRenderer skull;
+	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/bone_spike.png");
+	private SpikeRenderer spike;
 	
 	public BoneShamanProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        skull = new SpikeRenderer(3, 0.25F, 0.5F, 0.25F, 0);
+        spike = new SpikeRenderer(3, 0.25F, 0.5F, 0.25F, 0);
     }
 
 	 @Override
 	 public void render(BoneShamanProjectile entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
 		VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(TEXTURE));
 		stack.pushPose();
-		stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
-		stack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + 90.0F));
-		stack.scale(1F, -1F, -1F);
-		stack.translate(0F, -1.5F, 0F);
-		skull.render(stack.last(), consumer,  packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1F, 1.0F, 1.0F, 1.0F));
+		stack.translate(-0.25F, -0.25F, -0.25F);
+		stack.pushPose();
+		stack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) - 90.0F));
+		stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.prevAnimationTicks, entity.animationTicks)));
+		spike.render(stack.last(), consumer,  packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1F, 1.0F, 1.0F, 1.0F));
+		stack.popPose();
 		stack.popPose();
 	}
 
