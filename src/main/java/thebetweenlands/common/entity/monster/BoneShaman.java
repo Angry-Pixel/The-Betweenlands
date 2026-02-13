@@ -51,10 +51,14 @@ public class BoneShaman extends FlyingMonster {
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> RELOADING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> RELOAD_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> CASTING_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> IS_ATTACKING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> IS_CASTING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> SPIKE_PROJECTILE = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public int prevReloadTimer;
 	public int prevAttackTimer;
+	public int prevCastingTimer;
 	public int lastSpawningAnimationTicks = 0;
 	public int spawnDuration = 30;
 
@@ -70,6 +74,9 @@ public class BoneShaman extends FlyingMonster {
 		builder.define(RELOAD_TIMER, 0);
 		builder.define(ATTACK_TIMER, 0);
 		builder.define(IS_ATTACKING, false);
+		builder.define(CASTING_TIMER, 0);
+		builder.define(IS_CASTING, false);
+		builder.define(SPIKE_PROJECTILE, false);
 	}
 
 	@Override
@@ -101,17 +108,34 @@ public class BoneShaman extends FlyingMonster {
 				if (getSpawnTimer() == spawnDuration - 1) // Temp
 					spawnPuppets();
 				if (isReloading()) {
-					setReloadTimer(getReloadTimer() + 1);
-					if (getReloadTimer() > 60) {
+					if (!isCasting()) {
+						setReloadTimer(getReloadTimer() + 1);
+						if (getReloadTimer() == 20)
+							setCasting(true);
+					}
+
+					if(isCasting())
+						setCastingTimer(getCastingTimer() + 1);
+					
+					if (getCastingTimer() > 40) {
+						setCastingTimer(0);
+						setCasting(false);
+					}
+					
+					if (getReloadTimer() > 40) {
 						setReloadTimer(0);
 						setReloading(false);
 					}
 				} else
 					setReloadTimer(0);
 			}
+
 			if (level().isClientSide()) {
 				if (getSpawnTimer() < 10)
 					spawnEmergingParticles();
+				
+				if (getCastingTimer() > 0)
+					spawnCastingParticles();
 
 				if (isAlive() && !isEmerging()) {
 					if (getRandom().nextInt(3) == 0) {
@@ -130,10 +154,13 @@ public class BoneShaman extends FlyingMonster {
 		if (level().isClientSide()) {
 			prevReloadTimer = getReloadTimer();
 			prevAttackTimer = getAttackTimer();
+			prevCastingTimer = getCastingTimer();
 			if (getAttackTimer() == 0)
 				prevAttackTimer = 0;
 			if (getReloadTimer() == 0)
 				prevReloadTimer = 0;
+			if (getCastingTimer() == 0)
+				prevCastingTimer = 0;
 			if (isDeadOrDying())
 				setDeltaMovement(Vec3.ZERO);
 		}
@@ -144,6 +171,7 @@ public class BoneShaman extends FlyingMonster {
 				setReloadTimer(0);
 				setReloading(false);
 				setAttackTimer(0);
+				setCastingTimer(0);
 			}
 			if (isAlive()) {
 				if (isAttacking()) {
@@ -204,6 +232,18 @@ public class BoneShaman extends FlyingMonster {
 			double motionZ = level().getRandom().nextDouble() * 0.2F - 0.1F;
 			level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, getBlockStateOn()), false, px + ox, py, pz + oz, motionX, motionY, motionZ);
 		}
+	}
+
+	private void spawnCastingParticles() {
+		double px = getX();
+		double py = getY() + 3.5D;
+		double pz = getZ();
+		double ox = level().getRandom().nextDouble() * 0.5F - 0.25F;
+		double oz = level().getRandom().nextDouble() * 0.5F - 0.25F;
+		double motionX = level().getRandom().nextDouble() * 0.4F - 0.2F;
+		double motionY = level().getRandom().nextDouble() * 0.2F + 0.15F;
+		double motionZ = level().getRandom().nextDouble() * 0.4F - 0.2F;
+		TheBetweenlands.createParticle(ParticleRegistry.DRUID_CASTING.get(), level(), px + ox, py, pz + oz, ParticleFactory.ParticleArgs.get().withMotion(motionX, motionY, motionZ).withScale(getRandom().nextFloat() * 0.5F + 0.5F).withColor(1F, 1F, 1F, 1F));
 	}
 
 	@Override
@@ -300,6 +340,30 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(IS_ATTACKING);
 	}
 
+	public void setCastingTimer(int progress) {
+		getEntityData().set(CASTING_TIMER, progress);
+	}
+
+	public int getCastingTimer() {
+		return getEntityData().get(CASTING_TIMER);
+	}
+
+	public void setCasting(boolean attacking) {
+		getEntityData().set(IS_CASTING, attacking);
+	}
+
+	public boolean isCasting() {
+		return getEntityData().get(IS_CASTING);
+	}
+
+	public void setShootingSpikes(boolean attacking) {
+		getEntityData().set(SPIKE_PROJECTILE, attacking);
+	}
+
+	public boolean isShootingSpikes() {
+		return getEntityData().get(SPIKE_PROJECTILE);
+	}
+
 	public float getSpawningAnimation(float partialTicks) {
 		return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
 	}
@@ -393,7 +457,7 @@ public class BoneShaman extends FlyingMonster {
 			if (canPerformAttack(target)) {
 				if (!shaman.level().isClientSide()) {
 					shaman.setAttacking(true);
-					if (shaman.getAttackTimer() == 20) { // will need to adjust to match animation
+					if (shaman.getAttackTimer() == 10) { // will need to adjust to match animation
 						Level level = shaman.level();
 						double direction = Math.toRadians(shaman.getYRot());
 						Vec3 diff = (new Vec3(shaman.position().x, shaman.position().y + shaman.getBbHeight(), shaman.position().z))
@@ -403,7 +467,7 @@ public class BoneShaman extends FlyingMonster {
 						
 						Projectile projectile;
 						projectile = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
-						if (level.getRandom().nextBoolean()) {
+						if (!shaman.isShootingSpikes()) {
 							projectile = new PrimordialMalevolenceProjectile(level, shaman);
 							((PrimordialMalevolenceProjectile) projectile).setDeflectable(true);
 							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
@@ -415,6 +479,7 @@ public class BoneShaman extends FlyingMonster {
 						}
 						level.addFreshEntity(projectile);
 						shaman.setReloading(true);
+						shaman.setShootingSpikes(level.getRandom().nextBoolean());
 					}
 				}
 			}
