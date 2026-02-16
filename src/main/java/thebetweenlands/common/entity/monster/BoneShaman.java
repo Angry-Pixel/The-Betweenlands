@@ -107,34 +107,13 @@ public class BoneShaman extends FlyingMonster {
 					setSpawnTimer(getSpawnTimer() + 1);
 				if (getSpawnTimer() == spawnDuration - 1) // Temp
 					spawnPuppets();
-				if (isReloading()) {
-					if (!isCasting()) {
-						setReloadTimer(getReloadTimer() + 1);
-						if (getReloadTimer() == 20)
-							setCasting(true);
-					}
-
-					if(isCasting())
-						setCastingTimer(getCastingTimer() + 1);
-					
-					if (getCastingTimer() > 40) {
-						setCastingTimer(0);
-						setCasting(false);
-					}
-					
-					if (getReloadTimer() > 40) {
-						setReloadTimer(0);
-						setReloading(false);
-					}
-				} else
-					setReloadTimer(0);
 			}
 
 			if (level().isClientSide()) {
 				if (getSpawnTimer() < 10)
 					spawnEmergingParticles();
 				
-				if (getCastingTimer() > 0)
+				if (!isShootingSpikes() && getCastingTimer() > 0)
 					spawnCastingParticles();
 
 				if (isAlive() && !isEmerging()) {
@@ -171,17 +150,43 @@ public class BoneShaman extends FlyingMonster {
 				setReloadTimer(0);
 				setReloading(false);
 				setAttackTimer(0);
+				setAttacking(false);
 				setCastingTimer(0);
+				setCasting(false);
 			}
+
 			if (isAlive()) {
 				if (isAttacking()) {
 					setAttackTimer(getAttackTimer() + 1);
-					if (getAttackTimer() > 20) {
+					if (getAttackTimer() >= 20) {
+						setShootingSpikes(level().getRandom().nextBoolean());
 						setAttackTimer(0);
 						setAttacking(false);
 					}
 				} else
 					setAttackTimer(0);
+				
+				if (isReloading()) {
+					if (!isCasting()) {
+						setReloadTimer(getReloadTimer() + 1);
+						if (getReloadTimer() == 20)
+							setCasting(true);
+					}
+
+					if(isCasting())
+						setCastingTimer(getCastingTimer() + 1);
+					
+					if (getCastingTimer() >= 40) {
+						setCastingTimer(0);
+						setCasting(false);
+					}
+					
+					if (getReloadTimer() >= 40) {
+						setReloadTimer(0);
+						setReloading(false);
+					}
+				} else
+					setReloadTimer(0);
 			}
 		}
 	}
@@ -457,30 +462,31 @@ public class BoneShaman extends FlyingMonster {
 			if (canPerformAttack(target)) {
 				if (!shaman.level().isClientSide()) {
 					shaman.setAttacking(true);
-					if (shaman.getAttackTimer() == 10) { // will need to adjust to match animation
-						Level level = shaman.level();
-						double direction = Math.toRadians(shaman.getYRot());
-						Vec3 diff = (new Vec3(shaman.position().x, shaman.position().y + shaman.getBbHeight(), shaman.position().z))
-								.subtract(new Vec3(target.getBoundingBox().minX + (target.getBoundingBox().maxX - target.getBoundingBox().minX) / 2.0D,
-									target.getBoundingBox().minY + (target.getBoundingBox().maxY - target.getBoundingBox().minY) / 2.0D,
-									target.getBoundingBox().minZ + (target.getBoundingBox().maxZ - target.getBoundingBox().minZ) / 2.0D)).normalize();
-						
-						Projectile projectile;
-						projectile = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
-						if (!shaman.isShootingSpikes()) {
-							projectile = new PrimordialMalevolenceProjectile(level, shaman);
+					Level level = shaman.level();
+					double direction = Math.toRadians(shaman.getYRot());
+					Vec3 diff = (new Vec3(shaman.position().x, shaman.position().y + shaman.getBbHeight(), shaman.position().z)).subtract(new Vec3(target.getBoundingBox().minX + (target.getBoundingBox().maxX - target.getBoundingBox().minX) / 2.0D, target.getBoundingBox().minY + (target.getBoundingBox().maxY - target.getBoundingBox().minY) / 2.0D, target.getBoundingBox().minZ + (target.getBoundingBox().maxZ - target.getBoundingBox().minZ) / 2.0D)).normalize();
+
+					if (!shaman.isShootingSpikes()) {
+						 if(shaman.getAttackTimer() == 10) {
+							Projectile projectile = new PrimordialMalevolenceProjectile(level, shaman);
 							((PrimordialMalevolenceProjectile) projectile).setDeflectable(true);
 							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
 							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.5F, 0F);
-						}
-						else {
+							level.addFreshEntity(projectile);
+						 }
+					} else {
+						if (shaman.getAttackTimer()%4 == 0) {
+							Projectile projectile = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
 							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
-							projectile.shoot(-diff.x, -diff.y, -diff.z, 0.5F, 0F);
+							//TODO Calculate angle from vector between shaman and target rather than using the entity YRot
+							float shootingAngle = -30 + shaman.getAttackTimer() * 3F;
+							projectile.shootFromRotation(shaman, shaman.getXRot(), shaman.getYRot() + shootingAngle, 0.0F, 0.5F, 0F);
+							level.addFreshEntity(projectile);
 						}
-						level.addFreshEntity(projectile);
-						shaman.setReloading(true);
-						shaman.setShootingSpikes(level.getRandom().nextBoolean());
 					}
+
+					if (shaman.getAttackTimer() == 19)
+						shaman.setReloading(true);
 				}
 			}
 		}
