@@ -480,14 +480,11 @@ public class BoneShaman extends FlyingMonster {
 								diff = (new Vec3(shaman.position().x, shaman.position().y + shaman.getBbHeight() / 2D, shaman.position().z)).subtract(new Vec3(target.position().x, target.position().y + target.getBbHeight() / 2D, target.position().z)).normalize();
 								Projectile projectile = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
 								projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight() / 2D, shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
-								// TODO This is shit, will fixy later
 								float shootingAngle = 60 - shaman.getAttackTimer() * 6F;
 								float angle = (float) Math.toRadians(shaman.getYHeadRot() + shootingAngle);
-								projectile.setXRot(shaman.getXRot());
-								projectile.setYRot(shaman.getYRot());
 								double xOffset = -Math.sin(angle);
 								double zOffset = Math.cos(angle);
-								Vec3 targetVector = new Vec3(xOffset, -0.1D, zOffset).normalize();
+								Vec3 targetVector = new Vec3(xOffset, 0D, zOffset).normalize();
 								projectile.shoot(targetVector.x, -diff.y, targetVector.z, 0.5F, 0F);
 								level.addFreshEntity(projectile);
 							}
