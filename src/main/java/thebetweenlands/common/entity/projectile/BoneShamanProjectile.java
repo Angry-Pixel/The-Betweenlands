@@ -45,16 +45,6 @@ public class BoneShamanProjectile extends ThrowableProjectile {
 					discard();
 			}
 		}
-
-		if (level().isClientSide()) {
-			prevAnimationTicks = animationTicks;
-			if (animationTicks < 360)
-				animationTicks += 15;
-			if (animationTicks >= 360) {
-				animationTicks -= 360;
-				prevAnimationTicks -= 360;
-			}
-		}
 	}
 
 	@Override
