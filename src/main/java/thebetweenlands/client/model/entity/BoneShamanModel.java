@@ -553,7 +553,7 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 				}
 			}
 			else {
-
+				//Not sure if anything really needs to be added for the spike 'reload'
 			}
 		}
 
