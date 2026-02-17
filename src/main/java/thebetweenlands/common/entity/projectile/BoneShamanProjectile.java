@@ -78,7 +78,7 @@ public class BoneShamanProjectile extends ThrowableProjectile {
 
 	@Override
 	protected double getDefaultGravity() {
-		return 0.00001F;
+		return 0.0002F;
 	}
 
 	@Override
