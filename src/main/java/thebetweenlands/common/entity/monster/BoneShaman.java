@@ -478,9 +478,13 @@ public class BoneShaman extends FlyingMonster {
 						if (shaman.getAttackTimer()%4 == 0) {
 							Projectile projectile = new BoneShamanProjectile(level, shaman, (float) shaman.getAttributeValue(Attributes.ATTACK_DAMAGE));
 							projectile.absMoveTo(shaman.getX() - Math.sin(direction) * 0.5D, shaman.getY() + shaman.getBbHeight(), shaman.getZ() + Math.cos(direction) * 0.5D, shaman.getYRot(), 0F);
-							//TODO Calculate angle from vector between shaman and target rather than using the entity YRot
+							// TODO This is shit, will fixy later
 							float shootingAngle = -30 + shaman.getAttackTimer() * 3F;
-							projectile.shootFromRotation(shaman, shaman.getXRot(), shaman.getYRot() + shootingAngle, 0.0F, 0.5F, 0F);
+							float angle = (float) Math.toRadians(shaman.getYRot() + shootingAngle);
+							double xOffset = -Math.sin(angle);
+							double zOffset = Math.cos(angle);
+							Vec3 targetVector = new Vec3(xOffset, -0.1D, zOffset).normalize();
+							projectile.shoot(targetVector.x, -diff.y, targetVector.z, 0.5F, 0F);
 							level.addFreshEntity(projectile);
 						}
 					}

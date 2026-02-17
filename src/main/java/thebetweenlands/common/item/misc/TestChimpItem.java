@@ -233,13 +233,20 @@ public class TestChimpItem extends Item {
 				shaman.setPos(context.getClickedPos().above().getBottomCenter());
 				context.getLevel().addFreshEntity(shaman);
 			}
-			
-		/*	WatcherEyes spy_eye = EntityRegistry.WATCHER_EYES.get().create(context.getLevel());
+			/*
+			WatcherEyes spy_eye = EntityRegistry.WATCHER_EYES.get().create(context.getLevel());
 			if (spy_eye != null) {
 				spy_eye.setPos(context.getClickedPos().getBottomCenter());
 				context.getLevel().addFreshEntity(spy_eye);
 				spy_eye.setYRot(context.getHorizontalDirection().getOpposite().toYRot());
 			}*/
+		/*	
+			BoneShamanProjectile bone = EntityRegistry.BONE_SHAMAN_PROJECTILE.get().create(context.getLevel());
+			if (bone != null) {
+				bone.setPos(context.getClickedPos().above().getBottomCenter());
+				context.getLevel().addFreshEntity(bone);
+			}
+			*/
 		}
 
 		return InteractionResult.SUCCESS;
