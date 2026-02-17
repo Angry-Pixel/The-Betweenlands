@@ -11,6 +11,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.monster.BoneShaman;
 
@@ -501,9 +502,22 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		float reloadProgress = Mth.lerp(partialTick, entity.prevReloadTimer / 40.0f, entity.getReloadTimer() / 40.0f);
 		float castingProgress = Mth.lerp(partialTick, entity.prevCastingTimer / 40.0f, entity.getCastingTimer() / 40.0f);
 		float attackProgress = Mth.lerp(partialTick, entity.prevAttackTimer / 20.0f, entity.getAttackTimer() / 20.0f);
+		Vec3 movement = entity.getDeltaMovement();
+		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
 
-		arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(30F) * limbSwingAmount;
-		arm1.zRot = convertDegtoRad(-8.1958F) + convertDegtoRad(-30F) * limbSwingAmount;
+		head_base.yRot += netHeadYaw / Mth.RAD_TO_DEG;
+		head_base.xRot += headPitch / Mth.RAD_TO_DEG;
+		jaw.xRot = convertDegtoRad(15F) + Mth.cos(ageInTicks * 0.25F) * 0.125F;
+		hipbone.y = -2.0F + sin * 2F;
+
+		if(movement.x == 0 && movement.z == 0) {
+			arm4.zRot = convertDegtoRad(7.5261F) + sin * 0.0625F;
+			arm1.zRot = convertDegtoRad(-8.1958F) - sin * 0.125F;
+		}
+		else {
+			arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(30F) * limbSwingAmount;
+			arm1.zRot = convertDegtoRad(-8.1958F) + convertDegtoRad(-30F) * limbSwingAmount;
+		}
 
 		if (entity.getReloadTimer() > 0) {
 			if(!entity.isShootingSpikes()) {
@@ -537,6 +551,9 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 					hand2.xRot = convertDegtoRad(20F) + convertDegtoRad(12.5F) * (float)Math.sin(castingProgress * Math.PI * 4);
 					arm1.zRot = convertDegtoRad(80F) + convertDegtoRad(-35F) * (float)Math.sin(castingProgress * Math.PI);
 				}
+			}
+			else {
+
 			}
 		}
 
