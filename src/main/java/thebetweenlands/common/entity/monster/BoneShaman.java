@@ -49,8 +49,8 @@ import thebetweenlands.common.registries.ParticleRegistry;
 
 public class BoneShaman extends FlyingMonster {
 
-	// TODO Maybe rename "spawning" to "summoning"?
-	public static final EntityDataAccessor<Boolean> IS_SPAWNING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+	// TODO Maybe rename "spawning" to "summoning"? or maybe not :P
+	public static final EntityDataAccessor<Boolean> IS_SUMMONING_PUPPETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<List<BlockPos>> SPAWN_TARGETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializerRegistry.BLOCK_POS_LIST.get());
 	public static final EntityDataAccessor<Boolean> RELOADING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
@@ -73,7 +73,7 @@ public class BoneShaman extends FlyingMonster {
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
-		builder.define(IS_SPAWNING, false);
+		builder.define(IS_SUMMONING_PUPPETS, false);
 		builder.define(SPAWN_TIMER, 0);
 		builder.define(SPAWN_TARGETS, List.of());
 		builder.define(RELOADING, false);
@@ -109,7 +109,12 @@ public class BoneShaman extends FlyingMonster {
 		if (isAlive()) {
 			lastSpawningAnimationTicks = getSpawnTimer();
 			if (!level().isClientSide()) {
-				this.stepSummoning();
+				if (getSpawnTimer() < spawnDuration)
+					setSpawnTimer(getSpawnTimer() + 1);
+				if (getSpawnTimer() == spawnDuration - 1) // TODO Temp - once tests are over, move to initial spawn method
+					spawnPuppets();
+				if(!isEmerging() && !isSummoningPuppets()) //just a temp catch for stop it firing off until timer is made
+					stepSummoning();
 			}
 
 			if (level().isClientSide()) {
@@ -194,20 +199,25 @@ public class BoneShaman extends FlyingMonster {
 		}
 	}
 
+	// TODO Putting list here as this method is the crux of where logic injection starts
 	public void stepSummoning() {
-		if(isSpawning()) {
-			if (getSpawnTimer() < spawnDuration)
-				setSpawnTimer(getSpawnTimer() + 1);
-			if (getSpawnTimer() == spawnDuration - 1) // Temp
-				spawnPuppets();
-		} else {
-			List<BlockPos> puppetSpawnLocations = this.findNearbySummonLocations();
+			// TODO Temp - once tests are over, move to initial spawn method
+			// TODO this needs a check for amounts in world already - we don't want too many - see spawnPuppets()
+			// if lowest threshold is met then do the following
+			// 1. if no nearby blocks - skip all below and continue reload and attacks.
+			// 2. postpone/repurpose timer for reloading and prevent attacking
+			// 3. make entity face target location.
+			// 4. use timer and logic to activate animation
+			// 5. maybe shoot some particles based on start and end vectors for some visual niceness
+			// 6. activate logic for spawning new puppet
+			// 7. rinse and repeat until minimum threshold for puppet count is met (may randomise threshold a bit)
+			List<BlockPos> puppetSpawnLocations = findNearbySummonLocations();
 			
 			if(!puppetSpawnLocations.isEmpty()) {
-				this.setSpawning(true);
-				this.setSpawnTargets(puppetSpawnLocations);
+				setSummoningPuppets(true); //unused but set atm for logic extension
+				setSpawnTargets(puppetSpawnLocations);
+				spawnPuppets();
 			}
-		}
 	}
 	
 	/**
@@ -224,7 +234,7 @@ public class BoneShaman extends FlyingMonster {
 		BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
 
 		// Search for nearby blocks that puppets can be summoned from
-		Level level = this.level();
+		Level level = level();
 		for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
 			if (level.getBlockState(pos).is(BLBlockTagProvider.BONE_PUPPET_CONVERTABLE) && level.isEmptyBlock(pos.above())) {
 				puppetSummonLocations.add(pos.immutable());
@@ -235,7 +245,7 @@ public class BoneShaman extends FlyingMonster {
 	}
 	
 	private void spawnPuppets() {
-		List<BlockPos> list = this.getSpawnTargets();
+		List<BlockPos> list = getSpawnTargets();
 
 		if (!list.isEmpty()) {// && list.size() >= 4) { TODO a nice way to set amounts
 			for (int spawn = 0; spawn < list.size(); spawn++) {
@@ -340,14 +350,13 @@ public class BoneShaman extends FlyingMonster {
 	public boolean isEmerging() {
 		return getEntityData().get(SPAWN_TIMER) < spawnDuration;
 	}
-
 	
-	public boolean isSpawning() {
-		return getEntityData().get(IS_SPAWNING);
+	public boolean isSummoningPuppets() {
+		return getEntityData().get(IS_SUMMONING_PUPPETS);
 	}
 
-	public void setSpawning(boolean spawning) {
-		getEntityData().set(IS_SPAWNING, spawning);
+	public void setSummoningPuppets(boolean summon) {
+		getEntityData().set(IS_SUMMONING_PUPPETS, summon);
 	}
 	
 	public int getSpawnTimer() {
