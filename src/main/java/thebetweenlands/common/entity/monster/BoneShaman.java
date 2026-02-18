@@ -3,7 +3,6 @@ package thebetweenlands.common.entity.monster;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -39,10 +38,10 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.entity.boss.malevolence.PrimordialMalevolenceProjectile;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityDataSerializerRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -50,6 +49,7 @@ import thebetweenlands.common.registries.ParticleRegistry;
 
 public class BoneShaman extends FlyingMonster {
 
+	// TODO Maybe rename "spawning" to "summoning"?
 	public static final EntityDataAccessor<Boolean> IS_SPAWNING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<List<BlockPos>> SPAWN_TARGETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializerRegistry.BLOCK_POS_LIST.get());
@@ -109,10 +109,7 @@ public class BoneShaman extends FlyingMonster {
 		if (isAlive()) {
 			lastSpawningAnimationTicks = getSpawnTimer();
 			if (!level().isClientSide()) {
-				if (getSpawnTimer() < spawnDuration)
-					setSpawnTimer(getSpawnTimer() + 1);
-				if (getSpawnTimer() == spawnDuration - 1) // Temp
-					spawnPuppets();
+				this.stepSummoning();
 			}
 
 			if (level().isClientSide()) {
@@ -197,16 +194,49 @@ public class BoneShaman extends FlyingMonster {
 		}
 	}
 
-	private void spawnPuppets() {
-		// TODO clean up later
-		List<BlockPos> list = new ArrayList<>();
+	public void stepSummoning() {
+		if(isSpawning()) {
+			if (getSpawnTimer() < spawnDuration)
+				setSpawnTimer(getSpawnTimer() + 1);
+			if (getSpawnTimer() == spawnDuration - 1) // Temp
+				spawnPuppets();
+		} else {
+			List<BlockPos> puppetSpawnLocations = this.findNearbySummonLocations();
+			
+			if(!puppetSpawnLocations.isEmpty()) {
+				this.setSpawning(true);
+				this.setSpawnTargets(puppetSpawnLocations);
+			}
+		}
+	}
+	
+	/**
+	 * Finds all nearby valid locations for bone puppets to be summoned from
+	 * @return a list of valid puppet summon locations
+	 */
+	public List<BlockPos> findNearbySummonLocations() {
+		// List of puppet spawn locations
+		List<BlockPos> puppetSummonLocations = new ArrayList<>();
+		
+		// Get search bounds
 		AABB searchBox = new AABB(blockPosition()).inflate(8D, 8D, 8D);
 		BlockPos minPos = BlockPos.containing(searchBox.minX, searchBox.minY, searchBox.minZ);
 		BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
+
+		// Search for nearby blocks that puppets can be summoned from
+		Level level = this.level();
 		for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
-			if (level().getBlockState(pos).is(BlockRegistry.SLIMY_BONE_ORE) && level().isEmptyBlock(pos.above()))
-				list.add(new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
+			if (level.getBlockState(pos).is(BLBlockTagProvider.BONE_PUPPET_CONVERTABLE) && level.isEmptyBlock(pos.above())) {
+				puppetSummonLocations.add(pos.immutable());
+			}
 		}
+		
+		return puppetSummonLocations;
+	}
+	
+	private void spawnPuppets() {
+		List<BlockPos> list = this.getSpawnTargets();
+
 		if (!list.isEmpty()) {// && list.size() >= 4) { TODO a nice way to set amounts
 			for (int spawn = 0; spawn < list.size(); spawn++) {
 				BonePuppetRanged puppet1 = new BonePuppetRanged(EntityRegistry.BONE_PUPPET_RANGED.get(), level());
@@ -328,7 +358,7 @@ public class BoneShaman extends FlyingMonster {
 		getEntityData().set(SPAWN_TIMER, timer);
 	}
 
-	public List<BlockPos> setSpawnTargets() {
+	public List<BlockPos> getSpawnTargets() {
 		return getEntityData().get(SPAWN_TARGETS);
 	}
 
