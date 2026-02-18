@@ -45,6 +45,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> SPIKE_TRAPS = tag("spike_traps");
 	public static final TagKey<Block> SPIKE_TRAPS_BLOCKED_BY = tag("spike_traps_blocked_by");
 	public static final TagKey<Block> SPIKE_TRAPS_IGNORE = tag("spike_traps_ignore");
+	
+	public static final TagKey<Block> BONE_PUPPET_CONVERTABLE = tag("bone_puppet_convertable");
 
 	public static final TagKey<Block> DYED_DULL_LAVENDER = commonTag("dyed/dull_lavender");
 	public static final TagKey<Block> DYED_MAROON = commonTag("dyed/maroon");
@@ -168,6 +170,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(SPIKE_TRAPS).addTag(BlockTags.WITHER_IMMUNE);
 		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW, Blocks.STRUCTURE_VOID);
 
+		this.tag(BONE_PUPPET_CONVERTABLE).add(BlockRegistry.SLIMY_BONE_ORE.get());
+		
 		this.tag(FILTERED_SILT_GLASS).add(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS.get(), BlockRegistry.MAROON_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS.get(), BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SAFFRON_FILTERED_SILT_GLASS.get(), BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS.get(),
