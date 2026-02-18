@@ -19,6 +19,7 @@ public class EntityDataSerializerRegistry {
 
 	public static final DeferredRegister<EntityDataSerializer<?>> DATA_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, TheBetweenlands.ID);
 
+	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<List<BlockPos>>> BLOCK_POS_LIST = DATA_SERIALIZERS.register("block_pos_list", () -> EntityDataSerializer.forValueType(BlockPos.STREAM_CODEC.apply(ByteBufCodecs.list())));
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<List<Optional<BlockPos>>>> OPTIONAL_POS_LIST = DATA_SERIALIZERS.register("optional_pos_list", () -> EntityDataSerializer.forValueType(BlockPos.STREAM_CODEC.apply(ByteBufCodecs::optional).apply(ByteBufCodecs.list())));
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<List<Direction>>> DIRECTION_LIST = DATA_SERIALIZERS.register("direction_list", () -> EntityDataSerializer.forValueType(Direction.STREAM_CODEC.apply(ByteBufCodecs.list())));
 	public static final DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<Holder<FrogVariant>>> FROG_VARIANT = DATA_SERIALIZERS.register("frog_variant", () -> EntityDataSerializer.forValueType(ByteBufCodecs.holderRegistry(BLRegistries.Keys.FROG_VARIANT)));

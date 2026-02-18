@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.monster;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -42,13 +43,16 @@ import thebetweenlands.common.entity.boss.malevolence.PrimordialMalevolenceProje
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityDataSerializerRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 
 public class BoneShaman extends FlyingMonster {
 
+	public static final EntityDataAccessor<Boolean> IS_SPAWNING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<List<BlockPos>> SPAWN_TARGETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializerRegistry.BLOCK_POS_LIST.get());
 	public static final EntityDataAccessor<Boolean> RELOADING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> RELOAD_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> CASTING_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
@@ -69,7 +73,9 @@ public class BoneShaman extends FlyingMonster {
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
+		builder.define(IS_SPAWNING, false);
 		builder.define(SPAWN_TIMER, 0);
+		builder.define(SPAWN_TARGETS, List.of());
 		builder.define(RELOADING, false);
 		builder.define(RELOAD_TIMER, 0);
 		builder.define(ATTACK_TIMER, 0);
@@ -305,6 +311,15 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(SPAWN_TIMER) < spawnDuration;
 	}
 
+	
+	public boolean isSpawning() {
+		return getEntityData().get(IS_SPAWNING);
+	}
+
+	public void setSpawning(boolean spawning) {
+		getEntityData().set(IS_SPAWNING, spawning);
+	}
+	
 	public int getSpawnTimer() {
 		return getEntityData().get(SPAWN_TIMER);
 	}
@@ -313,6 +328,15 @@ public class BoneShaman extends FlyingMonster {
 		getEntityData().set(SPAWN_TIMER, timer);
 	}
 
+	public List<BlockPos> setSpawnTargets() {
+		return getEntityData().get(SPAWN_TARGETS);
+	}
+
+	public void setSpawnTargets(List<BlockPos> spawnTargets) {
+		getEntityData().set(SPAWN_TARGETS, List.copyOf(spawnTargets));
+	}
+	
+	
 	public void setReloading(boolean attacking) {
 		getEntityData().set(RELOADING, attacking);
 	}
@@ -329,6 +353,7 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(RELOAD_TIMER);
 	}
 
+	
 	public void setAttackTimer(int progress) {
 		getEntityData().set(ATTACK_TIMER, progress);
 	}
@@ -345,6 +370,7 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(IS_ATTACKING);
 	}
 
+	
 	public void setCastingTimer(int progress) {
 		getEntityData().set(CASTING_TIMER, progress);
 	}
