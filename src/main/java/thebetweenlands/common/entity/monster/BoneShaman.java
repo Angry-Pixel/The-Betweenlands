@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -52,7 +54,7 @@ public class BoneShaman extends FlyingMonster {
 	// TODO Maybe rename "spawning" to "summoning"? or maybe not :P
 	public static final EntityDataAccessor<Boolean> IS_SUMMONING_PUPPETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<List<BlockPos>> SPAWN_TARGETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializerRegistry.BLOCK_POS_LIST.get());
+	public static final EntityDataAccessor<List<BlockPos>> PUPPET_SUMMON_TARGETS = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializerRegistry.BLOCK_POS_LIST.get());
 	public static final EntityDataAccessor<Boolean> RELOADING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> RELOAD_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> CASTING_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
@@ -60,6 +62,8 @@ public class BoneShaman extends FlyingMonster {
 	public static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> IS_CASTING = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Boolean> SPIKE_PROJECTILE = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> SHOOT_SUMMON_PARTICLES = SynchedEntityData.defineId(BoneShaman.class, EntityDataSerializers.BOOLEAN);
+
 	public int prevReloadTimer;
 	public int prevAttackTimer;
 	public int prevCastingTimer;
@@ -75,7 +79,7 @@ public class BoneShaman extends FlyingMonster {
 		super.defineSynchedData(builder);
 		builder.define(IS_SUMMONING_PUPPETS, false);
 		builder.define(SPAWN_TIMER, 0);
-		builder.define(SPAWN_TARGETS, List.of());
+		builder.define(PUPPET_SUMMON_TARGETS, List.of());
 		builder.define(RELOADING, false);
 		builder.define(RELOAD_TIMER, 0);
 		builder.define(ATTACK_TIMER, 0);
@@ -83,12 +87,14 @@ public class BoneShaman extends FlyingMonster {
 		builder.define(CASTING_TIMER, 0);
 		builder.define(IS_CASTING, false);
 		builder.define(SPIKE_PROJECTILE, false);
+		builder.define(SHOOT_SUMMON_PARTICLES, false);
 	}
 
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
 		goalSelector.addGoal(1, new BoneShamanHoverAttackGoal(this, 1D, 10F, 6F));
+		goalSelector.addGoal(2, new BoneShamanSummonPuppetsGoal(this, 1D));
 		// goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
 		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -123,6 +129,11 @@ public class BoneShaman extends FlyingMonster {
 				
 				if (!isShootingSpikes() && getCastingTimer() > 0)
 					spawnCastingParticles();
+
+				if (isShootingSummonParticles() && level().getGameTime()%20 ==0) {
+					BlockPos targetPos = getPuppetSummonTargets().get(0);
+					shootParticles(level(), new Vec3(targetPos.getX() + 0.5D - getX(), targetPos.getY() + 0.5D - getY() - getBbHeight() / 2D, targetPos.getZ() + 0.5D - getZ()));
+				}
 
 				if (isAlive() && !isEmerging()) {
 					if (getRandom().nextInt(3) == 0) {
@@ -164,37 +175,48 @@ public class BoneShaman extends FlyingMonster {
 			}
 
 			if (isAlive()) {
-				if (isAttacking()) {
-					setAttackTimer(getAttackTimer() + 1);
-					if (getAttackTimer() >= 20) {
-						setShootingSpikes(level().getRandom().nextBoolean());
+				if(!isSummoningPuppets()) {
+					if (isAttacking()) {
+						setAttackTimer(getAttackTimer() + 1);
+						if (getAttackTimer() >= 20) {
+							setShootingSpikes(level().getRandom().nextBoolean());
+							setAttackTimer(0);
+							setAttacking(false);
+						}
+					} else
 						setAttackTimer(0);
-						setAttacking(false);
-					}
-				} else
-					setAttackTimer(0);
-				
-				if (isReloading()) {
-					if (!isCasting()) {
-						setReloadTimer(getReloadTimer() + 1);
-						if (getReloadTimer() == 20)
-							setCasting(true);
-					}
-
-					if(isCasting())
-						setCastingTimer(getCastingTimer() + 1);
 					
-					if (getCastingTimer() >= 40) {
-						setCastingTimer(0);
-						setCasting(false);
-					}
-					
-					if (getReloadTimer() >= 40) {
+					if (isReloading()) {
+						if (!isCasting()) {
+							setReloadTimer(getReloadTimer() + 1);
+							if (getReloadTimer() == 20)
+								setCasting(true);
+						}
+	
+						if(isCasting())
+							setCastingTimer(getCastingTimer() + 1);
+						
+						if (getCastingTimer() >= 40) {
+							setCastingTimer(0);
+							setCasting(false);
+						}
+						
+						if (getReloadTimer() >= 40) {
+							setReloadTimer(0);
+							setReloading(false);
+						}
+					} else
 						setReloadTimer(0);
-						setReloading(false);
-					}
-				} else
+				}
+				else {
+					//do this and trigger summoning counter I guess
 					setReloadTimer(0);
+					setReloading(false);
+					setAttackTimer(0);
+					setAttacking(false);
+					setCastingTimer(0);
+					setCasting(false);
+				}
 			}
 		}
 	}
@@ -211,12 +233,12 @@ public class BoneShaman extends FlyingMonster {
 			// 5. maybe shoot some particles based on start and end vectors for some visual niceness
 			// 6. activate logic for spawning new puppet
 			// 7. rinse and repeat until minimum threshold for puppet count is met (may randomise threshold a bit)
-			List<BlockPos> puppetSpawnLocations = findNearbySummonLocations();
+			List<BlockPos> puppetSummonLocations = findNearbySummonLocations();
 			
-			if(!puppetSpawnLocations.isEmpty()) {
+			if(!puppetSummonLocations.isEmpty()) {
 				setSummoningPuppets(true); //unused but set atm for logic extension
-				setSpawnTargets(puppetSpawnLocations);
-				spawnPuppets();
+				setPuppetSummonTargets(puppetSummonLocations);
+				//spawnPuppets(); move to AI
 			}
 	}
 	
@@ -245,7 +267,7 @@ public class BoneShaman extends FlyingMonster {
 	}
 	
 	private void spawnPuppets() {
-		List<BlockPos> list = getSpawnTargets();
+		List<BlockPos> list = getPuppetSummonTargets();
 
 		if (!list.isEmpty()) {// && list.size() >= 4) { TODO a nice way to set amounts
 			for (int spawn = 0; spawn < list.size(); spawn++) {
@@ -295,6 +317,18 @@ public class BoneShaman extends FlyingMonster {
 		double motionY = level().getRandom().nextDouble() * 0.2F + 0.15F;
 		double motionZ = level().getRandom().nextDouble() * 0.4F - 0.2F;
 		TheBetweenlands.createParticle(ParticleRegistry.DRUID_CASTING.get(), level(), px + ox, py, pz + oz, ParticleFactory.ParticleArgs.get().withMotion(motionX, motionY, motionZ).withScale(getRandom().nextFloat() * 0.5F + 0.5F).withColor(1F, 1F, 1F, 1F));
+	}
+
+	private void shootParticles(Level level, Vec3 target) {
+		for(int i = 0; i < 20; i++) {
+			float offsetLen = level.getRandom().nextFloat();
+			Vec3 offset = new Vec3(target.x * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.y * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.z * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f);
+			float vx = (level.getRandom().nextFloat() * 0.5f - 0.25f) * 0.00125f;
+			float vy = (level.getRandom().nextFloat() * 0.5f - 0.25f) * 0.00125f;
+			float vz = (level.getRandom().nextFloat() * 0.5f - 0.25f) * 0.00125f;
+			float scale = 0.25f + level.getRandom().nextFloat();
+			TheBetweenlands.createParticle(ParticleRegistry.DRUID_CASTING.get(), level, getX() + offset.x, getY() + getBbHeight() / 1.5D + offset.y, getZ() + offset.z, ParticleFactory.ParticleArgs.get().withMotion(vx, vy, vz).withColor(0.5F + level.getRandom().nextFloat() * 0.5F, 0.5F + level.getRandom().nextFloat() * 0.5F, 0.5F + level.getRandom().nextFloat() * 0.5F, 1.0F).withScale(scale).withData(100)); 
+		}
 	}
 
 	@Override
@@ -367,12 +401,12 @@ public class BoneShaman extends FlyingMonster {
 		getEntityData().set(SPAWN_TIMER, timer);
 	}
 
-	public List<BlockPos> getSpawnTargets() {
-		return getEntityData().get(SPAWN_TARGETS);
+	public List<BlockPos> getPuppetSummonTargets() {
+		return getEntityData().get(PUPPET_SUMMON_TARGETS);
 	}
 
-	public void setSpawnTargets(List<BlockPos> spawnTargets) {
-		getEntityData().set(SPAWN_TARGETS, List.copyOf(spawnTargets));
+	public void setPuppetSummonTargets(List<BlockPos> summonTargets) {
+		getEntityData().set(PUPPET_SUMMON_TARGETS, List.copyOf(summonTargets));
 	}
 	
 	
@@ -434,6 +468,14 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(SPIKE_PROJECTILE);
 	}
 
+	public void setShootSummonParticles(boolean state) {
+		getEntityData().set(SHOOT_SUMMON_PARTICLES, state);
+	}
+
+	public boolean isShootingSummonParticles() {
+		return getEntityData().get(SHOOT_SUMMON_PARTICLES);
+	}
+
 	public float getSpawningAnimation(float partialTicks) {
 		return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
 	}
@@ -462,12 +504,12 @@ public class BoneShaman extends FlyingMonster {
 
 		@Override
 		public boolean canUse() {
-			return isValidTarget();
+			return isValidTarget() && !shaman.isSummoningPuppets();
 		}
 
 		@Override
 		public boolean canContinueToUse() {
-			return isValidTarget() || !shaman.getNavigation().isDone();
+			return (isValidTarget() || !shaman.getNavigation().isDone()) && !shaman.isSummoningPuppets();
 		}
 
 		private boolean isValidTarget() {
@@ -565,5 +607,72 @@ public class BoneShaman extends FlyingMonster {
 		protected boolean canPerformAttack(LivingEntity entity) {
 			return !shaman.isReloading() && shaman.getSensing().hasLineOfSight(entity);
 		}
+	}
+
+	public static class BoneShamanSummonPuppetsGoal extends Goal {
+		private final BoneShaman shaman;
+		private final double speedModifier;
+		private int particleTimer = 0;
+
+		public BoneShamanSummonPuppetsGoal(BoneShaman shaman, double speedModifier) {
+			this.shaman = shaman;
+			this.speedModifier = speedModifier;
+			setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+		}
+
+		@Override
+		public boolean canUse() {
+			return shaman.isSummoningPuppets();
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return canUse() && (getTargetBlockPos() != null  || !shaman.level().isEmptyBlock(getTargetBlockPos()));  // && !shaman.getPuppetCount() <= 1; //some amount we are happy with;
+		}
+
+		@Override
+		   public void start() {
+			particleTimer = 0;
+		}
+
+	    @Override
+	    public void tick() {
+	    	Level level = shaman.level();
+	    	if(!level.isClientSide()) {
+		    	shaman.stepSummoning();
+		        if (getTargetBlockPos() != null && !level.isEmptyBlock(getTargetBlockPos())) {
+		        	shaman.getLookControl().setLookAt(getTargetBlockPos().getX(), getTargetBlockPos().getY(), getTargetBlockPos().getZ());
+		            if (shaman.getLookControl().isLookingAtTarget()) {
+		                shaman.getMoveControl().setWantedPosition(getTargetBlockPos().getX(), getTargetBlockPos().getY(), getTargetBlockPos().getZ(), 0.1D);
+		                shaman.hurtMarked = true;
+		                if (shaman.getYHeadRot() == shaman.getYRot() && shaman.getYRot() == shaman.yRotO && shaman.getXRot() == shaman.xRotO) {
+		                	particleTimer++;
+		                	if(!shaman.isShootingSummonParticles())
+		                		shaman.setShootSummonParticles(true);
+		                	if(particleTimer >= 20) {
+		                		shaman.spawnPuppets();
+		                		shaman.setShootSummonParticles(false);
+		                		particleTimer = 0;
+		                		shaman.setSummoningPuppets(false);
+		                	}
+		               }
+		            }
+		        }
+		        else {
+            		shaman.setShootSummonParticles(false);
+            		particleTimer = 0;
+            		shaman.setSummoningPuppets(false);
+		        }
+	    	}
+	    }
+ 
+	    @Nullable
+		private BlockPos getTargetBlockPos() {
+			List<BlockPos> list = shaman.getPuppetSummonTargets();
+			if(!list.isEmpty())
+				return list.get(0);
+			return null;
+		}
+		
 	}
 }
