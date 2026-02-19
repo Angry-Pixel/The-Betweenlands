@@ -21,6 +21,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thebetweenlands.common.entity.projectile.ThrownBone;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class BonePuppetRanged extends BonePuppetBase {
 
@@ -30,6 +31,11 @@ public class BonePuppetRanged extends BonePuppetBase {
 
     public BonePuppetRanged(EntityType<? extends Monster> type, Level level) {
         super(type, level);
+    }
+
+    public BonePuppetRanged(Level level, LivingEntity master) {
+        super(EntityRegistry.BONE_PUPPET_RANGED.get(), level);
+        setParentEntity(master);
     }
 
     @Override

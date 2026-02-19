@@ -13,11 +13,17 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class BonePuppetMelee extends BonePuppetBase {
 
 	public BonePuppetMelee(EntityType<? extends Monster> type, Level level) {
         super(type, level);
+    }
+
+    public BonePuppetMelee(Level level, LivingEntity master) {
+        super(EntityRegistry.BONE_PUPPET_MELEE.get(), level);
+        setParentEntity(master);
     }
 
     @Override

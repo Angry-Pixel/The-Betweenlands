@@ -1,14 +1,16 @@
 package thebetweenlands.common.entity.monster;
 
+import java.util.UUID;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,10 +30,12 @@ import thebetweenlands.common.registries.ItemRegistry;
 public abstract class BonePuppetBase extends Monster implements BLEntity {
 
 	public static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> PARENT_ID = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> ATTACK_TIMER = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> IS_ATTACKING = SynchedEntityData.defineId(BonePuppetBase.class, EntityDataSerializers.BOOLEAN);
-
+	@Nullable
+	public UUID masterUUID;
+	@Nullable
+	public Entity cachedMaster;
     public int lastSpawningAnimationTicks = 0;
     public int spawnDuration = 30;
     public int prevAttackTimer;
@@ -44,25 +48,35 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(SPAWN_TIMER, 0);
-        builder.define(PARENT_ID, -1);
         builder.define(ATTACK_TIMER, 0);
         builder.define(IS_ATTACKING, false);
     }
 
-	@Nullable
-	public BoneShaman getParentEntity() {
-		BoneShaman parentEntity = (BoneShaman) level().getEntity(getEntityData().get(PARENT_ID));
-		return getEntityData().get(PARENT_ID) != -1 ? parentEntity : null;
-	}
+    public void setParentEntity(@Nullable Entity master) {
+        if (master != null) {
+            this.masterUUID = master.getUUID();
+            this.cachedMaster = master;
+        }
+    }
+
+    @Nullable
+    public Entity getParentEntity()  {
+        if (this.cachedMaster != null && !this.cachedMaster.isRemoved()) {
+            return this.cachedMaster;
+        } else if (this.masterUUID != null && this.level() instanceof ServerLevel serverlevel) {
+            this.cachedMaster = serverlevel.getEntity(this.masterUUID);
+            return this.cachedMaster;
+        } else {
+            return null;
+        }
+    }
 
 	@Override
 	public void tick() {
 		super.tick();
-		//TODO temp disable for test
-	/*	if (!this.level().isClientSide())
-			if (getParentEntity() == null || getParentEntity().isDeadOrDying())
+		if (!this.level().isClientSide())
+			if (getParentEntity() == null || ((LivingEntity) getParentEntity()).isDeadOrDying()) // will do unless we make some odd entity owning shit
 				kill();
-	*/
 	}
 
 	@Override
@@ -72,8 +86,12 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
 			if (!level().isClientSide()) {
 				if (getSpawnTimer() > 0)
 					setSpawnTimer(getSpawnTimer() - 1);
-				if (getSpawnTimer() == 0)
+
+				if (getSpawnTimer() == 0)  {
+					if(getParentEntity() instanceof BoneShaman shaman)
+						shaman.setPuppetCount(shaman.getPuppetCount() - 1);
 					remove(Entity.RemovalReason.KILLED);
+				}
 			}
 
 			if (level().isClientSide())
@@ -166,15 +184,25 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
         super.addAdditionalSaveData(compound);
         compound.putInt("spawn_timer", getSpawnTimer());
 		if (getParentEntity() != null)
-			compound.putInt("parent", getParentEntity().getId());
+			compound.putUUID("Master", masterUUID);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         setSpawnTimer(compound.getInt("spawn_timer"));
-		if(compound.contains("parent", Tag.TAG_INT))
-			setParentEntityID(compound.getInt("parent"));
+		if(compound.hasUUID("Master")) {
+            this.masterUUID = compound.getUUID("Master");
+            this.cachedMaster = null;
+		}
+    }
+
+    @Override
+    public void restoreFrom(Entity entity) {
+        super.restoreFrom(entity);
+        if (entity instanceof BonePuppetBase puppet) {
+            this.cachedMaster = puppet.cachedMaster;
+        }
     }
 
     @Override
@@ -204,14 +232,6 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
         getEntityData().set(SPAWN_TIMER, timer);
     }
 
-	public Integer getParentEntityID() {
-		return getEntityData().get(PARENT_ID);
-	}
-
-	public void setParentEntityID(Integer parentID) {
-		getEntityData().set(PARENT_ID, parentID);
-	}
-
     public void setAttackTimer(int progress) {
     	getEntityData().set(ATTACK_TIMER, progress);
     }
@@ -227,13 +247,6 @@ public abstract class BonePuppetBase extends Monster implements BLEntity {
     public boolean isAttacking() {
         return getEntityData().get(IS_ATTACKING);
     }
-
-	@Override
-	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-		if (PARENT_ID.equals(key))
-			setParentEntityID(getParentEntityID());
-		super.onSyncedDataUpdated(key);
-	}
 
     public float getSpawningAnimation(float partialTicks) {
         return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
