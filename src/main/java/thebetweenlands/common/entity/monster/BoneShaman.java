@@ -94,7 +94,7 @@ public class BoneShaman extends FlyingMonster {
 	protected void registerGoals() {
 		goalSelector.addGoal(0, new FloatGoal(this));
 		goalSelector.addGoal(1, new BoneShamanHoverAttackGoal(this, 1D, 10F, 6F));
-		goalSelector.addGoal(2, new BoneShamanSummonPuppetsGoal(this, 1D));
+		goalSelector.addGoal(2, new BoneShamanSummonPuppetsGoal(this));
 		// goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
 		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -185,22 +185,22 @@ public class BoneShaman extends FlyingMonster {
 						}
 					} else
 						setAttackTimer(0);
-					
+
 					if (isReloading()) {
 						if (!isCasting()) {
 							setReloadTimer(getReloadTimer() + 1);
 							if (getReloadTimer() == 20)
 								setCasting(true);
 						}
-	
+
 						if(isCasting())
 							setCastingTimer(getCastingTimer() + 1);
-						
+
 						if (getCastingTimer() >= 40) {
 							setCastingTimer(0);
 							setCasting(false);
 						}
-						
+
 						if (getReloadTimer() >= 40) {
 							setReloadTimer(0);
 							setReloading(false);
@@ -209,7 +209,6 @@ public class BoneShaman extends FlyingMonster {
 						setReloadTimer(0);
 				}
 				else {
-					//do this and trigger summoning counter I guess
 					setReloadTimer(0);
 					setReloading(false);
 					setAttackTimer(0);
@@ -223,25 +222,23 @@ public class BoneShaman extends FlyingMonster {
 
 	// TODO Putting list here as this method is the crux of where logic injection starts
 	public void stepSummoning() {
-			// TODO Temp - once tests are over, move to initial spawn method
 			// TODO this needs a check for amounts in world already - we don't want too many - see spawnPuppets()
 			// if lowest threshold is met then do the following
-			// 1. if no nearby blocks - skip all below and continue reload and attacks.
+			// 1. // DONE if no nearby blocks - skip all below and continue reload and attacks.
 			// 2. postpone/repurpose timer for reloading and prevent attacking
-			// 3. make entity face target location.
+			// 3. // DONE - make entity face target location.
 			// 4. use timer and logic to activate animation
-			// 5. maybe shoot some particles based on start and end vectors for some visual niceness
-			// 6. activate logic for spawning new puppet
+			// 5. // DONE (Placeholder)- maybe shoot some particles based on start and end vectors for some visual niceness
+			// 6. // DONE activate logic for spawning new puppet
 			// 7. rinse and repeat until minimum threshold for puppet count is met (may randomise threshold a bit)
 			List<BlockPos> puppetSummonLocations = findNearbySummonLocations();
-			
+
 			if(!puppetSummonLocations.isEmpty()) {
 				setSummoningPuppets(true); //unused but set atm for logic extension
 				setPuppetSummonTargets(puppetSummonLocations);
-				//spawnPuppets(); move to AI
 			}
 	}
-	
+
 	/**
 	 * Finds all nearby valid locations for bone puppets to be summoned from
 	 * @return a list of valid puppet summon locations
@@ -249,7 +246,7 @@ public class BoneShaman extends FlyingMonster {
 	public List<BlockPos> findNearbySummonLocations() {
 		// List of puppet spawn locations
 		List<BlockPos> puppetSummonLocations = new ArrayList<>();
-		
+
 		// Get search bounds
 		AABB searchBox = new AABB(blockPosition()).inflate(8D, 8D, 8D);
 		BlockPos minPos = BlockPos.containing(searchBox.minX, searchBox.minY, searchBox.minZ);
@@ -262,10 +259,10 @@ public class BoneShaman extends FlyingMonster {
 				puppetSummonLocations.add(pos.immutable());
 			}
 		}
-		
+
 		return puppetSummonLocations;
 	}
-	
+
 	private void spawnPuppets() {
 		List<BlockPos> list = getPuppetSummonTargets();
 
@@ -384,7 +381,7 @@ public class BoneShaman extends FlyingMonster {
 	public boolean isEmerging() {
 		return getEntityData().get(SPAWN_TIMER) < spawnDuration;
 	}
-	
+
 	public boolean isSummoningPuppets() {
 		return getEntityData().get(IS_SUMMONING_PUPPETS);
 	}
@@ -392,7 +389,7 @@ public class BoneShaman extends FlyingMonster {
 	public void setSummoningPuppets(boolean summon) {
 		getEntityData().set(IS_SUMMONING_PUPPETS, summon);
 	}
-	
+
 	public int getSpawnTimer() {
 		return getEntityData().get(SPAWN_TIMER);
 	}
@@ -408,8 +405,7 @@ public class BoneShaman extends FlyingMonster {
 	public void setPuppetSummonTargets(List<BlockPos> summonTargets) {
 		getEntityData().set(PUPPET_SUMMON_TARGETS, List.copyOf(summonTargets));
 	}
-	
-	
+
 	public void setReloading(boolean attacking) {
 		getEntityData().set(RELOADING, attacking);
 	}
@@ -426,7 +422,6 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(RELOAD_TIMER);
 	}
 
-	
 	public void setAttackTimer(int progress) {
 		getEntityData().set(ATTACK_TIMER, progress);
 	}
@@ -443,7 +438,6 @@ public class BoneShaman extends FlyingMonster {
 		return getEntityData().get(IS_ATTACKING);
 	}
 
-	
 	public void setCastingTimer(int progress) {
 		getEntityData().set(CASTING_TIMER, progress);
 	}
@@ -611,12 +605,10 @@ public class BoneShaman extends FlyingMonster {
 
 	public static class BoneShamanSummonPuppetsGoal extends Goal {
 		private final BoneShaman shaman;
-		private final double speedModifier;
 		private int particleTimer = 0;
 
-		public BoneShamanSummonPuppetsGoal(BoneShaman shaman, double speedModifier) {
+		public BoneShamanSummonPuppetsGoal(BoneShaman shaman) {
 			this.shaman = shaman;
-			this.speedModifier = speedModifier;
 			setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 		}
 
@@ -673,6 +665,6 @@ public class BoneShaman extends FlyingMonster {
 				return list.get(0);
 			return null;
 		}
-		
 	}
+
 }
