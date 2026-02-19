@@ -118,7 +118,7 @@ public class BoneShaman extends FlyingMonster {
 			if (!level().isClientSide()) {
 				if (getSpawnTimer() < spawnDuration)
 					setSpawnTimer(getSpawnTimer() + 1);
-				if(!isEmerging() && !isSummoningPuppets()) //just a temp catch for stop it firing off until timer is made
+				if(!isEmerging() && !isSummoningPuppets() && canSummonNewPuppets()) //just a temp catch for stop it firing off until timer is made
 					stepSummoning();
 			}
 
@@ -287,8 +287,9 @@ public class BoneShaman extends FlyingMonster {
 						puppet2.setYRot(getYRot());
 						level().addFreshEntity(puppet2);
 					}
-					setPuppetCount(getPuppetCount() + 1);
+					
 				}
+				setPuppetCount(getPuppetCount() + 1);
 			//}
 		}
 	}
@@ -633,17 +634,24 @@ public class BoneShaman extends FlyingMonster {
 
 		@Override
 		public boolean canUse() {
-			return shaman.canSummonNewPuppets() && !shaman.isSummoningPuppets();
+			return shaman.isSummoningPuppets();
 		}
 
 		@Override
 		public boolean canContinueToUse() {
-			return shaman.canSummonNewPuppets() && shaman.isSummoningPuppets() && (getTargetBlockPos() != null  || !shaman.level().isEmptyBlock(getTargetBlockPos()));
+			return canUse() && shaman.canSummonNewPuppets() && (getTargetBlockPos() != null  || !shaman.level().isEmptyBlock(getTargetBlockPos()));
 		}
 
 		@Override
 		   public void start() {
 			particleTimer = 0;
+		}
+
+		@Override
+		   public void stop() {
+      		shaman.setShootSummonParticles(false);
+    		particleTimer = 0;
+    		shaman.setSummoningPuppets(false);
 		}
 
 	    @Override
@@ -656,7 +664,7 @@ public class BoneShaman extends FlyingMonster {
 		            if (shaman.getLookControl().isLookingAtTarget()) {
 		                shaman.getMoveControl().setWantedPosition(getTargetBlockPos().getX(), getTargetBlockPos().getY(), getTargetBlockPos().getZ(), 0.1D);
 		                shaman.hurtMarked = true;
-		                if (shaman.getYHeadRot() == shaman.getYRot() && shaman.getYRot() == shaman.yRotO && shaman.getXRot() == shaman.xRotO) { //jank
+		                if (shaman.getYRot() == shaman.yRotO && shaman.getXRot() == shaman.xRotO) { //jank
 		                	particleTimer++;
 		                	if(!shaman.isShootingSummonParticles())
 		                		shaman.setShootSummonParticles(true);
@@ -670,9 +678,7 @@ public class BoneShaman extends FlyingMonster {
 		            }
 		        }
 		        else {
-            		shaman.setShootSummonParticles(false);
-            		particleTimer = 0;
-            		shaman.setSummoningPuppets(false);
+            		stop();
 		        }
 	    	}
 	    }
