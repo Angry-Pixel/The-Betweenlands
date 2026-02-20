@@ -20,8 +20,14 @@ public class BoneShamanRenderer<T extends BoneShaman> extends MobRenderer<T, Bon
 
 	@Override
 	protected void scale(BoneShaman entity, PoseStack stack, float partialTick) {
-		stack.translate(0.0D, 1.25D - entity.getSpawningAnimation(partialTick) * 1.25D, 0.0D);
-		shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
+		shadowStrength = 0F;
+		if (entity.getSpawningAnimation(partialTick) <= 0.75F)
+			stack.translate(0.0D, 3.2D, 0.0D);
+		if (entity.getSpawningAnimation(partialTick) > 0.75F && entity.getSpawningAnimation(partialTick) <= 1D) {
+			stack.translate(0.0D, 9.8D - entity.getSpawningAnimation(partialTick) * 3D * 3.2D, 0.0D);
+			shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
+			shadowStrength = 1F;
+		}
 	}
 
 	@Override

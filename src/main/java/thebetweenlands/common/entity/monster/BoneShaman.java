@@ -123,13 +123,19 @@ public class BoneShaman extends FlyingMonster {
 			}
 
 			if (level().isClientSide()) {
-				if (getSpawnTimer() < 10)
+				if (getSpawnTimer() <= 1)
 					spawnEmergingParticles();
-				
+
+				if (getSpawnTimer() >= 10 && getSpawnTimer() < 13)
+					spawnEmergingParticles();
+
+				if (getSpawnTimer() >= 20 && getSpawnTimer() < spawnDuration)
+					spawnEmergingParticles();
+
 				if (!isShootingSpikes() && getCastingTimer() > 0)
 					spawnCastingParticles();
 
-				if (isShootingSummonParticles() && level().getGameTime()%20 ==0) {
+				if (isShootingSummonParticles() && level().getGameTime()%20 == 0) {
 					BlockPos targetPos = getPuppetSummonTargets().get(0);
 					shootParticles(level(), new Vec3(targetPos.getX() + 0.5D - getX(), targetPos.getY() + 0.5D - getY() - getBbHeight() / 2D, targetPos.getZ() + 0.5D - getZ()));
 				}
