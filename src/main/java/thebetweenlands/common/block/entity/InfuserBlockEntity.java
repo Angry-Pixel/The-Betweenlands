@@ -1,11 +1,18 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,23 +25,25 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
+import thebetweenlands.common.block.entity.util.SidedNoMenuContainerBlockEntity;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.item.herblore.AspectVialItem;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-
-public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
+public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implements IFluidHandler {
 
 	public static final int MAX_INGREDIENTS = 6;
+	public static final int LIFE_CRYSTAL_SLOT = MAX_INGREDIENTS + 1;
+	public static final int CONTAINER_SIZE = LIFE_CRYSTAL_SLOT + 1;
 
-	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_INGREDIENTS + 2, ItemStack.EMPTY);
+	private NonNullList<ItemStack> items = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
 	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 3, stack -> stack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
 
 	private int infusionTime = 0;
@@ -236,7 +245,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		}
 		if (entity.isValidCrystalInstalled()) {
 			if (entity.temp >= 100 && entity.evaporation >= 400 && entity.stirProgress >= 90 && entity.hasIngredients()) {
-				entity.getItems().get(MAX_INGREDIENTS + 1).setDamageValue(entity.getItems().get(MAX_INGREDIENTS + 1).getDamageValue() + 1);
+				entity.getItems().get(LIFE_CRYSTAL_SLOT).setDamageValue(entity.getItems().get(LIFE_CRYSTAL_SLOT).getDamageValue() + 1);
 				entity.stirProgress = 0;
 			}
 			if (!entity.hasCrystal) {
@@ -298,12 +307,62 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	}
 
 	public boolean isValidCrystalInstalled() {
-		return !this.getItems().get(MAX_INGREDIENTS + 1).isEmpty() && this.getItems().get(MAX_INGREDIENTS + 1).getItem() instanceof LifeCrystalItem && this.getItems().get(MAX_INGREDIENTS + 1).getDamageValue() < this.getItems().get(MAX_INGREDIENTS + 1).getMaxDamage();
+		return !this.getItems().get(LIFE_CRYSTAL_SLOT).isEmpty() && this.getItems().get(LIFE_CRYSTAL_SLOT).getItem() instanceof LifeCrystalItem && this.getItems().get(LIFE_CRYSTAL_SLOT).getDamageValue() < this.getItems().get(LIFE_CRYSTAL_SLOT).getMaxDamage();
+	}
+	
+	public boolean isIngredientSlot(int slot) {
+		return 0 <= slot && slot <= MAX_INGREDIENTS;
 	}
 
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
-		return !hasInfusion() && this.getItem(slot).isEmpty() && ((slot <= MAX_INGREDIENTS && stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().isPresent()) || (slot == MAX_INGREDIENTS + 1 && stack.getItem() instanceof LifeCrystalItem));
+		// Do not insert if there is already an item in that slot
+		if(!this.getItem(slot).isEmpty()) {
+			return false;
+		}
+		
+		// If we're trying to insert to an ingredient slot
+		if(this.isIngredientSlot(slot)) {
+			return !hasInfusion() // Do not insert ingredients if we're mid-infusion
+				&& stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().isPresent(); // Only accept ingredients that actually have aspects
+		}
+		
+		// Only accept life crystals in the life crystal slot
+		if(slot == LIFE_CRYSTAL_SLOT) {
+			// TODO life crystal charge data component?
+			return stack.getItem() instanceof LifeCrystalItem;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		// Do not allow removing ingredients mid-infusion
+		if(this.isIngredientSlot(slot)) {
+			return !hasInfusion();
+		}
+		return super.canTakeItem(target, slot, stack);
+	}
+	
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		if(side.getAxis().isVertical()) { // Top and bottom can access ingredients
+			return slotsBetweenInclusive(0, MAX_INGREDIENTS);
+		} else if(side.getAxis().isHorizontal()) { // Sides access life crystal
+			return new int[] {LIFE_CRYSTAL_SLOT};
+		}
+		return NO_SLOTS;
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return true;
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return true;
 	}
 
 	@Override
@@ -323,7 +382,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	@Override
 	public int getContainerSize() {
-		return MAX_INGREDIENTS + 2;
+		return CONTAINER_SIZE;
 	}
 
 	public boolean hasIngredients() {
