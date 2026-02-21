@@ -41,6 +41,10 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> ITEM_FRAMES = tag("item_frames");
 	public static final TagKey<Item> SLINGSHOT_AMMO = tag("slingshot_ammo");
 
+	public static final TagKey<Item> WATER_FILTERS = tag("water_filters");
+	public static final TagKey<Item> WATER_FILTERS_MOSS = tag("water_filters/moss");
+	public static final TagKey<Item> WATER_FILTERS_SILK = tag("water_filters/silk");
+
 	/**
 	 * Whether an item ignores the weakness on non-betweenlands tools
 	 */
@@ -109,6 +113,10 @@ public class BLItemTagProvider extends ItemTagsProvider {
 		this.tag(DEFAULT_CORRODIBLE);
 		this.tag(CUSTOM_CORRODIBLE);
 
+		this.tag(WATER_FILTERS).addTag(WATER_FILTERS_MOSS).addTag(WATER_FILTERS_SILK);
+		this.tag(WATER_FILTERS_MOSS).add(ItemRegistry.MOSS_FILTER.getKey());
+		this.tag(WATER_FILTERS_SILK).add(ItemRegistry.SILK_FILTER.getKey());
+		
 		this.tag(GIVES_FOOD_SICKNESS).add(ItemRegistry.MIRE_SNAIL_EGG.get(), ItemRegistry.COOKED_MIRE_SNAIL_EGG.get(),
 			ItemRegistry.RAW_FROG_LEGS.get(), ItemRegistry.COOKED_FROG_LEGS.get(),
 			ItemRegistry.RAW_SNAIL_FLESH.get(), ItemRegistry.COOKED_SNAIL_FLESH.get(),

@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-29T08:18:18.445653492	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2026-02-21T21:56:49.5129737	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 3c8338bc22db2497bf01321405dcacecc18dd51c data/minecraft/tags/item/chest_armor.json
@@ -32,3 +32,6 @@ acfa9371b1f86fc431faf8337cd533e716c06649 data/thebetweenlands/tags/item/repairs_
 e7acf1217e6b03bd758438ba0a0f0ee548b03bef data/thebetweenlands/tags/item/samite.json
 47c424da0debcdd6c4fee6808267c1e53747ff20 data/thebetweenlands/tags/item/samite_canvas_panels.json
 0b4fb1710c1ea70138d18db6ea9e27f8d1280827 data/thebetweenlands/tags/item/slingshot_ammo.json
+ceeaeeadf8d76546a5ffac264877457627a15fe7 data/thebetweenlands/tags/item/water_filters.json
+39cb0d6cae396c83de4d417da570a0b04c7d9908 data/thebetweenlands/tags/item/water_filters/moss.json
+0a66c27c5d8a72dbb304191cc7a37ade2c3b62ca data/thebetweenlands/tags/item/water_filters/silk.json
