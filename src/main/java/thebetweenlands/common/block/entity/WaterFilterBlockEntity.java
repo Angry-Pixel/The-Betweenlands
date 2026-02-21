@@ -1,5 +1,8 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -7,6 +10,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,14 +26,17 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.block.entity.util.SidedNoMenuContainerBlockEntity;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 
-import java.util.Collections;
-import java.util.List;
+public class WaterFilterBlockEntity extends SidedNoMenuContainerBlockEntity implements IFluidHandler {
 
-public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
-
+	public static final int FILTER_SLOT = 0;
+	
 	public boolean showFluidAnimation;
 	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4);
 	private NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
@@ -157,12 +164,16 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 		return this.hasMossFilter() || this.hasSilkFilter();
 	}
 
+	public ItemStack getFilterStack() {
+		return this.getItem(FILTER_SLOT);
+	}
+	
 	public boolean hasMossFilter() {
-		return this.getItem(0).is(ItemRegistry.MOSS_FILTER);
+		return this.getFilterStack().is(BLItemTagProvider.WATER_FILTERS_MOSS);
 	}
 
 	public boolean hasSilkFilter() {
-		return this.getItem(0).is(ItemRegistry.SILK_FILTER);
+		return this.getFilterStack().is(BLItemTagProvider.WATER_FILTERS_SILK);
 	}
 
 	public int getTankFluidAmount() {
@@ -234,5 +245,38 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.tank.readFromNBT(registries, tag);
 		this.showFluidAnimation = tag.getBoolean("show_fluid_animation");
+	}
+
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if(slot == FILTER_SLOT) {
+			return stack.is(BLItemTagProvider.WATER_FILTERS);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		if(side.getAxis().isVertical()) { // Top and bottom can access items
+			return allSlotsAfter(FILTER_SLOT + 1, this);
+		} else if(side.getAxis().isHorizontal()) { // Sides can access filter
+			return new int[] { FILTER_SLOT };
+		}
+		return NO_SLOTS;
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return true;
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return true;
 	}
 }

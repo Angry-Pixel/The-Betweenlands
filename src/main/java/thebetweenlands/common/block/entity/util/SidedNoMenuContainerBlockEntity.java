@@ -30,8 +30,12 @@ public abstract class SidedNoMenuContainerBlockEntity extends NoMenuContainerBlo
 	@Override
 	public abstract boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction);
 	
+	public static int getDynamicMaxSize(NoMenuContainerBlockEntity blockEntity) {
+		return Math.max(blockEntity.getContainerSize(), blockEntity.getItems().size());
+	}
+	
 	public static int[] allSlots(NoMenuContainerBlockEntity blockEntity) {
-		return allSlots(Math.max(blockEntity.getContainerSize(), blockEntity.getItems().size()));
+		return allSlots(getDynamicMaxSize(blockEntity));
 	}
 
 	public static int[] allSlots(int containerSize) {
@@ -50,6 +54,10 @@ public abstract class SidedNoMenuContainerBlockEntity extends NoMenuContainerBlo
 		return IntStream.rangeClosed(minSlotInclusive, minSlotInclusive).toArray();
 	}
 
+	public static int[] allSlotsAfter(int minSlotInclusive, NoMenuContainerBlockEntity blockEntity) {
+		return slotsBetween(minSlotInclusive, getDynamicMaxSize(blockEntity));
+	}
+	
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
 		return true;
