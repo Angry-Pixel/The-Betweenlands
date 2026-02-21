@@ -22,6 +22,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.registries.*;
 
 import java.util.Collections;

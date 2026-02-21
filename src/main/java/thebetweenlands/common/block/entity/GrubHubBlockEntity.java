@@ -16,6 +16,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.block.container.GrubHubBlock;
+import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.network.clientbound.InfestWeedwoodBushPacket;
 import thebetweenlands.common.registries.*;
 

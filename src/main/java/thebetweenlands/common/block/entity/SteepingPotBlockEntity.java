@@ -22,6 +22,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.recipes.SteepingPotRecipe;
+import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.item.recipe.FluidRecipeInput;
 import thebetweenlands.common.registries.*;
 

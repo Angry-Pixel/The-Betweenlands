@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class PresentBlockEntity extends NoMenuContainerBlockEntity {

@@ -13,6 +13,6 @@ public class GrubHubWrapper extends ItemStackHandler {
 	//dont allow inserting items
 	@Override
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		return ItemStack.EMPTY;
+		return stack;
 	}
 }

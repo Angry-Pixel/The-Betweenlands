@@ -1,6 +1,10 @@
-package thebetweenlands.common.block.entity;
+package thebetweenlands.common.block.entity.util;
 
+import javax.annotation.Nullable;
+
+import it.unimi.dsi.fastutil.ints.IntArrays;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentMap;
@@ -13,6 +17,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.RandomizableContainer;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -22,9 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-import javax.annotation.Nullable;
-
-public abstract class NoMenuContainerBlockEntity extends BlockEntity implements RandomizableContainer {
+public abstract class NoMenuContainerBlockEntity extends BlockEntity implements RandomizableContainer, WorldlyContainer {
 
 	@Nullable
 	protected ResourceKey<LootTable> lootTable;
@@ -112,6 +115,21 @@ public abstract class NoMenuContainerBlockEntity extends BlockEntity implements 
 		this.getItems().clear();
 	}
 
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return IntArrays.EMPTY_ARRAY;
+	}
+	
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return false;
+	}
+	
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return false;
+	}
+	
 	@Override
 	protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
 		super.applyImplicitComponents(componentInput);
