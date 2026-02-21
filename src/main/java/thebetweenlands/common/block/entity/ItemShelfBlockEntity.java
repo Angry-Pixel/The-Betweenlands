@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,5 +45,15 @@ public class ItemShelfBlockEntity extends NoMenuContainerBlockEntity {
 	@Override
 	public int getContainerSize() {
 		return 4;
+	}
+
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		return true;
 	}
 }
