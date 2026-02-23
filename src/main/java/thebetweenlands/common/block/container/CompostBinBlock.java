@@ -99,6 +99,11 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 				}
 			}
 		}
+		
+		if(stack.isEmpty() && player.isCreative() && player.isCrouching()) {
+			level.setBlockAndUpdate(pos, state.cycle(OPEN));
+			return ItemInteractionResult.SUCCESS;
+		}
 
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
