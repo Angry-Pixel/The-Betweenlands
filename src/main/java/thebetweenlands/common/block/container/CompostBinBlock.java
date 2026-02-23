@@ -70,8 +70,9 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 			if (level.getBlockEntity(pos) instanceof CompostBinBlockEntity bin) {
 				if (bin.getCompostedAmount() > 0) {
 					if (bin.removeCompost(CompostBinBlockEntity.COMPOST_PER_ITEM)) {
-						ItemStack compostStack = new ItemStack(ItemRegistry.COMPOST.get());
+						ItemStack compostStack = ItemRegistry.COMPOST.toStack();
 						ItemHandlerHelper.giveItemToPlayer(player, compostStack);
+						bin.setChanged();
 						return ItemInteractionResult.SUCCESS;
 					}
 				}

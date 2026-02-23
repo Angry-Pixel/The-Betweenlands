@@ -1,22 +1,34 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
 import thebetweenlands.common.block.container.CompostBinBlock;
-import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
+import thebetweenlands.common.block.entity.util.SidedNoMenuContainerBlockEntity;
+import thebetweenlands.common.capability.CompostBinWrapper;
+import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataMapRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
-public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
+public class CompostBinBlockEntity extends SidedNoMenuContainerBlockEntity {
 
 	public static final int COMPOST_PER_ITEM = 25;
 	public static final int MAX_COMPOST_AMOUNT = COMPOST_PER_ITEM * 16;
-	public static final int MAX_ITEMS = 20;
+	public static final int MAX_COMPOSTING_ITEMS = 20;
+
+	// Slot for compost items to go in
+	public static final int MIN_COMPOSTING_SLOT = 0;
+	public static final int MAX_COMPOSTING_SLOT = MAX_COMPOSTING_ITEMS - 1;
+	public static final int COMPOST_SLOT = MAX_COMPOSTING_SLOT + 1;
 
 	public static final float MAX_OPEN = 90.0F;
 	public static final float MIN_OPEN = 0.0F;
@@ -26,11 +38,11 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	private int compostedAmount;
 	private int totalCompostAmount;
 	private float lidAngle = 0.0F;
-	private int[] processes = new int[MAX_ITEMS];
-	private int[] compostAmounts = new int[MAX_ITEMS];
-	private int[] compostTimes = new int[MAX_ITEMS];
+	private int[] processes = new int[MAX_COMPOSTING_ITEMS];
+	private int[] compostAmounts = new int[MAX_COMPOSTING_ITEMS];
+	private int[] compostTimes = new int[MAX_COMPOSTING_ITEMS];
 
-	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_ITEMS, ItemStack.EMPTY);
+	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_COMPOSTING_ITEMS, ItemStack.EMPTY);
 
 	public CompostBinBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.COMPOST_BIN.get(), pos, state);
@@ -41,36 +53,33 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 
 		if (!level.isClientSide()) {
 			if (!state.getValue(CompostBinBlock.OPEN)) {
-				for (int i = 0; i < entity.getContainerSize(); i++) {
-					if (!entity.getItem(i).isEmpty()) {
-						if (entity.processes[i] >= entity.compostTimes[i]) {
-							entity.compostedAmount += entity.compostAmounts[i];
-							entity.setItem(i, ItemStack.EMPTY);
-							entity.processes[i] = 0;
-							entity.compostTimes[i] = 0;
-							entity.compostAmounts[i] = 0;
-
-							entity.setChanged();
-						} else {
-							entity.processes[i]++;
-						}
-					}
-				}
+				entity.tickComposting();
 			}
 
-			// Fall down
-			for (int i = 1; i < entity.getContainerSize(); i++) {
-				if (entity.getItem(i - 1).isEmpty() && !entity.getItem(i).isEmpty()) {
-					entity.setItem(i - 1, entity.getItem(i));
-					entity.setItem(i, ItemStack.EMPTY);
-					entity.processes[i - 1] = entity.processes[i];
-					entity.processes[i] = 0;
-					entity.compostAmounts[i - 1] = entity.compostAmounts[i];
-					entity.compostAmounts[i] = 0;
-					entity.compostTimes[i - 1] = entity.compostTimes[i];
-					entity.compostTimes[i] = 0;
+			// Shift unfinished composting items into empty slots below them
+			entity.compostingItemsFallDown();
+		}
+	}
+	
+	public void tickComposting() {
+		boolean changed = false;
+		for (int i = 0; i < this.getCompostingContainerSize(); i++) {
+			if (!this.getCompostingItem(i).isEmpty()) {
+				if (this.processes[i] >= this.compostTimes[i]) {
+					this.compostedAmount += this.compostAmounts[i];
+					this.setCompostingItem(i, ItemStack.EMPTY);
+					this.processes[i] = 0;
+					this.compostTimes[i] = 0;
+					this.compostAmounts[i] = 0;
+				} else {
+					this.processes[i]++;
 				}
+				changed = true;
 			}
+		}
+		
+		if(changed) {
+			this.setChanged();
 		}
 	}
 
@@ -89,12 +98,11 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 				this.compostedAmount = 0;
 				this.totalCompostAmount = 0;
 			}
-			this.setChanged();
 			return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Adds an item to the compost bin
 	 *
@@ -107,12 +115,11 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	public CompostResult addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate) {
 		int clampedAmount = this.getClampedCompostAmount(compostAmount);
 		if (clampedAmount > 0) {
-			for (int i = 0; i < this.getContainerSize(); i++) {
-				if (this.getItem(i).isEmpty()) {
+			for (int i = 0; i < this.getCompostingContainerSize(); i++) {
+				if (this.getCompostingItem(i).isEmpty()) {
 					if (!doSimulate) {
-						ItemStack copy = stack.copy();
-						copy.setCount(1);
-						this.setItem(i, copy);
+						ItemStack copy = stack.copyWithCount(1);
+						this.setCompostingItem(i, copy);
 						this.compostAmounts[i] = clampedAmount;
 						this.compostTimes[i] = compostTime;
 						this.processes[i] = 0;
@@ -180,11 +187,229 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 		this.items = items;
 	}
 
+	public boolean isCompostingSlot(int slot) {
+		return MIN_COMPOSTING_SLOT <= slot && slot <= MAX_COMPOSTING_SLOT;
+	}
+	
+	public void compostingItemsFallDown() {
+		boolean changed = false;
+		
+		// Fall down
+		for (int i = 1; i < this.getCompostingContainerSize(); i++) {
+			if (this.getCompostingItem(i - 1).isEmpty() && !this.getCompostingItem(i).isEmpty()) {
+				this.setCompostingItem(i - 1, this.getCompostingItem(i));
+				this.setCompostingItem(i, ItemStack.EMPTY);
+				this.processes[i - 1] = this.processes[i];
+				this.processes[i] = 0;
+				this.compostAmounts[i - 1] = this.compostAmounts[i];
+				this.compostAmounts[i] = 0;
+				this.compostTimes[i - 1] = this.compostTimes[i];
+				this.compostTimes[i] = 0;
+				changed = true;
+			}
+		}
+		
+		if(changed) {
+			this.setChanged();
+		}
+	}
+	
+	public int getCompostingMaxStackSize() {
+		return 1;
+	}
+	
+	public int getCompostingMaxStackSize(ItemStack stack) {
+		return Math.min(this.getCompostingMaxStackSize(), stack.getMaxStackSize());
+	}
+	
+	public ItemStack getCompostingItem(int compostingIndex) {
+		this.unpackLootTable(null);
+		return this.items.get(compostingIndex);
+	}
+	
+	public void setCompostingItem(int compostingIndex, ItemStack stack) {
+		this.unpackLootTable(null);
+		this.items.set(compostingIndex, stack);
+		stack.limitSize(this.getCompostingMaxStackSize(stack));
+		this.setChanged();
+	}
+	
+	public int getCompostingContainerSize() {
+		return MAX_COMPOSTING_ITEMS;
+	}
+	
 	@Override
 	public int getContainerSize() {
-		return MAX_ITEMS;
+		return this.getCompostingContainerSize() + 1; // Compost slot
+	}
+	
+	@Override
+	public int getMaxStackSize() {
+		return 1;
 	}
 
+	public ItemStack getCompostStack() {
+		int compostedAmount = this.getCompostedAmount();
+		if(compostedAmount < COMPOST_PER_ITEM) {
+			return ItemStack.EMPTY;
+		}
+		return ItemRegistry.COMPOST.toStack(compostedAmount / COMPOST_PER_ITEM);
+	}
+	
+	public ItemStack removeCompostStack(int count, boolean simulate) {
+		ItemStack compostStack = this.getCompostStack().copy();
+
+		ItemStack removedCompost = compostStack.split(count);
+		
+		if(!simulate && !removedCompost.isEmpty()) {
+			this.removeCompost(removedCompost.getCount() * COMPOST_PER_ITEM);
+		}
+		
+		return removedCompost;
+	}
+	
+	@Override
+	public ItemStack getItem(int index) {
+		if(index == COMPOST_SLOT) {
+			return this.getCompostStack();
+		}
+		return super.getItem(index);
+	}
+	
+	@Override
+	public void setItem(int index, ItemStack stack) {
+		if(this.isCompostingSlot(index)) {
+			int i = index;
+			if(!stack.isEmpty() && this.compostAmounts[i] == 0) {
+				CompostableItem compostData = stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE);
+				
+				// Can only insert compostable items
+				if (compostData != null) {
+					int compostAmount = compostData.amount();
+					int compostTime = compostData.time();
+
+					if(this.canAddItemToBin(compostAmount, index)) {
+						int clampedAmount = this.getClampedCompostAmount(compostAmount);
+						
+						ItemStack copy = stack.copyWithCount(1);
+						this.setCompostingItem(i, copy);
+						this.compostAmounts[i] = clampedAmount;
+						this.compostTimes[i] = compostTime;
+						this.processes[i] = 0;
+						this.totalCompostAmount += clampedAmount;
+
+						this.setChanged();
+						return;
+					}
+				}
+			}
+		}
+		
+		if(index == COMPOST_SLOT) {
+			return;
+		}
+		
+		super.setItem(index, stack);
+	}
+	
+	@Override
+	public ItemStack removeItem(int index, int count) {
+		if(index == COMPOST_SLOT) {
+			ItemStack removedCompost = this.removeCompostStack(count, false);
+			if(!removedCompost.isEmpty()) {
+				this.setChanged();
+			}
+			return removedCompost;
+		}
+		return super.removeItem(index, count);
+	}
+	
+	@Override
+	public ItemStack removeItemNoUpdate(int index) {
+		if(index == COMPOST_SLOT) {
+			ItemStack removedCompost = this.getCompostStack();
+			if(!removedCompost.isEmpty()) {
+				this.removeCompost(removedCompost.getCount() * COMPOST_PER_ITEM);
+			}
+			return removedCompost;
+		}
+		return super.removeItemNoUpdate(index);
+	}
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		// Can only add items when the lid is open
+		if(this.hasLevel()) {
+			boolean isLidOpen = this.getLevel().getBlockState(this.getBlockPos()).getValue(CompostBinBlock.OPEN);
+			if(!isLidOpen) {
+				return false;
+			}
+		}
+		
+		// Can only insert to composting slots
+		if(this.isCompostingSlot(slot)) {
+			// Cannot insert into slot that is currently processing
+			// Cannot insert empty stack
+			if(!this.getItem(slot).isEmpty() || stack.isEmpty()) {
+				return false;
+			}
+			
+			CompostableItem compostData = stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE);
+			
+			// Can only insert compostable items
+			if (compostData == null) {
+				return false;
+			}
+			
+			int compostAmount = compostData.amount();
+
+			return this.canAddItemToBin(compostAmount, slot);
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		// Cannot take items when the lid is closed
+		if(this.hasLevel()) {
+			boolean isLidOpen = this.getLevel().getBlockState(this.getBlockPos()).getValue(CompostBinBlock.OPEN);
+			if(!isLidOpen) {
+				return false;
+			}
+		}
+		
+		// Only allow extracting items that shouldn't have been inserted
+		if(this.isCompostingSlot(slot)) {
+			return this.compostAmounts[slot] <= 0;
+		}
+		
+		// Allow taking from the compost slot
+		if(slot == COMPOST_SLOT) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		if(side == Direction.DOWN) {
+			return new int[] { COMPOST_SLOT };
+		}
+		return slotsBetweenInclusive(MIN_COMPOSTING_SLOT, MAX_COMPOSTING_SLOT);
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return true;
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return true;
+	}
+	
 	/**
 	 * Returns the lid angle
 	 *
@@ -226,5 +451,10 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 		ADDED,
 		NOT_ADDED,
 		FULL
+	}
+	
+	@Override
+	public IItemHandler getItemHandlerCapability(Direction context) {
+		return new CompostBinWrapper(this, context);
 	}
 }

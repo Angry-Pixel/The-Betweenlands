@@ -59,8 +59,8 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 		this.bin.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		stack.popPose();
 
-		for (int i = 0; i < entity.getContainerSize(); i++) {
-			ItemStack item = entity.getItem(i);
+		for (int i = 0; i < entity.getCompostingContainerSize(); i++) {
+			ItemStack item = entity.getCompostingItem(i);
 
 			if (!item.isEmpty()) {
 				stack.pushPose();
