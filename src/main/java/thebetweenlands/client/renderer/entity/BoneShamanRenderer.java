@@ -1,6 +1,7 @@
 package thebetweenlands.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -21,13 +22,12 @@ public class BoneShamanRenderer<T extends BoneShaman> extends MobRenderer<T, Bon
 	@Override
 	protected void scale(BoneShaman entity, PoseStack stack, float partialTick) {
 		shadowStrength = 0F;
-		if (entity.getSpawningAnimation(partialTick) <= 0.75F)
-			stack.translate(0.0D, 3.2D, 0.0D);
-		if (entity.getSpawningAnimation(partialTick) > 0.75F && entity.getSpawningAnimation(partialTick) <= 1D) {
-			stack.translate(0.0D, 9.8D - entity.getSpawningAnimation(partialTick) * 3D * 3.2D, 0.0D);
-			shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
-			shadowStrength = 1F;
+		if (entity.getSpawningAnimation(partialTick) <= 0.5F) {
+			stack.translate(0.0D, 3.2D - entity.getSpawningAnimation(partialTick) * 6.4D, 0.0D);
+			stack.mulPose(Axis.YP.rotationDegrees(entity.getSpawningAnimation(partialTick) * 720F));
 		}
+		shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
+		shadowStrength = 1F;
 	}
 
 	@Override

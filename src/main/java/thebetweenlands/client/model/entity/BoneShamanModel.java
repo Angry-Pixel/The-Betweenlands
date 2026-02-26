@@ -524,38 +524,21 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		if(entity.isEmerging()) {
 
-			if(entity.getSpawnTimer() < 10) {
-				arm4.visible = false;
-				staff1a.visible = false;
-			}
-			else
-				arm4.visible = true;
-
-			if(entity.getSpawnTimer() < 15) {
-				arm4.xRot = 3.0527F;
-				arm4.yRot = -0.1415F;
-				arm4.zRot = -0.0136F;
-				arm_lower2.xRot = 0.2182F;
-				hand2.xRot = 0.1309F;
-				arm1.xRot = -3.1416F;
-				arm1.yRot = -0.1745F;
-				arm1.zRot = -0.0121F;
-				arm_lower.xRot = -0.0436F;
-			}
-			else {
-				if (entity.getSpawnTimer() > 20)
-					staff1a.visible = true;
-
-				arm4.xRot = -3.0527F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm4.yRot = -0.1415F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm4.zRot = -0.0136F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm_lower2.xRot = 0.2182F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				hand2.xRot = 0.1309F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm1.xRot = -3.1416F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm1.yRot = -0.1745F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm1.zRot = -0.0121F * (float) Math.sin(spawnProgressDelay * Math.PI);
-				arm_lower.xRot = -0.0436F * (float) Math.sin(spawnProgressDelay * Math.PI);
-
+			if(entity.getSpawnTimer() > 15) {
+				arm4.xRot = convertDegtoRad(-2.5881F) + convertDegtoRad(0.5546F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm4.yRot = convertDegtoRad(14.9854F) + convertDegtoRad(57.1991F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(103.5949F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				hand2.xRot = convertDegtoRad(-20F) + convertDegtoRad(40F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				hand2.yRot = convertDegtoRad(0F) + convertDegtoRad(15F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				hand2.zRot = convertDegtoRad(-5F) + convertDegtoRad(25F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm1.xRot = convertDegtoRad(0F) + convertDegtoRad(-150F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm1.yRot = convertDegtoRad(0F) + convertDegtoRad(-40F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm1.zRot = convertDegtoRad(-8.1958F) + convertDegtoRad(88.1958F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(2.5F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm_lower.yRot = convertDegtoRad(0F) + convertDegtoRad(10F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				arm_lower.zRot = convertDegtoRad(0F) + convertDegtoRad(40F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				head_base.xRot = convertDegtoRad(-12.5F) + convertDegtoRad(-27.5F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+				jaw.xRot = convertDegtoRad(15F) + convertDegtoRad(30F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
 			}
 		}
 
@@ -589,6 +572,7 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		if (entity.getAttackTimer() > 0) {
 			if(!entity.isShootingSpikes()) {
 				arm1.xRot = convertDegtoRad(0F) + convertDegtoRad(-77.5F) * (float)Math.sin(attackProgress * Math.PI);
+				arm1.yRot += netHeadYaw / Mth.RAD_TO_DEG;
 				arm4.xRot = convertDegtoRad(-2.5881F) + convertDegtoRad(4.0881F) * (float)Math.sin(attackProgress * Math.PI);
 				arm4.yRot = convertDegtoRad(14.9854F) + convertDegtoRad(-40F) * (float)Math.sin(attackProgress * Math.PI);
 				arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(17.4739F) * (float)Math.sin(attackProgress * Math.PI);

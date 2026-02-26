@@ -123,13 +123,7 @@ public class BoneShaman extends FlyingMonster {
 			}
 
 			if (level().isClientSide()) {
-				if (getSpawnTimer() <= 1)
-					spawnEmergingParticles();
-
-				if (getSpawnTimer() >= 10 && getSpawnTimer() < 13)
-					spawnEmergingParticles();
-
-				if (getSpawnTimer() >= 20 && getSpawnTimer() < spawnDuration)
+				if (getSpawnTimer() <= 10)
 					spawnEmergingParticles();
 
 				if (!isShootingSpikes() && getCastingTimer() > 0)
