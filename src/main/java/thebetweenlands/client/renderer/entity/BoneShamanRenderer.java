@@ -24,7 +24,7 @@ public class BoneShamanRenderer<T extends BoneShaman> extends MobRenderer<T, Bon
 		shadowStrength = 0F;
 		if (entity.getSpawningAnimation(partialTick) <= 0.5F) {
 			stack.translate(0.0D, 3.2D - entity.getSpawningAnimation(partialTick) * 6.4D, 0.0D);
-			stack.mulPose(Axis.YP.rotationDegrees(entity.getSpawningAnimation(partialTick) * 720F));
+			stack.mulPose(Axis.YP.rotationDegrees(entity.getSpawningAnimation(partialTick) * 1440F));
 		}
 		shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
 		shadowStrength = 1F;

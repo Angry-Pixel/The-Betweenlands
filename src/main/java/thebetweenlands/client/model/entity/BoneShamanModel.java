@@ -524,21 +524,75 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 		if(entity.isEmerging()) {
 
-			if(entity.getSpawnTimer() > 15) {
-				arm4.xRot = convertDegtoRad(-2.5881F) + convertDegtoRad(0.5546F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm4.yRot = convertDegtoRad(14.9854F) + convertDegtoRad(57.1991F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(103.5949F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				hand2.xRot = convertDegtoRad(-20F) + convertDegtoRad(40F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				hand2.yRot = convertDegtoRad(0F) + convertDegtoRad(15F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				hand2.zRot = convertDegtoRad(-5F) + convertDegtoRad(25F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm1.xRot = convertDegtoRad(0F) + convertDegtoRad(-150F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm1.yRot = convertDegtoRad(0F) + convertDegtoRad(-40F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm1.zRot = convertDegtoRad(-8.1958F) + convertDegtoRad(88.1958F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(2.5F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm_lower.yRot = convertDegtoRad(0F) + convertDegtoRad(10F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				arm_lower.zRot = convertDegtoRad(0F) + convertDegtoRad(40F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				head_base.xRot = convertDegtoRad(-12.5F) + convertDegtoRad(-27.5F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
-				jaw.xRot = convertDegtoRad(15F) + convertDegtoRad(30F) * (float)Math.sin((spawnProgressDelay - 0.5F) * 2F * Math.PI);
+		head_base.xRot = 0.829F;
+
+		arm1.xRot = -0.5672F;
+		arm1.yRot = 0.0F;
+		arm1.zRot = 0.0315F;
+
+		arm_lower.xRot = -0.5575F;
+		arm_lower.yRot = 0.7714F;
+		arm_lower.zRot = 1.3813F;
+
+		hand.xRot = 0.0F;
+		hand.yRot = 0.0F;
+		hand.zRot = 0.0873F;
+
+		arm4.xRot = -0.9408F;
+		arm4.yRot = -0.842F;
+		arm4.zRot = 0.5175F;
+
+		arm_lower2.xRot = -1.3891F;
+		arm_lower2.yRot = 0.1663F;
+		arm_lower2.zRot = -0.3914F;
+
+		hand2.xRot = -0.0562F;
+		hand2.yRot = 0.3542F;
+		hand2.zRot = 0.086F;
+
+		staff1a.xRot = 2.1781F;
+		staff1a.yRot = 0.2153F;
+		staff1a.zRot = -0.7615F;
+
+			if(entity.getSpawnTimer() > 15 && entity.getSpawnTimer() <= 22) {
+				//lazy lerp to get to half way for the animation
+				arm4.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.9408F, convertDegtoRad(0.5546F));
+				arm4.yRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.842F, convertDegtoRad(57.1991F));
+				arm4.zRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.5175F, convertDegtoRad(103.5949F));
+				hand2.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.0562F, convertDegtoRad(40F));
+				hand2.yRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.3542F, convertDegtoRad(15F));
+				hand2.zRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.086F, convertDegtoRad(25F));
+				arm1.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.5672F, convertDegtoRad(-150F));
+				arm1.yRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, convertDegtoRad(0F), convertDegtoRad(-40F));
+				arm1.zRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.0315F, convertDegtoRad(88.1958F));
+				arm_lower.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.5575F, convertDegtoRad(2.5F));
+				arm_lower.yRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.7714F, convertDegtoRad(10F));
+				arm_lower.zRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 1.3813F, convertDegtoRad(40F));
+				head_base.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.829F, convertDegtoRad(-27.5F));
+				arm_lower2.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -1.3891F, -0.6545F);
+				arm_lower2.yRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.1663F, 0.0F);
+				arm_lower2.zRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.3914F, 0.0F);
+				staff1a.xRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 2.1781F, 1.2489F);
+				staff1a.yRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, 0.2153F, -0.0485F);
+				staff1a.zRot = Mth.lerp((spawnProgressDelay - 0.5F) * 4F, -0.7615F, -0.399F);
+
+			}
+			if(entity.getSpawnTimer() > 22) {
+				// second half of the original sin animation (hue) to return to base pose
+				arm4.xRot = convertDegtoRad(-2.5881F) + convertDegtoRad(0.5546F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm4.yRot = convertDegtoRad(14.9854F) + convertDegtoRad(57.1991F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(103.5949F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				hand2.xRot = convertDegtoRad(-20F) + convertDegtoRad(40F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				hand2.yRot = convertDegtoRad(0F) + convertDegtoRad(15F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				hand2.zRot = convertDegtoRad(-5F) + convertDegtoRad(25F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm1.xRot = convertDegtoRad(0F) + convertDegtoRad(-150F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm1.yRot = convertDegtoRad(0F) + convertDegtoRad(-40F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm1.zRot = convertDegtoRad(-8.1958F) + convertDegtoRad(88.1958F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm_lower.xRot = convertDegtoRad(-17.5F) + convertDegtoRad(2.5F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm_lower.yRot = convertDegtoRad(0F) + convertDegtoRad(10F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				arm_lower.zRot = convertDegtoRad(0F) + convertDegtoRad(40F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				head_base.xRot = convertDegtoRad(-12.5F) + convertDegtoRad(-27.5F) * (float)Math.sin(spawnProgressDelay * Math.PI);
+				jaw.xRot = convertDegtoRad(15F) + convertDegtoRad(30F) * (float)Math.sin(spawnProgressDelay * Math.PI); 
 			}
 		}
 
