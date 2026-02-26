@@ -503,6 +503,7 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		float castingProgress = Mth.lerp(partialTick, entity.prevCastingTimer / 40.0f, entity.getCastingTimer() / 40.0f);
 		float attackProgress = Mth.lerp(partialTick, entity.prevAttackTimer / 20.0f, entity.getAttackTimer() / 20.0f);
 		float spawnProgressDelay = Mth.lerp(partialTick, entity.lastSpawningAnimationTicks / 30.0f, entity.getSpawnTimer() / 30.0f);
+		float summonProgress = Mth.lerp(partialTick, entity.prevSummonTimer / 20.0f, entity.getSummonTimer() / 20.0f);
 		Vec3 movement = entity.getDeltaMovement();
 		float sin = Mth.sin(ageInTicks * 0.25F) * 0.8F;
 
@@ -523,36 +524,28 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 		}
 
 		if(entity.isEmerging()) {
-
-		head_base.xRot = 0.829F;
-
-		arm1.xRot = -0.5672F;
-		arm1.yRot = 0.0F;
-		arm1.zRot = 0.0315F;
-
-		arm_lower.xRot = -0.5575F;
-		arm_lower.yRot = 0.7714F;
-		arm_lower.zRot = 1.3813F;
-
-		hand.xRot = 0.0F;
-		hand.yRot = 0.0F;
-		hand.zRot = 0.0873F;
-
-		arm4.xRot = -0.9408F;
-		arm4.yRot = -0.842F;
-		arm4.zRot = 0.5175F;
-
-		arm_lower2.xRot = -1.3891F;
-		arm_lower2.yRot = 0.1663F;
-		arm_lower2.zRot = -0.3914F;
-
-		hand2.xRot = -0.0562F;
-		hand2.yRot = 0.3542F;
-		hand2.zRot = 0.086F;
-
-		staff1a.xRot = 2.1781F;
-		staff1a.yRot = 0.2153F;
-		staff1a.zRot = -0.7615F;
+			head_base.xRot = 0.829F;
+			arm1.xRot = -0.5672F;
+			arm1.yRot = 0.0F;
+			arm1.zRot = 0.0315F;
+			arm_lower.xRot = -0.5575F;
+			arm_lower.yRot = 0.7714F;
+			arm_lower.zRot = 1.3813F;
+			hand.xRot = 0.0F;
+			hand.yRot = 0.0F;
+			hand.zRot = 0.0873F;
+			arm4.xRot = -0.9408F;
+			arm4.yRot = -0.842F;
+			arm4.zRot = 0.5175F;
+			arm_lower2.xRot = -1.3891F;
+			arm_lower2.yRot = 0.1663F;
+			arm_lower2.zRot = -0.3914F;
+			hand2.xRot = -0.0562F;
+			hand2.yRot = 0.3542F;
+			hand2.zRot = 0.086F;
+			staff1a.xRot = 2.1781F;
+			staff1a.yRot = 0.2153F;
+			staff1a.zRot = -0.7615F;
 
 			if(entity.getSpawnTimer() > 15 && entity.getSpawnTimer() <= 22) {
 				//lazy lerp to get to half way for the animation
@@ -578,7 +571,7 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 
 			}
 			if(entity.getSpawnTimer() > 22) {
-				// second half of the original sin animation (hue) to return to base pose
+				// second half of the original sin (hue) animation to return to base pose
 				arm4.xRot = convertDegtoRad(-2.5881F) + convertDegtoRad(0.5546F) * (float)Math.sin(spawnProgressDelay * Math.PI);
 				arm4.yRot = convertDegtoRad(14.9854F) + convertDegtoRad(57.1991F) * (float)Math.sin(spawnProgressDelay * Math.PI);
 				arm4.zRot = convertDegtoRad(7.5261F) + convertDegtoRad(103.5949F) * (float)Math.sin(spawnProgressDelay * Math.PI);
@@ -596,7 +589,7 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 			}
 		}
 
-		if (entity.getReloadTimer() > 0) {
+		if (entity.isReloading()) {
 			if(!entity.isShootingSpikes()) {
 				arm4.xRot = convertDegtoRad(-2.5881F) + convertDegtoRad(0.5546F) * (float)Math.sin(reloadProgress * Math.PI);
 				arm4.yRot = convertDegtoRad(14.9854F) + convertDegtoRad(57.1991F) * (float)Math.sin(reloadProgress * Math.PI);
@@ -623,7 +616,7 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 			}
 		}
 
-		if (entity.getAttackTimer() > 0) {
+		if (entity.isAttacking()) {
 			if(!entity.isShootingSpikes()) {
 				arm1.xRot = convertDegtoRad(0F) + convertDegtoRad(-77.5F) * (float)Math.sin(attackProgress * Math.PI);
 				arm1.yRot += netHeadYaw / Mth.RAD_TO_DEG;
@@ -644,6 +637,18 @@ public class BoneShamanModel<T extends BoneShaman> extends MowzieModelBase<T> {
 				hipbone.yRot = convertDegtoRad(0F) + convertDegtoRad(45F) * (float)Math.sin(attackProgress * Math.PI * 2);
 			}
 		}
+		if (entity.isSummoningPuppets()) {
+		  	arm4.xRot = -0.0452F + -0.5441F * (float)Math.sin(summonProgress * Math.PI);
+			arm4.yRot = 0.2615F + -0.1886F * (float)Math.sin(summonProgress * Math.PI);
+			arm4.zRot = 0.1314F + 0.241F * (float)Math.sin(summonProgress * Math.PI);
+			arm_lower2.xRot = -0.0869F + -0.1474F * (float)Math.sin(summonProgress * Math.PI);
+			arm_lower2.yRot = 0.0076F + 0.0135F * (float)Math.sin(summonProgress * Math.PI);
+			arm_lower2.zRot = -0.1312F + -0.1999F * (float)Math.sin(summonProgress * Math.PI);
+			hand2.xRot = -0.3421F + 0.3569F * (float)Math.sin(summonProgress * Math.PI);
+			hand2.yRot = -0.0623F + -0.1803F * (float)Math.sin(summonProgress * Math.PI);
+			hand2.zRot = -0.1176F + 0.171F * (float)Math.sin(summonProgress * Math.PI);
+		}
+		
 	}
 
 	@Override
