@@ -305,9 +305,8 @@ public class BoneShaman extends FlyingMonster {
 	private void shootParticles(Level level, Vec3 target) {
 		for(int i = 0; i < 20; i++) {
 			float offsetLen = level.getRandom().nextFloat();
-			Vec3 offset = new Vec3(target.x * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.y * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.z * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f);
+			Vec3 offset = new Vec3(target.x * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.y * offsetLen, target.z * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f);
 			float vx = (level.getRandom().nextFloat() * 0.5f - 0.25f) * 0.00125f;
-			float vy = (level.getRandom().nextFloat() * 0.5f - 0.25f) * 0.00125f;
 			float vz = (level.getRandom().nextFloat() * 0.5f - 0.25f) * 0.00125f;
 			float scale = 0.25f + level.getRandom().nextFloat();
 			//TODO may need a tweak to line up nice with the staff
@@ -315,8 +314,8 @@ public class BoneShaman extends FlyingMonster {
 			double offSetX = -Math.sin(angle) * 1.25D;
 			double offSetZ = Math.cos(angle) * 1.25D;
 			//TODO add better particles - will use smoke for now
-			//TheBetweenlands.createParticle(ParticleRegistry.DRUID_CASTING.get(), level, getX() + offset.x, getY() + getBbHeight() / 1.25D + offset.y, getZ() + offset.z, ParticleFactory.ParticleArgs.get().withMotion(vx, vy, vz).withColor(0.5F + level.getRandom().nextFloat() * 0.5F, 0.5F + level.getRandom().nextFloat() * 0.5F, 0.5F + level.getRandom().nextFloat() * 0.5F, 1.0F).withScale(scale).withData(100)); 
-			level.addParticle(ParticleTypes.CLOUD, false, getX() + offset.x + offSetX, getY() + getBbHeight() / 1.25D + offset.y, getZ() + offset.z + offSetZ, vx, vy, vz);
+			TheBetweenlands.createParticle(ParticleRegistry.WIGHT_FACE.get(), level, getX() + offset.x + offSetX, getY() + getBbHeight() / 1.25D + offset.y, getZ() + offset.z + offSetZ, ParticleFactory.ParticleArgs.get().withMotion(vx, 0D, vz).withScale(scale).withData(10)); 
+			//level.addParticle(ParticleTypes.CLOUD, false, getX() + offset.x + offSetX, getY() + getBbHeight() / 1.25D + offset.y, getZ() + offset.z + offSetZ, vx, vy, vz);
 		}
 	}
 

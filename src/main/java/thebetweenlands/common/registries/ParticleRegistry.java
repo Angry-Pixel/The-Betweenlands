@@ -64,7 +64,9 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_RIPPLE = PARTICLES.register("water_ripple", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<LightningArcParticleOptions>> LIGHTNING_ARC = register("lightning_arc", false, type -> LightningArcParticleOptions.CODEC, type -> LightningArcParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> WIGHT_FACE_SWIRL = register("wight_face_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WIGHT_FACE = PARTICLES.register("wight_face", () -> new SimpleParticleType(false));
 
+	
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {
 			@Override
