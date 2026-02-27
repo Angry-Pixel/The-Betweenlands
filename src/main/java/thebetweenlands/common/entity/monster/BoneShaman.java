@@ -125,7 +125,10 @@ public class BoneShaman extends FlyingMonster {
 			if (level().isClientSide()) {
 				if (getSpawnTimer() <= 10)
 					spawnEmergingParticles();
-
+				
+				if (isAlive() && isEmerging() && getSpawnTimer() == 20)
+					spawnEmergingEndParticles();
+				
 				if (!isShootingSpikes() && getCastingTimer() > 0)
 					spawnCastingParticles();
 
@@ -287,6 +290,13 @@ public class BoneShaman extends FlyingMonster {
 			double motionY = level().getRandom().nextDouble() * 0.1F + 0.075F;
 			double motionZ = level().getRandom().nextDouble() * 0.2F - 0.1F;
 			level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, getBlockStateOn()), false, px + ox, py, pz + oz, motionX, motionY, motionZ);
+		}
+	}
+
+	public void spawnEmergingEndParticles() {
+		for (int a = 0; a < 360; a += 4) {
+			double ang = a * Math.PI / 180D;
+			TheBetweenlands.createParticle(ParticleRegistry.WIGHT_FACE.get(), level(), getX() -Math.sin((float) ang) * 0.75D, getY() + getBbHeight() * 0.6D , getZ() + Math.cos((float) ang) * 0.75D, ParticleFactory.ParticleArgs.get().withMotion(-Math.sin((float) ang) * 0.2D, 0D, Math.cos((float) ang) * 0.2D).withScale(1F).withData(200)); 
 		}
 	}
 
