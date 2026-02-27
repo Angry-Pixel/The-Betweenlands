@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,7 +39,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.SpikeParticle;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
+import thebetweenlands.client.particle.options.SpikeParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.entity.boss.malevolence.PrimordialMalevolenceProjectile;
@@ -296,7 +299,17 @@ public class BoneShaman extends FlyingMonster {
 	public void spawnEmergingEndParticles() {
 		for (int a = 0; a < 360; a += 4) {
 			double ang = a * Math.PI / 180D;
-			TheBetweenlands.createParticle(ParticleRegistry.WIGHT_FACE.get(), level(), getX() -Math.sin((float) ang) * 0.75D, getY() + getBbHeight() * 0.6D , getZ() + Math.cos((float) ang) * 0.75D, ParticleFactory.ParticleArgs.get().withMotion(-Math.sin((float) ang) * 0.2D, 0D, Math.cos((float) ang) * 0.2D).withScale(1F).withData(200)); 
+			TheBetweenlands.createParticle(ParticleRegistry.WIGHT_FACE.get(), level(), getX() -Math.sin((float) ang) * 0.75D, getY() + getBbHeight() * 0.6D , getZ() + Math.cos((float) ang) * 0.75D, ParticleFactory.ParticleArgs.get().withMotion(-Math.sin((float) ang) * 0.6D, 0D, Math.cos((float) ang) * 0.6D).withScale(1F).withData(40)); 
+		}
+		Vec3 frontCenter = this.position();
+		for (int i = 0; i < 10; i++) {
+			RandomSource rnd = this.level().getRandom();
+			float rx = rnd.nextFloat() * 4.0F - 2.0F;
+			float ry = rnd.nextFloat() * 4.0F - 2.0F;
+			float rz = rnd.nextFloat() * 4.0F - 2.0F;
+			Vec3 vec = new Vec3(rx, ry, rz);
+			vec = vec.normalize();
+			TheBetweenlands.createParticle(new SpikeParticleOptions(SpikeParticle.BONE_TEXTURE, this.level().getRandom().nextInt(15) == 0), this.level(), frontCenter.x, frontCenter.y + 1.6D, frontCenter.z, ParticleFactory.ParticleArgs.get().withMotion(vec.x * 0.5F, vec.y * 0.15F + 0.35F, vec.z * 0.5F).withScale(0.75F));
 		}
 	}
 

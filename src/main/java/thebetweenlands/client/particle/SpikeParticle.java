@@ -26,6 +26,7 @@ public class SpikeParticle extends Particle {
 
 	public static final ResourceLocation URCHIN_TEXTURE = TheBetweenlands.prefix("textures/entity/urchin_spike.png");
 	public static final ResourceLocation ROOT_TEXTURE = TheBetweenlands.prefix("textures/block/spirit_tree_log_side.png");
+	public static final ResourceLocation BONE_TEXTURE = TheBetweenlands.prefix("textures/entity/bone_spike.png");
 
 	@Nullable
 	private SpikeRenderer renderer;
