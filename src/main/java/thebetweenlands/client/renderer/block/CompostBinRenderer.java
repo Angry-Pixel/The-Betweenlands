@@ -37,7 +37,7 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 
 	@Override
 	public void render(CompostBinBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
-		float compostHeight = Math.min((float) entity.getCompostedAmount() / (float) entity.getMaximimumCompostAmount() * 1.25F, 1.025F) * COMPOST_BLOCK_SCALE;
+		float compostHeight = Math.min((float) entity.getCompostedAmount() / (float) entity.getMaximumCompostAmount() * 1.25F, 1.025F) * COMPOST_BLOCK_SCALE;
 
 		if (compostHeight > 0.01F) {
 			BlockState compost = BlockRegistry.COMPOST_BLOCK.get().defaultBlockState();
@@ -59,14 +59,15 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 		this.bin.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		stack.popPose();
 
-		for (int i = 0; i < entity.getCompostingContainerSize(); i++) {
-			ItemStack item = entity.getCompostingItem(i);
+		final int compostItems = entity.getMaxCompostItems();
+		for (int i = 0; i < compostItems; i++) {
+			ItemStack item = entity.getCompostItem(i);
 
 			if (!item.isEmpty()) {
 				stack.pushPose();
 
 				// 0.4 for items, 0.5 for compost
-				stack.translate(0.5F, 0.005F + compostHeight + i * 0.4f / entity.getContainerSize(), 0.5F + 0.08F);
+				stack.translate(0.5F, 0.005F + compostHeight + i * 0.4f / compostItems, 0.5F + 0.08F);
 				stack.scale(0.6F, 0.6F, 0.6F);
 				stack.mulPose(Axis.YP.rotationDegrees(RandomSource.create(i * 12315L).nextFloat() * 360.0F));
 				stack.mulPose(Axis.XP.rotationDegrees(90.0f));

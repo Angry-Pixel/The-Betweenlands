@@ -7,11 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -30,9 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
-import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class CompostBinBlock extends HorizontalBaseEntityBlock {
@@ -78,23 +74,18 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 				}
 
 				if (!stack.isEmpty()) {
-					CompostableItem data = stack.getItemHolder().getData(DataMapRegistry.COMPOSTABLE);
-					if (data != null) {
-						int amount = data.amount();
-						int time = data.time();
-						switch (bin.addItemToBin(stack, amount, time, true)) {
-							case CompostBinBlockEntity.CompostResult.ADDED:
-								bin.addItemToBin(stack, amount, time, false);
-								stack.consume(1, player);
-								return ItemInteractionResult.SUCCESS;
-							case CompostBinBlockEntity.CompostResult.FULL:
-							default:
-								player.displayClientMessage(Component.translatable("block.thebetweenlands.compost_bin.full"), true);
-								return ItemInteractionResult.CONSUME;
-						}
-					} else {
-						player.displayClientMessage(Component.translatable("block.thebetweenlands.compost_bin.not_compostable"), true);
-						return ItemInteractionResult.CONSUME;
+					ItemStack compostStack = stack.copyWithCount(1);
+					switch (bin.addItemToBin(compostStack, true)) {
+						case NOT_COMPOSTABLE:
+							player.displayClientMessage(Component.translatable("block.thebetweenlands.compost_bin.not_compostable"), true);
+							return ItemInteractionResult.CONSUME;
+						case CompostBinBlockEntity.CompostResult.ADDED:
+							bin.addItemToBin(compostStack, false);
+							stack.consume(1, player);
+							return ItemInteractionResult.SUCCESS;
+						default:
+							player.displayClientMessage(Component.translatable("block.thebetweenlands.compost_bin.full"), true);
+							return ItemInteractionResult.CONSUME;
 					}
 				}
 			}
@@ -109,15 +100,29 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+		super.onPlace(state, level, pos, oldState, movedByPiston);
+		// There may be a blockentity that persisted from the previous state
+		if (level.getBlockEntity(pos) instanceof CompostBinBlockEntity bin) {
+			bin.setLidOpen(state.getValue(OPEN));
+		}
+	}
+	
+	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		if (!state.is(newState.getBlock())) {
+			if (level.getBlockEntity(pos) instanceof CompostBinBlockEntity bin) {
+				bin.dropContents(level, pos);
+				level.updateNeighbourForOutputSignal(pos, state.getBlock());
+			}
+		}
 		super.onRemove(state, level, pos, newState, moving);
 	}
 
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (level.getBlockEntity(pos) instanceof CompostBinBlockEntity bin) {
-			if (!state.getValue(OPEN) && !bin.isEmpty()) {
+			if (!state.getValue(OPEN) && !bin.isFinishedComposting()) {
 //				BLParticles.DIRT_DECAY.spawn(level, pos.getX() + 0.2F + random.nextFloat() * 0.62F, pos.getY() + random.nextFloat() * 0.75F, pos.getZ() + 0.2F + random.nextFloat() * 0.6F);
 			}
 		}
@@ -148,17 +153,16 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
 		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if(state.getValue(OPEN)) {
-			int itemFullness = AbstractContainerMenu.getRedstoneSignalFromBlockEntity(blockEntity);
-			if(blockEntity instanceof CompostBinBlockEntity compostBin) {
-				float compostValue = (float)compostBin.getTotalCompostAmount() / (float)compostBin.getMaximimumCompostAmount();
+		if(blockEntity instanceof CompostBinBlockEntity compostBin) {
+			if(state.getValue(OPEN)) {
+				int itemFullness = ItemHandlerHelper.calcRedstoneFromInventory(compostBin.getCompostHandler());
+				float compostValue = (float)compostBin.getTotalCompostAmount() / (float)compostBin.getMaximumCompostAmount();
 				int compostFullness = Mth.lerpDiscrete(compostValue, 0, 15);
 				return Math.max(itemFullness, compostFullness);
+			} else {
+				float compostValue = (float)compostBin.getCompostedAmount() / (float)compostBin.getTotalCompostAmount();
+				return Mth.lerpDiscrete(compostValue, 0, 15);
 			}
-			return itemFullness;
-		} else if(blockEntity instanceof CompostBinBlockEntity compostBin) {
-			float compostValue = (float)compostBin.getCompostedAmount() / (float)compostBin.getTotalCompostAmount();
-			return Mth.lerpDiscrete(compostValue, 0, 15);
 		}
 		return super.getAnalogOutputSignal(state, level, pos);
 	}
