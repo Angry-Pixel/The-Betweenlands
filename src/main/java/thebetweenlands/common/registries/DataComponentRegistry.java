@@ -22,7 +22,21 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
-import thebetweenlands.common.component.item.*;
+import thebetweenlands.common.component.item.AmphibiousUpgrades;
+import thebetweenlands.common.component.item.AmuletData;
+import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.ChirobarbErrupterData;
+import thebetweenlands.common.component.item.CorrosionData;
+import thebetweenlands.common.component.item.DiscoveryContainerData;
+import thebetweenlands.common.component.item.ElixirContents;
+import thebetweenlands.common.component.item.FishBaitStats;
+import thebetweenlands.common.component.item.GemSingerTarget;
+import thebetweenlands.common.component.item.InfusionBucketData;
+import thebetweenlands.common.component.item.OriginalItemData;
+import thebetweenlands.common.component.item.RenamableData;
+import thebetweenlands.common.component.item.ShieldSpitData;
+import thebetweenlands.common.component.item.ShockwaveSwordData;
+import thebetweenlands.common.component.item.UpgradeDamage;
 
 public class DataComponentRegistry {
 
@@ -58,6 +72,8 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UpgradeDamage>> UPGRADE_DAMAGE = COMPONENTS.register("upgrade_damage", () -> DataComponentType.<UpgradeDamage>builder().persistent(UpgradeDamage.CODEC).networkSynchronized(UpgradeDamage.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<BlockPos>> WAYFINDER_LINK = COMPONENTS.register("wayfinder_link", () -> DataComponentType.<BlockPos>builder().persistent(BlockPos.CODEC).networkSynchronized(BlockPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WORMS = COMPONENTS.register("worms", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChirobarbErrupterData>> CHIROBARB_ERRUPTER_DATA = COMPONENTS.register("chirobarb_errupter_data", () -> DataComponentType.<ChirobarbErrupterData>builder().persistent(ChirobarbErrupterData.CODEC).networkSynchronized(ChirobarbErrupterData.STREAM_CODEC).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_CORROSION = COMPONENTS.register("max_corrosion", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
