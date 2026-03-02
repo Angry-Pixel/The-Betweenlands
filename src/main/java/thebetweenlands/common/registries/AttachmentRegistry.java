@@ -5,7 +5,19 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.component.entity.*;
+import thebetweenlands.common.component.entity.BlessingData;
+import thebetweenlands.common.component.entity.CircleGemData;
+import thebetweenlands.common.component.entity.DecayData;
+import thebetweenlands.common.component.entity.FallDamageReductionData;
+import thebetweenlands.common.component.entity.FoodSicknessData;
+import thebetweenlands.common.component.entity.InfestationIgnoreData;
+import thebetweenlands.common.component.entity.LastKilledData;
+import thebetweenlands.common.component.entity.MudWalkerData;
+import thebetweenlands.common.component.entity.PuppetData;
+import thebetweenlands.common.component.entity.PuppeteerData;
+import thebetweenlands.common.component.entity.RingOfSummoningEntityData;
+import thebetweenlands.common.component.entity.RotSmellData;
+import thebetweenlands.common.component.entity.SwarmedData;
 import thebetweenlands.common.component.entity.equipment.EquipmentData;
 import thebetweenlands.common.component.entity.equipment.EquipmentDataSerializer;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -29,6 +41,7 @@ public class AttachmentRegistry {
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<PuppeteerData>> PUPPETEER = ATTACHMENT_TYPES.register("puppeteer", () -> AttachmentType.builder(PuppeteerData::new).serialize(PuppeteerData.CODEC).sync(PuppeteerData.STREAM_CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<RotSmellData>> ROT_SMELL = ATTACHMENT_TYPES.register("rot_smell", () -> AttachmentType.builder(RotSmellData::new).serialize(RotSmellData.CODEC).sync(RotSmellData.STREAM_CODEC).build());
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<SwarmedData>> SWARMED = ATTACHMENT_TYPES.register("swarmed", () -> AttachmentType.builder(SwarmedData::new).serialize(SwarmedData.CODEC).sync(SwarmedData.STREAM_CODEC).build());
+	public static final DeferredHolder<AttachmentType<?>, AttachmentType<RingOfSummoningEntityData>> RING_OF_SUMMONING_ENTITY_DATA = ATTACHMENT_TYPES.register("ring_of_summoning_entity_data", () -> AttachmentType.builder(RingOfSummoningEntityData::new).serialize(RingOfSummoningEntityData.CODEC).sync(RingOfSummoningEntityData.STREAM_CODEC).build());
 
 	public static final DeferredHolder<AttachmentType<?>, AttachmentType<BetweenlandsWorldStorage>> WORLD_STORAGE = ATTACHMENT_TYPES.register("world_storage", () -> AttachmentType.builder(BetweenlandsWorldStorage::create).serialize(new WorldStorageSerializer()).sync(new WorldStorageSerializer()).copyHandler(BetweenlandsWorldStorage::copy).build());
 }
