@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.List;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -16,8 +18,6 @@ import net.minecraft.world.level.Level;
 import thebetweenlands.api.item.RadialMenuEquippable;
 import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
-
-import java.util.List;
 
 public abstract class RingItem extends Item implements RadialMenuEquippable {
 	public RingItem(Properties properties) {

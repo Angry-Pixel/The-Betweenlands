@@ -111,4 +111,8 @@ public class PuppeteerData {
 	public int getPrevShieldRotationTicks() {
 		return this.prevShieldRotationTicks;
 	}
+
+	public ProtectionShield getShield() {
+		return shield;
+	}
 }

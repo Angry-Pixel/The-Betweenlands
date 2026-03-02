@@ -73,6 +73,7 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<BlockPos>> WAYFINDER_LINK = COMPONENTS.register("wayfinder_link", () -> DataComponentType.<BlockPos>builder().persistent(BlockPos.CODEC).networkSynchronized(BlockPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WORMS = COMPONENTS.register("worms", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> RING_ACTIVE = COMPONENTS.register("ring_active", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> RING_PUPPET_UUID = COMPONENTS.register("ring_puppet_uuid", () -> DataComponentType.<UUID>builder().persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChirobarbErrupterData>> CHIROBARB_ERRUPTER_DATA = COMPONENTS.register("chirobarb_errupter_data", () -> DataComponentType.<ChirobarbErrupterData>builder().persistent(ChirobarbErrupterData.CODEC).networkSynchronized(ChirobarbErrupterData.STREAM_CODEC).build());
 
