@@ -523,7 +523,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new RingOfPowerItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_ASCENT = ITEMS.register("ring_of_ascent", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new RingOfSummoningItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE, false)));
+	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new RingOfSummoningItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponentRegistry.RING_ACTIVE, false)));
 	public static final DeferredItem<Item> RING_OF_DISPERSION = ITEMS.register("ring_of_dispersion", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_GATHERING = ITEMS.register("ring_of_gathering", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> THEM_SCRAP = ITEMS.register("them_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));

@@ -53,15 +53,15 @@ public class RingOfSummoningItem extends RingItem {
 	public void onEquipmentTick(ItemStack stack, Entity entity, Container inventory) {
 		if(!entity.level().isClientSide() && entity instanceof Player player) {
 			RingOfSummoningEntityData cap = player.getData(AttachmentRegistry.RING_OF_SUMMONING_ENTITY_DATA);
-			if (cap != null && stack.has(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE)) {
+			if (cap != null && stack.has(DataComponentRegistry.RING_ACTIVE)) {
 
 				if (cap.getCooldownTicks() > 0) {
 					cap.setCooldownTicks(player, cap.getCooldownTicks() - 1);
-					stack.set(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE, false);
+					stack.set(DataComponentRegistry.RING_ACTIVE, false);
 				} else {
 					if (cap.isActive()) {
 						cap.setActiveTicks(player, cap.getActiveTicks() + 1);
-						stack.set(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE, true);
+						stack.set(DataComponentRegistry.RING_ACTIVE, true);
 
 						if (cap.getActiveTicks() > MAX_USE_TIME) {
 							cap.setActive(player, false);
@@ -102,7 +102,7 @@ public class RingOfSummoningItem extends RingItem {
 							}
 						}
 					} else {
-						stack.set(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE, false);
+						stack.set(DataComponentRegistry.RING_ACTIVE, false);
 					}
 				}
 			}
@@ -111,12 +111,12 @@ public class RingOfSummoningItem extends RingItem {
 
 	@Override
 	public void onUnequip(ItemStack stack, Entity entity, Container inventory) {
-		stack.set(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE, false);
+		stack.set(DataComponentRegistry.RING_ACTIVE, false);
 	}
 
 	@Override
 	public boolean isFoil(ItemStack stack) {
-		return stack.has(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE) && stack.get(DataComponentRegistry.RING_OF_SUMMONING_ACTIVE);
+		return stack.has(DataComponentRegistry.RING_ACTIVE) && stack.get(DataComponentRegistry.RING_ACTIVE);
 	}
 
 	public static boolean isRingActive(Entity entity) {
