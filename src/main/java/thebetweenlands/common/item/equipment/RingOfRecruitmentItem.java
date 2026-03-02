@@ -105,7 +105,6 @@ public class RingOfRecruitmentItem extends RingItem {
 						List<PrimordialMalevolenceBlockade> collidingEntities = target.level().getEntitiesOfClass(PrimordialMalevolenceBlockade.class, target.getBoundingBox().inflate(0.5D));
 						for(PrimordialMalevolenceBlockade collidingEntity : collidingEntities) {
 							if(!spawned.contains(collidingEntity)) {
-								
 								collidingEntity.kill();
 							}
 						}
@@ -113,10 +112,8 @@ public class RingOfRecruitmentItem extends RingItem {
 						blockade.moveTo(target.getX(), target.getY() - 0.15f, target.getZ(), target.level().getRandom().nextFloat() * 360.0f, 0);
 						blockade.setMaxDespawnTicks(30 + target.level().getRandom().nextInt(20));
 						blockade.setTriangleSize(0.75f + target.getBbWidth() * 0.5f);
-
 						spawned.add(blockade);
 						target.level().addFreshEntity(blockade);
-
 					}
 				}
 				
@@ -168,7 +165,6 @@ public class RingOfRecruitmentItem extends RingItem {
 				if(recruitedRingUuid != null && !ringUuid.equals(recruitedRingUuid))
 					return ItemStack.EMPTY;
 			}
-			
 			return ring;
 		}
 		return ItemStack.EMPTY;
