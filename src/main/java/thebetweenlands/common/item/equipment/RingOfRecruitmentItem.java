@@ -34,7 +34,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class RingOfRecruitmentItem extends RingItem {
-	public static final String NBT_UUID = "ring_of_recruitment.uuid";
 
 	public RingOfRecruitmentItem(Properties properties) {
 		super(properties);
@@ -96,22 +95,20 @@ public class RingOfRecruitmentItem extends RingItem {
 	public void onKeybindState(Player player, ItemStack stack, Container inventory, boolean active) {
 		if(!player.level().isClientSide() && active && !player.getCooldowns().isOnCooldown(ItemRegistry.RING_OF_RECRUITMENT.get())) {
 			PuppeteerData cap = player.getData(AttachmentRegistry.PUPPETEER);
-			
 			if(cap != null && cap.getShield() != null) {
 				List<Entity> targets = cap.getPuppets(player);
-				
 				Set<Entity> spawned = new HashSet<>();
-				
+
 				for(Entity target : targets) {
 					PuppetData targetCap = target.getData(AttachmentRegistry.PUPPET);
 					if(targetCap != null && target.onGround() && ((!targetCap.getStay() && !targetCap.getGuard()) || target.distanceTo(player) < 6)) {
 						List<PrimordialMalevolenceBlockade> collidingEntities = target.level().getEntitiesOfClass(PrimordialMalevolenceBlockade.class, target.getBoundingBox().inflate(0.5D));
 						for(PrimordialMalevolenceBlockade collidingEntity : collidingEntities) {
 							if(!spawned.contains(collidingEntity)) {
+								
 								collidingEntity.kill();
 							}
 						}
-
 						PrimordialMalevolenceBlockade blockade = new PrimordialMalevolenceBlockade(target.level(), player);
 						blockade.moveTo(target.getX(), target.getY() - 0.15f, target.getZ(), target.level().getRandom().nextFloat() * 360.0f, 0);
 						blockade.setMaxDespawnTicks(30 + target.level().getRandom().nextInt(20));
@@ -119,6 +116,7 @@ public class RingOfRecruitmentItem extends RingItem {
 
 						spawned.add(blockade);
 						target.level().addFreshEntity(blockade);
+
 					}
 				}
 				
@@ -170,6 +168,7 @@ public class RingOfRecruitmentItem extends RingItem {
 				if(recruitedRingUuid != null && !ringUuid.equals(recruitedRingUuid))
 					return ItemStack.EMPTY;
 			}
+			
 			return ring;
 		}
 		return ItemStack.EMPTY;
