@@ -49,6 +49,7 @@ public class ShaderHandler {
 	 * - Collects viewport matrices for WorldShader.
 	 */
 	public static void onRenderWeather(final RenderLevelStageEvent event) {
+		if (!ShaderHelper.INSTANCE.canUseShaders()) return;
 
 		// Fetch depth and matrix data before debug elements render
 		if (event.getStage() == AFTER_WEATHER) {
@@ -95,6 +96,7 @@ public class ShaderHandler {
 	 * Sets base buffer for cutting out translucent render batch
 	 */
 	public static void onPreTranslucentBatch() {
+		if (!ShaderHelper.INSTANCE.canUseShaders()) return;
 		// Set base buffer and cleanup
 		ShaderHandler.diffBlitDepth.Base.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
 		Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
@@ -104,6 +106,7 @@ public class ShaderHandler {
 	 * Sets before buffer for cutting out translucent render batch
 	 */
 	public static void onPostTranslucentBatch() {
+		if (!ShaderHelper.INSTANCE.canUseShaders()) return;
 		ShaderHandler.diffBlitDepth.BeforeTarget.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
 		Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
 	}
