@@ -70,6 +70,12 @@ public class AnimatorMenu extends AbstractContainerMenu {
 	public double getBurnProgress() {
 		return (this.data.get(3) + (this.getFuelProgress() / 42.0D)) / (double) this.data.get(4);
 	}
+	
+	@Override
+	public void removed(Player player) {
+		super.removed(player);
+		this.animator.stopOpen(player);
+	}
 
 	@Override
 	public ItemStack quickMoveStack(Player player, int index) {
