@@ -72,7 +72,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	public int fuelConsumed = 0;
 	public int requiredFuelCount = 32;
 	public int requiredLifeCount = 32;
-	public boolean itemAnimated = false;
+	public boolean itemAnimated = false; // TODO try to remove in favour of hasOutputItems
 	private ItemStack prevItem = ItemStack.EMPTY;
 
 	public float oRot;
@@ -374,14 +374,6 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		}
 	}
 
-	@Override
-	public void setChanged() {
-		super.setChanged();
-		if (this.getLevel() != null) {
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
-		}
-	}
-
 	public boolean isValidLifeCrystal(ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() instanceof LifeCrystalItem;
 	}
@@ -437,13 +429,47 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	}
 
 	@Override
+	public ItemStack removeItem(int slot, int amount) {
+		// hasOutputItems is checked in setChanged(), so we don't need an explicit check here
+		//    because super.removeItem(...) calls setChanged() if an item was extracted
+		return super.removeItem(slot, amount);
+	}
+	
+	@Override
+	public ItemStack removeItemNoUpdate(int slot) {
+		// No update for hasOutputItems
+		return super.removeItemNoUpdate(slot);
+	}
+	
+	@Override
 	public void setItem(int slot, ItemStack stack) {
+		ItemStack prevItem = this.getItem(slot);
 		super.setItem(slot, stack);
 		if (slot == LIFE_CRYSTAL_SLOT) {
 			this.lifeCrystalLife = this.getCrystalPower();
 		}
+		if(slot == FOCAL_SLOT && this.hasOutputItems) {
+			// Note: AbstractFurnaceBlockEntity does something very similar
+			if(stack.isEmpty() || !ItemStack.isSameItemSameComponents(stack, prevItem)) {
+				this.hasOutputItems = false;
+				this.itemAnimated = false;
+				this.setChanged();
+			}
+		}
 	}
 
+	@Override
+	public void setChanged() {
+		if(this.hasOutputItems && this.getItem(FOCAL_SLOT).isEmpty()) {
+			this.hasOutputItems = false;
+			this.itemAnimated = false;
+		}
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
+	}
+	
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
 		return new AnimatorMenu(containerId, inventory, this, this.data);
@@ -464,7 +490,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			return this.isValidFuel(stack);
 		}
 		// Do not allow placing items into the focal slot if it's working as an output right now
-		if(slot == FOCAL_SLOT && itemAnimated) {
+		if(slot == FOCAL_SLOT && this.hasOutputItems) {
 			return false;
 		}
 		return super.canPlaceItem(slot, stack);
@@ -483,7 +509,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
 		if(index == FOCAL_SLOT) {
 			// Deny the top face access to the focal slot if it's an output right now
-			if(direction == Direction.UP && itemAnimated) {
+			if(direction == Direction.UP && this.hasOutputItems) {
 				return false;
 			}
 			// Don't allow inserting through the bottom face
@@ -498,11 +524,11 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		if(index == FOCAL_SLOT) {
 			// Deny the top face access to the focal slot if it's an output right now
-			if(direction == Direction.UP && itemAnimated) {
+			if(direction == Direction.UP && this.hasOutputItems) {
 				return false;
 			}
 			// Deny the bottom face access to the focal slot if it's an input right now
-			else if(direction == Direction.DOWN && !itemAnimated) {
+			else if(direction == Direction.DOWN && !this.hasOutputItems) {
 				return false;
 			}
 		}
@@ -517,6 +543,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		tag.putInt("progress", this.fuelBurnProgress);
 		tag.putInt("items_consumed", this.fuelConsumed);
 		tag.putBoolean("life_depleted", this.itemAnimated);
+		tag.putBoolean("has_output_items", this.hasOutputItems);
+		tag.putBoolean("has_recipe", this.hasRecipe);
 		if (!this.itemToAnimate.isEmpty()) {
 			tag.put("to_animate", this.itemToAnimate.save(registries));
 		}
@@ -532,6 +560,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		this.fuelBurnProgress = tag.getInt("progress");
 		this.fuelConsumed = tag.getInt("items_consumed");
 		this.itemAnimated = tag.getBoolean("life_depleted");
+		this.hasOutputItems = tag.getBoolean("has_output_items");
+		this.hasRecipe = tag.getBoolean("has_recipe");
 		if (tag.contains("to_animate", Tag.TAG_COMPOUND))
 			this.itemToAnimate = ItemStack.parseOptional(registries, tag.getCompound("to_animate"));
 		else
