@@ -487,9 +487,17 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			// Only allow inserting fuel
 			return this.isValidFuel(stack);
 		}
-		// Do not allow placing items into the focal slot if it's working as an output right now
-		if(slot == FOCAL_SLOT && this.hasOutputItems) {
-			return false;
+		
+		if(slot == FOCAL_SLOT) {
+			// Do not allow placing items into the focal slot if it's working as an output right now
+			if(this.hasOutputItems) {
+				return false;
+			}
+			// Only allow inserting a single item to the focal slot
+			// (Our item handler also ensures that mods never insert a stack with a count more than 1)
+			else {
+				return this.getItem(slot).isEmpty();
+			}
 		}
 		return super.canPlaceItem(slot, stack);
 	}
