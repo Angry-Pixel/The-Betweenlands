@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.entity;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -17,6 +19,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -34,11 +37,11 @@ import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
 import thebetweenlands.common.inventory.AnimatorMenu;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.*;
-
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.mutable.MutableInt;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class AnimatorBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
@@ -292,29 +295,24 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 					}
 				}
 			}
+			
+			return true;
 		}
 		
 		return false;
 	}
 	
 	public void drainLifeCrystalPower(Level level, BlockPos pos) {
-		// Maybe we could have a data component for life crystal power instead...
+		// Maybe we could have a data component or capability for life crystal power instead...
 		
 		ItemStack lifeCrystalItem = this.getItem(LIFE_CRYSTAL_SLOT);
 		
 		if(this.isValidLifeCrystal(lifeCrystalItem) && lifeCrystalItem.isDamageableItem()) {
-			ItemStack damagedLifeCrystal = lifeCrystalItem.copy();
+			// The life crystal item prevents itself from breaking
+			// So I'm leaving it up to the target item to determine what to do for custom implementations
+			// This is a good candidate for a true capability to determine how much power a crystal has, and how to handle draining it
 			
-			MutableInt brokenCount = new MutableInt(0);
-			damagedLifeCrystal.hurtAndBreak(this.requiredLifeCount, (ServerLevel) level, null, item -> brokenCount.increment());
-			
-			// If it broke
-			if(damagedLifeCrystal.isEmpty() || brokenCount.intValue() > 0) {
-				damagedLifeCrystal.setCount(lifeCrystalItem.getCount());
-				damagedLifeCrystal.setDamageValue(damagedLifeCrystal.getMaxDamage() - 1);
-			}
-			
-			lifeCrystalItem.applyComponents(damagedLifeCrystal.getComponents());
+			lifeCrystalItem.hurtAndBreak(this.requiredLifeCount, (ServerLevel) level, (LivingEntity) null, null);
 		}
 	}
 	
