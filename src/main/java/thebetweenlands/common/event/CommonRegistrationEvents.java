@@ -350,7 +350,7 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> tile);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> tile);
 
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ANIMATOR.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ANIMATOR.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CENSER.get(), (tile, context) -> new CenserWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CRAB_POT.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.COMPOST_BIN.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);

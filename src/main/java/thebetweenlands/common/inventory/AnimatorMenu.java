@@ -34,9 +34,9 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		this.animator = animator;
 		this.data = data;
 
-		this.addSlot(new SingleItemSlot(animator, 0, 79, 23));
-		this.addSlot(new FilteredSlot(animator, 1, 34, 57, stack -> stack.getItem() instanceof LifeCrystalItem));
-		this.addSlot(new FilteredSlot(animator, 2, 124, 57, stack -> stack.is(ItemRegistry.SULFUR)));
+		this.addSlot(new SingleItemSlot(animator, AnimatorBlockEntity.FOCAL_SLOT, 79, 23));
+		this.addSlot(new FilteredSlot(animator, AnimatorBlockEntity.LIFE_CRYSTAL_SLOT, 34, 57, animator::isValidLifeCrystal));
+		this.addSlot(new FilteredSlot(animator, AnimatorBlockEntity.FUEL_SLOT, 124, 57, animator::isValidFuel));
 
 		for (int k = 0; k < 3; k++) {
 			for (int i1 = 0; i1 < 9; i1++) {

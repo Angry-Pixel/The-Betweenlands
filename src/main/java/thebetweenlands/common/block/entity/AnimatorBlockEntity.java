@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -36,8 +38,24 @@ import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
 
-public class AnimatorBlockEntity extends BaseContainerBlockEntity {
+public class AnimatorBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
+	/**
+	 * Slot that contains the item to animate + recipe output once animation is finished
+	 */
+	public static final int FOCAL_SLOT = 0;
+	/**
+	 * Slot that contains the life crystal
+	 */
+	public static final int LIFE_CRYSTAL_SLOT = 1;
+	/**
+	 * Slot that contains the fuel (sulphur)
+	 */
+	public static final int FUEL_SLOT = 2;
+
+	private static final int[] SLOTS_FOR_VERTICAL = new int[] {FOCAL_SLOT};
+	private static final int[] SLOTS_FOR_HORIZONTAL = new int[] {LIFE_CRYSTAL_SLOT, FUEL_SLOT};
+	
 	public ItemStack itemToAnimate = ItemStack.EMPTY;
 	public int fuelBurnProgress;
 	public int lifeCrystalLife;
@@ -94,7 +112,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	public static void tick(Level level, BlockPos pos, BlockState state, AnimatorBlockEntity entity) {
 		if (!level.isClientSide()) {
 			if (entity.isValidFocalItem(level)) {
-				entity.itemToAnimate = entity.getItem(0);
+				entity.itemToAnimate = entity.getItem(FOCAL_SLOT);
 				SingleRecipeInput input = new SingleRecipeInput(entity.itemToAnimate);
 				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
 				if (recipe != null) {
@@ -117,7 +135,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 					entity.fuelBurnProgress++;
 					if (entity.fuelBurnProgress >= 42) {
 						entity.fuelBurnProgress = 0;
-						entity.getItem(2).shrink(1);
+						entity.getItem(FUEL_SLOT).shrink(1);
 						entity.fuelConsumed++;
 						entity.setChanged();
 					}
@@ -125,22 +143,22 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 				}
 			}
 
-			if (!entity.getItem(2).isEmpty() && !entity.itemAnimated) {
-				if (entity.getItem(0).isEmpty() || entity.getItem(1).isEmpty()) {
+			if (!entity.getItem(FUEL_SLOT).isEmpty() && !entity.itemAnimated) {
+				if (entity.getItem(FOCAL_SLOT).isEmpty() || entity.getItem(LIFE_CRYSTAL_SLOT).isEmpty()) {
 					entity.fuelBurnProgress = 0;
 					entity.fuelConsumed = 0;
 				}
 			}
 
-			if (entity.fuelConsumed >= entity.requiredFuelCount && !entity.getItem(0).isEmpty() && !entity.getItem(1).isEmpty() && !entity.itemAnimated) {
-				SingleRecipeInput recipeInput = new SingleRecipeInput(entity.getItem(0));
+			if (entity.fuelConsumed >= entity.requiredFuelCount && !entity.getItem(FOCAL_SLOT).isEmpty() && !entity.getItem(LIFE_CRYSTAL_SLOT).isEmpty() && !entity.itemAnimated) {
+				SingleRecipeInput recipeInput = new SingleRecipeInput(entity.getItem(FOCAL_SLOT));
 				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(recipeInput, level).orElse(null);
 				if (recipe != null) {
-					ItemStack input = entity.getItem(0).copy();
+					ItemStack input = entity.getItem(FOCAL_SLOT).copy();
 					ItemStack result = recipe.value().onAnimated((ServerLevel) level, pos, recipeInput);
 					if (result.isEmpty()) result = recipe.value().assemble(recipeInput, level.registryAccess());
 					if (!result.isEmpty()) {
-						entity.setItem(0, result.copy());
+						entity.setItem(FOCAL_SLOT, result.copy());
 
 						for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(12), EntitySelector.NO_SPECTATORS)) {
 							if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 144) {
@@ -149,18 +167,18 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 						}
 					}
 				}
-				entity.getItem(1).setDamageValue(entity.getItem(1).getDamageValue() + entity.requiredLifeCount);
+				entity.getItem(LIFE_CRYSTAL_SLOT).setDamageValue(entity.getItem(LIFE_CRYSTAL_SLOT).getDamageValue() + entity.requiredLifeCount);
 				entity.setChanged();
 				entity.itemAnimated = true;
 			}
-			if (entity.prevStackSize != entity.getItem(0).getCount())
+			if (entity.prevStackSize != entity.getItem(FOCAL_SLOT).getCount())
 				entity.setChanged();
-			if (entity.prevItem != entity.getItem(0))
+			if (entity.prevItem != entity.getItem(FOCAL_SLOT))
 				entity.setChanged();
-			entity.prevItem = entity.getItem(0);
-			entity.prevStackSize = entity.getItem(0).getCount();
+			entity.prevItem = entity.getItem(FOCAL_SLOT);
+			entity.prevStackSize = entity.getItem(FOCAL_SLOT).getCount();
 
-			boolean shouldBeRunning = !entity.getItem(0).isEmpty() && entity.isCrystalInSlot() && entity.isSulfurInSlot() && entity.fuelConsumed < entity.requiredFuelCount && entity.lifeCrystalLife >= entity.requiredLifeCount && entity.isValidFocalItem(level);
+			boolean shouldBeRunning = !entity.getItem(FOCAL_SLOT).isEmpty() && entity.isCrystalInSlot() && entity.isSulfurInSlot() && entity.fuelConsumed < entity.requiredFuelCount && entity.lifeCrystalLife >= entity.requiredLifeCount && entity.isValidFocalItem(level);
 			if (entity.running != shouldBeRunning) {
 				entity.running = shouldBeRunning;
 				entity.setChanged();
@@ -219,23 +237,32 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 		}
 	}
 
+	public boolean isValidLifeCrystal(ItemStack stack) {
+		return !stack.isEmpty() && stack.getItem() instanceof LifeCrystalItem;
+	}
+
+	public boolean isValidFuel(ItemStack stack) {
+		return !stack.isEmpty() && stack.is(ItemRegistry.SULFUR);
+	}
+	
 	public boolean isCrystalInSlot() {
-		return this.getItem(1).getItem() instanceof LifeCrystalItem && this.getItem(1).getDamageValue() < this.getItem(1).getMaxDamage();
+		final ItemStack stack = this.getItem(LIFE_CRYSTAL_SLOT);
+		return this.isValidLifeCrystal(stack) && stack.getDamageValue() < stack.getMaxDamage();
 	}
 
 	public int getCrystalPower() {
 		if (this.isCrystalInSlot())
-			return this.getItem(1).getMaxDamage() - this.getItem(1).getDamageValue();
+			return this.getItem(LIFE_CRYSTAL_SLOT).getMaxDamage() - this.getItem(LIFE_CRYSTAL_SLOT).getDamageValue();
 		return 0;
 	}
 
 	public boolean isSulfurInSlot() {
-		return this.getItem(2).is(ItemRegistry.SULFUR);
+		return this.isValidFuel(this.getItem(FUEL_SLOT));
 	}
 
 	public boolean isValidFocalItem(Level level) {
-		if (!this.getItem(0).isEmpty()) {
-			SingleRecipeInput recipeInput = new SingleRecipeInput(this.getItem(0));
+		if (!this.getItem(FOCAL_SLOT).isEmpty()) {
+			SingleRecipeInput recipeInput = new SingleRecipeInput(this.getItem(FOCAL_SLOT));
 			return this.quickCheck.getRecipeFor(recipeInput, level).isPresent();
 		}
 		return false;
@@ -263,7 +290,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public void setItem(int slot, ItemStack stack) {
 		super.setItem(slot, stack);
-		if (slot == 1) {
+		// I think this should technically be happening in setChanged()
+		if (slot == LIFE_CRYSTAL_SLOT) {
 			this.lifeCrystalLife = this.getCrystalPower();
 		}
 	}
@@ -276,6 +304,61 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public int getContainerSize() {
 		return 3;
+	}
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if(slot == LIFE_CRYSTAL_SLOT) {
+			// Only allow inserting life crystals
+			return this.isValidLifeCrystal(stack);
+		} else if(slot == FUEL_SLOT) {
+			// Only allow inserting fuel
+			return this.isValidFuel(stack);
+		}
+		// Do not allow placing items into the focal slot if it's working as an output right now
+		if(slot == FOCAL_SLOT && itemAnimated) {
+			return false;
+		}
+		return super.canPlaceItem(slot, stack);
+	}
+	
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		if(side.getAxis().isVertical()) {
+			return SLOTS_FOR_VERTICAL;
+		} else {
+			return SLOTS_FOR_HORIZONTAL;
+		}
+	}
+	
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		if(index == FOCAL_SLOT) {
+			// Deny the top face access to the focal slot if it's an output right now
+			if(direction == Direction.UP && itemAnimated) {
+				return false;
+			}
+			// Don't allow inserting through the bottom face
+			else if(direction == Direction.DOWN) {
+				return false;
+			}
+		}
+		return this.canPlaceItem(index, itemStack);
+	}
+	
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		if(index == FOCAL_SLOT) {
+			// Deny the top face access to the focal slot if it's an output right now
+			if(direction == Direction.UP && itemAnimated) {
+				return false;
+			}
+			// Deny the bottom face access to the focal slot if it's an input right now
+			else if(direction == Direction.DOWN && !itemAnimated) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
