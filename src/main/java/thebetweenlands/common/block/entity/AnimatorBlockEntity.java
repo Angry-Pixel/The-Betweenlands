@@ -38,6 +38,8 @@ import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+
 public class AnimatorBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
 	/**
@@ -56,6 +58,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	private static final int[] SLOTS_FOR_VERTICAL = new int[] {FOCAL_SLOT};
 	private static final int[] SLOTS_FOR_HORIZONTAL = new int[] {LIFE_CRYSTAL_SLOT, FUEL_SLOT};
 	
+	private static final int FUEL_BURN_TICKS = 42;
+	
+	// If a recipe finished and the focal slot now contains the output items for it
+	// Once all the output items have been extracted, this is set back to false
+	public boolean hasOutputItems = false;
+	
+	// If we have a valid animator recipe that we could use
+	public boolean hasRecipe = false;
 	public ItemStack itemToAnimate = ItemStack.EMPTY;
 	public int fuelBurnProgress;
 	public int lifeCrystalLife;
@@ -63,7 +73,6 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	public int requiredFuelCount = 32;
 	public int requiredLifeCount = 32;
 	public boolean itemAnimated = false;
-	private int prevStackSize = 0;
 	private ItemStack prevItem = ItemStack.EMPTY;
 
 	public float oRot;
@@ -111,78 +120,21 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 
 	public static void tick(Level level, BlockPos pos, BlockState state, AnimatorBlockEntity entity) {
 		if (!level.isClientSide()) {
-			if (entity.isValidFocalItem(level)) {
-				entity.itemToAnimate = entity.getItem(FOCAL_SLOT);
-				SingleRecipeInput input = new SingleRecipeInput(entity.itemToAnimate);
-				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
-				if (recipe != null) {
-					entity.requiredFuelCount = recipe.value().getRequiredFuel(input);
-					entity.requiredLifeCount = recipe.value().getRequiredLife(input);
-				}
-			} else {
-				entity.itemToAnimate = ItemStack.EMPTY;
-			}
-
-			if (entity.isCrystalInSlot())
-				entity.lifeCrystalLife = entity.getCrystalPower();
-			if (entity.getItems().subList(0, 3).stream().anyMatch(ItemStack::isEmpty)) {
-				entity.fuelBurnProgress = 0;
-				entity.fuelConsumed = 0;
-			}
-
-			if (!entity.itemToAnimate.isEmpty() && entity.isCrystalInSlot() && entity.isSulfurInSlot() && entity.fuelConsumed < entity.requiredFuelCount && entity.isValidFocalItem(level)) {
-				if (entity.lifeCrystalLife >= entity.requiredLifeCount) {
-					entity.fuelBurnProgress++;
-					if (entity.fuelBurnProgress >= 42) {
-						entity.fuelBurnProgress = 0;
-						entity.getItem(FUEL_SLOT).shrink(1);
-						entity.fuelConsumed++;
-						entity.setChanged();
-					}
-					entity.itemAnimated = false;
+			// Updates that don't rely on crafting
+			entity.updateValues();
+			
+			if(entity.hasOutputItems) {
+				if(entity.getItem(FOCAL_SLOT).isEmpty()) {
+					entity.setItem(FOCAL_SLOT, ItemStack.EMPTY);
+					entity.hasOutputItems = false;
+					entity.setChanged();
+				} else {
+					// Don't update crafting if there are still output items to be extracted
+					return;
 				}
 			}
-
-			if (!entity.getItem(FUEL_SLOT).isEmpty() && !entity.itemAnimated) {
-				if (entity.getItem(FOCAL_SLOT).isEmpty() || entity.getItem(LIFE_CRYSTAL_SLOT).isEmpty()) {
-					entity.fuelBurnProgress = 0;
-					entity.fuelConsumed = 0;
-				}
-			}
-
-			if (entity.fuelConsumed >= entity.requiredFuelCount && !entity.getItem(FOCAL_SLOT).isEmpty() && !entity.getItem(LIFE_CRYSTAL_SLOT).isEmpty() && !entity.itemAnimated) {
-				SingleRecipeInput recipeInput = new SingleRecipeInput(entity.getItem(FOCAL_SLOT));
-				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(recipeInput, level).orElse(null);
-				if (recipe != null) {
-					ItemStack input = entity.getItem(FOCAL_SLOT).copy();
-					ItemStack result = recipe.value().onAnimated((ServerLevel) level, pos, recipeInput);
-					if (result.isEmpty()) result = recipe.value().assemble(recipeInput, level.registryAccess());
-					if (!result.isEmpty()) {
-						entity.setItem(FOCAL_SLOT, result.copy());
-
-						for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(12), EntitySelector.NO_SPECTATORS)) {
-							if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 144) {
-								AdvancementCriteriaRegistry.ANIMATE.get().trigger(player, input, result.copy());
-							}
-						}
-					}
-				}
-				entity.getItem(LIFE_CRYSTAL_SLOT).setDamageValue(entity.getItem(LIFE_CRYSTAL_SLOT).getDamageValue() + entity.requiredLifeCount);
-				entity.setChanged();
-				entity.itemAnimated = true;
-			}
-			if (entity.prevStackSize != entity.getItem(FOCAL_SLOT).getCount())
-				entity.setChanged();
-			if (entity.prevItem != entity.getItem(FOCAL_SLOT))
-				entity.setChanged();
-			entity.prevItem = entity.getItem(FOCAL_SLOT);
-			entity.prevStackSize = entity.getItem(FOCAL_SLOT).getCount();
-
-			boolean shouldBeRunning = !entity.getItem(FOCAL_SLOT).isEmpty() && entity.isCrystalInSlot() && entity.isSulfurInSlot() && entity.fuelConsumed < entity.requiredFuelCount && entity.lifeCrystalLife >= entity.requiredLifeCount && entity.isValidFocalItem(level);
-			if (entity.running != shouldBeRunning) {
-				entity.running = shouldBeRunning;
-				entity.setChanged();
-			}
+			
+			entity.tickCrafting(level, pos, state);
 		} else {
 			entity.updateEntityRotation();
 			if (entity.isRunning() && !entity.soundPlaying) {
@@ -228,6 +180,199 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 
 		this.rot += f2 * 0.4F;
 	}
+	
+	/**
+	 * Updates values that don't require crafting to be in progress
+	 */
+	public void updateValues() {
+		// Update life crystal display value
+		if (this.isCrystalInSlot()) {
+			this.lifeCrystalLife = this.getCrystalPower();
+		}
+		
+		// Update burn progress
+		if (this.hasOutputItems || this.getItems().subList(0, 3).stream().anyMatch(ItemStack::isEmpty)) {
+			this.fuelBurnProgress = 0;
+			this.fuelConsumed = 0;
+		}
+	}
+	
+	public boolean hasFocalItemChanged() {
+		ItemStack focalItem = this.getItem(FOCAL_SLOT);
+		return focalItem != this.prevItem && (
+				this.prevItem.getCount() != focalItem.getCount() ||
+				!ItemStack.isSameItemSameComponents(this.prevItem, focalItem)
+			);
+	}
+	
+	/**
+	 * Updates the current animator recipe based on the focal item
+	 * 
+	 * Returns true if the recipe changed in any way
+	 * @param level
+	 * @return if the recipe changed
+	 */
+	public boolean updateRecipe(Level level) {
+		final boolean hadRecipe = this.hasRecipe;
+		
+		ItemStack focalItem = this.getItem(FOCAL_SLOT);
+		if(focalItem.isEmpty() || !this.isValidFocalItem(level, focalItem)) {
+			this.itemToAnimate = ItemStack.EMPTY;
+			this.hasRecipe = false;
+			return hadRecipe;
+		}
+
+		SingleRecipeInput recipeInput = new SingleRecipeInput(focalItem);
+		RecipeHolder<AnimatorRecipe> recipe = this.quickCheck.getRecipeFor(recipeInput, level).orElse(null);
+		if (recipe == null) {
+			this.itemToAnimate = ItemStack.EMPTY;
+			this.hasRecipe = false;
+			return hadRecipe;
+		}
+		
+		ItemStack previousItem = this.itemToAnimate;
+		
+		this.itemToAnimate = focalItem;
+		this.requiredFuelCount = recipe.value().getRequiredFuel(recipeInput);
+		this.requiredLifeCount = recipe.value().getRequiredLife(recipeInput);
+		this.hasRecipe = true;
+		
+		return !hadRecipe || (focalItem != previousItem && !ItemStack.isSameItemSameComponents(focalItem, previousItem));
+	}
+	
+	public boolean resetCraftingProgress() {
+		// Consider changed whenever one of the fields updates
+		// Maybe, or also maybe not and this is wrong
+		boolean changed = this.fuelBurnProgress != 0 || this.fuelConsumed != 0 || this.running;
+		this.fuelBurnProgress = 0;
+		this.fuelConsumed = 0;
+		this.running = false;
+		return changed;
+	}
+	
+	public boolean burnFuel() {
+		if(this.fuelConsumed < this.requiredFuelCount) {
+			this.fuelBurnProgress++;
+			if (this.fuelBurnProgress >= FUEL_BURN_TICKS) {
+				this.fuelBurnProgress = 0;
+				this.getItem(FUEL_SLOT).shrink(1);
+				this.fuelConsumed++;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean completeRecipe(Level level, BlockPos pos) {
+		if(this.fuelConsumed >= this.requiredFuelCount) {
+			// Get the recipe
+			ItemStack focalItem = this.getItem(FOCAL_SLOT);
+			SingleRecipeInput recipeInput = new SingleRecipeInput(focalItem);
+			RecipeHolder<AnimatorRecipe> recipe = this.quickCheck.getRecipeFor(recipeInput, level).orElse(null);
+			if (recipe == null) {
+				return false;
+			}
+			
+			// Get the result item
+			ItemStack resultStack = recipe.value().onAnimated((ServerLevel) level, pos, recipeInput);
+			if (resultStack.isEmpty()) {
+				// It may require custom handling
+				resultStack = recipe.value().assemble(recipeInput, level.registryAccess());
+			}
+			
+			// If the result item exists
+			if (!resultStack.isEmpty()) {
+				this.setItem(FOCAL_SLOT, resultStack.copy());
+				this.hasOutputItems = true;
+
+				// Animate item trigger
+				for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(12), EntitySelector.NO_SPECTATORS)) {
+					if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 12 * 12) {
+						AdvancementCriteriaRegistry.ANIMATE.get().trigger(player, focalItem.copy(), resultStack.copy());
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public void drainLifeCrystalPower(Level level, BlockPos pos) {
+		// Maybe we could have a data component for life crystal power instead...
+		
+		ItemStack lifeCrystalItem = this.getItem(LIFE_CRYSTAL_SLOT);
+		
+		if(this.isValidLifeCrystal(lifeCrystalItem) && lifeCrystalItem.isDamageableItem()) {
+			ItemStack damagedLifeCrystal = lifeCrystalItem.copy();
+			
+			MutableInt brokenCount = new MutableInt(0);
+			damagedLifeCrystal.hurtAndBreak(this.requiredLifeCount, (ServerLevel) level, null, item -> brokenCount.increment());
+			
+			// If it broke
+			if(damagedLifeCrystal.isEmpty() || brokenCount.intValue() > 0) {
+				damagedLifeCrystal.setCount(lifeCrystalItem.getCount());
+				damagedLifeCrystal.setDamageValue(damagedLifeCrystal.getMaxDamage() - 1);
+			}
+			
+			lifeCrystalItem.applyComponents(damagedLifeCrystal.getComponents());
+		}
+	}
+	
+	public void tickCrafting(Level level, BlockPos pos, BlockState state) {
+		boolean changed = false;
+		
+		// Check if the item we're animating has changed since last tick
+		boolean focalItemChanged = this.hasFocalItemChanged();
+		if(focalItemChanged) {
+			this.prevItem = this.getItem(FOCAL_SLOT).copy();
+			changed = true;
+		}
+		
+		// Check if the recipe has changed
+		// (Also is a partial check for if the item we're animated has changed, TODO see if the two checks can be merged)
+		boolean recipeChanged = this.updateRecipe(level);
+		changed = changed || recipeChanged; // Avoid short circuits
+		
+		if(recipeChanged || focalItemChanged) {
+			// Reset recipe progress?
+			// TODO Check with team to see if progress not resetting when you swap the focal item is intentional or a bug
+		}
+		
+		if(
+			!this.hasRecipe
+			|| !this.isCrystalInSlot()
+			|| (this.fuelConsumed < this.requiredFuelCount && !this.isSulfurInSlot())
+		) {
+			if(this.resetCraftingProgress()) {
+				changed = true;
+			}
+		} else {
+			// Burn fuel if fuel still needs burning
+			boolean fuelItemBurned = this.burnFuel();
+			if(fuelItemBurned) {
+				this.itemAnimated = false;
+				changed = true;
+//				this.setChanged();
+//				changed = false;
+			}
+			
+			if(this.completeRecipe(level, pos)) {
+				this.drainLifeCrystalPower(level, pos);
+				this.itemAnimated = true;
+				changed = true;
+			}
+		}
+		
+		boolean shouldBeRunning = this.hasRecipe && this.isCrystalInSlot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && this.lifeCrystalLife >= this.requiredLifeCount;
+		if (this.running != shouldBeRunning) {
+			this.running = shouldBeRunning;
+			changed = true;
+		}
+		
+		if(changed) {
+			this.setChanged();
+		}
+	}
 
 	@Override
 	public void setChanged() {
@@ -260,12 +405,16 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		return this.isValidFuel(this.getItem(FUEL_SLOT));
 	}
 
-	public boolean isValidFocalItem(Level level) {
-		if (!this.getItem(FOCAL_SLOT).isEmpty()) {
-			SingleRecipeInput recipeInput = new SingleRecipeInput(this.getItem(FOCAL_SLOT));
+	public boolean isValidFocalItem(Level level, ItemStack stack) {
+		if (!stack.isEmpty()) {
+			SingleRecipeInput recipeInput = new SingleRecipeInput(stack);
 			return this.quickCheck.getRecipeFor(recipeInput, level).isPresent();
 		}
 		return false;
+	}
+
+	public boolean isValidFocalItem(Level level) {
+		return this.isValidFocalItem(level, this.getItem(FOCAL_SLOT));
 	}
 
 	public boolean isRunning() {
@@ -290,7 +439,6 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	@Override
 	public void setItem(int slot, ItemStack stack) {
 		super.setItem(slot, stack);
-		// I think this should technically be happening in setChanged()
 		if (slot == LIFE_CRYSTAL_SLOT) {
 			this.lifeCrystalLife = this.getCrystalPower();
 		}
