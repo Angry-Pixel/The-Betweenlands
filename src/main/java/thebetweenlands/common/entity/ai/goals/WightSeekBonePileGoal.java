@@ -75,6 +75,7 @@ public class WightSeekBonePileGoal extends Goal {
 						wight.setVolatile(false);
 						wight.clearTargetBlock();
 						wight.canTransformInToShaman = false;
+						wight.ignoreHidingOnSpawn = true;
 						CompoundTag wightNBT = new CompoundTag();
 						if (wight.saveAsPassenger(wightNBT)) {
 							shaman.getPersistentData().put("wightSaved", wightNBT);

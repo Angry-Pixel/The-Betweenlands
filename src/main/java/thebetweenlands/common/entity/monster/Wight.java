@@ -80,6 +80,7 @@ public class Wight extends Monster implements BLEntity {
     private boolean didTurnVolatileOnPlayer = false;
     private int growCount, prevGrowCount = 40;
 	public boolean canTransformInToShaman = true;
+	public boolean ignoreHidingOnSpawn = false;
 
     public Wight(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -286,6 +287,10 @@ public class Wight extends Monster implements BLEntity {
         }
 
         this.lastHidingAnimationTicks = this.hidingAnimationTicks;
+        if(this.ignoreHidingOnSpawn && tickCount <= 12 ) {
+        	this.lastHidingAnimationTicks = hidingAnimationTicks = 12;
+        }
+
         if (this.isHiding()) {
             if (this.hidingAnimationTicks > 0)
                 this.hidingAnimationTicks--;
@@ -426,6 +431,7 @@ public class Wight extends Monster implements BLEntity {
         compound.putBoolean("turned_volatile_on_player", this.didTurnVolatileOnPlayer);
         compound.putInt("grow_timer", this.getGrowTimer());
         compound.putBoolean("can_transform_in_to_shaman", this.canTransformInToShaman);	
+        compound.putBoolean("ignore_hiding_on_spawn", this.ignoreHidingOnSpawn);	
         getTargetBlock().ifPresent(blockpos -> {
         	compound.put("targetBlock", NbtUtils.writeBlockPos(blockpos));
         });
@@ -443,6 +449,7 @@ public class Wight extends Monster implements BLEntity {
         this.didTurnVolatileOnPlayer = compound.getBoolean("turned_volatile_on_player");
         this.setGrowTimer(compound.getInt("grow_timer"));
         this.canTransformInToShaman = compound.getBoolean("can_transform_in_to_shaman");
+        this.ignoreHidingOnSpawn = compound.getBoolean("ignore_hiding_on_spawn");
         if (compound.contains("targetBlock", 99))
         	this.setTargetBlock(NbtUtils.readBlockPos(compound, "targetBlock").get());
     }

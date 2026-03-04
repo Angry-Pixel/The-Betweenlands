@@ -249,8 +249,10 @@ public class BoneShaman extends FlyingMonster {
 					CompoundTag wightNBT = getPersistentData().getCompound("wightSaved");
 					EntityType<?> type = EntityType.byString(wightNBT.getString("id")).orElse(EntityRegistry.SPORELING.get());
 					Entity entity = type.create(level());
-					if (entity instanceof Wight)
-						entity.load(wightNBT);
+					if (entity instanceof Wight wight) {
+						wight.load(wightNBT);
+						wight.setHiding(false);
+					}
 					entity.moveTo(blockPosition().getX() + 0.5, blockPosition().getY(), blockPosition().getZ() + 0.5, 0F, 0F);
 					level().addFreshEntity(entity);
 				}
