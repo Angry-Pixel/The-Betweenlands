@@ -252,8 +252,10 @@ public class BoneShaman extends FlyingMonster {
 					if (entity instanceof Wight wight) {
 						wight.load(wightNBT);
 						wight.setHiding(false);
+						if(getTarget() != null)
+							wight.setTarget(getTarget());
 					}
-					entity.moveTo(blockPosition().getX() + 0.5, blockPosition().getY(), blockPosition().getZ() + 0.5, 0F, 0F);
+					entity.copyPosition(this);
 					level().addFreshEntity(entity);
 				}
 				remove(RemovalReason.DISCARDED);

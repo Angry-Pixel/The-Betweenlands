@@ -287,7 +287,7 @@ public class Wight extends Monster implements BLEntity {
         }
 
         this.lastHidingAnimationTicks = this.hidingAnimationTicks;
-        if(this.ignoreHidingOnSpawn && tickCount <= 12 ) {
+        if(this.ignoreHidingOnSpawn && tickCount <= 12) {
         	this.lastHidingAnimationTicks = hidingAnimationTicks = 12;
         }
 
