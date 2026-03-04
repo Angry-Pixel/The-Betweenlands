@@ -8,6 +8,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -70,12 +71,15 @@ public class WightSeekBonePileGoal extends Goal {
 					if (shaman != null) {
 						shaman.setPos(wight.blockPosition().below().getBottomCenter());
 						shaman.setYRot(wight.getYRot());
-						//puppet.setParentEntityID(wight.getId());
 						level.addFreshEntity(shaman);
-						wight.remove(RemovalReason.DISCARDED); // TODO save to NBT of shaman for later revival 
-						//wight.setVolatile(false);
-						//wight.clearTargetBlock();
-						//wight.canTransformInToShaman = false; // setting this so it only happens once
+						wight.setVolatile(false);
+						wight.clearTargetBlock();
+						wight.canTransformInToShaman = false;
+						CompoundTag wightNBT = new CompoundTag();
+						if (wight.saveAsPassenger(wightNBT)) {
+							shaman.getPersistentData().put("wightSaved", wightNBT);
+							wight.remove(RemovalReason.DISCARDED);
+						}
 					}
 				}
 			}

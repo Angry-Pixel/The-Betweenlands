@@ -20,6 +20,7 @@ import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,6 +49,7 @@ import thebetweenlands.common.entity.boss.malevolence.PrimordialMalevolenceProje
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
 import thebetweenlands.common.entity.projectile.BoneShamanProjectile;
 import thebetweenlands.common.registries.EntityDataSerializerRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 
@@ -72,6 +74,7 @@ public class BoneShaman extends FlyingMonster {
 	public int lastSpawningAnimationTicks = 0;
 	public int prevSummonTimer = 0;
 	public int spawnDuration = 30;
+	public int deathTicks = 0;
 
 	public BoneShaman(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
@@ -227,6 +230,31 @@ public class BoneShaman extends FlyingMonster {
 					setCastingTimer(0);
 					setCasting(false);
 				}
+			}
+		}
+	}
+
+	@Override
+	protected void tickDeath() {
+		//if (deathTicks == 0)
+			//if (!level().isClientSide())
+				//playSound(this.getDeathSound());
+
+		++this.deathTicks;
+		if (!level().isClientSide()) {
+			setPos(this.xo, this.yo, this.zo);
+			setDeltaMovement(Vec3.ZERO);
+			if (deathTicks == 20) {
+				if (!level().isClientSide()) {
+					CompoundTag wightNBT = getPersistentData().getCompound("wightSaved");
+					EntityType<?> type = EntityType.byString(wightNBT.getString("id")).orElse(EntityRegistry.SPORELING.get());
+					Entity entity = type.create(level());
+					if (entity instanceof Wight)
+						entity.load(wightNBT);
+					entity.moveTo(blockPosition().getX() + 0.5, blockPosition().getY(), blockPosition().getZ() + 0.5, 0F, 0F);
+					level().addFreshEntity(entity);
+				}
+				remove(RemovalReason.DISCARDED);
 			}
 		}
 	}
