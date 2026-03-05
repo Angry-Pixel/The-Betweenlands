@@ -45,6 +45,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.goals.EntityAIMoveToDirect;
@@ -56,6 +58,7 @@ import thebetweenlands.common.registries.AttributeRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO fix flight
@@ -65,9 +68,11 @@ public class Wight extends Monster implements BLEntity {
     protected static final EntityDataAccessor<Boolean> VOLATILE_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> GROW_TIMER = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.INT);
     private static final EntityDimensions VOLATILE_DIMENSIONS = EntityDimensions.scalable(0.7F, 0.7F).withAttachments(EntityAttachments.builder().attach(EntityAttachment.VEHICLE, new Vec3(0.0F, 0.5F, 0.0F)));
-	
     public static final EntityDataAccessor<Optional<BlockPos>> TARGET_BLOCK = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-
+    private static final EntityDataAccessor<Boolean> DO_HERO_LANDING = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> LANDING_FALL_HEIGHT = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> FALL_TIMER = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.INT);
+    
     protected final MoveControl flightMoveControl;
     protected final MoveControl groundMoveControl;
     private int hidingAnimationTicks = 0;
@@ -81,6 +86,9 @@ public class Wight extends Monster implements BLEntity {
     private int growCount, prevGrowCount = 40;
 	public boolean canTransformInToShaman = true;
 	public boolean ignoreHidingOnSpawn = false;
+    public int lastLandingAnimationTicks = 0;
+    public int landingDelayCount = 10;
+    public boolean oneShotParticle = true;
 
     public Wight(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -97,6 +105,9 @@ public class Wight extends Monster implements BLEntity {
         builder.define(VOLATILE_STATE_DW, false);
         builder.define(GROW_TIMER, this.growCount);
         builder.define(TARGET_BLOCK, Optional.empty());
+        builder.define(DO_HERO_LANDING, false);
+        builder.define(LANDING_FALL_HEIGHT, 0F);
+        builder.define(FALL_TIMER, 0);
     }
 
     @Override
@@ -158,18 +169,23 @@ public class Wight extends Monster implements BLEntity {
     @Override
     public void aiStep() {
         if (this.level().isClientSide()) {
+        	lastLandingAnimationTicks = getLandingAnimationTicks();
             this.prevGrowCount = this.growCount;
             this.growCount = this.getGrowTimer();
             if (this.getGrowTimer() > 0 && this.getGrowTimer() < 40)
                 if (this.tickCount % 4 == 0)
                     this.spawnVolatileParticles(true);
+            
+            if(getLandingAnimationTicks() >= 20 && onGround() && oneShotParticle) {
+            	spawnLandingParticles();
+            }
         } else {
             if (this.isInTar()) {
                 if (this.getGrowTimer() > 0)
                     this.setGrowTimer(Math.max(0, this.getGrowTimer() - 1));
                 if (this.getGrowTimer() <= 0) {
                     this.convertTo(EntityRegistry.TAR_BEAST.get(), false);
-                }
+                }   
             }
 
             if (!this.isInTar() && this.getGrowTimer() < 40)
@@ -202,6 +218,20 @@ public class Wight extends Monster implements BLEntity {
                     this.didTurnVolatileOnPlayer = false;
                 }
             }
+            
+            if (doHeroLanding()) {
+                if (getLandingAnimationTicks() < 20) // needs to be scaled distance
+                    setLandingAnimationTicks(getLandingAnimationTicks() + 1);
+                if (getLandingAnimationTicks() >= 20) { // needs to be scaled distance
+                	landingDelayCount--;
+                	if(onGround() && landingDelayCount <= 0)
+                		setDoHeroLanding(false);
+                }
+            } else {
+            	if (getLandingAnimationTicks() > 0)
+            		setLandingAnimationTicks(getLandingAnimationTicks() - 1);
+            }   
+            
         }
 
         if (this.isVolatile()) {
@@ -350,7 +380,7 @@ public class Wight extends Monster implements BLEntity {
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.isInTar() || this.getGrowTimer() < 40;
+        return super.isImmobile() || this.isInTar() || this.getGrowTimer() < 40 || getLandingAnimationTicks() > 0;
     }
 
     @Override
@@ -485,8 +515,20 @@ public class Wight extends Monster implements BLEntity {
         this.getEntityData().set(GROW_TIMER, timer);
     }
 
+	private void setLandingAnimationTicks(int timer) {
+		getEntityData().set(FALL_TIMER, timer);
+	} 
+
+    public int getLandingAnimationTicks() {
+    	return getEntityData().get(FALL_TIMER);
+	}
+
     public float getHidingAnimation(float partialTicks) {
         return Mth.lerp(partialTicks, this.lastHidingAnimationTicks, this.hidingAnimationTicks) / 12.0F;
+    }
+
+    public float getLandingAnimation(float partialTicks) {
+        return Mth.lerp(partialTicks, this.lastLandingAnimationTicks, getLandingAnimationTicks()) / 20.0F;
     }
 
     public float getGrowthFactor(float partialTicks) {
@@ -525,6 +567,22 @@ public class Wight extends Monster implements BLEntity {
 
     public void clearTargetBlock() {
         this.entityData.set(TARGET_BLOCK, Optional.empty());
+    }
+
+    public void setDoHeroLanding(boolean landingState) {
+        this.getEntityData().set(DO_HERO_LANDING, landingState);
+    }
+
+    public boolean doHeroLanding() {
+        return this.getEntityData().get(DO_HERO_LANDING);
+    }
+
+	public void setHeroLandingFallHeight(float distance) {
+		this.getEntityData().set(LANDING_FALL_HEIGHT, distance);
+	}
+	
+    public float getHeroLandingFallHeight() {
+        return getEntityData().get(LANDING_FALL_HEIGHT);
     }
 
 	public boolean canPossess(LivingEntity entity) {
@@ -572,6 +630,14 @@ public class Wight extends Monster implements BLEntity {
 //				BLParticles.STEAM_PURIFIER.spawn(this.level(), px, py, pz);
         }
     }
+
+	private void spawnLandingParticles() {
+		oneShotParticle = false;
+		for (int a = 0; a < 360; a += 4) {
+			double ang = a * Math.PI / 180D;
+			TheBetweenlands.createParticle(ParticleRegistry.WIGHT_FACE.get(), level(), getX() -Math.sin((float) ang) * 0.75D, getY(), getZ() + Math.cos((float) ang) * 0.75D, ParticleFactory.ParticleArgs.get().withMotion(-Math.sin((float) ang) * 0.3D, 0D, Math.cos((float) ang) * 0.3D).withScale(1F).withData(40)); 
+		}
+	}
 
     @Override
     public boolean canRiderInteract() {

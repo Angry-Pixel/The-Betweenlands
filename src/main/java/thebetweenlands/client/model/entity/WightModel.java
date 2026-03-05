@@ -231,56 +231,103 @@ public class WightModel<T extends Entity> extends MowzieModelBase<T> {
 			// for testing static speed with no AIs active
 			//float sin = Mth.sin(ageInTicks * 0.5F) * 0.8F;
 			//float cos = Mth.cos(ageInTicks * 0.5F) * 0.8F;
+			float heroLandingTicks = wight.getLandingAnimation(partialTick);// / wight.getHeroLandingFallHeight();
+			if(wight.getLandingAnimationTicks() > 0) {
+				base2.zRot = 0F;
+				
+				base2.y = Mth.lerp(heroLandingTicks, 3F, 10F);
 
-			float sin = wight.isHiding() ? 0 : Mth.sin(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
-			float cos = wight.isHiding() ? 0 : Mth.cos(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
+				torso3.xRot = Mth.lerp(heroLandingTicks, 0.2967F, + 0.7719F);
+				torso3.yRot = Mth.lerp(heroLandingTicks, 0F, - 0.1198F);
+				torso3.zRot = Mth.lerp(heroLandingTicks, 0F, - 0.3902F);
 
-			base2.zRot = 0F + sin * 0.25F * wight.getHidingAnimation(partialTick);
+				arm_left3.xRot = Mth.lerp(heroLandingTicks, -0.0873F, + 0.3654F);
+				arm_left3.yRot = Mth.lerp(heroLandingTicks, -0.5236F, - 0.3997F);
+				arm_left3.zRot = Mth.lerp(heroLandingTicks, -1.2217F, - 1.3474F);
 
-			torso3.xRot = convertDegtoRad(7.5F) + convertDegtoRad(9.5F) * wight.getHidingAnimation(partialTick) + sin * 0.25F;
-			torso3.yRot = 0F - cos * 0.25F;
-			torso3.zRot = 0F - sin * 0.25F;
+				arm_left4.xRot = Mth.lerp(heroLandingTicks, -1.2217F, - 1.2217F);
 
-			arm_left3.xRot = convertDegtoRad(-19.9299F) + convertDegtoRad(-4.9299F) * wight.getHidingAnimation(partialTick) + sin * 0.5F;
-			arm_left3.yRot = convertDegtoRad(1.7082F) + convertDegtoRad(-13.7082F) * wight.getHidingAnimation(partialTick);
-			arm_left3.zRot = convertDegtoRad(0.3001F) + convertDegtoRad(-44.6999F) * wight.getHidingAnimation(partialTick) + cos * 0.25F;
+				arm_right3.xRot = Mth.lerp(heroLandingTicks, -0.0873F, - 0.637F);
+				arm_right3.yRot = Mth.lerp(heroLandingTicks, 0.5236F, + 0.2094F);
+				arm_right3.zRot = Mth.lerp(heroLandingTicks, 1.2217F,  + 0.7854F);
 
-			arm_left4.xRot = convertDegtoRad(-10F) + convertDegtoRad(-60F) * wight.getHidingAnimation(partialTick);
+				arm_right4.xRot = Mth.lerp(heroLandingTicks, -1.3963F, - 0.1731F);
+				arm_right4.yRot = Mth.lerp(heroLandingTicks, 0F, - 0.0227F);
+				arm_right4.zRot = Mth.lerp(heroLandingTicks, 0F, - 0.1289F);
 
-			arm_right3.xRot = convertDegtoRad(-19.9299F) + convertDegtoRad(-4.9299F) * wight.getHidingAnimation(partialTick) - sin * 0.75F;
-			arm_right3.yRot = convertDegtoRad(-1.7082F) + convertDegtoRad(13.7082F) * wight.getHidingAnimation(partialTick);
-			arm_right3.zRot = convertDegtoRad(-0.3001F) + convertDegtoRad(44.6999F) * wight.getHidingAnimation(partialTick) - cos * 0.5F;
+				leg_left3.xRot = Mth.lerp(heroLandingTicks, -0.4363F, - 1.4784F);
+				leg_left3.yRot = Mth.lerp(heroLandingTicks, -0.2269F, - 0.4007F);
+				leg_left3.zRot = Mth.lerp(heroLandingTicks, -0.3491F, - 0.3655F);
 
-			arm_right4.xRot = convertDegtoRad(-10F) + convertDegtoRad(-60F) * wight.getHidingAnimation(partialTick);
+				leg_left4.xRot = Mth.lerp(heroLandingTicks, 0.6981F, + 1.7017F);
+				leg_left4.yRot = Mth.lerp(heroLandingTicks, -0.1745F, - 0.1745F);
+				leg_left4.zRot = Mth.lerp(heroLandingTicks, 0.2618F, + 0.2618F);
 
-			leg_left3.xRot = -0.4333F - sin;
-			leg_left3.yRot = convertDegtoRad(-5.4196F) + convertDegtoRad(-7.5804F) * wight.getHidingAnimation(partialTick);
-			leg_left3.zRot = convertDegtoRad(1.3664F) + convertDegtoRad(-18.6336F) * wight.getHidingAnimation(partialTick);
+				leg_right3.xRot = Mth.lerp(heroLandingTicks, -0.4333F, + 0.0873F);
+				leg_right3.yRot = Mth.lerp(heroLandingTicks, 0.2269F, + 0.2269F);
+				leg_right3.zRot = Mth.lerp(heroLandingTicks, 0.3491F, + 0.3491F);
 
-			leg_left4.xRot = 0.6981F + cos * 0.5F;
-			leg_left4.yRot = 0F + convertDegtoRad(5F) * wight.getHidingAnimation(partialTick);
-			leg_left4.zRot = 0F + convertDegtoRad(15F) * wight.getHidingAnimation(partialTick);
+				leg_right4.xRot = Mth.lerp(heroLandingTicks, 0.6981F, + 1.5272F);
+				leg_right4.yRot = Mth.lerp(heroLandingTicks, 0.1745F, + 0.1745F);
+				leg_right4.zRot = Mth.lerp(heroLandingTicks, -0.2618F, - 0.2618F);
 
-			leg_right3.xRot = -0.4333F + sin;
-			leg_right3.yRot = convertDegtoRad(5.4196F) + convertDegtoRad(7.5804F) * wight.getHidingAnimation(partialTick);
-			leg_right3.zRot = convertDegtoRad(-1.3664F) + convertDegtoRad(18.6336F) * wight.getHidingAnimation(partialTick);
+				neck2.xRot = Mth.lerp(heroLandingTicks, -0.2182F, + 0.4712F);
+				neck2.yRot = 0F;
+				neck2.zRot = 0F;
 
-			leg_right4.xRot = 0.6981F - cos * 0.5F;
-			leg_right4.yRot = 0F + convertDegtoRad(-5F) * wight.getHidingAnimation(partialTick);
-			leg_right4.zRot = 0F + convertDegtoRad(-15F) * wight.getHidingAnimation(partialTick);
+				jaw2.xRot = 0.5236F;
+			}
+			else {
+				float sin = wight.isHiding() ? 0 : Mth.sin(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
+				float cos = wight.isHiding() ? 0 : Mth.cos(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
+	
+				base2.zRot = 0F + sin * 0.25F * wight.getHidingAnimation(partialTick);
 
-			neck2.xRot = convertDegtoRad(40F) + convertDegtoRad(-43F) * wight.getHidingAnimation(partialTick) - sin * 0.25F;
-			neck2.yRot = 0F + cos * 0.25F;
-			neck2.zRot = 0F + sin * 0.25F;
+				torso3.xRot = convertDegtoRad(7.5F) + convertDegtoRad(9.5F) * wight.getHidingAnimation(partialTick) + sin * 0.25F;
+				torso3.yRot = 0F - cos * 0.25F;
+				torso3.zRot = 0F - sin * 0.25F;
 
-			hood_tip2.xRot = convertDegtoRad(7.5F) + convertDegtoRad(7.5F) * wight.getHidingAnimation(partialTick);
+				arm_left3.xRot = convertDegtoRad(-19.9299F) + convertDegtoRad(-4.9299F) * wight.getHidingAnimation(partialTick) + sin * 0.5F;
+				arm_left3.yRot = convertDegtoRad(1.7082F) + convertDegtoRad(-13.7082F) * wight.getHidingAnimation(partialTick);
+				arm_left3.zRot = convertDegtoRad(0.3001F) + convertDegtoRad(-44.6999F) * wight.getHidingAnimation(partialTick) + cos * 0.25F;
 
-			cloak_s_l3.zRot = -0.0436F - convertDegtoRad(30F) * wight.getHidingAnimation(partialTick) - sin * 0.125F;
-			cloak_s_r3.zRot = 0.0436F + convertDegtoRad(30F) * wight.getHidingAnimation(partialTick) + sin * 0.125F;
+				arm_left4.xRot = convertDegtoRad(-10F) + convertDegtoRad(-60F) * wight.getHidingAnimation(partialTick);
 
-			jaw2.xRot = 0F + convertDegtoRad(30F) * wight.getHidingAnimation(partialTick) - sin * 0.25F;
+				arm_right3.xRot = convertDegtoRad(-19.9299F) + convertDegtoRad(-4.9299F) * wight.getHidingAnimation(partialTick) - sin * 0.75F;
+				arm_right3.yRot = convertDegtoRad(-1.7082F) + convertDegtoRad(13.7082F) * wight.getHidingAnimation(partialTick);
+				arm_right3.zRot = convertDegtoRad(-0.3001F) + convertDegtoRad(44.6999F) * wight.getHidingAnimation(partialTick) - cos * 0.5F;
 
-		} else {
+				arm_right4.xRot = convertDegtoRad(-10F) + convertDegtoRad(-60F) * wight.getHidingAnimation(partialTick);
+
+				leg_left3.xRot = -0.4333F - sin;
+				leg_left3.yRot = convertDegtoRad(-5.4196F) + convertDegtoRad(-7.5804F) * wight.getHidingAnimation(partialTick);
+				leg_left3.zRot = convertDegtoRad(1.3664F) + convertDegtoRad(-18.6336F) * wight.getHidingAnimation(partialTick);
+
+				leg_left4.xRot = 0.6981F + cos * 0.5F;
+				leg_left4.yRot = 0F + convertDegtoRad(5F) * wight.getHidingAnimation(partialTick);
+				leg_left4.zRot = 0F + convertDegtoRad(15F) * wight.getHidingAnimation(partialTick);
+
+				leg_right3.xRot = -0.4333F + sin;
+				leg_right3.yRot = convertDegtoRad(5.4196F) + convertDegtoRad(7.5804F) * wight.getHidingAnimation(partialTick);
+				leg_right3.zRot = convertDegtoRad(-1.3664F) + convertDegtoRad(18.6336F) * wight.getHidingAnimation(partialTick);
+
+				leg_right4.xRot = 0.6981F - cos * 0.5F;
+				leg_right4.yRot = 0F + convertDegtoRad(-5F) * wight.getHidingAnimation(partialTick);
+				leg_right4.zRot = 0F + convertDegtoRad(-15F) * wight.getHidingAnimation(partialTick);
+
+				neck2.xRot = convertDegtoRad(40F) + convertDegtoRad(-43F) * wight.getHidingAnimation(partialTick) - sin * 0.25F;
+				neck2.yRot = 0F + cos * 0.25F;
+				neck2.zRot = 0F + sin * 0.25F;
+
+				hood_tip2.xRot = convertDegtoRad(7.5F) + convertDegtoRad(7.5F) * wight.getHidingAnimation(partialTick);
+
+				cloak_s_l3.zRot = -0.0436F - convertDegtoRad(30F) * wight.getHidingAnimation(partialTick) - sin * 0.125F;
+				cloak_s_r3.zRot = 0.0436F + convertDegtoRad(30F) * wight.getHidingAnimation(partialTick) + sin * 0.125F;
+
+				jaw2.xRot = 0F + convertDegtoRad(30F) * wight.getHidingAnimation(partialTick) - sin * 0.25F;
+			}
+		}
+		else {
 			neck2.xRot = convertDegtoRad(40F);
 			neck2.yRot = 0F;
 			neck2.zRot = 0F;

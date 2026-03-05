@@ -36,8 +36,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.SpikeParticle;
@@ -252,6 +255,8 @@ public class BoneShaman extends FlyingMonster {
 					if (entity instanceof Wight wight) {
 						wight.load(wightNBT);
 						wight.setHiding(false);
+						wight.setDoHeroLanding(true);
+						wight.setHeroLandingFallHeight(findDistanceToGround(this));
 						if(getTarget() != null)
 							wight.setTarget(getTarget());
 					}
@@ -261,6 +266,15 @@ public class BoneShaman extends FlyingMonster {
 				remove(RemovalReason.DISCARDED);
 			}
 		}
+	}
+
+	private float findDistanceToGround(Entity entity) {
+	    Level level = entity.level();
+	    Vec3 pos = entity.position();
+	    BlockHitResult result = level.clip(new ClipContext(pos, pos.add(0, -10, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+	    if (result.getType() == HitResult.Type.BLOCK)
+	        return (float) (pos.y - result.getBlockPos().getY());
+	    return 10.0F;
 	}
 
 	public void stepSummoning() {
