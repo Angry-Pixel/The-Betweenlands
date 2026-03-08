@@ -13,9 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.common.component.entity.RingOfSummoningEntityData;
 import thebetweenlands.common.component.entity.equipment.EquipmentData;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
@@ -35,25 +33,15 @@ public class RingOfSummoningItem extends RingItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> component, TooltipFlag flag) {
-		component.add(Component.translatable(("tooltip.bl.ring.summoning.bonus"), 0));
-		if (flag.hasShiftDown()) {
-			component.add(Component.translatable(("tooltip.bl.ring.summoning"), BetweenlandsKeybinds.RADIAL_MENU.getKey().getDisplayName(), BetweenlandsKeybinds.USE_RING.getDisplayName(), BetweenlandsKeybinds.USE_SECONDARY_RING.getDisplayName(), 1));
-		} else {
-			component.add(Component.translatable("tooltip.bl.press.shift"));
-		}
-	}
-
-	@Override
 	MutableComponent getUsageTooltip() {
 		return Component.empty();
 	}
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, Container inventory) {
-		if(!entity.level().isClientSide() && entity instanceof Player player) {
+		if (!entity.level().isClientSide() && entity instanceof Player player) {
 			RingOfSummoningEntityData cap = player.getData(AttachmentRegistry.RING_OF_SUMMONING_ENTITY_DATA);
-			if (cap != null && stack.has(DataComponentRegistry.RING_ACTIVE)) {
+			if (stack.has(DataComponentRegistry.RING_ACTIVE)) {
 
 				if (cap.getCooldownTicks() > 0) {
 					cap.setCooldownTicks(player, cap.getCooldownTicks() - 1);
@@ -70,7 +58,7 @@ public class RingOfSummoningItem extends RingItem {
 							int arms = player.level().getEntitiesOfClass(MummyArm.class, player.getBoundingBox().inflate(18), e -> e.distanceTo(player) <= 18.0D).size();
 
 							if (arms < MAX_ARMS) {
-								List<LivingEntity> targets = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(16), e -> e instanceof LivingEntity && e.distanceTo(player) <= 16.0D && e != player && (e instanceof Mob));
+								List<LivingEntity> targets = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(16), e -> e instanceof LivingEntity && e.distanceTo(player) <= 16.0D && (e instanceof Mob));
 
 								BlockPos targetPos = null;
 
@@ -123,13 +111,11 @@ public class RingOfSummoningItem extends RingItem {
 		EquipmentData data = entity.getData(AttachmentRegistry.EQUIPMENT);
 		Container inv = data.getContainer(entity, EquipmentInventoryType.RING);
 		boolean hasRing = false;
-		if(data != null) {
-			for(int i = 0; i < inv.getContainerSize(); i++) {
-				ItemStack stack = inv.getItem(i);
-				if(!stack.isEmpty() && stack.is(ItemRegistry.RING_OF_SUMMONING)/* && ((RingItem) stack.getItem()).canBeUsed(stack)*/) {
-					hasRing = true;
-					break;
-				}
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack stack = inv.getItem(i);
+			if (!stack.isEmpty() && stack.is(ItemRegistry.RING_OF_SUMMONING)/* && ((RingItem) stack.getItem()).canBeUsed(stack)*/) {
+				hasRing = true;
+				break;
 			}
 		}
 		return hasRing;
@@ -138,15 +124,13 @@ public class RingOfSummoningItem extends RingItem {
 	@Override
 	public void onKeybindState(Player player, ItemStack stack, Container inventory, boolean active) {
 		RingOfSummoningEntityData cap = player.getData(AttachmentRegistry.RING_OF_SUMMONING_ENTITY_DATA);
-		if (cap != null) {
-			if(!active && cap.isActive()) {
-				cap.setActive(player, false);
-				cap.setCooldownTicks(player, RingOfSummoningItem.USE_COOLDOWN);
-			} else if(active && !cap.isActive() && cap.getCooldownTicks() <= 0 && RingOfSummoningItem.isRingActive(player)) {
-				cap.setActive(player, true);
-				cap.setActiveTicks(player, 0);
-				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundRegistry.PEAT_MUMMY_CHARGE.get(), SoundSource.PLAYERS, 0.4F, (player.level().getRandom().nextFloat() * 0.4F + 0.8F) * 0.8F);
-			}
+		if (!active && cap.isActive()) {
+			cap.setActive(player, false);
+			cap.setCooldownTicks(player, RingOfSummoningItem.USE_COOLDOWN);
+		} else if (active && !cap.isActive() && cap.getCooldownTicks() <= 0 && RingOfSummoningItem.isRingActive(player)) {
+			cap.setActive(player, true);
+			cap.setActiveTicks(player, 0);
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundRegistry.PEAT_MUMMY_CHARGE.get(), SoundSource.PLAYERS, 0.4F, (player.level().getRandom().nextFloat() * 0.4F + 0.8F) * 0.8F);
 		}
 	}
 }
