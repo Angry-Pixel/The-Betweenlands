@@ -1,4 +1,4 @@
-package thebetweenlands.client.item.armor.extension;
+package thebetweenlands.client.extensions.item.armor;
 
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;

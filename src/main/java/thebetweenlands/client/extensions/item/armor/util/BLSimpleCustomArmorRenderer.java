@@ -1,4 +1,4 @@
-package thebetweenlands.client.item.armor.extension.util;
+package thebetweenlands.client.extensions.item.armor.util;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.packs.resources.ResourceManager;

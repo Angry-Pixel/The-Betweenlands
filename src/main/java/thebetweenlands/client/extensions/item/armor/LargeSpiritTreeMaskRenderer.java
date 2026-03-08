@@ -1,4 +1,4 @@
-package thebetweenlands.client.item.armor.extension;
+package thebetweenlands.client.extensions.item.armor;
 
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.item.armor.extension.util.SimpleArmorModelCache;
+import thebetweenlands.client.extensions.item.armor.util.SimpleArmorModelCache;
 import thebetweenlands.common.TheBetweenlands;
 
 public class LargeSpiritTreeMaskRenderer extends MaskRenderer implements ResourceManagerReloadListener {

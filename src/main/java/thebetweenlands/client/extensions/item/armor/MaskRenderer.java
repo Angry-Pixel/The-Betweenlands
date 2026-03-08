@@ -1,4 +1,4 @@
-package thebetweenlands.client.item.armor.extension;
+package thebetweenlands.client.extensions.item.armor;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;

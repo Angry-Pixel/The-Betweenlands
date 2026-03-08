@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-11T14:17:15.562279245	Item Models: thebetweenlands
+// 1.21.1	2026-03-08T06:33:49.315571964	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -47,8 +47,10 @@ c2a7eeb16fc413a2beceedaad65dde4706242c68 assets/thebetweenlands/models/item/anad
 50edf41cbf49d0c28306e4dd3436ebbf049daf67 assets/thebetweenlands/models/item/anadia_scales.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/anadia_spawn_egg.json
 c23b608925b9a059092b6c28d76cca095fba37c4 assets/thebetweenlands/models/item/anadia_swim_bladder.json
+53821de0e325cd6fead01c6d7cbeb16d4ce50e40 assets/thebetweenlands/models/item/ancient_battleaxe.json
 837d7020d3dc4a915047e9dd40fcfa0c6e4c2356 assets/thebetweenlands/models/item/ancient_boots.json
 adae83c4ab9b17891a1c3a6127bc41cf56e8cea0 assets/thebetweenlands/models/item/ancient_chestplate.json
+7a5d7f53613d023124fb023234d30cfbe57bb487 assets/thebetweenlands/models/item/ancient_greatsword.json
 4d5b928ad917fd2fc844e127639fc1b30020285d assets/thebetweenlands/models/item/ancient_helmet.json
 7d24344be26cb71b9fd823135312398f0dfd5ee1 assets/thebetweenlands/models/item/ancient_leggings.json
 6c224c0cf26a770a4299385264f4ba77a94707e4 assets/thebetweenlands/models/item/ancient_remnant.json
@@ -594,7 +596,7 @@ f93e02bcf3e153d1f4279afbc5db66347651581f assets/thebetweenlands/models/item/urch
 4777877653275bcce1ee075a9e7c89bab657ee41 assets/thebetweenlands/models/item/valonite_axe.json
 9337bd4de65af7ee059a7f89a7ea5f3b63830b97 assets/thebetweenlands/models/item/valonite_boots.json
 3841cff23c9820e80ca9f67f5b880a95f713293d assets/thebetweenlands/models/item/valonite_chestplate.json
-3687cd6e78727720d542192067e6070cd3985673 assets/thebetweenlands/models/item/valonite_greataxe.json
+654e77106531436158dc5734d58b7025d91b1cc6 assets/thebetweenlands/models/item/valonite_greataxe.json
 6d4120000abc0f3ab1394c1e442b7d7e5627e385 assets/thebetweenlands/models/item/valonite_helmet.json
 df2120088eaa536d18c95c1eaf4ed1d29d0a620b assets/thebetweenlands/models/item/valonite_leggings.json
 5fa3e3f54329fcc6a9d824472df116b0eded5505 assets/thebetweenlands/models/item/valonite_pickaxe.json

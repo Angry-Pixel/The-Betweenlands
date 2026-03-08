@@ -22,21 +22,7 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
-import thebetweenlands.common.component.item.AmphibiousUpgrades;
-import thebetweenlands.common.component.item.AmuletData;
-import thebetweenlands.common.component.item.AspectContents;
-import thebetweenlands.common.component.item.ChirobarbErrupterData;
-import thebetweenlands.common.component.item.CorrosionData;
-import thebetweenlands.common.component.item.DiscoveryContainerData;
-import thebetweenlands.common.component.item.ElixirContents;
-import thebetweenlands.common.component.item.FishBaitStats;
-import thebetweenlands.common.component.item.GemSingerTarget;
-import thebetweenlands.common.component.item.InfusionBucketData;
-import thebetweenlands.common.component.item.OriginalItemData;
-import thebetweenlands.common.component.item.RenamableData;
-import thebetweenlands.common.component.item.ShieldSpitData;
-import thebetweenlands.common.component.item.ShockwaveSwordData;
-import thebetweenlands.common.component.item.UpgradeDamage;
+import thebetweenlands.common.component.item.*;
 
 public class DataComponentRegistry {
 
@@ -66,6 +52,7 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ShockwaveSwordData>> SHOCKWAVE_DATA = COMPONENTS.register("shockwave_data", () -> DataComponentType.<ShockwaveSwordData>builder().persistent(ShockwaveSwordData.CODEC).networkSynchronized(ShockwaveSwordData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SimpleFluidContent>> STORED_FLUID = COMPONENTS.register("stored_fluid", () -> DataComponentType.<SimpleFluidContent>builder().persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemAttributeModifiers>> STORED_BROKEN_ATTRIBUTES = COMPONENTS.register("stored_broken_attributes", () -> DataComponentType.<ItemAttributeModifiers>builder().persistent(ItemAttributeModifiers.CODEC).networkSynchronized(ItemAttributeModifiers.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SwingData>> SWING_DATA = COMPONENTS.register("swing_data", () -> DataComponentType.<SwingData>builder().persistent(SwingData.CODEC).networkSynchronized(SwingData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<GlobalPos>> TALISMAN_LINK = COMPONENTS.register("talisman_link", () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> THROWING = COMPONENTS.register("throwing", () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WALK_TICKS = COMPONENTS.register("walk_ticks", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());

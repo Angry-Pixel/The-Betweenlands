@@ -109,15 +109,7 @@ import thebetweenlands.common.network.clientbound.UpdateBetweenlandsBossBarPacke
 import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
 import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
 import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
-import thebetweenlands.common.network.serverbound.ChiromawDoubleJumpPacket;
-import thebetweenlands.common.network.serverbound.ChopFishPacket;
-import thebetweenlands.common.network.serverbound.EquipItemPacket;
-import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
-import thebetweenlands.common.network.serverbound.OpenPouchPacket;
-import thebetweenlands.common.network.serverbound.RenameItemPacket;
-import thebetweenlands.common.network.serverbound.SetGalleryUrlPacket;
-import thebetweenlands.common.network.serverbound.SetLastPageDataPacket;
-import thebetweenlands.common.network.serverbound.UpdateRingStatePacket;
+import thebetweenlands.common.network.serverbound.*;
 import thebetweenlands.common.registries.AttributeRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -322,8 +314,8 @@ public class CommonRegistrationEvents {
 
 		registrar.playToServer(ChiromawDoubleJumpPacket.TYPE, ChiromawDoubleJumpPacket.STREAM_CODEC, ChiromawDoubleJumpPacket::handle);
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
-		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, ExtendedReachAttackPacket::handle);
 		registrar.playToServer(EquipItemPacket.TYPE, EquipItemPacket.STREAM_CODEC, EquipItemPacket::handle);
+		registrar.playToServer(HandleSwingPacket.TYPE, HandleSwingPacket.STREAM_CODEC, HandleSwingPacket::handle);
 		registrar.playToServer(OpenPouchPacket.TYPE, OpenPouchPacket.STREAM_CODEC, OpenPouchPacket::handle);
 		registrar.playToServer(RenameItemPacket.TYPE, RenameItemPacket.STREAM_CODEC, RenameItemPacket::handle);
 		registrar.playToServer(SetGalleryUrlPacket.TYPE, SetGalleryUrlPacket.STREAM_CODEC, SetGalleryUrlPacket::handle);

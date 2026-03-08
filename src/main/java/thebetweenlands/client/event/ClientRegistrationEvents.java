@@ -57,6 +57,9 @@ import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.client.BetweenlandsSpecialEffects;
 import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
+import thebetweenlands.client.extensions.effect.ElixirEffectExtension;
+import thebetweenlands.client.extensions.effect.InvisibleEffectRegistration;
+import thebetweenlands.client.extensions.item.BigSwingExtension;
 import thebetweenlands.client.gui.overlay.AprilFoolsOverlay;
 import thebetweenlands.client.gui.overlay.CircleGemItemOverlay;
 import thebetweenlands.client.gui.overlay.CorrosiveBootsOverlay;
@@ -79,14 +82,14 @@ import thebetweenlands.client.gui.screen.SilkBundleScreen;
 import thebetweenlands.client.gui.screen.SmokingRackScreen;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
-import thebetweenlands.client.item.armor.extension.AmphibiousArmorRenderer;
-import thebetweenlands.client.item.armor.extension.BoneArmorRenderer;
-import thebetweenlands.client.item.armor.extension.ExplorersHatRenderer;
-import thebetweenlands.client.item.armor.extension.LargeSpiritTreeMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SilkMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SkullMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SmallSpiritTreeMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SyrmoriteArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.AmphibiousArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.BoneArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.ExplorersHatRenderer;
+import thebetweenlands.client.extensions.item.armor.LargeSpiritTreeMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SilkMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SkullMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SmallSpiritTreeMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SyrmoriteArmorRenderer;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
 import thebetweenlands.client.model.armor.BoneArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
@@ -1011,6 +1014,8 @@ public class ClientRegistrationEvents {
 			ItemRegistry.DRAETON.get(), ItemRegistry.DRAETON_ANCHOR_UPGRADE.get(), ItemRegistry.DRAETON_CRAFTING_UPGRADE.get(), ItemRegistry.DRAETON_FURNACE_UPGRADE.get(),
 			ItemRegistry.WEEDWOOD_ROWBOAT.get(), ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE.get());
 
+		event.registerItem(BigSwingExtension.INSTANCE, ItemRegistry.VALONITE_GREATAXE.get(), ItemRegistry.ANCIENT_BATTLEAXE.get(), ItemRegistry.ANCIENT_GREATSWORD.get());
+
 		event.registerItem(AmphibiousArmorRenderer.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
 			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
@@ -1027,53 +1032,11 @@ public class ClientRegistrationEvents {
 		event.registerItem(SmallSpiritTreeMaskRenderer.INSTANCE, ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
 		event.registerItem(LargeSpiritTreeMaskRenderer.INSTANCE, ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
 
-		event.registerMobEffect(new IClientMobEffectExtensions() {
-			@Override
-			public boolean isVisibleInInventory(MobEffectInstance instance) {
-				return false;
-			}
-
-			@Override
-			public boolean isVisibleInGui(MobEffectInstance instance) {
-				return false;
-			}
-		}, MobEffectRegistry.ENLIGHTENED.get(), MobEffectRegistry.ROOT_BOUND.get());
+		event.registerMobEffect(InvisibleEffectRegistration.INSTANCE, MobEffectRegistry.ENLIGHTENED.get(), MobEffectRegistry.ROOT_BOUND.get());
 
 		for (DeferredHolder<MobEffect, ?> effect : MobEffectRegistry.EFFECTS.getEntries().stream().filter(holder -> holder.get() instanceof ElixirEffect.ElixirPotionEffect).toList()) {
 			ElixirEffect.ElixirPotionEffect potEffect = (ElixirEffect.ElixirPotionEffect) effect.get();
-			event.registerMobEffect(new IClientMobEffectExtensions() {
-				@Override
-				public boolean isVisibleInInventory(MobEffectInstance instance) {
-					return potEffect.getIcon() != null;
-				}
-
-				@Override
-				public boolean isVisibleInGui(MobEffectInstance instance) {
-					return potEffect.getIcon() != null;
-				}
-
-				@Override
-				public boolean renderInventoryIcon(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
-					if (potEffect.getIcon() != null) {
-						RenderSystem.enableBlend();
-						graphics.blit(potEffect.getIcon(), x + 1, y + 7, 0, 0, 0, 16, 16, 16, 16);
-					}
-					return true;
-				}
-
-				@Override
-				public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
-					return true;
-				}
-
-				@Override
-				public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
-					if (potEffect.getIcon() != null) {
-						graphics.blit(potEffect.getIcon(), x + 4, y + 4, 0, 0, 0, 16, 16, 16, 16);
-					}
-					return true;
-				}
-			}, potEffect);
+			event.registerMobEffect(new ElixirEffectExtension(potEffect), potEffect);
 		}
 
 		event.registerFluidType(new SwampWaterFluidType(), FluidTypeRegistry.SWAMP_WATER.get());

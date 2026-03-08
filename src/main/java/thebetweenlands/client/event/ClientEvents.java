@@ -43,6 +43,7 @@ public class ClientEvents {
 		AmbienceHandler.init();
 		BossHandler.init();
 		CameraPositionHandler.INSTANCE.init();
+		ClientSwingHandler.init();
 		ElixirClientHandler.init();
 		EquipmentRenderingHandler.init();
 		ItemTooltipHandler.init();
@@ -73,6 +74,8 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(FogHandler::onClientTick);
 		NeoForge.EVENT_BUS.addListener(FogHandler::onFogColor);
 		NeoForge.EVENT_BUS.addListener(FogHandler::updateFog);
+
+		NeoForge.EVENT_BUS.addListener(ArmSwingSpeedHandler::fireArmSwingEvent);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {
