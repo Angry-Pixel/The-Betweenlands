@@ -1480,6 +1480,8 @@
   "item.thebetweenlands.champagne_dye_bucket": "Champagne Dye Bucket",
   "item.thebetweenlands.champagne_item_frame": "Champagne Item Frame",
   "item.thebetweenlands.chirobarb_erupter": "Chirobarb Erupter",
+  "item.thebetweenlands.chirobarb_erupter.cooldown": "Has a 3 second cooldown.",
+  "item.thebetweenlands.chirobarb_erupter.desc": "Right-click to fire 360 degree volley of barbs.",
   "item.thebetweenlands.chirobarb_shock_erupter": "Chirobarb Shock Erupter",
   "item.thebetweenlands.chiromaw_barb": "Chiromaw Barb",
   "item.thebetweenlands.chiromaw_greebling_rider_spawn_egg": "Greebling Rider Spawn Egg",

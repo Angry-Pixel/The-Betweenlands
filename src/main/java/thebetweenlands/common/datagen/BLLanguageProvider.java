@@ -1654,6 +1654,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.VOODOO_DOLL, "Voodoo Doll");
 		this.addItem(ItemRegistry.SWIFT_PICK, "Swift Pick");
 		this.addItem(ItemRegistry.CHIROBARB_ERUPTER, "Chirobarb Erupter");
+		this.add("item.thebetweenlands.chirobarb_erupter.desc", "Right-click to fire 360 degree volley of barbs.");
+		this.add("item.thebetweenlands.chirobarb_erupter.cooldown", "Has a 3 second cooldown.");
 		this.addItem(ItemRegistry.CHIROBARB_SHOCK_ERUPTER, "Chirobarb Shock Erupter");
 		this.addItem(ItemRegistry.MIST_STAFF, "Staff of the Mist Walker");
 		this.addItem(ItemRegistry.SHADOW_STAFF, "Staff of the Shadow Walker");
