@@ -23,13 +23,13 @@ public class AnimatorMenu extends AbstractContainerMenu {
 	private final ContainerData data;
 
 	public AnimatorMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(6));
+		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(7));
 	}
 
 	public AnimatorMenu(int containerId, Inventory playerInventory, AnimatorBlockEntity animator, ContainerData data) {
 		super(MenuRegistry.ANIMATOR.get(), containerId);
 		checkContainerSize(animator, 3);
-		checkContainerDataCount(data, 6);
+		checkContainerDataCount(data, 7);
 		animator.startOpen(playerInventory.player);
 		this.animator = animator;
 		this.data = data;
@@ -56,19 +56,23 @@ public class AnimatorMenu extends AbstractContainerMenu {
 	}
 
 	public float getCrystalLife() {
-		return this.data.get(1);
+		return this.data.get(2);
 	}
 
 	public int getLifeCount() {
-		return this.data.get(5);
+		return this.data.get(6);
 	}
 
 	public int getFuelProgress() {
 		return this.data.get(0);
 	}
 
+	public int getFuelDuration() {
+		return Math.max(this.data.get(1), 1);
+	}
+
 	public double getBurnProgress() {
-		return (this.data.get(3) + (this.getFuelProgress() / 42.0D)) / (double) this.data.get(4);
+		return (this.data.get(4) + (this.getFuelProgress() / (double)this.getFuelDuration())) / (double) this.data.get(5);
 	}
 	
 	@Override

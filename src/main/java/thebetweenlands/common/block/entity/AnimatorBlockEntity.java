@@ -61,8 +61,6 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	private static final int[] SLOTS_FOR_VERTICAL = new int[] {FOCAL_SLOT};
 	private static final int[] SLOTS_FOR_HORIZONTAL = new int[] {LIFE_CRYSTAL_SLOT, FUEL_SLOT};
 	
-	private static final int FUEL_BURN_TICKS = 42;
-	
 	// If a recipe finished and the focal slot now contains the output items for it
 	// Once all the output items have been extracted, this is set back to false
 	public boolean hasOutputItems = false;
@@ -70,13 +68,13 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	// If we have a valid animator recipe that we could use
 	public boolean hasRecipe = false;
 	public ItemStack itemToAnimate = ItemStack.EMPTY;
+	public int fuelBurnDuration;
 	public int fuelBurnProgress;
 	public int lifeCrystalLife;
 	public int fuelConsumed = 0;
 	public int requiredFuelCount = 32;
 	public int requiredLifeCount = 32;
 	public boolean itemAnimated = false; // TODO try to remove in favour of hasOutputItems
-	private ItemStack prevItem = ItemStack.EMPTY;
 
 	public float oRot;
 	public float rot;
@@ -89,11 +87,12 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		public int get(int index) {
 			return switch (index) {
 				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress;
-				case 1 -> AnimatorBlockEntity.this.lifeCrystalLife;
-				case 2 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
-				case 3 -> AnimatorBlockEntity.this.fuelConsumed;
-				case 4 -> AnimatorBlockEntity.this.requiredFuelCount;
-				case 5 -> AnimatorBlockEntity.this.requiredLifeCount;
+				case 1 -> AnimatorBlockEntity.this.fuelBurnDuration;
+				case 2 -> AnimatorBlockEntity.this.lifeCrystalLife;
+				case 3 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
+				case 4 -> AnimatorBlockEntity.this.fuelConsumed;
+				case 5 -> AnimatorBlockEntity.this.requiredFuelCount;
+				case 6 -> AnimatorBlockEntity.this.requiredLifeCount;
 				default -> 0;
 			};
 		}
@@ -101,16 +100,17 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		public void set(int index, int value) {
 			switch (index) {
 				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress = value;
-				case 1 -> AnimatorBlockEntity.this.lifeCrystalLife = value;
-				case 2 -> AnimatorBlockEntity.this.itemAnimated = value == 1;
-				case 3 -> AnimatorBlockEntity.this.fuelConsumed = value;
-				case 4 -> AnimatorBlockEntity.this.requiredFuelCount = value;
-				case 5 -> AnimatorBlockEntity.this.requiredLifeCount = value;
+				case 1 -> AnimatorBlockEntity.this.fuelBurnDuration = value;
+				case 2 -> AnimatorBlockEntity.this.lifeCrystalLife = value;
+				case 3 -> AnimatorBlockEntity.this.itemAnimated = value == 1;
+				case 4 -> AnimatorBlockEntity.this.fuelConsumed = value;
+				case 5 -> AnimatorBlockEntity.this.requiredFuelCount = value;
+				case 6 -> AnimatorBlockEntity.this.requiredLifeCount = value;
 			}
 		}
 
 		public int getCount() {
-			return 6;
+			return 7;
 		}
 	};
 
@@ -200,14 +200,6 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		}
 	}
 	
-	public boolean hasFocalItemChanged() {
-		ItemStack focalItem = this.getItem(FOCAL_SLOT);
-		return focalItem != this.prevItem && (
-				this.prevItem.getCount() != focalItem.getCount() ||
-				!ItemStack.isSameItemSameComponents(this.prevItem, focalItem)
-			);
-	}
-	
 	/**
 	 * Updates the current animator recipe based on the focal item
 	 * 
@@ -232,15 +224,23 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			this.hasRecipe = false;
 			return hadRecipe;
 		}
-		
+
 		ItemStack previousItem = this.itemToAnimate;
+		boolean focalItemChanged = (
+			previousItem.isEmpty() ||
+			previousItem.getCount() != focalItem.getCount() |
+			!ItemStack.isSameItemSameComponents(focalItem, previousItem)
+		);
+
+		if(focalItemChanged) {
+			this.itemToAnimate = focalItem.copy();
+		}
 		
-		this.itemToAnimate = focalItem;
+		this.hasRecipe = true;
 		this.requiredFuelCount = recipe.value().getRequiredFuel(recipeInput);
 		this.requiredLifeCount = recipe.value().getRequiredLife(recipeInput);
-		this.hasRecipe = true;
 		
-		return !hadRecipe || (focalItem != previousItem && !ItemStack.isSameItemSameComponents(focalItem, previousItem));
+		return !hadRecipe || focalItemChanged;
 	}
 	
 	public boolean resetCraftingProgress() {
@@ -253,10 +253,18 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		return changed;
 	}
 	
+	public void updateRunning() {
+		boolean shouldBeRunning = this.hasRecipe && this.isCrystalInSlot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && this.lifeCrystalLife >= this.requiredLifeCount;
+		if (this.running != shouldBeRunning) {
+			this.running = shouldBeRunning;
+			this.setChanged();
+		}
+	}
+	
 	public boolean burnFuel() {
 		if(this.fuelConsumed < this.requiredFuelCount) {
 			this.fuelBurnProgress++;
-			if (this.fuelBurnProgress >= FUEL_BURN_TICKS) {
+			if (this.fuelBurnProgress >= this.fuelBurnDuration) {
 				this.fuelBurnProgress = 0;
 				this.getItem(FUEL_SLOT).shrink(1);
 				this.fuelConsumed++;
@@ -319,21 +327,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	public void tickCrafting(Level level, BlockPos pos, BlockState state) {
 		boolean changed = false;
 		
-		// Check if the item we're animating has changed since last tick
-		boolean focalItemChanged = this.hasFocalItemChanged();
-		if(focalItemChanged) {
-			this.prevItem = this.getItem(FOCAL_SLOT).copy();
-			changed = true;
-		}
-		
-		// Check if the recipe has changed
+		// Check if the recipe has changed or if the item we're animating has changed since last tick
 		// (Also is a partial check for if the item we're animated has changed, TODO see if the two checks can be merged)
 		boolean recipeChanged = this.updateRecipe(level);
 		changed = changed || recipeChanged; // Avoid short circuits
 		
-		if(recipeChanged || focalItemChanged) {
-			// Reset recipe progress?
-			// TODO Check with team to see if progress not resetting when you swap the focal item is intentional or a bug
+		if(recipeChanged) {
+			// Reset crafting progress if the recipe changed
+			this.resetCraftingProgress();
 		}
 		
 		if(
@@ -361,11 +362,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			}
 		}
 		
-		boolean shouldBeRunning = this.hasRecipe && this.isCrystalInSlot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && this.lifeCrystalLife >= this.requiredLifeCount;
-		if (this.running != shouldBeRunning) {
-			this.running = shouldBeRunning;
-			changed = true;
-		}
+		this.updateRunning();
 		
 		if(changed) {
 			this.setChanged();
