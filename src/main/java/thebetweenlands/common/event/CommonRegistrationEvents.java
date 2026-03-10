@@ -50,12 +50,16 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.api.capability.BLCapabilities;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.util.ItemHandlerProvidingBlockEntity;
 import thebetweenlands.common.capability.AnimatorWrapper;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
+import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
+import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.ChargeType;
+import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.DrainType;
 import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.EventCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
@@ -376,5 +380,8 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 
 		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
+
+		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING_IF_UNBREAKABLE, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, false), ItemRegistry.LIFE_CRYSTAL);
+		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, true), ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
 	}
 }

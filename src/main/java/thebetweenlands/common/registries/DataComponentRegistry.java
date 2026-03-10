@@ -65,6 +65,9 @@ public class DataComponentRegistry {
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<RenamableData>> RENAMABLE = COMPONENTS.register("renamable", () -> DataComponentType.<RenamableData>builder().persistent(RenamableData.CODEC).networkSynchronized(RenamableData.STREAM_CODEC).build());
 
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> LIFE_POWER = COMPONENTS.register("life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_LIFE_POWER = COMPONENTS.register("max_life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	
 	// Transient Component
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_ITEM_UUID = COMPONENTS.register("inventory_item_uuid", () -> DataComponentType.<UUID>builder().networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 }
