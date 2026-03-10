@@ -70,8 +70,6 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 					}
 					animator.fuelConsumed = 0;
 				}
-				animator.itemToAnimate = ItemStack.EMPTY;
-				animator.itemAnimated = false;
 			}
 			return InteractionResult.CONSUME;
 		}

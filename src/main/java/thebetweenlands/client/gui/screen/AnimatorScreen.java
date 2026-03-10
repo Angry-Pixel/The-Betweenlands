@@ -1,11 +1,13 @@
 package thebetweenlands.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.TheBetweenlands;
@@ -54,7 +56,7 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 
 			if (this.getMenu().getAnimator().hasValidFocalItem(Minecraft.getInstance().level)) {
 				//Required life crystal bar
-				int requiredLifeCrystal = this.getMenu().getLifeCount() / 3;
+				int requiredLifeCrystal = this.getMenu().getRecipeLifeRequired() / 3;
 				RenderSystem.enableBlend();
 				RenderSystem.setShaderColor(1.0F, 0.1F, 0.1F, 0.35F + (float) (Math.cos((this.updateTicks + partialTick) / 10.0F) + 1.0F) / 2.0F * 0.65F);
 				graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, lifeCrystalCount, this.leftPos + 39, this.topPos + 8 + lifeCrystalCount, 6, requiredLifeCrystal);
@@ -70,10 +72,11 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 
 		//Fuel bar
 		if (this.getMenu().getSlot(2).hasItem()) {
-			int fuelBurnProgress = this.getMenu().getFuelProgress();
+			float fuelBurnPercentage = this.getMenu().getFuelBurnPercentage();
+			int fuelBurnProgress = Mth.floor(fuelBurnPercentage * 42);
 			graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, fuelBurnProgress, this.leftPos + 129, this.topPos + 8 + fuelBurnProgress, 6, 40 - fuelBurnProgress);
 
-			double relTotalProgress = this.getMenu().getBurnProgress();
+			float relTotalProgress = this.getMenu().getTotalBurnProgress();
 
 			if (relTotalProgress <= 0.66D) {
 				int barWidth = (int) (relTotalProgress / 0.66D * 32);

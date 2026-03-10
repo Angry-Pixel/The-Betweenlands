@@ -94,12 +94,13 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			return switch (index) {
 				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress;
 				case 1 -> AnimatorBlockEntity.this.fuelBurnDuration;
-				case 2 -> AnimatorBlockEntity.this.lifeCrystalLife;
-				case 3 -> AnimatorBlockEntity.this.lifeCrystalMaxLife;
-				case 4 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
-				case 5 -> AnimatorBlockEntity.this.fuelConsumed;
-				case 6 -> AnimatorBlockEntity.this.requiredFuelCount;
-				case 7 -> AnimatorBlockEntity.this.requiredLifeCount;
+				case 2 -> AnimatorBlockEntity.this.fuelValue;
+				case 3 -> AnimatorBlockEntity.this.lifeCrystalLife;
+				case 4 -> AnimatorBlockEntity.this.lifeCrystalMaxLife;
+				case 5 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
+				case 6 -> AnimatorBlockEntity.this.fuelConsumed;
+				case 7 -> AnimatorBlockEntity.this.requiredFuelCount;
+				case 8 -> AnimatorBlockEntity.this.requiredLifeCount;
 				default -> 0;
 			};
 		}
@@ -108,17 +109,18 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			switch (index) {
 				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress = value;
 				case 1 -> AnimatorBlockEntity.this.fuelBurnDuration = value;
-				case 2 -> AnimatorBlockEntity.this.lifeCrystalLife = value;
-				case 3 -> AnimatorBlockEntity.this.lifeCrystalMaxLife = value;
-				case 4 -> AnimatorBlockEntity.this.itemAnimated = value == 1;
-				case 5 -> AnimatorBlockEntity.this.fuelConsumed = value;
-				case 6 -> AnimatorBlockEntity.this.requiredFuelCount = value;
-				case 7 -> AnimatorBlockEntity.this.requiredLifeCount = value;
+				case 2 -> AnimatorBlockEntity.this.fuelValue = value;
+				case 3 -> AnimatorBlockEntity.this.lifeCrystalLife = value;
+				case 4 -> AnimatorBlockEntity.this.lifeCrystalMaxLife = value;
+				case 5 -> AnimatorBlockEntity.this.itemAnimated = value != 0;
+				case 6 -> AnimatorBlockEntity.this.fuelConsumed = value;
+				case 7 -> AnimatorBlockEntity.this.requiredFuelCount = value;
+				case 8 -> AnimatorBlockEntity.this.requiredLifeCount = value;
 			}
 		}
 
 		public int getCount() {
-			return 8;
+			return 9;
 		}
 	};
 
@@ -334,7 +336,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		ItemStack previousItem = this.itemToAnimate;
 		boolean focalItemChanged = (
 			previousItem.isEmpty() ||
-			previousItem.getCount() != focalItem.getCount() |
+			previousItem.getCount() != focalItem.getCount() ||
 			!ItemStack.isSameItemSameComponents(focalItem, previousItem)
 		);
 
@@ -350,13 +352,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	}
 	
 	public boolean resetCraftingProgress() {
-		// Consider changed whenever one of the fields updates
-		// Maybe, or also maybe not and this is wrong
-		boolean changed = this.fuelBurnProgress != 0 || this.fuelConsumed != 0 || this.running;
-		this.fuelBurnProgress = 0;
-		this.fuelConsumed = 0;
-		this.running = false;
-		return changed;
+		if(this.fuelBurnProgress != 0 || this.fuelConsumed != 0 || this.running) {
+			this.fuelBurnProgress = 0;
+			this.fuelConsumed = 0;
+			this.running = false;
+			this.setChanged();
+			return true;
+		}
+		return false;
 	}
 	
 	public void updateRunning() {
@@ -431,16 +434,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	}
 	
 	public void tickCrafting(Level level, BlockPos pos, BlockState state) {
-		boolean changed = false;
 		
 		// Check if the recipe has changed or if the item we're animating has changed since last tick
-		// (Also is a partial check for if the item we're animated has changed, TODO see if the two checks can be merged)
 		boolean recipeChanged = this.updateRecipe(level);
-		changed = changed || recipeChanged; // Avoid short circuits
 		
 		if(recipeChanged) {
 			// Reset crafting progress if the recipe changed
 			this.resetCraftingProgress();
+			this.setChanged();
 		}
 		
 		if(
@@ -448,17 +449,15 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			|| !this.hasValidLifeCrystal()
 			|| (this.fuelConsumed < this.requiredFuelCount && !this.hasValidFuel())
 		) {
-			if(this.resetCraftingProgress()) {
-				changed = true;
-			}
+			this.resetCraftingProgress();
 		} else {
+			boolean changed = false;
+			
 			// Burn fuel if fuel still needs burning
 			boolean fuelItemBurned = this.burnFuel();
 			if(fuelItemBurned) {
 				this.itemAnimated = false;
 				changed = true;
-//				this.setChanged();
-//				changed = false;
 			}
 			
 			if(this.completeRecipe(level, pos)) {
@@ -466,12 +465,10 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 				this.itemAnimated = true;
 				changed = true;
 			}
-		}
-		
-		this.updateRunning();
-		
-		if(changed) {
-			this.setChanged();
+			
+			if(changed) {
+				this.setChanged();
+			}
 		}
 	}
 
@@ -519,6 +516,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			if(stack.isEmpty() || !ItemStack.isSameItemSameComponents(stack, prevItem)) {
 				this.hasOutputItems = false;
 				this.itemAnimated = false;
+				this.setChanged();
+			}
+		}
+		if(slot == FUEL_SLOT && this.fuelBurnProgress != 0) {
+			// Note: AbstractFurnaceBlockEntity does something very similar
+			if(stack.isEmpty() || !ItemStack.isSameItemSameComponents(stack, prevItem)) {
+				this.fuelBurnProgress = 0;
+				this.updateFuelFields();
 				this.setChanged();
 			}
 		}
@@ -614,7 +619,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
 		tag.putInt("life", this.lifeCrystalLife);
-		tag.putInt("progress", this.fuelBurnProgress);
+		tag.putInt("fuel_burn_progress", this.fuelBurnProgress);
 		tag.putInt("items_consumed", this.fuelConsumed);
 		tag.putBoolean("life_depleted", this.itemAnimated);
 		tag.putBoolean("has_output_items", this.hasOutputItems);
@@ -631,7 +636,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.lifeCrystalLife = tag.getInt("life");
-		this.fuelBurnProgress = tag.getInt("progress");
+		this.fuelBurnProgress = tag.getInt("fuel_burn_progress");
 		this.fuelConsumed = tag.getInt("items_consumed");
 		this.itemAnimated = tag.getBoolean("life_depleted");
 		this.hasOutputItems = tag.getBoolean("has_output_items");

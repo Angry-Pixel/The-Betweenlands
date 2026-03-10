@@ -23,13 +23,13 @@ public class AnimatorMenu extends AbstractContainerMenu {
 	private final ContainerData data;
 
 	public AnimatorMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(8));
+		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(9));
 	}
 
 	public AnimatorMenu(int containerId, Inventory playerInventory, AnimatorBlockEntity animator, ContainerData data) {
 		super(MenuRegistry.ANIMATOR.get(), containerId);
 		checkContainerSize(animator, 3);
-		checkContainerDataCount(data, 8);
+		checkContainerDataCount(data, 9);
 		animator.startOpen(playerInventory.player);
 		this.animator = animator;
 		this.data = data;
@@ -55,28 +55,57 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		return this.animator;
 	}
 
-	public float getCrystalLife() {
-		return this.data.get(2);
-	}
-	
-	public int getCrystalMaxLife() {
-		return Math.max(this.data.get(3), 0);
-	}
-
-	public int getLifeCount() {
-		return this.data.get(7);
-	}
-
-	public int getFuelProgress() {
+	public int getFuelBurnProgress() {
 		return this.data.get(0);
 	}
 
-	public int getFuelDuration() {
-		return Math.max(this.data.get(1), 1);
+	public int getFuelBurnTime() {
+		return this.data.get(1);
 	}
 
-	public double getBurnProgress() {
-		return (this.data.get(5) + (this.getFuelProgress() / (double)this.getFuelDuration())) / (double) this.data.get(6);
+	public int getFuelValue() {
+		return this.data.get(2);
+	}
+
+	public float getCrystalLife() {
+		return Math.max(this.data.get(3), 0);
+	}
+	
+	public int getCrystalMaxLife() {
+		return Math.max(this.data.get(4), 0);
+	}
+	
+	public boolean hasFinishedAnimating() {
+		return this.data.get(5) != 0;
+	}
+
+	public int getFuelConsumed() {
+		return this.data.get(6);
+	}
+
+	public int getRecipeFuelRequired() {
+		return this.data.get(7);
+	}
+
+	public int getRecipeLifeRequired() {
+		return this.data.get(8);
+	}
+
+	public float getFuelBurnPercentage() {
+		return (float)this.getFuelBurnProgress() / (float)this.getFuelBurnTime();
+	}
+	
+	public float getTotalBurnProgress() {
+		int consumedFuel = this.getFuelConsumed();
+		float partiallyConsumedFuel = this.getFuelBurnPercentage() * this.getFuelValue();
+		float totalProgress = consumedFuel + partiallyConsumedFuel;
+
+		int requiredFuel = this.getRecipeFuelRequired();
+		if(totalProgress >= requiredFuel) {
+			return 1.0f;
+		} else {
+			return totalProgress / requiredFuel;
+		}
 	}
 	
 	@Override
