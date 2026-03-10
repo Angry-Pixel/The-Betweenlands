@@ -23,9 +23,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.CapabilityHooks;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -60,6 +62,7 @@ import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.ChargeType;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.DrainType;
+import thebetweenlands.common.capability.lifecrystal.DataLifeCrystalHandler;
 import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.EventCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
@@ -148,6 +151,7 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerPackets);
 		bus.addListener(CommonRegistrationEvents::registerDataMaps);
 		bus.addListener(CommonRegistrationEvents::registerCapabilities);
+		bus.addListener(EventPriority.LOW, CommonRegistrationEvents::registerFallbackCapabilities);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
 
@@ -383,5 +387,12 @@ public class CommonRegistrationEvents {
 
 		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING_IF_UNBREAKABLE, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, false), ItemRegistry.LIFE_CRYSTAL);
 		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, true), ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
+	}
+	
+	private static void registerFallbackCapabilities(RegisterCapabilitiesEvent event) {
+		// NeoForge does the same thing (see net.neoforged.neoforge.capabilities.CapabilityHooks#registerFallbackVanillaProviders)
+		for(Item item : BuiltInRegistries.ITEM) {
+			event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (object, context) -> DataLifeCrystalHandler.createIfValid(object, false), item);
+		}
 	}
 }

@@ -2,6 +2,8 @@ package thebetweenlands.common.capability.lifecrystal;
 
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.api.capability.lifecrystal.ILifeCrystalHandlerModifiable;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -19,13 +21,26 @@ public class DataLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 		this.allowBreaking = allowBreaking;
 	}
 	
-	protected boolean stackHasLifePower() {
-		return this.stack.has(DataComponentRegistry.LIFE_POWER) && this.stack.has(DataComponentRegistry.MAX_LIFE_POWER);
+	@Nullable
+	public static DataLifeCrystalHandler createIfValid(ItemStack stack, boolean allowBreaking) {
+		if(stackIsValid(stack)) {
+			return new DataLifeCrystalHandler(stack, allowBreaking);
+		} else {
+			return null;
+		}
+	}
+	
+	public static boolean stackIsValid(ItemStack stack) {
+		return stack.has(DataComponentRegistry.LIFE_POWER) && stack.has(DataComponentRegistry.MAX_LIFE_POWER);
+	}
+	
+	protected boolean stackIsValid() {
+		return stackIsValid(this.stack);
 	}
 	
 	@Override
 	public int getLifePower() {
-		if(!this.stackHasLifePower()) {
+		if(!this.stackIsValid()) {
 			return 0;
 		}
 		return this.stack.get(DataComponentRegistry.LIFE_POWER);
@@ -33,7 +48,7 @@ public class DataLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 
 	@Override
 	public int getMaxLifePower() {
-		if(!this.stackHasLifePower()) {
+		if(!this.stackIsValid()) {
 			return 0;
 		}
 		return this.stack.get(DataComponentRegistry.MAX_LIFE_POWER);
@@ -42,7 +57,7 @@ public class DataLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 	@Override
 	public int chargeLifePower(int power, boolean simulate) {
 		// Make sure charge and stack is valid
-		if(power <= 0 || this.stack.isEmpty() || !this.stackHasLifePower()) {
+		if(power <= 0 || this.stack.isEmpty() || !this.stackIsValid()) {
 			return power;
 		}
 		
@@ -73,7 +88,7 @@ public class DataLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 	@Override
 	public int drainLifePower(int power, boolean simulate) {
 		// Make sure charge and stack is valid
-		if(power <= 0 || this.stack.isEmpty() || !this.stackHasLifePower()) {
+		if(power <= 0 || this.stack.isEmpty() || !this.stackIsValid()) {
 			return 0;
 		}
 		
@@ -103,7 +118,7 @@ public class DataLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 
 	@Override
 	public void setLifePower(int power) {
-		if(!this.stackHasLifePower()) {
+		if(!this.stackIsValid()) {
 			throw new RuntimeException("Attempt to set life power on a stack that doesn't support it");
 		}
 		int maxPower = this.getMaxLifePower();

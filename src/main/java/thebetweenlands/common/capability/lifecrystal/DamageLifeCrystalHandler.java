@@ -31,8 +31,21 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 		this.allowBreaking = allowBreaking;
 	}
 	
-	protected boolean stackHasDurability() {
-		return this.stack.has(DataComponents.MAX_DAMAGE) && this.stack.has(DataComponents.DAMAGE);
+	@Nullable
+	public static DamageLifeCrystalHandler createIfValid(ItemStack stack, @Nullable Level level, ChargeType chargeType, DrainType drainType, boolean allowBreaking) {
+		if(stackIsValid(stack)) {
+			return new DamageLifeCrystalHandler(stack, level, chargeType, drainType, allowBreaking);
+		} else {
+			return null;
+		}
+	}
+	
+	public static boolean stackIsValid(ItemStack stack) {
+		return stack.has(DataComponents.MAX_DAMAGE) && stack.has(DataComponents.DAMAGE);
+	}
+	
+	protected boolean stackIsValid() {
+		return stackIsValid(this.stack);
 	}
 	
 	protected boolean isUnbreakable() {
@@ -42,7 +55,7 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 	protected void damageStackByAmount(int amount) {
 		// Cannot use hurtAndBreak()
 		// We may need to ignore unbreakable and may need to prevent breaking
-		if(!this.stackHasDurability()) {
+		if(!this.stackIsValid()) {
 			return;
 		}
 		
@@ -65,7 +78,7 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 	
 	@Override
 	public int getLifePower() {
-		if(!this.stackHasDurability()) {
+		if(!this.stackIsValid()) {
 			return 0;
 		}
 		return Math.max(this.stack.getMaxDamage() - this.stack.getDamageValue(), 0);
@@ -73,7 +86,7 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 
 	@Override
 	public int getMaxLifePower() {
-		if(!this.stackHasDurability()) {
+		if(!this.stackIsValid()) {
 			return 0;
 		}
 		return Math.max(this.stack.getMaxDamage(), 0);
@@ -85,7 +98,7 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 			// No negative charging
 			power <= 0 ||
 			// No charging invalid stacks
-			this.stack.isEmpty() || !this.stackHasDurability() ||
+			this.stack.isEmpty() || !this.stackIsValid() ||
 			// Do not allow charging if charging is disabled
 			this.chargeType == ChargeType.NO_CHARGING ||
 			// Do not allow charging if the stack is unbreakable and unbreakable charging is disabled
@@ -116,7 +129,7 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 			// No negative draining
 			power <= 0 ||
 			// No draining from invalid stacks
-			this.stack.isEmpty() || !this.stackHasDurability() ||
+			this.stack.isEmpty() || !this.stackIsValid() ||
 			// Do not allow draining if draining is disabled
 			this.drainType == DrainType.NO_DRAINING ||
 			// Do not allow draining if the stack is unbreakable and unbreakable drain is disabled
@@ -147,7 +160,7 @@ public class DamageLifeCrystalHandler implements ILifeCrystalHandlerModifiable {
 
 	@Override
 	public void setLifePower(int power) {
-		if(!this.stackHasDurability()) {
+		if(!this.stackIsValid()) {
 			throw new RuntimeException("Attempt to set life power on a stack that doesn't support durability");
 		}
 		int maxDamage = this.stack.getMaxDamage();
