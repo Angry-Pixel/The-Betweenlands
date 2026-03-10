@@ -47,12 +47,12 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 		int j = (this.height - this.imageHeight) / 2;
 		graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-		if (this.getMenu().getAnimator().isCrystalInSlot()) {
+		if (this.getMenu().getAnimator().hasValidLifeCrystal()) {
 			//Life crystal bar
 			int lifeCrystalCount = (int) (42 - this.getMenu().getCrystalLife() / 3.0F);
 			graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, lifeCrystalCount, this.leftPos + 39, this.topPos + 8 + lifeCrystalCount, 6, 40 - lifeCrystalCount);
 
-			if (this.getMenu().getAnimator().isValidFocalItem(Minecraft.getInstance().level)) {
+			if (this.getMenu().getAnimator().hasValidFocalItem(Minecraft.getInstance().level)) {
 				//Required life crystal bar
 				int requiredLifeCrystal = this.getMenu().getLifeCount() / 3;
 				RenderSystem.enableBlend();

@@ -32,14 +32,16 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import thebetweenlands.api.capability.BLCapabilities;
+import thebetweenlands.api.capability.lifecrystal.ILifeCrystalHandler;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
+import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.inventory.AnimatorMenu;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -61,6 +63,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	private static final int[] SLOTS_FOR_VERTICAL = new int[] {FOCAL_SLOT};
 	private static final int[] SLOTS_FOR_HORIZONTAL = new int[] {LIFE_CRYSTAL_SLOT, FUEL_SLOT};
 	
+	private static final int DEFAULT_MAX_LIFE = 128;
+	
 	// If a recipe finished and the focal slot now contains the output items for it
 	// Once all the output items have been extracted, this is set back to false
 	public boolean hasOutputItems = false;
@@ -68,9 +72,11 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	// If we have a valid animator recipe that we could use
 	public boolean hasRecipe = false;
 	public ItemStack itemToAnimate = ItemStack.EMPTY;
-	public int fuelBurnDuration;
-	public int fuelBurnProgress;
-	public int lifeCrystalLife;
+	public int fuelBurnProgress = 0;
+	public int fuelBurnDuration = 42;
+	public int fuelValue = 1;
+	public int lifeCrystalLife = 0;
+	public int lifeCrystalMaxLife = DEFAULT_MAX_LIFE;
 	public int fuelConsumed = 0;
 	public int requiredFuelCount = 32;
 	public int requiredLifeCount = 32;
@@ -89,10 +95,11 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress;
 				case 1 -> AnimatorBlockEntity.this.fuelBurnDuration;
 				case 2 -> AnimatorBlockEntity.this.lifeCrystalLife;
-				case 3 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
-				case 4 -> AnimatorBlockEntity.this.fuelConsumed;
-				case 5 -> AnimatorBlockEntity.this.requiredFuelCount;
-				case 6 -> AnimatorBlockEntity.this.requiredLifeCount;
+				case 3 -> AnimatorBlockEntity.this.lifeCrystalMaxLife;
+				case 4 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
+				case 5 -> AnimatorBlockEntity.this.fuelConsumed;
+				case 6 -> AnimatorBlockEntity.this.requiredFuelCount;
+				case 7 -> AnimatorBlockEntity.this.requiredLifeCount;
 				default -> 0;
 			};
 		}
@@ -102,42 +109,78 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress = value;
 				case 1 -> AnimatorBlockEntity.this.fuelBurnDuration = value;
 				case 2 -> AnimatorBlockEntity.this.lifeCrystalLife = value;
-				case 3 -> AnimatorBlockEntity.this.itemAnimated = value == 1;
-				case 4 -> AnimatorBlockEntity.this.fuelConsumed = value;
-				case 5 -> AnimatorBlockEntity.this.requiredFuelCount = value;
-				case 6 -> AnimatorBlockEntity.this.requiredLifeCount = value;
+				case 3 -> AnimatorBlockEntity.this.lifeCrystalMaxLife = value;
+				case 4 -> AnimatorBlockEntity.this.itemAnimated = value == 1;
+				case 5 -> AnimatorBlockEntity.this.fuelConsumed = value;
+				case 6 -> AnimatorBlockEntity.this.requiredFuelCount = value;
+				case 7 -> AnimatorBlockEntity.this.requiredLifeCount = value;
 			}
 		}
 
 		public int getCount() {
-			return 7;
+			return 8;
 		}
 	};
 
 	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
 	public final RecipeManager.CachedCheck<SingleRecipeInput, AnimatorRecipe> quickCheck = RecipeManager.createCheck(RecipeRegistry.ANIMATOR_RECIPE.get());
 
+	// Constructor
 	public AnimatorBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.ANIMATOR.get(), pos, state);
 	}
+	
+	// ======== Filters for slots ========
+	
+	@Nullable
+	public static AnimatorFuel getAnimatorFuel(ItemStack stack) {
+		return stack.getItemHolder().getData(DataMapRegistry.ANIMATOR_FUEL);
+	}
+	
+	@Nullable
+	public static ILifeCrystalHandler getLifeCrystalHandler(ItemStack stack) {
+		return stack.getCapability(BLCapabilities.LifeCrystalHandler.ITEM);
+	}
+	
+	public boolean isValidLifeCrystal(ItemStack stack) {
+		return !stack.isEmpty() && getLifeCrystalHandler(stack) != null;
+	}
 
+	public boolean isValidFuel(ItemStack stack) {
+		return !stack.isEmpty() && getAnimatorFuel(stack) != null;
+	}
+
+	public boolean isValidFocalItem(Level level, ItemStack stack) {
+		if (!stack.isEmpty()) {
+			SingleRecipeInput recipeInput = new SingleRecipeInput(stack);
+			return this.quickCheck.getRecipeFor(recipeInput, level).isPresent();
+		}
+		return false;
+	}
+
+	public boolean hasValidLifeCrystal() {
+		return this.isValidLifeCrystal(this.getItem(LIFE_CRYSTAL_SLOT));
+	}
+
+	public boolean hasValidFuel() {
+		return this.isValidFuel(this.getItem(FUEL_SLOT));
+	}
+	
+	public boolean hasValidFocalItem(Level level) {
+		return this.isValidFocalItem(level, this.getItem(FOCAL_SLOT));
+	}
+
+	// ======== Tick Loop ========
+	
 	public static void tick(Level level, BlockPos pos, BlockState state, AnimatorBlockEntity entity) {
 		if (!level.isClientSide()) {
-			// Updates that don't rely on crafting
-			entity.updateValues();
+			// Update the container fields and anything that doesn't have to do with crafting
+			entity.updateFields();
 			
-			if(entity.hasOutputItems) {
-				if(entity.getItem(FOCAL_SLOT).isEmpty()) {
-					entity.setItem(FOCAL_SLOT, ItemStack.EMPTY);
-					entity.hasOutputItems = false;
-					entity.setChanged();
-				} else {
-					// Don't update crafting if there are still output items to be extracted
-					return;
-				}
+			// Don't do any crafting if there are still output items from the last recipe to be extracted
+			if(!entity.hasOutputItems) { 
+				entity.tickCrafting(level, pos, state);
 			}
-			
-			entity.tickCrafting(level, pos, state);
 		} else {
 			entity.updateEntityRotation();
 			if (entity.isRunning() && !entity.soundPlaying) {
@@ -183,20 +226,83 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 
 		this.rot += f2 * 0.4F;
 	}
+
+	/**
+	 * Updates life crystal fields
+	 */
+	public void updateCrystalPowerFields() {
+		final int lifePower, maxLifePower;
+
+		// Get the current life power and max life power of this crystal
+		if(this.hasValidLifeCrystal()) {
+			// Get life crystal handler
+			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
+			lifePower = lifeCrystalHandler.getLifePower();
+			maxLifePower = lifeCrystalHandler.getMaxLifePower();
+		} else {
+			lifePower = 0;
+			maxLifePower = DEFAULT_MAX_LIFE;
+		}
+
+		// Update the fields and setChanged if crystal power has changed
+		if(this.lifeCrystalLife != lifePower || this.lifeCrystalMaxLife != maxLifePower) {
+			this.lifeCrystalLife = lifePower;
+			this.lifeCrystalMaxLife = maxLifePower;
+			this.setChanged();
+		}
+	}
+
+	/**
+	 * Updates fuel burn duration
+	 */
+	public void updateFuelFields() {
+		final int fuelBurnTime, fuelValue;
+		
+		// Get the current fuel values
+		if(this.hasValidFuel()) {
+			AnimatorFuel animatorFuel = getAnimatorFuel(this.getItem(FUEL_SLOT));
+			fuelBurnTime = animatorFuel.fuelBurnTime();
+			fuelValue = animatorFuel.fuelValue();
+		} else {
+			fuelBurnTime = 42;
+			fuelValue = 0;
+		}
+		
+		// Update fields and setChanged
+		if(this.fuelBurnDuration != fuelBurnTime || this.fuelValue != fuelValue) {
+			this.fuelBurnDuration = fuelBurnTime;
+			this.fuelValue = fuelValue;
+			this.setChanged();
+		}
+	}
 	
 	/**
 	 * Updates values that don't require crafting to be in progress
 	 */
-	public void updateValues() {
-		// Update life crystal display value
-		if (this.isCrystalInSlot()) {
-			this.lifeCrystalLife = this.getCrystalPower();
-		}
+	public void updateFields() {
+		// Update life crystal values
+		this.updateCrystalPowerFields();
 		
-		// Update burn progress
+		// Update burn duration and value
+		this.updateFuelFields();
+		
 		if (this.hasOutputItems || this.getItems().subList(0, 3).stream().anyMatch(ItemStack::isEmpty)) {
 			this.fuelBurnProgress = 0;
 			this.fuelConsumed = 0;
+		}
+		
+		if (this.hasOutputItems && this.running) {
+			this.running = false;
+			this.setChanged();
+		}
+		
+		if(this.hasOutputItems) {
+			if(this.getItem(FOCAL_SLOT).isEmpty()) {
+				this.setItem(FOCAL_SLOT, ItemStack.EMPTY);
+				this.hasOutputItems = false;
+				this.itemAnimated = false;
+				this.setChanged();
+			}
 		}
 	}
 	
@@ -254,7 +360,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	}
 	
 	public void updateRunning() {
-		boolean shouldBeRunning = this.hasRecipe && this.isCrystalInSlot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && this.lifeCrystalLife >= this.requiredLifeCount;
+		boolean shouldBeRunning = this.hasRecipe && this.hasValidLifeCrystal() && this.hasValidFuel() && this.fuelConsumed < this.requiredFuelCount && this.lifeCrystalLife >= this.requiredLifeCount;
 		if (this.running != shouldBeRunning) {
 			this.running = shouldBeRunning;
 			this.setChanged();
@@ -267,9 +373,9 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			if (this.fuelBurnProgress >= this.fuelBurnDuration) {
 				this.fuelBurnProgress = 0;
 				this.getItem(FUEL_SLOT).shrink(1);
-				this.fuelConsumed++;
-				return true;
+				this.fuelConsumed += this.fuelValue;
 			}
+			return true;
 		}
 		return false;
 	}
@@ -339,8 +445,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		
 		if(
 			!this.hasRecipe
-			|| !this.isCrystalInSlot()
-			|| (this.fuelConsumed < this.requiredFuelCount && !this.isSulfurInSlot())
+			|| !this.hasValidLifeCrystal()
+			|| (this.fuelConsumed < this.requiredFuelCount && !this.hasValidFuel())
 		) {
 			if(this.resetCraftingProgress()) {
 				changed = true;
@@ -367,41 +473,6 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		if(changed) {
 			this.setChanged();
 		}
-	}
-
-	public boolean isValidLifeCrystal(ItemStack stack) {
-		return !stack.isEmpty() && stack.getItem() instanceof LifeCrystalItem;
-	}
-
-	public boolean isValidFuel(ItemStack stack) {
-		return !stack.isEmpty() && stack.is(ItemRegistry.SULFUR);
-	}
-	
-	public boolean isCrystalInSlot() {
-		final ItemStack stack = this.getItem(LIFE_CRYSTAL_SLOT);
-		return this.isValidLifeCrystal(stack) && stack.getDamageValue() < stack.getMaxDamage();
-	}
-
-	public int getCrystalPower() {
-		if (this.isCrystalInSlot())
-			return this.getItem(LIFE_CRYSTAL_SLOT).getMaxDamage() - this.getItem(LIFE_CRYSTAL_SLOT).getDamageValue();
-		return 0;
-	}
-
-	public boolean isSulfurInSlot() {
-		return this.isValidFuel(this.getItem(FUEL_SLOT));
-	}
-
-	public boolean isValidFocalItem(Level level, ItemStack stack) {
-		if (!stack.isEmpty()) {
-			SingleRecipeInput recipeInput = new SingleRecipeInput(stack);
-			return this.quickCheck.getRecipeFor(recipeInput, level).isPresent();
-		}
-		return false;
-	}
-
-	public boolean isValidFocalItem(Level level) {
-		return this.isValidFocalItem(level, this.getItem(FOCAL_SLOT));
 	}
 
 	public boolean isRunning() {
@@ -441,7 +512,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		ItemStack prevItem = this.getItem(slot);
 		super.setItem(slot, stack);
 		if (slot == LIFE_CRYSTAL_SLOT) {
-			this.lifeCrystalLife = this.getCrystalPower();
+			this.updateCrystalPowerFields();
 		}
 		if(slot == FOCAL_SLOT && this.hasOutputItems) {
 			// Note: AbstractFurnaceBlockEntity does something very similar
