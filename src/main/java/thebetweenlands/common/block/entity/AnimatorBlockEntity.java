@@ -24,6 +24,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -762,11 +763,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			CompoundTag lastRecipeTag = tag.getCompound("last_recipe");
 			ResourceLocation id = ResourceLocation.tryParse(lastRecipeTag.getString("id"));
 			ItemStack input = ItemStack.parseOptional(registries, lastRecipeTag.getCompound("input"));
-			if(id != null) {
-				this.lastRecipeData = Optional.of(new AnimatorRecipeData(id, input));
-			} else {
-				this.lastRecipeData = Optional.empty();
-			}
+			this.lastRecipeData = Optional.of(new AnimatorRecipeData(id, input));
 		} else {
 			this.lastRecipeData = Optional.empty();
 		}
@@ -807,5 +804,47 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 
 	protected static record AnimatorRecipeData(ResourceLocation recipeId, ItemStack recipeInput) {
 		
+	}
+	
+	public boolean hasOutputItems() {
+		return this.lastRecipeHasOutputItems;
+	}
+	
+	public boolean requiresPlayerRetrieval() {
+		return this.lastRecipeRequiresPlayerRetrieval;
+	}
+	
+	/**
+	 * Applies all pending retrieval behaviours
+	 * @param level
+	 * @param pos
+	 * @param player
+	 * @return true if there are no more retrieval behaviours necessary
+	 */
+	public boolean processRetrieval(Level level, BlockPos pos, Player player) {
+		// There is no previous recipe, so there are no behaviours that need processing
+		if(this.lastRecipeData.isEmpty()) {
+			this.lastRecipeRequiresPlayerRetrieval = false;
+			return true;
+		}
+		
+		AnimatorRecipeData lastRecipe = this.lastRecipeData.get();
+		
+		SingleRecipeInput recipeInput = new SingleRecipeInput(lastRecipe.recipeInput().copy());
+		Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level, lastRecipe.recipeId());
+		// There is no previous recipe, so there are no behaviours that need processing
+		if(recipe.isEmpty()) {
+			this.lastRecipeRequiresPlayerRetrieval = false;
+			return true;
+		}
+		
+		boolean canOpenMenu = recipe.get().value().onRetrieved(player, pos, recipeInput);
+		
+		if(canOpenMenu) {
+			this.lastRecipeRequiresPlayerRetrieval = false;
+			return true;
+		}
+		
+		return false;
 	}
 }

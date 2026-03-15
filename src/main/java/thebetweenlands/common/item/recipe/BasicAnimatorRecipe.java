@@ -85,6 +85,11 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 		}
 		return ItemStack.EMPTY;
 	}
+	
+	@Override
+	public boolean requiresPlayerRetrieval(Level level, BlockPos pos, SingleRecipeInput input) {
+		return this.resultEntity().isPresent();
+	}
 
 	@Override
 	public boolean onRetrieved(Player player, BlockPos pos, SingleRecipeInput input) {

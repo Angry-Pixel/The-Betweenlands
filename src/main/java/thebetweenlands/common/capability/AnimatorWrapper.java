@@ -15,7 +15,7 @@ public class AnimatorWrapper extends SidedInvWrapper {
 	
 	@Override
 	public int getSlotLimit(int slot) {
-		if (getSlot(this.inv, slot, this.side) == AnimatorBlockEntity.FOCAL_SLOT && !entity.lastRecipeHasOutputItems) {
+		if (getSlot(this.inv, slot, this.side) == AnimatorBlockEntity.FOCAL_SLOT && !entity.hasOutputItems()) {
 			return 1;
 		}
 		return super.getSlotLimit(slot);

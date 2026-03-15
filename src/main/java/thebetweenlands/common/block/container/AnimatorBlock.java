@@ -1,16 +1,19 @@
 package thebetweenlands.common.block.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,20 +28,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import javax.annotation.Nullable;
-import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
+import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
-import thebetweenlands.common.registries.RecipeRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
@@ -60,15 +56,8 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 			return InteractionResult.SUCCESS;
 		} else {
 			if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
-				if (!animator.itemAnimated) {
+				if (animator.processRetrieval(level, pos, player)) {
 					player.openMenu(animator, buf -> buf.writeBlockPos(pos));
-				} else {
-					SingleRecipeInput recipeInput = new SingleRecipeInput(animator.itemToAnimate);
-					Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level);
-					if (recipe.isEmpty() || recipe.get().value().onRetrieved(player, pos, recipeInput)) {
-						player.openMenu(animator, buf -> buf.writeBlockPos(pos));
-					}
-					animator.fuelConsumed = 0;
 				}
 			}
 			return InteractionResult.CONSUME;
@@ -107,7 +96,8 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 	@Override
 	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
-			return Math.round(((float) animator.fuelConsumed / (float) animator.requiredFuelCount) * 16.0F);
+			float percentage = (float) animator.recipeFuelConsumed / (float) animator.recipeRequiredFuelCount;
+			return Mth.lerpDiscrete(percentage, 0, 15);
 		}
 		return 0;
 	}

@@ -74,6 +74,11 @@ public record ToolRepairAnimatorRecipe(Ingredient input, int minRepairLifeCost, 
 	}
 
 	@Override
+	public boolean requiresPlayerRetrieval(Level level, BlockPos pos, SingleRecipeInput input) {
+		return false;
+	}
+	
+	@Override
 	public boolean onRetrieved(Player player, BlockPos pos, SingleRecipeInput input) {
 		return true;
 	}
