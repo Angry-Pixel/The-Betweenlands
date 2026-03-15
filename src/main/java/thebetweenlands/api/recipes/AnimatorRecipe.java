@@ -62,6 +62,15 @@ public interface AnimatorRecipe extends Recipe<SingleRecipeInput> {
 	ItemStack onAnimated(ServerLevel level, BlockPos pos, SingleRecipeInput input);
 
 	/**
+	 * Used to check if the output for this recipe can only be retrieved by a player, and not via automation such as hoppers.
+	 * @param level
+	 * @param pos
+	 * @param input
+	 * @return
+	 */
+	boolean requiresPlayerRetrieval(Level level, BlockPos pos, SingleRecipeInput input);
+	
+	/**
 	 * Called when the animator has finished animating and is right-clicked.
 	 * Return true if GUI should be opened on first click
 	 * @param player
