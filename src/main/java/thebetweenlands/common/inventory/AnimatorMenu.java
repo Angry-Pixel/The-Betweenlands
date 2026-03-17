@@ -137,13 +137,15 @@ public class AnimatorMenu extends AbstractContainerMenu {
 			ItemStack stack1 = slot.getItem();
 			stack = stack1.copy();
 			if (index > 2) {
-				if (stack1.is(ItemRegistry.SULFUR))
+				final boolean validFuel = this.animator.isValidFuel(stack1);
+				final boolean validLifeCrystal = this.animator.isValidLifeCrystal(stack1);
+				if (validFuel)
 					if (!this.moveItemStackTo(stack1, 2, 3, true))
 						return ItemStack.EMPTY;
-				if (stack1.getItem() instanceof LifeCrystalItem)
+				if (validLifeCrystal)
 					if (!this.moveItemStackTo(stack1, 1, 2, true))
 						return ItemStack.EMPTY;
-				if (stack1.getCount() == 1 && !stack1.is(ItemRegistry.SULFUR) && !(stack1.getItem() instanceof LifeCrystalItem))
+				if (stack1.getCount() == 1 && !validFuel && !validLifeCrystal)
 					if (!this.moveItemStackTo(stack1, 0, 1, true))
 						return ItemStack.EMPTY;
 			} else if (!this.moveItemStackTo(stack1, 3, this.slots.size(), false))
