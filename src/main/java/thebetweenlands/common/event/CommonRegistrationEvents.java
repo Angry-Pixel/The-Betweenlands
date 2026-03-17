@@ -59,6 +59,7 @@ import thebetweenlands.common.block.entity.util.ItemHandlerProvidingBlockEntity;
 import thebetweenlands.common.capability.AnimatorWrapper;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
+import thebetweenlands.common.capability.SmokingRackWrapper;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.ChargeType;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.DrainType;
@@ -376,12 +377,14 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MORTAR.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MOTH_HOUSE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.OFFERING_TABLE.get(), (tile, context) -> new InvWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PRESENT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> new SidedInvWrapper(tile, context));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SMOKING_RACK.get(), (tile, context) -> new SmokingRackWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SULFUR_FURNACE.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SYRMORITE_HOPPER.get(), (tile, context) -> new VanillaHopperItemHandler(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 
 		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);

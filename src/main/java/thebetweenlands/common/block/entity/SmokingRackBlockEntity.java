@@ -210,6 +210,19 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 			this.setChanged();
 		}
 	}
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		// Only allow fallen leaves in the fallen leaves slot
+		if(slot == 0 && !stack.is(BlockRegistry.FALLEN_LEAVES.asItem())) {
+			return false;
+		} else if(slot >= 4) { // No inserting into output slots
+			return false;
+		} else if(slot > 0 && slot < 4 && !this.getItem(slot).isEmpty()) { // Max stack size 1 in input slots
+			return false;
+		}
+		return super.canPlaceItem(slot, stack);
+	}
 
 	@Override
 	public void setChanged() {
