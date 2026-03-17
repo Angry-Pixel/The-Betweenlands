@@ -319,7 +319,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	}
 	
 	public boolean canProcess() {
-		return !this.lastRecipeHasOutput() && this.hasRecipe && this.canExtractRequiredLife;
+		return !this.lastRecipeHasOutput() && this.hasRecipe && this.canExtractRequiredLife && (this.recipeFuelConsumed >= this.recipeRequiredFuelCount || this.hasValidFuel());
 	}
 	
 	/**
@@ -373,6 +373,9 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		if(this.hasValidLifeCrystal() && this.hasRecipe()) {
 			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
 			lifeCrystalHandler.drainLifePower(this.recipeRequiredLifeCount, false);
+
+			// Update fields
+			this.updateLifeCrystalFields();
 		}
 	}
 	
