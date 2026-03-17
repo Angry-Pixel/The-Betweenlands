@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -33,6 +34,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.inventory.PositionSupplyingMenuProvider;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 
@@ -57,13 +59,20 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 		} else {
 			if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
 				if (animator.processRetrieval(level, pos, player)) {
-					player.openMenu(animator, buf -> buf.writeBlockPos(pos));
+					player.openMenu(animator, pos);
 				}
 			}
 			return InteractionResult.CONSUME;
 		}
 	}
 
+	@Override
+	protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+		// Special menu provider for spectators
+		MenuProvider menuProvider = super.getMenuProvider(state, level, pos);
+		return PositionSupplyingMenuProvider.ofNullable(menuProvider, pos);
+	}
+	
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		Containers.dropContentsOnDestroy(state, newState, level, pos);
