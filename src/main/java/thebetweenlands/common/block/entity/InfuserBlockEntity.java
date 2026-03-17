@@ -357,7 +357,7 @@ public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implemen
 
 	@Override
 	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
-		return true;
+		return this.canPlaceItem(index, itemStack);
 	}
 
 	@Override

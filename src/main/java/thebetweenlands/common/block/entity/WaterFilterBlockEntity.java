@@ -272,7 +272,7 @@ public class WaterFilterBlockEntity extends SidedNoMenuContainerBlockEntity impl
 
 	@Override
 	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
-		return true;
+		return this.canPlaceItem(index, itemStack);
 	}
 
 	@Override
