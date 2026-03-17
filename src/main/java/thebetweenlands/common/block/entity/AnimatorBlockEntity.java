@@ -82,7 +82,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 */
 	public int recipeFuelConsumed = 0; // Field
 	/**
-	 * Information about the previous recipe, so {@linkplain AnimatorRecipe#onRetrieved(net.minecraft.world.entity.player.Player, BlockPos, SingleRecipeInput)} can be called.
+	 * Information about the previous recipe, so {@linkplain AnimatorRecipe#onRetrieved(Player, BlockPos, SingleRecipeInput)} can be called.
 	 */
 	protected Optional<AnimatorRecipeData> lastRecipeData = Optional.empty();
 	/**
@@ -91,6 +91,10 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 * 2. After a player opens the animator, will be set to false
 	 */
 	protected boolean lastRecipeRequiresPlayerRetrieval = false;
+	/**
+	 * If the last recipe can still have {@linkplain AnimatorRecipe#onRetrieved(Player, BlockPos, SingleRecipeInput)} called
+	 */
+	protected boolean lastRecipeCanBeRetrieved = false;
 	/**
 	 * If the focal slot contains output items instead of items to be animated.
 	 * While true, the animator will not attempt to animate the item in the focal slot.
@@ -475,7 +479,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 */
 	public void updateLastRecipe(Level level, BlockPos pos, SingleRecipeInput recipeInput, RecipeHolder<AnimatorRecipe> recipe) {
 		this.lastRecipeRequiresPlayerRetrieval = recipe.value().requiresPlayerRetrieval(level, pos, recipeInput);
-		
+		this.lastRecipeCanBeRetrieved = true;
 		this.lastRecipeData = Optional.of(new AnimatorRecipeData(recipe.id(), recipeInput.item()));
 	}
 	
@@ -537,6 +541,12 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 * @return true if the recipe completed this tick
 	 */
 	public boolean tickCrafting(Level level, BlockPos pos, BlockState state) {
+		// We've started crafting the next item, so we can no longer do retrievals on the previous one
+		if(this.lastRecipeCanBeRetrieved) {
+			this.lastRecipeCanBeRetrieved = false;
+			this.setChangedNoUpdate();
+		}
+		
 		// Burn fuel
 		this.burnFuel();
 		
@@ -745,9 +755,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		if(this.lastRecipeData.isPresent()) {
 			AnimatorRecipeData lastRecipe = this.lastRecipeData.get();
 			CompoundTag lastRecipeTag = new CompoundTag(2);
+			ItemStack inputStack = lastRecipe.recipeInput();
 			lastRecipeTag.putString("id", lastRecipe.recipeId().toString());
-			lastRecipeTag.put("input", lastRecipe.recipeInput.save(registries));
+			if(!inputStack.isEmpty()) {
+				lastRecipeTag.put("input", inputStack.save(registries));
+			}
 			tag.put("last_recipe", lastRecipeTag);
+
+			tag.putBoolean("last_recipe_can_be_retrieved", this.lastRecipeCanBeRetrieved);
 		}
 	}
 
@@ -768,8 +783,12 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 			ResourceLocation id = ResourceLocation.tryParse(lastRecipeTag.getString("id"));
 			ItemStack input = ItemStack.parseOptional(registries, lastRecipeTag.getCompound("input"));
 			this.lastRecipeData = Optional.of(new AnimatorRecipeData(id, input));
+
+			this.lastRecipeCanBeRetrieved = tag.getBoolean("last_recipe_can_be_retrieved");
 		} else {
 			this.lastRecipeData = Optional.empty();
+			
+			this.lastRecipeCanBeRetrieved = false;
 		}
 		
 		this.updateFuelFields();
@@ -826,11 +845,19 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 * @return true if there are no more retrieval behaviours necessary
 	 */
 	public boolean processRetrieval(Level level, BlockPos pos, Player player) {
+		// The intention is for lastRecipeRequiresPlayerRetrieval to only be unset once the menu opens
+		// If the menu opens immediately, then it will be unset immediately
+		// If the recipe does a retrieval first, it won't be unset until the player clicks for a second time and the menu opens
+		
 		// There is no previous recipe, so there are no behaviours that need processing
-		if(this.lastRecipeData.isEmpty()) {
+		// Or we can no longer do retrievals on the previous recipe (either we started crafting the next item, or have already retrieved this recipe)
+		if(this.lastRecipeData.isEmpty() || !this.lastRecipeCanBeRetrieved) {
 			this.lastRecipeRequiresPlayerRetrieval = false;
 			return true;
 		}
+		
+		// We can only retrieve a recipe once
+		this.lastRecipeCanBeRetrieved = false;
 		
 		AnimatorRecipeData lastRecipe = this.lastRecipeData.get();
 		
