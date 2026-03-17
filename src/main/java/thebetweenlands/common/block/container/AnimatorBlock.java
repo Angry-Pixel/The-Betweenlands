@@ -96,6 +96,9 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWat
 	@Override
 	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
+			if(animator.recipeRequiredFuelCount == 0) {
+				return 0;
+			}
 			float percentage = (float) animator.recipeFuelConsumed / (float) animator.recipeRequiredFuelCount;
 			return Mth.lerpDiscrete(percentage, 0, 15);
 		}

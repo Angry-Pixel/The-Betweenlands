@@ -14,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.inventory.slot.FilteredSlot;
 import thebetweenlands.common.inventory.slot.SingleItemSlot;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
 
 public class AnimatorMenu extends AbstractContainerMenu {
@@ -34,7 +32,12 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		this.animator = animator;
 		this.data = data;
 
-		this.addSlot(new SingleItemSlot(animator, AnimatorBlockEntity.FOCAL_SLOT, 79, 23));
+		this.addSlot(new SingleItemSlot(animator, AnimatorBlockEntity.FOCAL_SLOT, 79, 23) {
+			@Override
+			public boolean mayPickup(Player player) {
+				return super.mayPickup(player) && !animator.requiresPlayerRetrieval();
+			}
+		});
 		this.addSlot(new FilteredSlot(animator, AnimatorBlockEntity.LIFE_CRYSTAL_SLOT, 34, 57, animator::isValidLifeCrystal));
 		this.addSlot(new FilteredSlot(animator, AnimatorBlockEntity.FUEL_SLOT, 124, 57, animator::isValidFuel));
 

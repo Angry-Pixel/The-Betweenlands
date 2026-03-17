@@ -93,15 +93,14 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 
 	@Override
 	public boolean onRetrieved(Player player, BlockPos pos, SingleRecipeInput input) {
-		if (player.level().getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
-			if (this.resultEntity().isPresent()) {
-				Entity entity = this.resultEntity().get().create(player.level());
-				entity.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
-				player.level().addFreshEntity(entity);
-				animator.setItem(0, ItemStack.EMPTY);
-				return false;
-			}
-			return true;
+		if (this.resultEntity().isPresent() && player.level().getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
+			Entity entity = this.resultEntity().get().create(player.level());
+			entity.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
+			player.level().addFreshEntity(entity);
+			animator.setItem(0, ItemStack.EMPTY);
+			animator.setRequiresPlayerRetrieval(false);
+			animator.setChanged();
+			return false;
 		}
 		return true;
 	}

@@ -477,7 +477,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 * @param recipeInput
 	 * @param recipe
 	 */
-	public void updateLastRecipe(Level level, BlockPos pos, SingleRecipeInput recipeInput, RecipeHolder<AnimatorRecipe> recipe) {
+	public void updateLastRecipe(Level level, BlockPos pos, SingleRecipeInput recipeInput, RecipeHolder<AnimatorRecipe> recipe, ItemStack resultStack) {
 		this.lastRecipeRequiresPlayerRetrieval = recipe.value().requiresPlayerRetrieval(level, pos, recipeInput);
 		this.lastRecipeCanBeRetrieved = true;
 		this.lastRecipeData = Optional.of(new AnimatorRecipeData(recipe.id(), recipeInput.item()));
@@ -509,7 +509,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		// Get the result item
 		ItemStack resultStack = recipe.value().onAnimated((ServerLevel) level, pos, recipeInput);
 		if (resultStack.isEmpty()) {
-			// It may require custom handling
+			// Fall back to default handling if custom handling failed
 			resultStack = recipe.value().assemble(recipeInput, level.registryAccess());
 		}
 		
@@ -527,7 +527,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		}
 		
 		// Updates "last recipe" data
-		this.updateLastRecipe(level, pos, recipeInput, recipe);
+		this.updateLastRecipe(level, pos, recipeInput, recipe, resultStack);
 		
 		return true;
 	}
@@ -829,12 +829,57 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		
 	}
 	
+	/**
+	 * Are there output items that need to be extracted before the next recipe can start?
+	 * 
+	 * <p>
+	 * Automatically unset in {@link AnimatorBlockEntity#setItem(int, ItemStack) setItem} if the focal item is changed or emptied.
+	 * Use {@link AnimatorBlockEntity#setHasOutputItems setHasOutputItems} if you want to replace the focal item while still treating
+	 * the new stack as an output item.
+	 * </p>
+	 * @return
+	 */
 	public boolean hasOutputItems() {
 		return this.lastRecipeHasOutputItems;
 	}
-	
+
+	/**
+	 * Sets the flag for {@link #hasOutputItems()}.
+	 * 
+	 * <p>
+	 * May be used by animator recipes in {@link AnimatorRecipe#onRetrieved(Player, BlockPos, SingleRecipeInput) onRetrieved}
+	 * to replace the focal item without allowing the next recipe to start.
+	 * </p>
+	 */
+	public void setHasOutputItems(boolean hasOutputItems) {
+		this.lastRecipeHasOutputItems = hasOutputItems;
+	}
+
+	/**
+	 * Does this animator need a player to interact with it before the next recipe can start or items can be extracted?
+	 * 
+	 * <p>
+	 * Automatically unset in {@link AnimatorBlockEntity#processRetrieval(Level, BlockPos, Player) processRetrieval} if the player
+	 * opens the gui.
+	 * Use {@link AnimatorBlockEntity#setRequiresPlayerRetrieval(boolean) setRequiresPlayerRetrieval} if you want to allow non-player
+	 * interactions again.
+	 * </p>
+	 * @return
+	 */
 	public boolean requiresPlayerRetrieval() {
 		return this.lastRecipeRequiresPlayerRetrieval;
+	}
+
+	/**
+	 * Sets the flag for {@link #requiresPlayerRetrieval()}.
+	 * 
+	 * <p>
+	 * May be used by animator recipes in {@link AnimatorRecipe#onRetrieved(Player, BlockPos, SingleRecipeInput) onRetrieved}
+	 * to allow the next recipe to start while still preventing the gui from opening.
+	 * </p>
+	 */
+	public void setRequiresPlayerRetrieval(boolean requiresPlayerRetrieval) {
+		this.lastRecipeRequiresPlayerRetrieval = requiresPlayerRetrieval;
 	}
 	
 	/**
@@ -845,6 +890,11 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 * @return true if there are no more retrieval behaviours necessary
 	 */
 	public boolean processRetrieval(Level level, BlockPos pos, Player player) {
+		// Spectators can always open the gui, but they do not activate retrieval behaviours
+		if(player.isSpectator()) {
+			return true;
+		}
+		
 		// The intention is for lastRecipeRequiresPlayerRetrieval to only be unset once the menu opens
 		// If the menu opens immediately, then it will be unset immediately
 		// If the recipe does a retrieval first, it won't be unset until the player clicks for a second time and the menu opens
