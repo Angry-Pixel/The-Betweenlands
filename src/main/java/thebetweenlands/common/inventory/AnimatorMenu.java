@@ -1,5 +1,7 @@
 package thebetweenlands.common.inventory;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,20 +18,18 @@ import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
 
-import java.util.Objects;
-
 public class AnimatorMenu extends AbstractContainerMenu {
 	private final AnimatorBlockEntity animator;
 	private final ContainerData data;
 
 	public AnimatorMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(9));
+		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(10));
 	}
 
 	public AnimatorMenu(int containerId, Inventory playerInventory, AnimatorBlockEntity animator, ContainerData data) {
 		super(MenuRegistry.ANIMATOR.get(), containerId);
 		checkContainerSize(animator, 3);
-		checkContainerDataCount(data, 9);
+		checkContainerDataCount(data, 10);
 		animator.startOpen(playerInventory.player);
 		this.animator = animator;
 		this.data = data;
@@ -63,20 +63,20 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		return this.data.get(1);
 	}
 
-	public int getFuelValue() {
+	public int getFuelBurnValue() {
 		return this.data.get(2);
 	}
 
-	public float getCrystalLife() {
+	public int getCrystalLife() {
 		return Math.max(this.data.get(3), 0);
 	}
-	
+
 	public int getCrystalMaxLife() {
 		return Math.max(this.data.get(4), 0);
 	}
 	
-	public boolean hasFinishedAnimating() {
-		return this.data.get(5) != 0;
+	public int getCrystalLifeToDrain() {
+		return Math.max(this.data.get(5), 0);
 	}
 
 	public int getFuelConsumed() {
@@ -91,13 +91,21 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		return this.data.get(8);
 	}
 
-	public float getFuelBurnPercentage() {
-		return (float)this.getFuelBurnProgress() / (float)this.getFuelBurnTime();
+	public boolean isRunning() {
+		return this.data.get(9) != 0;
+	}
+
+	public float getFuelBurnPercentage(float partialTick) {
+		float progress = (float)this.getFuelBurnProgress();
+		if(this.isRunning()) {
+			progress += partialTick;
+		}
+		return progress / (float)this.getFuelBurnTime();
 	}
 	
-	public float getTotalBurnProgress() {
+	public float getTotalBurnProgress(float partialTick) {
 		int consumedFuel = this.getFuelConsumed();
-		float partiallyConsumedFuel = this.getFuelBurnPercentage() * this.getFuelValue();
+		float partiallyConsumedFuel = this.getFuelBurnPercentage(partialTick) * this.getFuelBurnValue();
 		float totalProgress = consumedFuel + partiallyConsumedFuel;
 
 		int requiredFuel = this.getRecipeFuelRequired();

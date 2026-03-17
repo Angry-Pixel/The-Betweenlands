@@ -67,7 +67,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	private static final int[] SLOTS_FOR_VERTICAL = new int[] {FOCAL_SLOT};
 	private static final int[] SLOTS_FOR_HORIZONTAL = new int[] {LIFE_CRYSTAL_SLOT, FUEL_SLOT};
 	
-	private static final int DEFAULT_MAX_LIFE = 128;
+	public static final int DEFAULT_MAX_LIFE = 128;
 	
 	// Persistent data (save in saveAdditional; setChanged after updating)
 	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY); // Accessible to client (setChangedAndSync)
