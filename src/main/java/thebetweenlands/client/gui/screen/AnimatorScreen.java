@@ -61,7 +61,7 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 				graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, lifeCrystalCount, this.leftPos + 39, this.topPos + 8 + lifeCrystalCount, 6, 40 - lifeCrystalCount);
 
 				int lifeToDrain = this.getMenu().getCrystalLifeToDrain();
-				if (lifeToDrain > 0) {
+				if (lifeToDrain > 0 && this.getMenu().getRecipeLifeRequired() > 0) {
 					// Life crystal drain bar
 					int requiredLifeCrystal = (int) ((long)lifeToDrain * 128L / renderMaxLife) / 3;
 					RenderSystem.enableBlend();
@@ -83,7 +83,14 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 			float fuelBurnPercentage = this.getMenu().getFuelBurnPercentage(partialTick);
 			int fuelBurnProgress = Mth.floor(fuelBurnPercentage * 42);
 			graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, fuelBurnProgress, this.leftPos + 129, this.topPos + 8 + fuelBurnProgress, 6, 40 - fuelBurnProgress);
-
+		} else {
+			graphics.pose().pushPose();
+			graphics.pose().translate(this.leftPos, this.topPos, 0);
+			RenderUtils.drawGhostItemAtSlot(graphics, new ItemStack(ItemRegistry.SULFUR.get()), this.getMenu().getSlot(2));
+			graphics.pose().popPose();
+		}
+		
+		if(this.getMenu().isRunning()) {
 			float relTotalProgress = this.getMenu().getTotalBurnProgress(partialTick);
 
 			if (relTotalProgress <= 0.66D) {
@@ -95,11 +102,6 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 				int barHeight = (int) ((relTotalProgress - 0.66D) / 0.4D * 19);
 				graphics.blitSprite(SMELT_PROGRESS, 72, 18, 0, 16 - barHeight, this.leftPos + 51, this.topPos + 65 - barHeight, 72, 2 + barHeight);
 			}
-		} else {
-			graphics.pose().pushPose();
-			graphics.pose().translate(this.leftPos, this.topPos, 0);
-			RenderUtils.drawGhostItemAtSlot(graphics, new ItemStack(ItemRegistry.SULFUR.get()), this.getMenu().getSlot(2));
-			graphics.pose().popPose();
 		}
 	}
 }

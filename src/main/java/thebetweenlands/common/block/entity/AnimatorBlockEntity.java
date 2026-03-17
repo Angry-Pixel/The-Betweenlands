@@ -406,6 +406,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		this.recipeRequiredLifeCount = 0;
 		this.canExtractRequiredLife = false;
 		this.lifeCrystalSimulatedDrain = 0;
+		// Mandatory update running due to the order in which menu sync and player actions are handled each tick
+		this.updateCurrentlyProcessing(false);
 	}
 	
 	/**
@@ -432,6 +434,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		this.recipeRequiredFuelCount = recipe.value().getRequiredFuel(recipeInput);
 		this.recipeRequiredLifeCount = recipe.value().getRequiredLife(recipeInput);
 		this.updateLifeCrystalDrainData();
+		// Mandatory update running due to the order in which menu sync and player actions are handled each tick
+		this.updateCurrentlyProcessing(this.canProcess());
 	}
 	
 	/**
@@ -791,7 +795,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
+		CompoundTag tag = this.saveCustomOnly(registries);
 		tag.putBoolean("running", this.running);
 		return tag;
 	}

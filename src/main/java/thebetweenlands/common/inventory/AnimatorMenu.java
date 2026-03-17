@@ -97,18 +97,25 @@ public class AnimatorMenu extends AbstractContainerMenu {
 
 	public float getFuelBurnPercentage(float partialTick) {
 		float progress = (float)this.getFuelBurnProgress();
-		if(this.isRunning()) {
-			progress += partialTick;
-		}
+		// Seems to cause visual jitters
+//		if(this.isRunning()) {
+//			progress += partialTick;
+//		}
 		return progress / (float)this.getFuelBurnTime();
 	}
 	
 	public float getTotalBurnProgress(float partialTick) {
+		int requiredFuel = this.getRecipeFuelRequired();
+
+		// No progress if there is no recipe
+		if(requiredFuel <= 0) {
+			return 0.0f;
+		}
+		
 		int consumedFuel = this.getFuelConsumed();
 		float partiallyConsumedFuel = this.getFuelBurnPercentage(partialTick) * this.getFuelBurnValue();
 		float totalProgress = consumedFuel + partiallyConsumedFuel;
 
-		int requiredFuel = this.getRecipeFuelRequired();
 		if(totalProgress >= requiredFuel) {
 			return 1.0f;
 		} else {
