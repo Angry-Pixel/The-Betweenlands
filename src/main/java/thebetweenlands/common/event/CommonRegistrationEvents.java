@@ -377,7 +377,7 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MOTH_HOUSE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PRESENT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SULFUR_FURNACE.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SYRMORITE_HOPPER.get(), (tile, context) -> new VanillaHopperItemHandler(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
