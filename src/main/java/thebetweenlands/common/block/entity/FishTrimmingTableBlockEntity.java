@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -38,14 +40,18 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 	public static final int OUTPUT_SLOT_1 = 1;
 	public static final int OUTPUT_SLOT_2 = 2;
 	public static final int OUTPUT_SLOT_3 = 3;
-	public static final int CHOPPER_SLOT = 5;
-	public static final int SLOT_COUNT = 6;
-	
+	public static final int CHOPPER_SLOT = 4;
+	public static final int SLOT_COUNT = 5;
+
 	public static final int DATA_FIELD_COUNT = 0;
 
 	private static final int[] SLOTS_FOR_SIDES = new int[] {FISH_SLOT, CHOPPER_SLOT};
 	
 	private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
+	
+	private ItemStack remainsItem = ItemStack.EMPTY;
+	// We need to track how many remains we have left even after clearing the output slots
+	private int remainsCount = 0;
 	
 	/**
 	 * Current trimming table recipe
@@ -226,14 +232,63 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		return ItemStack.EMPTY;
 	}
 
+	/**
+	 * Set the remains for the trimming table
+	 * @param remainsItem
+	 * @param remainsCount
+	 */
+	public void setRemains(ItemStack remainsItem, int remainsCount) {
+		if(remainsItem.isEmpty()) remainsItem = ItemStack.EMPTY;
+		this.remainsItem = remainsItem;
+		this.remainsCount = remainsCount;
+	}
+	
+	/**
+	 * Gets the item used for the remains, without scaling from {@linkplain #getRemainsCount()}
+	 * @return
+	 */
+	public ItemStack getRemainsItem() {
+		return this.remainsItem;
+	}
+
+	/**
+	 * Gets count multiplier for the remains item, used in {@linkplain #getRemainsStack()}
+	 * @return
+	 */
+	public int getRemainsCount() {
+		return this.remainsCount;
+	}
+
+	/**
+	 * Gets the remains stack for recycling.
+	 * 
+	 * <p>The remains stack is found by multiplying the count of {@linkplain #getRemainsItem()} by the value of {@linkplain #getRemainsCount()}</p>
+	 * @return
+	 */
+	public ItemStack getRemainsStack() {
+		int remainsCount = this.getRemainsCount();
+		if(remainsCount <= 0) {
+			return ItemStack.EMPTY;
+		}
+		ItemStack remainsItem = this.getRemainsItem();
+		return remainsItem.copyWithCount(Math.min(remainsItem.getCount() * remainsCount, Item.ABSOLUTE_MAX_STACK_SIZE));
+	}
+	
 	public boolean allResultSlotsEmpty() {
-		return this.getItems().subList(1, 5).stream().allMatch(ItemStack::isEmpty);
+		return this.getItems().subList(1, 4).stream().allMatch(ItemStack::isEmpty) && (this.remainsCount == 0 || this.remainsItem.isEmpty());
 	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
+		
+		CompoundTag remainsTag = new CompoundTag(2);
+		if(!this.remainsItem.isEmpty()) {
+			remainsTag.put("item", this.remainsItem.save(registries));
+		}
+		remainsTag.putInt("count", this.remainsCount);
+		tag.put("remains", remainsTag);
 	}
 
 	@Override
@@ -241,6 +296,16 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		super.loadAdditional(tag, registries);
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
+		
+		if(tag.contains("remains", Tag.TAG_COMPOUND)) {
+			CompoundTag remainsTag = tag.getCompound("remains");
+			this.remainsItem = ItemStack.parseOptional(registries, remainsTag.getCompound("item"));
+			this.remainsCount = remainsTag.getInt("count");
+		} else {
+			this.remainsItem = ItemStack.EMPTY;
+			this.remainsCount = 0;
+		}
+		
 		// Update recipe if the world is loaded
 		this.updateRecipe();
 	}
