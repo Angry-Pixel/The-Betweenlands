@@ -59,9 +59,9 @@ public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmin
 		) {
 			graphics.pose().pushPose();
 			graphics.pose().translate(this.leftPos, this.topPos, 0);
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 1, 0), this.getMenu().getSlot(1));
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 2, 0), this.getMenu().getSlot(2));
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 3, 0), this.getMenu().getSlot(3));
+			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 1), this.getMenu().getSlot(1));
+			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 2), this.getMenu().getSlot(2));
+			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 3), this.getMenu().getSlot(3));
 			graphics.pose().popPose();
 		}
 	}

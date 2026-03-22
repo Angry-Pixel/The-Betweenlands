@@ -25,7 +25,9 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.ticks.ContainerSingleItem;
 import thebetweenlands.api.recipes.TrimmingTableRecipe;
 import thebetweenlands.common.inventory.FishTrimmingTableMenu;
 import thebetweenlands.common.item.misc.MobItem;
@@ -52,9 +54,82 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 	
 	private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
 	
-	private ItemStack remainsItem = ItemStack.EMPTY;
+	protected ItemStack remainsItem = ItemStack.EMPTY;
 	// We need to track how many remains we have left even after clearing the output slots
-	private int remainsCount = 0;
+	protected int remainsCount = 0;
+	
+	private final Container remainsAccess = new ContainerSingleItem.BlockContainerSingleItem() {
+		@Override
+		public BlockEntity getContainerBlockEntity() {
+			return FishTrimmingTableBlockEntity.this;
+		}
+		
+		@Override
+		public void setChanged() {
+			FishTrimmingTableBlockEntity.this.setChanged();
+		}
+		
+		@Override
+		public ItemStack splitTheItem(int amount) {
+			// Empty if no extraction
+			if(amount <= 0) {
+				return ItemStack.EMPTY;
+			}
+			
+			// Get the remains count and remains item
+			final int remainsCount = FishTrimmingTableBlockEntity.this.getRemainsCount();
+			final ItemStack remainsItem = FishTrimmingTableBlockEntity.this.getRemainsItem();
+			
+			if(remainsCount <= 0 || remainsItem.isEmpty() || amount <= remainsItem.getCount()) {
+				return ItemStack.EMPTY;
+			}
+			
+			// What amount interval are remains removed (usually 1)
+			// e.g. if 2, then only 2, 4, 6, 8, etc. items can be extracted at once
+			final int groupCount = remainsItem.getCount();
+			
+			int remainsRemoved = Math.min(amount / groupCount, remainsCount);
+			final ItemStack splitStack = remainsItem.copyWithCount(remainsRemoved * groupCount);
+			
+			if(remainsRemoved < remainsCount) {
+				FishTrimmingTableBlockEntity.this.setRemains(remainsItem, remainsCount - remainsRemoved);
+			} else {
+				FishTrimmingTableBlockEntity.this.setRemains(ItemStack.EMPTY, 0);
+			}
+
+			// Remove output items on extraction
+			FishTrimmingTableBlockEntity.this.setItem(OUTPUT_SLOT_1, ItemStack.EMPTY);
+			FishTrimmingTableBlockEntity.this.setItem(OUTPUT_SLOT_2, ItemStack.EMPTY);
+			FishTrimmingTableBlockEntity.this.setItem(OUTPUT_SLOT_3, ItemStack.EMPTY);
+			
+			return splitStack;
+		}
+		
+		@Override
+		public void setTheItem(ItemStack item) {
+			// Removal only, NO-OP
+			// This is supported behaviour, See LecternBlockEntity#bookAccess
+		}
+		
+		@Override
+		public ItemStack getTheItem() {
+			return FishTrimmingTableBlockEntity.this.getRemainsStack();
+		}
+		
+		@Override
+		public ItemStack removeItem(int slot, int amount) {
+			ItemStack removed = ContainerSingleItem.BlockContainerSingleItem.super.removeItem(slot, amount);
+			if(removed.getCount() > 0) {
+				this.setChanged();
+			}
+			return removed;
+		}
+		
+		@Override
+		public boolean canPlaceItem(int slot, ItemStack stack) {
+			return false;
+		}
+	};
 	
 	/**
 	 * Current trimming table recipe
@@ -176,13 +251,17 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 	 * Updates the {@code recipe} if the world is loaded
 	 */
 	public void updateRecipe() {
-		if(!this.hasLevel()) {
-			return;
+		if(this.hasLevel()) {
+			this.updateRecipe(this.getLevel());
 		}
-		
+	}
+	
+	/**
+	 * Updates the {@code recipe} using the specified world
+	 */
+	public void updateRecipe(Level level) {
 		ItemStack fishStack = this.getItem(FISH_SLOT);
 		if(!fishStack.isEmpty()) {
-			Level level = this.getLevel();
 			SingleRecipeInput recipeInput = new SingleRecipeInput(fishStack);
 			this.recipe = this.quickCheck.getRecipeFor(recipeInput, level).map(RecipeHolder::value).orElse(null);
 		} else {
@@ -251,20 +330,25 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		return null;
 	}
 
-	public ItemStack getSlotResult(Level level, int slot, int numItems) {
+	public ItemStack getSlotResult(Level level, int slot) {
 		if (this.recipe != null) {
 			switch (slot) {
 				case 0:
 					return ItemStack.EMPTY;
 				case 1, 2, 3:
 					return this.recipe.assembleRecipe(new SingleRecipeInput(this.getItem(0)), level).get(slot - 1);
-				case 4:
-					return this.recipe.getRemains().copyWithCount(numItems);
 			}
 		}
 		return ItemStack.EMPTY;
 	}
-
+	
+	public ItemStack getRemainsItemResult(Level level) {
+		if(this.recipe != null) {
+			return this.recipe.getRemains();
+		}
+		return ItemStack.EMPTY;
+	}
+	
 	/**
 	 * Set the remains for the trimming table
 	 * @param remainsItem
@@ -305,6 +389,33 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		}
 		ItemStack remainsItem = this.getRemainsItem();
 		return remainsItem.copyWithCount(Math.min(remainsItem.getCount() * remainsCount, Item.ABSOLUTE_MAX_STACK_SIZE));
+	}
+	
+	/**
+	 * Removes remains by {@code count}, down to 0.
+	 * 
+	 * <p>Reduces the remains count (given by {@linkplain #getRemainsCount()}) {@code count}, down to 0.</p>
+	 * <p>If the remains count reaches zero, sets the remains item (given by {@linkplain #getRemainsItem()}) to {@link ItemStack#EMPTY ItemStack.EMPTY}</p>
+	 * @param count
+	 * @see #getRemainsCount()
+	 */
+	public void removeRemains(int count) {
+		if(count <= 0) return;
+		
+		if(count >= this.remainsCount) {
+			this.remainsCount = 0;
+			this.remainsItem = ItemStack.EMPTY;
+		} else {
+			this.remainsCount -= count;
+		}
+	}
+	
+	/**
+	 * Returns an <strong>extract-only</strong> container view of the remains stack.
+	 * @return
+	 */
+	public Container getRemainsAccess() {
+		return this.remainsAccess;
 	}
 	
 	public boolean allResultSlotsEmpty() {

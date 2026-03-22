@@ -37,14 +37,14 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		checkContainerDataCount(containerData, FishTrimmingTableBlockEntity.DATA_FIELD_COUNT);
 		this.containerData = containerData;
 
-		this.addSlot(new Slot(table, 0, 80, 27));
+		this.addSlot(new Slot(table, FishTrimmingTableBlockEntity.FISH_SLOT, 80, 27));
 
-		this.addSlot(new TrimmingResultSlot(table, 1, 44, 77));
-		this.addSlot(new TrimmingResultSlot(table, 2, 80, 77));
-		this.addSlot(new TrimmingResultSlot(table, 3, 116, 77));
-		this.addSlot(new TrimmingResultSlot(table, 4, 8, 113));
+		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_1, 44, 77));
+		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_2, 80, 77));
+		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_3, 116, 77));
+		this.addSlot(new RemainsResultSlot(table.getRemainsAccess(), 0, 8, 113));
 
-		this.addSlot(new FilteredSlot(table, 5, 152, 113, table::isChopper));
+		this.addSlot(new FilteredSlot(table, FishTrimmingTableBlockEntity.CHOPPER_SLOT, 152, 113, table::isChopper));
 
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 9; k++) {
@@ -123,19 +123,22 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 	public void chop(ServerPlayer player) {
 		if (this.table.getStoredRecipe() != null && this.table.hasChopper() && this.table.allResultSlotsEmpty()) {
 
-			// set slot contents 1, 2, 3 to butcher items and 4 to guts (if applicable)
+			// set slot contents 1, 2, 3 to butcher items
 			int numItems = 0;
-			for (int i = 1; i <= 4; i++) {
-				ItemStack result = this.table.getSlotResult(player.level(), i, numItems);
+			for (int i = 1; i <= 3; i++) {
+				ItemStack result = this.table.getSlotResult(player.level(), i);
 				numItems += result.getCount();
 				this.getSlot(i).set(result);
 			}
+			
+			// set remains items (if applicable)
+			this.table.setRemains(this.table.getRemainsItemResult(player.level()), numItems);
 
 			// damage axe
-			this.table.getItem(5).hurtAndBreak(1, player.serverLevel(), player, (item) -> {});
+			this.table.getItem(FishTrimmingTableBlockEntity.CHOPPER_SLOT).hurtAndBreak(1, player.serverLevel(), player, (item) -> {});
 
 			// set slot contents 0 to empty last so logic works in order
-			this.table.setItem(0, this.table.getSlotResult(player.level(), 0, 0));
+			this.table.setItem(0, this.table.getSlotResult(player.level(), 0));
 
 			this.slotsChanged(this.table);
 
@@ -143,12 +146,40 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		}
 	}
 
+	public class RemainsResultSlot extends Slot {
+
+		public RemainsResultSlot(Container container, int slot, int x, int y) {
+			super(container, slot, x, y);
+		}
+
+		@Override
+		public boolean mayPlace(ItemStack stack) {
+			return false;
+		}
+
+		@Override
+		public void onTake(Player player, ItemStack stack) {
+			if (player instanceof ServerPlayer sp) {
+				AdvancementCriteriaRegistry.TRIM_FISH.get().trigger(sp);
+			}
+
+			super.onTake(player, stack);
+		}
+		
+		@Override
+		public boolean isFake() {
+			return true;
+		}
+	}
+	
 	public class TrimmingResultSlot extends Slot {
 
+		private final FishTrimmingTableBlockEntity table;
 		private int prevCount;
 
-		public TrimmingResultSlot(Container table, int slot, int x, int y) {
+		public TrimmingResultSlot(FishTrimmingTableBlockEntity table, int slot, int x, int y) {
 			super(table, slot, x, y);
+			this.table = table;
 		}
 
 		private void updateCount() {
@@ -159,19 +190,10 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		public void setChanged() {
 			super.setChanged();
 
-			if (!this.container.getItem(4).isEmpty()) {
-				int index = this.getSlotIndex();
-
-				if (index == 1 || index == 2 || index == 3) {
-					int removed = Math.max(0, this.prevCount - this.getItem().getCount());
-
-					if (removed > 0) {
-						this.container.getItem(4).shrink(removed);
-						this.container.setChanged();
-
-						FishTrimmingTableMenu.this.slotsChanged(this.container);
-					}
-				}
+			int removed = Math.max(0, this.prevCount - this.getItem().getCount());
+			if (removed > 0) {
+				this.table.removeRemains(removed);
+				FishTrimmingTableMenu.this.slotsChanged(this.container);
 			}
 
 			this.updateCount();
@@ -186,13 +208,6 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		public void onTake(Player player, ItemStack stack) {
 			if (player instanceof ServerPlayer sp) {
 				AdvancementCriteriaRegistry.TRIM_FISH.get().trigger(sp);
-			}
-
-			if (this.getSlotIndex() == 4) {
-				this.container.setItem(1, ItemStack.EMPTY);
-				this.container.setItem(2, ItemStack.EMPTY);
-				this.container.setItem(3, ItemStack.EMPTY);
-				FishTrimmingTableMenu.this.slotsChanged(this.container);
 			}
 
 			super.onTake(player, stack);
