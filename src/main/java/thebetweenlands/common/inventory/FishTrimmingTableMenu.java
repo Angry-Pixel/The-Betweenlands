@@ -41,7 +41,7 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		this.addSlot(new TrimmingResultSlot(table, 3, 116, 77));
 		this.addSlot(new TrimmingResultSlot(table, 4, 8, 113));
 
-		this.addSlot(new FilteredSlot(table, 5, 152, 113, stack -> stack.is(ItemRegistry.BONE_AXE)));
+		this.addSlot(new FilteredSlot(table, 5, 152, 113, table::isChopper));
 
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 9; k++) {

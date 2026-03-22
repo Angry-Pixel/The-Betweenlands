@@ -3,6 +3,7 @@ package thebetweenlands.common.block.entity;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -29,17 +32,20 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
+public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
 	public static final int FISH_SLOT = 0;
 	public static final int OUTPUT_SLOT_1 = 1;
 	public static final int OUTPUT_SLOT_2 = 2;
 	public static final int OUTPUT_SLOT_3 = 3;
 	public static final int CHOPPER_SLOT = 5;
+	public static final int SLOT_COUNT = 6;
 	
 	public static final int DATA_FIELD_COUNT = 0;
+
+	private static final int[] SLOTS_FOR_SIDES = new int[] {FISH_SLOT, CHOPPER_SLOT};
 	
-	private NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
+	private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
 	
 	/**
 	 * Current trimming table recipe
@@ -79,8 +85,12 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 		return this.recipe;
 	}
 
+	public boolean isChopper(ItemStack stack) {
+		return stack.is(ItemRegistry.BONE_AXE);
+	}
+
 	public boolean hasChopper() {
-		return this.getItem(CHOPPER_SLOT).is(ItemRegistry.BONE_AXE);
+		return this.isChopper(this.getItem(CHOPPER_SLOT));
 	}
 
 	@Override
@@ -105,7 +115,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 
 	@Override
 	public int getContainerSize() {
-		return 6;
+		return SLOT_COUNT;
 	}
 
 	@Override
@@ -154,6 +164,45 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 		this.recipeDirty = false;
 	}
 
+	// ======== CONTAINER INSERTION/EXTRACTION RULES START ========
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		// No inserting into output slots
+		if(slot == OUTPUT_SLOT_1 || slot == OUTPUT_SLOT_2 || slot == OUTPUT_SLOT_3) {
+			return false;
+		} else if(slot == CHOPPER_SLOT) {
+			return this.isChopper(stack);
+		}
+		return super.canPlaceItem(slot, stack);
+	}
+	
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		// No extracting from output slots
+		if(slot == OUTPUT_SLOT_1 || slot == OUTPUT_SLOT_2 || slot == OUTPUT_SLOT_3) {
+			return false;
+		}
+		return super.canTakeItem(target, slot, stack);
+	}
+	
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return SLOTS_FOR_SIDES;
+	}
+	
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return this.canPlaceItem(index, itemStack);
+	}
+	
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return true;
+	}
+
+	// ========= CONTAINER INSERTION/EXTRACTION RULES END =========
+	
 	@Nullable
 	public Entity getInputEntity(Level level) {
 		ItemStack stack = this.getItems().getFirst();
