@@ -8,6 +8,8 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
@@ -24,10 +26,10 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 	private final FishTrimmingTableBlockEntity table;
 
 	public FishTrimmingTableMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null));
+		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(FishTrimmingTableBlockEntity.DATA_FIELD_COUNT));
 	}
 
-	public FishTrimmingTableMenu(int containerId, Inventory playerInventory, FishTrimmingTableBlockEntity table) {
+	public FishTrimmingTableMenu(int containerId, Inventory playerInventory, FishTrimmingTableBlockEntity table, ContainerData containerData) {
 		super(MenuRegistry.FISH_TRIMMING_TABLE.get(), containerId);
 		table.startOpen(playerInventory.player);
 		this.table = table;
@@ -50,6 +52,8 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		for (int i1 = 0; i1 < 9; i1++) {
 			this.addSlot(new Slot(playerInventory, i1, 8 + i1 * 18, 203));
 		}
+		
+		this.addDataSlots(containerData);
 	}
 
 	public FishTrimmingTableBlockEntity getContainer() {

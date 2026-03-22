@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.entity;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -12,8 +14,10 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -25,14 +29,47 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
-import javax.annotation.Nullable;
-
 public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 
+	public static final int FISH_SLOT = 0;
+	public static final int OUTPUT_SLOT_1 = 1;
+	public static final int OUTPUT_SLOT_2 = 2;
+	public static final int OUTPUT_SLOT_3 = 3;
+	public static final int CHOPPER_SLOT = 5;
+	
+	public static final int DATA_FIELD_COUNT = 0;
+	
 	private NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
+	
+	/**
+	 * Current trimming table recipe
+	 */
 	@Nullable
-	private TrimmingTableRecipe recipe;
+	protected TrimmingTableRecipe recipe;
+	/**
+	 * Does the triming table recipe need to be updated?
+	 */
+	protected boolean recipeDirty = false;
 
+	protected final ContainerData containerData = new ContainerData() {
+		@Override
+		public int get(int index) {
+			return 0;
+		}
+		
+		@Override
+		public void set(int index, int value) {
+			
+		}
+		
+		@Override
+		public int getCount() {
+			return DATA_FIELD_COUNT;
+		}
+	};
+	
+	public final RecipeManager.CachedCheck<SingleRecipeInput, TrimmingTableRecipe> quickCheck = RecipeManager.createCheck(RecipeRegistry.TRIMMING_TABLE_RECIPE.get());
+	
 	public FishTrimmingTableBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.FISH_TRIMMING_TABLE.get(), pos, state);
 	}
@@ -43,7 +80,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public boolean hasChopper() {
-		return this.getItem(5).is(ItemRegistry.BONE_AXE);
+		return this.getItem(CHOPPER_SLOT).is(ItemRegistry.BONE_AXE);
 	}
 
 	@Override
@@ -63,7 +100,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return new FishTrimmingTableMenu(containerId, inventory, this);
+		return new FishTrimmingTableMenu(containerId, inventory, this, this.containerData);
 	}
 
 	@Override
@@ -74,9 +111,47 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public void setItem(int slot, ItemStack stack) {
 		super.setItem(slot, stack);
-		if (slot == 0 && this.getLevel() != null) {
-			this.recipe = this.getLevel().getRecipeManager().getRecipeFor(RecipeRegistry.TRIMMING_TABLE_RECIPE.get(), new SingleRecipeInput(stack), this.getLevel()).map(RecipeHolder::value).orElse(null);
+		if (slot == FISH_SLOT) {
+			// Defer updating the recipe until setChanged()
+			// This is for the purposes of getting output items:
+			//     If the fish slot gets replaced (see getSlotResult(Level, int, int)) before the output slots do,
+			//         the recipe won't be set to null immediately and the output slots will still get their items
+			this.recipeDirty = true;
 		}
+	}
+	
+	@Override
+	public void setChanged() {
+		if(this.recipeDirty) {
+			this.updateRecipe();
+		}
+		super.setChanged();
+	}
+	
+	@Override
+	public void onLoad() {
+		super.onLoad();
+		// Ensure recipe is loaded
+		this.updateRecipe();
+	}
+	
+	/**
+	 * Updates the {@code recipe} if the world is loaded
+	 */
+	public void updateRecipe() {
+		if(!this.hasLevel()) {
+			return;
+		}
+		
+		ItemStack fishStack = this.getItem(FISH_SLOT);
+		if(!fishStack.isEmpty()) {
+			Level level = this.getLevel();
+			SingleRecipeInput recipeInput = new SingleRecipeInput(fishStack);
+			this.recipe = this.quickCheck.getRecipeFor(recipeInput, level).map(RecipeHolder::value).orElse(null);
+		} else {
+			this.recipe = null;
+		}
+		this.recipeDirty = false;
 	}
 
 	@Nullable
@@ -117,6 +192,8 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 		super.loadAdditional(tag, registries);
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
+		// Update recipe if the world is loaded
+		this.updateRecipe();
 	}
 
 	@Nullable
