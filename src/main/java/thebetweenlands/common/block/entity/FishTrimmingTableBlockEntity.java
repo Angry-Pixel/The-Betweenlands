@@ -209,7 +209,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return new FishTrimmingTableMenu(containerId, inventory, this, this.containerData);
+		return new FishTrimmingTableMenu(containerId, inventory, this, this.remainsAccess, this.containerData);
 	}
 
 	@Override

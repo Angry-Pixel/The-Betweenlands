@@ -7,6 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -27,14 +28,16 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 	private final ContainerData containerData;
 
 	public FishTrimmingTableMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(FishTrimmingTableBlockEntity.DATA_FIELD_COUNT));
+		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainer(1), new SimpleContainerData(FishTrimmingTableBlockEntity.DATA_FIELD_COUNT));
 	}
 
-	public FishTrimmingTableMenu(int containerId, Inventory playerInventory, FishTrimmingTableBlockEntity table, ContainerData containerData) {
+	public FishTrimmingTableMenu(int containerId, Inventory playerInventory, FishTrimmingTableBlockEntity table, Container remainsAccess, ContainerData containerData) {
 		super(MenuRegistry.FISH_TRIMMING_TABLE.get(), containerId);
+		checkContainerSize(table, FishTrimmingTableBlockEntity.SLOT_COUNT);
+		checkContainerDataCount(containerData, FishTrimmingTableBlockEntity.DATA_FIELD_COUNT);
+		checkContainerSize(remainsAccess, 1);
 		table.startOpen(playerInventory.player);
 		this.table = table;
-		checkContainerDataCount(containerData, FishTrimmingTableBlockEntity.DATA_FIELD_COUNT);
 		this.containerData = containerData;
 
 		this.addSlot(new Slot(table, FishTrimmingTableBlockEntity.FISH_SLOT, 80, 27));
@@ -42,8 +45,8 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_1, 44, 77));
 		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_2, 80, 77));
 		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_3, 116, 77));
-		this.addSlot(new RemainsResultSlot(table.getRemainsAccess(), 0, 8, 113));
-
+		this.addSlot(new RemainsResultSlot(remainsAccess, 0, 8, 113));
+		
 		this.addSlot(new FilteredSlot(table, FishTrimmingTableBlockEntity.CHOPPER_SLOT, 152, 113, table::isChopper));
 
 		for (int l = 0; l < 3; l++) {
