@@ -57,23 +57,23 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 		stack.translate(0.5F, 0.0F, 0.5F);
 		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(FishTrimmingTableBlock.FACING).toYRot()));
 		stack.scale(1.0F, -1.0F, -1.0F);
-		this.table.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);
-		if (!entity.getItem(5).isEmpty()) {
-			this.cleaver.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);
-			this.blood.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);
+		this.table.render(stack, source.getBuffer(entity.getRemainsCount() > 0 ? USED_TEXTURE : TEXTURE), light, overlay);
+		if (!entity.getItem(FishTrimmingTableBlockEntity.CHOPPER_SLOT).isEmpty()) {
+			this.cleaver.render(stack, source.getBuffer(entity.getRemainsCount() > 0 ? USED_TEXTURE : TEXTURE), light, overlay);
+			this.blood.render(stack, source.getBuffer(entity.getRemainsCount() > 0 ? USED_TEXTURE : TEXTURE), light, overlay);
 		}
 
 		if (entity.getLevel() != null) {
 			RandomSource random = RandomSource.create(entity.getBlockPos().asLong());
 
-			if (!entity.getItem(0).isEmpty()) {
+			if (!entity.getItem(FishTrimmingTableBlockEntity.FISH_SLOT).isEmpty()) {
 				if (this.shouldRenderAsEntity(entity, 0) && entity.getInputEntity(entity.getLevel()) != null)
-					this.renderMobInSlot(stack, source, entity.getItem(0), entity.getInputEntity(entity.getLevel()), new Vec3(0.0F, -0.8F, 0.0F), light);
+					this.renderMobInSlot(stack, source, entity.getItem(FishTrimmingTableBlockEntity.FISH_SLOT), entity.getInputEntity(entity.getLevel()), new Vec3(0.0F, -0.8F, 0.0F), light);
 				else
-					this.renderItemInSlot(stack, source, entity.getItem(0), ITEM_OFFSETS[0], 0.5F, 0.0F, light, overlay);
+					this.renderItemInSlot(stack, source, entity.getItem(FishTrimmingTableBlockEntity.FISH_SLOT), ITEM_OFFSETS[0], 0.5F, 0.0F, light, overlay);
 			}
 
-			for (int i = 1; i < 5; i++) {
+			for (int i = 1; i < 4; i++) {
 				renderItemInSlot(stack, source, entity.getItem(i), ITEM_OFFSETS[i], 0.25F, (float)random.nextDouble() * 60.0F - 30.0F, light, overlay);
 			}
 		}
