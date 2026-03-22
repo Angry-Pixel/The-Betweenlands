@@ -1,5 +1,7 @@
 package thebetweenlands.common.inventory;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,8 +20,6 @@ import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import java.util.Objects;
 
 public class FishTrimmingTableMenu extends AbstractContainerMenu {
 
@@ -141,6 +141,8 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 			this.table.setItem(0, this.table.getSlotResult(player.level(), 0));
 
 			this.slotsChanged(this.table);
+			this.table.setChanged();
+			this.table.markUpdated();
 
 			player.level().playSound(null, this.table.getBlockPos(), SoundRegistry.FISH_CHOP.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
@@ -180,6 +182,7 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		public TrimmingResultSlot(FishTrimmingTableBlockEntity table, int slot, int x, int y) {
 			super(table, slot, x, y);
 			this.table = table;
+			this.updateCount();
 		}
 
 		private void updateCount() {
@@ -193,6 +196,8 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 			int removed = Math.max(0, this.prevCount - this.getItem().getCount());
 			if (removed > 0) {
 				this.table.removeRemains(removed);
+				this.table.setChanged();
+				this.table.markUpdated();
 				FishTrimmingTableMenu.this.slotsChanged(this.container);
 			}
 

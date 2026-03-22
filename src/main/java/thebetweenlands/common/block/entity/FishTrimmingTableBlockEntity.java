@@ -67,6 +67,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		@Override
 		public void setChanged() {
 			FishTrimmingTableBlockEntity.this.setChanged();
+			FishTrimmingTableBlockEntity.this.markUpdated();
 		}
 		
 		@Override
@@ -80,7 +81,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 			final int remainsCount = FishTrimmingTableBlockEntity.this.getRemainsCount();
 			final ItemStack remainsItem = FishTrimmingTableBlockEntity.this.getRemainsItem();
 			
-			if(remainsCount <= 0 || remainsItem.isEmpty() || amount <= remainsItem.getCount()) {
+			if(remainsCount <= 0 || remainsItem.isEmpty() || amount < remainsItem.getCount()) {
 				return ItemStack.EMPTY;
 			}
 			
@@ -229,6 +230,12 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		if(slot == CHOPPER_SLOT) {
 			this.updateChopperValid();
 			this.updateCanChop();
+		}
+	}
+
+	public void markUpdated() {
+		if (this.hasLevel()) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 	}
 	
