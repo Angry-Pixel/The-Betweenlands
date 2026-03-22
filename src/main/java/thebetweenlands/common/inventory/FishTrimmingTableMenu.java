@@ -24,6 +24,7 @@ import java.util.Objects;
 public class FishTrimmingTableMenu extends AbstractContainerMenu {
 
 	private final FishTrimmingTableBlockEntity table;
+	private final ContainerData containerData;
 
 	public FishTrimmingTableMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
 		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(FishTrimmingTableBlockEntity.DATA_FIELD_COUNT));
@@ -33,6 +34,8 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		super(MenuRegistry.FISH_TRIMMING_TABLE.get(), containerId);
 		table.startOpen(playerInventory.player);
 		this.table = table;
+		checkContainerDataCount(containerData, FishTrimmingTableBlockEntity.DATA_FIELD_COUNT);
+		this.containerData = containerData;
 
 		this.addSlot(new Slot(table, 0, 80, 27));
 
@@ -58,6 +61,18 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 
 	public FishTrimmingTableBlockEntity getContainer() {
 		return this.table;
+	}
+	
+	public boolean isChopperValid() {
+		return this.containerData.get(FishTrimmingTableBlockEntity.FIELD_CHOPPER_VALID) != 0;
+	}
+	
+	public boolean hasRecipe() {
+		return this.containerData.get(FishTrimmingTableBlockEntity.FIELD_HAS_RECIPE) != 0;
+	}
+	
+	public boolean canChop() {
+		return this.containerData.get(FishTrimmingTableBlockEntity.FIELD_CAN_CHOP) != 0;
 	}
 
 	@Override

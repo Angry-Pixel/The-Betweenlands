@@ -18,7 +18,6 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -33,6 +32,7 @@ import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.util.BooleanContainerData;
 
 public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
@@ -43,7 +43,10 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 	public static final int CHOPPER_SLOT = 4;
 	public static final int SLOT_COUNT = 5;
 
-	public static final int DATA_FIELD_COUNT = 0;
+	public static final int FIELD_CHOPPER_VALID = 0;
+	public static final int FIELD_HAS_RECIPE = 1;
+	public static final int FIELD_CAN_CHOP = 2;
+	public static final int DATA_FIELD_COUNT = 3;
 
 	private static final int[] SLOTS_FOR_SIDES = new int[] {FISH_SLOT, CHOPPER_SLOT};
 	
@@ -62,16 +65,30 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 	 * Does the triming table recipe need to be updated?
 	 */
 	protected boolean recipeDirty = false;
+	
+	// Yummy menu fields for the client
+	protected final BooleanContainerData containerData = new BooleanContainerData() {
+		private boolean isChopperValid = false;
+		private boolean hasRecipe = false;
+		private boolean canChop = false;
 
-	protected final ContainerData containerData = new ContainerData() {
 		@Override
-		public int get(int index) {
-			return 0;
+		public boolean getBoolean(int index) {
+			return switch(index) {
+				case FIELD_CHOPPER_VALID -> this.isChopperValid;
+				case FIELD_HAS_RECIPE -> this.hasRecipe;
+				case FIELD_CAN_CHOP -> this.canChop;
+				default -> false;
+			};
 		}
 		
 		@Override
-		public void set(int index, int value) {
-			
+		public void set(int index, boolean value) {
+			switch(index) {
+				case FIELD_CHOPPER_VALID -> this.isChopperValid = value;
+				case FIELD_HAS_RECIPE -> this.hasRecipe = value;
+				case FIELD_CAN_CHOP -> this.canChop = value;
+			}
 		}
 		
 		@Override
@@ -134,6 +151,10 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 			//         the recipe won't be set to null immediately and the output slots will still get their items
 			this.recipeDirty = true;
 		}
+		if(slot == CHOPPER_SLOT) {
+			this.updateChopperValid();
+			this.updateCanChop();
+		}
 	}
 	
 	@Override
@@ -167,7 +188,19 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		} else {
 			this.recipe = null;
 		}
+		
 		this.recipeDirty = false;
+		
+		this.containerData.set(FIELD_HAS_RECIPE, this.recipe != null);
+		this.updateCanChop();
+	}
+	
+	public void updateChopperValid() {
+		this.containerData.set(FIELD_CHOPPER_VALID, this.hasChopper());
+	}
+	
+	public void updateCanChop() {
+		this.containerData.set(FIELD_CAN_CHOP, this.hasChopper() && !this.getItem(FISH_SLOT).isEmpty() && this.allResultSlotsEmpty());
 	}
 
 	// ======== CONTAINER INSERTION/EXTRACTION RULES START ========
@@ -308,6 +341,8 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		
 		// Update recipe if the world is loaded
 		this.updateRecipe();
+		this.updateChopperValid();
+		this.updateCanChop();
 	}
 
 	@Nullable

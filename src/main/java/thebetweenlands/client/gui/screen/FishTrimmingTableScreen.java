@@ -50,7 +50,13 @@ public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmin
 		int j = (this.height - this.imageHeight) / 2;
 		graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-		if (this.getMenu().getContainer() instanceof FishTrimmingTableBlockEntity table && table.getStoredRecipe() != null && table.hasChopper() && table.allResultSlotsEmpty()) {
+		if (
+				// Ensure the table exists on the client and the client knows the recipe so the client knows the result items
+				// TODO have the server sync the result items to the client via some hidden slots so this isn't necessary
+				this.getMenu().getContainer() instanceof FishTrimmingTableBlockEntity table && table.getStoredRecipe() != null &&
+				// Ensure that the server also has a recipe (i.e. the recipe from `table` isn't client-only or something)
+				this.getMenu().hasRecipe() && this.getMenu().canChop()
+		) {
 			graphics.pose().pushPose();
 			graphics.pose().translate(this.leftPos, this.topPos, 0);
 			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 1, 0), this.getMenu().getSlot(1));
