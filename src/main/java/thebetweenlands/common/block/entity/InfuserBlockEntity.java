@@ -26,11 +26,11 @@ import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.util.SidedNoMenuContainerBlockEntity;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.item.herblore.AspectVialItem;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -43,6 +43,9 @@ public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implemen
 	public static final int LIFE_CRYSTAL_SLOT = MAX_INGREDIENTS + 1;
 	public static final int CONTAINER_SIZE = LIFE_CRYSTAL_SLOT + 1;
 
+	private static final int[] SLOTS_FOR_VERTICAL = slotsBetweenInclusive(0, MAX_INGREDIENTS); // Top and bottom can access ingredients
+	private static final int[] SLOTS_FOR_SIDES = new int[] {LIFE_CRYSTAL_SLOT}; // Sides access life crystal
+	
 	private NonNullList<ItemStack> items = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
 	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 3, stack -> stack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
 
@@ -243,9 +246,9 @@ public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implemen
 			entity.evaporation--;
 			entity.setChanged();
 		}
-		if (entity.isValidCrystalInstalled()) {
+		if (entity.canCrystalStir()) {
 			if (entity.temp >= 100 && entity.evaporation >= 400 && entity.stirProgress >= 90 && entity.hasIngredients()) {
-				entity.getItems().get(LIFE_CRYSTAL_SLOT).setDamageValue(entity.getItems().get(LIFE_CRYSTAL_SLOT).getDamageValue() + 1);
+				LifeCrystalHelper.drainLifePower(entity.getItem(LIFE_CRYSTAL_SLOT), 1, false);
 				entity.stirProgress = 0;
 			}
 			if (!entity.hasCrystal) {
@@ -307,7 +310,11 @@ public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implemen
 	}
 
 	public boolean isValidCrystalInstalled() {
-		return !this.getItems().get(LIFE_CRYSTAL_SLOT).isEmpty() && this.getItems().get(LIFE_CRYSTAL_SLOT).getItem() instanceof LifeCrystalItem && this.getItems().get(LIFE_CRYSTAL_SLOT).getDamageValue() < this.getItems().get(LIFE_CRYSTAL_SLOT).getMaxDamage();
+		return LifeCrystalHelper.hasLifePower(this.getItem(LIFE_CRYSTAL_SLOT));
+	}
+
+	public boolean canCrystalStir() {
+		return LifeCrystalHelper.drainLifePower(this.getItem(LIFE_CRYSTAL_SLOT), 1, true) > 0;
 	}
 	
 	public boolean isIngredientSlot(int slot) {
@@ -329,8 +336,7 @@ public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implemen
 		
 		// Only accept life crystals in the life crystal slot
 		if(slot == LIFE_CRYSTAL_SLOT) {
-			// TODO life crystal charge data component?
-			return stack.getItem() instanceof LifeCrystalItem;
+			return LifeCrystalHelper.isValidLifeCrystal(stack);
 		}
 		
 		return false;
@@ -348,9 +354,9 @@ public class InfuserBlockEntity extends SidedNoMenuContainerBlockEntity implemen
 	@Override
 	public int[] getSlotsForFace(Direction side) {
 		if(side.getAxis().isVertical()) { // Top and bottom can access ingredients
-			return slotsBetweenInclusive(0, MAX_INGREDIENTS);
+			return SLOTS_FOR_VERTICAL;
 		} else if(side.getAxis().isHorizontal()) { // Sides access life crystal
-			return new int[] {LIFE_CRYSTAL_SLOT};
+			return SLOTS_FOR_SIDES;
 		}
 		return NO_SLOTS;
 	}

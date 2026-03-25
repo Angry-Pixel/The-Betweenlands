@@ -1,5 +1,10 @@
 package thebetweenlands.common.block.container;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -37,17 +42,16 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
+import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.*;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
@@ -116,9 +120,9 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 					}
 				}
 
-				if (!stack.isEmpty() && stack.getItem() instanceof LifeCrystalItem) {
-					if (infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).isEmpty()) {
-						infuser.setItem(InfuserBlockEntity.MAX_INGREDIENTS + 1, stack);
+				if (LifeCrystalHelper.isValidLifeCrystal(stack)) {
+					if (infuser.getItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT).isEmpty()) {
+						infuser.setItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT, stack);
 						infuser.updateInfusingRecipe();
 						if (!player.isCreative()) player.setItemInHand(hand, ItemStack.EMPTY);
 					}
@@ -151,10 +155,10 @@ public class InfuserBlock extends HorizontalBaseEntityBlock implements SwampWate
 			}
 
 			if (player.isShiftKeyDown()) {
-				if (!infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).isEmpty()) {
-					ItemEntity itemEntity = player.drop(infuser.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).copy(), false);
+				if (!infuser.getItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT).isEmpty()) {
+					ItemEntity itemEntity = player.drop(infuser.getItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT).copy(), false);
 					if (itemEntity != null) itemEntity.setPickUpDelay(0);
-					infuser.setItem(InfuserBlockEntity.MAX_INGREDIENTS + 1, ItemStack.EMPTY);
+					infuser.setItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT, ItemStack.EMPTY);
 					infuser.updateInfusingRecipe();
 					infuser.setChanged();
 					return InteractionResult.SUCCESS;
