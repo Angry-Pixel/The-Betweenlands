@@ -33,6 +33,10 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> REPAIRS_LURKER_SKIN_SHIELD = tag("repairs_lurker_skin_shield");
 
 	public static final TagKey<Item> ASPECT_VIALS = tag("aspect_vials");
+	public static final TagKey<Item> EMPTY_ASPECT_VIALS = tag("empty_aspect_vials");
+	public static final TagKey<Item> FILLED_ASPECT_VIALS = tag("filled_aspect_vials");
+	public static final TagKey<Item> FILLABLE_ASPECT_VIALS = tag("fillable_aspect_vials");
+	
 	public static final TagKey<Item> BL_LOGS = tag("betweenlands_logs");
 	public static final TagKey<Item> FILTERED_SILT_GLASS = tag("filtered_silt_glass");
 	public static final TagKey<Item> MUD_BRICK_SHINGLES = tag("mud_brick_shingles");
@@ -76,7 +80,6 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		this.copy(BLBlockTagProvider.OCTINE_IGNITES, OCTINE_IGNITES);
-		this.tag(ASPECT_VIALS).add(ItemRegistry.GREEN_ASPECT_VIAL.getKey(), ItemRegistry.ORANGE_ASPECT_VIAL.getKey());
 		this.tag(BL_LOGS).add(
 			BlockRegistry.WEEDWOOD.asItem(), BlockRegistry.WEEDWOOD_LOG.asItem(), BlockRegistry.WEEDWOOD_BARK.asItem(),
 			BlockRegistry.ROTTEN_BARK.asItem(), BlockRegistry.RUBBER_LOG.asItem(),
@@ -115,6 +118,18 @@ public class BLItemTagProvider extends ItemTagsProvider {
 		this.tag(DEFAULT_CORRODIBLE);
 		this.tag(CUSTOM_CORRODIBLE);
 
+
+		this.tag(ASPECT_VIALS)
+			.addTag(FILLED_ASPECT_VIALS).addTag(FILLABLE_ASPECT_VIALS).addTag(EMPTY_ASPECT_VIALS);
+		this.tag(EMPTY_ASPECT_VIALS)
+			.add(ItemRegistry.GREEN_DENTROTHYST_VIAL.getKey(), ItemRegistry.ORANGE_DENTROTHYST_VIAL.getKey(), ItemRegistry.DIRTY_DENTROTHYST_VIAL.getKey());
+		this.tag(FILLED_ASPECT_VIALS)
+			.add(ItemRegistry.GREEN_ASPECT_VIAL.getKey(), ItemRegistry.ORANGE_ASPECT_VIAL.getKey());
+		this.tag(FILLABLE_ASPECT_VIALS).add(
+				ItemRegistry.GREEN_DENTROTHYST_VIAL.getKey(), ItemRegistry.ORANGE_DENTROTHYST_VIAL.getKey(),
+				ItemRegistry.GREEN_ASPECT_VIAL.getKey(), ItemRegistry.ORANGE_ASPECT_VIAL.getKey()
+			);
+		
 		this.tag(WATER_FILTERS).addTag(WATER_FILTERS_MOSS).addTag(WATER_FILTERS_SILK);
 		this.tag(WATER_FILTERS_MOSS).add(ItemRegistry.MOSS_FILTER.getKey());
 		this.tag(WATER_FILTERS_SILK).add(ItemRegistry.SILK_FILTER.getKey());

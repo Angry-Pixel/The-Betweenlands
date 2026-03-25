@@ -1,6 +1,7 @@
 {
   "values": [
-    "thebetweenlands:green_aspect_vial",
-    "thebetweenlands:orange_aspect_vial"
+    "#thebetweenlands:filled_aspect_vials",
+    "#thebetweenlands:fillable_aspect_vials",
+    "#thebetweenlands:empty_aspect_vials"
   ]
 }
