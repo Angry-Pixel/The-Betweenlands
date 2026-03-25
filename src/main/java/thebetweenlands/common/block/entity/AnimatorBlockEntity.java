@@ -36,11 +36,11 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.api.capability.BLCapabilities;
 import thebetweenlands.api.capability.lifecrystal.ILifeCrystalHandler;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
 import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.inventory.AnimatorMenu;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
@@ -213,13 +213,8 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		return stack.getItemHolder().getData(DataMapRegistry.ANIMATOR_FUEL);
 	}
 	
-	@Nullable
-	public static ILifeCrystalHandler getLifeCrystalHandler(ItemStack stack) {
-		return stack.getCapability(BLCapabilities.LifeCrystalHandler.ITEM);
-	}
-	
 	public boolean isValidLifeCrystal(ItemStack stack) {
-		return !stack.isEmpty() && getLifeCrystalHandler(stack) != null;
+		return LifeCrystalHelper.isValidLifeCrystal(stack);
 	}
 
 	public boolean isValidFuel(ItemStack stack) {
@@ -350,7 +345,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 		}
 		
 		// If we have a valid crystal and recipe
-		ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
+		ILifeCrystalHandler lifeCrystalHandler = LifeCrystalHelper.getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
 		int simulatedDrain = lifeCrystalHandler.drainLifePower(this.recipeRequiredLifeCount, true);
 		
 		if(simulatedDrain >= this.recipeRequiredLifeCount) {
@@ -371,7 +366,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	 */
 	public void drainLifeCrystalPower(Level level, BlockPos pos) {
 		if(this.hasValidLifeCrystal() && this.hasRecipe()) {
-			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
+			ILifeCrystalHandler lifeCrystalHandler = LifeCrystalHelper.getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
 			lifeCrystalHandler.drainLifePower(this.recipeRequiredLifeCount, false);
 
 			// Update fields
@@ -385,7 +380,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	public void updateLifeCrystalFields() {
 		if(this.hasValidLifeCrystal()) {
 			// Update life crystal life fields
-			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
+			ILifeCrystalHandler lifeCrystalHandler = LifeCrystalHelper.getLifeCrystalHandler(this.getItem(LIFE_CRYSTAL_SLOT));
 			this.lifeCrystalCurrentLife = lifeCrystalHandler.getLifePower();
 			this.lifeCrystalMaxLife = lifeCrystalHandler.getMaxLifePower();
 		} else {
