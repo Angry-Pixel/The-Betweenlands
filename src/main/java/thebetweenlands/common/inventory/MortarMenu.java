@@ -8,6 +8,8 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.inventory.slot.FilteredSlot;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -47,8 +49,12 @@ public class MortarMenu extends AbstractContainerMenu {
 				return 1;
 			}
 		});
-		this.addSlot(new FilteredSlot(mortar, 2, 123, 36, stack -> false));
-		this.addSlot(new FilteredSlot(mortar, 3, 79, 8, stack -> stack.getItem() instanceof LifeCrystalItem));
+		this.addSlot(new FilteredSlot(mortar, 2, 123, 36, stack -> stack.is(BLItemTagProvider.ASPECT_VIALS)) {
+			public int getMaxStackSize(ItemStack stack) {
+				return stack.is(BLItemTagProvider.ASPECT_VIALS) ? 1 : super.getMaxStackSize(stack);
+			};
+		});
+		this.addSlot(new FilteredSlot(mortar, 3, 79, 8, LifeCrystalHelper::isValidLifeCrystal));
 
 		for (int k = 0; k < 3; k++) {
 			for (int i1 = 0; i1 < 9; i1++) {
