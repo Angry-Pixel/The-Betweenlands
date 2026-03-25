@@ -98,7 +98,7 @@ public class MortarMenu extends AbstractContainerMenu {
 					if (!this.moveItemStackTo(stack1, 1, 2, false)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (stack1.getItem() instanceof LifeCrystalItem) {
+				} else if (LifeCrystalHelper.isValidLifeCrystal(stack1)) {
 					if (!this.moveItemStackTo(stack1, 3, 4, false)) {
 						return ItemStack.EMPTY;
 					}
