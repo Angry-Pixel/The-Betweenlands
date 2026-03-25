@@ -284,7 +284,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 			return LifeCrystalHelper.isValidLifeCrystal(stack);
 		} else if(slot == 2) { // Output slot
 			ItemStack existingItem = this.getItem(2);
-			return stack.is(BLItemTagProvider.ASPECT_VIALS) && !existingItem.is(BLItemTagProvider.ASPECT_VIALS);
+			return stack.is(BLItemTagProvider.FILLABLE_ASPECT_VIALS) && !existingItem.is(BLItemTagProvider.FILLABLE_ASPECT_VIALS);
 		}
 		return super.canPlaceItem(slot, stack);
 	}

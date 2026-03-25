@@ -28,7 +28,7 @@ public class MortarWrapper extends SidedInvWrapper {
 	@Override
 	public int getSlotLimit(int slot) {
 		// If we're the output slot and we contain an aspect vial, the max stack size is 1
-		if (getSlot(this.inv, slot, this.side) == 2 && this.getStackInSlot(slot).is(BLItemTagProvider.ASPECT_VIALS)) {
+		if (getSlot(this.inv, slot, this.side) == 2 && this.getStackInSlot(slot).is(BLItemTagProvider.FILLABLE_ASPECT_VIALS)) {
 			return 1;
 		}
 		return super.getSlotLimit(slot);

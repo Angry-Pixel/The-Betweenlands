@@ -49,9 +49,9 @@ public class MortarMenu extends AbstractContainerMenu {
 				return 1;
 			}
 		});
-		this.addSlot(new FilteredSlot(mortar, 2, 123, 36, stack -> stack.is(BLItemTagProvider.ASPECT_VIALS)) {
+		this.addSlot(new FilteredSlot(mortar, 2, 123, 36, stack -> stack.is(BLItemTagProvider.FILLABLE_ASPECT_VIALS)) {
 			public int getMaxStackSize(ItemStack stack) {
-				return stack.is(BLItemTagProvider.ASPECT_VIALS) ? 1 : super.getMaxStackSize(stack);
+				return stack.is(BLItemTagProvider.FILLABLE_ASPECT_VIALS) ? 1 : super.getMaxStackSize(stack);
 			};
 		});
 		this.addSlot(new FilteredSlot(mortar, 3, 79, 8, LifeCrystalHelper::isValidLifeCrystal));
