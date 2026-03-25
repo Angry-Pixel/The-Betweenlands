@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-21T21:56:49.5129737	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2026-03-25T10:54:50.610259	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 3c8338bc22db2497bf01321405dcacecc18dd51c data/minecraft/tags/item/chest_armor.json
@@ -8,6 +8,7 @@ a16324761e9d4c783862e23154a594a210fa7644 data/minecraft/tags/item/leg_armor.json
 56d10934ffdfbdd5a641242625886e1603a65a60 data/minecraft/tags/item/pickaxes.json
 6d94a07fd1401c7963d0cbd25416072ff5145982 data/minecraft/tags/item/shovels.json
 a4c743895b60b03c27274f97543c63320a2cb51a data/minecraft/tags/item/swords.json
+a9170b0c494355ef59be0d1ff25a6f0502f0969d data/thebetweenlands/tags/item/aspect_vials.json
 2e7d9af41da46bd82d367ae4752f08050920cd0c data/thebetweenlands/tags/item/betweenlands_logs.json
 a7598dbab37e1a8e21a417106272d54c15d70163 data/thebetweenlands/tags/item/circle_gem_applicable.json
 64e73efc633e013c26a0476e03cdd737fd89a3b2 data/thebetweenlands/tags/item/corrodible.json
