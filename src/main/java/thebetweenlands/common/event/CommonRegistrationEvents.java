@@ -58,6 +58,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.util.ItemHandlerProvidingBlockEntity;
 import thebetweenlands.common.capability.AnimatorWrapper;
 import thebetweenlands.common.capability.CenserWrapper;
+import thebetweenlands.common.capability.MortarWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.capability.SmokingRackWrapper;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
@@ -374,7 +375,7 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ITEM_SHELF.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.LOOT_POT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.LOOT_URN.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MORTAR.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MORTAR.get(), (tile, context) -> new MortarWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MOTH_HOUSE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.OFFERING_TABLE.get(), (tile, context) -> new InvWrapper(tile));

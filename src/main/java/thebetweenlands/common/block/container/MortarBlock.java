@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -127,7 +128,14 @@ public class MortarBlock extends HorizontalBaseEntityBlock implements SwampWater
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		if (level.getBlockEntity(pos) instanceof MortarBlockEntity mortar) {
+			boolean pestleActive = mortar.isPestleActive();
+			mortar.setPestleActive(false);
+			Containers.dropContentsOnDestroy(state, newState, level, pos);
+			mortar.setPestleActive(pestleActive);
+		} else {
+			Containers.dropContentsOnDestroy(state, newState, level, pos);
+		}
 		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 	

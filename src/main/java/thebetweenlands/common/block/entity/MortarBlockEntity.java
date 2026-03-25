@@ -1,5 +1,9 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -28,11 +32,11 @@ import thebetweenlands.api.recipes.MortarRecipe;
 import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.inventory.MortarMenu;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.*;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class MortarBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
@@ -118,7 +122,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 						}
 
 						if (entity.isPestleInstalled())
-							entity.getItem(1).set(DataComponentRegistry.PESTLE_ACTIVE, Unit.INSTANCE);
+							entity.setPestleActive(true);
 
 						if (entity.progress > 84) {
 							if (!entity.getItem(0).isEmpty())
@@ -144,9 +148,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 								entity.setItem(1, ItemStack.EMPTY);
 							}
 
-							if (!entity.getItem(1).isEmpty())
-								entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
-
+							entity.setPestleActive(false);
 							entity.setChanged();
 						}
 					}
@@ -159,8 +161,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 		}
 
 		if (!validRecipe || entity.getItem(0).isEmpty() || entity.getItem(1).isEmpty() || outputFull) {
-			if (!entity.getItem(1).isEmpty())
-				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
+			entity.setPestleActive(false);
 
 			if (entity.progress > 0) {
 				entity.progress = 0;
@@ -168,8 +169,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 			}
 		}
 		if (entity.getItem(3).isEmpty() && entity.progress > 0 && !entity.manualGrinding) {
-			if (!entity.getItem(1).isEmpty())
-				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
+			entity.setPestleActive(false);
 			entity.progress = 0;
 			entity.setChanged();
 		}
@@ -189,6 +189,21 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 
 	private boolean outputIsFull() {
 		return this.getItem(2).getCount() >= this.getMaxStackSize();
+	}
+
+	public boolean isPestleActive() {
+		return this.isPestleInstalled() && this.getItem(1).has(DataComponentRegistry.PESTLE_ACTIVE);
+	}
+
+	public void setPestleActive(boolean active) {
+		ItemStack pestle = this.getItem(1);
+		if(!pestle.isEmpty()) {
+			if(active) {
+				pestle.set(DataComponentRegistry.PESTLE_ACTIVE, Unit.INSTANCE);
+			} else {
+				pestle.remove(DataComponentRegistry.PESTLE_ACTIVE);
+			}
+		}
 	}
 
 	@Override
@@ -250,6 +265,15 @@ public class MortarBlockEntity extends BaseContainerBlockEntity implements World
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
 		return this.saveCustomOnly(registries);
+	}
+	
+	@Override
+	public ItemStack removeItem(int slot, int amount) {
+		ItemStack stack = super.removeItem(slot, amount);
+		if(slot == 1 && !stack.isEmpty()) { // Pestle slot
+			stack.remove(DataComponentRegistry.PESTLE_ACTIVE);
+		}
+		return stack;
 	}
 	
 	@Override
