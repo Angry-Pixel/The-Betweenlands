@@ -44,7 +44,7 @@ public class LifeCrystalItem extends Item {
 	public void setDamage(ItemStack stack, int damage) {
 		int maxDamage = stack.getMaxDamage();
 		if(damage > maxDamage && this.isRechargeable(stack)) {
-			//Don't let the crystal break
+			// Don't let the crystal break
 			damage = maxDamage;
 		}
 		super.setDamage(stack, damage);

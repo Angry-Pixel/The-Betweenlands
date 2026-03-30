@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -18,7 +19,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.block.container.GrubHubBlock;
 import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.network.clientbound.InfestWeedwoodBushPacket;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
 
@@ -115,6 +120,18 @@ public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IF
 	@Override
 	public int getContainerSize() {
 		return 1;
+	}
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		// 1.12 allowed you to add grubs if you wanted
+		// I'm leaving it in so that you can fill up the grubhub and have it spawn infestations
+		return slot == 0 && stack.is(ItemRegistry.SILK_GRUB);
+	}
+	
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		return true;
 	}
 
 	@Override

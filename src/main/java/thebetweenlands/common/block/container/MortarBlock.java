@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,6 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.MortarBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -77,7 +79,7 @@ public class MortarBlock extends HorizontalBaseEntityBlock implements SwampWater
 				mortar.setChanged();
 				stack.shrink(1);
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
-			} else if (stack.getItem() instanceof LifeCrystalItem && mortar.getItem(3).isEmpty()) {
+			} else if (LifeCrystalHelper.isValidLifeCrystal(stack) && mortar.getItem(3).isEmpty()) {
 				mortar.setItem(3, stack.copyWithCount(1));
 				mortar.setChanged();
 				stack.shrink(1);
@@ -127,7 +129,14 @@ public class MortarBlock extends HorizontalBaseEntityBlock implements SwampWater
 
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-		Containers.dropContentsOnDestroy(state, newState, level, pos);
+		if (level.getBlockEntity(pos) instanceof MortarBlockEntity mortar) {
+			boolean pestleActive = mortar.isPestleActive();
+			mortar.setPestleActive(false);
+			Containers.dropContentsOnDestroy(state, newState, level, pos);
+			mortar.setPestleActive(pestleActive);
+		} else {
+			Containers.dropContentsOnDestroy(state, newState, level, pos);
+		}
 		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 	

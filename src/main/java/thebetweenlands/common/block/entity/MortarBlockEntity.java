@@ -1,6 +1,11 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +17,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -23,15 +29,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.MortarRecipe;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.inventory.MortarMenu;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+public class MortarBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
-public class MortarBlockEntity extends BaseContainerBlockEntity {
-
+	private static final int[] SLOTS_FOR_UP = new int[]{0}; // Input slot
+	private static final int[] SLOTS_FOR_DOWN = new int[]{2}; // Output slot
+	private static final int[] SLOTS_FOR_SIDES = new int[]{1, 3}; // Pestle slot, Life Crystal slot
+	
 	public int progress;
 	public boolean manualGrinding = false;
 	public float crystalVelocity;
@@ -94,7 +106,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 				outputFull &= !replacesOutput;
 
-				if ((entity.isCrystalInstalled() || entity.manualGrinding)) {
+				if ((entity.canCrystalGrind() || entity.manualGrinding)) {
 					if (!output.isEmpty() && (replacesOutput || entity.getItem(2).isEmpty() || (ItemStack.isSameItemSameComponents(entity.getItem(2), output) && entity.getItem(2).getCount() + output.getCount() <= output.getMaxStackSize()))) {
 						validRecipe = true;
 
@@ -110,7 +122,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 						}
 
 						if (entity.isPestleInstalled())
-							entity.getItem(1).set(DataComponentRegistry.PESTLE_ACTIVE, Unit.INSTANCE);
+							entity.setPestleActive(true);
 
 						if (entity.progress > 84) {
 							if (!entity.getItem(0).isEmpty())
@@ -127,7 +139,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 							entity.getItem(1).setDamageValue(entity.getItem(1).getDamageValue() + 1);
 
 							if (!entity.manualGrinding)
-								entity.getItem(3).setDamageValue(entity.getItem(1).getDamageValue() + 1);
+								LifeCrystalHelper.drainLifePower(entity.getItem(3), 1, false);
 
 							entity.progress = 0;
 							entity.manualGrinding = false;
@@ -136,9 +148,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 								entity.setItem(1, ItemStack.EMPTY);
 							}
 
-							if (!entity.getItem(1).isEmpty())
-								entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
-
+							entity.setPestleActive(false);
 							entity.setChanged();
 						}
 					}
@@ -151,8 +161,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 		}
 
 		if (!validRecipe || entity.getItem(0).isEmpty() || entity.getItem(1).isEmpty() || outputFull) {
-			if (!entity.getItem(1).isEmpty())
-				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
+			entity.setPestleActive(false);
 
 			if (entity.progress > 0) {
 				entity.progress = 0;
@@ -160,8 +169,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 			}
 		}
 		if (entity.getItem(3).isEmpty() && entity.progress > 0 && !entity.manualGrinding) {
-			if (!entity.getItem(1).isEmpty())
-				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
+			entity.setPestleActive(false);
 			entity.progress = 0;
 			entity.setChanged();
 		}
@@ -172,11 +180,30 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public boolean isCrystalInstalled() {
-		return this.getItem(3).getItem() instanceof LifeCrystalItem && this.getItem(3).getDamageValue() <= this.getItem(3).getMaxDamage();
+		return LifeCrystalHelper.hasLifePower(this.getItem(3));
+	}
+
+	public boolean canCrystalGrind() {
+		return LifeCrystalHelper.drainLifePower(this.getItem(3), 1, true) > 0;
 	}
 
 	private boolean outputIsFull() {
 		return this.getItem(2).getCount() >= this.getMaxStackSize();
+	}
+
+	public boolean isPestleActive() {
+		return this.isPestleInstalled() && this.getItem(1).has(DataComponentRegistry.PESTLE_ACTIVE);
+	}
+
+	public void setPestleActive(boolean active) {
+		ItemStack pestle = this.getItem(1);
+		if(!pestle.isEmpty()) {
+			if(active) {
+				pestle.set(DataComponentRegistry.PESTLE_ACTIVE, Unit.INSTANCE);
+			} else {
+				pestle.remove(DataComponentRegistry.PESTLE_ACTIVE);
+			}
+		}
 	}
 
 	@Override
@@ -238,5 +265,47 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
 		return this.saveCustomOnly(registries);
+	}
+	
+	@Override
+	public ItemStack removeItem(int slot, int amount) {
+		ItemStack stack = super.removeItem(slot, amount);
+		if(slot == 1 && !stack.isEmpty()) { // Pestle slot
+			stack.remove(DataComponentRegistry.PESTLE_ACTIVE);
+		}
+		return stack;
+	}
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if(slot == 1) { // Pestle slot
+			return stack.is(ItemRegistry.PESTLE);
+		} else if(slot == 3) { // Life Crystal slot
+			return LifeCrystalHelper.isValidLifeCrystal(stack);
+		} else if(slot == 2) { // Output slot
+			ItemStack existingItem = this.getItem(2);
+			return stack.is(BLItemTagProvider.FILLABLE_ASPECT_VIALS) && !existingItem.is(BLItemTagProvider.FILLABLE_ASPECT_VIALS);
+		}
+		return super.canPlaceItem(slot, stack);
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		if(side == Direction.UP) {
+			return SLOTS_FOR_UP;
+		} else if(side == Direction.DOWN) {
+			return SLOTS_FOR_DOWN;
+		}
+		return SLOTS_FOR_SIDES;
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return this.canPlaceItem(index, itemStack);
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return true;
 	}
 }

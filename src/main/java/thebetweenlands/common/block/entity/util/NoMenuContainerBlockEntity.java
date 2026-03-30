@@ -2,7 +2,6 @@ package thebetweenlands.common.block.entity.util;
 
 import javax.annotation.Nullable;
 
-import it.unimi.dsi.fastutil.ints.IntArrays;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -17,7 +16,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.RandomizableContainer;
-import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -26,8 +24,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
-public abstract class NoMenuContainerBlockEntity extends BlockEntity implements RandomizableContainer, WorldlyContainer {
+public abstract class NoMenuContainerBlockEntity extends BlockEntity implements RandomizableContainer, ItemHandlerProvidingBlockEntity {
 
 	@Nullable
 	protected ResourceKey<LootTable> lootTable;
@@ -40,6 +40,13 @@ public abstract class NoMenuContainerBlockEntity extends BlockEntity implements 
 	protected abstract NonNullList<ItemStack> getItems();
 
 	protected abstract void setItems(NonNullList<ItemStack> items);
+
+	// Force implementors to think about automation
+	@Override
+	public abstract boolean canPlaceItem(int slot, ItemStack stack);
+
+	@Override
+	public abstract boolean canTakeItem(Container target, int slot, ItemStack stack);
 
 	@Nullable
 	@Override
@@ -114,21 +121,6 @@ public abstract class NoMenuContainerBlockEntity extends BlockEntity implements 
 	public void clearContent() {
 		this.getItems().clear();
 	}
-
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		return IntArrays.EMPTY_ARRAY;
-	}
-	
-	@Override
-	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
-		return false;
-	}
-	
-	@Override
-	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
-		return false;
-	}
 	
 	@Override
 	protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
@@ -176,5 +168,10 @@ public abstract class NoMenuContainerBlockEntity extends BlockEntity implements 
 		if (this.getLevel() != null) {
 			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
+	}
+	
+	@Override
+	public IItemHandler getItemHandlerCapability(Direction context) {
+		return new InvWrapper(this);
 	}
 }

@@ -23,9 +23,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.CapabilityHooks;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -50,11 +52,19 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.api.capability.BLCapabilities;
 import thebetweenlands.api.world.generator.ConfiguredEarlyGenerator;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.entity.util.ItemHandlerProvidingBlockEntity;
+import thebetweenlands.common.capability.AnimatorWrapper;
 import thebetweenlands.common.capability.CenserWrapper;
-import thebetweenlands.common.capability.GrubHubWrapper;
+import thebetweenlands.common.capability.MortarWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
+import thebetweenlands.common.capability.SmokingRackWrapper;
+import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
+import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.ChargeType;
+import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.DrainType;
+import thebetweenlands.common.capability.lifecrystal.DataLifeCrystalHandler;
 import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.EventCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
@@ -135,6 +145,7 @@ public class CommonRegistrationEvents {
 		bus.addListener(CommonRegistrationEvents::registerPackets);
 		bus.addListener(CommonRegistrationEvents::registerDataMaps);
 		bus.addListener(CommonRegistrationEvents::registerCapabilities);
+		bus.addListener(EventPriority.LOW, CommonRegistrationEvents::registerFallbackCapabilities);
 
 		NeoForge.EVENT_BUS.addListener(CommonRegistrationEvents::registerCommands);
 
@@ -325,6 +336,7 @@ public class CommonRegistrationEvents {
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {
 		event.register(DataMapRegistry.AMULET_SPAWNS);
+		event.register(DataMapRegistry.ANIMATOR_FUEL);
 		event.register(DataMapRegistry.COMPOSTABLE);
 		event.register(DataMapRegistry.DECAY_FOOD);
 		event.register(DataMapRegistry.FLUX_MULTIPLIER);
@@ -342,24 +354,42 @@ public class CommonRegistrationEvents {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> tile);
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> tile);
 
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ANIMATOR.get(), (tile, context) -> new InvWrapper(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SULFUR_FURNACE.get(), (tile, context) -> new SidedInvWrapper(tile, context));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ANIMATOR.get(), (tile, context) -> new AnimatorWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CENSER.get(), (tile, context) -> new CenserWrapper(tile));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CRAB_POT.get(), (tile, context) -> new InvWrapper(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.COMPOST_BIN.get(), (tile, context) -> new SidedInvWrapper(tile, context));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.COMPOST_BIN.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.CRAB_POT_FILTER.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.DRUID_ALTAR.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.FISHING_TACKLE_BOX.get(), (tile, context) -> new InvWrapper(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.GRUB_HUB.get(), (tile, context) -> new GrubHubWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.FISH_TRIMMING_TABLE.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.GRUB_HUB.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.INFUSER.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ITEM_SHELF.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.LOOT_POT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.LOOT_URN.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MORTAR.get(), (tile, context) -> new MortarWrapper(tile, context));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MOTH_HOUSE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.OFFERING_TABLE.get(), (tile, context) -> new InvWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PRESENT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> new SidedInvWrapper(tile, context));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SMOKING_RACK.get(), (tile, context) -> new SmokingRackWrapper(tile));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SULFUR_FURNACE.get(), (tile, context) -> new SidedInvWrapper(tile, context));
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SYRMORITE_HOPPER.get(), (tile, context) -> new VanillaHopperItemHandler(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.ITEM_SHELF.get(), (tile, context) -> new SidedInvWrapper(tile, context));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MORTAR.get(), (tile, context) -> new InvWrapper(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.MOTH_HOUSE.get(), (tile, context) -> new MothHouseWrapper(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.PURIFIER.get(), (tile, context) -> new InvWrapper(tile));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.SILT_GLASS_JAR.get(), (tile, context) -> new SidedInvWrapper(tile, context));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.STEEPING_POT.get(), (tile, context) -> new SidedInvWrapper(tile, context));
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), (tile, context) -> new SidedInvWrapper(tile, context));
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.WATER_FILTER.get(), ItemHandlerProvidingBlockEntity::getItemHandlerCapability);
 
 		event.registerItem(Capabilities.FluidHandler.ITEM, (object, context) -> new FluidHandlerItemStack(DataComponentRegistry.STORED_FLUID, object, FluidType.BUCKET_VOLUME), ItemRegistry.WEEDWOOD_BUCKET, ItemRegistry.SYRMORITE_BUCKET);
+
+		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING_IF_UNBREAKABLE, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, false), ItemRegistry.LIFE_CRYSTAL);
+		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, true), ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
+	}
+	
+	private static void registerFallbackCapabilities(RegisterCapabilitiesEvent event) {
+		// NeoForge does the same thing (see net.neoforged.neoforge.capabilities.CapabilityHooks#registerFallbackVanillaProviders)
+		for(Item item : BuiltInRegistries.ITEM) {
+			event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (object, context) -> DataLifeCrystalHandler.createIfValid(object, false), item);
+		}
 	}
 }

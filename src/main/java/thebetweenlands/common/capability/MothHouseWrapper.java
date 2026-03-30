@@ -1,19 +1,18 @@
 package thebetweenlands.common.capability;
 
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.entity.MothHouseBlockEntity;
 
-public class MothHouseWrapper extends ItemStackHandler {
+public class MothHouseWrapper extends InvWrapper {
 
 	private final MothHouseBlockEntity entity;
 
 	public MothHouseWrapper(MothHouseBlockEntity entity) {
-		super(entity.getItems());
+		super(entity);
 		this.entity = entity;
 	}
 
-	@Override
 	protected void onContentsChanged(int slot) {
 		// Don't mark dirty while loading chunk!
 		if (this.entity.hasLevel()) {
@@ -27,6 +26,7 @@ public class MothHouseWrapper extends ItemStackHandler {
 			ItemStack prevStack = this.getStackInSlot(slot).copy();
 
 			super.setStackInSlot(slot, stack);
+			this.onContentsChanged(slot);
 
 			ItemStack newStack = this.getStackInSlot(slot);
 
@@ -35,6 +35,7 @@ public class MothHouseWrapper extends ItemStackHandler {
 			}
 		} else {
 			super.setStackInSlot(slot, stack);
+			this.onContentsChanged(slot);
 		}
 	}
 

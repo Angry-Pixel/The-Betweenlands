@@ -1,13 +1,18 @@
 package thebetweenlands.common.inventory;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
@@ -17,29 +22,32 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import java.util.Objects;
-
 public class FishTrimmingTableMenu extends AbstractContainerMenu {
 
 	private final FishTrimmingTableBlockEntity table;
+	private final ContainerData containerData;
 
 	public FishTrimmingTableMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null));
+		this(i, playerInventory, (FishTrimmingTableBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainer(1), new SimpleContainerData(FishTrimmingTableBlockEntity.DATA_FIELD_COUNT));
 	}
 
-	public FishTrimmingTableMenu(int containerId, Inventory playerInventory, FishTrimmingTableBlockEntity table) {
+	public FishTrimmingTableMenu(int containerId, Inventory playerInventory, FishTrimmingTableBlockEntity table, Container remainsAccess, ContainerData containerData) {
 		super(MenuRegistry.FISH_TRIMMING_TABLE.get(), containerId);
+		checkContainerSize(table, FishTrimmingTableBlockEntity.SLOT_COUNT);
+		checkContainerDataCount(containerData, FishTrimmingTableBlockEntity.DATA_FIELD_COUNT);
+		checkContainerSize(remainsAccess, 1);
 		table.startOpen(playerInventory.player);
 		this.table = table;
+		this.containerData = containerData;
 
-		this.addSlot(new Slot(table, 0, 80, 27));
+		this.addSlot(new Slot(table, FishTrimmingTableBlockEntity.FISH_SLOT, 80, 27));
 
-		this.addSlot(new TrimmingResultSlot(table, 1, 44, 77));
-		this.addSlot(new TrimmingResultSlot(table, 2, 80, 77));
-		this.addSlot(new TrimmingResultSlot(table, 3, 116, 77));
-		this.addSlot(new TrimmingResultSlot(table, 4, 8, 113));
-
-		this.addSlot(new FilteredSlot(table, 5, 152, 113, stack -> stack.is(ItemRegistry.BONE_AXE)));
+		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_1, 44, 77));
+		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_2, 80, 77));
+		this.addSlot(new TrimmingResultSlot(table, FishTrimmingTableBlockEntity.OUTPUT_SLOT_3, 116, 77));
+		this.addSlot(new RemainsResultSlot(remainsAccess, 0, 8, 113));
+		
+		this.addSlot(new FilteredSlot(table, FishTrimmingTableBlockEntity.CHOPPER_SLOT, 152, 113, table::isChopper));
 
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 9; k++) {
@@ -50,10 +58,24 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		for (int i1 = 0; i1 < 9; i1++) {
 			this.addSlot(new Slot(playerInventory, i1, 8 + i1 * 18, 203));
 		}
+		
+		this.addDataSlots(containerData);
 	}
 
 	public FishTrimmingTableBlockEntity getContainer() {
 		return this.table;
+	}
+	
+	public boolean isChopperValid() {
+		return this.containerData.get(FishTrimmingTableBlockEntity.FIELD_CHOPPER_VALID) != 0;
+	}
+	
+	public boolean hasRecipe() {
+		return this.containerData.get(FishTrimmingTableBlockEntity.FIELD_HAS_RECIPE) != 0;
+	}
+	
+	public boolean canChop() {
+		return this.containerData.get(FishTrimmingTableBlockEntity.FIELD_CAN_CHOP) != 0;
 	}
 
 	@Override
@@ -104,32 +126,66 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 	public void chop(ServerPlayer player) {
 		if (this.table.getStoredRecipe() != null && this.table.hasChopper() && this.table.allResultSlotsEmpty()) {
 
-			// set slot contents 1, 2, 3 to butcher items and 4 to guts (if applicable)
+			// set slot contents 1, 2, 3 to butcher items
 			int numItems = 0;
-			for (int i = 1; i <= 4; i++) {
-				ItemStack result = this.table.getSlotResult(player.level(), i, numItems);
+			for (int i = 1; i <= 3; i++) {
+				ItemStack result = this.table.getSlotResult(player.level(), i);
 				numItems += result.getCount();
 				this.getSlot(i).set(result);
 			}
+			
+			// set remains items (if applicable)
+			this.table.setRemains(this.table.getRemainsItemResult(player.level()), numItems);
 
 			// damage axe
-			this.table.getItem(5).hurtAndBreak(1, player.serverLevel(), player, (item) -> {});
+			this.table.getItem(FishTrimmingTableBlockEntity.CHOPPER_SLOT).hurtAndBreak(1, player.serverLevel(), player, (item) -> {});
 
 			// set slot contents 0 to empty last so logic works in order
-			this.table.setItem(0, this.table.getSlotResult(player.level(), 0, 0));
+			this.table.setItem(0, this.table.getSlotResult(player.level(), 0));
 
 			this.slotsChanged(this.table);
+			this.table.setChanged();
+			this.table.markUpdated();
 
 			player.level().playSound(null, this.table.getBlockPos(), SoundRegistry.FISH_CHOP.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 
+	public class RemainsResultSlot extends Slot {
+
+		public RemainsResultSlot(Container container, int slot, int x, int y) {
+			super(container, slot, x, y);
+		}
+
+		@Override
+		public boolean mayPlace(ItemStack stack) {
+			return false;
+		}
+
+		@Override
+		public void onTake(Player player, ItemStack stack) {
+			if (player instanceof ServerPlayer sp) {
+				AdvancementCriteriaRegistry.TRIM_FISH.get().trigger(sp);
+			}
+
+			super.onTake(player, stack);
+		}
+		
+		@Override
+		public boolean isFake() {
+			return true;
+		}
+	}
+	
 	public class TrimmingResultSlot extends Slot {
 
+		private final FishTrimmingTableBlockEntity table;
 		private int prevCount;
 
-		public TrimmingResultSlot(Container table, int slot, int x, int y) {
+		public TrimmingResultSlot(FishTrimmingTableBlockEntity table, int slot, int x, int y) {
 			super(table, slot, x, y);
+			this.table = table;
+			this.updateCount();
 		}
 
 		private void updateCount() {
@@ -140,19 +196,12 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		public void setChanged() {
 			super.setChanged();
 
-			if (!this.container.getItem(4).isEmpty()) {
-				int index = this.getSlotIndex();
-
-				if (index == 1 || index == 2 || index == 3) {
-					int removed = Math.max(0, this.prevCount - this.getItem().getCount());
-
-					if (removed > 0) {
-						this.container.getItem(4).shrink(removed);
-						this.container.setChanged();
-
-						FishTrimmingTableMenu.this.slotsChanged(this.container);
-					}
-				}
+			int removed = Math.max(0, this.prevCount - this.getItem().getCount());
+			if (removed > 0) {
+				this.table.removeRemains(removed);
+				this.table.setChanged();
+				this.table.markUpdated();
+				FishTrimmingTableMenu.this.slotsChanged(this.container);
 			}
 
 			this.updateCount();
@@ -167,13 +216,6 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 		public void onTake(Player player, ItemStack stack) {
 			if (player instanceof ServerPlayer sp) {
 				AdvancementCriteriaRegistry.TRIM_FISH.get().trigger(sp);
-			}
-
-			if (this.getSlotIndex() == 4) {
-				this.container.setItem(1, ItemStack.EMPTY);
-				this.container.setItem(2, ItemStack.EMPTY);
-				this.container.setItem(3, ItemStack.EMPTY);
-				FishTrimmingTableMenu.this.slotsChanged(this.container);
 			}
 
 			super.onTake(player, stack);

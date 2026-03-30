@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.inventory.PositionSupplyingMenuProvider;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
@@ -55,10 +57,17 @@ public class DruidAltarBlock extends BaseEntityBlock implements SwampWaterLoggab
 			return InteractionResult.SUCCESS;
 		} else {
 			if (level.getBlockEntity(pos) instanceof DruidAltarBlockEntity altar) {
-				player.openMenu(altar, buf -> buf.writeBlockPos(pos));
+				player.openMenu(altar, pos);
 			}
 			return InteractionResult.CONSUME;
 		}
+	}
+
+	@Override
+	protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+		// Special menu provider for spectators
+		MenuProvider menuProvider = super.getMenuProvider(state, level, pos);
+		return PositionSupplyingMenuProvider.ofNullable(menuProvider, pos);
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.Optional;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
@@ -8,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,13 +26,14 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.recipes.SteepingPotRecipe;
-import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
+import thebetweenlands.common.block.entity.util.SidedNoMenuContainerBlockEntity;
 import thebetweenlands.common.item.recipe.FluidRecipeInput;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
 
-import java.util.Optional;
-
-public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
+public class SteepingPotBlockEntity extends SidedNoMenuContainerBlockEntity implements IFluidHandler {
 
 	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME);
 	public int tempFluidColour;
@@ -105,16 +110,16 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 
 				if (recipe.isEmpty()) {
 					entity.setHeatProgress(0);
-					if (!entity.getItem(0).isEmpty())
-						entity.setItem(0, new ItemStack(ItemRegistry.DIRTY_SILK_BUNDLE.get()));
+					if (!entity.getBundleStack().isEmpty())
+						entity.setBundleStack(new ItemStack(ItemRegistry.DIRTY_SILK_BUNDLE.get()));
 					level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.3F, 0.9F + level.getRandom().nextFloat() * 0.3F);
 					entity.drain(FluidType.BUCKET_VOLUME, FluidAction.EXECUTE);
 				} else {
 					ItemStack output = recipe.get().value().getResultItem(level.registryAccess());
 					FluidStack outputFluid = recipe.get().value().getResultFluid(level.registryAccess());
 
-					if (!entity.getItem(0).isEmpty())
-						entity.setItem(0, new ItemStack(ItemRegistry.DIRTY_SILK_BUNDLE.get()));
+					if (!entity.getBundleStack().isEmpty())
+						entity.setBundleStack(new ItemStack(ItemRegistry.DIRTY_SILK_BUNDLE.get()));
 
 					entity.drain(FluidType.BUCKET_VOLUME, FluidAction.EXECUTE);
 
@@ -137,13 +142,24 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 		this.tempFluidColour = type;
 	}
 
-	public boolean hasBundle() {
-		ItemStack bundle = this.getItem(0);
+	public ItemStack getBundleStack() {
+		return this.getItem(0);
+	}
+
+	public void setBundleStack(ItemStack stack) {
+		this.setItem(0, stack);
+	}
+	
+	public boolean isValidBundle(ItemStack bundle) {
 		return !bundle.isEmpty() && bundle.is(ItemRegistry.SILK_BUNDLE) && bundle.has(DataComponents.CONTAINER);
 	}
 
+	public boolean hasBundle() {
+		return this.isValidBundle(this.getBundleStack());
+	}
+
 	private NonNullList<ItemStack> getBundleItems() {
-		ItemStack bundle = this.getItem(0);
+		ItemStack bundle = this.getBundleStack();
 		NonNullList<ItemStack> inventoryBundle = NonNullList.withSize(4, ItemStack.EMPTY);
 		if (!bundle.isEmpty() && bundle.is(ItemRegistry.SILK_BUNDLE) && bundle.has(DataComponents.CONTAINER)) {
 			bundle.get(DataComponents.CONTAINER).copyInto(inventoryBundle);
@@ -190,6 +206,34 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 		return 1;
 	}
 
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		return slot == 0 && this.isValidBundle(stack);
+	}
+
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return allSlots(this);
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return this.canPlaceItem(index, itemStack);
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		if(direction == Direction.DOWN && this.isValidBundle(stack)) {
+			return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public int getTanks() {
 		return this.tank.getTanks();

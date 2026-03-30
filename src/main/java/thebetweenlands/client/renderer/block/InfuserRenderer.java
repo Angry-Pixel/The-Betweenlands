@@ -103,13 +103,13 @@ public class InfuserRenderer implements BlockEntityRenderer<InfuserBlockEntity> 
 			}
 		}
 
-		if (!entity.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1).isEmpty()) {
+		if (!entity.getItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT).isEmpty()) {
 			stack.pushPose();
 			stack.translate(0.5D, 1.43D, 0.5D);
 			stack.scale(0.25F, 0.25F, 0.25F);
 			stack.translate(0.0D, bobProgress, 0.0D);
 			stack.mulPose(Axis.YP.rotationDegrees(crystalRotation));
-			this.itemRenderer.renderStatic(entity.getItem(InfuserBlockEntity.MAX_INGREDIENTS + 1), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+			this.itemRenderer.renderStatic(entity.getItem(InfuserBlockEntity.LIFE_CRYSTAL_SLOT), ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
 

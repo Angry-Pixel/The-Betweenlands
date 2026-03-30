@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -14,11 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.items.IItemHandler;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.MothHouseBlock;
 import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -265,5 +268,10 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 		this.productionTime = tag.getInt("production_time");
 		this.productionEfficiency = tag.getFloat("production_efficiency");
 		this.isWorking = tag.getBoolean("working");
+	}
+	
+	@Override
+	public IItemHandler getItemHandlerCapability(Direction context) {
+		return new MothHouseWrapper(this);
 	}
 }
