@@ -166,7 +166,23 @@ public class CorrosionHelper {
 		
 		return false;
 	}
+	
+	/**
+	 * Attempts to reset the corrosion on an item stack to 0.
+	 * @param stack
+	 */
+	public static void resetCorrosion(ItemStack stack) {
+		ICorrosionHandler handler = getCorrosionHandler(stack);
+		if(handler == null) {
+			return;
+		}
 
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCorrosion(0);
+		} else {
+			handler.removeCorrosion(handler.getCoating(), false);
+		}
+	}
 
 	/**
 	 * Returns a general modifier at the amount corrosion of the specified item
@@ -278,31 +294,23 @@ public class CorrosionHelper {
 	 * @param isHeldItem
 	 */
 	public static void updateCorrosion(ItemStack stack, Level world, Entity holder, int slot, boolean isHeldItem) {
-		if (world.isClientSide()) {
+		if (world.isClientSide() || !isCorrodible(stack) || (holder != null && holder.isSpectator())) {
 			return;
 		}
 		
-		if(!shouldEntityCorrode(holder) || !isCorrodible(stack)) {
-			return;
-		}
-		
-		ICorrosionHandler handler = stack.getCapability(BLCapabilities.CorrosionHandler.ITEM);
-		if(handler == null) {
-			return;
-		}
-		
-		int corrosion = handler.getCorrosion();
+		// If there is no corrosion in this world, reset the corrosion value of this item
 		if(!isCorrosionEnabled(world)) {
-			if(corrosion != 0) {
-				boolean directlySetCorrosion = setCorrosion(handler, 0);
-				if(!directlySetCorrosion) {
-					handler.removeCorrosion(corrosion, false);
+			resetCorrosion(stack);
+			return;
+		} 
+		
+		if(shouldEntityCorrode(holder)) {
+			ICorrosionHandler handler = stack.getCapability(BLCapabilities.CorrosionHandler.ITEM);
+			if(handler != null && handler.getCorrosion() < handler.getMaxCorrosion()) {
+				float probability = getCorrosionProbability(stack, world, holder, isHeldItem);
+				if (world.getRandom().nextFloat() < probability) {
+					handler.corrode(1, false);
 				}
-			}
-		} else if (corrosion < handler.getMaxCorrosion()) {
-			float probability = getCorrosionProbability(stack, world, holder, isHeldItem);
-			if (world.getRandom().nextFloat() < probability) {
-				handler.corrode(1, false);
 			}
 		}
 	}
