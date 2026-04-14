@@ -20,7 +20,7 @@ public class DefaultCorrosionHandler implements ICorrosionHandler, ICorrosionHan
 
 	@Nullable
 	public static DefaultCorrosionHandler createIfCorrodible(ItemStack stack, @Nullable Void context) {
-		if(stack.is(BLItemTagProvider.CORRODIBLE)) {
+		if(stack.is(BLItemTagProvider.DEFAULT_CORRODIBLE)) {
 			return new DefaultCorrosionHandler(stack);
 		} else {
 			return null;

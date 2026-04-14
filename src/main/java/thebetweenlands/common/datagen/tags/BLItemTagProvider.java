@@ -13,7 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import thebetweenlands.api.item.CustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -65,11 +64,6 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	 */
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
 
-	/**
-	 * Whether an item has custom corrosion information. The item should implement {@link CustomCorrodible}; this tag will be ignored if it doesn't.
-	 */
-	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
-
 	public static final TagKey<Item> DOES_NOT_ROT = tag("does_not_rot");
 	public static final TagKey<Item> CIRCLE_GEM_APPLICABLE = tag("circle_gem_applicable");
 
@@ -112,12 +106,6 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.ELM_CYAN_ITEM_FRAME.get(), ItemRegistry.CADMIUM_GREEN_ITEM_FRAME.get(),
 			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME.get(), ItemRegistry.BROWN_RUST_ITEM_FRAME.get(),
 			ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME.get(), ItemRegistry.PEWTER_GREY_ITEM_FRAME.get());
-
-		// Those two "inherit" from this one
-		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
-		this.tag(DEFAULT_CORRODIBLE);
-		this.tag(CUSTOM_CORRODIBLE);
-
 
 		this.tag(ASPECT_VIALS)
 			.addTag(FILLED_ASPECT_VIALS).addTag(FILLABLE_ASPECT_VIALS).addTag(EMPTY_ASPECT_VIALS);
@@ -232,6 +220,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.VALONITE_SHOVEL.get()
 		);
 
+		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE);
 		this.tag(DEFAULT_CORRODIBLE).add(
 			//Swords
 			ItemRegistry.WEEDWOOD_SWORD.get(),
@@ -242,7 +231,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.WIGHTS_BANE.get(),
 			ItemRegistry.SLUDGE_SLICER.get(),
 			ItemRegistry.SHOCKWAVE_SWORD.get(),
-			// TODO Ancient
+			ItemRegistry.ANCIENT_GREATSWORD.get(),
 
 			// Pickaxes
 			ItemRegistry.WEEDWOOD_PICKAXE.get(),
@@ -258,7 +247,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.VALONITE_AXE.get(),
 			ItemRegistry.VALONITE_GREATAXE.get(),
 			ItemRegistry.HAG_HACKER.get(),
-			// TODO Ancient Greataxe
+			ItemRegistry.ANCIENT_BATTLEAXE.get(),
 
 			// Shovels
 			ItemRegistry.WEEDWOOD_SHOVEL.get(),
