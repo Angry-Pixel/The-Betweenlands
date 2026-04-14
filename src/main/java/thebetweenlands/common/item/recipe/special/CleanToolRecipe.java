@@ -84,7 +84,7 @@ public class CleanToolRecipe extends CustomRecipe {
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
 		final int inputSize = input.size();
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inputSize, ItemStack.EMPTY);
+		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inputSize, ItemStack.EMPTY);
 
 		int sap = 0;
 		ItemStack tool = ItemStack.EMPTY;
@@ -121,7 +121,7 @@ public class CleanToolRecipe extends CustomRecipe {
 		// The tool *was* fully cleaned by the sap spit, meaning there might be sap spit that went unused
 		int sapChecked = 0;
 		boolean fullyCleaned = false;
-        for (int i = 0; i < inputSize; i++) {
+		for (int i = 0; i < inputSize; i++) {
 			ItemStack stack = input.getItem(i);
 			if (stack.isEmpty()) {
 				continue;
@@ -147,9 +147,9 @@ public class CleanToolRecipe extends CustomRecipe {
 					fullyCleaned = true;
 				}
 			}
-        }
+		}
 
-        return nonnulllist;
+		return nonnulllist;
 	}
 
 	@Override

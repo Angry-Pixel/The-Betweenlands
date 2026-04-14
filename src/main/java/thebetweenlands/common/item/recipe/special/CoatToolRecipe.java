@@ -2,7 +2,6 @@ package thebetweenlands.common.item.recipe.special;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.capability.corrosion.ICorrosionHandler;
 import thebetweenlands.api.item.CorrosionHelper;
-import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
@@ -84,7 +82,7 @@ public class CoatToolRecipe extends CustomRecipe {
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
 		final int inputSize = input.size();
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inputSize, ItemStack.EMPTY);
+		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inputSize, ItemStack.EMPTY);
 
 		int scabyst = 0;
 		ItemStack tool = ItemStack.EMPTY;
@@ -119,7 +117,7 @@ public class CoatToolRecipe extends CustomRecipe {
 		// The tool *was* fully coated by the scabyst, meaning there might be scabyst that went unused
 		int scabystChecked = 0;
 		boolean fullyCoated = false;
-        for (int i = 0; i < inputSize; i++) {
+		for (int i = 0; i < inputSize; i++) {
 			ItemStack stack = input.getItem(i);
 			if (stack.isEmpty()) {
 				continue;
@@ -143,8 +141,8 @@ public class CoatToolRecipe extends CustomRecipe {
 					fullyCoated = true;
 				}
 			}
-        }
-        return nonnulllist;
+		}
+		return nonnulllist;
 	}
 
 	@Override

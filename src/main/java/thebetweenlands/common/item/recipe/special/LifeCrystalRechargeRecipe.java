@@ -86,7 +86,7 @@ public class LifeCrystalRechargeRecipe extends CustomRecipe {
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
 		final int inputSize = input.size();
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inputSize, ItemStack.EMPTY);
+		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inputSize, ItemStack.EMPTY);
 
 		int hearts = 0;
 		ItemStack crystal = ItemStack.EMPTY;
@@ -123,7 +123,7 @@ public class LifeCrystalRechargeRecipe extends CustomRecipe {
 		// The crystal *was* fully charged by the hearts, meaning there might be hearts that went unused
 		int heartsChecked = 0;
 		boolean fullyCharged = false;
-        for (int i = 0; i < inputSize; i++) {
+		for (int i = 0; i < inputSize; i++) {
 			ItemStack stack = input.getItem(i);
 			if (stack.isEmpty()) {
 				continue;
@@ -148,9 +148,9 @@ public class LifeCrystalRechargeRecipe extends CustomRecipe {
 					fullyCharged = true;
 				}
 			}
-        }
+		}
 
-        return nonnulllist;
+		return nonnulllist;
 	}
 
 	@Override
