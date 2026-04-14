@@ -61,6 +61,7 @@ import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MortarWrapper;
 import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.capability.SmokingRackWrapper;
+import thebetweenlands.common.capability.corrosion.DefaultCorrosionHandler;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.ChargeType;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler.DrainType;
@@ -390,6 +391,7 @@ public class CommonRegistrationEvents {
 		// NeoForge does the same thing (see net.neoforged.neoforge.capabilities.CapabilityHooks#registerFallbackVanillaProviders)
 		for(Item item : BuiltInRegistries.ITEM) {
 			event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (object, context) -> DataLifeCrystalHandler.createIfValid(object, false), item);
+			event.registerItem(BLCapabilities.CorrosionHandler.ITEM, DefaultCorrosionHandler::createIfCorrodible, item);
 		}
 	}
 }
