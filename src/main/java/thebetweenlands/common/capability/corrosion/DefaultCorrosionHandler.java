@@ -94,7 +94,7 @@ public class DefaultCorrosionHandler implements ICorrosionHandler, ICorrosionHan
 
 		// Add all of the points we can
 		if(!simulate) {
-			this.setCoating(currentCorrosion + toAdd);
+			this.setCorrosion(currentCorrosion + toAdd);
 		}
 		return toAdd;
 	}
@@ -144,7 +144,7 @@ public class DefaultCorrosionHandler implements ICorrosionHandler, ICorrosionHan
 
 		// Remove all of the points we can
 		if(!simulate) {
-			this.setCoating(currentCorrosion - toRemove);
+			this.setCorrosion(currentCorrosion - toRemove);
 		}
 		return toRemove;
 	}
