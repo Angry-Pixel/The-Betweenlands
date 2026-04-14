@@ -80,6 +80,7 @@ public class LifeCrystalRechargeRecipe extends CustomRecipe {
 		}
 
 		ILifeCrystalHandler handler = LifeCrystalHelper.getLifeCrystalHandler(crystal);
+		if(handler == null) return ItemStack.EMPTY; // This should never happen due to our matches method
 		return LifeCrystalHelper.withLifeCharge(crystal, Mth.ceil(hearts * handler.getMaxLifePower() / 8.0F));
 	}
 	

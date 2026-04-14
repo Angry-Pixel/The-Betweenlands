@@ -77,6 +77,7 @@ public class CleanToolRecipe extends CustomRecipe {
 		
 		tool = tool.copy();
 		ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(tool);
+		if(handler == null) return ItemStack.EMPTY; // This should never happen due to our matches method
 		handler.removeCorrosion(Mth.ceil(sap * handler.getMaxCorrosion() / 3.0f), false);
 		return tool;
 	}

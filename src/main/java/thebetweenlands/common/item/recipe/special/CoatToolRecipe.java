@@ -75,6 +75,7 @@ public class CoatToolRecipe extends CustomRecipe {
 
 		tool = tool.copy();
 		ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(tool);
+		if(handler == null) return ItemStack.EMPTY; // This should never happen due to our matches method
 		handler.addCoating(scabyst * COATING_PER_SCABYST, false);
 		return tool;
 	}
@@ -123,7 +124,7 @@ public class CoatToolRecipe extends CustomRecipe {
 				continue;
 			}
 			
-			if (stack.is(ItemRegistry.SAP_SPIT)) {
+			if (stack.is(ItemRegistry.SCABYST)) {
 				if(fullyCoated) {
 					// If we've met the coating quota, scabyst is no longer consumed
 					nonnulllist.set(i, stack.copyWithCount(1));
