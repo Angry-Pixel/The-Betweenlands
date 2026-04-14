@@ -106,34 +106,67 @@ public class CorrosionHelper {
 	/**
 	 * Sets the corrosion on a stack if possible.
 	 * @param stack
-	 * @return
+	 * @param corrosion
+	 * @return true if the corrosion could be directly set
 	 */
-	public static void setCorrosion(ItemStack stack, int corrosion) {
+	public static boolean setCorrosion(ItemStack stack, int corrosion) {
 		final ICorrosionHandler handler;
 		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
-			return;
+			return false;
 		}
 
-		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
-			modifiable.setCorrosion(corrosion);
-		}
+		return setCorrosion(handler, corrosion);
 	}
-
 	/**
 	 * Sets the coating on a stack.
 	 * @param stack
-	 * @return
+	 * @param coating
+	 * @return true if the coating could be directly set
 	 */
-	public static void setCoating(ItemStack stack, int coating) {
+	public static boolean setCoating(ItemStack stack, int coating) {
 		final ICorrosionHandler handler;
 		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
-			return;
+			return false;
 		}
 
 		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
 			modifiable.setCoating(coating);
+			return true;
 		}
+		
+		return false;
 	}
+
+	/**
+	 * Attempts to directly set the corrosion on a corrosion handler if possible.
+	 * @param handler
+	 * @param corrosion
+	 * @return true if the corrosion could be directly set
+	 */
+	public static boolean setCorrosion(ICorrosionHandler handler, int corrosion) {
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCorrosion(corrosion);
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Attempts to directly set the coating on a corrosion handler if possible.
+	 * @param handler
+	 * @param coating
+	 * @return true if the coating could be directly set
+	 */
+	public static boolean setCoating(ICorrosionHandler handler, int coating) {
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCorrosion(coating);
+			return true;
+		}
+		
+		return false;
+	}
+
 
 	/**
 	 * Returns a general modifier at the amount corrosion of the specified item
@@ -253,20 +286,23 @@ public class CorrosionHelper {
 			return;
 		}
 		
-		int corrosion = getCorrosion(stack);
+		ICorrosionHandler handler = stack.getCapability(BLCapabilities.CorrosionHandler.ITEM);
+		if(handler == null) {
+			return;
+		}
+		
+		int corrosion = handler.getCorrosion();
 		if(!isCorrosionEnabled(world)) {
 			if(corrosion != 0) {
-				setCorrosion(stack, 0);
+				boolean directlySetCorrosion = setCorrosion(handler, 0);
+				if(!directlySetCorrosion) {
+					handler.removeCorrosion(corrosion, false);
+				}
 			}
-		} else if (corrosion < getMaximumCorrosion(stack)) {
+		} else if (corrosion < handler.getMaxCorrosion()) {
 			float probability = getCorrosionProbability(stack, world, holder, isHeldItem);
 			if (world.getRandom().nextFloat() < probability) {
-				int coating = getCoating(stack);
-				if(coating > 0) {
-					setCoating(stack, coating - 1);
-				} else {
-					setCorrosion(stack, corrosion + 1);
-				}
+				handler.corrode(1, false);
 			}
 		}
 	}
