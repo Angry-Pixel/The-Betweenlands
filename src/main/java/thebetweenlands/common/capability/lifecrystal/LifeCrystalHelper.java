@@ -56,7 +56,7 @@ public class LifeCrystalHelper {
 		}
 		ItemStack copyStack = stack.copy();
 		if(isValidLifeCrystal(copyStack)) {
-			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(stack);
+			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(copyStack);
 			lifeCrystalHandler.drainLifePower(power, false);
 		}
 		return copyStack;
@@ -68,7 +68,7 @@ public class LifeCrystalHelper {
 		}
 		ItemStack copyStack = stack.copy();
 		if(isValidLifeCrystal(copyStack)) {
-			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(stack);
+			ILifeCrystalHandler lifeCrystalHandler = getLifeCrystalHandler(copyStack);
 			lifeCrystalHandler.chargeLifePower(power, false);
 		}
 		return copyStack;
