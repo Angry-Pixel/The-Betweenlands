@@ -31,13 +31,11 @@ public class CoatToolRecipe extends CustomRecipe {
 			
 			if (stack.is(ItemRegistry.SCABYST)) {
 				scabyst++;
+			} else if (!tool.isEmpty()) {
+				return false;
 			} else {
 				ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(stack);
-				if(handler == null)
-					return false;
-				if (!tool.isEmpty())
-					return false;
-				if (handler.getCoating() >= handler.getMaxCoating())
+				if(handler == null || handler.getCoating() >= handler.getMaxCoating())
 					return false;
 				tool = stack;
 			}

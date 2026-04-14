@@ -32,13 +32,11 @@ public class CleanToolRecipe extends CustomRecipe {
 			
 			if (stack.is(ItemRegistry.SAP_SPIT)) {
 				sap++;
+			} else if (!tool.isEmpty()) {
+				return false;
 			} else {
 				ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(stack);
-				if(handler == null)
-					return false;
-				if (!tool.isEmpty())
-					return false;
-				if (handler.getCorrosion() <= 0)
+				if(handler == null || handler.getCorrosion() <= 0)
 					return false;
 				tool = stack;
 			}
