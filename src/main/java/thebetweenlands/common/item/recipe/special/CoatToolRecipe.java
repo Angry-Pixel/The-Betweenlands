@@ -7,9 +7,9 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.component.item.CorrosionData;
+import thebetweenlands.api.capability.corrosion.ICorrosionHandler;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
-import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
@@ -25,18 +25,21 @@ public class CoatToolRecipe extends CustomRecipe {
 		ItemStack tool = ItemStack.EMPTY;
 		for (int i = 0; i < input.size(); ++i) {
 			ItemStack stack = input.getItem(i);
-			if (!stack.isEmpty()) {
-				if (stack.is(BLItemTagProvider.CORRODIBLE)) {
-					if (!tool.isEmpty())
-						return false;
-					if (stack.getOrDefault(DataComponentRegistry.CORROSION, CorrosionData.EMPTY).coating() >= stack.getOrDefault(DataComponentRegistry.MAX_COATING, 600))
-						return false;
-					tool = stack;
-				} else if (stack.is(ItemRegistry.SCABYST)) {
-					scabyst++;
-				} else {
+			if (stack.isEmpty()) {
+				continue;
+			}
+			
+			if (stack.is(ItemRegistry.SCABYST)) {
+				scabyst++;
+			} else {
+				ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(stack);
+				if(handler == null)
 					return false;
-				}
+				if (!tool.isEmpty())
+					return false;
+				if (handler.getCoating() >= handler.getMaxCoating())
+					return false;
+				tool = stack;
 			}
 		}
 		return scabyst > 0 && !tool.isEmpty();
@@ -49,16 +52,16 @@ public class CoatToolRecipe extends CustomRecipe {
 		for (int i = 0; i < input.size(); ++i) {
 			ItemStack stack = input.getItem(i);
 			if (!stack.isEmpty()) {
-				if (stack.is(BLItemTagProvider.CORRODIBLE)) {
-					tool = stack;
-				} else if (stack.is(ItemRegistry.SCABYST)) {
+				if (stack.is(ItemRegistry.SCABYST)) {
 					scabyst++;
+				} else if (stack.is(BLItemTagProvider.CORRODIBLE)) {
+					tool = stack;
 				}
 			}
 		}
 		tool = tool.copy();
-		var data = tool.getOrDefault(DataComponentRegistry.CORROSION, CorrosionData.EMPTY);
-		tool.set(DataComponentRegistry.CORROSION, data.withCoating(Math.min(tool.getOrDefault(DataComponentRegistry.MAX_COATING, 600), data.coating() + scabyst * 75)));
+		ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(tool);
+		handler.addCoating(scabyst * 75, false);
 		return tool;
 	}
 

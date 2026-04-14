@@ -8,9 +8,9 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.component.item.CorrosionData;
+import thebetweenlands.api.capability.corrosion.ICorrosionHandler;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
-import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
@@ -26,18 +26,21 @@ public class CleanToolRecipe extends CustomRecipe {
 		ItemStack tool = ItemStack.EMPTY;
 		for (int i = 0; i < input.size(); ++i) {
 			ItemStack stack = input.getItem(i);
-			if (!stack.isEmpty()) {
-				if (stack.is(BLItemTagProvider.CORRODIBLE)) {
-					if (!tool.isEmpty())
-						return false;
-					if (stack.getOrDefault(DataComponentRegistry.CORROSION, CorrosionData.EMPTY).corrosion() == 0)
-						return false;
-					tool = stack;
-				} else if (stack.is(ItemRegistry.SAP_SPIT)) {
-					sap++;
-				} else {
+			if (stack.isEmpty()) {
+				continue;
+			}
+			
+			if (stack.is(ItemRegistry.SAP_SPIT)) {
+				sap++;
+			} else {
+				ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(stack);
+				if(handler == null)
 					return false;
-				}
+				if (!tool.isEmpty())
+					return false;
+				if (handler.getCorrosion() <= 0)
+					return false;
+				tool = stack;
 			}
 		}
 		return sap > 0 && !tool.isEmpty();
@@ -50,16 +53,16 @@ public class CleanToolRecipe extends CustomRecipe {
 		for (int i = 0; i < input.size(); ++i) {
 			ItemStack stack = input.getItem(i);
 			if (!stack.isEmpty()) {
-				if (stack.is(BLItemTagProvider.CORRODIBLE)) {
-					tool = stack;
-				} else if (stack.is(ItemRegistry.SAP_SPIT)) {
+				if (stack.is(ItemRegistry.SAP_SPIT)) {
 					sap++;
+				} else if (stack.is(BLItemTagProvider.CORRODIBLE)) {
+					tool = stack;
 				}
 			}
 		}
 		tool = tool.copy();
-		var data = tool.getOrDefault(DataComponentRegistry.CORROSION, CorrosionData.EMPTY);
-		tool.set(DataComponentRegistry.CORROSION, data.withCorrosion(Math.max(0, data.corrosion() - Mth.ceil(sap * tool.getOrDefault(DataComponentRegistry.MAX_CORROSION, 255) / 3.0F))));
+		ICorrosionHandler handler = CorrosionHelper.getCorrosionHandler(tool);
+		handler.removeCorrosion(Mth.ceil(sap * handler.getMaxCorrosion() / 3.0f), false);
 		return tool;
 	}
 
