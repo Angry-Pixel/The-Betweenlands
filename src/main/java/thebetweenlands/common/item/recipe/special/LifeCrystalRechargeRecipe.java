@@ -8,6 +8,8 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import thebetweenlands.api.capability.lifecrystal.ILifeCrystalHandler;
+import thebetweenlands.common.capability.lifecrystal.LifeCrystalHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
@@ -19,17 +21,24 @@ public class LifeCrystalRechargeRecipe extends CustomRecipe {
 
 	@Override
 	public boolean matches(CraftingInput input, Level level) {
-		ItemStack crystal = null;
+		ItemStack crystal = ItemStack.EMPTY;
 		int hearts = 0;
 
 		for (int i = 0; i < input.size(); ++i) {
-			ItemStack checkedStack = input.getItem(i);
-			if (!checkedStack.isEmpty()) {
-				if (checkedStack.is(ItemRegistry.LIFE_CRYSTAL) && checkedStack.isDamaged()) {
-					crystal = checkedStack;
-				} else if (checkedStack.is(ItemRegistry.WIGHT_HEART)) {
-					hearts++;
-				}
+			ItemStack stack = input.getItem(i);
+			if (stack.isEmpty()) {
+				continue;
+			}
+			
+			if (stack.is(ItemRegistry.WIGHT_HEART)) {
+				hearts++;
+			} else if(!crystal.isEmpty()) {
+				return false;
+			} else {
+				ILifeCrystalHandler handler = LifeCrystalHelper.getLifeCrystalHandler(stack);
+				if(handler == null || handler.getLifePower() >= handler.getMaxLifePower())
+					return false;
+				crystal = stack;
 			}
 		}
 		return crystal != null && hearts > 0;
@@ -40,29 +49,28 @@ public class LifeCrystalRechargeRecipe extends CustomRecipe {
 		int hearts = 0;
 		ItemStack crystal = ItemStack.EMPTY;
 		for (int i = 0; i < input.size(); ++i) {
-			ItemStack itemstack = input.getItem(i);
-			if (!itemstack.isEmpty()) {
-				if (itemstack.is(ItemRegistry.LIFE_CRYSTAL)) {
+			ItemStack stack = input.getItem(i);
+			if (!stack.isEmpty()) {
+				if (stack.is(ItemRegistry.WIGHT_HEART)) {
+					//add all hearts in the grid to a list to determine the amount to repair
+					hearts++;
+				} else {
 					if (crystal.isEmpty()) {
-						crystal = itemstack;
+						crystal = stack;
 					} else {
 						//Only accept 1 crystal
 						return ItemStack.EMPTY;
 					}
-				} else if (itemstack.is(ItemRegistry.WIGHT_HEART)) {
-					//add all hearts in the grid to a list to determine the amount to repair
-					hearts++;
 				}
 			}
 		}
 
-		if (hearts > 0 && !crystal.isEmpty() && crystal.isDamaged()) {
-			ItemStack newCrystal = ItemRegistry.LIFE_CRYSTAL.toStack();
-			newCrystal.setDamageValue(Math.max(0, crystal.getDamageValue() - Mth.ceil(hearts * crystal.getMaxDamage() / 8.0F)));
-			return newCrystal;
+		if (hearts == 0 || crystal.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 
-		return ItemStack.EMPTY;
+		ILifeCrystalHandler handler = LifeCrystalHelper.getLifeCrystalHandler(crystal);
+		return LifeCrystalHelper.withLifeCharge(crystal, Mth.ceil(hearts * handler.getMaxLifePower() / 8.0F));
 	}
 
 	@Override
