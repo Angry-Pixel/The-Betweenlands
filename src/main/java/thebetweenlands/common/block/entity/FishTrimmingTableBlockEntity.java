@@ -226,9 +226,13 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 			//     If the fish slot gets replaced (see getSlotResult(Level, int, int)) before the output slots do,
 			//         the recipe won't be set to null immediately and the output slots will still get their items
 			this.recipeDirty = true;
+			this.updateCanChop();
 		}
 		if(slot == CHOPPER_SLOT) {
 			this.updateChopperValid();
+			this.updateCanChop();
+		}
+		if(slot == OUTPUT_SLOT_1 || slot == OUTPUT_SLOT_2 || slot == OUTPUT_SLOT_3) {
 			this.updateCanChop();
 		}
 	}
@@ -244,6 +248,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		if(this.recipeDirty) {
 			this.updateRecipe();
 		}
+		this.updateCanChop();
 		super.setChanged();
 	}
 	
@@ -343,7 +348,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 				case 0:
 					return ItemStack.EMPTY;
 				case 1, 2, 3:
-					return this.recipe.assembleRecipe(new SingleRecipeInput(this.getItem(0)), level).get(slot - 1);
+					return this.recipe.assembleRecipe(new SingleRecipeInput(this.getItem(FISH_SLOT)), level).get(slot - 1);
 			}
 		}
 		return ItemStack.EMPTY;
@@ -365,6 +370,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		if(remainsItem.isEmpty()) remainsItem = ItemStack.EMPTY;
 		this.remainsItem = remainsItem;
 		this.remainsCount = remainsCount;
+		this.updateCanChop();
 	}
 	
 	/**
@@ -412,6 +418,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity imple
 		if(count >= this.remainsCount) {
 			this.remainsCount = 0;
 			this.remainsItem = ItemStack.EMPTY;
+			this.updateCanChop();
 		} else {
 			this.remainsCount -= count;
 		}

@@ -325,7 +325,6 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(ShockArrowHitPacket.TYPE, ShockArrowHitPacket.STREAM_CODEC, ShockArrowHitPacket::handle);
 
 		registrar.playToServer(ChiromawDoubleJumpPacket.TYPE, ChiromawDoubleJumpPacket.STREAM_CODEC, ChiromawDoubleJumpPacket::handle);
-		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 		registrar.playToServer(EquipItemPacket.TYPE, EquipItemPacket.STREAM_CODEC, EquipItemPacket::handle);
 		registrar.playToServer(HandleSwingPacket.TYPE, HandleSwingPacket.STREAM_CODEC, HandleSwingPacket::handle);
 		registrar.playToServer(OpenPouchPacket.TYPE, OpenPouchPacket.STREAM_CODEC, OpenPouchPacket::handle);

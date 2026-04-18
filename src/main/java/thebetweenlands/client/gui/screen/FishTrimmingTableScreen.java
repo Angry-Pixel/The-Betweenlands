@@ -1,7 +1,7 @@
 package thebetweenlands.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -10,11 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.inventory.FishTrimmingTableMenu;
-import thebetweenlands.common.network.serverbound.ChopFishPacket;
 
 public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmingTableMenu> {
 
@@ -29,7 +26,13 @@ public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmin
 	@Override
 	protected void init() {
 		super.init();
-		this.addRenderableWidget(Button.builder(Component.translatable("container.thebetweenlands.fish_trimming_table.butcher"), button -> PacketDistributor.sendToServer(ChopFishPacket.INSTANCE)).bounds(this.leftPos + 48, this.topPos + 111, 80, 20).build());
+		this.addRenderableWidget(Button.builder(Component.translatable("container.thebetweenlands.fish_trimming_table.butcher"), this::onChopButtonClick).bounds(this.leftPos + 48, this.topPos + 111, 80, 20).build());
+	}
+	
+	private void onChopButtonClick(Button button) {
+		if(this.menu.clickMenuButton(this.minecraft.player, 0)) {
+			this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
+		}
 	}
 
 	@Override
@@ -51,17 +54,14 @@ public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmin
 		graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
 		if (
-				// Ensure the table exists on the client and the client knows the recipe so the client knows the result items
-				// TODO have the server sync the result items to the client via some hidden slots so this isn't necessary
-				this.getMenu().getContainer() instanceof FishTrimmingTableBlockEntity table && table.getStoredRecipe() != null &&
-				// Ensure that the server also has a recipe (i.e. the recipe from `table` isn't client-only or something)
+				// If the server has a recipe and is ready to chop, display the networked result items (in hidden slots 6, 7, and 8)
 				this.getMenu().hasRecipe() && this.getMenu().canChop()
 		) {
 			graphics.pose().pushPose();
 			graphics.pose().translate(this.leftPos, this.topPos, 0);
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 1), this.getMenu().getSlot(1));
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 2), this.getMenu().getSlot(2));
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 3), this.getMenu().getSlot(3));
+			this.drawSlotAsBackground(graphics, this.getMenu().getSlot(6).getItem(), this.getMenu().getSlot(1));
+			this.drawSlotAsBackground(graphics, this.getMenu().getSlot(7).getItem(), this.getMenu().getSlot(2));
+			this.drawSlotAsBackground(graphics, this.getMenu().getSlot(8).getItem(), this.getMenu().getSlot(3));
 			graphics.pose().popPose();
 		}
 	}
