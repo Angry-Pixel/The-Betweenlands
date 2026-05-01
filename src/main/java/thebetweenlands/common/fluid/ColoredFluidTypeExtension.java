@@ -1,10 +1,10 @@
 package thebetweenlands.common.fluid;
 
-public class ColoredFluidType extends BasicFluidType {
+public class ColoredFluidTypeExtension extends BasicFluidTypeExtension {
 
 	private final int color;
 
-	public ColoredFluidType(int color, String fluidName) {
+	public ColoredFluidTypeExtension(int color, String fluidName) {
 		super(fluidName);
 		this.color = color;
 	}

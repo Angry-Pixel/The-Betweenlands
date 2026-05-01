@@ -4,11 +4,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import thebetweenlands.common.TheBetweenlands;
 
-public class BasicFluidType implements IClientFluidTypeExtensions {
+public class BasicFluidTypeExtension implements IClientFluidTypeExtensions {
 
 	private final String fluidName;
 
-	public BasicFluidType(String fluidName) {
+	public BasicFluidTypeExtension(String fluidName) {
 		this.fluidName = fluidName;
 	}
 

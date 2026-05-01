@@ -7,13 +7,13 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FluidState;
 import thebetweenlands.common.TheBetweenlands;
 
-public class SwampWaterFluidType extends BasicFluidType {
+public class SwampWaterFluidTypeExtension extends BasicFluidTypeExtension {
 
 	private static final int DEEP_COLOR_R = 19;
 	private static final int DEEP_COLOR_G = 24;
 	private static final int DEEP_COLOR_B = 68;
 
-	public SwampWaterFluidType() {
+	public SwampWaterFluidTypeExtension() {
 		super("swamp_water");
 	}
 
