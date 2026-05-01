@@ -85,6 +85,10 @@ public class GunkData {
 		
 		if(gunkData.exitPauseTimer > 0) {
 			gunkData.exitPauseTimer--;
+		} else {
+			// TODO adjust gunk rate
+			gunkData.setGunk(gunkData.getGunk() - 1);
+			player.syncData(AttachmentRegistry.GUNK);
 		}
 		
 		if(gunkData.enterPauseTimer < ENTER_WAIT_TIME) {
@@ -99,7 +103,7 @@ public class GunkData {
 
 		if(gunkData.enterPauseTimer > 0) {
 			gunkData.enterPauseTimer--;
-		} else if(player.isSwimming() && player.isVisuallySwimming()) {
+		} else if(player.isSwimming()) {
 			// TODO adjust gunk rate
 			gunkData.setGunk(gunkData.getGunk() + 1);
 			player.syncData(AttachmentRegistry.GUNK);

@@ -1,6 +1,7 @@
 package thebetweenlands.common.handler;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -28,15 +29,22 @@ public class PlayerGunkHandler {
 		AttributeMap attributes = player.getAttributes();
 		AttributeInstance swimSpeed = attributes.getInstance(NeoForgeMod.SWIM_SPEED);
 		
-		if(player.isInFluidType(FluidTypeRegistry.SWAMP_WATER.get()) && player.hasData(AttachmentRegistry.GUNK)) {
+		if(shouldApplyGunkSlowdown(player) && player.hasData(AttachmentRegistry.GUNK)) {
 			GunkData gunkData = player.getData(AttachmentRegistry.GUNK);
-			// Goes down to 0 as gunk reaches 100%
-			// At 100% the player needs to be taken out of the swimming animation
-			swimSpeed.addOrReplacePermanentModifier(new AttributeModifier(GUNK_SLOWDOWN_MODIFIER, -((double)gunkData.getGunk() / (double)GunkData.GUNK_MAX), Operation.ADD_MULTIPLIED_TOTAL));
+			// 0% slowdown for 0% to 20% gunk
+			// 0%-80% slowdown for 20% to 80% gunk
+			// 80% slowdown for 80% to 100% gunk
+			final double slowdown = Mth.clampedMap(gunkData.getGunk(), GunkData.GUNK_MAX * 0.2, GunkData.GUNK_MAX * 0.8, 0.0, -0.8);
+			
+			swimSpeed.addOrReplacePermanentModifier(new AttributeModifier(GUNK_SLOWDOWN_MODIFIER, slowdown, Operation.ADD_MULTIPLIED_TOTAL));
 		} else {
 			swimSpeed.removeModifier(GUNK_SLOWDOWN_MODIFIER);
 		}
 		
+	}
+	
+	public static boolean shouldApplyGunkSlowdown(Player player) {
+		return player.isInFluidType(FluidTypeRegistry.SWAMP_WATER.get()) && player.isSwimming();
 	}
 	
 }
