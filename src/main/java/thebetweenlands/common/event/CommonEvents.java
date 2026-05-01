@@ -19,6 +19,7 @@ import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
+import thebetweenlands.common.handler.PlayerGunkHandler;
 import thebetweenlands.common.handler.ItemEquipmentHandler;
 import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.handler.ShieldHandler;
@@ -43,6 +44,7 @@ public class CommonEvents {
 		ShieldHandler.init();
 		SimulacrumHandler.init();
 		WorldEventHandler.init();
+		PlayerGunkHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);
