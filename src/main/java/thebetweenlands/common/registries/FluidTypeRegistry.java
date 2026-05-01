@@ -9,17 +9,18 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.fluid.RubberFluidType;
+import thebetweenlands.common.fluid.SwampWaterFluidType;
 import thebetweenlands.common.fluid.TarFluidType;
 
 //TODO fluids have a LOT more flexibility nowadays. Perhaps we should look into making our fluids more unique
 public class FluidTypeRegistry {
 	public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, TheBetweenlands.ID);
 
-	public static final DeferredHolder<FluidType, FluidType> SWAMP_WATER = FLUID_TYPES.register("swamp_water", () -> new FluidType(FluidType.Properties.create()
+	public static final DeferredHolder<FluidType, FluidType> SWAMP_WATER = FLUID_TYPES.register("swamp_water", () -> new SwampWaterFluidType(FluidType.Properties.create()
 		.descriptionId("block.thebetweenlands.swamp_water")
 		.fallDistanceModifier(0.0F)
 		.canExtinguish(true)
-		.canSwim(false) //haha
+		.canSwim(true) // disabled once gunk reaches 100%
 		.canHydrate(true)
 		.canConvertToSource(true)
 		.supportsBoating(true)

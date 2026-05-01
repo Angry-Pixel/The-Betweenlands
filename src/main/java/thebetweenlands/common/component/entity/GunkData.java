@@ -59,6 +59,10 @@ public class GunkData {
 		this.gunkCounter = Mth.clamp(gunk, 0, GUNK_MAX);
 	}
 	
+	public boolean isSwimmingBlocked() {
+		return this.gunkCounter >= GUNK_MAX;
+	}
+	
 	public static void onPlayerTick(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
 		if(player.level().isClientSide()) {

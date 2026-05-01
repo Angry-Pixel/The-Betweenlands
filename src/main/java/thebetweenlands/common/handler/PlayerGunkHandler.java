@@ -20,6 +20,7 @@ public class PlayerGunkHandler {
 	
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(GunkData::onPlayerTick);
+		NeoForge.EVENT_BUS.addListener(PlayerGunkHandler::modifyPlayerSwimSpeed);
 	}
 	
 	public static void modifyPlayerSwimSpeed(PlayerTickEvent.Pre e) {
