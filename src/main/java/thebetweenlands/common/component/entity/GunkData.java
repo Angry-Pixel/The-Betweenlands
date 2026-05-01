@@ -95,7 +95,7 @@ public class GunkData {
 
 		if(gunkData.enterPauseTimer > 0) {
 			gunkData.enterPauseTimer--;
-		} else {
+		} else if(player.isSwimming() && player.isVisuallySwimming()) {
 			// TODO adjust gunk rate
 			gunkData.setGunk(gunkData.getGunk() + 1);
 			player.syncData(AttachmentRegistry.GUNK);
