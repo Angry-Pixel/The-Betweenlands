@@ -13,7 +13,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.GunkData;
 import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.FluidTypeRegistry;
 
 public class PlayerGunkHandler {
 
@@ -40,11 +39,10 @@ public class PlayerGunkHandler {
 		} else {
 			swimSpeed.removeModifier(GUNK_SLOWDOWN_MODIFIER);
 		}
-		
 	}
 	
 	public static boolean shouldApplyGunkSlowdown(Player player) {
-		return player.isInFluidType(FluidTypeRegistry.SWAMP_WATER.get()) && player.isSwimming();
+		return GunkData.isGunkEnabled(player) && GunkData.isGunkActive(player) && player.isSwimming();
 	}
 	
 }

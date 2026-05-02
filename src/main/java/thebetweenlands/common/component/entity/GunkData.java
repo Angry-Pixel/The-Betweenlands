@@ -7,12 +7,15 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 
-public class GunkData {
+public final class GunkData {
 
 	public static final int GUNK_MAX = 100;
 	public static final int ENTER_WAIT_TIME = 20;
@@ -62,10 +65,20 @@ public class GunkData {
 	public boolean isSwimmingBlocked() {
 		return this.gunkCounter >= GUNK_MAX;
 	}
+
+	public static boolean isGunkEnabled(Player player) {
+		return player.level().getDifficulty() != Difficulty.PEACEFUL &&
+			player.level().getGameRules().getBoolean(TheBetweenlands.DECAY_GAMERULE) && BetweenlandsConfig.useDecay &&
+			!player.isCreative() && !player.getAbilities().invulnerable;
+	}
+	
+	public static boolean isGunkActive(Player player) {
+		return player.isInFluidType(FluidTypeRegistry.SWAMP_WATER.get());
+	}
 	
 	public static void onPlayerTick(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
-		if(player.level().isClientSide()) {
+		if(player.level().isClientSide() || !isGunkEnabled(player)) {
 			return;
 		}
 		

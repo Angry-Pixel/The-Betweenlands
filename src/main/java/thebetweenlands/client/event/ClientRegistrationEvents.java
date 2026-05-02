@@ -66,6 +66,7 @@ import thebetweenlands.client.gui.overlay.CorrosiveBootsOverlay;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.EquipmentOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
+import thebetweenlands.client.gui.overlay.GunkOverlay;
 import thebetweenlands.client.gui.overlay.swarm.SwarmOverlay;
 import thebetweenlands.client.gui.screen.AmphibiousArmorScreen;
 import thebetweenlands.client.gui.screen.AnimatorScreen;
@@ -427,6 +428,9 @@ import thebetweenlands.util.DrinkableBrew;
 
 public class ClientRegistrationEvents {
 
+	public static final ResourceLocation DECAY_METER_OVERLAY_LAYER = TheBetweenlands.prefix("decay_meter");
+	public static final ResourceLocation GUNK_METER_OVERLAY_LAYER = TheBetweenlands.prefix("gunk_meter");
+	
 	public static RiftVariantReloadListener riftVariantListener;
 	public static AspectIconTextureManager aspectIcons;
 	public static CircleGemTextureManager circleGems;
@@ -476,7 +480,8 @@ public class ClientRegistrationEvents {
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
 		event.registerAbove(VanillaGuiLayers.HOTBAR, TheBetweenlands.prefix("item_equipment"), EquipmentOverlay::renderEquipment);
 		event.registerAbove(VanillaGuiLayers.HOTBAR, TheBetweenlands.prefix("radial_equipment_menu"), RadialMenuHandler.INSTANCE::renderRadialMenu);
-		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
+		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, DECAY_METER_OVERLAY_LAYER, DecayBarOverlay::renderDecayBar);
+		event.registerAbove(DECAY_METER_OVERLAY_LAYER, GUNK_METER_OVERLAY_LAYER, GunkOverlay::renderGunkBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 		event.registerAboveAll(TheBetweenlands.prefix("swarm"), SwarmOverlay.INSTANCE::renderSwarm);
 		event.registerAboveAll(TheBetweenlands.prefix("april_fools"), AprilFoolsOverlay.INSTANCE::renderAprilFools);
