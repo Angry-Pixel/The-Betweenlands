@@ -62,18 +62,50 @@ public final class GunkData {
 		this.gunkCounter = Mth.clamp(gunk, 0, GUNK_MAX);
 	}
 	
+	public boolean increaseGunk(int amount) {
+		final int prevGunk = this.gunkCounter;
+		final int newGunk = this.gunkCounter = Math.clamp(this.gunkCounter + amount, 0, GUNK_MAX);
+		return prevGunk != newGunk;
+	}
+	
+	/**
+	 * @return {@code true} if the player is preventing from swimming (via swim pose) in Swamp Water
+	 */
 	public boolean isSwimmingBlocked() {
 		return this.gunkCounter >= GUNK_MAX;
 	}
 
+	/**
+	 * Returns whether the gunk systems should even be engaged for the target player.
+	 * 
+	 * <p>If {@code false}, then everything gunk-related is blanket disabled for this player</p>
+	 * @param player the player to check
+	 * @return {@code true} if gunk should affect this player, or {@code false} if everything gunk-related should be disabled for this player
+	 */
 	public static boolean isGunkEnabled(Player player) {
 		return player.level().getDifficulty() != Difficulty.PEACEFUL &&
-			player.level().getGameRules().getBoolean(TheBetweenlands.DECAY_GAMERULE) && BetweenlandsConfig.useDecay &&
+			player.level().getGameRules().getBoolean(TheBetweenlands.GUNK_GAMERULE) && BetweenlandsConfig.useGunk &&
 			!player.isCreative() && !player.getAbilities().invulnerable;
 	}
 	
+	/**
+	 * Returns whether the player is in a state where gunk is "active".
+	 * @param player the player to check
+	 * @return
+	 */
 	public static boolean isGunkActive(Player player) {
 		return player.isInFluidType(FluidTypeRegistry.SWAMP_WATER.get());
+	}
+	
+	/**
+	 * Returns whether this player can gain gunk
+	 * @param player
+	 * @return {@code false} if the player's gunk is prevented from increasing
+	 */
+	public static boolean canGunkIncrease(Player player) {
+		// TODO lurker skin armour
+		// TODO amphibious armour
+		return true;
 	}
 	
 	public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -100,8 +132,12 @@ public final class GunkData {
 			gunkData.exitPauseTimer--;
 		} else {
 			// TODO adjust gunk rate
-			gunkData.setGunk(gunkData.getGunk() - 1);
-			player.syncData(AttachmentRegistry.GUNK);
+			boolean gunkChanged = gunkData.increaseGunk(-1);
+
+			// Sync gunk data if it changed
+			if(gunkChanged) {
+				player.syncData(AttachmentRegistry.GUNK);
+			}
 		}
 		
 		if(gunkData.enterPauseTimer < ENTER_WAIT_TIME) {
@@ -116,10 +152,14 @@ public final class GunkData {
 
 		if(gunkData.enterPauseTimer > 0) {
 			gunkData.enterPauseTimer--;
-		} else if(player.isSwimming()) {
+		} else if(player.isSwimming() && canGunkIncrease(player)) {
 			// TODO adjust gunk rate
-			gunkData.setGunk(gunkData.getGunk() + 1);
-			player.syncData(AttachmentRegistry.GUNK);
+			boolean gunkChanged = gunkData.increaseGunk(1);
+
+			// Sync gunk data if it changed
+			if(gunkChanged) {
+				player.syncData(AttachmentRegistry.GUNK);
+			}
 		}
 		
 		// TODO gunk when moving through algae and certain water plants

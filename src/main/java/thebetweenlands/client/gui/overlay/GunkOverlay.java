@@ -28,6 +28,7 @@ public class GunkOverlay {
 			GunkData gunkData = player.getData(AttachmentRegistry.GUNK);
 			
 			// If they are not in water and their gunk is at 0, then do not render the gunk bar
+			// TODO keep gunk bar on screen for 10 ticks after this
 			if(!GunkData.isGunkActive(player) && gunkData.getGunk() == 0) return;
 
 			int posX = graphics.guiWidth() / 2 + 10;

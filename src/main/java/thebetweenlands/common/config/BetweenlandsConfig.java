@@ -44,6 +44,7 @@ public class BetweenlandsConfig {
 	public static final boolean useToolWeakness = true;
 	public static final boolean useTorchBlacklist = true;
 	public static final boolean useDecay = true;
+	public static final boolean useGunk = true;
 	public static final List<ResourceKey<Level>> decayDimensionList = new ArrayList<>();
 	public static final boolean useCorrosion = true;
 	public static final boolean cavingRopeIndicator = true;
