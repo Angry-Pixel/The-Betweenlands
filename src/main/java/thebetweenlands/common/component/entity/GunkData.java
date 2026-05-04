@@ -8,7 +8,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -170,5 +173,26 @@ public final class GunkData {
 		// Hmm, best way to get position?
 		// Either player.getPosition(0.0f) and player.getPosition(1.0f) for old and new position respectively
 		// or new Vec3(player.xo, player.yo, player.zo) and player.position() for old and new position respectively
+		
+		// Entity.getPosition(partialTicks) seems to mostly be client-side
+		
+		// Where the player was at the start of this tick
+		Vec3 oldPos = new Vec3(player.xo, player.yo, player.zo);
+		// Where the player was at the end of this tick
+		Vec3 pos = player.position();
+		
+		// How the player moved to get from where they were to where they are
+		Vec3 deltaMovement = pos.subtract(oldPos);
+		
+		final Pose forcedPose = player.getForcedPose();
+		Pose pose = forcedPose != null ? forcedPose : player.getPose();
+		
+		// local bounding box (centred on 0, 0) for the player in this pose
+		AABB localBounds = player.getLocalBoundsForPose(pose);
+		
+		// TODO figure out how much of the player moved through gunk water plants and add the corresponding amount of gunk
+		// Note: should be inversely related to the player's scale (or dimensions of their bounding box)
+		//       that is, someone 10x the size should gain less gunk for the same movement through a single block because they are bigger
+		
 	}
 }
