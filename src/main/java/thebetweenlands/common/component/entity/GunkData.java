@@ -197,11 +197,21 @@ public final class GunkData {
 		Pose pose = forcedPose != null ? forcedPose : player.getPose();
 		
 		// local bounding box (centred on 0, 0) for the player in this pose
+		// 0, 0, 0 is the bottom centre of this AABB
 		AABB localBounds = player.getLocalBoundsForPose(pose);
 		
 		// TODO figure out how much of the player moved through gunk water plants and add the corresponding amount of gunk
 		// Note: should be inversely related to the player's scale (or dimensions of their bounding box)
 		//       that is, someone 10x the size should gain less gunk for the same movement through a single block because they are bigger
 		
+		// Currently, we assume the bounding box size has not changed since the start of this tick
+		AABB oldBounds = localBounds.move(oldPos);
+		AABB newBounds = localBounds.move(pos);
+		AABB totalBounds = oldBounds.minmax(newBounds);
+		
+		// We want to:
+		// 1. Find every gunk plant between the old bound and new bounds
+		// 2. Calculate the percentage of each plant's bounding box that was traveled through (and not already intersected with)
+		// 3. Use that to determine the total amount of partial gunk to add
 	}
 }
