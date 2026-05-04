@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
+import thebetweenlands.common.datamap.block.GunkPlant;
 import thebetweenlands.common.datamap.entity.AmuletSpawn;
 import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.datamap.item.CompostableItem;
@@ -320,5 +321,8 @@ public class BLDataMapProvider extends DataMapProvider {
 		compostMap.add(ItemRegistry.PALE_GRASS_BLADES, new CompostableItem(3, 4000), false);
 		compostMap.add(ItemRegistry.STRING_ROOT_FIBERS, new CompostableItem(3, 4000), false);
 		compostMap.add(ItemRegistry.CRYPTWEED_BLADES, new CompostableItem(3, 4000), false);
+		
+		var gunkMap = this.builder(DataMapRegistry.GUNK);
+		gunkMap.add(BlockRegistry.ALGAE, new GunkPlant(10.0d), false);
 	}
 }
