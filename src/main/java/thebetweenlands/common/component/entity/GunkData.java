@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Pose;
@@ -27,13 +28,15 @@ public final class GunkData {
 	public static final Codec<GunkData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.INT.fieldOf("gunk_counter").forGetter(o -> o.gunkCounter),
 		Codec.INT.fieldOf("enter_pause_timer").forGetter(o -> o.enterPauseTimer),
-		Codec.INT.fieldOf("exit_pause_timer").forGetter(o -> o.exitPauseTimer)
+		Codec.INT.fieldOf("exit_pause_timer").forGetter(o -> o.exitPauseTimer),
+		ExtraCodecs.POSITIVE_FLOAT.fieldOf("partial_gunk").forGetter(o -> o.partialGunk)
 	).apply(instance, GunkData::new));
 
 	public static final StreamCodec<FriendlyByteBuf, GunkData> STREAM_CODEC = StreamCodec.composite(
-		ByteBufCodecs.INT, o -> o.gunkCounter,
+		ByteBufCodecs.INT, o -> o.gunkCounter, // We only really need to sync gunkCounter...
 		ByteBufCodecs.INT, o -> o.enterPauseTimer,
 		ByteBufCodecs.INT, o -> o.exitPauseTimer,
+		ByteBufCodecs.FLOAT, o -> o.partialGunk,
 		GunkData::new
 	);
 
@@ -46,15 +49,18 @@ public final class GunkData {
 	// 0-35, tracks the amount of time before any out-of-water behaviours (e.g. gunk slowly decreasing) begin
 	// If the player enters water, immediately set to its maximum of 35
 	private int exitPauseTimer;
+	// Partial gunk from moving through plants
+	private float partialGunk;
 	
 	public GunkData() {
-		this(0, ENTER_WAIT_TIME, 0);
+		this(0, ENTER_WAIT_TIME, 0, 0.0f);
 	}
 	
-	public GunkData(int gunkCounter, int enterPauseTimer, int exitPauseTimer) {
+	public GunkData(int gunkCounter, int enterPauseTimer, int exitPauseTimer, float partialGunk) {
 		this.gunkCounter = gunkCounter;
 		this.enterPauseTimer = enterPauseTimer;
 		this.exitPauseTimer = exitPauseTimer;
+		this.partialGunk = partialGunk;
 	}
 	
 	public int getGunk() {
@@ -183,6 +189,9 @@ public final class GunkData {
 		
 		// How the player moved to get from where they were to where they are
 		Vec3 deltaMovement = pos.subtract(oldPos);
+		
+		// If the player hasn't significantly moved, do nothing
+		if (deltaMovement.lengthSqr() < 1.0E-4 * 1.0E-4) return;
 		
 		final Pose forcedPose = player.getForcedPose();
 		Pose pose = forcedPose != null ? forcedPose : player.getPose();
