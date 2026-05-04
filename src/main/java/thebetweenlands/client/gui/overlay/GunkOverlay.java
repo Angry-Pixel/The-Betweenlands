@@ -10,14 +10,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.GunkData;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 public class GunkOverlay {
 
-	private static final ResourceLocation GUNK_BACKGROUND_SPRITE = TheBetweenlands.prefix("hud/gunk_bar_background");
-	private static final ResourceLocation GUNK_PROGRESS_SPRITE = TheBetweenlands.prefix("hud/gunk_bar_progress");
+	private static final ResourceLocation GUNK_BAR_BACKGROUND_SPRITE = TheBetweenlands.prefix("hud/gunk_bar_background");
+	private static final ResourceLocation GUNK_BAR_PROGRESS_SPRITE = TheBetweenlands.prefix("hud/gunk_bar_progress");
 
 	public static void renderGunkBar(GuiGraphics graphics, DeltaTracker tracker) {
+		// Only render the gunk bar if debug is on
+		// TODO uncomment when better overlay is implemented
+//		if(!BetweenlandsConfig.debug) { return; }
+		
 		Minecraft minecraft = Minecraft.getInstance();
 		Gui gui = minecraft.gui;
 		Player player = gui.getCameraPlayer();
@@ -41,12 +46,12 @@ public class GunkOverlay {
 
 			RenderSystem.enableBlend();
 			
-			graphics.blitSprite(GUNK_BACKGROUND_SPRITE, posX, posY, 81, 5);
+			graphics.blitSprite(GUNK_BAR_BACKGROUND_SPRITE, posX, posY, 81, 5);
 			
 			if(currentGunk > 0) {
 				float gunkProgress = (float)currentGunk / (float)maxGunk;
 				int gunkPixels = (int)(gunkProgress * 81);
-				graphics.blitSprite(GUNK_PROGRESS_SPRITE, 81, 5, 0, 0, posX, posY, 0, gunkPixels, 5);
+				graphics.blitSprite(GUNK_BAR_PROGRESS_SPRITE, 81, 5, 0, 0, posX, posY, 0, gunkPixels, 5);
 			}
 
 			RenderSystem.disableBlend();
@@ -55,5 +60,10 @@ public class GunkOverlay {
 			
 			minecraft.getProfiler().pop();
 		}
+	}
+	
+	
+	public static void renderGunkOverlay(GuiGraphics graphics, DeltaTracker tracker) {
+		// Render a better overlay here
 	}
 }
