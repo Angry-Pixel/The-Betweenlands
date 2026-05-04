@@ -119,6 +119,8 @@ public final class GunkData {
 		} else {
 			tickOutOfWater(player);
 		}
+		
+		tickMoveThroughWaterPlants(player);
 	}
 
 	public static void tickOutOfWater(Player player) {
@@ -161,7 +163,12 @@ public final class GunkData {
 				player.syncData(AttachmentRegistry.GUNK);
 			}
 		}
-		
-		// TODO gunk when moving through algae and certain water plants
+	}
+	
+	public static void tickMoveThroughWaterPlants(Player player) {
+		// Updates gunk for moving through algae and certain water plants
+		// Hmm, best way to get position?
+		// Either player.getPosition(0.0f) and player.getPosition(1.0f) for old and new position respectively
+		// or new Vec3(player.xo, player.yo, player.zo) and player.position() for old and new position respectively
 	}
 }
