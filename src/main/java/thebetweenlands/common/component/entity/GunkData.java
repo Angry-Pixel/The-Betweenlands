@@ -188,7 +188,7 @@ public final class GunkData {
 		Vec3 pos = player.position();
 		
 		// How the player moved to get from where they were to where they are
-		Vec3 deltaMovement = pos.subtract(oldPos);
+		Vec3 deltaMovement = oldPos.vectorTo(pos);
 		
 		// If the player hasn't significantly moved, do nothing
 		if (deltaMovement.lengthSqr() < 1.0E-4 * 1.0E-4) return;
@@ -213,5 +213,142 @@ public final class GunkData {
 		// 1. Find every gunk plant between the old bound and new bounds
 		// 2. Calculate the percentage of each plant's bounding box that was traveled through (and not already intersected with)
 		// 3. Use that to determine the total amount of partial gunk to add
+	}
+	
+	// TODO probably could go into a different file
+	// TODO ngl could probably process this one axis at a time (wouldn't be 100% accurate though, because we don't know the exact motion the player moved through)
+	
+	/**
+	 * Finds the percentage of the volume of {@code aabb} that is passed through by {@code localBounds} as it is offset from its starting position by {@code movementDelta}
+	 * @param localBounds the local bounds, representing the player's bounding box
+	 * @param movementDelta the offset that the {@code localBounds} goes through
+	 * @param aabb the aabb that is passed through by {@code localBounds}
+	 * @return the percentage of the volume of {@code aabb} that is passed through by {@code localBounds} as it is offset from its starting position by {@code movementDelta}
+	 */
+	public static double findIntersectionVolume(AABB localBounds, Vec3 movementDelta, AABB aabb) {
+		// Scale universe such that localBounds is [(0, 0, 0), (1, 1, 1)]
+		Vec3 offsetPos = localBounds.getMinPosition().reverse();
+		AABB offsetLocalBounds = localBounds.move(offsetPos);
+		Vec3 scaleFactor = new Vec3(1.0 / offsetLocalBounds.maxX, 1.0 / offsetLocalBounds.maxY, 1.0 / offsetLocalBounds.maxZ);
+		
+		AABB offsetAabb = aabb.move(offsetPos);
+		AABB targetAabb = new AABB(offsetAabb.getMinPosition().multiply(scaleFactor), offsetAabb.getMaxPosition().multiply(scaleFactor));
+		
+		return findIntersectionVolumeWithCenteredLocalBounds(movementDelta.multiply(scaleFactor), targetAabb);
+	}
+
+	/**
+	 * Finds the percentage of the volume of {@code aabb} that is passed through by the unit aabb, as the unit aabb moves from 0, 0, 0 to {@code movementDelta}
+	 * @param movementDelta the offset that the unit aabb goes through
+	 * @param aabb the aabb that is passed through by the unit aabb
+	 * @return the percentage of the volume of {@code aabb} that is passed through by the unit aabb, as the unit aabb moves from 0, 0, 0 to {@code movementDelta}
+	 */
+	public static double findIntersectionVolumeWithCenteredLocalBounds(Vec3 movementDelta, AABB aabb) {
+		// Local bounds is AABB at [(0, 0, 0), (1, 1, 1)]
+
+		final double minXIntersectsZero = aabb.minX / movementDelta.x;
+		final double minXIntersectsOne  = (aabb.minX - 1) / movementDelta.x;
+		final double maxXIntersectsZero = aabb.maxX / movementDelta.x;
+		final double maxXIntersectsOne  = (aabb.maxX - 1) / movementDelta.x;
+
+		final AxisIntersection firstXIntersection = getFirstIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne);
+		final AxisIntersection lastXIntersection = getLastIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne);
+
+		final double minYIntersectsZero = aabb.minY / movementDelta.y;
+		final double minYIntersectsOne  = (aabb.minY - 1) / movementDelta.y;
+		final double maxYIntersectsZero = aabb.maxY / movementDelta.y;
+		final double maxYIntersectsOne  = (aabb.maxY - 1) / movementDelta.y;
+
+		final AxisIntersection firstYIntersection = getFirstIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne);
+		final AxisIntersection lastYIntersection = getLastIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne);
+
+		final double minZIntersectsZero = aabb.minZ / movementDelta.z;
+		final double minZIntersectsOne  = (aabb.minZ - 1) / movementDelta.z;
+		final double maxZIntersectsZero = aabb.maxZ / movementDelta.z;
+		final double maxZIntersectsOne  = (aabb.maxZ - 1) / movementDelta.z;
+
+		final AxisIntersection firstZIntersection = getFirstIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
+		final AxisIntersection lastZIntersection = getLastIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
+
+		return 0.0;
+	}
+	
+	/**
+	 * Represents the type of intersection along an axis.
+	 */
+	public static enum AxisIntersection {
+		MIN_VAL_INTERSECTS_ZERO,
+		MIN_VAL_INTERSECTS_ONE,
+		MAX_VAL_INTERSECTS_ZERO,
+		MAX_VAL_INTERSECTS_ONE;
+		
+		public double getIntersection(double minIntersectsZero, double minIntersectsOne, double maxIntersectsZero, double maxIntersectsOne) {
+			return switch(this) {
+				case MIN_VAL_INTERSECTS_ZERO -> minIntersectsZero;
+				case MIN_VAL_INTERSECTS_ONE -> minIntersectsOne;
+				case MAX_VAL_INTERSECTS_ZERO -> maxIntersectsZero;
+				case MAX_VAL_INTERSECTS_ONE -> maxIntersectsOne;
+			};
+		}
+	}
+
+	/**
+	 * Gets the {@link AxisIntersection axis intersection} that represents the double with the lowest value
+	 * @param minIntersectsZero
+	 * @param minIntersectsOne
+	 * @param maxIntersectsZero
+	 * @param maxIntersectsOne
+	 * @return
+	 */
+	public static AxisIntersection getFirstIntersection(double minIntersectsZero, double minIntersectsOne, double maxIntersectsZero, double maxIntersectsOne) {
+		AxisIntersection intersection = AxisIntersection.MIN_VAL_INTERSECTS_ZERO;
+		double minValue = minIntersectsZero;
+		
+		if(minIntersectsOne < minValue) {
+			minValue = minIntersectsOne;
+			intersection = AxisIntersection.MIN_VAL_INTERSECTS_ONE;
+		}
+		
+		if(maxIntersectsZero < minValue) {
+			minValue = maxIntersectsZero;
+			intersection = AxisIntersection.MAX_VAL_INTERSECTS_ZERO;
+		}
+		
+		if(maxIntersectsOne < minValue) {
+			minValue = maxIntersectsOne;
+			intersection = AxisIntersection.MAX_VAL_INTERSECTS_ONE;
+		}
+		
+		return intersection;
+	}
+	
+	/**
+	 * Gets the {@link AxisIntersection axis intersection} that represents the double with the highest value
+	 * @param minIntersectsZero
+	 * @param minIntersectsOne
+	 * @param maxIntersectsZero
+	 * @param maxIntersectsOne
+	 * @return
+	 */
+	public static AxisIntersection getLastIntersection(double minIntersectsZero, double minIntersectsOne, double maxIntersectsZero, double maxIntersectsOne) {
+		AxisIntersection intersection = AxisIntersection.MIN_VAL_INTERSECTS_ZERO;
+		double maxValue = minIntersectsZero;
+		
+		if(minIntersectsOne > maxValue) {
+			maxValue = minIntersectsOne;
+			intersection = AxisIntersection.MIN_VAL_INTERSECTS_ONE;
+		}
+		
+		if(maxIntersectsZero > maxValue) {
+			maxValue = maxIntersectsZero;
+			intersection = AxisIntersection.MAX_VAL_INTERSECTS_ZERO;
+		}
+		
+		if(maxIntersectsOne > maxValue) {
+			maxValue = maxIntersectsOne;
+			intersection = AxisIntersection.MAX_VAL_INTERSECTS_ONE;
+		}
+		
+		return intersection;
 	}
 }
