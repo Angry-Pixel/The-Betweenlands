@@ -258,17 +258,30 @@ public final class GunkData {
 		// Local bounds is AABB at [(0, 0, 0), (1, 1, 1)]
 		
 		if(!withinIntersectionBounds(movementDelta, aabb)) {
+			// We are entirely outside of the bounding box
 			return 0;
 		}
 		
+		final double aabbVolume = aabb.getXsize() * aabb.getYsize() * aabb.getZsize();
+		
+		// Determine which faces are actually relevant
+		// If there are faces we don't intersect with then don't consider them for the calculations which require intersections
 		final AxisFacesIntersects xIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.X);
 		final AxisFacesIntersects yIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.Y);
 		final AxisFacesIntersects zIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.Z);
 
 		if(xIntersections == AxisFacesIntersects.NO_FACES_INTERSECT || yIntersections == AxisFacesIntersects.NO_FACES_INTERSECT || zIntersections == AxisFacesIntersects.NO_FACES_INTERSECT) {
-			return 0;
+			// We are entirely within the bounding box
+			// Implies that the AABB is probably larger than [(0, 0, 0), (1, 1, 1)]
+			// 1 / aabbVolume is the ratio of the volume of the unit bounding box (1 * 1 * 1) to the aabb volume
+			return Math.min(1, 1.0 / aabbVolume);
 		}
 		
+		// Time axis
+		// * At time 0, the player bounding box is [(0, 0, 0), (1, 1, 1)]
+		// * At time 1, the player bounding box is [(0, 0, 0) + movementDelta, (1, 1, 1) + movementDelta]
+		
+		// Get the time values for the first and last intersections along each axis
 		final double minXIntersectsZero = aabb.minX / movementDelta.x;
 		final double minXIntersectsOne  = (aabb.minX - 1) / movementDelta.x;
 		final double maxXIntersectsZero = aabb.maxX / movementDelta.x;
@@ -276,6 +289,8 @@ public final class GunkData {
 
 		final AxisIntersection firstXIntersection = getFirstIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne, xIntersections);
 		final AxisIntersection lastXIntersection = getLastIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne, xIntersections);
+		final double firstXIntersectionTime = firstXIntersection.getIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne);
+		final double lastXIntersectionTime = lastXIntersection.getIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne);
 
 		final double minYIntersectsZero = aabb.minY / movementDelta.y;
 		final double minYIntersectsOne  = (aabb.minY - 1) / movementDelta.y;
@@ -284,6 +299,8 @@ public final class GunkData {
 		
 		final AxisIntersection firstYIntersection = getFirstIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne, yIntersections);
 		final AxisIntersection lastYIntersection = getLastIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne, yIntersections);
+		final double firstYIntersectionTime = firstYIntersection.getIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne);
+		final double lastYIntersectionTime = lastYIntersection.getIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne);
 
 		final double minZIntersectsZero = aabb.minZ / movementDelta.z;
 		final double minZIntersectsOne  = (aabb.minZ - 1) / movementDelta.z;
@@ -292,10 +309,11 @@ public final class GunkData {
 		
 		final AxisIntersection firstZIntersection = getFirstIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne, zIntersections);
 		final AxisIntersection lastZIntersection = getLastIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne, zIntersections);
-
+		final double firstZIntersectionTime = firstZIntersection.getIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
+		final double lastZIntersectionTime = lastZIntersection.getIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
+		
 		return 0.0;
 	}
-
 
 	/**
 	 * Heuristic check that determines if the aabb is outside of the range of [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta.
@@ -336,6 +354,14 @@ public final class GunkData {
 		return true;
 	}
 	
+	/**
+	 * Returns which sides of the aabb will intersect with [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta.
+	 * Only finds the sides that will intersect on the specified axis, for faster checking elsewhere
+	 * @param movementDelta
+	 * @param aabb
+	 * @param axis
+	 * @return
+	 */
 	public static AxisFacesIntersects getAABBIntersectionFaces(Vec3 movementDelta, AABB aabb, Axis axis) {
 		// Get bounds for the target aabb
 		final double movement = movementDelta.get(axis);
@@ -349,48 +375,6 @@ public final class GunkData {
 		final boolean hasNegativeFace = minBound <= minFace && minFace <= maxBound;
 		
 		return AxisFacesIntersects.of(hasPositiveFace, hasNegativeFace);
-	}
-	
-	/**
-	 * Returns which sides of the aabb will intersect with [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta
-	 * @param movementDelta
-	 * @param aabb
-	 * @return
-	 */
-	public static EnumSet<Direction> getSidesThatIntersect(Vec3 movementDelta, AABB aabb) {
-		EnumSet<Direction> directions = EnumSet.noneOf(Direction.class);
-
-		// X
-		final double minXBounds = Math.min(0, movementDelta.x);
-		final double maxXBounds = 1 + Math.max(0, movementDelta.x);
-		if (minXBounds <= aabb.maxX && aabb.maxX <= maxXBounds) {
-			directions.add(Direction.fromAxisAndDirection(Axis.X, AxisDirection.POSITIVE));
-		}
-		if (minXBounds <= aabb.minX && aabb.minX <= maxXBounds) {
-			directions.add(Direction.fromAxisAndDirection(Axis.X, AxisDirection.NEGATIVE));
-		}
-
-		// Y
-		final double minYBounds = Math.min(0, movementDelta.y);
-		final double maxYBounds = 1 + Math.max(0, movementDelta.y);
-		if (minYBounds <= aabb.maxY && aabb.maxY <= maxYBounds) {
-			directions.add(Direction.fromAxisAndDirection(Axis.Y, AxisDirection.POSITIVE));
-		}
-		if (minYBounds <= aabb.minY && aabb.minY <= maxYBounds) {
-			directions.add(Direction.fromAxisAndDirection(Axis.Y, AxisDirection.NEGATIVE));
-		}
-
-		// Z
-		final double minZBounds = Math.min(0, movementDelta.z);
-		final double maxZBounds = 1 + Math.max(0, movementDelta.z);
-		if (minZBounds <= aabb.maxZ && aabb.maxZ <= maxZBounds) {
-			directions.add(Direction.fromAxisAndDirection(Axis.Z, AxisDirection.POSITIVE));
-		}
-		if (minZBounds <= aabb.minZ && aabb.minZ <= maxZBounds) {
-			directions.add(Direction.fromAxisAndDirection(Axis.Z, AxisDirection.NEGATIVE));
-		}
-		
-		return directions;
 	}
 	
 	public static enum AxisFacesIntersects {
