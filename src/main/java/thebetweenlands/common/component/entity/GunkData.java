@@ -1,13 +1,9 @@
 package thebetweenlands.common.component.entity;
 
-import java.util.EnumSet;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -270,11 +266,28 @@ public final class GunkData {
 		final AxisFacesIntersects yIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.Y);
 		final AxisFacesIntersects zIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.Z);
 
-		if(xIntersections == AxisFacesIntersects.NO_FACES_INTERSECT || yIntersections == AxisFacesIntersects.NO_FACES_INTERSECT || zIntersections == AxisFacesIntersects.NO_FACES_INTERSECT) {
+		final int intersectingAxisCount = countIntersectingAxes(xIntersections, yIntersections, zIntersections);
+		
+		if(intersectingAxisCount == 0) {
 			// We are entirely within the bounding box
 			// Implies that the AABB is probably larger than [(0, 0, 0), (1, 1, 1)]
 			// 1 / aabbVolume is the ratio of the volume of the unit bounding box (1 * 1 * 1) to the aabb volume
 			return Math.min(1, 1.0 / aabbVolume);
+		} else if(intersectingAxisCount == 1) {
+			// Better handling for single-axis cases
+			final Axis axis;
+			final AxisFacesIntersects faceIntersections;
+			if(xIntersections != AxisFacesIntersects.NO_FACES_INTERSECT) {
+				axis = Axis.X;
+				faceIntersections = xIntersections;
+			} else if(yIntersections != AxisFacesIntersects.NO_FACES_INTERSECT) {
+				axis = Axis.Y;
+				faceIntersections = yIntersections;
+			} else if(zIntersections != AxisFacesIntersects.NO_FACES_INTERSECT) {
+				axis = Axis.Z;
+				faceIntersections = zIntersections;
+			} else { throw new IllegalStateException(); }
+			return findIntersectionVolumeWithSingleIntersection(movementDelta, aabb, axis, faceIntersections);
 		}
 		
 		// Time axis
@@ -313,6 +326,46 @@ public final class GunkData {
 		final double lastZIntersectionTime = lastZIntersection.getIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
 		
 		return 0.0;
+	}
+	
+	public static int countIntersectingAxes(AxisFacesIntersects xIntersections, AxisFacesIntersects yIntersections, AxisFacesIntersects zIntersections) {
+		return (xIntersections != AxisFacesIntersects.NO_FACES_INTERSECT ? 1 : 0) + (yIntersections != AxisFacesIntersects.NO_FACES_INTERSECT ? 1 : 0) + (zIntersections != AxisFacesIntersects.NO_FACES_INTERSECT ? 1 : 0);
+	}
+	
+	/**
+	 * Calculates the intersection volume between axis and [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta,
+	 * given that only one axis of the aabb has faces that intersect with the unit bounding box.
+	 * @param movementDelta
+	 * @param aabb
+	 * @param axis
+	 * @param faceIntersections
+	 * @return
+	 */
+	public static double findIntersectionVolumeWithSingleIntersection(Vec3 movementDelta, AABB aabb, Axis axis, AxisFacesIntersects faceIntersections) {
+		if (faceIntersections == AxisFacesIntersects.NO_FACES_INTERSECT) throw new IllegalArgumentException("expected at least one intersection on " + axis.getName() + ", got none");
+
+		final double min = aabb.min(axis);
+		final double max = aabb.max(axis);
+		final double movement = movementDelta.get(axis);
+
+		final double minIntersectsZero = min / movement;
+		final double minIntersectsOne  = (min - 1) / movement;
+		final double maxIntersectsZero = max / movement;
+		final double maxIntersectsOne  = (max - 1) / movement;
+
+		final AxisIntersection firstIntersection = getFirstIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne, faceIntersections);
+		final AxisIntersection lastIntersection = getLastIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne, faceIntersections);
+		final double firstIntersectionTime = firstIntersection.getIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne);
+		final double lastIntersectionTime = lastIntersection.getIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne);
+		
+		return 0.0;
+	}
+	
+	public static record IntersectionTime(double time, AxisIntersection intersection, Axis axis) implements Comparable<IntersectionTime> {
+		@Override
+		public int compareTo(IntersectionTime other) {
+			return Double.compare(this.time(), other.time());
+		}
 	}
 
 	/**
