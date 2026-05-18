@@ -260,8 +260,6 @@ public final class GunkData {
 			return 0;
 		}
 		
-		final double aabbVolume = aabb.getXsize() * aabb.getYsize() * aabb.getZsize();
-		
 		// Determine which faces are actually relevant
 		// If there are faces we don't intersect with then don't consider them for the calculations which require intersections
 		final AxisFacesIntersects xIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.X);
@@ -288,6 +286,7 @@ public final class GunkData {
 		final Intersection maxZIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.Z, AxisIntersection.MAX_VAL_INTERSECTS_ZERO, zIntersections);
 		final Intersection maxZIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.Z, AxisIntersection.MAX_VAL_INTERSECTS_ONE,  zIntersections);
 		
+		// JIT loves this
 		final Intersection[] sortedIntersections = new Intersection[] {
 			minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne,
 			minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne,
@@ -297,7 +296,115 @@ public final class GunkData {
 		// Sort for smallest time to largest
 		Arrays.sort(sortedIntersections);
 		
-		return 0.0;
+		return calculateVolumeFromIntersections(movementDelta, aabb, sortedIntersections);
+	}
+	
+	// TODO should make a lot of this stuff private and probably also move it to a different class
+	
+	/**
+	 * In this method we "move" the unit aabb from (0, 0, 0) to movementDelta.
+	 * We accept a sorted array of {@link Intersection Intersections} that we can iterate through in ascending time order.
+	 * We use this to keep track of where the unit aabb is relative to the target aabb and use that to construct our formulas.
+	 * Far from perfect, but it runs in fixed time 
+	 * @param movementDelta
+	 * @param aabb
+	 * @param sortedIntersections an array of length {@code 16} containing non-null {@link Intersection Intersections}, sorted in ascending {@link Intersection#time() time} order
+	 * @return
+	 */
+	public static double calculateVolumeFromIntersections(Vec3 movementDelta, AABB aabb, Intersection[] sortedIntersections) {
+		// Compute axis relations at time 0
+		// The "Min X", "Max X", etc. being referred to is the Min X of the *unit aabb*, not of the target aabb
+		AxisType minXAxisRelation = AxisType.compute(0, aabb.minX, aabb.maxX);
+		AxisType maxXAxisRelation = AxisType.compute(1, aabb.minX, aabb.maxX);
+		AxisType minYAxisRelation = AxisType.compute(0, aabb.minY, aabb.maxY);
+		AxisType maxYAxisRelation = AxisType.compute(1, aabb.minY, aabb.maxY);
+		AxisType minZAxisRelation = AxisType.compute(0, aabb.minZ, aabb.maxZ);
+		AxisType maxZAxisRelation = AxisType.compute(1, aabb.minZ, aabb.maxZ);
+		
+		double volume = 0.0;
+		double c = 0.0; // Kahan summation algorithm
+		
+		double previousTime = 0.0;
+		for (Intersection intersection : sortedIntersections) {
+			if (intersection.isNaN()) continue;
+			final double intersectionTime = intersection.time();
+			if (!Double.isFinite(intersectionTime) || intersectionTime < 0 || intersectionTime < previousTime) continue;
+			
+			final double time = intersection.time();
+			
+			// TODO evaluate formula with bounds [previousTime, time]
+			
+			final Axis axis = intersection.axis();
+			final AxisIntersection intersectionFace = intersection.intersection();
+			
+			// The rate of change of the unit aabb
+			final double value = movementDelta.get(axis);
+			
+			// Calculate the new axis type
+			final AxisType newAxisType;
+			switch(intersectionFace) {
+				case MIN_VAL_INTERSECTS_ZERO, MIN_VAL_INTERSECTS_ONE -> {
+					if (value < 0) {
+						newAxisType = AxisType.BELOW_MIN;
+					} else {
+						newAxisType = AxisType.INSIDE;
+					}
+				}
+				case MAX_VAL_INTERSECTS_ZERO, MAX_VAL_INTERSECTS_ONE -> {
+					if (value > 0) {
+						newAxisType = AxisType.ABOVE_MAX;
+					} else {
+						newAxisType = AxisType.INSIDE;
+					}
+				}
+				default -> throw new IllegalStateException();
+			}
+			
+			// Should we set the min axis relation or max axis relation? (unit zero is min axis relations, unit one is max axis relations)
+			final boolean isZero = intersectionFace == AxisIntersection.MIN_VAL_INTERSECTS_ZERO || intersectionFace == AxisIntersection.MAX_VAL_INTERSECTS_ZERO;
+			
+			// Set the relevant axis type variable
+			switch(axis) {
+				case X -> {
+					if (isZero) {
+						minXAxisRelation = newAxisType;
+					} else {
+						maxXAxisRelation = newAxisType;
+					}
+				}
+				case Y -> {
+					if (isZero) {
+						minYAxisRelation = newAxisType;
+					} else {
+						maxYAxisRelation = newAxisType;
+					}
+				}
+				case Z -> {
+					if (isZero) {
+						minZAxisRelation = newAxisType;
+					} else {
+						maxZAxisRelation = newAxisType;
+					}
+				}
+				default -> throw new IllegalStateException();
+			}
+			
+			previousTime = time;
+		}
+		
+		return volume;
+	}
+	
+	public static enum AxisType {
+		BELOW_MIN,
+		ABOVE_MAX,
+		INSIDE;
+		
+		public static AxisType compute(double value, double min, double max) {
+			if (value < min) return BELOW_MIN;
+			else if (value > max) return ABOVE_MAX;
+			else return INSIDE;
+		}
 	}
 	
 	public static record Intersection(double time, Axis axis, AxisIntersection intersection) implements Comparable<Intersection> {
@@ -322,6 +429,10 @@ public final class GunkData {
 				case MAX_VAL_INTERSECTS_ONE -> (aabb.max(axis) - 1) / movement;
 			};
 			return new Intersection(time, axis, intersection);
+		}
+		
+		public boolean isNaN() {
+			return this == NaN || Double.isNaN(this.time());
 		}
 		
 		@Override
@@ -463,6 +574,14 @@ public final class GunkData {
 				case MAX_VAL_INTERSECTS_ZERO -> MIN_VAL_INTERSECTS_ONE;
 				case MAX_VAL_INTERSECTS_ONE -> MAX_VAL_INTERSECTS_ONE;
 			};
+		}
+		
+		public boolean isMin() {
+			return this == MIN_VAL_INTERSECTS_ZERO || this == MIN_VAL_INTERSECTS_ONE;
+		}
+		
+		public boolean isMax() {
+			return this == MAX_VAL_INTERSECTS_ZERO || this == MAX_VAL_INTERSECTS_ONE;
 		}
 	}
 }
