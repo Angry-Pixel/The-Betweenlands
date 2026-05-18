@@ -1,5 +1,7 @@
 package thebetweenlands.common.component.entity;
 
+import java.util.Arrays;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -265,148 +267,68 @@ public final class GunkData {
 		final AxisFacesIntersects xIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.X);
 		final AxisFacesIntersects yIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.Y);
 		final AxisFacesIntersects zIntersections = getAABBIntersectionFaces(movementDelta, aabb, Axis.Z);
-
-		final int intersectingAxisCount = countIntersectingAxes(xIntersections, yIntersections, zIntersections);
-		
-		if(intersectingAxisCount == 0) {
-			// We are entirely within the bounding box
-			// Implies that the AABB is probably larger than [(0, 0, 0), (1, 1, 1)]
-			// 1 / aabbVolume is the ratio of the volume of the unit bounding box (1 * 1 * 1) to the aabb volume
-			return Math.min(1, 1.0 / aabbVolume);
-		} else if(intersectingAxisCount == 1) {
-			// Better handling for single-axis cases
-			final Axis axis;
-			final AxisFacesIntersects faceIntersections;
-			if(xIntersections != AxisFacesIntersects.NO_FACES_INTERSECT) {
-				axis = Axis.X;
-				faceIntersections = xIntersections;
-			} else if(yIntersections != AxisFacesIntersects.NO_FACES_INTERSECT) {
-				axis = Axis.Y;
-				faceIntersections = yIntersections;
-			} else if(zIntersections != AxisFacesIntersects.NO_FACES_INTERSECT) {
-				axis = Axis.Z;
-				faceIntersections = zIntersections;
-			} else { throw new IllegalStateException(); }
-			return findIntersectionVolumeWithSingleIntersection(movementDelta, aabb, axis, faceIntersections);
-		}
 		
 		// Time axis
 		// * At time 0, the player bounding box is [(0, 0, 0), (1, 1, 1)]
 		// * At time 1, the player bounding box is [(0, 0, 0) + movementDelta, (1, 1, 1) + movementDelta]
 		
 		// Get the time values for the first and last intersections along each axis
-		final double minXIntersectsZero = aabb.minX / movementDelta.x;
-		final double minXIntersectsOne  = (aabb.minX - 1) / movementDelta.x;
-		final double maxXIntersectsZero = aabb.maxX / movementDelta.x;
-		final double maxXIntersectsOne  = (aabb.maxX - 1) / movementDelta.x;
+		final Intersection minXIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.X, AxisIntersection.MIN_VAL_INTERSECTS_ZERO, xIntersections);
+		final Intersection minXIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.X, AxisIntersection.MIN_VAL_INTERSECTS_ONE,  xIntersections);
+		final Intersection maxXIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.X, AxisIntersection.MAX_VAL_INTERSECTS_ZERO, xIntersections);
+		final Intersection maxXIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.X, AxisIntersection.MAX_VAL_INTERSECTS_ONE,  xIntersections);
 
-		final AxisIntersection firstXIntersection = getFirstIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne, xIntersections);
-		final AxisIntersection lastXIntersection = getLastIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne, xIntersections);
-		final double firstXIntersectionTime = firstXIntersection.getIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne);
-		final double lastXIntersectionTime = lastXIntersection.getIntersection(minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne);
+		final Intersection minYIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.Y, AxisIntersection.MIN_VAL_INTERSECTS_ZERO, yIntersections);
+		final Intersection minYIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.Y, AxisIntersection.MIN_VAL_INTERSECTS_ONE,  yIntersections);
+		final Intersection maxYIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.Y, AxisIntersection.MAX_VAL_INTERSECTS_ZERO, yIntersections);
+		final Intersection maxYIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.Y, AxisIntersection.MAX_VAL_INTERSECTS_ONE,  yIntersections);
 
-		final double minYIntersectsZero = aabb.minY / movementDelta.y;
-		final double minYIntersectsOne  = (aabb.minY - 1) / movementDelta.y;
-		final double maxYIntersectsZero = aabb.maxY / movementDelta.y;
-		final double maxYIntersectsOne  = (aabb.maxY - 1) / movementDelta.y;
+		final Intersection minZIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.Z, AxisIntersection.MIN_VAL_INTERSECTS_ZERO, zIntersections);
+		final Intersection minZIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.Z, AxisIntersection.MIN_VAL_INTERSECTS_ONE,  zIntersections);
+		final Intersection maxZIntersectsZero = Intersection.compute(movementDelta, aabb, Axis.Z, AxisIntersection.MAX_VAL_INTERSECTS_ZERO, zIntersections);
+		final Intersection maxZIntersectsOne  = Intersection.compute(movementDelta, aabb, Axis.Z, AxisIntersection.MAX_VAL_INTERSECTS_ONE,  zIntersections);
 		
-		final AxisIntersection firstYIntersection = getFirstIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne, yIntersections);
-		final AxisIntersection lastYIntersection = getLastIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne, yIntersections);
-		final double firstYIntersectionTime = firstYIntersection.getIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne);
-		final double lastYIntersectionTime = lastYIntersection.getIntersection(minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne);
-
-		final double minZIntersectsZero = aabb.minZ / movementDelta.z;
-		final double minZIntersectsOne  = (aabb.minZ - 1) / movementDelta.z;
-		final double maxZIntersectsZero = aabb.maxZ / movementDelta.z;
-		final double maxZIntersectsOne  = (aabb.maxZ - 1) / movementDelta.z;
+		final Intersection[] sortedIntersections = new Intersection[] {
+			minXIntersectsZero, minXIntersectsOne, maxXIntersectsZero, maxXIntersectsOne,
+			minYIntersectsZero, minYIntersectsOne, maxYIntersectsZero, maxYIntersectsOne,
+			minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne
+		};
 		
-		final AxisIntersection firstZIntersection = getFirstIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne, zIntersections);
-		final AxisIntersection lastZIntersection = getLastIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne, zIntersections);
-		final double firstZIntersectionTime = firstZIntersection.getIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
-		final double lastZIntersectionTime = lastZIntersection.getIntersection(minZIntersectsZero, minZIntersectsOne, maxZIntersectsZero, maxZIntersectsOne);
+		// Sort for smallest time to largest
+		Arrays.sort(sortedIntersections);
 		
 		return 0.0;
 	}
 	
-	public static int countIntersectingAxes(AxisFacesIntersects xIntersections, AxisFacesIntersects yIntersections, AxisFacesIntersects zIntersections) {
-		return (xIntersections != AxisFacesIntersects.NO_FACES_INTERSECT ? 1 : 0) + (yIntersections != AxisFacesIntersects.NO_FACES_INTERSECT ? 1 : 0) + (zIntersections != AxisFacesIntersects.NO_FACES_INTERSECT ? 1 : 0);
-	}
-	
-	/**
-	 * Calculates the intersection volume between axis and [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta,
-	 * given that only one axis of the aabb has faces that intersect with the unit bounding box.
-	 * @param movementDelta
-	 * @param aabb
-	 * @param axis
-	 * @param faceIntersections
-	 * @return
-	 */
-	public static double findIntersectionVolumeWithSingleIntersection(Vec3 movementDelta, AABB aabb, Axis axis, AxisFacesIntersects faceIntersections) {
-		if (faceIntersections == AxisFacesIntersects.NO_FACES_INTERSECT) throw new IllegalArgumentException("expected at least one intersection on " + axis.getName() + ", got none");
-
-		final double min = aabb.min(axis);
-		final double max = aabb.max(axis);
-		final double movement = movementDelta.get(axis);
-
-		final double minIntersectsZero = min / movement;
-		final double minIntersectsOne  = (min - 1) / movement;
-		final double maxIntersectsZero = max / movement;
-		final double maxIntersectsOne  = (max - 1) / movement;
-
-		final AxisIntersection firstIntersection = getFirstIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne, faceIntersections);
-		final AxisIntersection lastIntersection = getLastIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne, faceIntersections);
-		final double firstIntersectionTime = firstIntersection.getIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne);
-		final double lastIntersectionTime = lastIntersection.getIntersection(minIntersectsZero, minIntersectsOne, maxIntersectsZero, maxIntersectsOne);
+	public static record Intersection(double time, Axis axis, AxisIntersection intersection) implements Comparable<Intersection> {
+		public static final Intersection NaN = new Intersection(Double.NaN, null, null);
 		
-		return 0.0;
-	}
-	
-	public static record IntersectionTime(double time, AxisIntersection intersection, Axis axis) implements Comparable<IntersectionTime> {
+		public static Intersection compute(Vec3 movementDelta, AABB aabb, Axis axis, AxisIntersection intersection, AxisFacesIntersects relevantFaces) {
+			// If the face is ignored, then return NaN
+			switch(intersection) {
+				case MIN_VAL_INTERSECTS_ZERO, MIN_VAL_INTERSECTS_ONE -> {
+					if(!relevantFaces.negativeFaceIntersects()) return NaN;
+				}
+				case MAX_VAL_INTERSECTS_ZERO, MAX_VAL_INTERSECTS_ONE -> {
+					if(!relevantFaces.positiveFaceIntersects()) return NaN;
+				}
+			}
+			
+			final double movement = movementDelta.get(axis);
+			final double time = switch(intersection) {
+				case MIN_VAL_INTERSECTS_ZERO -> aabb.min(axis) / movement;
+				case MIN_VAL_INTERSECTS_ONE -> (aabb.min(axis) - 1) / movement;
+				case MAX_VAL_INTERSECTS_ZERO -> aabb.max(axis) / movement;
+				case MAX_VAL_INTERSECTS_ONE -> (aabb.max(axis) - 1) / movement;
+			};
+			return new Intersection(time, axis, intersection);
+		}
+		
 		@Override
-		public int compareTo(IntersectionTime other) {
+		public int compareTo(Intersection other) {
 			return Double.compare(this.time(), other.time());
 		}
 	}
-
-	/**
-	 * Heuristic check that determines if the aabb is outside of the range of [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta.
-	 * <p>If {@code true}, does not guarantee that there will be an intersection between aabb and [(0, 0, 0), (1, 1, 1)]</p>
-	 * <p>If {@code false}, guarantees that there will <strong>not</strong> be an intersection between aabb and [(0, 0, 0), (1, 1, 1)]</p>
-	 * @param movementDelta
-	 * @param aabb
-	 * @return
-	 */
-	public static boolean withinIntersectionBounds(Vec3 movementDelta, AABB aabb) {
-		// If it's outside of our x range
-		if (aabb.minX > 1 && aabb.minX > movementDelta.x + 1) {
-			// Too far in front of x
-			return false;
-		}
-		
-		if (aabb.maxX < 0 && aabb.maxX < movementDelta.x) {
-			// Too far behind x
-			return false;
-		}
-
-		if (aabb.maxY < 0 && aabb.maxY < movementDelta.y) {
-			return false;
-		}
-
-		if (aabb.maxZ < 0 && aabb.maxZ < movementDelta.z) {
-			return false;
-		}
-
-		if (aabb.maxY > 1 && aabb.maxY > movementDelta.y + 1) {
-			return false;
-		}
-
-		if (aabb.maxZ > 1 && aabb.maxZ > movementDelta.z + 1) {
-			return false;
-		}
-		
-		return true;
-	}
-	
 	/**
 	 * Returns which sides of the aabb will intersect with [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta.
 	 * Only finds the sides that will intersect on the specified axis, for faster checking elsewhere
@@ -476,12 +398,50 @@ public final class GunkData {
 			}
 		}
 	}
+
+	/**
+	 * Heuristic check that determines if the aabb is outside of the range of [(0, 0, 0), (1, 1, 1)] as it moves from (0, 0, 0) to movementDelta.
+	 * <p>If {@code true}, does not guarantee that there will be an intersection between aabb and [(0, 0, 0), (1, 1, 1)]</p>
+	 * <p>If {@code false}, guarantees that there will <strong>not</strong> be an intersection between aabb and [(0, 0, 0), (1, 1, 1)]</p>
+	 * @param movementDelta
+	 * @param aabb
+	 * @return
+	 */
+	public static boolean withinIntersectionBounds(Vec3 movementDelta, AABB aabb) {
+		// If it's outside of our x range
+		if (aabb.minX > 1 && aabb.minX > movementDelta.x + 1) {
+			// Too far in front of x
+			return false;
+		}
+		
+		if (aabb.maxX < 0 && aabb.maxX < movementDelta.x) {
+			// Too far behind x
+			return false;
+		}
+
+		if (aabb.maxY < 0 && aabb.maxY < movementDelta.y) {
+			return false;
+		}
+
+		if (aabb.maxZ < 0 && aabb.maxZ < movementDelta.z) {
+			return false;
+		}
+
+		if (aabb.maxY > 1 && aabb.maxY > movementDelta.y + 1) {
+			return false;
+		}
+
+		if (aabb.maxZ > 1 && aabb.maxZ > movementDelta.z + 1) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * Represents the type of intersection along an axis.
 	 */
 	public static enum AxisIntersection {
-		NO_INTERSECTION,
 		MIN_VAL_INTERSECTS_ZERO,
 		MIN_VAL_INTERSECTS_ONE,
 		MAX_VAL_INTERSECTS_ZERO,
@@ -489,7 +449,6 @@ public final class GunkData {
 		
 		public double getIntersection(double minIntersectsZero, double minIntersectsOne, double maxIntersectsZero, double maxIntersectsOne) {
 			return switch(this) {
-				case NO_INTERSECTION -> Double.NaN;
 				case MIN_VAL_INTERSECTS_ZERO -> minIntersectsZero;
 				case MIN_VAL_INTERSECTS_ONE -> minIntersectsOne;
 				case MAX_VAL_INTERSECTS_ZERO -> maxIntersectsZero;
@@ -499,92 +458,11 @@ public final class GunkData {
 		
 		public AxisIntersection getInverse() {
 			return switch(this) {
-				case NO_INTERSECTION -> NO_INTERSECTION;
 				case MIN_VAL_INTERSECTS_ZERO -> MIN_VAL_INTERSECTS_ZERO;
 				case MIN_VAL_INTERSECTS_ONE -> MAX_VAL_INTERSECTS_ZERO;
 				case MAX_VAL_INTERSECTS_ZERO -> MIN_VAL_INTERSECTS_ONE;
 				case MAX_VAL_INTERSECTS_ONE -> MAX_VAL_INTERSECTS_ONE;
 			};
 		}
-	}
-
-	/**
-	 * Gets the {@link AxisIntersection axis intersection} that represents the double with the lowest value
-	 * @param minIntersectsZero
-	 * @param minIntersectsOne
-	 * @param maxIntersectsZero
-	 * @param maxIntersectsOne
-	 * @param intersects
-	 * @return
-	 */
-	public static AxisIntersection getFirstIntersection(double minIntersectsZero, double minIntersectsOne, double maxIntersectsZero, double maxIntersectsOne, AxisFacesIntersects intersects) {
-		AxisIntersection intersection = AxisIntersection.NO_INTERSECTION;
-		double minValue = Double.POSITIVE_INFINITY;
-
-		if (intersects.negativeFaceIntersects()) {
-			if(minIntersectsZero < minValue) {
-				minValue = minIntersectsZero;
-				intersection = AxisIntersection.MIN_VAL_INTERSECTS_ZERO;
-			}
-	
-			if(minIntersectsOne < minValue) {
-				minValue = minIntersectsOne;
-				intersection = AxisIntersection.MIN_VAL_INTERSECTS_ONE;
-			}
-		}
-
-		if (intersects.positiveFaceIntersects()) {
-			if(maxIntersectsZero < minValue) {
-				minValue = maxIntersectsZero;
-				intersection = AxisIntersection.MAX_VAL_INTERSECTS_ZERO;
-			}
-	
-			if(maxIntersectsOne < minValue) {
-				minValue = maxIntersectsOne;
-				intersection = AxisIntersection.MAX_VAL_INTERSECTS_ONE;
-			}
-		}
-		
-		return intersection;
-	}
-	
-	/**
-	 * Gets the {@link AxisIntersection axis intersection} that represents the double with the highest value
-	 * @param minIntersectsZero
-	 * @param minIntersectsOne
-	 * @param maxIntersectsZero
-	 * @param maxIntersectsOne
-	 * @param intersects
-	 * @return
-	 */
-	public static AxisIntersection getLastIntersection(double minIntersectsZero, double minIntersectsOne, double maxIntersectsZero, double maxIntersectsOne, AxisFacesIntersects intersects) {
-		AxisIntersection intersection = AxisIntersection.NO_INTERSECTION;
-		double maxValue = Double.NEGATIVE_INFINITY;
-
-		if (intersects.negativeFaceIntersects()) {
-			if(minIntersectsZero > maxValue) {
-				maxValue = minIntersectsZero;
-				intersection = AxisIntersection.MIN_VAL_INTERSECTS_ZERO;
-			}
-	
-			if(minIntersectsOne > maxValue) {
-				maxValue = minIntersectsOne;
-				intersection = AxisIntersection.MIN_VAL_INTERSECTS_ONE;
-			}
-		}
-
-		if (intersects.positiveFaceIntersects()) {
-			if(maxIntersectsZero > maxValue) {
-				maxValue = maxIntersectsZero;
-				intersection = AxisIntersection.MAX_VAL_INTERSECTS_ZERO;
-			}
-	
-			if(maxIntersectsOne > maxValue) {
-				maxValue = maxIntersectsOne;
-				intersection = AxisIntersection.MAX_VAL_INTERSECTS_ONE;
-			}
-		}
-		
-		return intersection;
 	}
 }
