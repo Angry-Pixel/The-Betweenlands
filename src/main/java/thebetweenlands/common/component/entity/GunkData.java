@@ -1,6 +1,7 @@
 package thebetweenlands.common.component.entity;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -395,10 +396,97 @@ public final class GunkData {
 		return volume;
 	}
 	
+	public static double calculateVolumeSection(
+			double minTime, double maxTime,
+			Vec3 movementDelta, AABB aabb,
+			AxisType minXAxisRelation, AxisType maxXAxisRelation,
+			AxisType minYAxisRelation, AxisType maxYAxisRelation,
+			AxisType minZAxisRelation, AxisType maxZAxisRelation
+		) {
+		Objects.requireNonNull(minXAxisRelation);
+		Objects.requireNonNull(maxXAxisRelation);
+		Objects.requireNonNull(minYAxisRelation);
+		Objects.requireNonNull(maxYAxisRelation);
+		Objects.requireNonNull(minZAxisRelation);
+		Objects.requireNonNull(maxZAxisRelation);
+		// xSize = min(1 + xDelta * time, aabb.maxX) - max(0 + xDelta * time, aabb.minX)
+		// ySize = min(1 + yDelta * time, aabb.maxY) - max(0 + yDelta * time, aabb.minY)
+		// zSize = min(1 + zDelta * time, aabb.maxZ) - max(0 + zDelta * time, aabb.minZ)
+		// or, rather:
+		// xSize = clamp(1 + xDelta * time, aabb.minX, aabb.maxX) - clamp(0 + xDelta * time, aabb.minX, aabb.maxX)
+		// ySize = clamp(1 + yDelta * time, aabb.minY, aabb.maxY) - clamp(0 + yDelta * time, aabb.minY, aabb.maxY)
+		// zSize = clamp(1 + zDelta * time, aabb.minZ, aabb.maxZ) - clamp(0 + zDelta * time, aabb.minZ, aabb.maxZ)
+		// Surface area = 2 * (xSize * ySize + xSize * zSize + ySize * zSize)
+		// We want to integrate surface area with respect to time to get volume
+		// Typically, volume = xSize * ySize * zSize
+
+		// The amount of xSize that is multiplied by time
+		final double xSizeCoefficient = calculateCoefficient(minXAxisRelation, maxXAxisRelation, movementDelta.x);
+		// The amount of xSize that is not multiplied by time
+		final double xSizeConstant = calculateConstant(minXAxisRelation, maxXAxisRelation, aabb.minX, aabb.maxX);
+		// xSize = (xSizeCoefficient * time + xSizeConstant)
+		
+		// The amount of ySize that is multiplied by time
+		final double ySizeCoefficient = calculateCoefficient(minYAxisRelation, maxYAxisRelation, movementDelta.y);
+		// The amount of ySize that is not multiplied by time
+		final double ySizeConstant = calculateConstant(minYAxisRelation, maxYAxisRelation, aabb.minY, aabb.maxY);
+		// ySize = (ySizeCoefficient * time + ySizeConstant)
+		
+		// The amount of zSize that is multiplied by time
+		final double zSizeCoefficient = calculateCoefficient(minZAxisRelation, maxZAxisRelation, movementDelta.z);
+		// The amount of zSize that is not multiplied by time
+		final double zSizeConstant = calculateConstant(minZAxisRelation, maxZAxisRelation, aabb.minZ, aabb.maxZ);
+		// zSize = (zSizeCoefficient * time + zSizeConstant)
+		
+		// TODO math
+		
+		return 0.0;
+	}
+	
+	private static double calculateCoefficient(AxisType minAxisRelation, AxisType maxAxisRelation, double delta) {
+		if (minAxisRelation == AxisType.INSIDE && maxAxisRelation != AxisType.INSIDE) {
+			return -delta;
+		} else if (minAxisRelation != AxisType.INSIDE && maxAxisRelation == AxisType.INSIDE) {
+			return delta;
+		} else {
+			return 0.0;
+		}
+	}
+	
+	private static double calculateConstant(AxisType minAxisRelation, AxisType maxAxisRelation, double max, double min) {
+		final double maxConstant = maxAxisRelation.select(
+			min, // BELOW_MIN: max axis == min + 0 * time
+			max, // ABOVE_MAX: max axis == max + 0 * time
+			1    // INSIDE: max axis = 1 + delta * time
+		);
+		final double minConstant = minAxisRelation.select(
+			min, // BELOW_MIN: min axis == min + 0 * time
+			max, // ABOVE_MAX: min axis == max + 0 * time
+			0    // INSIDE: min axis = 0 + delta * time
+		);
+		return maxConstant - minConstant;
+	}
+	
 	public static enum AxisType {
 		BELOW_MIN,
 		ABOVE_MAX,
 		INSIDE;
+
+		public final double select(double min, double max) {
+			return switch(this) {
+				case BELOW_MIN -> min;
+				case ABOVE_MAX -> max;
+				case INSIDE -> Double.NaN;
+			};
+		}
+
+		public final double select(double min, double max, double inside) {
+			return switch(this) {
+				case BELOW_MIN -> min;
+				case ABOVE_MAX -> max;
+				case INSIDE -> inside;
+			};
+		}
 		
 		public static AxisType compute(double value, double min, double max) {
 			if (value < min) return BELOW_MIN;
