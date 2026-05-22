@@ -6,7 +6,9 @@ import java.util.Objects;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -257,6 +259,7 @@ public final class GunkData {
 		// Local bounds is AABB at [(0, 0, 0), (1, 1, 1)]
 		
 		if(!withinIntersectionBounds(movementDelta, aabb)) {
+//			System.out.println("Not within bounds");
 			// We are entirely outside of the bounding box
 			return 0;
 		}
@@ -300,19 +303,19 @@ public final class GunkData {
 		return calculateVolumeFromIntersections(movementDelta, aabb, sortedIntersections);
 	}
 	
-	// TODO should make a lot of this stuff private and probably also move it to a different class
-	
+	// Big bulky method
+	// TODO break this method up into chunks
 	/**
 	 * In this method we "move" the unit aabb from (0, 0, 0) to movementDelta.
 	 * We accept a sorted array of {@link Intersection Intersections} that we can iterate through in ascending time order.
 	 * We use this to keep track of where the unit aabb is relative to the target aabb and use that to construct our formulas.
-	 * Far from perfect, but it runs in fixed time 
+	 * Far from perfect, but it runs in fixed time
 	 * @param movementDelta
 	 * @param aabb
 	 * @param sortedIntersections an array of length {@code 16} containing non-null {@link Intersection Intersections}, sorted in ascending {@link Intersection#time() time} order
 	 * @return
 	 */
-	public static double calculateVolumeFromIntersections(Vec3 movementDelta, AABB aabb, Intersection[] sortedIntersections) {
+	private static double calculateVolumeFromIntersections(Vec3 movementDelta, AABB aabb, Intersection[] sortedIntersections) {
 		// Compute axis relations at time 0
 		// The "Min X", "Max X", etc. being referred to is the Min X of the *unit aabb*, not of the target aabb
 		AxisType minXAxisRelation = AxisType.compute(0, aabb.minX, aabb.maxX);
@@ -321,38 +324,156 @@ public final class GunkData {
 		AxisType maxYAxisRelation = AxisType.compute(1, aabb.minY, aabb.maxY);
 		AxisType minZAxisRelation = AxisType.compute(0, aabb.minZ, aabb.maxZ);
 		AxisType maxZAxisRelation = AxisType.compute(1, aabb.minZ, aabb.maxZ);
+
+		final AxisDirection xRelevantFace = movementDelta.x >= 0 ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE;
+		final AxisDirection yRelevantFace = movementDelta.y >= 0 ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE;
+		final AxisDirection zRelevantFace = movementDelta.z >= 0 ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE;
 		
-		double volume = 0.0;
+		// is now inside, was previously inside
+		
+		// The amount of xSize that is multiplied by time
+		double xSizeCoefficient = calculateSizeCoefficient(minXAxisRelation, maxXAxisRelation, movementDelta.x);
+		// The amount of xSize that is not multiplied by time
+		double xSizeConstant = calculateSizeConstant(minXAxisRelation, maxXAxisRelation, aabb.minX, aabb.maxX);
+		// xSize = (xSizeCoefficient * time + xSizeConstant)
+		
+		// The amount of ySize that is multiplied by time
+		double ySizeCoefficient = calculateSizeCoefficient(minYAxisRelation, maxYAxisRelation, movementDelta.y);
+		// The amount of ySize that is not multiplied by time
+		double ySizeConstant = calculateSizeConstant(minYAxisRelation, maxYAxisRelation, aabb.minY, aabb.maxY);
+		// ySize = (ySizeCoefficient * time + ySizeConstant)
+		
+		// The amount of zSize that is multiplied by time
+		double zSizeCoefficient = calculateSizeCoefficient(minZAxisRelation, maxZAxisRelation, movementDelta.z);
+		// The amount of zSize that is not multiplied by time
+		double zSizeConstant = calculateSizeConstant(minZAxisRelation, maxZAxisRelation, aabb.minZ, aabb.maxZ);
+		// zSize = (zSizeCoefficient * time + zSizeConstant)
+		
+		// Total volume; starts with s_x(0)*s_y(0)*s_z(0)
+		// volume = (xSizeCoefficient * 0 + xSizeConstant) * (ySizeCoefficient * 0 + ySizeConstant) * (zSizeCoefficient * 0 + zSizeConstant);
+		double volume = (xSizeConstant) * (ySizeConstant) * (zSizeConstant);
 		double c = 0.0; // Kahan summation algorithm
 		
 		double previousTime = 0.0;
+		double previousXSize = (xSizeCoefficient * 0 + xSizeConstant);
+		double previousYSize = (ySizeCoefficient * 0 + ySizeConstant);
+		double previousZSize = (zSizeCoefficient * 0 + zSizeConstant);
+		AxisType prevXRelation = selectRelation(xRelevantFace, minXAxisRelation, maxXAxisRelation);
+		AxisType prevYRelation = selectRelation(yRelevantFace, minYAxisRelation, maxYAxisRelation);
+		AxisType prevZRelation = selectRelation(zRelevantFace, minZAxisRelation, maxZAxisRelation);
 		for (Intersection intersection : sortedIntersections) {
+			// Loop invariants (disable assertions to disable):
+			assert xSizeCoefficient == calculateSizeCoefficient(minXAxisRelation, maxXAxisRelation, movementDelta.x);
+			assert xSizeConstant == calculateSizeConstant(minXAxisRelation, maxXAxisRelation, aabb.minX, aabb.maxX);
+			assert ySizeCoefficient == calculateSizeCoefficient(minYAxisRelation, maxYAxisRelation, movementDelta.y);
+			assert ySizeConstant == calculateSizeConstant(minYAxisRelation, maxYAxisRelation, aabb.minY, aabb.maxY);
+			assert zSizeCoefficient == calculateSizeCoefficient(minZAxisRelation, maxZAxisRelation, movementDelta.z);
+			assert zSizeConstant == calculateSizeConstant(minZAxisRelation, maxZAxisRelation, aabb.minZ, aabb.maxZ);
+			assert prevXRelation == selectRelation(xRelevantFace, minXAxisRelation, maxXAxisRelation);
+			assert prevYRelation == selectRelation(yRelevantFace, minYAxisRelation, maxYAxisRelation);
+			assert prevZRelation == selectRelation(zRelevantFace, minZAxisRelation, maxZAxisRelation);
+			
 			if (intersection.isNaN()) continue;
-			final double intersectionTime = intersection.time();
-			if (!Double.isFinite(intersectionTime) || intersectionTime < 0 || intersectionTime < previousTime) continue;
-			
 			final double time = intersection.time();
+			if (!Double.isFinite(time) || time < 0 || time < previousTime) continue;
+
+			// TODO When evaluating volumes and sizes, use absolute positions if possible
+			//      Current behaviour looks like:
+			//          1. X being BELOW_MIN: xSize, timediff for this iteration calculated via minX
+			//          2. X going from BELOW_MIN to INSIDE: xSize, timediff for this iteration calculated via minX
+			//          3. X being INSIDE: xSize, timediff for this iteration calculated via coefficient * time + constant
+			//          4. X going from INSIDE to ABOVE_MAX: xSize, timediff for this iteration calculated via delta * time + constant (uses val from prev intersection)
+			//          5. X being ABOVE_MAX: xSize, timediff for this iteration calculated via maxX
+			//      We would prefer behaviour like:
+			//          1. X being BELOW_MIN: xSize, timediff for this iteration calculated via minX
+			//          2. X going from BELOW_MIN to INSIDE: xSize, timediff for this iteration calculated via minX
+			//          3. X being INSIDE: xSize, timediff for this iteration calculated via delta * time + constant
+			//          4. X going from INSIDE to ABOVE_MAX: xSize, timediff for this iteration calculated via maxX
+			//          5. X being ABOVE_MAX: xSize, timediff for this iteration calculated via maxX
+
+			// Calculate the size of each axis at the current time
+			final double xSize = (xSizeCoefficient * time + xSizeConstant);
+			final double ySize = (ySizeCoefficient * time + ySizeConstant);
+			final double zSize = (zSizeCoefficient * time + zSizeConstant);
+
+			// Evaluate volume formula with bounds [previousTime, time], and add to `volume`
+			{
+//				System.out.printf("time: %f%n", time);
+				// We use the average of the current size and previous size,
+				// because it works with the math (see: trapezoid equation)
+				final double xSizeAverage = (xSize + previousXSize) / 2.0;
+				final double ySizeAverage = (ySize + previousYSize) / 2.0;
+				final double zSizeAverage = (zSize + previousZSize) / 2.0;
+				// Get current relations for time difference calculations
+				final AxisType xRelation = selectRelation(xRelevantFace, minXAxisRelation, maxXAxisRelation);
+				final AxisType yRelation = selectRelation(yRelevantFace, minYAxisRelation, maxYAxisRelation);
+				final AxisType zRelation = selectRelation(zRelevantFace, minZAxisRelation, maxZAxisRelation);
+//				System.out.printf("xSize: %f * time + %f%n", xSizeCoefficient, xSizeConstant);
+//				System.out.printf("xSize: %f, ySize: %f, zSize: %f%n", xSize, ySize, zSize);
+				// Calculate volumes
+				final double xFaceVol = ySizeAverage * zSizeAverage * getTimeDifference(
+						previousTime, time,
+						movementDelta.x, aabb.minX, aabb.maxX,
+						xRelevantFace, prevXRelation, xRelation
+					);
+				final double yFaceVol = xSizeAverage * zSizeAverage * getTimeDifference(
+						previousTime, time,
+						movementDelta.y, aabb.minY, aabb.maxY,
+						yRelevantFace, prevYRelation, yRelation
+					);
+				final double zFaceVol = xSizeAverage * ySizeAverage * getTimeDifference(
+						previousTime, time,
+						movementDelta.z, aabb.minZ, aabb.maxZ,
+						zRelevantFace, prevZRelation, zRelation
+					);
+//				System.out.printf("vol: %f, xVol: %f, yVol: %f, zVol: %f%n", volume, xFaceVol, yFaceVol, zFaceVol);
+				// Add volumes
+				addXVol: {
+					// Kahan summation algorithm
+					final double y = xFaceVol - c;
+					final double t = volume + y;
+					c = (t - volume) - y;
+					volume = t;
+				}
+//				System.out.printf("vol + xvol: %f%n", volume);
+				addYVol: {
+					// Kahan summation algorithm
+					final double y = yFaceVol - c;
+					final double t = volume + y;
+					c = (t - volume) - y;
+					volume = t;
+				}
+				addYVol: {
+					// Kahan summation algorithm
+					final double y = zFaceVol - c;
+					final double t = volume + y;
+					c = (t - volume) - y;
+					volume = t;
+				}
+			}
+
+			previousXSize = xSize;
+			previousYSize = ySize;
+			previousZSize = zSize;
 			
-			// TODO evaluate formula with bounds [previousTime, time]
+			final Axis axis = Objects.requireNonNull(intersection.axis());
+			final AxisIntersection intersectionFace = Objects.requireNonNull(intersection.intersection());
 			
-			final Axis axis = intersection.axis();
-			final AxisIntersection intersectionFace = intersection.intersection();
-			
-			// The rate of change of the unit aabb
-			final double value = movementDelta.get(axis);
+			// The rate of change of the unit aabb along this axis
+			final double delta = movementDelta.get(axis);
 			
 			// Calculate the new axis type
 			final AxisType newAxisType;
 			switch(intersectionFace) {
 				case MIN_VAL_INTERSECTS_ZERO, MIN_VAL_INTERSECTS_ONE -> {
-					if (value < 0) {
+					if (delta < 0) {
 						newAxisType = AxisType.BELOW_MIN;
 					} else {
 						newAxisType = AxisType.INSIDE;
 					}
 				}
 				case MAX_VAL_INTERSECTS_ZERO, MAX_VAL_INTERSECTS_ONE -> {
-					if (value > 0) {
+					if (delta > 0) {
 						newAxisType = AxisType.ABOVE_MAX;
 					} else {
 						newAxisType = AxisType.INSIDE;
@@ -365,26 +486,66 @@ public final class GunkData {
 			final boolean isZero = intersectionFace == AxisIntersection.MIN_VAL_INTERSECTS_ZERO || intersectionFace == AxisIntersection.MAX_VAL_INTERSECTS_ZERO;
 			
 			// Set the relevant axis type variable
+			// Note: this is the axis relation that will be used in the *future*
 			switch(axis) {
 				case X -> {
+					// Update x axis relations
 					if (isZero) {
 						minXAxisRelation = newAxisType;
 					} else {
 						maxXAxisRelation = newAxisType;
 					}
+					// Update xSize
+					{
+						// The amount of xSize that is multiplied by time
+						xSizeCoefficient = calculateSizeCoefficient(minXAxisRelation, maxXAxisRelation, movementDelta.x);
+						// The amount of xSize that is not multiplied by time
+						xSizeConstant = calculateSizeConstant(minXAxisRelation, maxXAxisRelation, aabb.minX, aabb.maxX);
+						// xSize = (xSizeCoefficient * time + xSizeConstant)
+					}
+					// Update relation
+					{
+						prevXRelation = selectRelation(xRelevantFace, minXAxisRelation, maxXAxisRelation);
+					}
 				}
 				case Y -> {
+					// Update y axis relations
 					if (isZero) {
 						minYAxisRelation = newAxisType;
 					} else {
 						maxYAxisRelation = newAxisType;
 					}
+					// Update ySize
+					{
+						// The amount of ySize that is multiplied by time
+						ySizeCoefficient = calculateSizeCoefficient(minYAxisRelation, maxYAxisRelation, movementDelta.y);
+						// The amount of ySize that is not multiplied by time
+						ySizeConstant = calculateSizeConstant(minYAxisRelation, maxYAxisRelation, aabb.minY, aabb.maxY);
+						// ySize = (ySizeCoefficient * time + ySizeConstant)
+					}
+					// Update relation
+					{
+						prevYRelation = selectRelation(yRelevantFace, minYAxisRelation, maxYAxisRelation);
+					}
 				}
 				case Z -> {
+					// Update z axis relations
 					if (isZero) {
 						minZAxisRelation = newAxisType;
 					} else {
 						maxZAxisRelation = newAxisType;
+					}
+					// Update zSize
+					{
+						// The amount of zSize that is multiplied by time
+						zSizeCoefficient = calculateSizeCoefficient(minZAxisRelation, maxZAxisRelation, movementDelta.z);
+						// The amount of zSize that is not multiplied by time
+						zSizeConstant = calculateSizeConstant(minZAxisRelation, maxZAxisRelation, aabb.minZ, aabb.maxZ);
+						// zSize = (zSizeCoefficient * time + zSizeConstant)
+					}
+					// Update relation
+					{
+						prevZRelation = selectRelation(zRelevantFace, minZAxisRelation, maxZAxisRelation);
 					}
 				}
 				default -> throw new IllegalStateException();
@@ -393,10 +554,146 @@ public final class GunkData {
 			previousTime = time;
 		}
 		
+		// Final volume going to t=1.0
+		
+		{
+			final double time = 1.0;
+
+			// Calculate the size of each axis at the current time
+			final double xSize = (xSizeCoefficient * time + xSizeConstant);
+			final double ySize = (ySizeCoefficient * time + ySizeConstant);
+			final double zSize = (zSizeCoefficient * time + zSizeConstant);
+
+			// Evaluate volume formula with bounds [previousTime, time], and add to `volume`
+			{
+				// We use the average of the current size and previous size,
+				// because it works with the math (see: trapezoid equation)
+				final double xSizeAverage = (xSize + previousXSize) / 2.0;
+				final double ySizeAverage = (ySize + previousYSize) / 2.0;
+				final double zSizeAverage = (zSize + previousZSize) / 2.0;
+				// Get current relations for time difference calculations
+				final AxisType xRelation = selectRelation(xRelevantFace, minXAxisRelation, maxXAxisRelation);
+				final AxisType yRelation = selectRelation(yRelevantFace, minYAxisRelation, maxYAxisRelation);
+				final AxisType zRelation = selectRelation(zRelevantFace, minZAxisRelation, maxZAxisRelation);
+				// Calculate volumes
+				final double xFaceVol = ySizeAverage * zSizeAverage * getTimeDifference(
+						previousTime, time,
+						movementDelta.x, aabb.minX, aabb.maxX,
+						xRelevantFace, prevXRelation, xRelation
+					);
+				final double yFaceVol = xSizeAverage * zSizeAverage * getTimeDifference(
+						previousTime, time,
+						movementDelta.y, aabb.minY, aabb.maxY,
+						yRelevantFace, prevYRelation, yRelation
+					);
+				final double zFaceVol = xSizeAverage * ySizeAverage * getTimeDifference(
+						previousTime, time,
+						movementDelta.z, aabb.minZ, aabb.maxZ,
+						zRelevantFace, prevZRelation, zRelation
+					);
+				// Add volumes
+				addXVol: {
+					// Kahan summation algorithm
+					final double y = xFaceVol - c;
+					final double t = volume + y;
+					c = (t - volume) - y;
+					volume = t;
+				}
+				addYVol: {
+					// Kahan summation algorithm
+					final double y = yFaceVol - c;
+					final double t = volume + y;
+					c = (t - volume) - y;
+					volume = t;
+				}
+				addYVol: {
+					// Kahan summation algorithm
+					final double y = zFaceVol - c;
+					final double t = volume + y;
+					c = (t - volume) - y;
+					volume = t;
+				}
+			}
+		}
+		
 		return volume;
 	}
 	
-	public static double calculateVolumeSection(
+	// Test main for testing values
+	// TODO remove
+//	public static void main(String[] args) {
+//		System.out.printf("Test: %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(4, 1, 0), new AABB(1, -1, -1, 3, 2, 2)));
+//	}
+	
+	private static AxisType selectRelation(AxisDirection direction, AxisType minRelation, AxisType maxRelation) {
+		return switch(direction) {
+			case POSITIVE -> maxRelation;
+			case NEGATIVE -> minRelation;
+			default -> throw new NullPointerException();
+		};
+	}
+	
+	/**
+	 * Calculates the distance a face moved over time.
+	 * 
+	 * Unless {@code newTime < prevTime}, the result will be positive.
+	 * @param prevTime the lower bound of time
+	 * @param newTime
+	 * @param movementDelta
+	 * @param aabbMin
+	 * @param aabbMax
+	 * @param axisDirection
+	 * @param prevAxisRelation
+	 * @param newAxisRelation
+	 * @return
+	 * @requires Double.isFinite(prevTime) && Double.isFinite(newTime)
+	 * @requires Double.isFinite(movementDelta)
+	 * @requires Double.isFinite(aabbMin) && Double.isFinite(aabbMax)
+	 * @ensures prevTime < newTime ==> \result >= 0.0
+	 * @ensures prevTime > newTime ==> \result <= 0.0
+	 * @ensures prevTime == newTime ==> \result == 0.0
+	 */
+	private static double getTimeDifference(
+			double prevTime, double newTime,
+			final double movementDelta, final double aabbMin, final double aabbMax,
+			AxisDirection axisDirection,
+			AxisType prevAxisRelation, AxisType newAxisRelation
+	) {
+//		final double delta = movementDelta.get(axis);
+		final double delta = movementDelta;
+
+		// We invert the sign when delta is negative
+		// This is *NOT* equivalent to taking the absolute value, because
+		//     we want newTime < prevTime to still create negative values.
+		final double deltaSign = Math.signum(delta);
+		
+		if (!Double.isFinite(deltaSign) || deltaSign == 0) return 0.0;
+		
+		// use xmax as an example
+		if (prevAxisRelation == AxisType.INSIDE && newAxisRelation == AxisType.INSIDE) {
+			// xmin = (0 + delta * newTime) - (0 + delta * prevTime) = delta * (newTime - prevTime)
+			// xmax = (1 + delta * newTime) - (1 + delta * prevTime) = delta * (newTime - prevTime)
+			return delta * (newTime - prevTime) * deltaSign;
+		} else {
+//			final double min = aabb.min(axis);
+//			final double max = aabb.max(axis);
+			final double min = aabbMin;
+			final double max = aabbMax;
+			final double newValue = newAxisRelation.select(
+					min,
+					max,
+					delta * newTime + (axisDirection == AxisDirection.POSITIVE ? 1 : 0)
+				);
+			final double prevValue = newAxisRelation.select(
+					min,
+					max,
+					delta * prevTime + (axisDirection == AxisDirection.POSITIVE ? 1 : 0)
+				);
+			return (newValue - prevValue) * deltaSign;
+		}
+	}
+	
+	private static double calculateVolumeSection(
 			double minTime, double maxTime,
 			Vec3 movementDelta, AABB aabb,
 			AxisType minXAxisRelation, AxisType maxXAxisRelation,
@@ -421,21 +718,21 @@ public final class GunkData {
 		// Typically, volume = xSize * ySize * zSize
 
 		// The amount of xSize that is multiplied by time
-		final double xSizeCoefficient = calculateCoefficient(minXAxisRelation, maxXAxisRelation, movementDelta.x);
+		final double xSizeCoefficient = calculateSizeCoefficient(minXAxisRelation, maxXAxisRelation, movementDelta.x);
 		// The amount of xSize that is not multiplied by time
-		final double xSizeConstant = calculateConstant(minXAxisRelation, maxXAxisRelation, aabb.minX, aabb.maxX);
+		final double xSizeConstant = calculateSizeConstant(minXAxisRelation, maxXAxisRelation, aabb.minX, aabb.maxX);
 		// xSize = (xSizeCoefficient * time + xSizeConstant)
 		
 		// The amount of ySize that is multiplied by time
-		final double ySizeCoefficient = calculateCoefficient(minYAxisRelation, maxYAxisRelation, movementDelta.y);
+		final double ySizeCoefficient = calculateSizeCoefficient(minYAxisRelation, maxYAxisRelation, movementDelta.y);
 		// The amount of ySize that is not multiplied by time
-		final double ySizeConstant = calculateConstant(minYAxisRelation, maxYAxisRelation, aabb.minY, aabb.maxY);
+		final double ySizeConstant = calculateSizeConstant(minYAxisRelation, maxYAxisRelation, aabb.minY, aabb.maxY);
 		// ySize = (ySizeCoefficient * time + ySizeConstant)
 		
 		// The amount of zSize that is multiplied by time
-		final double zSizeCoefficient = calculateCoefficient(minZAxisRelation, maxZAxisRelation, movementDelta.z);
+		final double zSizeCoefficient = calculateSizeCoefficient(minZAxisRelation, maxZAxisRelation, movementDelta.z);
 		// The amount of zSize that is not multiplied by time
-		final double zSizeConstant = calculateConstant(minZAxisRelation, maxZAxisRelation, aabb.minZ, aabb.maxZ);
+		final double zSizeConstant = calculateSizeConstant(minZAxisRelation, maxZAxisRelation, aabb.minZ, aabb.maxZ);
 		// zSize = (zSizeCoefficient * time + zSizeConstant)
 		
 		// TODO math
@@ -443,7 +740,7 @@ public final class GunkData {
 		return 0.0;
 	}
 	
-	private static double calculateCoefficient(AxisType minAxisRelation, AxisType maxAxisRelation, double delta) {
+	private static double calculateSizeCoefficient(AxisType minAxisRelation, AxisType maxAxisRelation, double delta) {
 		if (minAxisRelation == AxisType.INSIDE && maxAxisRelation != AxisType.INSIDE) {
 			return -delta;
 		} else if (minAxisRelation != AxisType.INSIDE && maxAxisRelation == AxisType.INSIDE) {
@@ -453,16 +750,16 @@ public final class GunkData {
 		}
 	}
 	
-	private static double calculateConstant(AxisType minAxisRelation, AxisType maxAxisRelation, double max, double min) {
+	private static double calculateSizeConstant(AxisType minAxisRelation, AxisType maxAxisRelation, double min, double max) {
 		final double maxConstant = maxAxisRelation.select(
 			min, // BELOW_MIN: max axis == min + 0 * time
 			max, // ABOVE_MAX: max axis == max + 0 * time
-			1    // INSIDE: max axis = 1 + delta * time
+			1.0  // INSIDE: max axis = 1.0 + delta * time
 		);
 		final double minConstant = minAxisRelation.select(
 			min, // BELOW_MIN: min axis == min + 0 * time
 			max, // ABOVE_MAX: min axis == max + 0 * time
-			0    // INSIDE: min axis = 0 + delta * time
+			0.0  // INSIDE: min axis = 0.0 + delta * time
 		);
 		return maxConstant - minConstant;
 	}
@@ -617,20 +914,26 @@ public final class GunkData {
 			// Too far behind x
 			return false;
 		}
-
+		
+		// If it's outside of our y range
+		if (aabb.minY> 1 && aabb.minY > movementDelta.y + 1) {
+			// Too far in front of y
+			return false;
+		}
+		
 		if (aabb.maxY < 0 && aabb.maxY < movementDelta.y) {
+			// Too far behind y
 			return false;
 		}
 
+		// If it's outside of our z range
+		if (aabb.minZ > 1 && aabb.minZ > movementDelta.z + 1) {
+			// Too far in front of z
+			return false;
+		}
+		
 		if (aabb.maxZ < 0 && aabb.maxZ < movementDelta.z) {
-			return false;
-		}
-
-		if (aabb.maxY > 1 && aabb.maxY > movementDelta.y + 1) {
-			return false;
-		}
-
-		if (aabb.maxZ > 1 && aabb.maxZ > movementDelta.z + 1) {
+			// Too far behind z
 			return false;
 		}
 		
