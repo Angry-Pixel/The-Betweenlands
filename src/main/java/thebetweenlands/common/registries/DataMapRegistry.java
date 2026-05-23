@@ -6,7 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datamap.block.GunkPlant;
+import thebetweenlands.common.datamap.block.WaterPlant;
 import thebetweenlands.common.datamap.entity.AmuletSpawn;
 import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.datamap.item.CompostableItem;
@@ -24,5 +24,5 @@ public class DataMapRegistry {
 	public static final DataMapType<Item, FluxMultiplier> FLUX_MULTIPLIER = DataMapType.builder(TheBetweenlands.prefix("flux_multiplier"), Registries.ITEM, FluxMultiplier.CODEC).synced(FluxMultiplier.CODEC, false).build();
 	public static final DataMapType<Item, LightningConversion> LIGHTNING_CONVERSION = DataMapType.builder(TheBetweenlands.prefix("lightning_conversion"), Registries.ITEM, LightningConversion.CODEC).synced(LightningConversion.CODEC, false).build();
 
-	public static final DataMapType<Block, GunkPlant> GUNK = DataMapType.builder(TheBetweenlands.prefix("gunk"), Registries.BLOCK, GunkPlant.CODEC).synced(GunkPlant.CODEC, false).build();
+	public static final DataMapType<Block, WaterPlant> GUNK = DataMapType.builder(TheBetweenlands.prefix("gunk"), Registries.BLOCK, WaterPlant.CODEC).synced(WaterPlant.CODEC, false).build();
 }

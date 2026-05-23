@@ -250,7 +250,7 @@ public final class GunkData {
 	}
 
 	/**
-	 * Finds the percentage of the volume of {@code aabb} that is passed through by the unit aabb, as the unit aabb moves from 0, 0, 0 to {@code movementDelta}
+	 * Finds the volume of {@code aabb} that is passed through by the unit aabb, as the unit aabb moves from 0, 0, 0 to {@code movementDelta}
 	 * @param movementDelta the offset that the unit aabb goes through
 	 * @param aabb the aabb that is passed through by the unit aabb
 	 * @return the percentage of the volume of {@code aabb} that is passed through by the unit aabb, as the unit aabb moves from 0, 0, 0 to {@code movementDelta}
@@ -619,10 +619,14 @@ public final class GunkData {
 		return volume;
 	}
 	
-	// Test main for testing values
-	// TODO remove
+	// Test function for making sure findIntersectionVolumeWithCenteredLocalBounds gives the right output
 //	public static void main(String[] args) {
-//		System.out.printf("Test: %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(4, 1, 0), new AABB(1, -1, -1, 3, 2, 2)));
+//		System.out.printf("Test: expected 2.5, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(4, 1, 0), new AABB(1, -1, -1, 3, 2, 2)));
+//		System.out.printf("Test: expected 3.3, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 1, 0), new AABB(1, -1, -2, 3.5, 2, 3)));
+//		System.out.printf("Test: expected 2.475, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 2, 0), new AABB(1, -1, -1, 3.5, 2, 2)));
+//		System.out.printf("Test: expected 2.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(1, 2, 0), new AABB(0.5, 0, -1, 4, 2, 2)));
+//		System.out.printf("Test: expected 0.5, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(0, 4, 0), new AABB(0.5, 0, 0, 2, 1, 1)));
+//		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(0, 4, 0), new AABB(0.5, 0, 0, 2, 2, 1)));
 //	}
 	
 	private static AxisType selectRelation(AxisDirection direction, AxisType minRelation, AxisType maxRelation) {
