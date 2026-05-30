@@ -24,5 +24,5 @@ public class DataMapRegistry {
 	public static final DataMapType<Item, FluxMultiplier> FLUX_MULTIPLIER = DataMapType.builder(TheBetweenlands.prefix("flux_multiplier"), Registries.ITEM, FluxMultiplier.CODEC).synced(FluxMultiplier.CODEC, false).build();
 	public static final DataMapType<Item, LightningConversion> LIGHTNING_CONVERSION = DataMapType.builder(TheBetweenlands.prefix("lightning_conversion"), Registries.ITEM, LightningConversion.CODEC).synced(LightningConversion.CODEC, false).build();
 
-	public static final DataMapType<Block, WaterPlant> GUNK = DataMapType.builder(TheBetweenlands.prefix("gunk"), Registries.BLOCK, WaterPlant.CODEC).synced(WaterPlant.CODEC, false).build();
+	public static final DataMapType<Block, WaterPlant> WATER_PLANT = DataMapType.builder(TheBetweenlands.prefix("water_plant"), Registries.BLOCK, WaterPlant.CODEC).synced(WaterPlant.CODEC, false).build();
 }

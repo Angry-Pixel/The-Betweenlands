@@ -341,6 +341,7 @@ public class CommonRegistrationEvents {
 		event.register(DataMapRegistry.DECAY_FOOD);
 		event.register(DataMapRegistry.FLUX_MULTIPLIER);
 		event.register(DataMapRegistry.LIGHTNING_CONVERSION);
+		event.register(DataMapRegistry.WATER_PLANT);
 	}
 
 	private static void registerCapabilities(RegisterCapabilitiesEvent event) {

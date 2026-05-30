@@ -1,7 +1,8 @@
 {
   "values": {
     "thebetweenlands:algae": {
-      "amount": 10.0
+      "movement_gunk": 10.0,
+      "passive_gunk": 0.05
     }
   }
 }

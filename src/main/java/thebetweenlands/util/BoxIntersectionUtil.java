@@ -18,7 +18,7 @@ public class BoxIntersectionUtil {
 	 * @param includeStartingVolume whether to include the volume of {@code aabb} that {@code localBounds} initially occupies
 	 * @return the percentage of the volume of {@code aabb} that is passed through by {@code localBounds} as it is offset from its starting position by {@code movementDelta}
 	 */
-	public static double findIntersectionVolume(AABB localBounds, Vec3 movementDelta, AABB aabb, boolean includeStartingVolume) {
+	public static double findPercentIntersectionVolume(AABB localBounds, Vec3 movementDelta, AABB aabb, boolean includeStartingVolume) {
 		// Scale universe such that localBounds is [(0, 0, 0), (1, 1, 1)]
 		Vec3 offsetPos = localBounds.getMinPosition().reverse();
 		AABB offsetLocalBounds = localBounds.move(offsetPos);

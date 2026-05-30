@@ -1,23 +1,32 @@
 package thebetweenlands.common.component.entity;
 
+import java.util.List;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.datamap.block.WaterPlant;
 import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
+import thebetweenlands.util.BoxIntersectionUtil;
 
 public final class GunkData {
 
@@ -29,7 +38,7 @@ public final class GunkData {
 		Codec.INT.fieldOf("gunk_counter").forGetter(o -> o.gunkCounter),
 		Codec.INT.fieldOf("enter_pause_timer").forGetter(o -> o.enterPauseTimer),
 		Codec.INT.fieldOf("exit_pause_timer").forGetter(o -> o.exitPauseTimer),
-		ExtraCodecs.POSITIVE_FLOAT.fieldOf("partial_gunk").forGetter(o -> o.partialGunk)
+		Codec.FLOAT.fieldOf("partial_gunk").forGetter(o -> o.partialGunk)
 	).apply(instance, GunkData::new));
 
 	public static final StreamCodec<FriendlyByteBuf, GunkData> STREAM_CODEC = StreamCodec.composite(
@@ -66,7 +75,7 @@ public final class GunkData {
 	public int getGunk() {
 		return this.gunkCounter;
 	}
-	
+
 	public void setGunk(int gunk) {
 		this.gunkCounter = Mth.clamp(gunk, 0, GUNK_MAX);
 	}
@@ -75,6 +84,47 @@ public final class GunkData {
 		final int prevGunk = this.gunkCounter;
 		final int newGunk = this.gunkCounter = Math.clamp(this.gunkCounter + amount, 0, GUNK_MAX);
 		return prevGunk != newGunk;
+	}
+	
+	/**
+	 * Adds just the integral (integer) part of partial gunk to full gunk
+	 * @param partialGunk
+	 * @return true if any 
+	 */
+	private boolean addPartialGunkIntegralPart(double partialGunk) {
+		if((int)partialGunk != 0) {
+			this.increaseGunk((int)partialGunk);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Adds partial gunk, and increases full gunk whenever partial gunk exceeds 1
+	 * @param partialGunk the amount of partial gunk to add
+	 * @return true if any full gunk was added
+	 */
+	public boolean addPartialGunk(double partialGunk) {
+		boolean addedGunk = false;
+		
+		if(this.addPartialGunkIntegralPart(partialGunk)) {
+			partialGunk %= 1; // extract fractional part
+			addedGunk = true;
+		}
+
+		if(this.addPartialGunkIntegralPart(this.partialGunk)) {
+			this.partialGunk %= 1; // extract fractional part
+			addedGunk = true;
+		}
+		
+		this.partialGunk += partialGunk;
+
+		if(this.addPartialGunkIntegralPart(this.partialGunk)) {
+			this.partialGunk %= 1; // extract fractional part
+			addedGunk = true;
+		}
+		
+		return addedGunk;
 	}
 	
 	/**
@@ -123,6 +173,8 @@ public final class GunkData {
 			return;
 		}
 		
+		// TODO profiler
+		
 		if(player.isInFluidType(FluidTypeRegistry.SWAMP_WATER.get())) {
 			tickInWater(player);
 		} else {
@@ -130,6 +182,15 @@ public final class GunkData {
 		}
 		
 		tickMoveThroughWaterPlants(player);
+	}
+	
+	public static void onPlayerTick2(PlayerTickEvent.Pre event) {
+		Player player = event.getEntity();
+		if(player.level().isClientSide() || !isGunkEnabled(player)) {
+			return;
+		}
+		
+//		tickMoveThroughWaterPlants(player);
 	}
 
 	public static void tickOutOfWater(Player player) {
@@ -183,13 +244,16 @@ public final class GunkData {
 		// Entity.getPosition(partialTicks) seems to mostly be client-side
 		
 		// Where the player was at the start of this tick
-		Vec3 oldPos = new Vec3(player.xo, player.yo, player.zo);
+//		Vec3 oldPlayerPos = new Vec3(player.xo, player.yo, player.zo);
+		Vec3 oldPlayerPos = new Vec3(player.xOld, player.yOld, player.zOld);
 		// Where the player was at the end of this tick
-		Vec3 pos = player.position();
+		Vec3 playerPos = player.position();
+//		Vec3 playerPos = new Vec3(player.getX(), player.getY(), player.getZ());
 		
 		// How the player moved to get from where they were to where they are
-		Vec3 deltaMovement = oldPos.vectorTo(pos);
-		
+		Vec3 deltaMovement = oldPlayerPos.vectorTo(playerPos);
+
+//		TheBetweenlands.LOGGER.info("Water plant begin; movement magnitude sq = {} (valid {})", deltaMovement.lengthSqr(), deltaMovement.lengthSqr() >= 1.0E-4 * 1.0E-4);
 		// If the player hasn't significantly moved, do nothing
 		if (deltaMovement.lengthSqr() < 1.0E-4 * 1.0E-4) return;
 		
@@ -205,14 +269,61 @@ public final class GunkData {
 		//       that is, someone 10x the size should gain less gunk for the same movement through a single block because they are bigger
 		
 		// Currently, we assume the bounding box size has not changed since the start of this tick
-		AABB oldBounds = localBounds.move(oldPos);
-		AABB newBounds = localBounds.move(pos);
+		AABB oldBounds = localBounds.move(oldPlayerPos);
+		AABB newBounds = localBounds.move(playerPos);
 		AABB totalBounds = oldBounds.minmax(newBounds);
+//		AABB totalBounds = oldBounds.expandTowards(deltaMovement);
 		
 		// We want to:
 		// 1. Find every gunk plant between the old bound and new bounds
 		// 2. Calculate the percentage of each plant's bounding box that was traveled through (and not already intersected with)
 		// 3. Use that to determine the total amount of partial gunk to add
+
+		// TODO profiler
 		
+		Level level = player.level();
+
+		final Vec3 oldPlayerPosNeg = oldPlayerPos.reverse();
+
+		GunkData gunkData = player.getData(AttachmentRegistry.GUNK);
+		final int prevGunk = gunkData.getGunk();
+
+		
+		// TODO more efficient method of finding blocks (this is slow at higher speeds)
+		BlockPos.betweenClosedStream(totalBounds)
+			.forEachOrdered(pos -> {
+				BlockState state = level.getBlockState(pos);
+				WaterPlant waterPlant = state.getBlockHolder().getData(DataMapRegistry.WATER_PLANT);
+//				TheBetweenlands.LOGGER.info("Water plant found pos {} {}", pos, waterPlant);
+				if(waterPlant == null || waterPlant.movementGunk() == 0.0f || !Float.isFinite(waterPlant.movementGunk())) {
+					return;
+				}
+//				TheBetweenlands.LOGGER.info("Water plant found plant {} at pos {} with value {}", state, pos, waterPlant.movementGunk());
+				VoxelShape shape = state.getShape(level, pos, CollisionContext.of(player)).move(pos.getX(), pos.getY(), pos.getZ());
+				List<AABB> aabbs = shape.toAabbs();
+				// Total volume that the player has passed through
+				double intersectionVolume = 0.0d;
+				// Total volume of the block
+				double totalVolume = 0.0d;
+				for(AABB aabb : aabbs) {
+//					TheBetweenlands.LOGGER.info("Water plant {} at pos {} has an aabb of {}", state, pos, aabb);
+					final double volume = aabb.getXsize() * aabb.getYsize() * aabb.getZsize();
+					// TODO volume for the center
+					final double volumeIntersected = BoxIntersectionUtil.findPercentIntersectionVolume(localBounds, deltaMovement, aabb.move(oldPlayerPosNeg), false) * volume;
+					
+					intersectionVolume += volumeIntersected;
+					totalVolume += volume;
+				}
+				
+				double percentIntersection = intersectionVolume / totalVolume;
+				
+//				TheBetweenlands.LOGGER.info("Intersection with {} for {} vol and {} amount gives a total of {} partial gunk", state, percentIntersection, waterPlant.movementGunk(), percentIntersection * waterPlant.movementGunk());
+				gunkData.addPartialGunk(percentIntersection * waterPlant.movementGunk());
+			});
+
+		final int newGunk = gunkData.getGunk();
+		if(prevGunk != newGunk) {
+			player.syncData(AttachmentRegistry.GUNK);
+		}
 	}
 }

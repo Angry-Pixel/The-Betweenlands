@@ -322,7 +322,7 @@ public class BLDataMapProvider extends DataMapProvider {
 		compostMap.add(ItemRegistry.STRING_ROOT_FIBERS, new CompostableItem(3, 4000), false);
 		compostMap.add(ItemRegistry.CRYPTWEED_BLADES, new CompostableItem(3, 4000), false);
 		
-		var gunkMap = this.builder(DataMapRegistry.GUNK);
-		gunkMap.add(BlockRegistry.ALGAE, new WaterPlant(10.0f), false);
+		var gunkMap = this.builder(DataMapRegistry.WATER_PLANT);
+		gunkMap.add(BlockRegistry.ALGAE, new WaterPlant(10.0f, 0.05f), false);
 	}
 }
