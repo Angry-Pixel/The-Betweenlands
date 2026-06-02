@@ -30,9 +30,9 @@ import thebetweenlands.util.BoxIntersectionUtil;
 
 public final class GunkData {
 
-	public static final int GUNK_MAX = 100;
+	public static final int GUNK_MAX = 1024;
 	public static final int ENTER_WAIT_TIME = 20;
-	public static final int EXIT_WAIT_TIME = 35;
+	public static final int EXIT_WAIT_TIME = 55;
 
 	public static final Codec<GunkData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.INT.fieldOf("gunk_counter").forGetter(o -> o.gunkCounter),
@@ -203,7 +203,6 @@ public final class GunkData {
 		if(gunkData.exitPauseTimer > 0) {
 			gunkData.exitPauseTimer--;
 		} else {
-			// TODO adjust gunk rate
 			boolean gunkChanged = gunkData.increaseGunk(-1);
 
 			// Sync gunk data if it changed
@@ -225,8 +224,7 @@ public final class GunkData {
 		if(gunkData.enterPauseTimer > 0) {
 			gunkData.enterPauseTimer--;
 		} else if(player.isSwimming() && canGunkIncrease(player)) {
-			// TODO adjust gunk rate
-			boolean gunkChanged = gunkData.increaseGunk(1);
+			boolean gunkChanged = gunkData.increaseGunk(2);
 
 			// Sync gunk data if it changed
 			if(gunkChanged) {
