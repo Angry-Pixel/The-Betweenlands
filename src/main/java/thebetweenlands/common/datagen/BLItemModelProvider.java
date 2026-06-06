@@ -255,6 +255,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SHIMMER_STONE);
 		this.basicItem(ItemRegistry.TARMINION);
 		this.basicItem(ItemRegistry.SLUDGE_BALL);
+		this.basicItem(ItemRegistry.SPORES);
 		//rope
 		Function<DeferredItem<?>, ModelFile> pebbleOverlay = item -> this.multiLayerItem(item.getId().getPath() + "_active", this.itemTexture(item), TheBetweenlands.prefix("item/angry_pebble_overlay"));
 		this.basicItem(ItemRegistry.ANGRY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.ANGRY_PEBBLE));

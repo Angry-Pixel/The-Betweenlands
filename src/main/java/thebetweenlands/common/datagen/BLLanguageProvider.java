@@ -1883,7 +1883,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.PALE_GRASS_BLADES, "Pale Grass Blades");
 		this.addItem(ItemRegistry.STRING_ROOT_FIBERS, "String Root Fibers");
 		this.addItem(ItemRegistry.CRYPTWEED_BLADES, "Cryptweed Blades");
-
+		this.addItem(ItemRegistry.SPORES, "Spores");
+		
 		this.addItem(ItemRegistry.ASPECTRUS_FRUIT, "Aspectrus Fruit");
 		this.add(ItemRegistry.ASPECTRUS_FRUIT.get().getDescriptionId() + ".aspect", "Aspectrus Fruit - %s");
 
