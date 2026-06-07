@@ -456,19 +456,19 @@ public class BoxIntersectionUtil {
 		}
 	}
 	
-	// Test function for making sure findIntersectionVolumeWithCenteredLocalBounds gives the right output
-	public static void main(String[] args) {
-		System.out.printf("Test: expected 2.5, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(4, 1, 0), new AABB(1, -1, -1, 3, 2, 2), true));
-		System.out.printf("Test: expected 3.3, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 1, 0), new AABB(1, -1, -2, 3.5, 2, 3), true));
-		System.out.printf("Test: expected 2.475, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 2, 0), new AABB(1, -1, -1, 3.5, 2, 2), true));
-		System.out.printf("Test: expected 2.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(1, 2, 0), new AABB(0.5, 0, -1, 4, 2, 2), true));
-		System.out.printf("Test: expected 0.5, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(0, 4, 0), new AABB(0.5, 0, 0, 2, 1, 1), true));
-		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(0, 4, 0), new AABB(0.5, 0, 0, 2, 2, 1), true));
-		// Starts outside, ends outside, tests all loop invariants for the X axis
-		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(10, 0, 0), new AABB(2, -1, -1, 3, 3, 3), true));
-		// Starts outside, ends partially inside
-		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 0, 0), new AABB(2, -1, -1, 3, 3, 3), true));
-	}
+//	// Test function for making sure findIntersectionVolumeWithCenteredLocalBounds gives the right output
+//	public static void main(String[] args) {
+//		System.out.printf("Test: expected 2.5, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(4, 1, 0), new AABB(1, -1, -1, 3, 2, 2), true));
+//		System.out.printf("Test: expected 3.3, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 1, 0), new AABB(1, -1, -2, 3.5, 2, 3), true));
+//		System.out.printf("Test: expected 2.475, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 2, 0), new AABB(1, -1, -1, 3.5, 2, 2), true));
+//		System.out.printf("Test: expected 2.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(1, 2, 0), new AABB(0.5, 0, -1, 4, 2, 2), true));
+//		System.out.printf("Test: expected 0.5, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(0, 4, 0), new AABB(0.5, 0, 0, 2, 1, 1), true));
+//		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(0, 4, 0), new AABB(0.5, 0, 0, 2, 2, 1), true));
+//		// Starts outside, ends outside, tests all loop invariants for the X axis
+//		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(10, 0, 0), new AABB(2, -1, -1, 3, 3, 3), true));
+//		// Starts outside, ends partially inside
+//		System.out.printf("Test: expected 1.0, got %f%n", findIntersectionVolumeWithCenteredLocalBounds(new Vec3(2.5, 0, 0), new AABB(2, -1, -1, 3, 3, 3), true));
+//	}
 	
 	private static AxisRelation selectRelation(AxisDirection direction, AxisRelation minRelation, AxisRelation maxRelation) {
 		return switch(direction) {

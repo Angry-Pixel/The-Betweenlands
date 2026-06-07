@@ -241,6 +241,7 @@ public final class GunkData {
 		
 		// Entity.getPosition(partialTicks) seems to mostly be client-side
 		
+		// TODO need a better way of tracking the player's position last tick, because this is insufficient
 		// Where the player was at the start of this tick
 //		Vec3 oldPlayerPos = new Vec3(player.xo, player.yo, player.zo);
 		Vec3 oldPlayerPos = new Vec3(player.xOld, player.yOld, player.zOld);
