@@ -29,6 +29,7 @@ import thebetweenlands.common.entity.FlameJet;
 import thebetweenlands.common.entity.GalleryFrame;
 import thebetweenlands.common.entity.GreeblingCorpse;
 import thebetweenlands.common.entity.LurkerSkinRaft;
+import thebetweenlands.common.entity.MistBridgeEntity;
 import thebetweenlands.common.entity.MovingWall;
 import thebetweenlands.common.entity.PredatorArrowGuide;
 import thebetweenlands.common.entity.RootGrabber;
@@ -255,6 +256,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<BLItemFrame>> ITEM_FRAME = register("item_frame", EntityType.Builder.<BLItemFrame>of(BLItemFrame::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
 	public static final DeferredHolder<EntityType<?>, EntityType<BLLightningBolt>> LIGHTNING_BOLT = register("lightning_bolt", EntityType.Builder.<BLLightningBolt>of(BLLightningBolt::new, MobCategory.MISC).sized(0.0F, 0.0F).noSave().clientTrackingRange(16).updateInterval(Integer.MAX_VALUE));
 	public static final DeferredHolder<EntityType<?>, EntityType<LurkerSkinRaft>> LURKER_SKIN_RAFT = register("lurker_skin_raft", EntityType.Builder.<LurkerSkinRaft>of(LurkerSkinRaft::new, MobCategory.MISC).sized(1.25F, 0.25F).clientTrackingRange(10));
+	public static final DeferredHolder<EntityType<?>, EntityType<MistBridgeEntity>> MIST_BRIDGE = register("mist_bridge", EntityType.Builder.<MistBridgeEntity>of(MistBridgeEntity::new, MobCategory.MISC).sized(0F, 0F).noSummon());
 	//mist bridge
 	public static final DeferredHolder<EntityType<?>, EntityType<MovingWall>> MOVING_WALL = register("moving_wall", EntityType.Builder.<MovingWall>of(MovingWall::new, MobCategory.MISC).sized(1.0F, 1.0F).noSummon().clientTrackingRange(4).updateInterval(20));
 	public static final DeferredHolder<EntityType<?>, EntityType<OctineArrow>> OCTINE_ARROW = register("octine_arrow", EntityType.Builder.<OctineArrow>of(OctineArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));

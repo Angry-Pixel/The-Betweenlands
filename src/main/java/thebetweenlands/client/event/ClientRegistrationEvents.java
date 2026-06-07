@@ -675,6 +675,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CHEST.get(), WeedwoodChestRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), WeedwoodCraftingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.MIST_BRIDGE.get(), NoopRenderer::new);
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {

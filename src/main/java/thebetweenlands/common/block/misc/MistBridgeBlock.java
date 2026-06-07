@@ -1,5 +1,9 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,10 +25,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ParticleRegistry;
-
-import javax.annotation.Nullable;
-
-import java.util.Map;
 
 public class MistBridgeBlock extends Block {
 
