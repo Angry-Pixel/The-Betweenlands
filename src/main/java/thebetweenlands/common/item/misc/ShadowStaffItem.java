@@ -32,7 +32,7 @@ public class ShadowStaffItem extends Item implements BigSwingAnimation {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		BlockPos pos = player.blockPosition().below();
+		BlockPos pos = player.blockPosition();
 
 		if (player.getCooldowns().isOnCooldown(this))
 			return InteractionResultHolder.pass(stack);
@@ -41,8 +41,8 @@ public class ShadowStaffItem extends Item implements BigSwingAnimation {
 			if (!level.isClientSide()) {
 				stack.hurtAndBreak(2, player, EquipmentSlot.MAINHAND);
 
-				double direction = Math.toRadians(player.yRotO);
-				Vec3 diag = new Vec3(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
+				float direction = Mth.DEG_TO_RAD * player.getYRot();
+				Vec3 diag = new Vec3(Mth.sin((float) (direction + Mth.HALF_PI)), 0, Mth.cos(direction + Mth.HALF_PI)).normalize();
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
 				List<BlockPos> convertPos = new ArrayList<BlockPos>();
 				List<Integer> blockDistance = new ArrayList<Integer>();
@@ -50,9 +50,9 @@ public class ShadowStaffItem extends Item implements BigSwingAnimation {
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
 						for (int yo = 0; yo <= 1; yo++) {
-							int originX = Mth.floor(pos.getX() + 0.5D - Math.sin(direction) * distance - diag.x * distance2 * 0.25D);
+							int originX = Mth.floor(pos.getX() + 0.5D - Mth.sin(direction) * distance - diag.x * distance2 * 0.25D);
 							int originY = pos.getY() + yo;
-							int originZ = Mth.floor(pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.z * distance2 * 0.25D);
+							int originZ = Mth.floor(pos.getZ() + 0.5D + Mth.cos(direction) * distance + diag.z * distance2 * 0.25D);
 							BlockPos origin = new BlockPos(originX, originY, originZ);
 
 							if (spawnedPos.contains(origin))
@@ -86,17 +86,17 @@ public class ShadowStaffItem extends Item implements BigSwingAnimation {
 
 	@SuppressWarnings("deprecation")
 	private boolean isShadowableBlock (Level level, Player player, BlockPos pos, BlockState state) {
-		return (state.isSolid() || state.is(BlockTags.REPLACEABLE)) && !state.hasBlockEntity() && state.getDestroyProgress(player, level, pos) > 0.0001 && !(state.is(BlockRegistry.MIST_BRIDGE.get())) && !(state.is(BlockRegistry.SHADOW_WALKER.get()) && !level.isEmptyBlock(pos));
+		return (state.isSolid() || state.is(BlockTags.REPLACEABLE) && !state.isAir()) && !state.hasBlockEntity() && state.getDestroyProgress(player, level, pos) > 0.0001 && !(state.is(BlockRegistry.MIST_BRIDGE.get())) && !(state.is(BlockRegistry.SHADOW_WALKER.get()) && !level.isEmptyBlock(pos));
 	}
 
 	private void spawnEntity(Level level, BlockPos pos, List<Integer> blockDistance, List<BlockPos> convertPos) {
 		if (!level.isClientSide()) {// && level.getDifficulty() != EnumDifficulty.PEACEFUL) {
 			MistBridgeEntity mist_bridge = new MistBridgeEntity(EntityRegistry.MIST_BRIDGE.get(), level);
 			if (mist_bridge != null) {
-			mist_bridge.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			mist_bridge.setBlockList(blockDistance, convertPos, false);
-			mist_bridge.setStartExtention(true);
-			level.addFreshEntity(mist_bridge);
+				mist_bridge.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+				mist_bridge.setBlockList(blockDistance, convertPos, false);
+				mist_bridge.setStartExtention(true);
+				level.addFreshEntity(mist_bridge);
 			}
 		}
 	}

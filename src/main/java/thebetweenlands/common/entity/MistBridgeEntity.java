@@ -29,7 +29,6 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 
 	public MistBridgeEntity (EntityType<? extends Entity> type, Level level) {
 		super(type, level);
-		//setSize(0.0F, 0.0F);
 		setNoGravity(true);
 		this.noPhysics = true;
 	}
@@ -38,7 +37,7 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		builder.define(START_EXTENTION, true);
 	}
-	
+
 	public boolean getStartExtention() {
 		return getEntityData().get(START_EXTENTION);
 	}
@@ -53,7 +52,7 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 		if (!level().isClientSide()) {
 			if (getStartExtention() && level().getGameTime() % 1 == 0) {
 				List<BlockPos> pos = matchDistance(level(), matchDistance);
-				if (!pos.isEmpty() && pos != null) {
+				if (!pos.isEmpty()) {
 					for (int index = 0; index < pos.size(); index++)
 						level().setBlock(pos.get(index), getTempBlock(), 2);
 				}
@@ -65,7 +64,6 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 					setStartExtention(false);
 					matchDistance = 0;
 				}
-	
 			}
 
 			if(startRetraction) {
@@ -113,12 +111,10 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 
 	@Override
 	public void push(Entity entity) {
-
 	}
 
 	@Override
 	public void push(double x, double y, double z) {
-
 	}
 
 	@Override
@@ -166,14 +162,10 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 		}
 
 		if (!posList.isEmpty() && !stateList.isEmpty()) {
-			System.out.println("Should be saving to the entityNBT here.");
 			entityNbt.put("originPos", posList);
 			entityNbt.put("tempBlockTypes", stateList);
 			entityNbt.put("distance", distanceList);
 			entityNbt.putBoolean("isMist", isMist);
-			//System.out.println("posList Raw:" + posList);
-			//System.out.println("entityNbt posList:" + getPersistentData().getList("originPos", Tag.TAG_LIST));
-			
 		}
 	}
 
@@ -185,12 +177,9 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 		ListTag distanceTagList = entityNbt.getList("distance", Tag.TAG_COMPOUND);
 		for (int indexCount = 0; indexCount < distanceTagList.size(); ++indexCount) {
 			if(distanceTagList.getCompound(indexCount).getInt("distance") == distanceIn) {
-				//System.out.println("All Entity NBT:" + entityNbt);
-				//System.out.println("posTagList:" + posTagList.getCompound(indexCount));
-				//System.out.println("Matched Block List:" + NbtUtils.readBlockPos(posTagList.getCompound(indexCount), "originPos").get());
 				CompoundTag posContainer = posTagList.getCompound(indexCount);
 				posList.add(NbtUtils.readBlockPos(posContainer, "pos").orElse(BlockPos.ZERO));
-		}
+			}
 		}
 		return posList;
 	}
@@ -214,15 +203,11 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 		this.setDead();
 	}
 */
-
 	@Override
 	protected void readAdditionalSaveData(CompoundTag compound) {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag compound) {
-		
+	protected void addAdditionalSaveData(CompoundTag compound) {	
 	}
-
-
 }
