@@ -17,6 +17,7 @@ import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
 import thebetweenlands.common.block.misc.GlowingGoopBlock;
+import thebetweenlands.common.block.misc.MistBridgeBlock;
 import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
 import thebetweenlands.common.block.misc.SamiteCanvasPanelBlock;
 import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
@@ -743,7 +744,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(BlockRegistry.GLOWING_GOOP, false);
 		this.carpetBlockWithItem(BlockRegistry.REED_MAT);
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
-		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
+//		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
+		this.mistBridge(BlockRegistry.MIST_BRIDGE);
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.SHADOW_WALKER, "translucent");
 		this.builtinEntityAndItem(BlockRegistry.STEEPING_POT, this.modLoc("block/particle/steeping_pot_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.MOTH_HOUSE, this.modLoc("block/particle/mothhouse_particle"), 0.625F, 0.0F);
@@ -1244,6 +1246,38 @@ public class BLBlockStateProvider extends BlockStateProvider {
 				.condition(PipeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
 		}
 		this.basicItemTex(block, true);
+	}
+	
+
+	public void mistBridge(DeferredBlock<Block> block) {
+		// Default model
+		ModelFile file = this.models().cubeAll(block.getId().getPath(), this.blockTexture(block.get()))
+			.ao(false)
+			.renderType("translucent");
+		
+		// Multipart builder
+		var builder = this.getMultipartBuilder(block.get())
+				.part().modelFile(file).addModel().end();
+		
+		// Edge model
+		ModelFile edgeFile = this.models().withExistingParent(block.getId().withSuffix("_edge").getPath(), this.mcLoc("block/thin_block"))
+			.texture("particle", this.blockTexture(block.get()))
+			.texture("texture", this.blockTexture(block.get()).withSuffix("_horizontal"))
+			.ao(false)
+			.renderType("translucent")
+//			.renderType("cutout")
+			.element().from(0.0F, 16.02F, -3.0F).to(16.0F, 16.02F, 0.0F)
+			.face(Direction.UP).texture("#texture").uvs(0, 13.0f, 16.0f, 16.0f).tintindex(0).end()
+			.face(Direction.DOWN).texture("#texture").uvs(0, 16.0f, 16.0f, 13.0f).tintindex(0).end().end();
+		
+		for (Direction dir : MistBridgeBlock.PROPERTY_BY_DIRECTION.keySet()) {
+			builder.part().modelFile(edgeFile)
+				.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isVertical() ? 270 : 0)
+				.rotationY(dir.getAxis().isHorizontal() ? (int) dir.getOpposite().toYRot() : 0).addModel()
+				.condition(PipeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
+		}
+		
+		this.simpleBlockItem(block);
 	}
 
 	public void mossBlockWithItem(DeferredBlock<Block> block) {
