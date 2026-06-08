@@ -39,7 +39,6 @@
   ],
   "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "thebetweenlands:block/mist_bridge",
     "texture": "thebetweenlands:block/mist_bridge_horizontal"
   }
 }

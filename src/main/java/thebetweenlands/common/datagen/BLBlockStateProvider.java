@@ -1,11 +1,38 @@
 package thebetweenlands.common.datagen;
 
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.WallSide;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -23,16 +50,17 @@ import thebetweenlands.common.block.misc.SamiteCanvasPanelBlock;
 import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
 import thebetweenlands.common.block.plant.EdgePlantBlock;
 import thebetweenlands.common.block.plant.ShelfFungusBlock;
-import thebetweenlands.common.block.structure.*;
+import thebetweenlands.common.block.structure.BeamRelayBlock;
+import thebetweenlands.common.block.structure.DruidStoneBlock;
+import thebetweenlands.common.block.structure.PortalFrameBlock;
+import thebetweenlands.common.block.structure.SpikeTrapBlock;
+import thebetweenlands.common.block.structure.TreePortalBlock;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
 import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.datagen.builders.model.BushModelBuilder;
 import thebetweenlands.common.datagen.builders.model.SlantModelBuilder;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.List;
-import java.util.Map;
 
 public class BLBlockStateProvider extends BlockStateProvider {
 
@@ -1248,6 +1276,36 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(block, true);
 	}
 	
+	// Different models for each edge because the texture is different
+	private BlockModelBuilder mistBridgeEdge(ResourceLocation modelId, ResourceLocation textureId, Direction direction) {
+		final Axis axis = direction.getAxis();
+		final AxisDirection axisDirection = direction.getAxisDirection();
+		assert axis.isHorizontal() && (axis == Axis.X || axis == Axis.Z);
+		float minPos = axisDirection == AxisDirection.NEGATIVE ? -3.0F : 16.0F;
+		float maxPos = axisDirection == AxisDirection.NEGATIVE ? 0.0F : 19.0F;
+
+		float u0 = (direction == Direction.WEST  ? 13.0F : 0.0F);
+		float v0 = (direction == Direction.NORTH ? 13.0F : 0.0F);
+		float u1 = (direction == Direction.EAST  ? 3.0F  : 16.0F);
+		float v1 = (direction == Direction.SOUTH ? 3.0F  : 16.0F);
+		
+		return this.models().withExistingParent(modelId.getPath(), this.mcLoc("block/thin_block"))
+				.texture("texture", textureId)
+				.element()
+					.from(axis == Axis.X ? minPos : 0.0F, 16.02F, axis == Axis.Z ? minPos : 0.0F)
+					.to(axis == Axis.X ? maxPos : 16.0F, 16.02F, axis == Axis.Z ? maxPos : 16.0F)
+					.face(Direction.UP)
+						.texture("#texture")
+						.uvs(u0, v0, u1, v1)
+						.tintindex(0)
+					.end()
+					.face(Direction.DOWN)
+						.texture("#texture")
+						.uvs(u0, v1, u1, v0)
+						.tintindex(0)
+					.end()
+				.end();
+	}
 
 	public void mistBridge(DeferredBlock<Block> block) {
 		// Default model
@@ -1259,22 +1317,27 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		var builder = this.getMultipartBuilder(block.get())
 				.part().modelFile(file).addModel().end();
 		
-		// Edge model
-		ModelFile edgeFile = this.models().withExistingParent(block.getId().withSuffix("_edge").getPath(), this.mcLoc("block/thin_block"))
-			.texture("particle", this.blockTexture(block.get()))
-			.texture("texture", this.blockTexture(block.get()).withSuffix("_horizontal"))
-			.ao(false)
-			.renderType("translucent")
-//			.renderType("cutout")
-			.element().from(0.0F, 16.02F, -3.0F).to(16.0F, 16.02F, 0.0F)
-			.face(Direction.UP).texture("#texture").uvs(0, 13.0f, 16.0f, 16.0f).tintindex(0).end()
-			.face(Direction.DOWN).texture("#texture").uvs(0, 16.0f, 16.0f, 13.0f).tintindex(0).end().end();
+//		// Edge model
+//		ModelFile edgeFile = this.models().withExistingParent(block.getId().withSuffix("_edge").getPath(), this.mcLoc("block/thin_block"))
+//			.texture("particle", this.blockTexture(block.get()))
+//			.texture("texture", this.blockTexture(block.get()).withSuffix("_horizontal"))
+//			.ao(false)
+//			.renderType("translucent")
+//			.element().from(0.0F, 16.02F, -3.0F).to(16.0F, 16.02F, 0.0F)
+//			.face(Direction.UP).texture("#texture").uvs(0, 13.0f, 16.0f, 16.0f).tintindex(0).end()
+//			.face(Direction.DOWN).texture("#texture").uvs(0, 16.0f, 16.0f, 13.0f).tintindex(0).end().end();
 		
+		// Add the edge model to every edge
 		for (Direction dir : MistBridgeBlock.PROPERTY_BY_DIRECTION.keySet()) {
-			builder.part().modelFile(edgeFile)
-				.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isVertical() ? 270 : 0)
-				.rotationY(dir.getAxis().isHorizontal() ? (int) dir.getOpposite().toYRot() : 0).addModel()
-				.condition(PipeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
+			if (!dir.getAxis().isHorizontal()) continue;
+			ModelFile edgeModel = mistBridgeEdge(block.getId().withSuffix("_" + dir.getSerializedName()), this.blockTexture(block.get()).withSuffix(dir.getAxis() == Axis.X ? "_vertical" : "_horizontal"), dir)
+					.ao(false)
+					.renderType("translucent");
+			builder.part().modelFile(edgeModel)
+//				.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isVertical() ? 270 : 0)
+//				.rotationY(dir.getAxis().isHorizontal() ? (int) dir.getOpposite().toYRot() : 0)
+				.addModel()
+				.condition(MistBridgeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
 		}
 		
 		this.simpleBlockItem(block);
