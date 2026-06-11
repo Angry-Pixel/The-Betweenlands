@@ -5,6 +5,9 @@
     {
       "faces": {
         "down": {
+          "neoforge_data": {
+            "ambient_occlusion": false
+          },
           "texture": "#texture",
           "tintindex": 0,
           "uv": [
@@ -15,6 +18,9 @@
           ]
         },
         "up": {
+          "neoforge_data": {
+            "ambient_occlusion": false
+          },
           "texture": "#texture",
           "tintindex": 0,
           "uv": [

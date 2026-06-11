@@ -3,6 +3,7 @@ package thebetweenlands.common.datagen;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
@@ -1277,7 +1278,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 	
 	// Different models for each edge because the texture is different
-	private BlockModelBuilder mistBridgeEdge(ResourceLocation modelId, ResourceLocation textureId, Direction direction) {
+	private BlockModelBuilder mistBridgeEdge(ResourceLocation modelId, ResourceLocation textureId, Direction direction, boolean ao) {
 		final Axis axis = direction.getAxis();
 		final AxisDirection axisDirection = direction.getAxisDirection();
 		assert axis.isHorizontal() && (axis == Axis.X || axis == Axis.Z);
@@ -1298,11 +1299,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 						.texture("#texture")
 						.uvs(u0, v0, u1, v1)
 						.tintindex(0)
+						.ao(ao)
 					.end()
 					.face(Direction.DOWN)
 						.texture("#texture")
-						.uvs(u0, v1, u1, v0)
+						.uvs(u0, v1, u1, v0) // Flipped uvs
 						.tintindex(0)
+						.ao(ao)
 					.end()
 				.end();
 	}
@@ -1317,25 +1320,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		var builder = this.getMultipartBuilder(block.get())
 				.part().modelFile(file).addModel().end();
 		
-//		// Edge model
-//		ModelFile edgeFile = this.models().withExistingParent(block.getId().withSuffix("_edge").getPath(), this.mcLoc("block/thin_block"))
-//			.texture("particle", this.blockTexture(block.get()))
-//			.texture("texture", this.blockTexture(block.get()).withSuffix("_horizontal"))
-//			.ao(false)
-//			.renderType("translucent")
-//			.element().from(0.0F, 16.02F, -3.0F).to(16.0F, 16.02F, 0.0F)
-//			.face(Direction.UP).texture("#texture").uvs(0, 13.0f, 16.0f, 16.0f).tintindex(0).end()
-//			.face(Direction.DOWN).texture("#texture").uvs(0, 16.0f, 16.0f, 13.0f).tintindex(0).end().end();
-		
 		// Add the edge model to every edge
 		for (Direction dir : MistBridgeBlock.PROPERTY_BY_DIRECTION.keySet()) {
 			if (!dir.getAxis().isHorizontal()) continue;
-			ModelFile edgeModel = mistBridgeEdge(block.getId().withSuffix("_" + dir.getSerializedName()), this.blockTexture(block.get()).withSuffix(dir.getAxis() == Axis.X ? "_vertical" : "_horizontal"), dir)
+			ModelFile edgeModel = mistBridgeEdge(block.getId().withSuffix("_" + dir.getSerializedName()), this.blockTexture(block.get()).withSuffix(dir.getAxis() == Axis.X ? "_vertical" : "_horizontal"), dir, false)
 					.ao(false)
 					.renderType("translucent");
 			builder.part().modelFile(edgeModel)
-//				.rotationX(dir == Direction.DOWN ? 90 : dir.getAxis().isVertical() ? 270 : 0)
-//				.rotationY(dir.getAxis().isHorizontal() ? (int) dir.getOpposite().toYRot() : 0)
 				.addModel()
 				.condition(MistBridgeBlock.PROPERTY_BY_DIRECTION.get(dir), true);
 		}
