@@ -32,7 +32,7 @@ public class MistStaffItem extends Item implements BigSwingAnimation {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		BlockPos pos = player.blockPosition().below().offset(1, 0, 1);
+		BlockPos pos = player.blockPosition().below();
 		BlockState blockStart = level.getBlockState(pos);
 
 		if (player.getCooldowns().isOnCooldown(this))
@@ -44,7 +44,7 @@ public class MistStaffItem extends Item implements BigSwingAnimation {
 				stack.hurtAndBreak(2, player, EquipmentSlot.MAINHAND);
 				
 				float direction = Mth.DEG_TO_RAD * player.getYRot();
-				Vec3 diag = new Vec3(Mth.sin((float) (direction + Mth.HALF_PI)), 0, Mth.cos(direction + Mth.HALF_PI)).normalize();
+				Vec3 diag = new Vec3(Mth.cos(direction), 0, -Mth.sin(direction)).normalize();
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
 				List<BlockPos> convertPos = new ArrayList<BlockPos>();
 				List<Integer> blockDistance = new ArrayList<Integer>();
@@ -52,9 +52,9 @@ public class MistStaffItem extends Item implements BigSwingAnimation {
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
 						for (int yo = 0; yo <= 1; yo++) {
-							int originX = Mth.floor(pos.getX() - 0.5D - Mth.sin(direction) * distance - diag.x * distance2 * 0.25D);
+							int originX = Mth.floor(pos.getX() + 0.5D - Mth.sin(direction) * distance - diag.x * distance2 * 0.25D);
 							int originY = pos.getY();
-							int originZ = Mth.floor(pos.getZ() - 0.5D + Mth.cos(direction) * distance + diag.z * distance2 * 0.25D);
+							int originZ = Mth.floor(pos.getZ() + 0.5D + Mth.cos(direction) * distance + diag.z * distance2 * 0.25D);
 							BlockPos origin = new BlockPos(originX, originY, originZ);
 
 							if (spawnedPos.contains(origin))

@@ -78,12 +78,12 @@ public class MistBridgeEntity extends Entity implements BLEntity {
 
 				if (matchDistance >= 16)
 					remove(RemovalReason.DISCARDED);
-			}	
+			}
 
 			if (tickCount > 1) {
 				if(isMist()) {
 					BlockState state = level().getBlockState(blockPosition());
-					if(state.is(BlockRegistry.MIST_BRIDGE) || state.is(BlockRegistry.MIST_BRIDGE) && !state.getValue(MistBridgeBlock.SOLID) || tickCount >= 200) {
+					if(!state.is(BlockRegistry.MIST_BRIDGE) || state.is(BlockRegistry.MIST_BRIDGE) && !state.getValue(MistBridgeBlock.SOLID) || tickCount >= 200) {
 						if(!startRetraction)
 							level().playSound(null, blockPosition(), SoundRegistry.MIST_STAFF_VANISH.get(), SoundSource.BLOCKS, 1F, 1.0F);
 						startRetraction = true;
