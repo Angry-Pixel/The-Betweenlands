@@ -241,16 +241,13 @@ public final class GunkData {
 		
 		// Entity.getPosition(partialTicks) seems to mostly be client-side
 		
-		// TODO need a better way of tracking the player's position last tick, because this is insufficient
-		// Where the player was at the start of this tick
-//		Vec3 oldPlayerPos = new Vec3(player.xo, player.yo, player.zo);
-		Vec3 oldPlayerPos = new Vec3(player.xOld, player.yOld, player.zOld);
 		// Where the player was at the end of this tick
 		Vec3 playerPos = player.position();
-//		Vec3 playerPos = new Vec3(player.getX(), player.getY(), player.getZ());
 		
-		// How the player moved to get from where they were to where they are
-		Vec3 deltaMovement = oldPlayerPos.vectorTo(playerPos);
+		// How the player moved to get from where they were last tick to where they are this tick
+		Vec3 deltaMovement = player.getKnownMovement();
+		
+		Vec3 oldPlayerPos = playerPos.subtract(deltaMovement);
 
 //		TheBetweenlands.LOGGER.info("Water plant begin; movement magnitude sq = {} (valid {})", deltaMovement.lengthSqr(), deltaMovement.lengthSqr() >= 1.0E-4 * 1.0E-4);
 		// If the player hasn't significantly moved, do nothing
@@ -268,9 +265,7 @@ public final class GunkData {
 		//       that is, someone 10x the size should gain less gunk for the same movement through a single block because they are bigger
 		
 		// Currently, we assume the bounding box size has not changed since the start of this tick
-		AABB oldBounds = localBounds.move(oldPlayerPos);
-		AABB newBounds = localBounds.move(playerPos);
-		AABB totalBounds = oldBounds.minmax(newBounds);
+		AABB totalBounds = localBounds.move(playerPos).expandTowards(deltaMovement.reverse());
 //		AABB totalBounds = oldBounds.expandTowards(deltaMovement);
 		
 		// We want to:
