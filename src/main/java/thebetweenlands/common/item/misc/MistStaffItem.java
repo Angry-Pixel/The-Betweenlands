@@ -75,7 +75,7 @@ public class MistStaffItem extends Item implements BigSwingAnimation {
 				
 				spawnEntity(level, pos, blockDistance, convertPos);
 				level.playSound(null, pos, SoundRegistry.MIST_STAFF_CAST.get(), SoundSource.BLOCKS, 1F, 1.0F);
-				player.getCooldowns().addCooldown(this, 200);
+				player.getCooldowns().addCooldown(this, player.isCreative() ? 10 : 200);
 			}
 			
 			player.swing(hand);
