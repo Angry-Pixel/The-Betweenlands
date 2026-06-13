@@ -107,6 +107,27 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		return progress / (float)this.getFuelBurnTime();
 	}
 	
+	protected int getVisualFuelBurnValue() {
+		int requiredFuel = this.getRecipeFuelRequired();
+		
+		// Don't do anything special if there is no recipe
+		if(requiredFuel <= 0) {
+			return this.getFuelBurnValue();
+		}
+		
+		int consumedFuel = this.getFuelConsumed();
+		int remainingFuel = requiredFuel - consumedFuel;
+		
+		int fuelBurnValue = this.getFuelBurnValue();
+		
+		return Math.min(fuelBurnValue, remainingFuel);
+	}
+	
+	/**
+	 * Returns a visual percentage of recipe progress, to be displayed by the animator screen
+	 * @param partialTick
+	 * @return
+	 */
 	public float getTotalBurnProgress(float partialTick) {
 		int requiredFuel = this.getRecipeFuelRequired();
 
@@ -116,7 +137,7 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		}
 		
 		int consumedFuel = this.getFuelConsumed();
-		float partiallyConsumedFuel = this.getFuelBurnPercentage(partialTick) * this.getFuelBurnValue();
+		float partiallyConsumedFuel = this.getFuelBurnPercentage(partialTick) * this.getVisualFuelBurnValue();
 		float totalProgress = consumedFuel + partiallyConsumedFuel;
 
 		if(totalProgress >= requiredFuel) {
