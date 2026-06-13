@@ -1,0 +1,34 @@
+{
+  "parent": "thebetweenlands:block/flat_head_mushroom_1",
+  "display": {
+    "gui": {
+      "translation": [0, 1.6, 0],
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "ground": {
+      "translation": [0, 1.8, 0],
+      "scale": [0.8, 0.8, 0.8]
+    },
+    "fixed": {
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "thirdperson_righthand": {
+      "translation": [0, 5.6, 2.4],
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "thirdperson_lefthand": {
+      "translation": [0, 5.6, 2.4],
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 5.6, 0],
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, -315, 0],
+      "translation": [0, 5.6, 0],
+      "scale": [0.75, 0.75, 0.75]
+    }
+  }
+}

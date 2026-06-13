@@ -97,7 +97,24 @@ import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
+import thebetweenlands.client.model.baked.swampplant.SwampPlantModelLoader;
+import thebetweenlands.client.model.baked.bulbcappedmushroom.BulbCappedMushroomModelLoader;
+import thebetweenlands.client.model.baked.flatheadmushroom1.FlatHeadMushroom1ModelLoader;
+import thebetweenlands.client.model.baked.flatheadmushroom2.FlatHeadMushroom2ModelLoader;
+
+
+import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
+
+import thebetweenlands.client.model.baked.venusflytrap.VenusFlyTrapModelLoader;
+import thebetweenlands.client.model.baked.pitcherplant.PitcherPlantModelLoader;
+import thebetweenlands.client.model.baked.weepingblue.WeepingBlueModelLoader;
+import thebetweenlands.client.model.baked.sundew.SundewModelLoader;
+import thebetweenlands.client.model.baked.volarpad.VolarpadModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
@@ -964,6 +981,18 @@ public class ClientRegistrationEvents {
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("bush"), BushModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("swamp_plant"), SwampPlantModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("black_hat_mushroom_1"), BlackHatMushroom1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("black_hat_mushroom_2"), BlackHatMushroom2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("black_hat_mushroom_3"), BlackHatMushroom3ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("slant"), SlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);

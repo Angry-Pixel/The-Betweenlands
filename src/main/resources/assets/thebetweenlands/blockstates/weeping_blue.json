@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=lower": [
+      { "model": "thebetweenlands:block/weeping_blue" },
+      { "model": "thebetweenlands:block/weeping_blue", "y": 90 },
+      { "model": "thebetweenlands:block/weeping_blue", "y": 180 },
+      { "model": "thebetweenlands:block/weeping_blue", "y": 270 }
+    ],
+    "half=upper": {
+      "model": "thebetweenlands:block/weeping_blue_top"
+    }
+  }
+}

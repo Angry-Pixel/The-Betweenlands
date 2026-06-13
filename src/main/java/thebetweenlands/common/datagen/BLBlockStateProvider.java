@@ -59,8 +59,7 @@ import thebetweenlands.common.block.structure.TreePortalBlock;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
 import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
-import thebetweenlands.common.datagen.builders.model.BushModelBuilder;
-import thebetweenlands.common.datagen.builders.model.SlantModelBuilder;
+import thebetweenlands.common.datagen.builders.model.*;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BLBlockStateProvider extends BlockStateProvider {
@@ -989,6 +988,15 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlock(BlockRegistry.SWAMP_KELP_PLANT);
 		this.crossBlock(BlockRegistry.SWAMP_KELP);
 		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
+		this.swampPlant(BlockRegistry.SWAMP_PLANT);
+		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
+		this.pitcherPlant(BlockRegistry.PITCHER_PLANT);
+		this.weepingBlue(BlockRegistry.WEEPING_BLUE);
+		this.sundew(BlockRegistry.SUNDEW);
+		this.volarpad(BlockRegistry.VOLARPAD);
+		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
+		this.flatHeadMushroom(BlockRegistry.FLATHEAD_MUSHROOM);
+		this.blackHatMushroom(BlockRegistry.BLACK_HAT_MUSHROOM);
 
 		this.flowerPot(BlockRegistry.POTTED_WEEDWOOD_SAPLING);
 		this.flowerPot(BlockRegistry.POTTED_SAP_SAPLING);
@@ -1372,6 +1380,42 @@ public class BLBlockStateProvider extends BlockStateProvider {
 
 	public void bush(DeferredBlock<Block> bush, ResourceLocation leaves, ResourceLocation stick) {
 		this.simpleBlockWithItem(bush.get(), this.models().withExistingParent(bush.getId().getPath(), "block/block").customLoader(BushModelBuilder::begin).end().texture("leaves", leaves).texture("sticks", stick));
+	}
+
+	public void swampPlant(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(SwampPlantModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void venusFlyTrap(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(VenusFlyTrapModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+	
+	public void pitcherPlant(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(PitcherPlantModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void weepingBlue(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(WeepingBlueModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void sundew(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(SundewModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void volarpad(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(VolarpadModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void bulbCappedMushroom(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(BulbCappedMushroomModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void flatHeadMushroom(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(FlatHeadMushroomModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
+	}
+
+	public void blackHatMushroom(DeferredBlock<Block> block) {
+		this.simpleBlockWithItem(block.get(), this.models().withExistingParent(block.getId().getPath(), "block/block").customLoader(BlackHatMushroomModelBuilder::begin).end().texture("texture", this.blockTexture(block.get())));
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {

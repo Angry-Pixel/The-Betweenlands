@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:volarpad",
+  "textures": {
+    "texture": "thebetweenlands:block/volarpad_1",
+    "particle": "thebetweenlands:block/particle/volarpad_particle"
+  }
+}

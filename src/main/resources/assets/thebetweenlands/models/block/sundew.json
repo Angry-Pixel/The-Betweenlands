@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:sundew",
+  "textures": {
+    "texture": "thebetweenlands:block/sundew",
+    "particle": "thebetweenlands:block/particle/sundew_particle"
+  }
+}
