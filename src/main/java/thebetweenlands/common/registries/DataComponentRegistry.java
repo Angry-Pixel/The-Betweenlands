@@ -23,6 +23,7 @@ import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.*;
+import thebetweenlands.common.datamap.item.AnimatorFuel;
 
 public class DataComponentRegistry {
 
@@ -72,7 +73,8 @@ public class DataComponentRegistry {
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> LIFE_POWER = COMPONENTS.register("life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_LIFE_POWER = COMPONENTS.register("max_life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
-	
+
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AnimatorFuel>> ANIMATOR_FUEL = COMPONENTS.register("animator_fuel", () -> DataComponentType.<AnimatorFuel>builder().persistent(AnimatorFuel.CODEC).networkSynchronized(AnimatorFuel.STREAM_CODEC).build());
 	// Transient Component
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_ITEM_UUID = COMPONENTS.register("inventory_item_uuid", () -> DataComponentType.<UUID>builder().networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 }

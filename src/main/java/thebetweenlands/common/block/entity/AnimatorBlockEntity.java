@@ -45,6 +45,7 @@ import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.inventory.AnimatorMenu;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -210,7 +211,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity implements Wor
 	
 	@Nullable
 	public static AnimatorFuel getAnimatorFuel(ItemStack stack) {
-		return stack.getItemHolder().getData(DataMapRegistry.ANIMATOR_FUEL);
+		return stack.has(DataComponentRegistry.ANIMATOR_FUEL) ? stack.get(DataComponentRegistry.ANIMATOR_FUEL) : stack.getItemHolder().getData(DataMapRegistry.ANIMATOR_FUEL);
 	}
 	
 	public boolean isValidLifeCrystal(ItemStack stack) {
