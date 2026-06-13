@@ -16,6 +16,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.util.QuadBuilder;
 
+import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class BulbCappedMushroomModel implements IDynamicBakedModel {
 
     private final TextureAtlasSprite texture;
     private final ItemTransforms transforms;
-    private final List<BakedQuad> quads;
+    private final List<BakedQuad> stalkQuads;
+    private final List<BakedQuad> capQuads;
 
     public BulbCappedMushroomModel(TextureAtlasSprite texture, ItemTransforms transforms, Transformation identity) {
         this.texture = texture;
@@ -33,18 +35,21 @@ public class BulbCappedMushroomModel implements IDynamicBakedModel {
                 .setTransformation(identity)
                 .setSprite(texture)
                 .setTintIndex(-1);
-        BulbCappedMushroomGeometry.build(builder);
-
-        this.quads = builder.build().nonCulledQuads;
+        BulbCappedMushroomGeometry.buildStalks(builder);
+        this.stalkQuads = builder.build().nonCulledQuads;
+        BulbCappedMushroomGeometry.buildCaps(builder); //vertices are cleared when built, so might as well reuse the builder
+        this.capQuads = builder.build().nonCulledQuads;
     }
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand,
             ModelData extraData, @Nullable RenderType renderType) {
-        if (side == null) {
-            return this.quads;
-        }
-        return Collections.emptyList();
+        if (side != null) return Collections.emptyList();
+
+        if (renderType == RenderType.translucent()) return this.capQuads;
+        if (renderType == RenderType.cutout()) return this.stalkQuads;
+
+        return new CompositeList<>(this.stalkQuads, this.capQuads);
     }
 
     @Override
@@ -84,6 +89,30 @@ public class BulbCappedMushroomModel implements IDynamicBakedModel {
 
     @Override
     public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data) {
-        return ChunkRenderTypeSet.of(RenderType.cutout());
+        return ChunkRenderTypeSet.of(RenderType.cutout(), RenderType.translucent());
     }
+
+    private static class CompositeList<E> extends AbstractList<E> {
+		private final List<E> list1;
+		private final List<E> list2;
+
+		public CompositeList(List<E> list1, List<E> list2) {
+			this.list1 = list1;
+			this.list2 = list2;
+		}
+
+		@Override
+		public E get(int index) {
+			if (index < this.list1.size()) {
+				return this.list1.get(index);
+			}
+			return this.list2.get(index - this.list1.size());
+		}
+
+		@Override
+		public int size() {
+			return this.list1.size() + this.list2.size();
+		}
+	}
+
 }

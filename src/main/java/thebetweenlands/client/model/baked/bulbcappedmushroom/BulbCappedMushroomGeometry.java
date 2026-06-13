@@ -11,7 +11,7 @@ public final class BulbCappedMushroomGeometry {
 	private BulbCappedMushroomGeometry() {
 	}
 
-	public static void build(QuadBuilder builder) {
+	public static void buildCaps(QuadBuilder builder) {
 		//cap1
 		builder.addVertex(0.725577F, 0.405101F, 0.663241F, 3F, 1.5F);
 		builder.addVertex(0.905145F, 0.397778F, 0.7167F, 3.75F, 1.5F);
@@ -62,31 +62,6 @@ public final class BulbCappedMushroomGeometry {
 		builder.addVertex(0.478447F, 0.150319F, 0.351254F, 6.25F, 10F);
 		builder.addVertex(0.479221F, 0.15039F, 0.538753F, 5.5F, 10F);
 		builder.addVertex(0.470665F, 0.337695F, 0.538717F, 5.5F, 8.5F);
-		//stalk1
-		builder.addVertex(0.74458F, 0.261486F, 0.706314F, 0.5F, 1F);
-		builder.addVertex(0.862958F, 0.239695F, 0.740034F, 1F, 1F);
-		builder.addVertex(0.809256F, -0.128165F, 0.69084F, 1F, 4F);
-		builder.addVertex(0.690879F, -0.106375F, 0.65712F, 0.5F, 4F);
-		builder.addVertex(0.708644F, 0.250785F, 0.825558F, 1.5F, 1F);
-		builder.addVertex(0.654943F, -0.117075F, 0.776364F, 1.5F, 4F);
-		builder.addVertex(0.77332F, -0.138865F, 0.810084F, 1F, 4F);
-		builder.addVertex(0.827021F, 0.228995F, 0.859278F, 1F, 1F);
-		builder.addVertex(0.690879F, -0.106375F, 0.65712F, 1F, 1F);
-		builder.addVertex(0.809256F, -0.128165F, 0.69084F, 1.5F, 1F);
-		builder.addVertex(0.77332F, -0.138865F, 0.810084F, 1.5F, 0F);
-		builder.addVertex(0.654943F, -0.117075F, 0.776364F, 1F, 0F);
-		builder.addVertex(0.74458F, 0.261486F, 0.706314F, 0.5F, 1F);
-		builder.addVertex(0.708644F, 0.250785F, 0.825558F, 0.5F, 0F);
-		builder.addVertex(0.827021F, 0.228995F, 0.859278F, 1F, 0F);
-		builder.addVertex(0.862958F, 0.239695F, 0.740034F, 1F, 1F);
-		builder.addVertex(0.862958F, 0.239695F, 0.740034F, 1F, 1F);
-		builder.addVertex(0.827021F, 0.228995F, 0.859278F, 1.5F, 1F);
-		builder.addVertex(0.77332F, -0.138865F, 0.810084F, 1.5F, 4F);
-		builder.addVertex(0.809256F, -0.128165F, 0.69084F, 1F, 4F);
-		builder.addVertex(0.74458F, 0.261486F, 0.706314F, 0.5F, 1F);
-		builder.addVertex(0.690879F, -0.106375F, 0.65712F, 0.5F, 4F);
-		builder.addVertex(0.654943F, -0.117075F, 0.776364F, 0F, 4F);
-		builder.addVertex(0.708644F, 0.250785F, 0.825558F, 0F, 1F);
 		//cap4
 		builder.addVertex(0.730823F, 0.268534F, 0.116114F, 6.25F, 5F);
 		builder.addVertex(0.906636F, 0.261181F, 0.051369F, 7F, 5F);
@@ -112,31 +87,6 @@ public final class BulbCappedMushroomGeometry {
 		builder.addVertex(0.731816F, 0.082555F, 0.139932F, 6.25F, 6.5F);
 		builder.addVertex(0.79697F, 0.105232F, 0.31428F, 5.5F, 6.5F);
 		builder.addVertex(0.795976F, 0.29121F, 0.290462F, 5.5F, 5F);
-		//stalk2
-		builder.addVertex(0.274662F, 0.109488F, 0.105789F, 0.5F, 5.5F);
-		builder.addVertex(0.399015F, 0.120849F, 0.111481F, 1F, 5.5F);
-		builder.addVertex(0.420003F, -0.125934F, 0.145505F, 1F, 7.5F);
-		builder.addVertex(0.295651F, -0.137295F, 0.139812F, 0.5F, 7.5F);
-		builder.addVertex(0.267497F, 0.125934F, 0.229495F, 1.5F, 5.5F);
-		builder.addVertex(0.288485F, -0.120849F, 0.263519F, 1.5F, 7.5F);
-		builder.addVertex(0.412838F, -0.109488F, 0.269211F, 1F, 7.5F);
-		builder.addVertex(0.391849F, 0.137295F, 0.235188F, 1F, 5.5F);
-		builder.addVertex(0.295651F, -0.137295F, 0.139812F, 1F, 5.5F);
-		builder.addVertex(0.420003F, -0.125934F, 0.145505F, 1.5F, 5.5F);
-		builder.addVertex(0.412838F, -0.109488F, 0.269211F, 1.5F, 4.5F);
-		builder.addVertex(0.288485F, -0.120849F, 0.263519F, 1F, 4.5F);
-		builder.addVertex(0.274662F, 0.109488F, 0.105789F, 0.5F, 5.5F);
-		builder.addVertex(0.267497F, 0.125934F, 0.229495F, 0.5F, 4.5F);
-		builder.addVertex(0.391849F, 0.137295F, 0.235188F, 1F, 4.5F);
-		builder.addVertex(0.399015F, 0.120849F, 0.111481F, 1F, 5.5F);
-		builder.addVertex(0.399015F, 0.120849F, 0.111481F, 1F, 5.5F);
-		builder.addVertex(0.391849F, 0.137295F, 0.235188F, 1.5F, 5.5F);
-		builder.addVertex(0.412838F, -0.109488F, 0.269211F, 1.5F, 7.5F);
-		builder.addVertex(0.420003F, -0.125934F, 0.145505F, 1F, 7.5F);
-		builder.addVertex(0.274662F, 0.109488F, 0.105789F, 0.5F, 5.5F);
-		builder.addVertex(0.295651F, -0.137295F, 0.139812F, 0.5F, 7.5F);
-		builder.addVertex(0.288485F, -0.120849F, 0.263519F, 0F, 7.5F);
-		builder.addVertex(0.267497F, 0.125934F, 0.229495F, 0F, 5.5F);
 		//cap8
 		builder.addVertex(0.381025F, 0.162316F, 0.80514F, 9.5F, 1.5F);
 		builder.addVertex(0.558899F, 0.170424F, 0.746391F, 10.25F, 1.5F);
@@ -212,31 +162,6 @@ public final class BulbCappedMushroomGeometry {
 		builder.addVertex(0.151562F, 0.154982F, 0.635243F, 6.25F, 3F);
 		builder.addVertex(0.128429F, 0.152764F, 0.821297F, 5.5F, 3F);
 		builder.addVertex(0.128126F, 0.34025F, 0.823496F, 5.5F, 1.5F);
-		//stalk4
-		builder.addVertex(0.77518F, 0.117867F, 0.149159F, 0.5F, 13F);
-		builder.addVertex(0.891924F, 0.096377F, 0.109992F, 1F, 13F);
-		builder.addVertex(0.869125F, -0.144202F, 0.174037F, 1F, 15F);
-		builder.addVertex(0.752381F, -0.122713F, 0.213203F, 0.5F, 15F);
-		builder.addVertex(0.818375F, 0.144202F, 0.263463F, 1.5F, 13F);
-		builder.addVertex(0.795576F, -0.096377F, 0.327508F, 1.5F, 15F);
-		builder.addVertex(0.91232F, -0.117867F, 0.288341F, 1F, 15F);
-		builder.addVertex(0.935119F, 0.122713F, 0.224297F, 1F, 13F);
-		builder.addVertex(0.752381F, -0.122713F, 0.213203F, 1F, 13F);
-		builder.addVertex(0.869125F, -0.144202F, 0.174037F, 1.5F, 13F);
-		builder.addVertex(0.91232F, -0.117867F, 0.288341F, 1.5F, 12F);
-		builder.addVertex(0.795576F, -0.096377F, 0.327508F, 1F, 12F);
-		builder.addVertex(0.77518F, 0.117867F, 0.149159F, 0.5F, 13F);
-		builder.addVertex(0.818375F, 0.144202F, 0.263463F, 0.5F, 12F);
-		builder.addVertex(0.935119F, 0.122713F, 0.224297F, 1F, 12F);
-		builder.addVertex(0.891924F, 0.096377F, 0.109992F, 1F, 13F);
-		builder.addVertex(0.891924F, 0.096377F, 0.109992F, 1F, 13F);
-		builder.addVertex(0.935119F, 0.122713F, 0.224297F, 1.5F, 13F);
-		builder.addVertex(0.91232F, -0.117867F, 0.288341F, 1.5F, 15F);
-		builder.addVertex(0.869125F, -0.144202F, 0.174037F, 1F, 15F);
-		builder.addVertex(0.77518F, 0.117867F, 0.149159F, 0.5F, 13F);
-		builder.addVertex(0.752381F, -0.122713F, 0.213203F, 0.5F, 15F);
-		builder.addVertex(0.795576F, -0.096377F, 0.327508F, 0F, 15F);
-		builder.addVertex(0.818375F, 0.144202F, 0.263463F, 0F, 13F);
 		//cap7
 		builder.addVertex(0.729166F, 0.110299F, 0.489741F, 6F, 14F);
 		builder.addVertex(0.85007F, 0.088043F, 0.467111F, 6.5F, 14F);
@@ -262,31 +187,6 @@ public final class BulbCappedMushroomGeometry {
 		builder.addVertex(0.704606F, -0.011753F, 0.478556F, 6F, 15F);
 		builder.addVertex(0.72471F, -0.027017F, 0.600981F, 5.5F, 15F);
 		builder.addVertex(0.749271F, 0.095035F, 0.612165F, 5.5F, 14F);
-		//stalk3
-		builder.addVertex(0.1756F, 0.188278F, 0.674201F, 0.5F, 9F);
-		builder.addVertex(0.298921F, 0.199545F, 0.69123F, 1F, 9F);
-		builder.addVertex(0.332863F, -0.10823F, 0.649054F, 1F, 11.5F);
-		builder.addVertex(0.209542F, -0.119496F, 0.632025F, 0.5F, 11.5F);
-		builder.addVertex(0.160349F, 0.169785F, 0.796881F, 1.5F, 9F);
-		builder.addVertex(0.194291F, -0.13799F, 0.754705F, 1.5F, 11.5F);
-		builder.addVertex(0.317612F, -0.126723F, 0.771734F, 1F, 11.5F);
-		builder.addVertex(0.28367F, 0.181051F, 0.81391F, 1F, 9F);
-		builder.addVertex(0.209542F, -0.119496F, 0.632025F, 1F, 9F);
-		builder.addVertex(0.332863F, -0.10823F, 0.649054F, 1.5F, 9F);
-		builder.addVertex(0.317612F, -0.126723F, 0.771734F, 1.5F, 8F);
-		builder.addVertex(0.194291F, -0.13799F, 0.754705F, 1F, 8F);
-		builder.addVertex(0.1756F, 0.188278F, 0.674201F, 0.5F, 9F);
-		builder.addVertex(0.160349F, 0.169785F, 0.796881F, 0.5F, 8F);
-		builder.addVertex(0.28367F, 0.181051F, 0.81391F, 1F, 8F);
-		builder.addVertex(0.298921F, 0.199545F, 0.69123F, 1F, 9F);
-		builder.addVertex(0.298921F, 0.199545F, 0.69123F, 1F, 9F);
-		builder.addVertex(0.28367F, 0.181051F, 0.81391F, 1.5F, 9F);
-		builder.addVertex(0.317612F, -0.126723F, 0.771734F, 1.5F, 11.5F);
-		builder.addVertex(0.332863F, -0.10823F, 0.649054F, 1F, 11.5F);
-		builder.addVertex(0.1756F, 0.188278F, 0.674201F, 0.5F, 9F);
-		builder.addVertex(0.209542F, -0.119496F, 0.632025F, 0.5F, 11.5F);
-		builder.addVertex(0.194291F, -0.13799F, 0.754705F, 0F, 11.5F);
-		builder.addVertex(0.160349F, 0.169785F, 0.796881F, 0F, 9F);
 		//cap2
 		builder.addVertex(0.248007F, 0.275994F, 0.068163F, 3F, 5F);
 		builder.addVertex(0.435194F, 0.276125F, 0.078988F, 3.75F, 5F);
@@ -312,6 +212,109 @@ public final class BulbCappedMushroomGeometry {
 		builder.addVertex(0.247696F, 0.08865F, 0.075814F, 3F, 6.5F);
 		builder.addVertex(0.236875F, 0.096306F, 0.262845F, 2.25F, 6.5F);
 		builder.addVertex(0.237186F, 0.28365F, 0.255194F, 2.25F, 5F);
+	}
+
+	public static void buildStalks(QuadBuilder builder) {
+		//stalk1
+		builder.addVertex(0.74458F, 0.261486F, 0.706314F, 0.5F, 1F);
+		builder.addVertex(0.862958F, 0.239695F, 0.740034F, 1F, 1F);
+		builder.addVertex(0.809256F, -0.128165F, 0.69084F, 1F, 4F);
+		builder.addVertex(0.690879F, -0.106375F, 0.65712F, 0.5F, 4F);
+		builder.addVertex(0.708644F, 0.250785F, 0.825558F, 1.5F, 1F);
+		builder.addVertex(0.654943F, -0.117075F, 0.776364F, 1.5F, 4F);
+		builder.addVertex(0.77332F, -0.138865F, 0.810084F, 1F, 4F);
+		builder.addVertex(0.827021F, 0.228995F, 0.859278F, 1F, 1F);
+		builder.addVertex(0.690879F, -0.106375F, 0.65712F, 1F, 1F);
+		builder.addVertex(0.809256F, -0.128165F, 0.69084F, 1.5F, 1F);
+		builder.addVertex(0.77332F, -0.138865F, 0.810084F, 1.5F, 0F);
+		builder.addVertex(0.654943F, -0.117075F, 0.776364F, 1F, 0F);
+		builder.addVertex(0.74458F, 0.261486F, 0.706314F, 0.5F, 1F);
+		builder.addVertex(0.708644F, 0.250785F, 0.825558F, 0.5F, 0F);
+		builder.addVertex(0.827021F, 0.228995F, 0.859278F, 1F, 0F);
+		builder.addVertex(0.862958F, 0.239695F, 0.740034F, 1F, 1F);
+		builder.addVertex(0.862958F, 0.239695F, 0.740034F, 1F, 1F);
+		builder.addVertex(0.827021F, 0.228995F, 0.859278F, 1.5F, 1F);
+		builder.addVertex(0.77332F, -0.138865F, 0.810084F, 1.5F, 4F);
+		builder.addVertex(0.809256F, -0.128165F, 0.69084F, 1F, 4F);
+		builder.addVertex(0.74458F, 0.261486F, 0.706314F, 0.5F, 1F);
+		builder.addVertex(0.690879F, -0.106375F, 0.65712F, 0.5F, 4F);
+		builder.addVertex(0.654943F, -0.117075F, 0.776364F, 0F, 4F);
+		builder.addVertex(0.708644F, 0.250785F, 0.825558F, 0F, 1F);
+		//stalk2
+		builder.addVertex(0.274662F, 0.109488F, 0.105789F, 0.5F, 5.5F);
+		builder.addVertex(0.399015F, 0.120849F, 0.111481F, 1F, 5.5F);
+		builder.addVertex(0.420003F, -0.125934F, 0.145505F, 1F, 7.5F);
+		builder.addVertex(0.295651F, -0.137295F, 0.139812F, 0.5F, 7.5F);
+		builder.addVertex(0.267497F, 0.125934F, 0.229495F, 1.5F, 5.5F);
+		builder.addVertex(0.288485F, -0.120849F, 0.263519F, 1.5F, 7.5F);
+		builder.addVertex(0.412838F, -0.109488F, 0.269211F, 1F, 7.5F);
+		builder.addVertex(0.391849F, 0.137295F, 0.235188F, 1F, 5.5F);
+		builder.addVertex(0.295651F, -0.137295F, 0.139812F, 1F, 5.5F);
+		builder.addVertex(0.420003F, -0.125934F, 0.145505F, 1.5F, 5.5F);
+		builder.addVertex(0.412838F, -0.109488F, 0.269211F, 1.5F, 4.5F);
+		builder.addVertex(0.288485F, -0.120849F, 0.263519F, 1F, 4.5F);
+		builder.addVertex(0.274662F, 0.109488F, 0.105789F, 0.5F, 5.5F);
+		builder.addVertex(0.267497F, 0.125934F, 0.229495F, 0.5F, 4.5F);
+		builder.addVertex(0.391849F, 0.137295F, 0.235188F, 1F, 4.5F);
+		builder.addVertex(0.399015F, 0.120849F, 0.111481F, 1F, 5.5F);
+		builder.addVertex(0.399015F, 0.120849F, 0.111481F, 1F, 5.5F);
+		builder.addVertex(0.391849F, 0.137295F, 0.235188F, 1.5F, 5.5F);
+		builder.addVertex(0.412838F, -0.109488F, 0.269211F, 1.5F, 7.5F);
+		builder.addVertex(0.420003F, -0.125934F, 0.145505F, 1F, 7.5F);
+		builder.addVertex(0.274662F, 0.109488F, 0.105789F, 0.5F, 5.5F);
+		builder.addVertex(0.295651F, -0.137295F, 0.139812F, 0.5F, 7.5F);
+		builder.addVertex(0.288485F, -0.120849F, 0.263519F, 0F, 7.5F);
+		builder.addVertex(0.267497F, 0.125934F, 0.229495F, 0F, 5.5F);
+		//stalk4
+		builder.addVertex(0.77518F, 0.117867F, 0.149159F, 0.5F, 13F);
+		builder.addVertex(0.891924F, 0.096377F, 0.109992F, 1F, 13F);
+		builder.addVertex(0.869125F, -0.144202F, 0.174037F, 1F, 15F);
+		builder.addVertex(0.752381F, -0.122713F, 0.213203F, 0.5F, 15F);
+		builder.addVertex(0.818375F, 0.144202F, 0.263463F, 1.5F, 13F);
+		builder.addVertex(0.795576F, -0.096377F, 0.327508F, 1.5F, 15F);
+		builder.addVertex(0.91232F, -0.117867F, 0.288341F, 1F, 15F);
+		builder.addVertex(0.935119F, 0.122713F, 0.224297F, 1F, 13F);
+		builder.addVertex(0.752381F, -0.122713F, 0.213203F, 1F, 13F);
+		builder.addVertex(0.869125F, -0.144202F, 0.174037F, 1.5F, 13F);
+		builder.addVertex(0.91232F, -0.117867F, 0.288341F, 1.5F, 12F);
+		builder.addVertex(0.795576F, -0.096377F, 0.327508F, 1F, 12F);
+		builder.addVertex(0.77518F, 0.117867F, 0.149159F, 0.5F, 13F);
+		builder.addVertex(0.818375F, 0.144202F, 0.263463F, 0.5F, 12F);
+		builder.addVertex(0.935119F, 0.122713F, 0.224297F, 1F, 12F);
+		builder.addVertex(0.891924F, 0.096377F, 0.109992F, 1F, 13F);
+		builder.addVertex(0.891924F, 0.096377F, 0.109992F, 1F, 13F);
+		builder.addVertex(0.935119F, 0.122713F, 0.224297F, 1.5F, 13F);
+		builder.addVertex(0.91232F, -0.117867F, 0.288341F, 1.5F, 15F);
+		builder.addVertex(0.869125F, -0.144202F, 0.174037F, 1F, 15F);
+		builder.addVertex(0.77518F, 0.117867F, 0.149159F, 0.5F, 13F);
+		builder.addVertex(0.752381F, -0.122713F, 0.213203F, 0.5F, 15F);
+		builder.addVertex(0.795576F, -0.096377F, 0.327508F, 0F, 15F);
+		builder.addVertex(0.818375F, 0.144202F, 0.263463F, 0F, 13F);
+		//stalk3
+		builder.addVertex(0.1756F, 0.188278F, 0.674201F, 0.5F, 9F);
+		builder.addVertex(0.298921F, 0.199545F, 0.69123F, 1F, 9F);
+		builder.addVertex(0.332863F, -0.10823F, 0.649054F, 1F, 11.5F);
+		builder.addVertex(0.209542F, -0.119496F, 0.632025F, 0.5F, 11.5F);
+		builder.addVertex(0.160349F, 0.169785F, 0.796881F, 1.5F, 9F);
+		builder.addVertex(0.194291F, -0.13799F, 0.754705F, 1.5F, 11.5F);
+		builder.addVertex(0.317612F, -0.126723F, 0.771734F, 1F, 11.5F);
+		builder.addVertex(0.28367F, 0.181051F, 0.81391F, 1F, 9F);
+		builder.addVertex(0.209542F, -0.119496F, 0.632025F, 1F, 9F);
+		builder.addVertex(0.332863F, -0.10823F, 0.649054F, 1.5F, 9F);
+		builder.addVertex(0.317612F, -0.126723F, 0.771734F, 1.5F, 8F);
+		builder.addVertex(0.194291F, -0.13799F, 0.754705F, 1F, 8F);
+		builder.addVertex(0.1756F, 0.188278F, 0.674201F, 0.5F, 9F);
+		builder.addVertex(0.160349F, 0.169785F, 0.796881F, 0.5F, 8F);
+		builder.addVertex(0.28367F, 0.181051F, 0.81391F, 1F, 8F);
+		builder.addVertex(0.298921F, 0.199545F, 0.69123F, 1F, 9F);
+		builder.addVertex(0.298921F, 0.199545F, 0.69123F, 1F, 9F);
+		builder.addVertex(0.28367F, 0.181051F, 0.81391F, 1.5F, 9F);
+		builder.addVertex(0.317612F, -0.126723F, 0.771734F, 1.5F, 11.5F);
+		builder.addVertex(0.332863F, -0.10823F, 0.649054F, 1F, 11.5F);
+		builder.addVertex(0.1756F, 0.188278F, 0.674201F, 0.5F, 9F);
+		builder.addVertex(0.209542F, -0.119496F, 0.632025F, 0.5F, 11.5F);
+		builder.addVertex(0.194291F, -0.13799F, 0.754705F, 0F, 11.5F);
+		builder.addVertex(0.160349F, 0.169785F, 0.796881F, 0F, 9F);
 		//stalk5
 		builder.addVertex(0.505928F, 0.179864F, 0.383603F, 2.75F, 9F);
 		builder.addVertex(0.629762F, 0.196893F, 0.383603F, 3.25F, 9F);
