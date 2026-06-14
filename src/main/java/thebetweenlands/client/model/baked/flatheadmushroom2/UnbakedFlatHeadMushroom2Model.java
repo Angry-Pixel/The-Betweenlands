@@ -8,14 +8,26 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 
 import java.util.function.Function;
+
+import org.joml.Vector3f;
+
+import com.mojang.math.Transformation;
 
 public class UnbakedFlatHeadMushroom2Model implements IUnbakedGeometry<UnbakedFlatHeadMushroom2Model> {
 
 	@Override
 	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
-		return new FlatHeadMushroom2Model(spriteGetter.apply(context.getMaterial("texture")), context.getTransforms(), context.getRootTransform());
+		Transformation transform = UnbakedGeometryHelper
+        .composeRootTransformIntoModelState(modelState, context.getRootTransform())
+        .getRotation()
+        .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
+        return new FlatHeadMushroom2Model(
+            spriteGetter.apply(context.getMaterial("texture")),
+            context.getTransforms(),
+            transform);
 	}
 }
 
