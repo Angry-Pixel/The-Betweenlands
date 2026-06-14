@@ -6,6 +6,11 @@ public class MiddleFruitBushBlock extends DecayableCropBlock {
 	}
 
 	@Override
+	public int getMaxAge() {
+		return 5;
+	}
+
+	@Override
 	public int getMaxHeight() {
 		return 1;
 	}

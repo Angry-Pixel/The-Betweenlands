@@ -1,8 +1,0 @@
-{
-  "parent": "thebetweenlands:block/venus_fly_trap",
-  "loader": "thebetweenlands:venus_fly_trap",
-  "textures": {
-    "texture": "thebetweenlands:block/venus_fly_trap_blooming",
-    "particle": "thebetweenlands:block/particle/venus_fly_trap_blooming_particle"
-  }
-}

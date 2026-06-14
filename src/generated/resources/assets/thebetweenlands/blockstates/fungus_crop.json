@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "decayed=false,stage=3": {
+      "model": "thebetweenlands:block/fungus_crop_4"
+    },
+    "decayed=true,stage=3": {
+      "model": "thebetweenlands:block/fungus_crop_4_decayed"
+    },
+    "stage=0": {
+      "model": "thebetweenlands:block/fungus_crop_1"
+    },
+    "stage=1": {
+      "model": "thebetweenlands:block/fungus_crop_2"
+    },
+    "stage=2": {
+      "model": "thebetweenlands:block/fungus_crop_3"
+    },
+    "stage=4": {
+      "model": "thebetweenlands:block/fungus_crop_4"
+    },
+    "stage=5": {
+      "model": "thebetweenlands:block/fungus_crop_4"
+    }
+  }
+}

@@ -99,17 +99,24 @@ import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.swampplant.SwampPlantModelLoader;
 import thebetweenlands.client.model.baked.bulbcappedmushroom.BulbCappedMushroomModelLoader;
 import thebetweenlands.client.model.baked.flatheadmushroom1.FlatHeadMushroom1ModelLoader;
 import thebetweenlands.client.model.baked.flatheadmushroom2.FlatHeadMushroom2ModelLoader;
-
-
-import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
-import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
-import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
-
+import thebetweenlands.client.model.baked.funguscrop1.FungusCrop1ModelLoader;
+import thebetweenlands.client.model.baked.funguscrop2.FungusCrop2ModelLoader;
+import thebetweenlands.client.model.baked.funguscrop3.FungusCrop3ModelLoader;
+import thebetweenlands.client.model.baked.funguscrop4.FungusCrop4ModelLoader;
+import thebetweenlands.client.model.baked.funguscrop4decayed.FungusCrop4DecayedModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop1.WhitePearCrop1ModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop2.WhitePearCrop2ModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop3.WhitePearCrop3ModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop4.WhitePearCrop4ModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop5.WhitePearCrop5ModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop6.WhitePearCrop6ModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop6decayed.WhitePearCrop6DecayedModelLoader;
 import thebetweenlands.client.model.baked.venusflytrap.VenusFlyTrapModelLoader;
 import thebetweenlands.client.model.baked.pitcherplant.PitcherPlantModelLoader;
 import thebetweenlands.client.model.baked.weepingblue.WeepingBlueModelLoader;
@@ -985,9 +992,25 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
+
 		event.register(TheBetweenlands.prefix("black_hat_mushroom_1"), BlackHatMushroom1ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("black_hat_mushroom_2"), BlackHatMushroom2ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("black_hat_mushroom_3"), BlackHatMushroom3ModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("fungus_crop_1"), FungusCrop1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("fungus_crop_2"), FungusCrop2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("fungus_crop_3"), FungusCrop3ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("fungus_crop_4"), FungusCrop4ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("fungus_crop_4_decayed"), FungusCrop4DecayedModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("white_pear_crop_1"), WhitePearCrop1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop_2"), WhitePearCrop2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop_3"), WhitePearCrop3ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop_4"), WhitePearCrop4ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop_5"), WhitePearCrop5ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop_6"), WhitePearCrop6ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop_6_decayed"), WhitePearCrop6DecayedModelLoader.INSTANCE);
+
 		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);

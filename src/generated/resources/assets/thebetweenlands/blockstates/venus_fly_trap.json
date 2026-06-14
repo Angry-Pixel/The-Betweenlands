@@ -1,0 +1,38 @@
+{
+  "variants": {
+    "blooming=false": [
+      {
+        "model": "thebetweenlands:block/venus_fly_trap"
+      },
+      {
+        "model": "thebetweenlands:block/venus_fly_trap",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/venus_fly_trap",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/venus_fly_trap",
+        "y": 270
+      }
+    ],
+    "blooming=true": [
+      {
+        "model": "thebetweenlands:block/venus_fly_trap_blooming"
+      },
+      {
+        "model": "thebetweenlands:block/venus_fly_trap_blooming",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/venus_fly_trap_blooming",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/venus_fly_trap_blooming",
+        "y": 270
+      }
+    ]
+  }
+}

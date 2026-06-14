@@ -81,6 +81,8 @@ import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
 import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DugDirtBlock;
 import thebetweenlands.common.block.farming.DugGrassBlock;
+import thebetweenlands.common.block.farming.FungusCropBlock;
+import thebetweenlands.common.block.farming.MiddleFruitBushBlock;
 import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.misc.BaubleBlock;
 import thebetweenlands.common.block.misc.CavingRopeLightBlock;
@@ -784,8 +786,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SEEDED_HANGER = register("seeded_hanger", () -> new SeededHangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
 	//TODO crops
 	public static final DeferredBlock<Block> ASPECTRUS_CROP = BLOCKS.register("aspectrus_crop", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> FUNGUS_CROP = BLOCKS.register("fungus_crop", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> MIDDLE_FRUIT_BUSH = BLOCKS.register("middle_fruit_bush", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> FUNGUS_CROP = BLOCKS.register("fungus_crop", () -> new FungusCropBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> MIDDLE_FRUIT_BUSH = BLOCKS.register("middle_fruit_bush", () -> new MiddleFruitBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> PHEROMONE_INFUSED_WEEDWOOD_BUSH = register("pheromone_infused_weedwood_bush", () -> new InfestedWeedwoodBushBlock(0, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
 	public static final DeferredBlock<Block> MOTH_INFESTED_WEEDWOOD_BUSH = register("moth_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(1, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
 	public static final DeferredBlock<Block> GRUB_INFESTED_WEEDWOOD_BUSH = register("grub_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(2, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));

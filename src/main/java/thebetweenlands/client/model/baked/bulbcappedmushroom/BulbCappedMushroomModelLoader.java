@@ -6,11 +6,11 @@ import com.google.gson.JsonParseException;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 
 public class BulbCappedMushroomModelLoader implements IGeometryLoader<UnbakedBulbCappedMushroomModel> {
-public static final BulbCappedMushroomModelLoader INSTANCE = new BulbCappedMushroomModelLoader();
+    public static final BulbCappedMushroomModelLoader INSTANCE = new BulbCappedMushroomModelLoader();
 
-@Override
-public UnbakedBulbCappedMushroomModel read(JsonObject object, JsonDeserializationContext context) throws JsonParseException {
-return new UnbakedBulbCappedMushroomModel();
+    @Override
+    public UnbakedBulbCappedMushroomModel read(JsonObject object, JsonDeserializationContext context)
+            throws JsonParseException {
+        return new UnbakedBulbCappedMushroomModel();
+    }
 }
-}
-

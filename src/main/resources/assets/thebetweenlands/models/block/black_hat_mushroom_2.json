@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:black_hat_mushroom_2",
-  "textures": {
-    "texture": "thebetweenlands:block/black_hat_mushroom_2",
-    "particle": "thebetweenlands:block/black_hat_mushroom_particle"
-  }
-}

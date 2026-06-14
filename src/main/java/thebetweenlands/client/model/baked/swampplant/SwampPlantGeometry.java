@@ -3,6 +3,8 @@ package thebetweenlands.client.model.baked.swampplant;
 import thebetweenlands.util.QuadBuilder;
 
 /**
+ * BLRegularplant - TripleHeadedSheep
+ * Created using Tabula 4.1.1
  * Procedurally generated geometry from the 1.12.2 Tabula
  */
 public final class SwampPlantGeometry {
