@@ -21,6 +21,7 @@ import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.api.block.FarmablePlant;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 
@@ -46,6 +47,9 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 	public int getMaxAge() {
 		return 3;
 	}
+
+	@Override
+	protected abstract ItemLike getBaseSeedId();//not particularly necessary, but it forces child classes to have a base seed item, compared to resorting to wheat as the default item
 
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
