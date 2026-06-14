@@ -1399,8 +1399,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.texture("particle", particle);
 	}
 
-	private void addRotatedVariants(VariantBlockStateBuilder builder, ModelFile... model) {
-		ConfiguredModel.Builder<VariantBlockStateBuilder> cmb = builder.partialState().modelForState();
+	private VariantBlockStateBuilder addRotatedVariants(VariantBlockStateBuilder.PartialBlockstate partialBuilder, ModelFile... model) {
+		ConfiguredModel.Builder<VariantBlockStateBuilder> cmb = partialBuilder.modelForState();
 		cmb = cmb.modelFile(model[0]).nextModel()
 			.modelFile(model[0]).rotationY(90).nextModel()
 			.modelFile(model[0]).rotationY(180).nextModel()
@@ -1411,7 +1411,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 				.nextModel().modelFile(model[i]).rotationY(180)
 				.nextModel().modelFile(model[i]).rotationY(270);
 		}
-		cmb.addModel();
+		return cmb.addModel();
 	}
 
 	private void shortPlantItemTransforms(ItemModelBuilder builder) {
@@ -1438,7 +1438,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 
 	public void swampPlant(DeferredBlock<Block> block) {
 		ModelFile swampPlant = this.customLoaderModel("swamp_plant", TheBetweenlands.prefix("swamp_plant"), this.modLoc("block/swamp_plant"), this.modLoc("block/particle/swamp_plant_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()), swampPlant);
+		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), swampPlant);
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/swamp_plant")));
 	}
 
@@ -1446,17 +1446,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile venusFlyTrap = this.customLoaderModel("venus_fly_trap", TheBetweenlands.prefix("venus_fly_trap"), this.modLoc("block/venus_fly_trap"), this.modLoc("block/particle/venus_fly_trap_particle"));
 		ModelFile venusFlyTrapBlooming = this.customLoaderModel("venus_fly_trap_blooming", TheBetweenlands.prefix("venus_fly_trap"), this.modLoc("block/venus_fly_trap_blooming"), this.modLoc("block/particle/venus_fly_trap_blooming_particle"));
 
-		this.getVariantBuilder(block.get())
-			.partialState().with(VenusFlyTrapBlock.BLOOMING, false).modelForState()
-				.modelFile(venusFlyTrap).nextModel()
-				.modelFile(venusFlyTrap).rotationY(90).nextModel()
-				.modelFile(venusFlyTrap).rotationY(180).nextModel()
-				.modelFile(venusFlyTrap).rotationY(270).addModel()
-			.partialState().with(VenusFlyTrapBlock.BLOOMING, true).modelForState()
-				.modelFile(venusFlyTrapBlooming).nextModel()
-				.modelFile(venusFlyTrapBlooming).rotationY(90).nextModel()
-				.modelFile(venusFlyTrapBlooming).rotationY(180).nextModel()
-				.modelFile(venusFlyTrapBlooming).rotationY(270).addModel();
+		addRotatedVariants((addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
+		.with(VenusFlyTrapBlock.BLOOMING, false), venusFlyTrap)).partialState()
+		.with(VenusFlyTrapBlock.BLOOMING, true), venusFlyTrapBlooming);
 
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/venus_fly_trap")));
 	}
@@ -1465,14 +1457,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile pitcherPlant = this.customLoaderModel("pitcher_plant", TheBetweenlands.prefix("pitcher_plant"), this.modLoc("block/pitcher_plant"), this.modLoc("block/particle/pitcher_plant_particle"));
 		ModelFile pitcherPlantTop = this.models().withExistingParent("pitcher_plant_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/pitcher_plant_particle"));
 
-		this.getVariantBuilder(block.get())
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState()
-				.modelFile(pitcherPlant).nextModel()
-				.modelFile(pitcherPlant).rotationY(90).nextModel()
-				.modelFile(pitcherPlant).rotationY(180).nextModel()
-				.modelFile(pitcherPlant).rotationY(270).addModel()
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-				.modelFile(pitcherPlantTop).addModel();
+		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), pitcherPlant)).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
+		.modelFile(pitcherPlantTop).addModel();
 
 		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/pitcher_plant")));
 	}
@@ -1481,14 +1469,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile weepingBlue = this.customLoaderModel("weeping_blue", TheBetweenlands.prefix("weeping_blue"), this.modLoc("block/weeping_blue"), this.modLoc("block/particle/weeping_blue_particle"));
 		ModelFile weepingBlueTop = this.models().withExistingParent("weeping_blue_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/weeping_blue_particle"));
 
-		this.getVariantBuilder(block.get())
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState()
-				.modelFile(weepingBlue).nextModel()
-				.modelFile(weepingBlue).rotationY(90).nextModel()
-				.modelFile(weepingBlue).rotationY(180).nextModel()
-				.modelFile(weepingBlue).rotationY(270).addModel()
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-				.modelFile(weepingBlueTop).addModel();
+		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), weepingBlue)).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
+		.modelFile(weepingBlueTop).addModel();
 
 		
 		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/weeping_blue")));
@@ -1498,14 +1482,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile sundew = this.customLoaderModel("sundew", TheBetweenlands.prefix("sundew"), this.modLoc("block/sundew"), this.modLoc("block/particle/sundew_particle"));
 		ModelFile sundewTop = this.models().withExistingParent("sundew_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/sundew_particle"));
 
-		this.getVariantBuilder(block.get())
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState()
-				.modelFile(sundew).nextModel()
-				.modelFile(sundew).rotationY(90).nextModel()
-				.modelFile(sundew).rotationY(180).nextModel()
-				.modelFile(sundew).rotationY(270).addModel()
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-				.modelFile(sundewTop).addModel();
+		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), sundew)).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
+		.modelFile(sundewTop).addModel();
 
 		
 		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/sundew")));
@@ -1517,23 +1497,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile volarpad3 = this.customLoaderModel("volarpad_3", TheBetweenlands.prefix("volarpad"), this.modLoc("block/volarpad_3"), this.modLoc("block/particle/volarpad_particle"));
 		ModelFile volarpadTop = this.models().withExistingParent("volarpad_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/volarpad_particle"));
 
-
-		this.getVariantBuilder(block.get())
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState()
-				.modelFile(volarpad1).nextModel()
-				.modelFile(volarpad1).rotationY(90).nextModel()
-				.modelFile(volarpad1).rotationY(180).nextModel()
-				.modelFile(volarpad1).rotationY(270).nextModel()
-				.modelFile(volarpad2).nextModel()
-				.modelFile(volarpad2).rotationY(90).nextModel()
-				.modelFile(volarpad2).rotationY(180).nextModel()
-				.modelFile(volarpad2).rotationY(270).nextModel()
-				.modelFile(volarpad3).nextModel()
-				.modelFile(volarpad3).rotationY(90).nextModel()
-				.modelFile(volarpad3).rotationY(180).nextModel()
-				.modelFile(volarpad3).rotationY(270).addModel()
-			.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-				.modelFile(volarpadTop).addModel();
+		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), volarpad1, volarpad2, volarpad3)).partialState()
+		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
+		.modelFile(volarpadTop).addModel();
 
 		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/volarpad_1"))
 			.transforms()
@@ -1548,14 +1515,14 @@ public class BLBlockStateProvider extends BlockStateProvider {
 
 	public void bulbCappedMushroom(DeferredBlock<Block> block) {
 		ModelFile bulbCappedMushroom = this.customLoaderModel("bulb_capped_mushroom", TheBetweenlands.prefix("bulb_capped_mushroom"), this.modLoc("block/bulb_capped_mushroom"), this.modLoc("block/particle/bulb_capped_mushroom_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()), bulbCappedMushroom);
+		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), bulbCappedMushroom);
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/bulb_capped_mushroom")));
 	}
 
 	public void flatHeadMushroom(DeferredBlock<Block> block) {
 		ModelFile flatHeadMushroom1 = this.customLoaderModel("flat_head_mushroom_1", TheBetweenlands.prefix("flat_head_mushroom_1"), this.modLoc("block/flat_head_mushroom_1"), this.modLoc("block/particle/flat_head_mushroom_particle"));
 		ModelFile flatHeadMushroom2 = this.customLoaderModel("flat_head_mushroom_2", TheBetweenlands.prefix("flat_head_mushroom_2"), this.modLoc("block/flat_head_mushroom_2"), this.modLoc("block/particle/flat_head_mushroom_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()), flatHeadMushroom1, flatHeadMushroom2);
+		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), flatHeadMushroom1, flatHeadMushroom2);
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/flat_head_mushroom_1")));
 	}
 
@@ -1563,11 +1530,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile blackHatMushroom1 = this.customLoaderModel("black_hat_mushroom_1", TheBetweenlands.prefix("black_hat_mushroom_1"), this.modLoc("block/black_hat_mushroom_1"), this.modLoc("block/particle/black_hat_mushroom_particle"));
 		ModelFile blackHatMushroom2 = this.customLoaderModel("black_hat_mushroom_2", TheBetweenlands.prefix("black_hat_mushroom_2"), this.modLoc("block/black_hat_mushroom_2"), this.modLoc("block/particle/black_hat_mushroom_particle"));
 		ModelFile blackHatMushroom3 = this.customLoaderModel("black_hat_mushroom_3", TheBetweenlands.prefix("black_hat_mushroom_3"), this.modLoc("block/black_hat_mushroom_3"), this.modLoc("block/particle/black_hat_mushroom_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()), blackHatMushroom1, blackHatMushroom2, blackHatMushroom3);
+		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), blackHatMushroom1, blackHatMushroom2, blackHatMushroom3);
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/black_hat_mushroom_1")));
 	}
 
-	public void fungusCrop(DeferredBlock<Block> block) { //TODO: fix crop block showing up as wheat seeds in Jade for some reason
+	public void fungusCrop(DeferredBlock<Block> block) {
 		ModelFile fungusCrop1 = this.customLoaderModel("fungus_crop_1", TheBetweenlands.prefix("fungus_crop_1"), this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"));
 		ModelFile fungusCrop2 = this.customLoaderModel("fungus_crop_2", TheBetweenlands.prefix("fungus_crop_2"), this.modLoc("block/fungus_crop_2"), this.modLoc("block/particle/fungus_crop_particle"));
 		ModelFile fungusCrop3 = this.customLoaderModel("fungus_crop_3", TheBetweenlands.prefix("fungus_crop_3"), this.modLoc("block/fungus_crop_3"), this.modLoc("block/particle/fungus_crop_particle"));
@@ -1586,7 +1553,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	
 	}
 
-	public void middleFruitBush(DeferredBlock<Block> block) { //TODO: fix crop block showing up as wheat seeds in Jade for some reason
+	public void middleFruitBush(DeferredBlock<Block> block) {
 		ModelFile whitePearCrop1 = this.customLoaderModel("white_pear_crop_1", TheBetweenlands.prefix("white_pear_crop_1"), this.modLoc("block/white_pear_crop_1"), this.modLoc("block/particle/white_pear_crop_particle"));
 		ModelFile whitePearCrop2 = this.customLoaderModel("white_pear_crop_2", TheBetweenlands.prefix("white_pear_crop_2"), this.modLoc("block/white_pear_crop_2"), this.modLoc("block/particle/white_pear_crop_particle"));
 		ModelFile whitePearCrop3 = this.customLoaderModel("white_pear_crop_3", TheBetweenlands.prefix("white_pear_crop_3"), this.modLoc("block/white_pear_crop_3"), this.modLoc("block/particle/white_pear_crop_particle"));
