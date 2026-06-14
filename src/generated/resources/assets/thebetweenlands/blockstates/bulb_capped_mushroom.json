@@ -1,7 +1,21 @@
 {
   "variants": {
-    "": {
-      "model": "thebetweenlands:block/bulb_capped_mushroom"
-    }
+    "": [
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom"
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom",
+        "y": 270
+      }
+    ]
   }
 }

@@ -1401,12 +1401,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 
 	private void addRotatedVariants(VariantBlockStateBuilder builder, ModelFile... model) {
 		ConfiguredModel.Builder<VariantBlockStateBuilder> cmb = builder.partialState().modelForState();
-		cmb.modelFile(model[0]).nextModel()
+		cmb = cmb.modelFile(model[0]).nextModel()
 			.modelFile(model[0]).rotationY(90).nextModel()
 			.modelFile(model[0]).rotationY(180).nextModel()
 			.modelFile(model[0]).rotationY(270);
-		for (int i = 0; i < model.length; i++) {
-			cmb.nextModel().modelFile(model[i]).rotationY(90)
+		for (int i = 1; i < model.length; i++) {
+			cmb = cmb.nextModel().modelFile(model[i])
+				.nextModel().modelFile(model[i]).rotationY(90)
 				.nextModel().modelFile(model[i]).rotationY(180)
 				.nextModel().modelFile(model[i]).rotationY(270);
 		}
@@ -1443,7 +1444,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 
 	public void venusFlyTrap(DeferredBlock<Block> block) {
 		ModelFile venusFlyTrap = this.customLoaderModel("venus_fly_trap", TheBetweenlands.prefix("venus_fly_trap"), this.modLoc("block/venus_fly_trap"), this.modLoc("block/particle/venus_fly_trap_particle"));
-		ModelFile venusFlyTrapBlooming = this.customLoaderModel("venus_fly_trap_blooming", TheBetweenlands.prefix("venus_fly_trap_blooming"), this.modLoc("block/venus_fly_trap_blooming"), this.modLoc("block/particle/venus_fly_trap_blooming_particle"));
+		ModelFile venusFlyTrapBlooming = this.customLoaderModel("venus_fly_trap_blooming", TheBetweenlands.prefix("venus_fly_trap"), this.modLoc("block/venus_fly_trap_blooming"), this.modLoc("block/particle/venus_fly_trap_blooming_particle"));
 
 		this.getVariantBuilder(block.get())
 			.partialState().with(VenusFlyTrapBlock.BLOOMING, false).modelForState()
