@@ -178,6 +178,7 @@ import thebetweenlands.common.block.terrain.BLSnowLayerBlock;
 import thebetweenlands.common.block.terrain.BlackIceBlock;
 import thebetweenlands.common.block.terrain.CircleGemBlock;
 import thebetweenlands.common.block.terrain.DeadGrassBlock;
+import thebetweenlands.common.block.terrain.DiggableSwampBlock;
 import thebetweenlands.common.block.terrain.HearthgroveLogBlock;
 import thebetweenlands.common.block.terrain.HollowLogBlock;
 import thebetweenlands.common.block.terrain.LifeCrystalStalactiteBlock;
@@ -256,8 +257,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MOSSY_CRAGROCK_TOP = register("mossy_cragrock_top", () -> new MossyCragrockBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5F, 10.0F).randomTicks().sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> PITSTONE = register("pitstone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.5F, 10.0F)));
 	public static final DeferredBlock<Block> LIMESTONE = register("limestone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.2F, 8.0F)));
-	public static final DeferredBlock<Block> SWAMP_DIRT = register("swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.ROOTED_DIRT)));
-	public static final DeferredBlock<Block> COARSE_SWAMP_DIRT = register("coarse_swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.ROOTED_DIRT)));
+	public static final DeferredBlock<Block> SWAMP_DIRT = register("swamp_dirt", () -> new DiggableSwampBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.ROOTED_DIRT), true));
+	public static final DeferredBlock<Block> COARSE_SWAMP_DIRT = register("coarse_swamp_dirt", () -> new DiggableSwampBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.ROOTED_DIRT), false));
 	public static final DeferredBlock<Block> SWAMP_GRASS = register("swamp_grass", () -> new SwampGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> WISP = register("wisp", () -> new WispBlock(BlockBehaviour.Properties.of().instabreak().noCollission().noOcclusion().sound(SoundType.STONE).replaceable()));
 	public static final DeferredBlock<Block> OCTINE_ORE = register("octine_ore", () -> new OctineOreBlock(ConstantInt.of(0), BlockBehaviour.Properties.of().requiresCorrectToolForDrops().lightLevel(value -> 13).strength(1.5F, 10.0F).sound(SoundType.STONE)));
@@ -793,7 +794,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> GRUB_INFESTED_WEEDWOOD_BUSH = register("grub_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(2, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
 	public static final DeferredBlock<Block> SILK_COCOONED_WEEDWOOD_BUSH = register("silk_cocooned_weedwood_bush", () -> new InfestedWeedwoodBushBlock(3, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
 	public static final DeferredBlock<Block> DECAY_INFESTED_WEEDWOOD_BUSH = register("decay_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(4, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
-	public static final DeferredBlock<Block> PURIFIED_SWAMP_DIRT = register("purified_swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> PURIFIED_SWAMP_DIRT = register("purified_swamp_dirt", () -> new DiggableSwampBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.GRASS), () -> BlockRegistry.PURIFIED_DUG_SWAMP_DIRT.get().defaultBlockState(), false));
 	public static final DeferredBlock<Block> DUG_SWAMP_DIRT = register("dug_swamp_dirt", () -> new DugDirtBlock(false, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> PURIFIED_DUG_SWAMP_DIRT = register("purified_dug_swamp_dirt", () -> new DugDirtBlock(true, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> DUG_SWAMP_GRASS = register("dug_swamp_grass", () -> new DugGrassBlock(false, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));

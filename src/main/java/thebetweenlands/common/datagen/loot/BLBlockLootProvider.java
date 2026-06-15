@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -31,6 +32,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.RepellerBlock;
 import thebetweenlands.common.block.container.SmokingRackBlock;
+import thebetweenlands.common.block.farming.DecayableCropBlock;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.block.terrain.WaystoneBlock;
 import thebetweenlands.common.block.terrain.WispBlock;
@@ -779,8 +781,8 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 
 		//TODO all of these. None of these are properly in the mod yet
 		this.add(BlockRegistry.ASPECTRUS_CROP.get(), LootTable.lootTable());
-		this.add(BlockRegistry.FUNGUS_CROP.get(), LootTable.lootTable());
-		this.add(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), LootTable.lootTable());
+		this.decayableCropDrop(BlockRegistry.FUNGUS_CROP.get(), 3, ItemRegistry.YELLOW_DOTTED_FUNGUS.get(), ItemRegistry.SPORES.get());
+		this.decayableCropDrop(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), 5, ItemRegistry.MIDDLE_FRUIT.get(), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS.get());
 		this.add(BlockRegistry.BARNACLE.get(), LootTable.lootTable());
 		this.add(BlockRegistry.BETWEENSTONE_PEBBLE.get(), LootTable.lootTable());
 
@@ -829,6 +831,15 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.dropPottedContents(BlockRegistry.POTTED_MILKWEED.get());
 		this.dropPottedContents(BlockRegistry.POTTED_NETTLE.get());
 		this.dropPottedContents(BlockRegistry.POTTED_PICKERELWEED.get());
+	}
+
+	private void decayableCropDrop(Block cropBlock, int stage, Item cropItem, Item seedItem) {
+		LootItemCondition.Builder licb = LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
+			.setProperties(StatePropertiesPredicate.Builder.properties()
+			.hasProperty(DecayableCropBlock.STAGE, stage)
+			.hasProperty(DecayableCropBlock.DECAYED, false));
+		
+		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, licb));
 	}
 
 	protected LootTable.Builder createBLLeavesDrops(Block leavesBlock, Block saplingBlock, boolean stick) {

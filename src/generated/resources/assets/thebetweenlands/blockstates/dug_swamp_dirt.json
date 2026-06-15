@@ -8,6 +8,27 @@
     {
       "apply": {
         "model": "thebetweenlands:block/dug_swamp_dirt_top"
+      },
+      "when": {
+        "composted": "false",
+        "decayed": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/dug_swamp_dirt_top_composted"
+      },
+      "when": {
+        "composted": "true",
+        "decayed": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/dug_swamp_dirt_top_decayed"
+      },
+      "when": {
+        "decayed": "true"
       }
     }
   ]

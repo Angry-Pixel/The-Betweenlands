@@ -62,9 +62,9 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-		return super.mayPlaceOn(state, level, pos) &&
-			!(state.getBlock() instanceof DugSoilBlock && state.getValue(DugSoilBlock.DECAYED)) &&
-			!(state.getBlock() instanceof DecayableCropBlock && state.getValue(CropBlock.AGE) < 15);
+		return super.mayPlaceOn(state, level, pos) || 
+			(state.getBlock() instanceof DugSoilBlock && !state.getValue(DugSoilBlock.DECAYED) && state.getValue(DugSoilBlock.COMPOSTED)) ||
+			(state.getBlock() instanceof DecayableCropBlock && state.getValue(CropBlock.AGE) >= 15);
 	}
 
 	@Nullable
@@ -144,9 +144,9 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 		BlockState stateDown = level.getBlockState(pos.below());
 		if (stateDown.getBlock() instanceof DugSoilBlock soil) {
 			if (level.getBlockEntity(pos.below()) instanceof DugSoilBlockEntity te && te.isComposted()) {
-				te.setCompost(level, pos, Math.max(te.getCompost() - compost, 0));
+				te.setCompost(level, pos.below(), Math.max(te.getCompost() - compost, 0));
 				if (soil.isPurified(level, pos.below(), stateDown)) {
-					te.setPurifiedHarvests(level, pos, te.getPurifiedHarvests() + 1);
+					te.setPurifiedHarvests(level, pos.below(), te.getPurifiedHarvests() + 1);
 				}
 			}
 		}

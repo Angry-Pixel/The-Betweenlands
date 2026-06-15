@@ -50,6 +50,7 @@ import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
+import thebetweenlands.common.block.farming.DugSoilBlock;
 import thebetweenlands.common.block.misc.GlowingGoopBlock;
 import thebetweenlands.common.block.misc.MistBridgeBlock;
 import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
@@ -68,6 +69,7 @@ import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.datagen.builders.model.*;
 import thebetweenlands.common.registries.BlockRegistry;
+
 
 public class BLBlockStateProvider extends BlockStateProvider {
 
@@ -641,8 +643,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.PURIFIED_SWAMP_DIRT);
 		this.dugDirt(BlockRegistry.DUG_SWAMP_DIRT, this.modLoc("block/swamp_dirt"), this.modLoc("block/swamp_dirt"));
 		this.dugDirt(BlockRegistry.DUG_SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_dirt"));
-		this.dugDirt(BlockRegistry.PURIFIED_DUG_SWAMP_DIRT, this.modLoc("block/purified_swamp_dirt"), this.modLoc("block/purified_swamp_dirt"));
-		this.dugDirt(BlockRegistry.PURIFIED_DUG_SWAMP_GRASS, this.modLoc("block/purified_swamp_grass_side"), this.modLoc("block/purified_swamp_dirt"));
+		this.dugDirtPurified(BlockRegistry.PURIFIED_DUG_SWAMP_DIRT, this.modLoc("block/purified_swamp_dirt"), this.modLoc("block/purified_swamp_dirt"));
+		this.dugDirtPurified(BlockRegistry.PURIFIED_DUG_SWAMP_GRASS, this.modLoc("block/purified_swamp_grass_side"), this.modLoc("block/purified_swamp_dirt"));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.BLACK_ICE, "translucent");
 		this.getVariantBuilder(BlockRegistry.SNOW.get()).forAllStates(state -> {
 			if (state.getValue(SnowLayerBlock.LAYERS) == 8) {
@@ -1610,9 +1612,56 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void dugDirt(DeferredBlock<Block> dugBlock, ResourceLocation side, ResourceLocation bottom) {
-		this.getMultipartBuilder(dugBlock.get()).part().modelFile(this.models().withExistingParent(dugBlock.getId().toString(), this.modLoc("block/dug_soil_base")).texture("bottom", bottom).texture("side", side)).addModel().end().part().modelFile(this.models().getExistingFile(this.modLoc("block/" + dugBlock.getId().getPath() + "_top"))).addModel().end();
-		var model = this.models().cubeBottomTop(dugBlock.getId().withSuffix("_inventory").toString(), side, bottom, this.modLoc("block/" + dugBlock.getId().getPath().replace("purified_", "") + "_0"));
-		this.itemModels().getBuilder(dugBlock.getId().getPath()).parent(model);
+		String path = dugBlock.getId().getPath();
+		ModelFile baseModel = this.models()
+			.withExistingParent(path, this.modLoc("block/dug_soil_base"))
+			.texture("bottom", bottom)
+			.texture("side", side);
+		ModelFile uncompostedTop = this.models().getExistingFile(this.modLoc("block/" + path + "_top"));
+		ModelFile compostedTop = this.models().getExistingFile(this.modLoc("block/" + path + "_top_composted"));
+		ModelFile decayedTop = this.models().getExistingFile(this.modLoc("block/" + path + "_top_decayed"));
+
+		this.getMultipartBuilder(dugBlock.get())
+			.part().modelFile(baseModel).addModel().end()
+			.part().modelFile(uncompostedTop).addModel()
+				.condition(DugSoilBlock.COMPOSTED, false)
+				.condition(DugSoilBlock.DECAYED, false).end()
+			.part().modelFile(compostedTop).addModel()
+				.condition(DugSoilBlock.COMPOSTED, true)
+				.condition(DugSoilBlock.DECAYED, false).end()
+			.part().modelFile(decayedTop).addModel()
+				.condition(DugSoilBlock.DECAYED, true).end();
+
+		BlockModelBuilder model = this.models().cubeBottomTop(
+			dugBlock.getId().withSuffix("_inventory").toString(),
+			side, bottom,
+			this.modLoc("block/" + path + "_0"));
+		this.itemModels().getBuilder(path).parent(model);
+	}
+
+	public void dugDirtPurified(DeferredBlock<Block> dugBlock, ResourceLocation side, ResourceLocation bottom) {
+		String path = dugBlock.getId().getPath();
+		String textureBase = path.replace("purified_dug_swamp_grass", "dug_swamp_grass").replace("purified_dug", "dug_purified");
+
+		ModelFile baseModel = this.models()
+			.withExistingParent(path, this.modLoc("block/dug_soil_base"))
+			.texture("bottom", bottom)
+			.texture("side", side);
+		ModelFile uncompostedTop = this.models().getExistingFile(this.modLoc("block/" + textureBase + "_top"));
+		ModelFile compostedTop = this.models().getExistingFile(this.modLoc("block/" + textureBase + "_top_composted"));
+
+		this.getMultipartBuilder(dugBlock.get())
+			.part().modelFile(baseModel).addModel().end()
+			.part().modelFile(uncompostedTop).addModel()
+				.condition(DugSoilBlock.COMPOSTED, false).end()
+			.part().modelFile(compostedTop).addModel()
+				.condition(DugSoilBlock.COMPOSTED, true).end();
+
+		BlockModelBuilder model = this.models().cubeBottomTop(
+			dugBlock.getId().withSuffix("_inventory").toString(),
+			side, bottom,
+			this.modLoc("block/" + textureBase + "_0"));
+		this.itemModels().getBuilder(path).parent(model);
 	}
 
 	public void edgePlant(DeferredBlock<Block> edgePlant, int amount) {
