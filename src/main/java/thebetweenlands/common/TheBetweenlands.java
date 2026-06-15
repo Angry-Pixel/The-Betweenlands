@@ -61,7 +61,11 @@ public class TheBetweenlands {
 	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 30;
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
 
-	public TheBetweenlands(IEventBus eventbus, Dist dist) {
+	public TheBetweenlands(IEventBus eventbus, Dist dist) throws IllegalAccessException {
+		if (FMLEnvironment.production) {
+			throw new IllegalAccessException("The Betweenlands is not ready for playtesting! We advise against playing the mod for the time being. Please remove the mod if you want to play the game.");
+		}
+
 		if (dist.isClient()) {
 			ClientRegistrationEvents.initClient(eventbus);
 		}
