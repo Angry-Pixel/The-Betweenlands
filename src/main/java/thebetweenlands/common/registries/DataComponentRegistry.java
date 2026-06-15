@@ -64,6 +64,7 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> RING_PUPPET_UUID = COMPONENTS.register("ring_puppet_uuid", () -> DataComponentType.<UUID>builder().persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChirobarbErrupterData>> CHIROBARB_ERRUPTER_DATA = COMPONENTS.register("chirobarb_errupter_data", () -> DataComponentType.<ChirobarbErrupterData>builder().persistent(ChirobarbErrupterData.CODEC).networkSynchronized(ChirobarbErrupterData.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<MagicItemMagnetData>> MAGIC_ITEM_MAGNET_DATA = COMPONENTS.register("magic_item_magnet_data", () -> DataComponentType.<MagicItemMagnetData>builder().persistent(MagicItemMagnetData.CODEC).networkSynchronized(MagicItemMagnetData.STREAM_CODEC).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_CORROSION = COMPONENTS.register("max_corrosion", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());

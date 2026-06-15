@@ -105,6 +105,7 @@ import thebetweenlands.common.item.misc.GlowingGoopItem;
 import thebetweenlands.common.item.misc.HoverTextItem;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.item.misc.LoreScrapItem;
+import thebetweenlands.common.item.misc.MagicItemMagnetItem;
 import thebetweenlands.common.item.misc.MiddleGemItem;
 import thebetweenlands.common.item.misc.MireSnailEggItem;
 import thebetweenlands.common.item.misc.MistStaffItem;
@@ -547,7 +548,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new BoneWayfinderItem(new Item.Properties().durability(10).setNoRepair().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new MagicItemMagnetItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).durability(2048)));
 	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new SnotPodItem(new Item.Properties().stacksTo(1)));
 
