@@ -64,7 +64,7 @@ public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable {
 			if (context.getLevel().getBlockState(context.getClickedPos().above()).getBlock() instanceof RopeBlock) {
 				rotation -= rotation % 2;
 			}
-			state.setValue(ROTATION, rotation);
+			state = state.setValue(ROTATION, rotation);
 		}
 		return state;
 	}

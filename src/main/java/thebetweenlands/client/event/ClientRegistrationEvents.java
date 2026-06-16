@@ -114,6 +114,7 @@ import thebetweenlands.client.model.baked.funguscrop2.FungusCrop2ModelLoader;
 import thebetweenlands.client.model.baked.funguscrop3.FungusCrop3ModelLoader;
 import thebetweenlands.client.model.baked.funguscrop4.FungusCrop4ModelLoader;
 import thebetweenlands.client.model.baked.funguscrop4decayed.FungusCrop4DecayedModelLoader;
+import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop1.WhitePearCrop1ModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop2.WhitePearCrop2ModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop3.WhitePearCrop3ModelLoader;
@@ -123,10 +124,12 @@ import thebetweenlands.client.model.baked.whitepearcrop6.WhitePearCrop6ModelLoad
 import thebetweenlands.client.model.baked.whitepearcrop6decayed.WhitePearCrop6DecayedModelLoader;
 import thebetweenlands.client.model.baked.venusflytrap.VenusFlyTrapModelLoader;
 import thebetweenlands.client.model.baked.pitcherplant.PitcherPlantModelLoader;
+import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.weepingblue.WeepingBlueModelLoader;
 import thebetweenlands.client.model.baked.sundew.SundewModelLoader;
 import thebetweenlands.client.model.baked.volarpad.VolarpadModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
+import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
 import thebetweenlands.client.model.block.AlembicModel;
@@ -1019,6 +1022,11 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("barnacle_2"), Barnacle2ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("barnacle_3"), Barnacle3ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("barnacle_4"), Barnacle4ModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
 
 		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
