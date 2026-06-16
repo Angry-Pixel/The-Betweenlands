@@ -1,0 +1,108 @@
+{
+  "variants": {
+    "facing=down,stage=1": {
+      "model": "thebetweenlands:block/barnacle_1",
+      "x": 180
+    },
+    "facing=down,stage=2": {
+      "model": "thebetweenlands:block/barnacle_2",
+      "x": 180
+    },
+    "facing=down,stage=3": {
+      "model": "thebetweenlands:block/barnacle_3",
+      "x": 180
+    },
+    "facing=down,stage=4": {
+      "model": "thebetweenlands:block/barnacle_4",
+      "x": 180
+    },
+    "facing=east,stage=1": {
+      "model": "thebetweenlands:block/barnacle_1",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,stage=2": {
+      "model": "thebetweenlands:block/barnacle_2",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,stage=3": {
+      "model": "thebetweenlands:block/barnacle_3",
+      "x": 270,
+      "y": 270
+    },
+    "facing=east,stage=4": {
+      "model": "thebetweenlands:block/barnacle_4",
+      "x": 270,
+      "y": 270
+    },
+    "facing=north,stage=1": {
+      "model": "thebetweenlands:block/barnacle_1",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,stage=2": {
+      "model": "thebetweenlands:block/barnacle_2",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,stage=3": {
+      "model": "thebetweenlands:block/barnacle_3",
+      "x": 270,
+      "y": 180
+    },
+    "facing=north,stage=4": {
+      "model": "thebetweenlands:block/barnacle_4",
+      "x": 270,
+      "y": 180
+    },
+    "facing=south,stage=1": {
+      "model": "thebetweenlands:block/barnacle_1",
+      "x": 270
+    },
+    "facing=south,stage=2": {
+      "model": "thebetweenlands:block/barnacle_2",
+      "x": 270
+    },
+    "facing=south,stage=3": {
+      "model": "thebetweenlands:block/barnacle_3",
+      "x": 270
+    },
+    "facing=south,stage=4": {
+      "model": "thebetweenlands:block/barnacle_4",
+      "x": 270
+    },
+    "facing=up,stage=1": {
+      "model": "thebetweenlands:block/barnacle_1"
+    },
+    "facing=up,stage=2": {
+      "model": "thebetweenlands:block/barnacle_2"
+    },
+    "facing=up,stage=3": {
+      "model": "thebetweenlands:block/barnacle_3"
+    },
+    "facing=up,stage=4": {
+      "model": "thebetweenlands:block/barnacle_4"
+    },
+    "facing=west,stage=1": {
+      "model": "thebetweenlands:block/barnacle_1",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,stage=2": {
+      "model": "thebetweenlands:block/barnacle_2",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,stage=3": {
+      "model": "thebetweenlands:block/barnacle_3",
+      "x": 270,
+      "y": 90
+    },
+    "facing=west,stage=4": {
+      "model": "thebetweenlands:block/barnacle_4",
+      "x": 270,
+      "y": 90
+    }
+  }
+}

@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BushBlock;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 
 public class PlantTonicBucketItem extends Item {
@@ -33,7 +34,7 @@ public class PlantTonicBucketItem extends Item {
 			}
 		}
 
-		if (level.getBlockEntity(pos) instanceof DugSoilBlockEntity) {
+		if (level.getBlockEntity(pos) instanceof DugSoilBlockEntity || level.getBlockState(pos).getBlock() instanceof BushBlock) {
 			boolean cured = false;
 
 			for (int xo = -2; xo <= 2; xo++) {

@@ -257,6 +257,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SLUDGE_BALL);
 		this.basicItem(ItemRegistry.ASPECTRUS_SEEDS);
 		this.basicItem(ItemRegistry.SPORES);
+		this.basicItem(ItemRegistry.BARNACLE_LARVAE);
 		this.basicItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
 		//rope
 		Function<DeferredItem<?>, ModelFile> pebbleOverlay = item -> this.multiLayerItem(item.getId().getPath() + "_active", this.itemTexture(item), TheBetweenlands.prefix("item/angry_pebble_overlay"));

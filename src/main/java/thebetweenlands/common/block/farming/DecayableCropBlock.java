@@ -33,7 +33,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 
 	public DecayableCropBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(DECAYED, false).setValue(STAGE, 0));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(DECAYED, false).setValue(AGE, 0).setValue(STAGE, 0));
 	}
 
 	public abstract int getMaxHeight();
@@ -63,7 +63,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
 		return super.mayPlaceOn(state, level, pos) || 
-			(state.getBlock() instanceof DugSoilBlock && !state.getValue(DugSoilBlock.DECAYED) && state.getValue(DugSoilBlock.COMPOSTED)) ||
+			(state.getBlock() instanceof DugSoilBlock && (state.getValue(DugSoilBlock.COMPOSTED) || state.getValue(DugSoilBlock.DECAYED))) ||
 			(state.getBlock() instanceof DecayableCropBlock && state.getValue(CropBlock.AGE) >= 15);
 	}
 
@@ -268,7 +268,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(DECAYED).add(STAGE));
+		super.createBlockStateDefinition(builder.add(DECAYED, STAGE));
 	}
 
 	@Override
@@ -295,6 +295,6 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 				this.growUp(level, pos);
 			}
 		}
-		// level.setBlockAndUpdate(pos, state.setValue(CropBlock.AGE, age));
+		level.setBlockAndUpdate(pos, state.setValue(CropBlock.AGE, age));
 	}
 }

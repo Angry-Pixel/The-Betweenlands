@@ -240,6 +240,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new ItemNameBlockItem(BlockRegistry.ASPECTRUS_CROP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new ItemNameBlockItem(BlockRegistry.FUNGUS_CROP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIDDLE_FRUIT_BUSH_SEEDS = ITEMS.register("middle_fruit_bush_seeds", () -> new ItemNameBlockItem(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), new Item.Properties()));
+	public static final DeferredItem<Item> BARNACLE_LARVAE = ITEMS.register("barnacle_larvae", () -> new ItemNameBlockItem(BlockRegistry.BARNACLE.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIRE_SNAIL_EGG = ITEMS.register("mire_snail_egg", () -> new MireSnailEggItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> COOKED_MIRE_SNAIL_EGG = ITEMS.register("cooked_mire_snail_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RAW_FROG_LEGS = ITEMS.register("raw_frog_legs", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4F).build())));

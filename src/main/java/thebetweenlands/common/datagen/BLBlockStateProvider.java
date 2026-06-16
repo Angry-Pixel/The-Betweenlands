@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.FenceBlock;
@@ -49,6 +50,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
+import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
 import thebetweenlands.common.block.farming.DugSoilBlock;
 import thebetweenlands.common.block.misc.GlowingGoopBlock;
@@ -1008,6 +1010,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.middleFruitBush(BlockRegistry.MIDDLE_FRUIT_BUSH);
 		this.flatHeadMushroom(BlockRegistry.FLATHEAD_MUSHROOM);
 		this.blackHatMushroom(BlockRegistry.BLACK_HAT_MUSHROOM);
+		this.barnacle(BlockRegistry.BARNACLE);
 
 		this.flowerPot(BlockRegistry.POTTED_WEEDWOOD_SAPLING);
 		this.flowerPot(BlockRegistry.POTTED_SAP_SAPLING);
@@ -1535,6 +1538,30 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), blackHatMushroom1, blackHatMushroom2, blackHatMushroom3);
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/black_hat_mushroom_1")));
 	}
+	
+	public void barnacle(DeferredBlock<Block> block) {
+		ModelFile[] barnacles = new ModelFile[]{this.customLoaderModel("barnacle_1", TheBetweenlands.prefix("barnacle_1"), this.modLoc("block/barnacle_1"), this.modLoc("block/barnacle_1")),
+			this.customLoaderModel("barnacle_2", TheBetweenlands.prefix("barnacle_2"), this.modLoc("block/barnacle_2"), this.modLoc("block/barnacle_2")),
+			this.customLoaderModel("barnacle_3", TheBetweenlands.prefix("barnacle_3"), this.modLoc("block/barnacle_3"), this.modLoc("block/barnacle_3")),
+			this.customLoaderModel("barnacle_4", TheBetweenlands.prefix("barnacle_4"), this.modLoc("block/barnacle_4"), this.modLoc("block/barnacle_4"))};
+		
+		VariantBlockStateBuilder vbsb = this.getVariantBuilder(block.get());
+		for (Direction dir : new Direction[]{Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+			for (int i = 0; i < 4; i++) {
+				ConfiguredModel.Builder<VariantBlockStateBuilder> bvbsb = vbsb.partialState().with(DirectionalBlock.FACING, dir).with(BarnacleBlock.STAGE, i+1).modelForState().modelFile(barnacles[i]);
+				switch (dir) {
+					case DOWN -> bvbsb.rotationX(180);
+					case SOUTH -> bvbsb.rotationX(270);
+					case WEST -> bvbsb.rotationX(270).rotationY(90);
+					case NORTH -> bvbsb.rotationX(270).rotationY(180);
+					case EAST -> bvbsb.rotationX(270).rotationY(270);
+					default -> {} // UP: default orientation
+				}
+				vbsb = bvbsb.addModel();
+			}
+		}
+		//hacky? kinda, but oh well
+	}
 
 	public void fungusCrop(DeferredBlock<Block> block) {
 		ModelFile fungusCrop1 = this.customLoaderModel("fungus_crop_1", TheBetweenlands.prefix("fungus_crop_1"), this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"));
@@ -1543,7 +1570,6 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile fungusCrop4 = this.customLoaderModel("fungus_crop_4", TheBetweenlands.prefix("fungus_crop_4"), this.modLoc("block/fungus_crop_4"), this.modLoc("block/particle/fungus_crop_particle"));
 		ModelFile fungusCrop4decayed = this.customLoaderModel("fungus_crop_4_decayed", TheBetweenlands.prefix("fungus_crop_4_decayed"), this.modLoc("block/fungus_crop_4_decayed"), this.modLoc("block/particle/fungus_crop_decayed_particle"));
 		
-
 		this.getVariantBuilder(block.get())
 			.partialState().with(DecayableCropBlock.STAGE, 0).modelForState().modelFile(fungusCrop1).addModel()
 			.partialState().with(DecayableCropBlock.STAGE, 1).modelForState().modelFile(fungusCrop2).addModel()
@@ -1552,7 +1578,6 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.partialState().with(DecayableCropBlock.STAGE, 3).with(DecayableCropBlock.DECAYED, true).modelForState().modelFile(fungusCrop4decayed).addModel()
 			.partialState().with(DecayableCropBlock.STAGE, 4).modelForState().modelFile(fungusCrop4).addModel()//hacky solution, fix later when farming is fully implemented
 			.partialState().with(DecayableCropBlock.STAGE, 5).modelForState().modelFile(fungusCrop4).addModel();
-	
 	}
 
 	public void middleFruitBush(DeferredBlock<Block> block) {

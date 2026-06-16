@@ -265,7 +265,31 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.OCTINE_ARROW.get(), ItemRegistry.BASILISK_ARROW.get(), ItemRegistry.SLUDGE_WORM_ARROW.get(),
 			ItemRegistry.SHOCK_ARROW.get(), ItemRegistry.CHIROMAW_BARB.get());
 
-		this.tag(DOES_NOT_ROT).add(Items.ROTTEN_FLESH); // TODO: add BL food items here
+		this.tag(DOES_NOT_ROT).add(Items.ROTTEN_FLESH).add(ItemRegistry.SAP_BALL.get()).add(ItemRegistry.ROTTEN_FOOD.get())//TODO double check whther rotten_food should have this tag
+			.add(ItemRegistry.MIRE_SNAIL_EGG.get()).add(ItemRegistry.COOKED_MIRE_SNAIL_EGG.get())
+			.add(ItemRegistry.RAW_FROG_LEGS.get()).add(ItemRegistry.COOKED_FROG_LEGS.get()).add(ItemRegistry.RAW_SNAIL_FLESH.get())
+			.add(ItemRegistry.COOKED_SNAIL_FLESH.get()).add(ItemRegistry.REED_DONUT.get()).add(ItemRegistry.JAM_DONUT.get())
+			.add(ItemRegistry.GERTS_DONUT.get()).add(ItemRegistry.PUFFSHROOM_TENDRIL.get()).add(ItemRegistry.KRAKEN_TENTACLE.get())
+			.add(ItemRegistry.KRAKEN_CALAMARI.get()).add(ItemRegistry.MIDDLE_FRUIT.get()).add(ItemRegistry.MINCE_PIE.get())
+			.add(ItemRegistry.CHRISTMAS_PUDDING.get()).add(ItemRegistry.CANDY_CANE.get()).add(ItemRegistry.WEEPING_BLUE_PETAL.get())
+			.add(ItemRegistry.WIGHT_HEART.get()).add(ItemRegistry.YELLOW_DOTTED_FUNGUS.get()).add(ItemRegistry.SILT_CRAB_CLAW.get())
+			.add(ItemRegistry.CRAB_STICK.get()).add(ItemRegistry.SLUDGE_JELLO.get()).add(ItemRegistry.MIDDLE_FRUIT_JELLO.get())
+			.add(ItemRegistry.SAP_JELLO.get()).add(ItemRegistry.GREEN_MARSHMALLOW.get()).add(ItemRegistry.PINK_MARSHMALLOW.get())
+			.add(ItemRegistry.FLATHEAD_MUSHROOM.get()).add(ItemRegistry.BLACK_HAT_MUSHROOM.get()).add(ItemRegistry.BULB_CAPPED_MUSHROOM.get())
+			.add(ItemRegistry.FRIED_SWAMP_KELP.get()).add(ItemRegistry.FORBIDDEN_FIG.get()).add(ItemRegistry.BLUE_CANDY.get())
+			.add(ItemRegistry.RED_CANDY.get()).add(ItemRegistry.YELLOW_CANDY.get()).add(ItemRegistry.CHIROMAW_WING.get())
+			.add(ItemRegistry.TANGLED_ROOT.get()).add(ItemRegistry.MIRE_SCRAMBLE.get()).add(ItemRegistry.WEEPING_BLUE_PETAL_SALAD.get())
+			.add(ItemRegistry.NIBBLESTICK.get()).add(ItemRegistry.SPIRIT_FRUIT.get()).add(ItemRegistry.SUSHI.get())
+			.add(ItemRegistry.ROCK_SNOT_PEARL.get()).add(ItemRegistry.PEARLED_PEAR.get()).add(ItemRegistry.RAW_ANADIA_MEAT.get())
+			.add(ItemRegistry.COOKED_ANADIA_MEAT.get()).add(ItemRegistry.SMOKED_ANADIA_MEAT.get()).add(ItemRegistry.BARNACLE.get())
+			.add(ItemRegistry.COOKED_BARNACLE.get()).add(ItemRegistry.SMOKED_BARNACLE.get()).add(ItemRegistry.SMOKED_CRAB_STICK.get())
+			.add(ItemRegistry.SMOKED_FROG_LEGS.get()).add(ItemRegistry.SMOKED_PUFFSHROOM_TENDRIL.get()).add(ItemRegistry.SMOKED_SILT_CRAB_CLAW.get())
+			.add(ItemRegistry.SMOKED_SNAIL_FLESH.get()).add(ItemRegistry.RAW_OLM_EGG.get()).add(ItemRegistry.COOKED_OLM_EGG.get())
+			.add(ItemRegistry.OLMLETTE.get()).add(ItemRegistry.SILK_GRUB.get()).add(ItemRegistry.NETTLE_SOUP.get())
+			.add(ItemRegistry.NETTLE_TEA.get()).add(ItemRegistry.PHEROMONE_EXTRACT.get()).add(ItemRegistry.SWAMP_BROTH.get())
+			.add(ItemRegistry.STURDY_STOCK.get()).add(ItemRegistry.PEAR_CORDIAL.get()).add(ItemRegistry.SHAMANS_BREW.get())
+			.add(ItemRegistry.LAKE_BROTH.get()).add(ItemRegistry.SHELL_STOCK.get()).add(ItemRegistry.FROG_LEG_EXTRACT.get())
+			.add(ItemRegistry.WITCH_TEA.get());
 
 		this.tag(IGNORES_TOOL_WEAKNESS).addTag(CORRODIBLE);
 

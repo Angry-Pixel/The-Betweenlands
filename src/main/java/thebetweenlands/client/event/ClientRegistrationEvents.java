@@ -97,6 +97,10 @@ import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.baked.barnacle1.Barnacle1ModelLoader;
+import thebetweenlands.client.model.baked.barnacle2.Barnacle2ModelLoader;
+import thebetweenlands.client.model.baked.barnacle3.Barnacle3ModelLoader;
+import thebetweenlands.client.model.baked.barnacle4.Barnacle4ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
@@ -1010,6 +1014,11 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("white_pear_crop_5"), WhitePearCrop5ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("white_pear_crop_6"), WhitePearCrop6ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("white_pear_crop_6_decayed"), WhitePearCrop6DecayedModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("barnacle_1"), Barnacle1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("barnacle_2"), Barnacle2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("barnacle_3"), Barnacle3ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("barnacle_4"), Barnacle4ModelLoader.INSTANCE);
 
 		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);

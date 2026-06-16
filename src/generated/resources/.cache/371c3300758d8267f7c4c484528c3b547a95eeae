@@ -1,4 +1,4 @@
-// 1.21.1	2026-04-14T19:42:36.4097474	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2026-06-15T02:44:29.988630887	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 3c8338bc22db2497bf01321405dcacecc18dd51c data/minecraft/tags/item/chest_armor.json
@@ -13,7 +13,7 @@ a4c743895b60b03c27274f97543c63320a2cb51a data/minecraft/tags/item/swords.json
 a7598dbab37e1a8e21a417106272d54c15d70163 data/thebetweenlands/tags/item/circle_gem_applicable.json
 1627b0d01b77b4fe15d142484da986ff54349972 data/thebetweenlands/tags/item/corrodible.json
 afa2fcc30df5be5a8fd33da3dd27bafe0fe96a48 data/thebetweenlands/tags/item/corrodible/default.json
-ed812d11a070d92ca88d1d889a167aa4dcda4159 data/thebetweenlands/tags/item/does_not_rot.json
+e997711a931662398c40e17bbd6ec357806900bf data/thebetweenlands/tags/item/does_not_rot.json
 d23ebea9a4ef324360a9fbf019f73418362b9474 data/thebetweenlands/tags/item/empty_aspect_vials.json
 8b9adc408104fceecb9611e08828a6afaeb7e7c6 data/thebetweenlands/tags/item/fillable_aspect_vials.json
 a9170b0c494355ef59be0d1ff25a6f0502f0969d data/thebetweenlands/tags/item/filled_aspect_vials.json

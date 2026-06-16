@@ -40,6 +40,8 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.misc.SulfurTorchBlock;
+import thebetweenlands.common.block.misc.SulfurWallTorchBlock;
 import thebetweenlands.common.component.item.OriginalItemData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
@@ -163,7 +165,7 @@ public class OverworldItemHandler {
 
 			@Override
 			public boolean onTorchBlockPlaced(LevelAccessor world, BlockPos pos, BlockState state, ItemStack stack, Entity player, BlockSnapshot blockSnapshot) {
-				if (!(state.getBlock() instanceof BaseTorchBlock)) return false;
+				if (!(state.getBlock() instanceof BaseTorchBlock) || state.getBlock() instanceof SulfurTorchBlock || state.getBlock() instanceof SulfurWallTorchBlock) return false;
 				BlockState dampTorch;
 				Optional<Direction> faceValue = state.getOptionalValue(HorizontalDirectionalBlock.FACING);
 				if (faceValue.isPresent()) {

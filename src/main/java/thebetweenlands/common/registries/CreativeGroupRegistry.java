@@ -763,6 +763,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RAW_ANADIA_MEAT);
 			output.accept(ItemRegistry.COOKED_ANADIA_MEAT);
 			output.accept(ItemRegistry.SMOKED_ANADIA_MEAT);
+			output.accept(ItemRegistry.BARNACLE_LARVAE);
 			output.accept(ItemRegistry.BARNACLE);
 			output.accept(ItemRegistry.COOKED_BARNACLE);
 			output.accept(ItemRegistry.SMOKED_BARNACLE);

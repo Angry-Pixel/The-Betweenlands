@@ -32,6 +32,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.RepellerBlock;
 import thebetweenlands.common.block.container.SmokingRackBlock;
+import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.block.terrain.WaystoneBlock;
@@ -783,7 +784,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.add(BlockRegistry.ASPECTRUS_CROP.get(), LootTable.lootTable());
 		this.decayableCropDrop(BlockRegistry.FUNGUS_CROP.get(), 3, ItemRegistry.YELLOW_DOTTED_FUNGUS.get(), ItemRegistry.SPORES.get());
 		this.decayableCropDrop(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), 5, ItemRegistry.MIDDLE_FRUIT.get(), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS.get());
-		this.add(BlockRegistry.BARNACLE.get(), LootTable.lootTable());
+		this.barnacle(BlockRegistry.BARNACLE.get(), 4, ItemRegistry.BARNACLE.get(), ItemRegistry.BARNACLE_LARVAE.get());
 		this.add(BlockRegistry.BETWEENSTONE_PEBBLE.get(), LootTable.lootTable());
 
 		this.add(BlockRegistry.WHITE_PRESENT.get(), LootTable.lootTable());
@@ -831,6 +832,14 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.dropPottedContents(BlockRegistry.POTTED_MILKWEED.get());
 		this.dropPottedContents(BlockRegistry.POTTED_NETTLE.get());
 		this.dropPottedContents(BlockRegistry.POTTED_PICKERELWEED.get());
+	}
+
+	private void barnacle(Block cropBlock, int stage, Item cropItem, Item seedItem) {
+		LootItemCondition.Builder licb = LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
+			.setProperties(StatePropertiesPredicate.Builder.properties()
+			.hasProperty(BarnacleBlock.STAGE, stage));
+		
+		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, licb));
 	}
 
 	private void decayableCropDrop(Block cropBlock, int stage, Item cropItem, Item seedItem) {
