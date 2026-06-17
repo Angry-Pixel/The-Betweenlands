@@ -83,6 +83,10 @@ public class PebblePileBlock extends Block implements SwampWaterLoggable {
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (stack.is(this.asItem())) {
+			if (state.getValue(PEBBLES) < 4) {
+				stack.consume(1, player);
+				level.setBlockAndUpdate(pos, state.setValue(PEBBLES, state.getValue(PEBBLES) + 1));
+			}
 			return ItemInteractionResult.sidedSuccess(level.isClientSide());
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);

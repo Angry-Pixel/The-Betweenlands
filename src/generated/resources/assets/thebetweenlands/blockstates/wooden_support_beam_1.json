@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/wooden_support_beam_1",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/wooden_support_beam_1"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/wooden_support_beam_1",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/wooden_support_beam_1",
+      "y": 270
+    }
+  }
+}

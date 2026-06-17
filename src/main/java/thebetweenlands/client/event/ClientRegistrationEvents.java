@@ -104,6 +104,7 @@ import thebetweenlands.client.model.baked.barnacle4.Barnacle4ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
+import thebetweenlands.client.model.baked.brazier.BrazierModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.swampplant.SwampPlantModelLoader;
 import thebetweenlands.client.model.baked.bulbcappedmushroom.BulbCappedMushroomModelLoader;
@@ -115,6 +116,7 @@ import thebetweenlands.client.model.baked.funguscrop3.FungusCrop3ModelLoader;
 import thebetweenlands.client.model.baked.funguscrop4.FungusCrop4ModelLoader;
 import thebetweenlands.client.model.baked.funguscrop4decayed.FungusCrop4DecayedModelLoader;
 import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
+import thebetweenlands.client.model.baked.pebblepile.PebblePileModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop1.WhitePearCrop1ModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop2.WhitePearCrop2ModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop3.WhitePearCrop3ModelLoader;
@@ -122,12 +124,16 @@ import thebetweenlands.client.model.baked.whitepearcrop4.WhitePearCrop4ModelLoad
 import thebetweenlands.client.model.baked.whitepearcrop5.WhitePearCrop5ModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop6.WhitePearCrop6ModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop6decayed.WhitePearCrop6DecayedModelLoader;
+import thebetweenlands.client.model.baked.woodensupportbeam1.WoodenSupportBeam1ModelLoader;
+import thebetweenlands.client.model.baked.woodensupportbeam2.WoodenSupportBeam2ModelLoader;
+import thebetweenlands.client.model.baked.woodensupportbeam3.WoodenSupportBeam3ModelLoader;
 import thebetweenlands.client.model.baked.venusflytrap.VenusFlyTrapModelLoader;
 import thebetweenlands.client.model.baked.pitcherplant.PitcherPlantModelLoader;
 import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.weepingblue.WeepingBlueModelLoader;
 import thebetweenlands.client.model.baked.sundew.SundewModelLoader;
 import thebetweenlands.client.model.baked.volarpad.VolarpadModelLoader;
+import thebetweenlands.client.model.baked.walkway.WalkwayModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
@@ -1027,6 +1033,16 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
 
 		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("wooden_support_beam_2"), WoodenSupportBeam2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("wooden_support_beam_3"), WoodenSupportBeam3ModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("pebble_pile"), PebblePileModelLoader.INSTANCE);
 
 		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);

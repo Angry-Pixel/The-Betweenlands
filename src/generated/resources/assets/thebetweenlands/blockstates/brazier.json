@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "thebetweenlands:block/brazier"
+    },
+    "half=upper": {
+      "model": "thebetweenlands:block/brazier_top"
+    }
+  }
+}

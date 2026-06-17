@@ -51,6 +51,7 @@ public class ClientEvents {
 		MusicHandler.INSTANCE.init();
 		RadialMenuHandler.INSTANCE.init();
 		ScreenHandler.init();
+		LanternLightHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
 

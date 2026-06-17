@@ -1,0 +1,55 @@
+{
+  "variants": {
+    "water_type=none": [
+      {
+        "model": "thebetweenlands:block/pebble_pile"
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile",
+        "y": 270
+      }
+    ],
+    "water_type=swamp_water": [
+      {
+        "model": "thebetweenlands:block/pebble_pile_water"
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile_water",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile_water",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile_water",
+        "y": 270
+      }
+    ],
+    "water_type=water": [
+      {
+        "model": "thebetweenlands:block/pebble_pile_water"
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile_water",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile_water",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/pebble_pile_water",
+        "y": 270
+      }
+    ]
+  }
+}

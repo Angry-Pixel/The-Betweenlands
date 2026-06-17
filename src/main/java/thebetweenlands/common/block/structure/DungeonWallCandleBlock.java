@@ -104,8 +104,8 @@ public class DungeonWallCandleBlock extends HorizontalDirectionalBlock {
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
 		if (state.getValue(LIT)) {
 			Direction facing = state.getValue(FACING);
-			double offSetX = facing.getStepX() * 0.09375;
-			double offSetZ = facing.getStepZ() * 0.09375;
+			double offSetX = facing.getStepX() * -0.09375;
+			double offSetZ = facing.getStepZ() * -0.09375;
 			double offSetWaxX = 0D + random.nextDouble() * 0.125D - random.nextDouble() * 0.125D;
 			double offSetWaxZ = 0D + random.nextDouble() * 0.125D - random.nextDouble() * 0.125D;
 
