@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:fungus_crop_4_decayed",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/fungus_crop_decayed_particle",
-    "texture": "thebetweenlands:block/fungus_crop_4_decayed"
-  }
-}

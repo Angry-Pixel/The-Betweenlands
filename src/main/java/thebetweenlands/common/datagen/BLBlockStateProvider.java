@@ -1424,13 +1424,17 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.texture("particle", particle);
 	}
 
-	private ModelFile customLoaderModelWithExtraTexture(String name, ResourceLocation loader, ResourceLocation texture, ResourceLocation particle, Tuple<String, ResourceLocation> extraTexture) {
-		return this.models().withExistingParent(name, "block/block")
+	@SafeVarargs
+	private ModelFile customLoaderModelWithExtraTexture(String name, ResourceLocation loader, ResourceLocation texture, ResourceLocation particle, Tuple<String, ResourceLocation>... extraTexture) {
+		BlockModelBuilder ret = this.models().withExistingParent(name, "block/block")
 			.customLoader((parent, helper) -> new VariantLoaderBuilder<>(loader, parent, helper))
 			.end()
 			.texture("texture", texture)
-			.texture(extraTexture.getA(), extraTexture.getB())
 			.texture("particle", particle);
+		for (int i = 0; i < extraTexture.length; i++) {
+			ret = ret.texture(extraTexture[i].getA(), extraTexture[i].getB());
+		}
+		return ret;
 	}
 
 	private VariantBlockStateBuilder addRotatedVariants(VariantBlockStateBuilder.PartialBlockstate partialBuilder, ModelFile... model) {
@@ -1585,63 +1589,50 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 	
 	public void barnacle(DeferredBlock<Block> block) {
-		ModelFile[] barnacles = new ModelFile[]{this.customLoaderModel("barnacle_1", TheBetweenlands.prefix("barnacle_1"), this.modLoc("block/barnacle_1"), this.modLoc("block/barnacle_1")),
-			this.customLoaderModel("barnacle_2", TheBetweenlands.prefix("barnacle_2"), this.modLoc("block/barnacle_2"), this.modLoc("block/barnacle_2")),
-			this.customLoaderModel("barnacle_3", TheBetweenlands.prefix("barnacle_3"), this.modLoc("block/barnacle_3"), this.modLoc("block/barnacle_3")),
-			this.customLoaderModel("barnacle_4", TheBetweenlands.prefix("barnacle_4"), this.modLoc("block/barnacle_4"), this.modLoc("block/barnacle_4"))};
-		
+		ModelFile barnacle = this.customLoaderModelWithExtraTexture("barnacle", TheBetweenlands.prefix("barnacle"), 
+			this.modLoc("block/barnacle_1"), this.modLoc("block/barnacle_1"),
+			new Tuple<String, ResourceLocation>("barnacle_2", this.modLoc("block/barnacle_2")),
+			new Tuple<String, ResourceLocation>("barnacle_3", this.modLoc("block/barnacle_3")),
+			new Tuple<String, ResourceLocation>("barnacle_4", this.modLoc("block/barnacle_4")));
+
 		VariantBlockStateBuilder vbsb = this.getVariantBuilder(block.get());
 		for (Direction dir : new Direction[]{Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
-			for (int i = 0; i < 4; i++) {
-				ConfiguredModel.Builder<VariantBlockStateBuilder> bvbsb = vbsb.partialState().with(DirectionalBlock.FACING, dir).with(BarnacleBlock.STAGE, i+1).modelForState().modelFile(barnacles[i]);
-				switch (dir) {
-					case DOWN -> bvbsb.rotationX(180);
-					case SOUTH -> bvbsb.rotationX(270);
-					case WEST -> bvbsb.rotationX(270).rotationY(90);
-					case NORTH -> bvbsb.rotationX(270).rotationY(180);
-					case EAST -> bvbsb.rotationX(270).rotationY(270);
-					default -> {} // UP: default orientation
-				}
-				vbsb = bvbsb.addModel();
+			ConfiguredModel.Builder<VariantBlockStateBuilder> bvbsb = vbsb.partialState().with(DirectionalBlock.FACING, dir).modelForState().modelFile(barnacle);
+			switch (dir) {
+				case DOWN -> bvbsb.rotationX(180);
+				case SOUTH -> bvbsb.rotationX(270);
+				case WEST -> bvbsb.rotationX(270).rotationY(90);
+				case NORTH -> bvbsb.rotationX(270).rotationY(180);
+				case EAST -> bvbsb.rotationX(270).rotationY(270);
+				default -> {} // UP: default orientation
 			}
+			vbsb = bvbsb.addModel();
 		}
 		//hacky? kinda, but oh well
 	}
 
 	public void fungusCrop(DeferredBlock<Block> block) {
-		ModelFile fungusCrop1 = this.customLoaderModel("fungus_crop_1", TheBetweenlands.prefix("fungus_crop_1"), this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop2 = this.customLoaderModel("fungus_crop_2", TheBetweenlands.prefix("fungus_crop_2"), this.modLoc("block/fungus_crop_2"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop3 = this.customLoaderModel("fungus_crop_3", TheBetweenlands.prefix("fungus_crop_3"), this.modLoc("block/fungus_crop_3"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop4 = this.customLoaderModel("fungus_crop_4", TheBetweenlands.prefix("fungus_crop_4"), this.modLoc("block/fungus_crop_4"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop4decayed = this.customLoaderModel("fungus_crop_4_decayed", TheBetweenlands.prefix("fungus_crop_4_decayed"), this.modLoc("block/fungus_crop_4_decayed"), this.modLoc("block/particle/fungus_crop_decayed_particle"));
+		ModelFile fungusCrop = this.customLoaderModelWithExtraTexture("fungus_crop", TheBetweenlands.prefix("fungus_crop"), 
+			this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"),
+			new Tuple<String, ResourceLocation>("fungus_crop_2", this.modLoc("block/fungus_crop_2")),
+			new Tuple<String, ResourceLocation>("fungus_crop_3", this.modLoc("block/fungus_crop_3")),
+			new Tuple<String, ResourceLocation>("fungus_crop_4", this.modLoc("block/fungus_crop_4")),
+			new Tuple<String, ResourceLocation>("fungus_crop_4_decayed", this.modLoc("block/fungus_crop_4_decayed")));
 		
-		this.getVariantBuilder(block.get())
-			.partialState().with(DecayableCropBlock.STAGE, 0).modelForState().modelFile(fungusCrop1).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 1).modelForState().modelFile(fungusCrop2).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 2).modelForState().modelFile(fungusCrop3).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 3).with(DecayableCropBlock.DECAYED, false).modelForState().modelFile(fungusCrop4).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 3).with(DecayableCropBlock.DECAYED, true).modelForState().modelFile(fungusCrop4decayed).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 4).modelForState().modelFile(fungusCrop4).addModel()//hacky solution, fix later when farming is fully implemented
-			.partialState().with(DecayableCropBlock.STAGE, 5).modelForState().modelFile(fungusCrop4).addModel();
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(fungusCrop).addModel();
 	}
 
 	public void middleFruitBush(DeferredBlock<Block> block) {
-		ModelFile whitePearCrop1 = this.customLoaderModel("white_pear_crop_1", TheBetweenlands.prefix("white_pear_crop_1"), this.modLoc("block/white_pear_crop_1"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop2 = this.customLoaderModel("white_pear_crop_2", TheBetweenlands.prefix("white_pear_crop_2"), this.modLoc("block/white_pear_crop_2"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop3 = this.customLoaderModel("white_pear_crop_3", TheBetweenlands.prefix("white_pear_crop_3"), this.modLoc("block/white_pear_crop_3"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop4 = this.customLoaderModel("white_pear_crop_4", TheBetweenlands.prefix("white_pear_crop_4"), this.modLoc("block/white_pear_crop_4"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop5 = this.customLoaderModel("white_pear_crop_5", TheBetweenlands.prefix("white_pear_crop_5"), this.modLoc("block/white_pear_crop_5"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop6 = this.customLoaderModel("white_pear_crop_6", TheBetweenlands.prefix("white_pear_crop_6"), this.modLoc("block/white_pear_crop_6"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop6decayed = this.customLoaderModel("white_pear_crop_6_decayed", TheBetweenlands.prefix("white_pear_crop_6_decayed"), this.modLoc("block/white_pear_crop_6_decayed"), this.modLoc("block/particle/white_pear_crop_decayed_particle"));
+		ModelFile whitePearCrop = this.customLoaderModelWithExtraTexture("white_pear_crop", TheBetweenlands.prefix("white_pear_crop"), 
+			this.modLoc("block/white_pear_crop_1"), this.modLoc("block/particle/white_pear_crop_particle"),
+			new Tuple<String, ResourceLocation>("white_pear_crop_2", this.modLoc("block/white_pear_crop_2")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_3", this.modLoc("block/white_pear_crop_3")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_4", this.modLoc("block/white_pear_crop_4")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_5", this.modLoc("block/white_pear_crop_5")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_6", this.modLoc("block/white_pear_crop_6")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_6_decayed", this.modLoc("block/white_pear_crop_6_decayed")));
 		
-		this.getVariantBuilder(block.get())
-			.partialState().with(DecayableCropBlock.STAGE, 0).modelForState().modelFile(whitePearCrop1).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 1).modelForState().modelFile(whitePearCrop2).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 2).modelForState().modelFile(whitePearCrop3).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 3).modelForState().modelFile(whitePearCrop4).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 4).modelForState().modelFile(whitePearCrop5).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 5).with(DecayableCropBlock.DECAYED, false).modelForState().modelFile(whitePearCrop6).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 5).with(DecayableCropBlock.DECAYED, true).modelForState().modelFile(whitePearCrop6decayed).addModel();
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(whitePearCrop).addModel();
 	}
 
 	public void dungeonWallCandle(DeferredBlock<Block> block) {

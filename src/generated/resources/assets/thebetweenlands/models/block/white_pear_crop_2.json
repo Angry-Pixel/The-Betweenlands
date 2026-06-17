@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:white_pear_crop_2",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/white_pear_crop_particle",
-    "texture": "thebetweenlands:block/white_pear_crop_2"
-  }
-}

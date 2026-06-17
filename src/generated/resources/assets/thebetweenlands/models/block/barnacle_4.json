@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:barnacle_4",
-  "textures": {
-    "particle": "thebetweenlands:block/barnacle_4",
-    "texture": "thebetweenlands:block/barnacle_4"
-  }
-}

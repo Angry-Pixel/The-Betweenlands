@@ -78,6 +78,7 @@ import thebetweenlands.common.block.container.WeedwoodChestBlock;
 import thebetweenlands.common.block.container.WeedwoodCraftingTableBlock;
 import thebetweenlands.common.block.container.WeedwoodJukeboxBlock;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
+import thebetweenlands.common.block.farming.AspectrusCropBlock;
 import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DugDirtBlock;
 import thebetweenlands.common.block.farming.DugGrassBlock;
@@ -786,7 +787,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> HANGER = register("hanger", () -> new HangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> SEEDED_HANGER = register("seeded_hanger", () -> new SeededHangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
 	//TODO crops
-	public static final DeferredBlock<Block> ASPECTRUS_CROP = BLOCKS.register("aspectrus_crop", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> ASPECTRUS_CROP = BLOCKS.register("aspectrus_crop", () -> new AspectrusCropBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> FUNGUS_CROP = BLOCKS.register("fungus_crop", () -> new FungusCropBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> MIDDLE_FRUIT_BUSH = BLOCKS.register("middle_fruit_bush", () -> new MiddleFruitBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> PHEROMONE_INFUSED_WEEDWOOD_BUSH = register("pheromone_infused_weedwood_bush", () -> new InfestedWeedwoodBushBlock(0, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));
