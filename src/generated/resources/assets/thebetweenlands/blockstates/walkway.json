@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/walkway",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/walkway"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/walkway",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/walkway",
+      "y": 270
+    }
+  }
+}

@@ -18,6 +18,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
@@ -69,6 +72,27 @@ public class BrazierBlock extends Block {
 			return blockstate.is(this) && blockstate.getValue(HALF) == DoubleBlockHalf.LOWER;
 		}
 	}
+
+	@Override
+	protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.empty();
+	}
+
+	@Override
+	protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+		return 1.0F;
+	}
+
+	@Override
+	protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
+		return adjacentState.is(this) && direction.getAxis() == Direction.Axis.Y;
+	}
+
 
 	@Override
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {

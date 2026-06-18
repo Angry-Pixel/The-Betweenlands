@@ -9,6 +9,8 @@ public class BetweenlandsCommonConfig {
 
 	public final OverworldItems OVERWORLD = new OverworldItems();
 
+	public final ShaderConfig SHADER = new ShaderConfig();
+
 	public BetweenlandsCommonConfig(ModConfigSpec.Builder builder) {
 		builder.comment("Configure handling for items outside of The Betweenlands").translation("config.thebetweenlands.general").push("Overworld");
 		{
@@ -83,6 +85,14 @@ public class BetweenlandsCommonConfig {
 					.defineListAllowEmpty("torchBlacklist", new ArrayList<>(), () -> "", ItemListProperty::isValidString);
 		}
 		builder.pop();
+		builder.comment("Configure handling for Betweenlands shader settings").translation("config.thebetweenlands.shader").push("Shader");
+		{
+			SHADER.lanternsUseShaders = builder
+					.comment("Should amate paper and silt glass lanterns have a shader glow")
+					.translation("config.thebetweenlands.lanterns_use_shaders")
+					.define("lanternsUseShaders", false);
+		}
+		builder.pop();
 	}
 
 	public static final class OverworldItems {
@@ -103,5 +113,9 @@ public class BetweenlandsCommonConfig {
 
 		public ModConfigSpec.ConfigValue<List<? extends String>> torchWhitelist;
 		public ModConfigSpec.ConfigValue<List<? extends String>> torchBlacklist;
+	}
+
+	public static final class ShaderConfig {
+		public ModConfigSpec.ConfigValue<Boolean> lanternsUseShaders;
 	}
 }

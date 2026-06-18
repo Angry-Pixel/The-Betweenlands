@@ -80,6 +80,8 @@ public class BetweenlandsConfig {
 	public static boolean debugModelLoader = false;
 	public static boolean dumpPackedTextures = false;
 
+	public static boolean lanternsUseShaders = false;
+
 //	public static final OverworldItemLists OVERWORLD = new OverworldItemLists();
 //
 //	public static final class OverworldItemLists {
@@ -128,6 +130,11 @@ public class BetweenlandsConfig {
 		public static final ItemListProperty torchBlacklist = new ItemListProperty(() -> torchBlacklistUnparsed.toArray(new String[0]));
 	}
 
+	public static final class Shader {
+		public static boolean lanternsUseShaders = false;
+
+	}
+
 	@SuppressWarnings("unchecked")
 	public static void rebuildCommonConfig(BetweenlandsCommonConfig commonConfig) {
 		// Load data from edited config
@@ -159,6 +166,8 @@ public class BetweenlandsConfig {
 		Overworld.toolWeaknessBlacklist.parseData();
 		Overworld.torchWhitelist.parseData();
 		Overworld.torchBlacklist.parseData();
+
+		Shader.lanternsUseShaders = /* (boolean) */ commonConfig.SHADER.lanternsUseShaders.get();
 
 		// Try to update the cache
 		HolderLookup.Provider registryAccess = TheBetweenlands.tryGetRegistryAccess();

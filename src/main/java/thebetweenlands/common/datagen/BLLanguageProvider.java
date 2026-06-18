@@ -1218,9 +1218,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.coated.4", "Well coated");
 		this.add("item.thebetweenlands.coated.5", "Well coated");
 
-		this.add("item.thebetweenlands.food_sickness.fine", "Tastes good");
-		this.add("item.thebetweenlands.food_sickness.half", "Tastes fine");
-		this.add("item.thebetweenlands.food_sickness.sick", "Can't eat this anymore");
+		this.add("item.thebetweenlands.food_sickness.state.fine", "Tastes good");
+		this.add("item.thebetweenlands.food_sickness.state.half", "Tastes fine");
+		this.add("item.thebetweenlands.food_sickness.state.sick", "Can't eat this anymore");
 
 		this.add("item.thebetweenlands.circle_gem.green", "Green Gem");
 		this.add("item.thebetweenlands.circle_gem.crimson", "Crimson Gem");
@@ -1885,6 +1885,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.CRYPTWEED_BLADES, "Cryptweed Blades");
 		this.addItem(ItemRegistry.ASPECTRUS_SEEDS, "Aspectrus Seeds");
 		this.addItem(ItemRegistry.SPORES, "Spores");
+		this.addItem(ItemRegistry.BARNACLE_LARVAE, "Barnacle Larvae");
 		this.addItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS, "White Pear Seeds");
 		
 		this.addItem(ItemRegistry.ASPECTRUS_FRUIT, "Aspectrus Fruit");

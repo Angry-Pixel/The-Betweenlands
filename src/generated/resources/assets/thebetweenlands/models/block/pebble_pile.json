@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "loader": "thebetweenlands:pebble_pile",
+  "textures": {
+    "particle": "thebetweenlands:block/betweenstone",
+    "texture": "thebetweenlands:block/betweenstone_pebble_pile"
+  }
+}

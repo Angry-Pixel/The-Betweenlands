@@ -15,6 +15,7 @@ public class LootFunctionRegistry {
 	public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SetCountFromAnadiaFunction>> SET_ANADIA_COUNT = FUNCTIONS.register("set_count_from_anadia", () -> new LootItemFunctionType<>(SetCountFromAnadiaFunction.CODEC));
 	public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SetAnadiaPropertiesFunction>> SET_ANADIA_PROPERTIES = FUNCTIONS.register("set_anadia_properties", () -> new LootItemFunctionType<>(SetAnadiaPropertiesFunction.CODEC));
 
+	public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SetAspectFromCropFunction>> SET_ASPECT_FROM_CROP = FUNCTIONS.register("set_aspect_from_crop", () -> new LootItemFunctionType<>(SetAspectFromCropFunction.CODEC));
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> HAS_ITEM = CONDITIONS.register("has_item", () -> new LootItemConditionType(PlayerHasItemCondition.CODEC));
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> EVENT_ACTIVE = CONDITIONS.register("event_active", () -> new LootItemConditionType(EventActiveCondition.CODEC));
 	public static final DeferredHolder<LootItemConditionType, LootItemConditionType> WORM_SQUISHED = CONDITIONS.register("worm_squished", () -> new LootItemConditionType(WormSquishedCondition.CODEC));

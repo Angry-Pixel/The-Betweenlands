@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:fungus_crop_3",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/fungus_crop_particle",
-    "texture": "thebetweenlands:block/fungus_crop_3"
-  }
-}

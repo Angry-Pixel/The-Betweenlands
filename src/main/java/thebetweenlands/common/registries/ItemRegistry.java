@@ -64,6 +64,7 @@ import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
 import thebetweenlands.common.item.equipment.RingOfPowerItem;
 import thebetweenlands.common.item.equipment.RingOfRecruitmentItem;
 import thebetweenlands.common.item.equipment.RingOfSummoningItem;
+import thebetweenlands.common.item.farming.AspectrusSeedItem;
 import thebetweenlands.common.item.food.ChiromawWingItem;
 import thebetweenlands.common.item.food.FallDamageReductionBrewItem;
 import thebetweenlands.common.item.food.ForbiddenFigItem;
@@ -237,9 +238,10 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 	public static final DeferredItem<Item> ROTTEN_FOOD = ITEMS.register("rotten_food", () -> new RottenFoodItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(-1).saturationModifier(-1.0F).effect(() -> new MobEffectInstance(MobEffects.HUNGER, 200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.POISON, 200, 1), 1.0F).build())));
 	public static final DeferredItem<Item> TAINTED_POTION = ITEMS.register("tainted_potion", () -> new TaintedPotionItem(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new ItemNameBlockItem(BlockRegistry.ASPECTRUS_CROP.get(), new Item.Properties()));
+	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new AspectrusSeedItem(new Item.Properties()));
 	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new ItemNameBlockItem(BlockRegistry.FUNGUS_CROP.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIDDLE_FRUIT_BUSH_SEEDS = ITEMS.register("middle_fruit_bush_seeds", () -> new ItemNameBlockItem(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), new Item.Properties()));
+	public static final DeferredItem<Item> BARNACLE_LARVAE = ITEMS.register("barnacle_larvae", () -> new ItemNameBlockItem(BlockRegistry.BARNACLE.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIRE_SNAIL_EGG = ITEMS.register("mire_snail_egg", () -> new MireSnailEggItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> COOKED_MIRE_SNAIL_EGG = ITEMS.register("cooked_mire_snail_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RAW_FROG_LEGS = ITEMS.register("raw_frog_legs", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4F).build())));
@@ -661,7 +663,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PALE_GRASS_BLADES = ITEMS.register("pale_grass_blades", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STRING_ROOT_FIBERS = ITEMS.register("string_root_fibers", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> CRYPTWEED_BLADES = ITEMS.register("cryptweed_blades", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new AspectrusFruitItem(new Item.Properties().component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("aspectrus_fruit", () -> new AspectrusFruitItem(new Item.Properties().component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
 	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.GREEN_ELIXIR, new Item.Properties()));
 	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentrothyst_vial", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.ORANGE_ELIXIR, new Item.Properties()));

@@ -78,11 +78,13 @@ import thebetweenlands.common.block.container.WeedwoodChestBlock;
 import thebetweenlands.common.block.container.WeedwoodCraftingTableBlock;
 import thebetweenlands.common.block.container.WeedwoodJukeboxBlock;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
+import thebetweenlands.common.block.farming.AspectrusCropBlock;
 import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DugDirtBlock;
 import thebetweenlands.common.block.farming.DugGrassBlock;
 import thebetweenlands.common.block.farming.FungusCropBlock;
 import thebetweenlands.common.block.farming.MiddleFruitBushBlock;
+import thebetweenlands.common.block.farming.RubberTreeFenceBlock;
 import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.misc.BaubleBlock;
 import thebetweenlands.common.block.misc.CavingRopeLightBlock;
@@ -578,7 +580,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SCABYST_BRICK_WALL = register("scabyst_brick_wall", () -> new SwampWallBlock(BlockBehaviour.Properties.ofFullCopy(SCABYST_BRICKS.get())));
 	public static final DeferredBlock<Block> WEEDWOOD_FENCE = register("weedwood_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> WEEDWOOD_LOG_FENCE = register("weedwood_log_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> RUBBER_TREE_FENCE = register("rubber_tree_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> RUBBER_TREE_FENCE = register("rubber_tree_fence", () -> new RubberTreeFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GIANT_ROOT_FENCE = register("giant_root_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> HEARTHGROVE_FENCE = register("hearthgrove_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> NIBBLETWIG_FENCE = register("nibbletwig_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
@@ -687,7 +689,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> ROTTEN_STAIRS = register("rotten_stairs", () -> new SwampStairBlock(ROTTEN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ROTTEN_FENCE = register("rotten_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ROTTEN_FENCE_GATE = register("rotten_fence_gate", () -> new FenceGateBlock(BLWoodTypes.ROTTEN_WOOD_TYPE, BlockBehaviour.Properties.of().ignitedByLava().strength(1.5F, 4.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> BRAZIER = register("brazier", () -> new BrazierBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> BRAZIER = register("brazier", () -> new BrazierBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(1.5F, 10.0F).sound(SoundType.WOOD).noOcclusion().forceSolidOff()));
 	public static final DeferredBlock<Block> DECAY_PIT_GROUND_CHAIN = BLOCKS.register("decay_pit_ground_chain", () -> new DecayPitGroundChainBlock(BlockBehaviour.Properties.of().noLootTable().noOcclusion().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> DECAY_PIT_HANGING_CHAIN = BLOCKS.register("decay_pit_hanging_chain", () -> new DecayPitHangingChainBlock(BlockBehaviour.Properties.of().noLootTable().noOcclusion().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> DECAY_PIT_CONTROL = BLOCKS.register("decay_pit_control", () -> new DecayPitControlBlock(BlockBehaviour.Properties.of().noLootTable().noOcclusion().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
@@ -786,7 +788,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> HANGER = register("hanger", () -> new HangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> SEEDED_HANGER = register("seeded_hanger", () -> new SeededHangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
 	//TODO crops
-	public static final DeferredBlock<Block> ASPECTRUS_CROP = BLOCKS.register("aspectrus_crop", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> ASPECTRUS_CROP = BLOCKS.register("aspectrus_crop", () -> new AspectrusCropBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> FUNGUS_CROP = BLOCKS.register("fungus_crop", () -> new FungusCropBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> MIDDLE_FRUIT_BUSH = BLOCKS.register("middle_fruit_bush", () -> new MiddleFruitBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> PHEROMONE_INFUSED_WEEDWOOD_BUSH = register("pheromone_infused_weedwood_bush", () -> new InfestedWeedwoodBushBlock(0, BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_BUSH.get()).randomTicks()));

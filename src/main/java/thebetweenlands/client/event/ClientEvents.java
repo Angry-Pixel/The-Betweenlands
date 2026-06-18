@@ -28,14 +28,11 @@ import thebetweenlands.client.handler.*;
 import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.EntityUnmountHandler;
-import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.SlingshotItem;
 import thebetweenlands.util.RenderUtils;
-
-import java.util.Optional;
 
 public class ClientEvents {
 

@@ -9,17 +9,21 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
@@ -49,8 +53,10 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
+import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
 import thebetweenlands.common.block.farming.DugSoilBlock;
+import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.misc.GlowingGoopBlock;
 import thebetweenlands.common.block.misc.MistBridgeBlock;
 import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
@@ -69,7 +75,7 @@ import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.datagen.builders.model.*;
 import thebetweenlands.common.registries.BlockRegistry;
-
+import thebetweenlands.common.block.structure.BrazierBlock;
 
 public class BLBlockStateProvider extends BlockStateProvider {
 
@@ -1004,10 +1010,24 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.sundew(BlockRegistry.SUNDEW);
 		this.volarpad(BlockRegistry.VOLARPAD);
 		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
+		this.aspectrusCrop(BlockRegistry.ASPECTRUS_CROP);
 		this.fungusCrop(BlockRegistry.FUNGUS_CROP);
 		this.middleFruitBush(BlockRegistry.MIDDLE_FRUIT_BUSH);
 		this.flatHeadMushroom(BlockRegistry.FLATHEAD_MUSHROOM);
 		this.blackHatMushroom(BlockRegistry.BLACK_HAT_MUSHROOM);
+		this.barnacle(BlockRegistry.BARNACLE);
+		this.lantern(BlockRegistry.PAPER_LANTERN_1, "lantern_paper_1", TheBetweenlands.prefix("paper_lantern"), this.modLoc("block/lantern_paper_1"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
+		this.lantern(BlockRegistry.PAPER_LANTERN_2, "lantern_paper_2", TheBetweenlands.prefix("paper_lantern"), this.modLoc("block/lantern_paper_2"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
+		this.lantern(BlockRegistry.PAPER_LANTERN_3, "lantern_paper_3", TheBetweenlands.prefix("paper_lantern"), this.modLoc("block/lantern_paper_3"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
+		this.lantern(BlockRegistry.SILT_GLASS_LANTERN, "lantern_silt_glass", TheBetweenlands.prefix("silt_glass_lantern"), this.modLoc("block/lantern_silt_glass"), this.modLoc("block/silt_glass"), this.modLoc("block/lantern_rope"));
+		this.dungeonWallCandle(BlockRegistry.DUNGEON_WALL_CANDLE);
+		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_1, "wooden_support_beam_1", TheBetweenlands.prefix("wooden_support_beam_1"), this.modLoc("block/wooden_support_beam_rotten_1"), this.modLoc("block/particle/wood_support_beam_particle"));
+		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_2, "wooden_support_beam_2", TheBetweenlands.prefix("wooden_support_beam_2"), this.modLoc("block/wooden_support_beam_rotten_2"), this.modLoc("block/particle/wood_support_beam_particle"));
+		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, "wooden_support_beam_3", TheBetweenlands.prefix("wooden_support_beam_3"), this.modLoc("block/wooden_support_beam_rotten_3"), this.modLoc("block/particle/wood_support_beam_particle"));
+		this.brazier(BlockRegistry.BRAZIER);
+		this.walkway(BlockRegistry.WALKWAY);
+		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
+
 
 		this.flowerPot(BlockRegistry.POTTED_WEEDWOOD_SAPLING);
 		this.flowerPot(BlockRegistry.POTTED_SAP_SAPLING);
@@ -1394,11 +1414,28 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	private ModelFile customLoaderModel(String name, ResourceLocation loader, ResourceLocation texture, ResourceLocation particle) {
+		return this.customLoaderModel(name, loader, texture, particle, true);
+	}
+
+	private ModelFile customLoaderModel(String name, ResourceLocation loader, ResourceLocation texture, ResourceLocation particle, boolean ambientOcclusion) {
 		return this.models().withExistingParent(name, "block/block")
+			.customLoader((parent, helper) -> new VariantLoaderBuilder<>(loader, parent, helper))
+			.end().ao(ambientOcclusion)
+			.texture("texture", texture)
+			.texture("particle", particle);
+	}
+
+	@SafeVarargs
+	private ModelFile customLoaderModelWithExtraTexture(String name, ResourceLocation loader, ResourceLocation texture, ResourceLocation particle, Tuple<String, ResourceLocation>... extraTexture) {
+		BlockModelBuilder ret = this.models().withExistingParent(name, "block/block")
 			.customLoader((parent, helper) -> new VariantLoaderBuilder<>(loader, parent, helper))
 			.end()
 			.texture("texture", texture)
 			.texture("particle", particle);
+		for (int i = 0; i < extraTexture.length; i++) {
+			ret = ret.texture(extraTexture[i].getA(), extraTexture[i].getB());
+		}
+		return ret;
 	}
 
 	private VariantBlockStateBuilder addRotatedVariants(VariantBlockStateBuilder.PartialBlockstate partialBuilder, ModelFile... model) {
@@ -1515,6 +1552,22 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).scale(0.34f).end();
 	}
 
+	public void lantern(DeferredBlock<Block> block, String name, ResourceLocation model, ResourceLocation modelTexture, ResourceLocation particleTexture, ResourceLocation ropeTexture) {
+		ModelFile lantern = this.customLoaderModelWithExtraTexture(name, model, modelTexture, particleTexture, new Tuple<String, ResourceLocation>("rope", ropeTexture));
+
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(lantern).addModel();
+
+		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/" + name))
+			.transforms()
+			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.85f).end()
+			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.5f).end()
+			.transform(ItemDisplayContext.FIXED).translation(0, 0, -5f).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(75, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(75, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 135, 0).translation(0, 4f, 0).scale(0.5f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 135, 0).translation(0, 4f, 0).scale(0.5f).end();
+	}
+
 	public void bulbCappedMushroom(DeferredBlock<Block> block) {
 		ModelFile bulbCappedMushroom = this.customLoaderModel("bulb_capped_mushroom", TheBetweenlands.prefix("bulb_capped_mushroom"), this.modLoc("block/bulb_capped_mushroom"), this.modLoc("block/particle/bulb_capped_mushroom_particle"));
 		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), bulbCappedMushroom);
@@ -1535,43 +1588,146 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), blackHatMushroom1, blackHatMushroom2, blackHatMushroom3);
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/black_hat_mushroom_1")));
 	}
+	
+	public void barnacle(DeferredBlock<Block> block) {
+		ModelFile barnacle = this.customLoaderModelWithExtraTexture("barnacle", TheBetweenlands.prefix("barnacle"), 
+			this.modLoc("block/barnacle_1"), this.modLoc("block/barnacle_1"),
+			new Tuple<String, ResourceLocation>("barnacle_2", this.modLoc("block/barnacle_2")),
+			new Tuple<String, ResourceLocation>("barnacle_3", this.modLoc("block/barnacle_3")),
+			new Tuple<String, ResourceLocation>("barnacle_4", this.modLoc("block/barnacle_4")));
+
+		VariantBlockStateBuilder vbsb = this.getVariantBuilder(block.get());
+		for (Direction dir : new Direction[]{Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+			ConfiguredModel.Builder<VariantBlockStateBuilder> bvbsb = vbsb.partialState().with(DirectionalBlock.FACING, dir).modelForState().modelFile(barnacle);
+			switch (dir) {
+				case DOWN -> bvbsb.rotationX(180);
+				case SOUTH -> bvbsb.rotationX(270);
+				case WEST -> bvbsb.rotationX(270).rotationY(90);
+				case NORTH -> bvbsb.rotationX(270).rotationY(180);
+				case EAST -> bvbsb.rotationX(270).rotationY(270);
+				default -> {} // UP: default orientation
+			}
+			vbsb = bvbsb.addModel();
+		}
+		//hacky? kinda, but oh well
+	}
+
+	public void aspectrusCrop(DeferredBlock<Block> block) {
+		ModelFile aspectrusCrop = this.customLoaderModelWithExtraTexture("aspectrus_crop", TheBetweenlands.prefix("aspectrus_crop"), 
+			this.modLoc("block/aspectrus_crop_0"), this.modLoc("block/particle/aspectrus_crop_particle"),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_1", this.modLoc("block/aspectrus_crop_1")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_2", this.modLoc("block/aspectrus_crop_2")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_3", this.modLoc("block/aspectrus_crop_3")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_4", this.modLoc("block/aspectrus_crop_4")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_5", this.modLoc("block/aspectrus_crop_5")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_6", this.modLoc("block/aspectrus_crop_6")),
+			new Tuple<String, ResourceLocation>("fence", this.modLoc("block/rubber_tree_planks")));
+			//should also show the rubber fence post model
+
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(aspectrusCrop).addModel();
+	}
 
 	public void fungusCrop(DeferredBlock<Block> block) {
-		ModelFile fungusCrop1 = this.customLoaderModel("fungus_crop_1", TheBetweenlands.prefix("fungus_crop_1"), this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop2 = this.customLoaderModel("fungus_crop_2", TheBetweenlands.prefix("fungus_crop_2"), this.modLoc("block/fungus_crop_2"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop3 = this.customLoaderModel("fungus_crop_3", TheBetweenlands.prefix("fungus_crop_3"), this.modLoc("block/fungus_crop_3"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop4 = this.customLoaderModel("fungus_crop_4", TheBetweenlands.prefix("fungus_crop_4"), this.modLoc("block/fungus_crop_4"), this.modLoc("block/particle/fungus_crop_particle"));
-		ModelFile fungusCrop4decayed = this.customLoaderModel("fungus_crop_4_decayed", TheBetweenlands.prefix("fungus_crop_4_decayed"), this.modLoc("block/fungus_crop_4_decayed"), this.modLoc("block/particle/fungus_crop_decayed_particle"));
+		ModelFile fungusCrop = this.customLoaderModelWithExtraTexture("fungus_crop", TheBetweenlands.prefix("fungus_crop"), 
+			this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"),
+			new Tuple<String, ResourceLocation>("fungus_crop_2", this.modLoc("block/fungus_crop_2")),
+			new Tuple<String, ResourceLocation>("fungus_crop_3", this.modLoc("block/fungus_crop_3")),
+			new Tuple<String, ResourceLocation>("fungus_crop_4", this.modLoc("block/fungus_crop_4")),
+			new Tuple<String, ResourceLocation>("fungus_crop_4_decayed", this.modLoc("block/fungus_crop_4_decayed")));
 		
-
-		this.getVariantBuilder(block.get())
-			.partialState().with(DecayableCropBlock.STAGE, 0).modelForState().modelFile(fungusCrop1).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 1).modelForState().modelFile(fungusCrop2).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 2).modelForState().modelFile(fungusCrop3).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 3).with(DecayableCropBlock.DECAYED, false).modelForState().modelFile(fungusCrop4).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 3).with(DecayableCropBlock.DECAYED, true).modelForState().modelFile(fungusCrop4decayed).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 4).modelForState().modelFile(fungusCrop4).addModel()//hacky solution, fix later when farming is fully implemented
-			.partialState().with(DecayableCropBlock.STAGE, 5).modelForState().modelFile(fungusCrop4).addModel();
-	
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(fungusCrop).addModel();
 	}
 
 	public void middleFruitBush(DeferredBlock<Block> block) {
-		ModelFile whitePearCrop1 = this.customLoaderModel("white_pear_crop_1", TheBetweenlands.prefix("white_pear_crop_1"), this.modLoc("block/white_pear_crop_1"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop2 = this.customLoaderModel("white_pear_crop_2", TheBetweenlands.prefix("white_pear_crop_2"), this.modLoc("block/white_pear_crop_2"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop3 = this.customLoaderModel("white_pear_crop_3", TheBetweenlands.prefix("white_pear_crop_3"), this.modLoc("block/white_pear_crop_3"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop4 = this.customLoaderModel("white_pear_crop_4", TheBetweenlands.prefix("white_pear_crop_4"), this.modLoc("block/white_pear_crop_4"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop5 = this.customLoaderModel("white_pear_crop_5", TheBetweenlands.prefix("white_pear_crop_5"), this.modLoc("block/white_pear_crop_5"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop6 = this.customLoaderModel("white_pear_crop_6", TheBetweenlands.prefix("white_pear_crop_6"), this.modLoc("block/white_pear_crop_6"), this.modLoc("block/particle/white_pear_crop_particle"));
-		ModelFile whitePearCrop6decayed = this.customLoaderModel("white_pear_crop_6_decayed", TheBetweenlands.prefix("white_pear_crop_6_decayed"), this.modLoc("block/white_pear_crop_6_decayed"), this.modLoc("block/particle/white_pear_crop_decayed_particle"));
+		ModelFile whitePearCrop = this.customLoaderModelWithExtraTexture("white_pear_crop", TheBetweenlands.prefix("white_pear_crop"), 
+			this.modLoc("block/white_pear_crop_1"), this.modLoc("block/particle/white_pear_crop_particle"),
+			new Tuple<String, ResourceLocation>("white_pear_crop_2", this.modLoc("block/white_pear_crop_2")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_3", this.modLoc("block/white_pear_crop_3")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_4", this.modLoc("block/white_pear_crop_4")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_5", this.modLoc("block/white_pear_crop_5")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_6", this.modLoc("block/white_pear_crop_6")),
+			new Tuple<String, ResourceLocation>("white_pear_crop_6_decayed", this.modLoc("block/white_pear_crop_6_decayed")));
+		
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(whitePearCrop).addModel();
+	}
+
+	public void dungeonWallCandle(DeferredBlock<Block> block) {
+		ModelFile dungeonWallCandle = this.customLoaderModel("dungeon_wall_candle", TheBetweenlands.prefix("dungeon_wall_candle"), this.modLoc("block/dungeon_wall_candle"), this.modLoc("block/particle/dungeon_wall_candle_particle"));
+		this.getVariantBuilder(block.get())
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.NORTH).modelForState().modelFile(dungeonWallCandle).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.EAST).modelForState().modelFile(dungeonWallCandle).rotationY(90).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.SOUTH).modelForState().modelFile(dungeonWallCandle).rotationY(180).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(dungeonWallCandle).rotationY(270).addModel();
+		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
+			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "item/mud_flower_pot_candle"));
+	}
+	public void woodenSupportBeam(DeferredBlock<Block> block, String name, ResourceLocation model, ResourceLocation modelTexture, ResourceLocation particleTexture) {
+		ModelFile woodenSupportBeam = this.customLoaderModel(name, model, modelTexture, particleTexture);
 		
 		this.getVariantBuilder(block.get())
-			.partialState().with(DecayableCropBlock.STAGE, 0).modelForState().modelFile(whitePearCrop1).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 1).modelForState().modelFile(whitePearCrop2).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 2).modelForState().modelFile(whitePearCrop3).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 3).modelForState().modelFile(whitePearCrop4).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 4).modelForState().modelFile(whitePearCrop5).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 5).with(DecayableCropBlock.DECAYED, false).modelForState().modelFile(whitePearCrop6).addModel()
-			.partialState().with(DecayableCropBlock.STAGE, 5).with(DecayableCropBlock.DECAYED, true).modelForState().modelFile(whitePearCrop6decayed).addModel();
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.NORTH).modelForState().modelFile(woodenSupportBeam).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.EAST).modelForState().modelFile(woodenSupportBeam).rotationY(90).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.SOUTH).modelForState().modelFile(woodenSupportBeam).rotationY(180).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(woodenSupportBeam).rotationY(270).addModel();
+		
+		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/" + name))
+			.transforms()
+			.transform(ItemDisplayContext.GUI).rotation(120, 30, 20).translation(0, 2.4f, 0).scale(.725f).end()
+			.transform(ItemDisplayContext.GROUND).rotation(90, 0, 180).translation(0, 3.2f, 0).scale(0.3f).end()
+			.transform(ItemDisplayContext.FIXED).rotation(90, 0, 90).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0, 180, 0).translation(0, 5.6f, 2.4f).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, 180, 0).translation(0, 5.6f, 2.4f).scale(0.75f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(90, 45, 0).translation(0, 5.6f, 0).scale(0.5f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(90, 45, 0).translation(0, 5.6f, 0).scale(0.5f).end();
+	}
+
+	public void brazier(DeferredBlock<Block> block) {
+		ModelFile brazier = this.customLoaderModel("brazier", TheBetweenlands.prefix("brazier"), this.modLoc("block/mud_tower_brazier"), this.modLoc("block/particle/mud_tower_brazier_particle"), false);
+		ModelFile brazierTop = this.models().withExistingParent("brazier_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/mud_tower_brazier_particle"));
+
+
+		this.getVariantBuilder(block.get())
+			.partialState().with(BrazierBlock.HALF, DoubleBlockHalf.LOWER).modelForState().modelFile(brazier).addModel()
+			.partialState().with(BrazierBlock.HALF, DoubleBlockHalf.UPPER).modelForState().modelFile(brazierTop).addModel();
+
+		
+		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/brazier")).transforms()
+			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, -2.4f, 0).scale(0.35f).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.2f).end()
+			.transform(ItemDisplayContext.FIXED).scale(0.4f).translation(0, -2, 0).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 2.4f, 2.4f).scale(0.2f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 2.4f, 2.4f).scale(0.2f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.2f).rotation(0, 45, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).scale(0.2f).end();
+	}
+
+	public void walkway(DeferredBlock<Block> block) {
+		ModelFile walkway = this.customLoaderModel("walkway", TheBetweenlands.prefix("walkway"), this.modLoc("block/walkway"), this.modLoc("block/weedwood_planks"), false);
+
+		this.getVariantBuilder(block.get())
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.NORTH).modelForState().modelFile(walkway).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.EAST).modelForState().modelFile(walkway).rotationY(90).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.SOUTH).modelForState().modelFile(walkway).rotationY(180).addModel()
+			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(walkway).rotationY(270).addModel();
+		
+		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/walkway")).transforms()
+			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.75f).end()
+			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.8f).end()
+			.transform(ItemDisplayContext.FIXED).rotation(-90f, 0, 0).translation(0, 0, -5f).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 5.6f, 2.4f).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 5.6f, 2.4f).scale(0.75f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).translation(0, 5.6f, 0).scale(0.75f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).translation(0, 5.6f, 0).scale(0.75f).end();
+	}
+
+	public void pebblePile(DeferredBlock<Block> block) {
+		ModelFile pebblePile = this.customLoaderModel("pebble_pile", TheBetweenlands.prefix("pebble_pile"), this.modLoc("block/betweenstone_pebble_pile"), this.modLoc("block/betweenstone"), false);
+		ModelFile pebblePileWater = this.customLoaderModel("pebble_pile_water", TheBetweenlands.prefix("pebble_pile"), this.modLoc("block/betweenstone_pebble_pile_water"), this.modLoc("block/betweenstone"), false);
+
+		this.addRotatedVariants(this.addRotatedVariants(this.addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
+		.with(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.NONE), pebblePile).partialState()
+		.with(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.WATER), pebblePileWater).partialState()
+		.with(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.SWAMP_WATER), pebblePileWater);
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {
