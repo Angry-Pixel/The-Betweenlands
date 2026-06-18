@@ -1,5 +1,6 @@
 package thebetweenlands.client.handler;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -21,22 +22,57 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 import thebetweenlands.client.renderer.entity.FireflyRenderer;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.block.misc.BLLanternBlock;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 
-public final class LanternLightHandler {//TODO: make this work in multiplayer
+public final class LanternLightHandler {
     private static final LongSet LANTERN_POSITIONS = new LongOpenHashSet();
     private static final int VIEW_DISTANCE = 12*16; //maybe make this be based on user's render distance? but probably not necessary
     private static final Predicate<BlockState> IS_LANTERN = state -> state.getBlock() instanceof BLLanternBlock;
+    private static boolean wasTrue = false;
+    private static Consumer<RenderLevelStageEvent> renderLevelListener = LanternLightHandler::onRenderLevel;
+    private static Consumer<ChunkEvent.Load> loadChunkListener = LanternLightHandler::onChunkLoad;
+    private static Consumer<ChunkEvent.Unload> unloadChunkListener = LanternLightHandler::onChunkUnload;
+    private static Consumer<BlockEvent.EntityPlaceEvent> placeBlockListener = LanternLightHandler::onBlockPlace;
+    private static Consumer<BlockEvent.BreakEvent> breakBlockListener = LanternLightHandler::onBlockBreak;
+    private static Consumer<LevelEvent.Unload> unloadLevelListener = LanternLightHandler::onLevelUnload;
 
     private LanternLightHandler() {}
 
     public static void init() {
-        NeoForge.EVENT_BUS.addListener(LanternLightHandler::onRenderLevel);
-        NeoForge.EVENT_BUS.addListener(LanternLightHandler::onChunkLoad);
-        NeoForge.EVENT_BUS.addListener(LanternLightHandler::onChunkUnload);
-        NeoForge.EVENT_BUS.addListener(LanternLightHandler::onBlockPlace);
-        NeoForge.EVENT_BUS.addListener(LanternLightHandler::onBlockBreak);
-        NeoForge.EVENT_BUS.addListener(LanternLightHandler::onLevelUnload);
+        //TODO: add config for this
+        if (BetweenlandsConfig.Shader.lanternsUseShaders) {
+            NeoForge.EVENT_BUS.addListener(renderLevelListener);
+            NeoForge.EVENT_BUS.addListener(loadChunkListener);
+            NeoForge.EVENT_BUS.addListener(unloadChunkListener);
+            NeoForge.EVENT_BUS.addListener(placeBlockListener);
+            NeoForge.EVENT_BUS.addListener(breakBlockListener);
+            NeoForge.EVENT_BUS.addListener(unloadLevelListener);
+            wasTrue = true;
+        }
+    }
+
+    public static void onSettingsReload() {
+        if (!BetweenlandsConfig.Shader.lanternsUseShaders && wasTrue) {
+            NeoForge.EVENT_BUS.unregister(renderLevelListener);
+            NeoForge.EVENT_BUS.unregister(loadChunkListener);
+            NeoForge.EVENT_BUS.unregister(unloadChunkListener);
+            NeoForge.EVENT_BUS.unregister(placeBlockListener);
+            NeoForge.EVENT_BUS.unregister(breakBlockListener);
+            NeoForge.EVENT_BUS.unregister(unloadLevelListener);
+            wasTrue = false;
+        } else if (BetweenlandsConfig.Shader.lanternsUseShaders && !wasTrue) {
+            NeoForge.EVENT_BUS.addListener(renderLevelListener);
+            NeoForge.EVENT_BUS.addListener(loadChunkListener);
+            NeoForge.EVENT_BUS.addListener(unloadChunkListener);
+            NeoForge.EVENT_BUS.addListener(placeBlockListener);
+            NeoForge.EVENT_BUS.addListener(breakBlockListener);
+            NeoForge.EVENT_BUS.addListener(unloadLevelListener);
+            //TODO: clear positions, then run a scan on all chunks to update lantern positions upon enabling this setting
+            // LANTERN_POSITIONS.clear();
+
+            wasTrue = true;
+        }
     }
 
     static void onLevelUnload(LevelEvent.Unload event) {
@@ -53,17 +89,17 @@ public final class LanternLightHandler {//TODO: make this work in multiplayer
         removeChunk((LevelChunk) event.getChunk());
     }
 
-    static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
+    static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {//TODO: make this work in multiplayer
         if (event.getPlacedBlock().getBlock() instanceof BLLanternBlock) {
             LANTERN_POSITIONS.add(event.getPos().asLong());
         }
     }
 
-    static void onBlockBreak(BlockEvent.BreakEvent event) {
+    static void onBlockBreak(BlockEvent.BreakEvent event) {//TODO: make this work in multiplayer
         LANTERN_POSITIONS.remove(event.getPos().asLong());
     }
 
-    private static void scanChunk(LevelChunk chunk) {//TODO: might be worth looking at making this more efficient if possible, as it runs every time a new chunk is loaded
+    private static void scanChunk(LevelChunk chunk) {//TODO: might be worth looking at making this more efficient if possible, as it runs every time a chunk is loaded
         int baseX = chunk.getPos().getMinBlockX();
         int baseZ = chunk.getPos().getMinBlockZ();
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();

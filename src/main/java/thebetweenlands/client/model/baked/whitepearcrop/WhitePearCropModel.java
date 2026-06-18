@@ -87,12 +87,13 @@ public class WhitePearCropModel implements IDynamicBakedModel {
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
 		if (side != null) return Collections.emptyList();
 		if (state == null) return stage1Quads;
+		if (state.getValue(DecayableCropBlock.DECAYED)) return stage6DecayedQuads;
 		return switch(state.getValue(DecayableCropBlock.STAGE)) {
 			case 1 -> stage2Quads;
 			case 2 -> stage3Quads;
 			case 3 -> stage4Quads;
 			case 4 -> stage5Quads;
-			case 5 -> state.getValue(DecayableCropBlock.DECAYED) ? stage6DecayedQuads : stage6Quads;
+			case 5 -> stage6Quads;
 			default -> stage1Quads;
 		};
 	}

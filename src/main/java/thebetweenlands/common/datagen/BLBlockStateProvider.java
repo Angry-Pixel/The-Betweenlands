@@ -1010,6 +1010,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.sundew(BlockRegistry.SUNDEW);
 		this.volarpad(BlockRegistry.VOLARPAD);
 		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
+		this.aspectrusCrop(BlockRegistry.ASPECTRUS_CROP);
 		this.fungusCrop(BlockRegistry.FUNGUS_CROP);
 		this.middleFruitBush(BlockRegistry.MIDDLE_FRUIT_BUSH);
 		this.flatHeadMushroom(BlockRegistry.FLATHEAD_MUSHROOM);
@@ -1609,6 +1610,21 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			vbsb = bvbsb.addModel();
 		}
 		//hacky? kinda, but oh well
+	}
+
+	public void aspectrusCrop(DeferredBlock<Block> block) {
+		ModelFile aspectrusCrop = this.customLoaderModelWithExtraTexture("aspectrus_crop", TheBetweenlands.prefix("aspectrus_crop"), 
+			this.modLoc("block/aspectrus_crop_0"), this.modLoc("block/particle/aspectrus_crop_particle"),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_1", this.modLoc("block/aspectrus_crop_1")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_2", this.modLoc("block/aspectrus_crop_2")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_3", this.modLoc("block/aspectrus_crop_3")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_4", this.modLoc("block/aspectrus_crop_4")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_5", this.modLoc("block/aspectrus_crop_5")),
+			new Tuple<String, ResourceLocation>("aspectrus_crop_6", this.modLoc("block/aspectrus_crop_6")),
+			new Tuple<String, ResourceLocation>("fence", this.modLoc("block/rubber_tree_planks")));
+			//should also show the rubber fence post model
+
+		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(aspectrusCrop).addModel();
 	}
 
 	public void fungusCrop(DeferredBlock<Block> block) {

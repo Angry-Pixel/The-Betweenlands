@@ -68,10 +68,11 @@ public class FungusCropModel implements IDynamicBakedModel {
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
 		if (side != null) return Collections.emptyList();
 		if (state == null) return stage1Quads;
+		if (state.getValue(DecayableCropBlock.DECAYED)) return stage4DecayedQuads;
 		return switch(state.getValue(DecayableCropBlock.STAGE)) {
 			case 1 -> stage2Quads;
 			case 2 -> stage3Quads;
-			case 3 -> state.getValue(DecayableCropBlock.DECAYED) ? stage4DecayedQuads : stage4Quads;
+			case 3 -> stage4Quads;
 			default -> stage1Quads;
 		};
 	}

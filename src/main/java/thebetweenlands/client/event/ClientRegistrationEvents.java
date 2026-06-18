@@ -51,6 +51,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.common.block.entity.AspectrusCropBlockEntity;
 import thebetweenlands.client.AspectIconTextureManager;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.BetweenlandsKeybinds;
@@ -97,6 +99,7 @@ import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.baked.aspectruscrop.AspectrusCropModelLoader;
 import thebetweenlands.client.model.baked.barnacle.BarnacleModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
@@ -997,15 +1000,12 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("black_hat_mushroom_2"), BlackHatMushroom2ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("black_hat_mushroom_3"), BlackHatMushroom3ModelLoader.INSTANCE);
 
+		event.register(TheBetweenlands.prefix("aspectrus_crop"), AspectrusCropModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("fungus_crop"), FungusCropModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("white_pear_crop"), WhitePearCropModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("barnacle"), BarnacleModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
 
 		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
@@ -1013,13 +1013,8 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("wooden_support_beam_3"), WoodenSupportBeam3ModelLoader.INSTANCE);
 
 		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("pebble_pile"), PebblePileModelLoader.INSTANCE);
-
-		event.register(TheBetweenlands.prefix("aspectrus_crop"), PebblePileModelLoader.INSTANCE);
-
 		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
@@ -1222,6 +1217,18 @@ public class ClientRegistrationEvents {
 				return 0xFFFFFFFF;
 			},
 			BlockRegistry.WEEDWOOD_BUSH.get());
+
+		event.register((state, level, pos, tintIndex) -> {
+			if (tintIndex == 1 && level != null && pos != null) {
+				if (level.getBlockEntity(pos) instanceof AspectrusCropBlockEntity crop) {
+					Aspect aspect = crop.getAspect();
+					if (aspect != null) {
+						return aspect.type().value().color();
+					}
+				}
+			}
+			return 0xFFFFFFFF;
+		}, BlockRegistry.ASPECTRUS_CROP.get());
 
 		event.register((state, level, pos, tintIndex) -> {
 				if (tintIndex <= 0) {

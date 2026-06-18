@@ -20,6 +20,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 import net.minecraft.world.level.ItemLike;
 
@@ -64,7 +65,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
 		return super.mayPlaceOn(state, level, pos) || 
 			(state.getBlock() instanceof DugSoilBlock && (state.getValue(DugSoilBlock.COMPOSTED) || state.getValue(DugSoilBlock.DECAYED))) ||
-			(state.getBlock() instanceof DecayableCropBlock && state.getValue(CropBlock.AGE) >= 15);
+			(state.getBlock() instanceof DecayableCropBlock);
 	}
 
 	@Nullable
@@ -167,12 +168,22 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 					if (this.canGrowUp(level, pos, state, height)) {
 						this.growUp(level, pos);
 					}
-
-					level.setBlock(pos, this.defaultBlockState(), 2);
+					level.setBlock(pos, state.setValue(this.getAgeProperty(), this.getMaxAge()), 2);
 				}
 				CommonHooks.fireCropGrowPost(level, pos, state);
 			}
 		}
+	}
+
+	@Override
+	public boolean isRandomlyTicking(BlockState state) {
+		if (state.getValue(DECAYED)) {
+			return false;
+		}
+		if (this.getAge(state) < this.getMaxAge()) {
+			return true;
+		}
+		return this.getMaxHeight() != 1;
 	}
 
 	/**

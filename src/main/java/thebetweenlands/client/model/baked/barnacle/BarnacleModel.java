@@ -64,9 +64,9 @@ public class BarnacleModel implements IDynamicBakedModel {
 		if (side != null) return Collections.emptyList();
 		if (state == null) return stage1Quads;
 		return switch(state.getValue(BarnacleBlock.STAGE)) {
-			case 1 -> stage2Quads;
-			case 2 -> stage3Quads;
-			case 3 -> stage4Quads;
+			case 2 -> stage2Quads;
+			case 3 -> stage3Quads;
+			case 4 -> stage4Quads;
 			default -> stage1Quads;
 		};
 	}

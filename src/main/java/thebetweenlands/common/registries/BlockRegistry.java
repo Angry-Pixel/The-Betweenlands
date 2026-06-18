@@ -84,6 +84,7 @@ import thebetweenlands.common.block.farming.DugDirtBlock;
 import thebetweenlands.common.block.farming.DugGrassBlock;
 import thebetweenlands.common.block.farming.FungusCropBlock;
 import thebetweenlands.common.block.farming.MiddleFruitBushBlock;
+import thebetweenlands.common.block.farming.RubberTreeFenceBlock;
 import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.misc.BaubleBlock;
 import thebetweenlands.common.block.misc.CavingRopeLightBlock;
@@ -579,7 +580,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SCABYST_BRICK_WALL = register("scabyst_brick_wall", () -> new SwampWallBlock(BlockBehaviour.Properties.ofFullCopy(SCABYST_BRICKS.get())));
 	public static final DeferredBlock<Block> WEEDWOOD_FENCE = register("weedwood_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> WEEDWOOD_LOG_FENCE = register("weedwood_log_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> RUBBER_TREE_FENCE = register("rubber_tree_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> RUBBER_TREE_FENCE = register("rubber_tree_fence", () -> new RubberTreeFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GIANT_ROOT_FENCE = register("giant_root_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> HEARTHGROVE_FENCE = register("hearthgrove_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> NIBBLETWIG_FENCE = register("nibbletwig_fence", () -> new SwampFenceBlock(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));

@@ -37,6 +37,7 @@ import thebetweenlands.common.block.farming.DecayableCropBlock;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.block.terrain.WaystoneBlock;
 import thebetweenlands.common.block.terrain.WispBlock;
+import thebetweenlands.common.loot.SetAspectFromCropFunction;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -781,7 +782,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.add(BlockRegistry.FALLEN_LEAVES.get(), block -> this.createShearsWithSickleDrop(block, ItemRegistry.LEAF));
 
 		//TODO all of these. None of these are properly in the mod yet
-		this.add(BlockRegistry.ASPECTRUS_CROP.get(), LootTable.lootTable());
+		this.aspectrusCropDrop();
 		this.decayableCropDrop(BlockRegistry.FUNGUS_CROP.get(), 3, ItemRegistry.YELLOW_DOTTED_FUNGUS.get(), ItemRegistry.SPORES.get());
 		this.decayableCropDrop(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), 5, ItemRegistry.MIDDLE_FRUIT.get(), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS.get());
 		this.barnacle(BlockRegistry.BARNACLE.get(), 4, ItemRegistry.BARNACLE.get(), ItemRegistry.BARNACLE_LARVAE.get());
@@ -849,6 +850,32 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 			.hasProperty(DecayableCropBlock.DECAYED, false));
 		
 		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, licb));
+	}
+
+	private void aspectrusCropDrop() {
+		this.add(BlockRegistry.ASPECTRUS_CROP.get(), block -> {
+			LootItemCondition.Builder grownAndNotDecayed = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+				.setProperties(StatePropertiesPredicate.Builder.properties()
+					.hasProperty(DecayableCropBlock.STAGE, 5)
+					.hasProperty(DecayableCropBlock.DECAYED, false));
+			HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+
+			return LootTable.lootTable()
+				.withPool(LootPool.lootPool()
+					.setRolls(UniformGenerator.between(1, 3))
+					.add(LootItem.lootTableItem(ItemRegistry.ASPECTRUS_FRUIT).apply(SetAspectFromCropFunction.setAspectFromCrop())
+					.when(grownAndNotDecayed))
+				)
+				.withPool(LootPool.lootPool()
+					.add(LootItem.lootTableItem(ItemRegistry.ASPECTRUS_SEEDS))
+				)
+				.withPool(LootPool.lootPool()
+                    .when(grownAndNotDecayed)
+					.add(LootItem.lootTableItem(ItemRegistry.ASPECTRUS_SEEDS)
+						.apply(ApplyBonusCount.addBonusBinomialDistributionCount(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.5714286F, 3))
+					)
+				);
+		});
 	}
 
 	protected LootTable.Builder createBLLeavesDrops(Block leavesBlock, Block saplingBlock, boolean stick) {
