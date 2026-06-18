@@ -123,7 +123,7 @@ public class AspectrusCropModel implements IDynamicBakedModel {
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
 		if (side != null) return Collections.emptyList();
 		if (state == null) return stage1Quads;
-		if (state.getValue(DecayableCropBlock.DECAYED)) return stage6Quads;
+		if (state.getValue(DecayableCropBlock.DECAYED)) return withFence(stage6Quads);
 		return withFence(switch(state.getValue(DecayableCropBlock.STAGE)) {
 			case 1 -> stage1Quads;
 			case 2 -> stage2Quads;

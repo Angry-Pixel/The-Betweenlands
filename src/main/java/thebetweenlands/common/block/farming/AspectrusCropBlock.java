@@ -18,7 +18,9 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.registry.AspectType;
@@ -28,8 +30,28 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class AspectrusCropBlock extends DecayableCropBlock implements EntityBlock {
-    protected static int ASPECT_FOG_RADIUS = 6; //not sure if this is defined elsewhere
+    protected static int ASPECT_FOG_RADIUS = 6;
     protected static int ASPECT_PER_FRUIT = 250;
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{ 
+        Block.box(4, 0, 4, 12, 6, 12),
+        Block.box(3, 0, 3, 13, 8, 13),
+        Block.box(2, 0, 2, 13+1, 12, 13+1),
+        Block.box(1, 0, 1, 15, 16, 15),
+    };
+    private static final VoxelShape FENCE_SHAPE = Block.box(6, 0, 6, 10, 16, 10);
+    private static final VoxelShape[] SHAPE_BY_STAGE = new VoxelShape[]{
+        Shapes.join(SHAPE_BY_AGE[0], FENCE_SHAPE, BooleanOp.OR),
+        Shapes.join(SHAPE_BY_AGE[1], FENCE_SHAPE, BooleanOp.OR),
+        Shapes.join(SHAPE_BY_AGE[2], FENCE_SHAPE, BooleanOp.OR),
+        Shapes.join(SHAPE_BY_AGE[3], FENCE_SHAPE, BooleanOp.OR),
+        Shapes.join(SHAPE_BY_AGE[3], FENCE_SHAPE, BooleanOp.OR),
+        Shapes.join(SHAPE_BY_AGE[3], FENCE_SHAPE, BooleanOp.OR),
+    };
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE_BY_STAGE[this.getAge(state)];
+    }
 
     public AspectrusCropBlock(Properties properties) {
         super(properties);
@@ -107,21 +129,63 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
 
     @Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return Block.box(6, 0, 6, 10, 16, 10);
+		return FENCE_SHAPE;
 	}
 
-    @Override 
-    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        boolean removed = super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
-        level.setBlock(pos, BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState(), level.isClientSide ? 11 : 3);
-        return removed;
+    private static final ThreadLocal<Boolean> BREAKING_PILLAR = ThreadLocal.withInitial(() -> false);
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player,
+                                    boolean willHarvest, FluidState fluid) {
+        if (BREAKING_PILLAR.get()) {
+            return false; // already breaking the pillar of crops
+        }
+        BREAKING_PILLAR.set(true);
+        try {
+            BlockPos base = findCropStackBase(level, pos);
+            breakEntireCropStack(level, base);
+            boolean shouldUpdateSoil = this.getAge(state) >= this.getMaxAge() || base.getY() != pos.getY();
+            if (shouldUpdateSoil && level instanceof ServerLevel) {
+                this.harvestAndUpdateSoil(level, base, 10); // base is directly above soil
+            }
+            return false;
+        } finally {
+            BREAKING_PILLAR.set(false);
+        }
+    }
+
+    private static BlockPos findCropStackBase(LevelReader level, BlockPos pos) {
+        BlockPos.MutableBlockPos check = pos.mutable();
+        while (level.getBlockState(check.below()).getBlock() instanceof AspectrusCropBlock) {
+            check.move(Direction.DOWN);
+        }
+        return check.immutable();
+    }
+
+    private void breakEntireCropStack(Level level, BlockPos base) {
+        BlockPos.MutableBlockPos check = base.mutable();
+        for (int i = 0; i < this.getMaxHeight(); i++) {
+            BlockState cropState = level.getBlockState(check);
+            if (!(cropState.getBlock() instanceof AspectrusCropBlock)) {
+                break;
+            }
+            if (level instanceof ServerLevel serverLevel) {
+                dropResources(cropState, serverLevel, check.immutable(), level.getBlockEntity(check));
+            }
+            level.setBlock(check, BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState(), level.isClientSide() ? 11 : 3);
+            check.move(Direction.UP);
+        }
     }
 
     @Override
     protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
-        return !state.canSurvive(level, currentPos)
-            ? BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState()
-            : super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        if (!state.canSurvive(level, currentPos)) {
+            if (level instanceof ServerLevel serverLevel) {
+                dropResources(state, serverLevel, currentPos, serverLevel.getBlockEntity(currentPos));
+            }
+            return BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState();
+        }
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
     }
     
 }
