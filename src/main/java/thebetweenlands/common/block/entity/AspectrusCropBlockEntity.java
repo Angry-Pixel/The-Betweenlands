@@ -16,7 +16,6 @@ public class AspectrusCropBlockEntity extends SyncedBlockEntity implements Entit
     @Nullable
     private Aspect seedAspect;
     private boolean hasSource;
-    public int glowTicks;
 
     public AspectrusCropBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityRegistry.ASPECTRUS_CROP.get(), pos, state);

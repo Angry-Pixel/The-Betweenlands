@@ -89,13 +89,6 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new AspectrusCropBlockEntity(pos, state);
 	}
-
-    // @Override
-    // protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-    //     if (!state.is(newState.getBlock())) {
-    //         super.onRemove(state, level, pos, newState, movedByPiston);
-    //     }
-    // }
     
     @Override
     protected boolean canGrow(LevelReader level, BlockPos pos, BlockState state) {

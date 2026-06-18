@@ -277,6 +277,7 @@ import thebetweenlands.client.particle.SpiritButterflyParticle;
 import thebetweenlands.client.particle.SwarmParticle;
 import thebetweenlands.client.particle.WaterRippleParticle;
 import thebetweenlands.client.renderer.BLItemRenderer;
+import thebetweenlands.client.renderer.block.AspectrusCropRenderer;
 import thebetweenlands.client.renderer.block.AlcoveRenderer;
 import thebetweenlands.client.renderer.block.AlembicRenderer;
 import thebetweenlands.client.renderer.block.AnimatorRenderer;
@@ -300,6 +301,7 @@ import thebetweenlands.client.renderer.block.GrubHubRenderer;
 import thebetweenlands.client.renderer.block.InfuserRenderer;
 import thebetweenlands.client.renderer.block.ItemCageRenderer;
 import thebetweenlands.client.renderer.block.ItemShelfRenderer;
+import thebetweenlands.client.renderer.block.LanternRenderer;
 import thebetweenlands.client.renderer.block.LootPotRenderer;
 import thebetweenlands.client.renderer.block.LootUrnRenderer;
 import thebetweenlands.client.renderer.block.MobSpawnerRenderer;
@@ -656,6 +658,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.BONE_SHAMAN_PROJECTILE.get(), BoneShamanProjectileRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WALL_ROOT.get(), WallRootRenderer::new);
 
+		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECTRUS_CROP.get(), AspectrusCropRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.LANTERN.get(), LanternRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);

@@ -13,7 +13,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -23,14 +25,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
-import thebetweenlands.client.handler.LanternLightHandler;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.entity.LanternBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.Optional;
 
-public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable {
+public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable, EntityBlock {
 
 	public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 7);
 	protected static final VoxelShape AABB = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D);
@@ -69,6 +71,12 @@ public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable {
 			state = state.setValue(ROTATION, rotation);
 		}
 		return state;
+	}
+
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new LanternBlockEntity(pos, state);
 	}
 
 	@Override
