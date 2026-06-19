@@ -167,8 +167,6 @@ public class BetweenlandsConfig {
 		Overworld.torchWhitelist.parseData();
 		Overworld.torchBlacklist.parseData();
 
-		Shader.lanternsUseShaders = /* (boolean) */ commonConfig.SHADER.lanternsUseShaders.get();
-
 		// Try to update the cache
 		HolderLookup.Provider registryAccess = TheBetweenlands.tryGetRegistryAccess();
 		if(registryAccess != null) {

@@ -302,7 +302,6 @@ import thebetweenlands.client.renderer.block.GrubHubRenderer;
 import thebetweenlands.client.renderer.block.InfuserRenderer;
 import thebetweenlands.client.renderer.block.ItemCageRenderer;
 import thebetweenlands.client.renderer.block.ItemShelfRenderer;
-import thebetweenlands.client.renderer.block.LanternRenderer;
 import thebetweenlands.client.renderer.block.LootPotRenderer;
 import thebetweenlands.client.renderer.block.LootUrnRenderer;
 import thebetweenlands.client.renderer.block.MobSpawnerRenderer;
@@ -661,7 +660,6 @@ public class ClientRegistrationEvents {
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECTRUS_CROP.get(), AspectrusCropRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECT_VIAL.get(), AspectVialRenderer::new);
-		event.registerBlockEntityRenderer(BlockEntityRegistry.LANTERN.get(), LanternRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);

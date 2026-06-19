@@ -26,13 +26,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.entity.LanternBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.ParticleRegistry;
 
 import java.util.Optional;
 
-public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable, EntityBlock {
+public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable {
 
 	public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 7);
 	protected static final VoxelShape AABB = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D);
@@ -71,12 +70,6 @@ public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable, 
 			state = state.setValue(ROTATION, rotation);
 		}
 		return state;
-	}
-
-	@Nullable
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new LanternBlockEntity(pos, state);
 	}
 
 	@Override
