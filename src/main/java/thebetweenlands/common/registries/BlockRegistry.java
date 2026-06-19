@@ -223,6 +223,7 @@ import thebetweenlands.common.block.waterlog.WeedwoodLadderBlock;
 import thebetweenlands.common.block.waterlog.WeedwoodStandingSignBlock;
 import thebetweenlands.common.block.waterlog.WeedwoodWallSignBlock;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
+import thebetweenlands.common.herblore.aspect.IAspectVial;
 import thebetweenlands.common.world.BLTreeGrowers;
 import thebetweenlands.util.BLDyeColor;
 import thebetweenlands.util.BLWoodTypes;
@@ -866,8 +867,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MUD_FLOWER_POT_CANDLE = register("mud_flower_pot_candle", () -> new MudFlowerPotCandleBlock(BlockBehaviour.Properties.of().strength(0.3F).lightLevel(value -> value.getValue(MudFlowerPotCandleBlock.LIT) ? 13 : 0).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GECKO_CAGE = register("gecko_cage", () -> new GeckoCageBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> INFUSER = register("infuser", () -> new InfuserBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> ORANGE_ASPECT_VIAL = BLOCKS.register("orange_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
-	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = BLOCKS.register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> ORANGE_ASPECT_VIAL = BLOCKS.register("orange_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS), IAspectVial.VialType.ORANGE));
+	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = BLOCKS.register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS), IAspectVial.VialType.GREEN));
 	public static final DeferredBlock<Block> MORTAR = register("mortar", () -> new MortarBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CENSER = register("censer", () -> new CenserBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> WEEDWOOD_BARREL = register("weedwood_barrel", () -> new BarrelBlock(false, BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));

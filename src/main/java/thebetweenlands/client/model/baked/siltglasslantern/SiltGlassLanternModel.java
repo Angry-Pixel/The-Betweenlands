@@ -29,15 +29,17 @@ public class SiltGlassLanternModel implements IDynamicBakedModel {
     
     private final TextureAtlasSprite texture;
     private final TextureAtlasSprite ropeSprite;
+    private final TextureAtlasSprite particleTexture;
 	private final ItemTransforms transforms;
 	private final List<BakedQuad>[] quadss = new List[8];
 	private final List<BakedQuad>[] glassQuadss = new List[8];
 	private final List<BakedQuad> lanternRope;
 
-    public SiltGlassLanternModel(TextureAtlasSprite texture, TextureAtlasSprite ropeSprite, ItemTransforms transforms, Transformation identity) {
+    public SiltGlassLanternModel(TextureAtlasSprite texture, TextureAtlasSprite ropeSprite, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.texture = texture;
 		this.ropeSprite = ropeSprite;
 		this.transforms = transforms;
+		this.particleTexture = particleTexture;
 
 		QuadBuilder ropeBuilder = new QuadBuilder(DefaultVertexFormat.BLOCK)
 			.setTransformation(identity)
@@ -100,7 +102,7 @@ public class SiltGlassLanternModel implements IDynamicBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
-		return this.texture;
+		return this.particleTexture;
 	}
 
 	@Override

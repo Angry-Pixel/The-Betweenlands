@@ -26,7 +26,7 @@ public class UnbakedSiltGlassLanternModel implements IUnbakedGeometry<UnbakedSil
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new SiltGlassLanternModel(
             spriteGetter.apply(context.getMaterial("texture")),
-            spriteGetter.apply(context.getMaterial("rope")),
+            spriteGetter.apply(context.getMaterial("rope")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}

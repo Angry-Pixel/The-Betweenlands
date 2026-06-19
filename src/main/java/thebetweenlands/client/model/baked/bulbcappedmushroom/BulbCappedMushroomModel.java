@@ -23,13 +23,15 @@ import java.util.List;
 public class BulbCappedMushroomModel implements IDynamicBakedModel {
 
     private final TextureAtlasSprite texture;
+    private final TextureAtlasSprite particleTexture;
     private final ItemTransforms transforms;
     private final List<BakedQuad> stalkQuads;
     private final List<BakedQuad> capQuads;
 
-    public BulbCappedMushroomModel(TextureAtlasSprite texture, ItemTransforms transforms, Transformation identity) {
+    public BulbCappedMushroomModel(TextureAtlasSprite texture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
         this.texture = texture;
         this.transforms = transforms;
+		this.particleTexture = particleTexture;
 
         QuadBuilder builder = new QuadBuilder(DefaultVertexFormat.BLOCK)
                 .setTransformation(identity)
@@ -37,7 +39,7 @@ public class BulbCappedMushroomModel implements IDynamicBakedModel {
                 .setTintIndex(-1);
         BulbCappedMushroomGeometry.buildStalks(builder);
         this.stalkQuads = builder.build().nonCulledQuads;
-        BulbCappedMushroomGeometry.buildCaps(builder); //vertices are cleared when built, so might as well reuse the builder
+        BulbCappedMushroomGeometry.buildCaps(builder);
         this.capQuads = builder.build().nonCulledQuads;
     }
 
@@ -74,7 +76,7 @@ public class BulbCappedMushroomModel implements IDynamicBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleIcon() {
-        return this.texture;
+		return this.particleTexture;
     }
 
     @Override

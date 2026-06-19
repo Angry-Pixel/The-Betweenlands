@@ -3,15 +3,13 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
 
-public class AspectrusCropBlockEntity extends SyncedBlockEntity implements EntityBlock {
+public class AspectrusCropBlockEntity extends SyncedBlockEntity implements IAspectBlockEntity {
 
     @Nullable
     private Aspect seedAspect;
@@ -38,12 +36,6 @@ public class AspectrusCropBlockEntity extends SyncedBlockEntity implements Entit
 
     public boolean hasSource() {
         return this.hasSource;
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new AspectrusCropBlockEntity(pos, state);
     }
 
     @Override

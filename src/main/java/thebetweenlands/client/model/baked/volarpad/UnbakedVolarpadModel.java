@@ -25,7 +25,7 @@ public class UnbakedVolarpadModel implements IUnbakedGeometry<UnbakedVolarpadMod
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new VolarpadModel(
-            spriteGetter.apply(context.getMaterial("texture")),
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}

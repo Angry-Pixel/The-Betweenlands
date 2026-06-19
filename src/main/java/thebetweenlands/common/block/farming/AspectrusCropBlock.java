@@ -143,14 +143,24 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
         BREAKING_PILLAR.set(true);
         try {
             BlockPos base = findCropStackBase(level, pos);
-            breakEntireCropStack(level, base);
             boolean shouldUpdateSoil = this.getAge(state) >= this.getMaxAge() || base.getY() != pos.getY();
+            breakEntireCropStack(level, base);
             if (shouldUpdateSoil && level instanceof ServerLevel) {
                 this.harvestAndUpdateSoil(level, base, 10); // base is directly above soil
             }
             return false;
         } finally {
             BREAKING_PILLAR.set(false);
+        }
+    }
+
+    @Override
+    public void onDestroyedByPuddles(ServerLevel level, BlockPos pos, BlockState puddleState) {
+        BlockPos base = findCropStackBase(level, pos);
+        boolean shouldUpdateSoil = this.getAge(level.getBlockState(base)) >= this.getMaxAge() || base.getY() != pos.getY(); 
+        breakEntireCropStack(level, base);
+        if (shouldUpdateSoil && level instanceof ServerLevel) {
+            this.harvestAndUpdateSoil(level, base, 10); // base is directly above soil
         }
     }
 
@@ -172,7 +182,7 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
             if (level instanceof ServerLevel serverLevel) {
                 dropResources(cropState, serverLevel, check.immutable(), level.getBlockEntity(check));
             }
-            level.setBlock(check, BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState(), level.isClientSide() ? 11 : 3);
+            level.setBlock(check, BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState(), 3);
             check.move(Direction.UP);
         }
     }

@@ -750,6 +750,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.MORTAR, this.modLoc("block/particle/mortar_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.CENSER, this.modLoc("block/particle/censer_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ALEMBIC, this.modLoc("block/particle/alembic_particle"), 0.625F, 0.0F);
+		this.builtinEntity(BlockRegistry.GREEN_ASPECT_VIAL, this.modLoc("block/green_dentrothyst"));
+		this.builtinEntity(BlockRegistry.ORANGE_ASPECT_VIAL, this.modLoc("block/orange_dentrothyst"));
 		this.builtinEntityAndItem(BlockRegistry.ANIMATOR, this.modLoc("block/particle/animator_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.WEEDWOOD_BARREL, this.modLoc("block/weedwood_planks"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.SYRMORITE_BARREL, this.modLoc("block/syrmorite_block"), 0.625F, 0.0F);
@@ -1711,13 +1713,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(walkway).rotationY(270).addModel();
 		
 		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/walkway")).transforms()
-			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.75f).end()
+			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.5f).end()
 			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.8f).end()
 			.transform(ItemDisplayContext.FIXED).rotation(-90f, 0, 0).translation(0, 0, -5f).scale(0.75f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 5.6f, 2.4f).scale(0.75f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 5.6f, 2.4f).scale(0.75f).end()
-			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).translation(0, 5.6f, 0).scale(0.75f).end()
-			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).translation(0, 5.6f, 0).scale(0.75f).end();
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 5.6f, 2.4f).scale(0.6f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 5.6f, 2.4f).scale(0.6f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).translation(0, 4f, 0).scale(0.6f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).translation(0, 4f, 0).scale(0.6f).end();
 	}
 
 	public void pebblePile(DeferredBlock<Block> block) {

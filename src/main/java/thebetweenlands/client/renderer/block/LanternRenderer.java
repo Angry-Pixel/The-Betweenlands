@@ -17,6 +17,11 @@ public class LanternRenderer implements BlockEntityRenderer<LanternBlockEntity> 
     }
 
     @Override
+    public boolean shouldRenderOffScreen(LanternBlockEntity blockEntity) {
+        return true;
+    }
+
+    @Override
     public void render(LanternBlockEntity tile, float partialTick, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         if (!BetweenlandsConfig.Shader.lanternsUseShaders) return;

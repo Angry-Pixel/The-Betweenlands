@@ -25,7 +25,7 @@ public class UnbakedSundewModel implements IUnbakedGeometry<UnbakedSundewModel> 
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new SundewModel(
-            spriteGetter.apply(context.getMaterial("texture")),
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}

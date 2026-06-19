@@ -24,7 +24,7 @@ public class UnbakedBarnacleModel implements IUnbakedGeometry<UnbakedBarnacleMod
         return new BarnacleModel(
             spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("barnacle_2")),
             spriteGetter.apply(context.getMaterial("barnacle_3")), spriteGetter.apply(context.getMaterial("barnacle_4")),
-            context.getTransforms(),
+            spriteGetter.apply(context.getMaterial("particle")), context.getTransforms(),
             transform);
 	}
 }

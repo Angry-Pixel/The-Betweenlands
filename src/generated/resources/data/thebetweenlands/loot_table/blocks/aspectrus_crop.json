@@ -18,7 +18,8 @@
           ],
           "functions": [
             {
-              "function": "thebetweenlands:set_aspect_from_crop"
+              "fallback_item": "thebetweenlands:aspectrus_fruit",
+              "function": "thebetweenlands:set_aspect_from_block_entity"
             }
           ],
           "name": "thebetweenlands:aspectrus_fruit"

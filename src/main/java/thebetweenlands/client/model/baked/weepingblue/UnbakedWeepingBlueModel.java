@@ -24,8 +24,8 @@ public class UnbakedWeepingBlueModel implements IUnbakedGeometry<UnbakedWeepingB
         .composeRootTransformIntoModelState(modelState, context.getRootTransform())
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
-        return new WeepingBlueModel(
-            spriteGetter.apply(context.getMaterial("texture")),
+        return new WeepingBlueModel( 
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}

@@ -3,15 +3,16 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:air"
+          "name": "thebetweenlands:green_aspect_vial"
+        }
+      ],
+      "functions": [
+        {
+          "fallback_item": "thebetweenlands:green_dentrothyst_vial",
+          "function": "thebetweenlands:set_aspect_from_block_entity"
         }
       ],
       "rolls": 1.0

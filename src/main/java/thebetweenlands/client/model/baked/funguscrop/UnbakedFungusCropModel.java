@@ -17,7 +17,7 @@ public class UnbakedFungusCropModel implements IUnbakedGeometry<UnbakedFungusCro
 	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
 		return new FungusCropModel(spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("fungus_crop_2")), 
 			spriteGetter.apply(context.getMaterial("fungus_crop_3")), spriteGetter.apply(context.getMaterial("fungus_crop_4")), 
-			spriteGetter.apply(context.getMaterial("fungus_crop_4_decayed")), context.getTransforms(), context.getRootTransform());
+			spriteGetter.apply(context.getMaterial("fungus_crop_4_decayed")), spriteGetter.apply(context.getMaterial("particle")), context.getTransforms(), context.getRootTransform());
 	}
 }
 

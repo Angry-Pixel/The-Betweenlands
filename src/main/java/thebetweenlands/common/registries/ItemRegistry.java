@@ -49,6 +49,7 @@ import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
 import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.aspect.IAspectVial;
 import thebetweenlands.common.item.armor.AncientArmorItem;
 import thebetweenlands.common.item.armor.BoneArmorItem;
 import thebetweenlands.common.item.armor.LurkerSkinArmorItem;
@@ -667,8 +668,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.GREEN_ELIXIR, new Item.Properties()));
 	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentrothyst_vial", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.ORANGE_ELIXIR, new Item.Properties()));
-	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
-	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(BlockRegistry.GREEN_ASPECT_VIAL.get(), new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY), IAspectVial.VialType.GREEN));
+	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(BlockRegistry.ORANGE_ASPECT_VIAL.get(), new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY), IAspectVial.VialType.ORANGE));
 	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(DIRTY_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 	public static final DeferredItem<Item> ORANGE_ELIXIR = ITEMS.register("orange_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 

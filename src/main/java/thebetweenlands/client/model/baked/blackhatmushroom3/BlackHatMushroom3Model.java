@@ -22,12 +22,14 @@ import java.util.List;
 public class BlackHatMushroom3Model implements IDynamicBakedModel {
     
     private final TextureAtlasSprite texture;
+    private final TextureAtlasSprite particleTexture;
 	private final ItemTransforms transforms;
 	private final List<BakedQuad> quads;
 
-    public BlackHatMushroom3Model(TextureAtlasSprite texture, ItemTransforms transforms, Transformation identity) {
+    public BlackHatMushroom3Model(TextureAtlasSprite texture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.texture = texture;
 		this.transforms = transforms;
+		this.particleTexture = particleTexture;
 
 		QuadBuilder builder = new QuadBuilder(DefaultVertexFormat.BLOCK)
 			.setTransformation(identity)
@@ -68,7 +70,7 @@ public class BlackHatMushroom3Model implements IDynamicBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
-		return this.texture;
+		return this.particleTexture;
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public class WhitePearCropModel implements IDynamicBakedModel {
     private final TextureAtlasSprite stage5Texture;
     private final TextureAtlasSprite stage6Texture;
     private final TextureAtlasSprite stage6DecayedTexture;
+    private final TextureAtlasSprite particleTexture;
 	private final ItemTransforms transforms;
 	private final List<BakedQuad> stage1Quads;
 	private final List<BakedQuad> stage2Quads;
@@ -40,7 +41,7 @@ public class WhitePearCropModel implements IDynamicBakedModel {
 
     public WhitePearCropModel(TextureAtlasSprite stage1Texture, TextureAtlasSprite stage2Texture, TextureAtlasSprite stage3Texture, 
 						   TextureAtlasSprite stage4Texture, TextureAtlasSprite stage5Texture, TextureAtlasSprite stage6Texture, 
-						   TextureAtlasSprite stage6DecayedTexture, ItemTransforms transforms, Transformation identity) {
+						   TextureAtlasSprite stage6DecayedTexture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.stage1Texture = stage1Texture;
 		this.stage2Texture = stage2Texture;
 		this.stage3Texture = stage3Texture;
@@ -48,6 +49,7 @@ public class WhitePearCropModel implements IDynamicBakedModel {
 		this.stage5Texture = stage5Texture;
 		this.stage6Texture = stage6Texture;
 		this.stage6DecayedTexture = stage6DecayedTexture;
+		this.particleTexture = particleTexture;
 		this.transforms = transforms;
 
 		QuadBuilder builder = new QuadBuilder(DefaultVertexFormat.BLOCK)
@@ -120,7 +122,7 @@ public class WhitePearCropModel implements IDynamicBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
-		return this.stage1Texture;
+		return this.particleTexture;
 	}
 
 	@Override

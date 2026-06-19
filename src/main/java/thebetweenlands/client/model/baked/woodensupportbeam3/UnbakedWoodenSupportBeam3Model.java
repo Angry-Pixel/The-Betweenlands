@@ -25,7 +25,7 @@ public class UnbakedWoodenSupportBeam3Model implements IUnbakedGeometry<UnbakedW
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new WoodenSupportBeam3Model(
-            spriteGetter.apply(context.getMaterial("texture")),
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}

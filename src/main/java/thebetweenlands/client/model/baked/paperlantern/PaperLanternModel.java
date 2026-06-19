@@ -29,14 +29,16 @@ public class PaperLanternModel implements IDynamicBakedModel {
     
     private final TextureAtlasSprite texture;
     private final TextureAtlasSprite ropeSprite;
+    private final TextureAtlasSprite particleTexture;
 	private final ItemTransforms transforms;
 	private final List<BakedQuad>[] quadss = new List[8];
 	private final List<BakedQuad> lanternRope;
 
-    public PaperLanternModel(TextureAtlasSprite texture, TextureAtlasSprite ropeSprite, ItemTransforms transforms, Transformation identity) {
+    public PaperLanternModel(TextureAtlasSprite texture, TextureAtlasSprite ropeSprite, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.texture = texture;
 		this.ropeSprite = ropeSprite;
 		this.transforms = transforms;
+		this.particleTexture = particleTexture;
 
 		QuadBuilder ropeBuilder = new QuadBuilder(DefaultVertexFormat.BLOCK)
 			.setTransformation(identity)
@@ -91,7 +93,7 @@ public class PaperLanternModel implements IDynamicBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
-		return this.texture;
+		return this.particleTexture;
 	}
 
 	@Override

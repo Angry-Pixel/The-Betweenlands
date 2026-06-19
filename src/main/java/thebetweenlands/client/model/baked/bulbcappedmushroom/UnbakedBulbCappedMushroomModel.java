@@ -26,7 +26,7 @@ public class UnbakedBulbCappedMushroomModel implements IUnbakedGeometry<UnbakedB
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new BulbCappedMushroomModel(
-            spriteGetter.apply(context.getMaterial("texture")),
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
     }

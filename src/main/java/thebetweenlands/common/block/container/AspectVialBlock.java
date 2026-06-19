@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -17,26 +18,32 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.block.entity.AspectVialBlockEntity;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.herblore.Amounts;
+import thebetweenlands.common.herblore.aspect.IAspectVial;
 import thebetweenlands.common.item.herblore.AspectVialItem;
 import thebetweenlands.common.item.herblore.DentrothystVialItem;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 
-public class AspectVialBlock extends BaseEntityBlock {
+public class AspectVialBlock extends BaseEntityBlock implements IAspectVial {
+
+	private final IAspectVial.VialType type;
 
 	public static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D);
 	public static final BooleanProperty RANDOM_POSITION = BooleanProperty.create("random_position");
 
-	public AspectVialBlock(Properties properties) {
+	public AspectVialBlock(Properties properties, IAspectVial.VialType type) {
 		super(properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(RANDOM_POSITION, false));
+		this.type = type;
 	}
 
 	@Override
@@ -47,6 +54,21 @@ public class AspectVialBlock extends BaseEntityBlock {
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return SHAPE;
+	}
+
+	@Override
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+		ItemStack ret = super.getCloneItemStack(state, target, level, pos, player);
+
+		if (!(level.getBlockEntity(pos) instanceof AspectVialBlockEntity blockEntity) || !(ret.getItem() instanceof AspectVialItem item)) return ret;
+
+		Aspect content = blockEntity.getAspect();
+		if (content == null || content.amount() == 0) 
+			return new ItemStack(item.type().equals(IAspectVial.VialType.GREEN) ? ItemRegistry.GREEN_DENTROTHYST_VIAL.get() : ItemRegistry.ORANGE_DENTROTHYST_VIAL.get());
+
+		ret.set(DataComponentRegistry.ASPECT_CONTENTS, new AspectContents(content.type(), content.amount()));
+
+		return ret;
 	}
 
 	@Override
@@ -73,7 +95,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 							return ItemInteractionResult.sidedSuccess(level.isClientSide());
 						}
 					} else {
-						if (vial.getAspect() != null && vial.getAspect().type() == contents.aspect().get()) {
+						if (vial.getAspect() != null && vial.getAspect().type().equals(contents.aspect().get())) {
 							if (!level.isClientSide()) {
 								int toRemove = Math.min(100, Amounts.VIAL - contents.amount());
 								if (toRemove > 0) {
@@ -121,11 +143,16 @@ public class AspectVialBlock extends BaseEntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new AspectVialBlockEntity(pos, state);
+		return new AspectVialBlockEntity(pos, state, this.type);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(RANDOM_POSITION);
+	}
+
+	@Override
+	public VialType type() {
+		return type;
 	}
 }

@@ -1895,8 +1895,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.DIRTY_DENTROTHYST_VIAL, "Dirty Dentrothyst Vial");
 		this.addItem(ItemRegistry.ORANGE_DENTROTHYST_VIAL, "Orange Dentrothyst Vial");
 
-		this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
-		this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
+		// this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
+		// this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
 		this.add("item.thebetweenlands.aspect_vial.aspect", "%s (%d)");
 		this.add("item.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
 		this.add("item.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");

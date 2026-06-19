@@ -85,8 +85,10 @@ public class PuddleBlock extends Block {
 					BlockPos newPos = pos.offset(xo, 0, zo);
 					if ((xo == 0 && zo == 0) || xo * xo == zo * zo) continue;
 					BlockState offsetState = level.getBlockState(newPos);
-					if ((level.isEmptyBlock(newPos) || (offsetState.getBlock() instanceof FarmablePlant plant && plant.canBeDestroyedByPuddles(level, newPos, offsetState))) && this.defaultBlockState().canSurvive(level, newPos)) {
+					if (level.isEmptyBlock(newPos) && this.defaultBlockState().canSurvive(level, newPos)) {
 						level.setBlockAndUpdate(newPos, this.defaultBlockState());
+					} else if ((offsetState.getBlock() instanceof FarmablePlant plant && plant.canBeDestroyedByPuddles(level, newPos, offsetState)) && this.defaultBlockState().canSurvive(level, newPos)) {
+						plant.onDestroyedByPuddles(level, newPos, this.defaultBlockState());
 					} else if (level.getBlockState(newPos).is(this)) {
 						level.setBlock(newPos, state.setValue(AMOUNT, Math.min(amount + random.nextInt(6), 15)), 2);
 					}

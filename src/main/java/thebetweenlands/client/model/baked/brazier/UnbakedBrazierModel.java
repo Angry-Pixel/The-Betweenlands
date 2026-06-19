@@ -15,7 +15,7 @@ public class UnbakedBrazierModel implements IUnbakedGeometry<UnbakedBrazierModel
 
 	@Override
 	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
-		return new BrazierModel(spriteGetter.apply(context.getMaterial("texture")), context.getTransforms(), context.getRootTransform());
+		return new BrazierModel(spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), context.getTransforms(), context.getRootTransform());
 	}
 }
 

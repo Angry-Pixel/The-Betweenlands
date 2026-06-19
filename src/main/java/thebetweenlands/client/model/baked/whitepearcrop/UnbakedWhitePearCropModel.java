@@ -18,7 +18,7 @@ public class UnbakedWhitePearCropModel implements IUnbakedGeometry<UnbakedWhiteP
 		return new WhitePearCropModel(spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("white_pear_crop_2")), 
 			spriteGetter.apply(context.getMaterial("white_pear_crop_3")), spriteGetter.apply(context.getMaterial("white_pear_crop_4")), 
 			spriteGetter.apply(context.getMaterial("white_pear_crop_5")), spriteGetter.apply(context.getMaterial("white_pear_crop_6")), 
-			spriteGetter.apply(context.getMaterial("white_pear_crop_6_decayed")), context.getTransforms(), context.getRootTransform());
+			spriteGetter.apply(context.getMaterial("white_pear_crop_6_decayed")), spriteGetter.apply(context.getMaterial("particle")), context.getTransforms(), context.getRootTransform());
 	}
 }
 

@@ -35,14 +35,16 @@ import thebetweenlands.common.block.container.SmokingRackBlock;
 import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
 import thebetweenlands.common.block.structure.BrazierBlock;
+import thebetweenlands.common.block.terrain.PebblePileBlock;
 import thebetweenlands.common.block.terrain.WaystoneBlock;
 import thebetweenlands.common.block.terrain.WispBlock;
-import thebetweenlands.common.loot.SetAspectFromCropFunction;
+import thebetweenlands.common.loot.SetAspectFromBlockEntityFunction;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class BLBlockLootProvider extends BlockLootSubProvider {
@@ -543,8 +545,8 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.dropSelf(BlockRegistry.MUD_FLOWER_POT_CANDLE.get());
 		this.dropSelf(BlockRegistry.GECKO_CAGE.get());
 		this.dropSelf(BlockRegistry.INFUSER.get());
-		this.dropSelf(BlockRegistry.GREEN_ASPECT_VIAL.get());
-		this.dropSelf(BlockRegistry.ORANGE_ASPECT_VIAL.get());
+		this.dropVial(BlockRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.GREEN_DENTROTHYST_VIAL.get());
+		this.dropVial(BlockRegistry.ORANGE_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get(), ItemRegistry.ORANGE_DENTROTHYST_VIAL.get());
 		this.dropSelf(BlockRegistry.MORTAR.get());
 		this.dropSelf(BlockRegistry.CENSER.get());
 		this.dropSelf(BlockRegistry.WEEDWOOD_BARREL.get());
@@ -781,12 +783,11 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.add(BlockRegistry.DECAY_INFESTED_WEEDWOOD_BUSH.get(), LootTable.lootTable());
 		this.add(BlockRegistry.FALLEN_LEAVES.get(), block -> this.createShearsWithSickleDrop(block, ItemRegistry.LEAF));
 
-		//TODO all of these. None of these are properly in the mod yet
 		this.aspectrusCropDrop();
 		this.decayableCropDrop(BlockRegistry.FUNGUS_CROP.get(), 3, ItemRegistry.YELLOW_DOTTED_FUNGUS.get(), ItemRegistry.SPORES.get());
 		this.decayableCropDrop(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), 5, ItemRegistry.MIDDLE_FRUIT.get(), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS.get());
 		this.barnacle(BlockRegistry.BARNACLE.get(), 4, ItemRegistry.BARNACLE.get(), ItemRegistry.BARNACLE_LARVAE.get());
-		this.add(BlockRegistry.BETWEENSTONE_PEBBLE.get(), LootTable.lootTable());
+		this.pebble(BlockRegistry.BETWEENSTONE_PEBBLE.get(), ItemRegistry.BETWEENSTONE_PEBBLE.get());
 
 		this.add(BlockRegistry.WHITE_PRESENT.get(), LootTable.lootTable());
 		this.add(BlockRegistry.LIGHT_GRAY_PRESENT.get(), LootTable.lootTable());
@@ -843,6 +844,20 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, licb));
 	}
 
+	private void pebble(Block cropBlock, Item pebbleItem) {
+		final Function<Integer, LootItemCondition.Builder> byPebbleCount = (num) -> LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
+			.setProperties(StatePropertiesPredicate.Builder.properties()
+				.hasProperty(PebblePileBlock.PEBBLES, num));
+		
+		this.add(cropBlock, block -> {
+			LootTable.Builder ret = LootTable.lootTable();
+			for (int i = 1; i <= 4; i++) {
+				ret = ret.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(i)).add(LootItem.lootTableItem(pebbleItem)).when(byPebbleCount.apply(i)));
+			}
+			return ret;
+		});
+	}
+
 	private void decayableCropDrop(Block cropBlock, int stage, Item cropItem, Item seedItem) {
 		LootItemCondition.Builder licb = LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
 			.setProperties(StatePropertiesPredicate.Builder.properties()
@@ -863,7 +878,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 			return LootTable.lootTable()
 				.withPool(LootPool.lootPool()
 					.setRolls(UniformGenerator.between(1, 3))
-					.add(LootItem.lootTableItem(ItemRegistry.ASPECTRUS_FRUIT).apply(SetAspectFromCropFunction.setAspectFromCrop())
+					.add(LootItem.lootTableItem(ItemRegistry.ASPECTRUS_FRUIT).apply(SetAspectFromBlockEntityFunction.setAspectFromBlockEntity(ItemRegistry.ASPECTRUS_FRUIT.get()))
 					.when(grownAndNotDecayed))
 				)
 				.withPool(LootPool.lootPool()
@@ -875,6 +890,15 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 						.apply(ApplyBonusCount.addBonusBinomialDistributionCount(registrylookup.getOrThrow(Enchantments.FORTUNE), 0.5714286F, 3))
 					)
 				);
+		});
+	}
+
+	private void dropVial(Block blockOrigin, Item itemOrigin, Item fallbackItem) {
+		this.add(blockOrigin, block -> {
+			return LootTable.lootTable()
+				.withPool(LootPool.lootPool()
+					.add(LootItem.lootTableItem(itemOrigin)).apply(SetAspectFromBlockEntityFunction.setAspectFromBlockEntity(fallbackItem))
+			);
 		});
 	}
 

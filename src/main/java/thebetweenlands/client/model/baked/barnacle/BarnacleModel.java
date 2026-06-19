@@ -27,6 +27,7 @@ public class BarnacleModel implements IDynamicBakedModel {
     private final TextureAtlasSprite stage2Texture;
     private final TextureAtlasSprite stage3Texture;
     private final TextureAtlasSprite stage4Texture;
+    private final TextureAtlasSprite particleTexture;
 	private final ItemTransforms transforms;
 	private final List<BakedQuad> stage1Quads;
 	private final List<BakedQuad> stage2Quads;
@@ -34,11 +35,12 @@ public class BarnacleModel implements IDynamicBakedModel {
 	private final List<BakedQuad> stage4Quads;
 
     public BarnacleModel(TextureAtlasSprite stage1Texture, TextureAtlasSprite stage2Texture, TextureAtlasSprite stage3Texture, 
-						   TextureAtlasSprite stage4Texture, ItemTransforms transforms, Transformation identity) {
+						   TextureAtlasSprite stage4Texture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.stage1Texture = stage1Texture;
 		this.stage2Texture = stage2Texture;
 		this.stage3Texture = stage3Texture;
 		this.stage4Texture = stage4Texture;
+		this.particleTexture = particleTexture;
 		this.transforms = transforms;
 
 		QuadBuilder builder = new QuadBuilder(DefaultVertexFormat.BLOCK)
@@ -93,7 +95,7 @@ public class BarnacleModel implements IDynamicBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
-		return this.stage1Texture;
+		return this.particleTexture;
 	}
 
 	@Override

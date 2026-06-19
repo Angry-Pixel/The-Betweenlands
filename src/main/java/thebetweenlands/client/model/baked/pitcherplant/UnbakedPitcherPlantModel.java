@@ -25,7 +25,7 @@ public class UnbakedPitcherPlantModel implements IUnbakedGeometry<UnbakedPitcher
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new PitcherPlantModel(
-            spriteGetter.apply(context.getMaterial("texture")),
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}

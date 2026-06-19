@@ -25,7 +25,7 @@ public class UnbakedDungeonWallCandleModel implements IUnbakedGeometry<UnbakedDu
         .getRotation()
         .applyOrigin(new Vector3f(0.5F, 0.5F, 0.5F));
         return new DungeonWallCandleModel(
-            spriteGetter.apply(context.getMaterial("texture")),
+            spriteGetter.apply(context.getMaterial("texture")), spriteGetter.apply(context.getMaterial("particle")), 
             context.getTransforms(),
             transform);
 	}
