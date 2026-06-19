@@ -80,8 +80,6 @@ public class BetweenlandsConfig {
 	public static boolean debugModelLoader = false;
 	public static boolean dumpPackedTextures = false;
 
-	public static boolean lanternsUseShaders = false;
-
 //	public static final OverworldItemLists OVERWORLD = new OverworldItemLists();
 //
 //	public static final class OverworldItemLists {
@@ -128,11 +126,6 @@ public class BetweenlandsConfig {
 
 		public static final ItemListProperty torchWhitelist = new ItemListProperty(() -> torchWhitelistUnparsed.toArray(new String[0]));
 		public static final ItemListProperty torchBlacklist = new ItemListProperty(() -> torchBlacklistUnparsed.toArray(new String[0]));
-	}
-
-	public static final class Shader {
-		public static boolean lanternsUseShaders = false;
-
 	}
 
 	@SuppressWarnings("unchecked")
