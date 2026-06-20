@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.client.BLModelLayers;
@@ -21,11 +22,33 @@ import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.IAspectVial;
 
 public class AspectVialRenderer implements BlockEntityRenderer<AspectVialBlockEntity> {
+    private static RenderType vialRenderType(String name, ResourceLocation texture, boolean depthNotColor) {
+        return RenderType.create(
+			name,
+			DefaultVertexFormat.NEW_ENTITY,
+			VertexFormat.Mode.QUADS,
+			256,
+			false,
+			true,
+			RenderType.CompositeState.builder()
+				.setShaderState(RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+				.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+				.setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+				.setLightmapState(RenderStateShard.LIGHTMAP)
+				.setOverlayState(RenderStateShard.OVERLAY)
+				.setWriteMaskState(depthNotColor ? RenderStateShard.DEPTH_WRITE : RenderStateShard.COLOR_WRITE)
+				.createCompositeState(true)
+		);
+    }
 
-    private static final RenderType TEXTURE_GREEN = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/vial_block_green.png"));
-    private static final RenderType TEXTURE_ORANGE = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/vial_block_orange.png"));
-	private static final RenderType LIQUID = RenderType.create(
-        "aspect_vial_liquid",
+    private static final RenderType GREEN_COLOR = vialRenderType("thebetweenlands:green_aspect_vial_color", TheBetweenlands.prefix("textures/entity/block/vial_block_green.png"), false);
+    private static final RenderType ORANGE_COLOR = vialRenderType("thebetweenlands:orange_aspect_vial_color", TheBetweenlands.prefix("textures/entity/block/vial_block_orange.png"), false);
+
+    private static final RenderType GREEN_DEPTH = vialRenderType("thebetweenlands:green_aspect_vial_color", TheBetweenlands.prefix("textures/entity/block/vial_block_green.png"), true);
+    private static final RenderType ORANGE_DEPTH = vialRenderType("thebetweenlands:orange_aspect_vial_depth", TheBetweenlands.prefix("textures/entity/block/vial_block_orange.png"), true);
+
+    private static final RenderType LIQUID = RenderType.create(
+        "thebetweenlands:aspect_vial_liquid",
         DefaultVertexFormat.NEW_ENTITY,
         VertexFormat.Mode.QUADS,
         256,
@@ -35,8 +58,6 @@ public class AspectVialRenderer implements BlockEntityRenderer<AspectVialBlockEn
             .setShaderState(RenderType.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
             .setTextureState(new RenderStateShard.TextureStateShard(TheBetweenlands.prefix("textures/entity/block/fluid.png"),false, false))
             .setTransparencyState(RenderStateShard.ADDITIVE_TRANSPARENCY)
-            .setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
-            .setWriteMaskState(RenderStateShard.COLOR_WRITE)
             .setLightmapState(RenderStateShard.LIGHTMAP)
             .setOverlayState(RenderStateShard.OVERLAY)
             .createCompositeState(true)
@@ -52,7 +73,7 @@ public class AspectVialRenderer implements BlockEntityRenderer<AspectVialBlockEn
 
     @Override
     public void render(AspectVialBlockEntity entity, float partialTick, PoseStack stack, MultiBufferSource source, int light, int overlay) {
-        
+
         BlockPos pos = entity.getBlockPos();
 
         float randX = 0;
@@ -68,9 +89,8 @@ public class AspectVialRenderer implements BlockEntityRenderer<AspectVialBlockEn
         stack.pushPose();
 		stack.translate(0.2F + randX, 0.0F, 0.25F + randZ);
 		stack.scale(1.0F, -1.0F, -1.0F);
-        
 
-		this.jar.render(stack, source.getBuffer(entity.type().equals(IAspectVial.VialType.GREEN) ? TEXTURE_GREEN : TEXTURE_ORANGE), light, overlay);
+        this.jar.render(stack, source.getBuffer(entity.type().equals(IAspectVial.VialType.GREEN) ? GREEN_COLOR : ORANGE_COLOR), light, overlay);
 
 		if (entity.getLevel() != null && entity.getAspect() instanceof Aspect aspect && aspect.amount() > 0) {
 			int color = aspect.type().value().color();
@@ -79,10 +99,12 @@ public class AspectVialRenderer implements BlockEntityRenderer<AspectVialBlockEn
             stack.pushPose();
             stack.translate(0.0F, amount * 0.1F - 0.05F, 0.0F);
             stack.scale(1, amount, 1);
-            this.jarLiquid.render(stack, source.getBuffer(LIQUID), 15728880, overlay, FastColor.ARGB32.colorFromFloat(1, colors[0], colors[1], colors[2]));
+            this.jarLiquid.render(stack, source.getBuffer(LIQUID), 15728880, overlay, FastColor.ARGB32.colorFromFloat(.98f, colors[0], colors[1], colors[2]));
             stack.popPose();
 		}
+
+        this.jar.render(stack, source.getBuffer(entity.type().equals(IAspectVial.VialType.GREEN) ? GREEN_DEPTH : ORANGE_DEPTH), light, overlay);
+
 		stack.popPose();
     }
-    
 }
