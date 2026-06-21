@@ -44,7 +44,7 @@ public class AspectVialRenderer implements BlockEntityRenderer<AspectVialBlockEn
     private static final RenderType GREEN_COLOR = vialRenderType("thebetweenlands:green_aspect_vial_color", TheBetweenlands.prefix("textures/entity/block/vial_block_green.png"), false);
     private static final RenderType ORANGE_COLOR = vialRenderType("thebetweenlands:orange_aspect_vial_color", TheBetweenlands.prefix("textures/entity/block/vial_block_orange.png"), false);
 
-    private static final RenderType GREEN_DEPTH = vialRenderType("thebetweenlands:green_aspect_vial_color", TheBetweenlands.prefix("textures/entity/block/vial_block_green.png"), true);
+    private static final RenderType GREEN_DEPTH = vialRenderType("thebetweenlands:green_aspect_vial_depth", TheBetweenlands.prefix("textures/entity/block/vial_block_green.png"), true);
     private static final RenderType ORANGE_DEPTH = vialRenderType("thebetweenlands:orange_aspect_vial_depth", TheBetweenlands.prefix("textures/entity/block/vial_block_orange.png"), true);
 
     private static final RenderType LIQUID = RenderType.create(

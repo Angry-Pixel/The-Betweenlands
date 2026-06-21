@@ -43,8 +43,8 @@
       ],
       "translation": [
         0,
-        0,
-        -5
+        3,
+        0
       ]
     },
     "ground": {
@@ -78,7 +78,7 @@
     },
     "thirdperson_lefthand": {
       "rotation": [
-        75,
+        0,
         315,
         0
       ],
@@ -95,7 +95,7 @@
     },
     "thirdperson_righthand": {
       "rotation": [
-        75,
+        0,
         315,
         0
       ],

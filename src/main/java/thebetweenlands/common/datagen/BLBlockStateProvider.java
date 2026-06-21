@@ -1470,7 +1470,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		builder.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, -2.4f, 0).scale(0.425f).end()
 			.transform(ItemDisplayContext.GROUND).scale(0.2f).translation(0, -2.4f, 0).end()
-			.transform(ItemDisplayContext.FIXED).scale(0.5f).end()
+			.transform(ItemDisplayContext.FIXED).translation(0, -2f, 0).scale(0.5f).end()
 			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 2.4f, 2.4f).scale(0.375f).end()
 			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 2.4f, 2.4f).scale(0.375f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.34f).rotation(0, 45, 0).end()
@@ -1547,10 +1547,10 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, -4, 0).scale(0.25f).end()
 			.transform(ItemDisplayContext.GROUND).scale(0.2f).end()
-			.transform(ItemDisplayContext.FIXED).translation(0, -1, 0).scale(0.3f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 0, 3.2f).scale(0.375f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 0, 3.2f).scale(0.375f).end()
-			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(0.34f).rotation(0, 45, 0).end()
+			.transform(ItemDisplayContext.FIXED).translation(0, -3, 0).scale(0.3f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 0, 3.2f).scale(0.2f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 0, 3.2f).scale(0.2f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).scale(0.34f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).scale(0.34f).end();
 	}
 
@@ -1563,9 +1563,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.85f).end()
 			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.5f).end()
-			.transform(ItemDisplayContext.FIXED).translation(0, 0, -5f).scale(0.75f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(75, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(75, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
+			.transform(ItemDisplayContext.FIXED).translation(0, 3f, 0).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 135, 0).translation(0, 4f, 0).scale(0.5f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 135, 0).translation(0, 4f, 0).scale(0.5f).end();
 	}
@@ -1677,8 +1677,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transform(ItemDisplayContext.GUI).rotation(120, 30, 20).translation(0, 2.4f, 0).scale(.725f).end()
 			.transform(ItemDisplayContext.GROUND).rotation(90, 0, 180).translation(0, 3.2f, 0).scale(0.3f).end()
 			.transform(ItemDisplayContext.FIXED).rotation(90, 0, 90).scale(0.75f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0, 180, 0).translation(0, 5.6f, 2.4f).scale(0.75f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, 180, 0).translation(0, 5.6f, 2.4f).scale(0.75f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-30, 180, 0).translation(0, 3f, 3f).scale(0.3f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(-30, 180, 0).translation(0, 3f, 3f).scale(0.3f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(90, 45, 0).translation(0, 5.6f, 0).scale(0.5f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(90, 45, 0).translation(0, 5.6f, 0).scale(0.5f).end();
 	}
@@ -1713,13 +1713,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(walkway).rotationY(270).addModel();
 		
 		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/walkway")).transforms()
-			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.5f).end()
-			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.8f).end()
-			.transform(ItemDisplayContext.FIXED).rotation(-90f, 0, 0).translation(0, 0, -5f).scale(0.75f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 5.6f, 2.4f).scale(0.6f).end()
-			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 5.6f, 2.4f).scale(0.6f).end()
-			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).translation(0, 4f, 0).scale(0.6f).end()
-			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).translation(0, 4f, 0).scale(0.6f).end();
+			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.4f).end()
+			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.7f).end()
+			.transform(ItemDisplayContext.FIXED).rotation(-90f, 0, 0).translation(0, 0, -5f).scale(0.5f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, 3f, 2.4f).scale(0.4f).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, 3f, 2.4f).scale(0.4f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).translation(0, 3f, 0).scale(0.4f).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).translation(0, 3f, 0).scale(0.4f).end();
 	}
 
 	public void pebblePile(DeferredBlock<Block> block) {

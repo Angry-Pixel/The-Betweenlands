@@ -144,7 +144,7 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
         try {
             BlockPos base = findCropStackBase(level, pos);
             boolean shouldUpdateSoil = this.getAge(state) >= this.getMaxAge() || base.getY() != pos.getY();
-            breakEntireCropStack(level, base);
+            breakEntireCropStack(level, base, willHarvest);
             if (shouldUpdateSoil && level instanceof ServerLevel) {
                 this.harvestAndUpdateSoil(level, base, 10); // base is directly above soil
             }
@@ -158,7 +158,7 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
     public void onDestroyedByPuddles(ServerLevel level, BlockPos pos, BlockState puddleState) {
         BlockPos base = findCropStackBase(level, pos);
         boolean shouldUpdateSoil = this.getAge(level.getBlockState(base)) >= this.getMaxAge() || base.getY() != pos.getY(); 
-        breakEntireCropStack(level, base);
+        breakEntireCropStack(level, base, false);
         if (shouldUpdateSoil && level instanceof ServerLevel) {
             this.harvestAndUpdateSoil(level, base, 10); // base is directly above soil
         }
@@ -172,14 +172,14 @@ public class AspectrusCropBlock extends DecayableCropBlock implements EntityBloc
         return check.immutable();
     }
 
-    private void breakEntireCropStack(Level level, BlockPos base) {
+    private void breakEntireCropStack(Level level, BlockPos base, boolean shouldDrop) {
         BlockPos.MutableBlockPos check = base.mutable();
         for (int i = 0; i < this.getMaxHeight(); i++) {
             BlockState cropState = level.getBlockState(check);
             if (!(cropState.getBlock() instanceof AspectrusCropBlock)) {
                 break;
             }
-            if (level instanceof ServerLevel serverLevel) {
+            if (shouldDrop && level instanceof ServerLevel serverLevel) {
                 dropResources(cropState, serverLevel, check.immutable(), level.getBlockEntity(check));
             }
             level.setBlock(check, BlockRegistry.RUBBER_TREE_FENCE.get().defaultBlockState(), 3);
