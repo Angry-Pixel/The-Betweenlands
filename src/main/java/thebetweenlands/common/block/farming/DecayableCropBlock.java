@@ -20,19 +20,21 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 
 public abstract class DecayableCropBlock extends CropBlock implements FarmablePlant {
 
 	public static final BooleanProperty DECAYED = BooleanProperty.create("decayed");
-	public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 3);
-	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 15);
+	public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 5);
+	// public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 15); //CropBlock already has an AGE property
 
 	public DecayableCropBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(DECAYED, false).setValue(AGE, 0));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(DECAYED, false).setValue(AGE, 0).setValue(STAGE, 0));
 	}
 
 	public abstract int getMaxHeight();
@@ -48,6 +50,9 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 	}
 
 	@Override
+	protected abstract ItemLike getBaseSeedId();//not particularly necessary, but it forces child classes to have a base seed item, compared to resorting to wheat as the default item
+
+	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		BlockPos blockpos = pos.below();
 		BlockState belowBlockState = level.getBlockState(blockpos);
@@ -58,9 +63,9 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-		return super.mayPlaceOn(state, level, pos) &&
-			!(state.getBlock() instanceof DugSoilBlock && state.getValue(DugSoilBlock.DECAYED)) &&
-			!(state.getBlock() instanceof DecayableCropBlock && state.getValue(AGE) < 15);
+		return super.mayPlaceOn(state, level, pos) || 
+			(state.getBlock() instanceof DugSoilBlock && (state.getValue(DugSoilBlock.COMPOSTED) || state.getValue(DugSoilBlock.DECAYED))) ||
+			(state.getBlock() instanceof DecayableCropBlock);
 	}
 
 	@Nullable
@@ -140,9 +145,9 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 		BlockState stateDown = level.getBlockState(pos.below());
 		if (stateDown.getBlock() instanceof DugSoilBlock soil) {
 			if (level.getBlockEntity(pos.below()) instanceof DugSoilBlockEntity te && te.isComposted()) {
-				te.setCompost(level, pos, Math.max(te.getCompost() - compost, 0));
+				te.setCompost(level, pos.below(), Math.max(te.getCompost() - compost, 0));
 				if (soil.isPurified(level, pos.below(), stateDown)) {
-					te.setPurifiedHarvests(level, pos, te.getPurifiedHarvests() + 1);
+					te.setPurifiedHarvests(level, pos.below(), te.getPurifiedHarvests() + 1);
 				}
 			}
 		}
@@ -163,12 +168,22 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 					if (this.canGrowUp(level, pos, state, height)) {
 						this.growUp(level, pos);
 					}
-
-					level.setBlock(pos, this.defaultBlockState(), 2);
+					level.setBlock(pos, state.setValue(this.getAgeProperty(), this.getMaxAge()), 2);
 				}
 				CommonHooks.fireCropGrowPost(level, pos, state);
 			}
 		}
+	}
+
+	@Override
+	public boolean isRandomlyTicking(BlockState state) {
+		if (state.getValue(DECAYED)) {
+			return false;
+		}
+		if (this.getAge(state) < this.getMaxAge()) {
+			return true;
+		}
+		return this.getMaxHeight() != 1;
 	}
 
 	/**
@@ -264,7 +279,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(AGE, DECAYED));
+		super.createBlockStateDefinition(builder.add(DECAYED, STAGE));
 	}
 
 	@Override
@@ -272,7 +287,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 		if (!this.canGrow(level, pos, state)) {
 			return false;
 		}
-		if (state.getValue(AGE) < 15) {
+		if (state.getValue(CropBlock.AGE) < 15) {
 			return true;
 		}
 		int height;
@@ -282,7 +297,7 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 
 	@Override
 	public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
-		int age = state.getValue(AGE) + Mth.nextInt(random, 2, 5);
+		int age = state.getValue(CropBlock.AGE) + Mth.nextInt(random, 2, 5);
 		if (age > 15) {
 			age = 15;
 			int height;
@@ -291,6 +306,6 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 				this.growUp(level, pos);
 			}
 		}
-		level.setBlockAndUpdate(pos, state.setValue(AGE, age));
+		level.setBlockAndUpdate(pos, state.setValue(CropBlock.AGE, age));
 	}
 }

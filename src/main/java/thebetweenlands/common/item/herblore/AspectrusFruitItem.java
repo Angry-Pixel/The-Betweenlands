@@ -15,7 +15,7 @@ public class AspectrusFruitItem extends Item {
 	@Override
 	public Component getName(ItemStack stack) {
 		return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect()
-			.map(aspect -> Component.translatable("item.thebetweenlands.apsectrus_fruit.aspect", Component.translatable(Util.makeDescriptionId("aspect", aspect.getKey().location()))))
+			.map(aspect -> Component.translatable("item.thebetweenlands.aspectrus_fruit.aspect", Component.translatable(Util.makeDescriptionId("aspect", aspect.getKey().location()))))
 			.orElse(super.getName(stack).copy());
 	}
 }

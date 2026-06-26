@@ -1,4 +1,82 @@
 {
   "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "thebetweenlands:betweenstone_pebble",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "pebbles": "1"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:betweenstone_pebble"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "thebetweenlands:betweenstone_pebble",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "pebbles": "2"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:betweenstone_pebble"
+        }
+      ],
+      "rolls": 2.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "thebetweenlands:betweenstone_pebble",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "pebbles": "3"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:betweenstone_pebble"
+        }
+      ],
+      "rolls": 3.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "thebetweenlands:betweenstone_pebble",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "pebbles": "4"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:betweenstone_pebble"
+        }
+      ],
+      "rolls": 4.0
+    }
+  ],
   "random_sequence": "thebetweenlands:blocks/betweenstone_pebble"
 }

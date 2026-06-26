@@ -1,6 +1,7 @@
 package thebetweenlands.api.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -78,5 +79,16 @@ public interface FarmablePlant {
 	 */
 	default boolean canBeDestroyedByPuddles(LevelReader level, BlockPos pos, BlockState state) {
 		return false;
+	}
+
+	/**
+	 * what should happen when this plant is destroyed by rain
+	 * @param level
+	 * @param pos
+	 * @param state
+	 * @return
+	 */
+	default void onDestroyedByPuddles(ServerLevel level, BlockPos pos, BlockState puddleState) {
+		level.setBlockAndUpdate(pos, puddleState);
 	}
 }

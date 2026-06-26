@@ -13,7 +13,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
+
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.ParticleRegistry;
@@ -64,7 +67,7 @@ public class BLLanternBlock extends LanternBlock implements SwampWaterLoggable {
 			if (context.getLevel().getBlockState(context.getClickedPos().above()).getBlock() instanceof RopeBlock) {
 				rotation -= rotation % 2;
 			}
-			state.setValue(ROTATION, rotation);
+			state = state.setValue(ROTATION, rotation);
 		}
 		return state;
 	}

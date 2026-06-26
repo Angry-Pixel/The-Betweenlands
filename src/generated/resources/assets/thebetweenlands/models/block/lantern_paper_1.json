@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:paper_lantern",
+  "textures": {
+    "particle": "thebetweenlands:block/amate_paper_pane_1_ct_0",
+    "rope": "thebetweenlands:block/lantern_rope",
+    "texture": "thebetweenlands:block/lantern_paper_1"
+  }
+}

@@ -510,7 +510,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.GOLDEN_CLUB_FLOWER, "Golden Club Flower");
 		this.addBlock(BlockRegistry.GOLDEN_CLUB_STALK, "Golden Club Stalk");
 		this.addBlock(BlockRegistry.GRAY_PRESENT, "Gray Present");
-		this.addBlock(BlockRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
+		// this.addBlock(BlockRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
 		this.addBlock(BlockRegistry.GREEN_BAUBLE, "Green Bauble");
 		this.addBlock(BlockRegistry.GREEN_DENTROTHYST, "Green Dentrothyst");
 		this.addBlock(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK, "Block of Green Middle Gem");
@@ -658,7 +658,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.OCTINE_BLOCK, "Block of Octine");
 		this.addBlock(BlockRegistry.OCTINE_ORE, "Octine Ore");
 		this.addBlock(BlockRegistry.OFFERING_TABLE, "Offering Table");
-		this.addBlock(BlockRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
+		// this.addBlock(BlockRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
 		this.addBlock(BlockRegistry.ORANGE_DENTROTHYST, "Orange Dentrothyst");
 		this.addBlock(BlockRegistry.ORANGE_PRESENT, "Orange Present");
 		this.addBlock(BlockRegistry.PALE_GRASS, "Pale Grass");
@@ -1218,9 +1218,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.coated.4", "Well coated");
 		this.add("item.thebetweenlands.coated.5", "Well coated");
 
-		this.add("item.thebetweenlands.food_sickness.fine", "Tastes good");
-		this.add("item.thebetweenlands.food_sickness.half", "Tastes fine");
-		this.add("item.thebetweenlands.food_sickness.sick", "Can't eat this anymore");
+		this.add("item.thebetweenlands.food_sickness.state.fine", "Tastes good");
+		this.add("item.thebetweenlands.food_sickness.state.half", "Tastes fine");
+		this.add("item.thebetweenlands.food_sickness.state.sick", "Can't eat this anymore");
 
 		this.add("item.thebetweenlands.circle_gem.green", "Green Gem");
 		this.add("item.thebetweenlands.circle_gem.crimson", "Crimson Gem");
@@ -1883,7 +1883,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.PALE_GRASS_BLADES, "Pale Grass Blades");
 		this.addItem(ItemRegistry.STRING_ROOT_FIBERS, "String Root Fibers");
 		this.addItem(ItemRegistry.CRYPTWEED_BLADES, "Cryptweed Blades");
+		this.addItem(ItemRegistry.ASPECTRUS_SEEDS, "Aspectrus Seeds");
 		this.addItem(ItemRegistry.SPORES, "Spores");
+		this.addItem(ItemRegistry.BARNACLE_LARVAE, "Barnacle Larvae");
+		this.addItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS, "White Pear Seeds");
 		
 		this.addItem(ItemRegistry.ASPECTRUS_FRUIT, "Aspectrus Fruit");
 		this.add(ItemRegistry.ASPECTRUS_FRUIT.get().getDescriptionId() + ".aspect", "Aspectrus Fruit - %s");
@@ -1892,11 +1895,14 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.DIRTY_DENTROTHYST_VIAL, "Dirty Dentrothyst Vial");
 		this.addItem(ItemRegistry.ORANGE_DENTROTHYST_VIAL, "Orange Dentrothyst Vial");
 
-		this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
-		this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
+		// this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
+		// this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
 		this.add("item.thebetweenlands.aspect_vial.aspect", "%s (%d)");
 		this.add("item.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
 		this.add("item.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");
+		this.add("block.thebetweenlands.aspect_vial.aspect", "%s (%d)");
+		this.add("block.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
+		this.add("block.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");
 
 		this.addItem(ItemRegistry.GREEN_ELIXIR, "Green Elixir Vial");
 		this.addItem(ItemRegistry.ORANGE_ELIXIR, "Orange Elixir Vial");

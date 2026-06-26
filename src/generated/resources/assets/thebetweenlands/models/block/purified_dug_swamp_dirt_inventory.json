@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "thebetweenlands:block/purified_swamp_dirt",
     "side": "thebetweenlands:block/purified_swamp_dirt",
-    "top": "thebetweenlands:block/dug_swamp_dirt_0"
+    "top": "thebetweenlands:block/dug_purified_swamp_dirt_0"
   }
 }

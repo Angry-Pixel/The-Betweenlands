@@ -76,9 +76,9 @@ public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContai
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
 		if (fluidstate.is(FluidRegistry.SWAMP_WATER_STILL.get()) && fluidstate.getAmount() == 8) {
-			return super.getStateForPlacement(context).setValue(FACING, context.getNearestLookingDirection()).setValue(IS_SWAMP_WATER, true);
+			return super.getStateForPlacement(context).setValue(FACING, context.getClickedFace()).setValue(IS_SWAMP_WATER, true);
 		} else if (fluidstate.is(Fluids.WATER) && fluidstate.getAmount() == 8) {
-			return super.getStateForPlacement(context).setValue(FACING, context.getNearestLookingDirection()).setValue(IS_SWAMP_WATER, false);
+			return super.getStateForPlacement(context).setValue(FACING, context.getClickedFace()).setValue(IS_SWAMP_WATER, false);
 		}
 		return null;
 	}

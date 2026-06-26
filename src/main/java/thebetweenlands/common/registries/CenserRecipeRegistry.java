@@ -15,7 +15,7 @@ public class CenserRecipeRegistry {
 
 	public static final DeferredRegister<CenserRecipe<?>> RECIPES = DeferredRegister.create(BLRegistries.Keys.CENSER_RECIPES, TheBetweenlands.ID);
 
-	public static final DeferredHolder<CenserRecipe<?>, AspectCenserRecipe> ASPECT = RECIPES.register("apsect", AspectCenserRecipe::new);
+	public static final DeferredHolder<CenserRecipe<?>, AspectCenserRecipe> ASPECT = RECIPES.register("aspect", AspectCenserRecipe::new);
 	public static final DeferredHolder<CenserRecipe<?>, CremainsCenserRecipe> CREMAINS = RECIPES.register("cremains", CremainsCenserRecipe::new);
 	public static final DeferredHolder<CenserRecipe<?>, DungeonFogCenserRecipe> DUNGEON_FOG = RECIPES.register("dungeon_fog", DungeonFogCenserRecipe::new);
 	public static final DeferredHolder<CenserRecipe<?>, ElixirCenserRecipe> ELIXIR = RECIPES.register("elixir", ElixirCenserRecipe::new);

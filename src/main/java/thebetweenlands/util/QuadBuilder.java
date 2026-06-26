@@ -1,6 +1,5 @@
 package thebetweenlands.util;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -503,7 +502,9 @@ public class QuadBuilder {
 					if (hasTransform) {
 						Vector4f vec = new Vector4f(positionData);
 						vert.transformation.getMatrix().transform(vec);
-						vec.get(FloatBuffer.wrap(positionData));
+						positionData[0] = vec.x();
+						positionData[1] = vec.y();
+						positionData[2] = vec.z();
 					}
 
 					builder.setPosition(positionData[0], positionData[1], positionData[2]);
@@ -524,7 +525,9 @@ public class QuadBuilder {
 						matrix.invert();
 						matrix.transpose();
 						matrix.transform(vec);
-						vec.get(FloatBuffer.wrap(normalData));
+						normalData[0] = vec.x();
+						normalData[1] = vec.y();
+						normalData[2] = vec.z();
 					}
 					float dx = normalData[0];
 					float dy = normalData[1];

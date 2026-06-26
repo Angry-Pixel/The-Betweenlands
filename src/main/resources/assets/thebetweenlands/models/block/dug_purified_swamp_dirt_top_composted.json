@@ -9,11 +9,11 @@
         {
             "cullface": "up",
             "connected_textures": [
-                "thebetweenlands:block/dug_swamp_grass_0",
-                "thebetweenlands:block/dug_swamp_grass_1",
-                "thebetweenlands:block/dug_swamp_grass_2",
-                "thebetweenlands:block/dug_swamp_grass_3",
-                "thebetweenlands:block/dug_swamp_grass_4"
+                "thebetweenlands:block/dug_purified_swamp_dirt_composted_0",
+                "thebetweenlands:block/dug_purified_swamp_dirt_composted_1",
+                "thebetweenlands:block/dug_purified_swamp_dirt_composted_2",
+                "thebetweenlands:block/dug_purified_swamp_dirt_composted_3",
+                "thebetweenlands:block/dug_purified_swamp_dirt_composted_4"
             ],
             "indices": [
                 "thebetweenlands:top_north_west_index",

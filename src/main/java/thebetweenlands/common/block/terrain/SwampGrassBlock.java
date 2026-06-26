@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -15,9 +14,9 @@ import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.PlacedFeatureRegistry;
 
-public class SwampGrassBlock extends Block implements BonemealableBlock {
+public class SwampGrassBlock extends DiggableSwampBlock implements BonemealableBlock {
 	public SwampGrassBlock(Properties properties) {
-		super(properties);
+		super(properties, () -> BlockRegistry.DUG_SWAMP_GRASS.get().defaultBlockState(), true);
 	}
 
 	@Override

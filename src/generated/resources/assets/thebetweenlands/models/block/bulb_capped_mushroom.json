@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:bulb_capped_mushroom",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/bulb_capped_mushroom_particle",
+    "texture": "thebetweenlands:block/bulb_capped_mushroom"
+  }
+}

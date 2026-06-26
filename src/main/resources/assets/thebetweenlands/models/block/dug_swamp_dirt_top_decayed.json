@@ -3,17 +3,17 @@
     "loader": "thebetweenlands:connected_texture",
     "ambient_occlusion": true,
     "textures": {
-        "particle": "thebetweenlands:block/purified_swamp_dirt"
+        "particle": "thebetweenlands:block/swamp_dirt"
     },
     "connected_texture_faces": [
         {
             "cullface": "up",
             "connected_textures": [
-                "thebetweenlands:block/dug_swamp_dirt_0",
-                "thebetweenlands:block/dug_swamp_dirt_1",
-                "thebetweenlands:block/dug_swamp_dirt_2",
-                "thebetweenlands:block/dug_swamp_dirt_3",
-                "thebetweenlands:block/dug_swamp_dirt_4"
+                "thebetweenlands:block/dug_swamp_dirt_decayed_0",
+                "thebetweenlands:block/dug_swamp_dirt_decayed_1",
+                "thebetweenlands:block/dug_swamp_dirt_decayed_2",
+                "thebetweenlands:block/dug_swamp_dirt_decayed_3",
+                "thebetweenlands:block/dug_swamp_dirt_decayed_4"
             ],
             "indices": [
                 "thebetweenlands:top_north_west_index",
