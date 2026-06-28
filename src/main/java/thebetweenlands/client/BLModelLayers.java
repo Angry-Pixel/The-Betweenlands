@@ -113,6 +113,13 @@ public class BLModelLayers {
 	public static final ModelLayerLocation GECKO = register("gecko");
 	public static final ModelLayerLocation MUTATED_GECKO = register("mutated_gecko");
 
+	public static final ModelLayerLocation ASPECTRUS_CROP_1 = register("aspectrus_crop_1");
+	public static final ModelLayerLocation ASPECTRUS_CROP_2 = register("aspectrus_crop_2");
+	public static final ModelLayerLocation ASPECTRUS_CROP_3 = register("aspectrus_crop_3");
+	public static final ModelLayerLocation ASPECTRUS_CROP_3_ASPECT = register("aspectrus_crop_3", "aspect");
+	public static final ModelLayerLocation ASPECTRUS_CROP_4 = register("aspectrus_crop_4");
+	public static final ModelLayerLocation ASPECTRUS_CROP_4_ASPECT = register("aspectrus_crop_4", "aspect");
+
 	public static final ModelLayerLocation ALCOVE = register("alcove");
 	public static final ModelLayerLocation ALEMBIC = register("alembic");
 	public static final ModelLayerLocation ANIMATOR = register("animator");

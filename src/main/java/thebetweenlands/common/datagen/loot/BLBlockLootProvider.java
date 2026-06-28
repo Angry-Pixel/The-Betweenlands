@@ -840,7 +840,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		LootItemCondition.Builder licb = LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
 			.setProperties(StatePropertiesPredicate.Builder.properties()
 			.hasProperty(BarnacleBlock.STAGE, stage));
-		
+
 		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, licb));
 	}
 
@@ -848,7 +848,7 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		final Function<Integer, LootItemCondition.Builder> byPebbleCount = (num) -> LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
 			.setProperties(StatePropertiesPredicate.Builder.properties()
 				.hasProperty(PebblePileBlock.PEBBLES, num));
-		
+
 		this.add(cropBlock, block -> {
 			LootTable.Builder ret = LootTable.lootTable();
 			for (int i = 1; i <= 4; i++) {
@@ -858,20 +858,20 @@ public class BLBlockLootProvider extends BlockLootSubProvider {
 		});
 	}
 
-	private void decayableCropDrop(Block cropBlock, int stage, Item cropItem, Item seedItem) {
-		LootItemCondition.Builder licb = LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
+	private void decayableCropDrop(DecayableCropBlock cropBlock, int stage, Item cropItem, Item seedItem) {
+		LootItemCondition.Builder properties = LootItemBlockStatePropertyCondition.hasBlockStateProperties(cropBlock)
 			.setProperties(StatePropertiesPredicate.Builder.properties()
-			.hasProperty(DecayableCropBlock.STAGE, stage)
+			.hasProperty(cropBlock.getAgeProperty(), stage)
 			.hasProperty(DecayableCropBlock.DECAYED, false));
-		
-		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, licb));
+
+		this.add(cropBlock, block -> this.createCropDrops(block, cropItem, seedItem, properties));
 	}
 
 	private void aspectrusCropDrop() {
 		this.add(BlockRegistry.ASPECTRUS_CROP.get(), block -> {
 			LootItemCondition.Builder grownAndNotDecayed = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
 				.setProperties(StatePropertiesPredicate.Builder.properties()
-					.hasProperty(DecayableCropBlock.STAGE, 5)
+					.hasProperty(BlockRegistry.ASPECTRUS_CROP.get().getAgeProperty(), 15)
 					.hasProperty(DecayableCropBlock.DECAYED, false));
 			HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 

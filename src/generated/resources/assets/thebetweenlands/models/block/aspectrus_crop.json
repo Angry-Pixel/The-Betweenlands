@@ -1,15 +1,6 @@
 {
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:aspectrus_crop",
+  "parent": "minecraft:builtin/entity",
   "textures": {
-    "aspectrus_crop_1": "thebetweenlands:block/aspectrus_crop_1",
-    "aspectrus_crop_2": "thebetweenlands:block/aspectrus_crop_2",
-    "aspectrus_crop_3": "thebetweenlands:block/aspectrus_crop_3",
-    "aspectrus_crop_4": "thebetweenlands:block/aspectrus_crop_4",
-    "aspectrus_crop_5": "thebetweenlands:block/aspectrus_crop_5",
-    "aspectrus_crop_6": "thebetweenlands:block/aspectrus_crop_6",
-    "fence": "thebetweenlands:block/rubber_tree_planks",
-    "particle": "thebetweenlands:block/particle/aspectrus_crop_particle",
-    "texture": "thebetweenlands:block/aspectrus_crop_0"
+    "particle": "thebetweenlands:block/particle/aspectrus_crop_particle"
   }
 }

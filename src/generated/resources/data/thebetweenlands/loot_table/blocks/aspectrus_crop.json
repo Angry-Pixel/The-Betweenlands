@@ -11,8 +11,8 @@
               "block": "thebetweenlands:aspectrus_crop",
               "condition": "minecraft:block_state_property",
               "properties": {
-                "decayed": "false",
-                "stage": "5"
+                "age": "15",
+                "decayed": "false"
               }
             }
           ],
@@ -48,8 +48,8 @@
           "block": "thebetweenlands:aspectrus_crop",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "decayed": "false",
-            "stage": "5"
+            "age": "15",
+            "decayed": "false"
           }
         }
       ],

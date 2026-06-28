@@ -1,63 +1,46 @@
 package thebetweenlands.common.item.farming;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.common.block.farming.AspectrusCropBlock;
-import thebetweenlands.common.block.farming.DugSoilBlock;
-import thebetweenlands.common.block.farming.RubberTreeFenceBlock;
+import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.entity.AspectrusCropBlockEntity;
+import thebetweenlands.common.item.ReplacingBlockPlaceContext;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class AspectrusSeedItem extends Item {
-
+public class AspectrusSeedItem extends PlantableSeedItem {
 
     public AspectrusSeedItem(Properties properties) {
-        super(properties);
+        super(BlockRegistry.ASPECTRUS_CROP.get(), nonDecayedSoil(), properties);
     }
 
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos clickedPos = context.getClickedPos();
-        BlockState clickedBlockState = level.getBlockState(clickedPos);
-        BlockPos cropPos;
-        BlockState dugSoilBlockState;
-        Player player = context.getPlayer();
-        ItemStack stack = context.getItemInHand();
+	@Nullable
+	@Override
+	public BlockPlaceContext updatePlacementContext(BlockPlaceContext context) {
+		BlockPos checkPos = context.getClickedPos().relative(context.getClickedFace().getOpposite());
+		if (context.getLevel().getBlockState(checkPos).getBlock() instanceof FenceBlock) {
+			return new ReplacingBlockPlaceContext(context, checkPos, true);
+		}
+		return null;
+	}
 
-        if (clickedBlockState.getBlock() instanceof DugSoilBlock && (context.getClickedFace() == net.minecraft.core.Direction.UP) && clickedBlockState.getValue(DugSoilBlock.COMPOSTED)) {
-            cropPos = clickedPos.above();
-            BlockState fenceBlockState = level.getBlockState(cropPos);
-            if (!(fenceBlockState.getBlock() instanceof RubberTreeFenceBlock)) return InteractionResult.FAIL;
-            dugSoilBlockState = clickedBlockState;
-            // if (player != null && !player.mayUseItemAt(clickedPos, context.getClickedFace(), stack)) {
-            //     return InteractionResult.FAIL;
-            // }
-        } else if (clickedBlockState.getBlock() instanceof RubberTreeFenceBlock) {
-            cropPos = clickedPos;
-            dugSoilBlockState = level.getBlockState(cropPos.below());
-            if (!(dugSoilBlockState.getBlock() instanceof DugSoilBlock)) return InteractionResult.FAIL;
-            // if (player != null && !player.mayUseItemAt(cropPos, context.getClickedFace(), stack)) {
-            //     return InteractionResult.FAIL;
-            // }
-        } else return InteractionResult.FAIL;
-        
-        BlockState crop = BlockRegistry.ASPECTRUS_CROP.get().defaultBlockState()
-                .setValue(AspectrusCropBlock.DECAYED, dugSoilBlockState.getValue(DugSoilBlock.DECAYED));
+	@Override
+	protected boolean canPlace(BlockPlaceContext context, BlockState state) {
+		return this.soilMatcher.test(context.getLevel().getBlockState(context.getClickedPos().below())) && state.canSurvive(context.getLevel(), context.getClickedPos());
+	}
 
-        if (!level.isClientSide()) {
-            level.setBlock(cropPos, crop, 3);
-            if (player == null || !player.getAbilities().instabuild) {
-                stack.shrink(1);
-            }
-        }
-        return InteractionResult.sidedSuccess(level.isClientSide());
-    }
+	@Override
+	protected boolean placeBlock(BlockPlaceContext context, BlockState state) {
+		BlockState fence = context.getLevel().getBlockState(context.getClickedPos());
+		boolean ret = super.placeBlock(context, state);
+		if (ret) {
+			BlockEntity entity = context.getLevel().getBlockEntity(context.getClickedPos());
+			if (entity instanceof AspectrusCropBlockEntity crop) {
+				crop.setFence(fence);
+			}
+		}
+		return ret;
+	}
 }

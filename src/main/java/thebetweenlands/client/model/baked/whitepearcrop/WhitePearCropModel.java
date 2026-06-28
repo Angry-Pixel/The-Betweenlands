@@ -14,6 +14,7 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
 
@@ -21,15 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class WhitePearCropModel implements IDynamicBakedModel {
-    
-    private final TextureAtlasSprite stage1Texture;
-    private final TextureAtlasSprite stage2Texture;
-    private final TextureAtlasSprite stage3Texture;
-    private final TextureAtlasSprite stage4Texture;
-    private final TextureAtlasSprite stage5Texture;
-    private final TextureAtlasSprite stage6Texture;
-    private final TextureAtlasSprite stage6DecayedTexture;
-    private final TextureAtlasSprite particleTexture;
+
+	private final TextureAtlasSprite particleTexture;
 	private final ItemTransforms transforms;
 	private final List<BakedQuad> stage1Quads;
 	private final List<BakedQuad> stage2Quads;
@@ -39,58 +33,51 @@ public class WhitePearCropModel implements IDynamicBakedModel {
 	private final List<BakedQuad> stage6Quads;
 	private final List<BakedQuad> stage6DecayedQuads;
 
-    public WhitePearCropModel(TextureAtlasSprite stage1Texture, TextureAtlasSprite stage2Texture, TextureAtlasSprite stage3Texture, 
-						   TextureAtlasSprite stage4Texture, TextureAtlasSprite stage5Texture, TextureAtlasSprite stage6Texture, 
-						   TextureAtlasSprite stage6DecayedTexture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
-		this.stage1Texture = stage1Texture;
-		this.stage2Texture = stage2Texture;
-		this.stage3Texture = stage3Texture;
-		this.stage4Texture = stage4Texture;
-		this.stage5Texture = stage5Texture;
-		this.stage6Texture = stage6Texture;
-		this.stage6DecayedTexture = stage6DecayedTexture;
+	public WhitePearCropModel(TextureAtlasSprite stage1Texture, TextureAtlasSprite stage2Texture, TextureAtlasSprite stage3Texture,
+							  TextureAtlasSprite stage4Texture, TextureAtlasSprite stage5Texture, TextureAtlasSprite stage6Texture,
+							  TextureAtlasSprite stage6DecayedTexture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.particleTexture = particleTexture;
 		this.transforms = transforms;
 
 		QuadBuilder builder = new QuadBuilder(DefaultVertexFormat.BLOCK)
 			.setTransformation(identity)
-			.setSprite(this.stage1Texture)
+			.setSprite(stage1Texture)
 			.setTintIndex(-1);
 
 		WhitePearCropGeometry.buildStage1(builder);
 		this.stage1Quads = builder.build().nonCulledQuads;
 
-		builder.setSprite(this.stage2Texture);
+		builder.setSprite(stage2Texture);
 		WhitePearCropGeometry.buildStage2(builder);
 		this.stage2Quads = builder.build().nonCulledQuads;
 
-		builder.setSprite(this.stage3Texture);
+		builder.setSprite(stage3Texture);
 		WhitePearCropGeometry.buildStage3(builder);
 		this.stage3Quads = builder.build().nonCulledQuads;
-		
-		builder.setSprite(this.stage4Texture);
+
+		builder.setSprite(stage4Texture);
 		WhitePearCropGeometry.buildStage4(builder);
 		this.stage4Quads = builder.build().nonCulledQuads;
 
-		builder.setSprite(this.stage5Texture);
+		builder.setSprite(stage5Texture);
 		WhitePearCropGeometry.buildStage5(builder);
 		this.stage5Quads = builder.build().nonCulledQuads;
 
-		builder.setSprite(this.stage6Texture);
+		builder.setSprite(stage6Texture);
 		WhitePearCropGeometry.buildStage6(builder);
 		this.stage6Quads = builder.build().nonCulledQuads;
 
-		builder.setSprite(this.stage6DecayedTexture);
+		builder.setSprite(stage6DecayedTexture);
 		WhitePearCropGeometry.buildStage6Decayed(builder);
 		this.stage6DecayedQuads = builder.build().nonCulledQuads;
 	}
 
-    @Override
+	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
 		if (side != null) return Collections.emptyList();
 		if (state == null) return stage1Quads;
 		if (state.getValue(DecayableCropBlock.DECAYED)) return stage6DecayedQuads;
-		return switch(state.getValue(DecayableCropBlock.STAGE)) {
+		return switch (BlockRegistry.MIDDLE_FRUIT_BUSH.get().getAge(state)) {
 			case 1 -> stage2Quads;
 			case 2 -> stage3Quads;
 			case 3 -> stage4Quads;

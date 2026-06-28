@@ -14,6 +14,8 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.farming.FungusCropBlock;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.common.block.farming.DecayableCropBlock;
 
@@ -21,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FungusCropModel implements IDynamicBakedModel {
-    
+
     private final TextureAtlasSprite stage1Texture;
     private final TextureAtlasSprite stage2Texture;
     private final TextureAtlasSprite stage3Texture;
@@ -35,7 +37,7 @@ public class FungusCropModel implements IDynamicBakedModel {
 	private final List<BakedQuad> stage4Quads;
 	private final List<BakedQuad> stage4DecayedQuads;
 
-    public FungusCropModel(TextureAtlasSprite stage1Texture, TextureAtlasSprite stage2Texture, TextureAtlasSprite stage3Texture, 
+    public FungusCropModel(TextureAtlasSprite stage1Texture, TextureAtlasSprite stage2Texture, TextureAtlasSprite stage3Texture,
 						   TextureAtlasSprite stage4Texture, TextureAtlasSprite stage4DecayedTexture, TextureAtlasSprite particleTexture, ItemTransforms transforms, Transformation identity) {
 		this.stage1Texture = stage1Texture;
 		this.stage2Texture = stage2Texture;
@@ -71,7 +73,7 @@ public class FungusCropModel implements IDynamicBakedModel {
 		if (side != null) return Collections.emptyList();
 		if (state == null) return stage1Quads;
 		if (state.getValue(DecayableCropBlock.DECAYED)) return stage4DecayedQuads;
-		return switch(state.getValue(DecayableCropBlock.STAGE)) {
+		return switch(BlockRegistry.FUNGUS_CROP.get().getAge(state)) {
 			case 1 -> stage2Quads;
 			case 2 -> stage3Quads;
 			case 3 -> stage4Quads;

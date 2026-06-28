@@ -1,4 +1,4 @@
-// 1.21.1	2026-02-11T14:27:01.074958865	Advancements
+// 1.21.1	2026-06-27T09:46:38.275622942	Advancements
 529cf42757adbfaa1f8bfa25376c898886cd14cc data/thebetweenlands/advancement/adventurer/3spoopy5me.json
 71e234b3c5d4d4f3bccffebf10769ba48a7225c6 data/thebetweenlands/advancement/adventurer/a_real_poopy_experience.json
 4519e4e2bcb02e86d631d224155596746959b25a data/thebetweenlands/advancement/adventurer/big_wood.json
@@ -66,7 +66,7 @@ ed4a6544a72e158bdbeff3408d11172703ac8036 data/thebetweenlands/advancement/farmer
 8aa4d388e7d9e1ad2ede4b47adcca8709afbf2e2 data/thebetweenlands/advancement/farmer/premium_produce.json
 847e506603befb43e6850fb6bb9b74fe80d08682 data/thebetweenlands/advancement/farmer/pure_and_dirty.json
 0a1aef1e917357982ac121549b4f3981080a37d7 data/thebetweenlands/advancement/farmer/root.json
-9e38a59581d342c1221f8c4d978ad909d76eab9a data/thebetweenlands/advancement/farmer/sporadically_radical.json
+8da414cd1da7f92ecb5297b57bfcae75d52ab62c data/thebetweenlands/advancement/farmer/sporadically_radical.json
 395fadd46d5dab75d5fcf6dcb43a8e30bdc1fd2b data/thebetweenlands/advancement/farmer/your_bush_smells.json
 401452f320c91604cbf992736323cbac0c13fe23 data/thebetweenlands/advancement/fighter/arrow_arsenal.json
 4a5fa7d5edfb856bb2c20dbb8764e3d89cf82377 data/thebetweenlands/advancement/fighter/banshees_in_the_barriers.json

@@ -26,7 +26,7 @@ public class SetAspectFromBlockEntityFunction extends LootItemConditionalFunctio
 
     private final Item fallbackItem;
 
-    public static final MapCodec<SetAspectFromBlockEntityFunction> CODEC = RecordCodecBuilder.mapCodec(instance -> 
+    public static final MapCodec<SetAspectFromBlockEntityFunction> CODEC = RecordCodecBuilder.mapCodec(instance ->
         commonFields(instance).and(
             BuiltInRegistries.ITEM.byNameCodec().fieldOf("fallback_item").forGetter(o -> o.fallbackItem)
         ).apply(instance, SetAspectFromBlockEntityFunction::new));
@@ -41,12 +41,11 @@ public class SetAspectFromBlockEntityFunction extends LootItemConditionalFunctio
         BlockEntity be = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
         if (be instanceof IAspectBlockEntity blockEntity) {
             Aspect aspect = blockEntity.getAspect();
-            TheBetweenlands.LOGGER.info("SAFBEF ran with aspect " + aspect + " and amount " + (aspect == null ? 0 : aspect.amount()));
             if (aspect != null && aspect.amount() > 0) {
                 stack.set(DataComponentRegistry.ASPECT_CONTENTS.get(), new AspectContents(aspect.type(), aspect.amount()));
                 return stack;
             }
-        } 
+        }
         return new ItemStack(fallbackItem);
     }
 

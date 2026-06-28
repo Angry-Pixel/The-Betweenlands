@@ -6,7 +6,7 @@
         "block": {
           "blocks": "thebetweenlands:fungus_crop",
           "state": {
-            "age": "15",
+            "age": "3",
             "decayed": "false"
           }
         }

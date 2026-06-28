@@ -19,8 +19,8 @@
                   "block": "thebetweenlands:middle_fruit_bush",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "decayed": "false",
-                    "stage": "5"
+                    "age": "5",
+                    "decayed": "false"
                   }
                 }
               ],
@@ -42,8 +42,8 @@
           "block": "thebetweenlands:middle_fruit_bush",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "decayed": "false",
-            "stage": "5"
+            "age": "5",
+            "decayed": "false"
           }
         }
       ],

@@ -11,7 +11,8 @@ public final class WhitePearCropGeometry {
 
 	private WhitePearCropGeometry() {
 	}
-	
+
+	//FIXME model is wrong
 	public static void buildStage6Decayed(QuadBuilder builder) {
 		//leaf2d
 		builder.addVertex(0.611117F, 0.390767F, 0.376249F, 2.625F, 3.75F);

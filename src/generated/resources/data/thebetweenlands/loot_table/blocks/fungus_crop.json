@@ -19,8 +19,8 @@
                   "block": "thebetweenlands:fungus_crop",
                   "condition": "minecraft:block_state_property",
                   "properties": {
-                    "decayed": "false",
-                    "stage": "3"
+                    "age": "3",
+                    "decayed": "false"
                   }
                 }
               ],
@@ -42,8 +42,8 @@
           "block": "thebetweenlands:fungus_crop",
           "condition": "minecraft:block_state_property",
           "properties": {
-            "decayed": "false",
-            "stage": "3"
+            "age": "3",
+            "decayed": "false"
           }
         }
       ],

@@ -2,14 +2,10 @@ package thebetweenlands.client.shader.postprocessing;
 
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +17,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
 import org.joml.Vector4f;
 import thebetweenlands.client.renderer.GLTextureObjectWrapper;
 import thebetweenlands.client.shader.LightSource;
@@ -30,7 +25,6 @@ import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
-import thebetweenlands.util.GLUProjection;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -38,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import static com.mojang.blaze3d.platform.GlConst.GL_DEPTH_BUFFER_BIT;
 
 /**
  * TODO: Finish and add Starfield, OcclusionExtractor, Godrays, and Swirl shaders.
@@ -197,12 +189,12 @@ public class WorldShader extends PostChain implements AutoCloseable {
 	}
 
 	private static final Comparator<LightSource> LIGHT_SOURCE_SORTER = (o1, o2) -> {
-		double dx1 = o1.x - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x();
-		double dy1 = o1.y - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y();
-		double dz1 = o1.z - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z();
-		double dx2 = o2.x - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x();
-		double dy2 = o2.y - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y();
-		double dz2 = o2.z - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z();
+		double dx1 = o1.x() - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x();
+		double dy1 = o1.y() - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y();
+		double dz1 = o1.z() - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z();
+		double dx2 = o2.x() - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x();
+		double dy2 = o2.y() - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y();
+		double dz2 = o2.z() - Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z();
 		double d1 = Math.sqrt(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
 		double d2 = Math.sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
 		if (d1 > d2) {
@@ -225,14 +217,14 @@ public class WorldShader extends PostChain implements AutoCloseable {
 
 		if (!lightSources.isEmpty()) {
 			for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS && i < lightSources.size(); i++) {
-				positionBuff[(i*3)] = ((float) this.lightSources.get(i).x - this.cameraPos.x);
-				positionBuff[(i*3)+1] = ((float) this.lightSources.get(i).y - this.cameraPos.y);
-				positionBuff[(i*3)+2] = ((float) this.lightSources.get(i).z - this.cameraPos.z);
-				colorBuff[(i*3)] = (this.lightSources.get(i).r);
-				colorBuff[(i*3)+1] = (this.lightSources.get(i).g);
-				colorBuff[(i*3)+2] = (this.lightSources.get(i).b);
+				positionBuff[(i*3)] = ((float) this.lightSources.get(i).x() - this.cameraPos.x);
+				positionBuff[(i*3)+1] = ((float) this.lightSources.get(i).y() - this.cameraPos.y);
+				positionBuff[(i*3)+2] = ((float) this.lightSources.get(i).z() - this.cameraPos.z);
+				colorBuff[(i*3)] = (this.lightSources.get(i).r());
+				colorBuff[(i*3)+1] = (this.lightSources.get(i).g());
+				colorBuff[(i*3)+2] = (this.lightSources.get(i).b());
 
-				lightSourceRadiusUniforms.set(i, this.lightSources.get(i).radius);
+				lightSourceRadiusUniforms.set(i, this.lightSources.get(i).radius());
 			}
 
 			lightSourcePositionUniforms.set(positionBuff);

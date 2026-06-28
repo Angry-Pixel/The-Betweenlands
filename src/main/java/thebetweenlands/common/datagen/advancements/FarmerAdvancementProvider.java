@@ -103,7 +103,7 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 				Component.translatable("advancement.thebetweenlands.farmer.sporadically_radical.desc"),
 				null, AdvancementType.TASK, true, true, false)
 			.addCriterion("place_fungus", ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(BlockRegistry.FUNGUS_CROP.get()))
-			.addCriterion("break_fungus", BreakBlockTrigger.TriggerInstance.breakBlock(BlockPredicate.Builder.block().of(BlockRegistry.FUNGUS_CROP.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DecayableCropBlock.DECAYED, false).hasProperty(DecayableCropBlock.AGE, 15)).build()))
+			.addCriterion("break_fungus", BreakBlockTrigger.TriggerInstance.breakBlock(BlockPredicate.Builder.block().of(BlockRegistry.FUNGUS_CROP.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DecayableCropBlock.DECAYED, false).hasProperty(BlockRegistry.FUNGUS_CROP.get().getAgeProperty(), 3)).build()))
 			.save(consumer, "thebetweenlands:farmer/sporadically_radical");
 
 		Advancement.Builder.advancement().parent(spores).display(ItemRegistry.YELLOW_DOTTED_FUNGUS,
