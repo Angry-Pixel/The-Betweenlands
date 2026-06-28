@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -13,15 +12,18 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.item.RadialMenuEquippable;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.equipment.EquipmentHelper;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.component.item.MagicItemMagnetData;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 
 public class MagicItemMagnetItem extends Item implements RadialMenuEquippable {// IAnimatorRepairable {
 	public MagicItemMagnetItem(Properties properties) {
 		super(properties);
-		//IEquippable.addEquippedPropertyOverrides(this);
+		//IEquippable.addEquippedPropertyOverrides(this); //dunno - is this just legacy jank now?
 	}
 
 	@Override
@@ -109,6 +111,10 @@ public class MagicItemMagnetItem extends Item implements RadialMenuEquippable {/
 
 	protected void spawnParticles(ItemEntity item) {
 		if(item.tickCount % 4 == 0) {
+			// new working code for what the old one looks like it was supposed to do
+			TheBetweenlands.createParticle(ParticleRegistry.CORRUPTED.get(), item.level(), item.getX(), item.getY() + item.getBbHeight() / 2.0f + 0.25f, item.getZ(), ParticleFactory.ParticleArgs.get().withScale(0.5f));
+			
+			//Old un-working particle code
 			//BLParticles.CORRUPTED.spawn(item.world, item.getX(), item.getY() + item.height / 2.0f + 0.25f, item.getZ(), ParticleArgs.get().withScale(0.5f));
 		}
 	}
@@ -122,6 +128,8 @@ public class MagicItemMagnetItem extends Item implements RadialMenuEquippable {/
 		}
 		super.setDamage(stack, damage);
 	}
+
+	//TODO This stuff needs moving to the new recipe system for the animator
 /*
 	@Override
 	public int getMinRepairFuelCost(ItemStack stack) {
