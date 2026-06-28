@@ -1028,7 +1028,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, "wooden_support_beam_3", TheBetweenlands.prefix("wooden_support_beam_3"), this.modLoc("block/wooden_support_beam_rotten_3"), this.modLoc("block/particle/wood_support_beam_particle"));
 		this.brazier(BlockRegistry.BRAZIER);
 		this.walkway(BlockRegistry.WALKWAY);
-		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
+//		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
 
 
 		this.flowerPot(BlockRegistry.POTTED_WEEDWOOD_SAPLING);
