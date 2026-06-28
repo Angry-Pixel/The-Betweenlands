@@ -125,6 +125,7 @@ import thebetweenlands.client.model.baked.sundew.SundewModelLoader;
 import thebetweenlands.client.model.baked.volarpad.VolarpadModelLoader;
 import thebetweenlands.client.model.baked.walkway.WalkwayModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
+import thebetweenlands.client.model.baked.custom.CustomElementsModel;
 import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
@@ -1025,6 +1026,7 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("elements"), CustomElementsModel.Loader.INSTANCE);
 		event.register(TheBetweenlands.prefix("slant"), SlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);
 	}

@@ -84,13 +84,15 @@ public class CustomElementsModel extends SimpleUnbakedGeometry<CustomElementsMod
 
         @Override
         public CustomElementsModel read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
-            if (!jsonObject.has("elements"))
-                throw new JsonParseException("An element model must have an \"elements\" member.");
+            if (!jsonObject.has("custom_elements"))
+                throw new JsonParseException("An element model must have an \"custom_elements\" member.");
 
             List<CustomBlockElement> elements = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(jsonObject, "elements")) {
-            	// TODO register CustomBlockElement deserializer
-                elements.add(deserializationContext.deserialize(element, CustomBlockElement.class));
+            for (JsonElement element : GsonHelper.getAsJsonArray(jsonObject, "custom_elements")) {
+            	// We cannot register the deserializer properly as far as I know, so I'm just going to call it directly
+            	// CustomBlockElement customElement = deserializationContext.deserialize(element, CustomBlockElement.class);
+            	CustomBlockElement customElement = CustomBlockElement.Deserializer.INSTANCE.deserialize(element, CustomBlockElement.class, deserializationContext);
+                elements.add(customElement);
             }
 
             return new CustomElementsModel(elements);

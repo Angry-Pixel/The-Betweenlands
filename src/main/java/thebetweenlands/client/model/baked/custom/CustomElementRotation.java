@@ -6,7 +6,6 @@ import org.joml.Vector3f;
 import com.mojang.math.Transformation;
 
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.TransformationHelper;
 
 public record CustomElementRotation(Vector3f origin, float xRot, float yRot, float zRot, boolean rescale) {
 	public static final CustomElementRotation ZERO = new CustomElementRotation(0.0f, 0.0f, 0.0f);
@@ -32,10 +31,12 @@ public record CustomElementRotation(Vector3f origin, float xRot, float yRot, flo
 	}
 	
 	public Transformation getTransformation() {
-		Quaternionf leftRotation = TransformationHelper.quatFromXYZ(this.xRot, this.yRot, this.zRot, true);
+        Quaternionf leftRotation = new Quaternionf().rotationZYX(this.zRot * (float) (Math.PI / 180.0), this.yRot * (float) (Math.PI / 180.0), this.xRot * (float) (Math.PI / 180.0));
+		
+		// TODO rescaling
 		
 		Transformation transformation = new Transformation(null, leftRotation, null, null);
-		return transformation.applyOrigin(this.origin);
+		return transformation.applyOrigin(new Vector3f(this.origin));
 	}
 	
 	/**

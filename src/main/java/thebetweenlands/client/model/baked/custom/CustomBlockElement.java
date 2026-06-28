@@ -22,6 +22,7 @@ import net.minecraft.util.Mth;
 public record CustomBlockElement(BlockElement baseBlockElement, CustomElementRotation customRotation) {
 
 	public static final class Deserializer implements JsonDeserializer<CustomBlockElement> {
+		public static final Deserializer INSTANCE = new Deserializer();
 
 		@Override
 		public CustomBlockElement deserialize(JsonElement json, Type type, JsonDeserializationContext context)
