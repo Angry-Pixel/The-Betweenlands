@@ -1,8 +1,12 @@
 package thebetweenlands.client.model.baked.custom;
 
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import com.mojang.math.Transformation;
+
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.TransformationHelper;
 
 public record CustomElementRotation(Vector3f origin, float xRot, float yRot, float zRot, boolean rescale) {
 	public static final CustomElementRotation ZERO = new CustomElementRotation(0.0f, 0.0f, 0.0f);
@@ -25,6 +29,13 @@ public record CustomElementRotation(Vector3f origin, float xRot, float yRot, flo
 		this.yRot = yRot;
 		this.zRot = zRot;
 		this.rescale = rescale;
+	}
+	
+	public Transformation getTransformation() {
+		Quaternionf leftRotation = TransformationHelper.quatFromXYZ(this.xRot, this.yRot, this.zRot, true);
+		
+		Transformation transformation = new Transformation(null, leftRotation, null, null);
+		return transformation.applyOrigin(this.origin);
 	}
 	
 	/**
