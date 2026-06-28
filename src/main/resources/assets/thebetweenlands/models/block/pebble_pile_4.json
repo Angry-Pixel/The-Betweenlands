@@ -1,13 +1,12 @@
 {
-	"__comment": "Temporarily, this always displays all four pebbles. Will be fixed after the blockstate file and datagen are done for these models",
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
 	"loader": "thebetweenlands:elements",
 	"textures": {
 		"particle": "thebetweenlands:block/betweenstone",
 		"texture": "thebetweenlands:block/betweenstone_pebble_pile"
     },
-	"parent": "minecraft:block/block",
-	"ambientocclusion": false,
-	"texture_size": [32, 32],
 	"custom_elements": [
 		{
 			"name": "pebble_1",
