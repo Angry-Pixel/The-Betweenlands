@@ -176,6 +176,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation WATER_FILTER = register("water_filter");
 	public static final ModelLayerLocation WAYSTONE = register("waystone");
 	public static final ModelLayerLocation WIND_CHIME = register("wind_chime");
+	public static final ModelLayerLocation VOLARKITE = register("volarkite");
 
 	private static ModelLayerLocation register(String name) {
 		return register(name, "main");

@@ -42,7 +42,7 @@ public class VolarkiteItem extends Item {
 		if (!level.isClientSide()) {
 			if (!player.isPassenger() && Lists.newArrayList(player.getIndirectPassengers()).stream().noneMatch(e -> e instanceof VolarkiteEntity)) {
 				VolarkiteEntity entity = new VolarkiteEntity(EntityRegistry.VOLARKITE.get(), level);
-				entity.setPos(player.getX(), player.getY(), player.getZ());
+				entity.setPos(player.getX(), player.getY() + player.getBbHeight(), player.getZ());
 				entity.setYRot(player.getYRot());
 				entity.setDeltaMovement(player.getDeltaMovement());
 				entity.hasImpulse = true;
