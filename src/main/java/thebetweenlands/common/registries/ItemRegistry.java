@@ -122,6 +122,7 @@ import thebetweenlands.common.item.misc.SnotPodItem;
 import thebetweenlands.common.item.misc.TarminionItem;
 import thebetweenlands.common.item.misc.TestChimpItem;
 import thebetweenlands.common.item.misc.TestFlagItem;
+import thebetweenlands.common.item.misc.VolarkiteItem;
 import thebetweenlands.common.item.misc.WallCreatureSpawnEgg;
 import thebetweenlands.common.item.misc.WeedwoodRowboatItem;
 import thebetweenlands.common.item.misc.bucket.BLBucketItem;
@@ -470,7 +471,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
 	public static final DeferredItem<Item> CAVING_ROPE = ITEMS.register("caving_rope", () -> new Item(new Item.Properties()));
 	//grapples
-	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new VolarkiteItem(new Item.Properties().stacksTo(1).durability(300)));
 	public static final DeferredItem<Item> SLINGSHOT = ITEMS.register("simple_slingshot", () -> new SlingshotItem(new Item.Properties().durability(64)));
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().durability(256)));
 	public static final DeferredItem<Item> FISHING_SPEAR = ITEMS.register("fishing_spear", () -> new FishingSpearItem(EntityRegistry.FISHING_SPEAR::get, 2, new Item.Properties().durability(64)));

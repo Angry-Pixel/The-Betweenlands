@@ -76,6 +76,8 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_LIFE_POWER = COMPONENTS.register("max_life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AnimatorFuel>> ANIMATOR_FUEL = COMPONENTS.register("animator_fuel", () -> DataComponentType.<AnimatorFuel>builder().persistent(AnimatorFuel.CODEC).networkSynchronized(AnimatorFuel.STREAM_CODEC).build());
+	
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> VOLARKITE_DATA = COMPONENTS.register("using_volarkite", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
 	// Transient Component
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_ITEM_UUID = COMPONENTS.register("inventory_item_uuid", () -> DataComponentType.<UUID>builder().networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 }

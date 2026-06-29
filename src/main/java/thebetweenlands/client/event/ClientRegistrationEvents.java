@@ -653,6 +653,8 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.WATCHER_EYES.get(), WatcherEyesRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BONE_SHAMAN_PROJECTILE.get(), BoneShamanProjectileRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WALL_ROOT.get(), WallRootRenderer::new);
+		//Temp for teting
+		event.registerEntityRenderer(EntityRegistry.VOLARKITE.get(), NoopRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECTRUS_CROP.get(), AspectrusCropRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECT_VIAL.get(), AspectVialRenderer::new);
