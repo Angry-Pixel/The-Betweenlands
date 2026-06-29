@@ -25,6 +25,7 @@ import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.handler.PlayerGunkHandler;
 import thebetweenlands.common.handler.ShieldHandler;
 import thebetweenlands.common.handler.SimulacrumHandler;
+import thebetweenlands.common.handler.VolarkiteMountHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
@@ -53,6 +54,7 @@ public class CommonEvents {
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onEntityMountEvent);
 		NeoForge.EVENT_BUS.addListener(CorrosiveBootsHandler::onPlayerTick);
 		NeoForge.EVENT_BUS.addListener(MagicItemMagnetHandler::onItemPickup);
+		NeoForge.EVENT_BUS.addListener(VolarkiteMountHandler::onMountEvent);
 	}
 
 	static void syncAspects(EntityJoinLevelEvent event) {

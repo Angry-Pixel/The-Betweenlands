@@ -291,7 +291,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<SludgeWormEggSac>> SLUDGE_WORM_EGG_SAC = registerWithAttributes("sludge_worm_egg_sac", EntityType.Builder.of(SludgeWormEggSac::new, MobCategory.MISC).sized(1.0F, 0.5F), BasicProximitySpawner::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<UrchinSpike>> URCHIN_SPIKE = register("urchin_spike", EntityType.Builder.<UrchinSpike>of(UrchinSpike::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon());
 	//volarkite
-	public static final DeferredHolder<EntityType<?>, EntityType<VolarkiteEntity>> VOLARKITE = register("volarkite", EntityType.Builder.<VolarkiteEntity>of(VolarkiteEntity::new, MobCategory.MISC).sized(0.6F, 1.8F).noSummon());
+	public static final DeferredHolder<EntityType<?>, EntityType<VolarkiteEntity>> VOLARKITE = register("volarkite", EntityType.Builder.<VolarkiteEntity>of(VolarkiteEntity::new, MobCategory.MISC).sized(0.6F, 1.8F).noSummon().clientTrackingRange(4).updateInterval(1).setShouldReceiveVelocityUpdates(true));
 	public static final DeferredHolder<EntityType<?>, EntityType<VolatileSoul>> VOLATILE_SOUL = register("volatile_soul", EntityType.Builder.<VolatileSoul>of(VolatileSoul::new, MobCategory.MISC).sized(0.3F, 0.3F).fireImmune().noSummon());
 	//weedwood rowboat
 
