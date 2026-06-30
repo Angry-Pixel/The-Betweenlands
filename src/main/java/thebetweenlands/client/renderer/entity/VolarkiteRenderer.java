@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.VolarkiteModel;
 import thebetweenlands.common.TheBetweenlands;
@@ -28,11 +29,10 @@ public class VolarkiteRenderer extends EntityRenderer<VolarkiteEntity> {
     @Override
     public void render(VolarkiteEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
-        poseStack.translate(0, 1.35D, 0);
-        poseStack.translate(0, -0.5D, 0);
-        poseStack.mulPose(Axis.YP.rotationDegrees((float)-interpolate(entity.yRotO, entity.getYRot(), partialTicks) + 180));
-        poseStack.mulPose(Axis.ZP.rotationDegrees((float)-interpolate(entity.prevRotationRoll, entity.rotationRoll, partialTicks)));
-        poseStack.mulPose(Axis.XP.rotationDegrees((float)-interpolate(entity.xRotO, entity.getXRot(), partialTicks)));
+        poseStack.translate(0, 0.95D, 0);
+        poseStack.mulPose(Axis.YP.rotationDegrees(-Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + 180));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.prevRotationRoll, entity.rotationRoll)));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
         poseStack.translate(0, 0.5D, 0);
         poseStack.translate(0, 0, 0.14D);
         poseStack.scale(-1, -1, 1);
@@ -46,9 +46,6 @@ public class VolarkiteRenderer extends EntityRenderer<VolarkiteEntity> {
     public ResourceLocation getTextureLocation(VolarkiteEntity entity) {
         return TEXTURE;
     }
-    
-	protected static double interpolate(double prev, double now, double partialTicks) {
-		return prev + (now - prev) * partialTicks;
-	}
+
 }
 

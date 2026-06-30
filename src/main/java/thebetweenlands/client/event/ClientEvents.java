@@ -13,6 +13,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.AmbienceHandler;
 import thebetweenlands.client.handler.ArmSwingSpeedHandler;
+import thebetweenlands.client.handler.BipedVolarkiteArmsRenderHandler;
 import thebetweenlands.client.handler.BossHandler;
 import thebetweenlands.client.handler.CameraPositionHandler;
 import thebetweenlands.client.handler.ClientSwingHandler;
@@ -77,6 +78,7 @@ public class ClientEvents {
 
 		NeoForge.EVENT_BUS.addListener(ArmSwingSpeedHandler::fireArmSwingEvent);
 		NeoForge.EVENT_BUS.addListener(PlayerVolakiteRenderHandler::volarkitePlayerRenderPre);
+		NeoForge.EVENT_BUS.addListener(BipedVolarkiteArmsRenderHandler::bipedVolarkiteArmsRenderPre);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

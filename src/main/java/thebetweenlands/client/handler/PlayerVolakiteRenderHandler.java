@@ -28,7 +28,6 @@ public class PlayerVolakiteRenderHandler {
         if (kite != null) {
             event.setCanceled(true);
             PoseStack poseStack = event.getPoseStack();
-
             poseStack.pushPose();
 
             float kiteYaw = Mth.lerp(event.getPartialTick(), kite.yRotO, kite.getYRot());
