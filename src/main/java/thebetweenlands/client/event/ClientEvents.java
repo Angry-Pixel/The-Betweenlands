@@ -12,20 +12,23 @@ import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.AmbienceHandler;
+import thebetweenlands.client.handler.ArmSwingSpeedHandler;
 import thebetweenlands.client.handler.BossHandler;
 import thebetweenlands.client.handler.CameraPositionHandler;
+import thebetweenlands.client.handler.ClientSwingHandler;
 import thebetweenlands.client.handler.ElixirClientHandler;
 import thebetweenlands.client.handler.EquipmentRenderingHandler;
+import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.handler.InputHandler;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.handler.MainMenuHandler;
 import thebetweenlands.client.handler.MusicHandler;
+import thebetweenlands.client.handler.PlayerVolakiteRenderHandler;
 import thebetweenlands.client.handler.ScreenHandler;
 import thebetweenlands.client.handler.ShaderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
-import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
-import thebetweenlands.client.handler.*;
 import thebetweenlands.client.sky.BLSkyRenderer;
+import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
@@ -73,6 +76,7 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(FogHandler::updateFog);
 
 		NeoForge.EVENT_BUS.addListener(ArmSwingSpeedHandler::fireArmSwingEvent);
+		NeoForge.EVENT_BUS.addListener(PlayerVolakiteRenderHandler::volarkitePlayerRenderPre);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {
