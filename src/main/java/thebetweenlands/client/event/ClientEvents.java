@@ -63,8 +63,8 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(FogHandler::updateFog);
 
 		NeoForge.EVENT_BUS.addListener(ArmSwingSpeedHandler::fireArmSwingEvent);
-		NeoForge.EVENT_BUS.addListener(PlayerVolakiteRenderHandler::volarkitePlayerRenderPre);
-		NeoForge.EVENT_BUS.addListener(BipedVolarkiteArmsRenderHandler::bipedVolarkiteArmsRenderPre);
+		NeoForge.EVENT_BUS.addListener(VolarkiteHandler::replacePlayerRenderer);
+		NeoForge.EVENT_BUS.addListener(VolarkiteHandler::removeHandWhenVolarkiting);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

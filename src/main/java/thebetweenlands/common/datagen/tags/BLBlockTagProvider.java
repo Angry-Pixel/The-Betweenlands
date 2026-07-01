@@ -31,6 +31,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> EMBERLING_HEALS_ON = tag("emberling_heals_on");
 	public static final TagKey<Block> HEATS_INFUSER = tag("heats_infuser");
 	public static final TagKey<Block> HEATS_SMOKING_RACK = tag("heats_smoking_rack");
+	public static final TagKey<Block> CREATES_VOLARKITE_UPDRAFTS = tag("volarkite/creates_updrafts");
+	public static final TagKey<Block> CREATES_VOLARKITE_DOWNDRAFTS = tag("volarkite/creates_downdrafts");
 
 	// Blocks tagged with this can be broken even inside structure guards
 	public static final TagKey<Block> CAN_BREAK_WHEN_GUARDED = tag("can_break_when_guarded");
@@ -45,7 +47,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> SPIKE_TRAPS = tag("spike_traps");
 	public static final TagKey<Block> SPIKE_TRAPS_BLOCKED_BY = tag("spike_traps_blocked_by");
 	public static final TagKey<Block> SPIKE_TRAPS_IGNORE = tag("spike_traps_ignore");
-	
+
 	public static final TagKey<Block> BONE_PUPPET_CONVERTABLE = tag("bone_puppet_convertable");
 
 	public static final TagKey<Block> DYED_DULL_LAVENDER = commonTag("dyed/dull_lavender");
@@ -119,6 +121,18 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(INCORRECT_FOR_WEEDWOOD_TOOL).addTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
 		this.tag(INCORRECT_FOR_LEGENDARY_TOOL);
 
+		this.tag(CREATES_VOLARKITE_UPDRAFTS)
+			.addTag(BlockTags.FIRE)
+			.addTag(BlockTags.CAMPFIRES)
+			.addTag(ORES_OCTINE)
+			.addTag(STORAGE_BLOCKS_OCTINE)
+			.add(Blocks.LAVA, Blocks.MAGMA_BLOCK)
+			.add(BlockRegistry.SMOULDERING_PEAT.get());
+
+		this.tag(CREATES_VOLARKITE_DOWNDRAFTS)
+			.addTag(BlockTags.ICE)
+			.addTag(BlockTags.SNOW);
+
 		this.tag(CAN_BREAK_WHEN_GUARDED).addOptionalTag(commonTag("graves"));
 
 		this.tag(MOVING_WALL_UNBREAKABLE).add(
@@ -171,7 +185,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW, Blocks.STRUCTURE_VOID);
 
 		this.tag(BONE_PUPPET_CONVERTABLE).add(BlockRegistry.SLIMY_BONE_ORE.get());
-		
+
 		this.tag(FILTERED_SILT_GLASS).add(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS.get(), BlockRegistry.MAROON_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS.get(), BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SAFFRON_FILTERED_SILT_GLASS.get(), BlockRegistry.CARIBBEAN_GREEN_FILTERED_SILT_GLASS.get(),

@@ -157,7 +157,7 @@ public class WeedwoodRowboatHandler {
 	}
 
 	public void dontRenderHandWhenBoated(RenderHandEvent event) {
-		if (MC.getCameraEntity() instanceof RowboatCam) {
+		if (MC.player.getVehicle() instanceof WeedwoodRowboat) {
 			event.setCanceled(true);
 		}
 	}

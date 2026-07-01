@@ -1184,6 +1184,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.LARGE_SPIRIT_TREE_FACE, "Large Spirit Tree Face");
 		this.addEntityType(EntityRegistry.ROOT_GRABBER, "Root Grabber");
 		this.addEntityType(EntityRegistry.SPIKE_WAVE, "Spike Wave");
+		this.addEntityType(EntityRegistry.WEEDWOOD_ROWBOAT, "Weedwood Rowboat");
+		this.addEntityType(EntityRegistry.VOLARKITE, "Volarkite");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -1887,7 +1889,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.SPORES, "Spores");
 		this.addItem(ItemRegistry.BARNACLE_LARVAE, "Barnacle Larvae");
 		this.addItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS, "White Pear Seeds");
-		
+
 		this.addItem(ItemRegistry.ASPECTRUS_FRUIT, "Aspectrus Fruit");
 		this.add(ItemRegistry.ASPECTRUS_FRUIT.get().getDescriptionId() + ".aspect", "Aspectrus Fruit - %s");
 

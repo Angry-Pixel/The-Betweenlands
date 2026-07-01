@@ -1,29 +1,35 @@
-package thebetweenlands.client.renderer.entity;
+package thebetweenlands.client.renderer.entity.volarkite;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.entity.VolarkiteModel;
+import thebetweenlands.client.model.entity.volarkite.VolarkiteModel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.VolarkiteEntity;
 
 public class VolarkiteRenderer extends EntityRenderer<VolarkiteEntity> {
-    
+
     protected static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/volarkite.png");
     private final VolarkiteModel<VolarkiteEntity> model;
+	private final PlayerVolarkiteRenderer playerRenderer;
+	private final PlayerVolarkiteRenderer slimPlayerRenderer;
 
     public VolarkiteRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new VolarkiteModel<VolarkiteEntity>(context.bakeLayer(BLModelLayers.VOLARKITE));
+        this.model = new VolarkiteModel<>(context.bakeLayer(BLModelLayers.VOLARKITE));
+		this.playerRenderer = new PlayerVolarkiteRenderer(context, false);
+		this.slimPlayerRenderer = new PlayerVolarkiteRenderer(context, true);
     }
 
     @Override
@@ -31,7 +37,7 @@ public class VolarkiteRenderer extends EntityRenderer<VolarkiteEntity> {
         poseStack.pushPose();
         poseStack.translate(0, 0.95D, 0);
         poseStack.mulPose(Axis.YP.rotationDegrees(-Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + 180));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.prevRotationRoll, entity.rotationRoll)));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.zRotO, entity.zRot)));
         poseStack.mulPose(Axis.XP.rotationDegrees(-Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
         poseStack.translate(0, 0.5D, 0);
         poseStack.translate(0, 0, 0.14D);
@@ -41,6 +47,14 @@ public class VolarkiteRenderer extends EntityRenderer<VolarkiteEntity> {
         poseStack.popPose();
         super.render(entity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
     }
+
+	public void renderRider(AbstractClientPlayer player, float partialTick, PoseStack stack, MultiBufferSource buffer, int light) {
+		if (player.getSkin().model().equals(PlayerSkin.Model.SLIM)) {
+			this.slimPlayerRenderer.render(player, 0.0F, partialTick, stack, buffer, light);
+		} else {
+			this.playerRenderer.render(player, 0.0F, partialTick, stack, buffer, light);
+		}
+	}
 
     @Override
     public ResourceLocation getTextureLocation(VolarkiteEntity entity) {

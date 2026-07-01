@@ -1,9 +1,5 @@
-package thebetweenlands.client.model.entity;
+package thebetweenlands.client.model.entity.volarkite;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -11,14 +7,13 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.common.entity.VolarkiteEntity;
 
-public class VolarkiteModel<T extends VolarkiteEntity> extends EntityModel<T> {
-
-	private final ModelPart root;
+public class VolarkiteModel<T extends VolarkiteEntity> extends MowzieModelBase<T> {
 
 	public VolarkiteModel(ModelPart root) {
-		this.root = root.getChild("root");
+		super(root);
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -93,15 +88,4 @@ public class VolarkiteModel<T extends VolarkiteEntity> extends EntityModel<T> {
 
 		return LayerDefinition.create(meshdefinition, 256, 128);
 	}
-
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		root.render(stack, consumer, light, overlay, color);
-	}
-
 }

@@ -1,0 +1,11 @@
+{
+  "values": [
+    "#minecraft:fire",
+    "#minecraft:campfires",
+    "#c:ores/octine",
+    "#c:storage_blocks/octine",
+    "minecraft:lava",
+    "minecraft:magma_block",
+    "thebetweenlands:smouldering_peat"
+  ]
+}

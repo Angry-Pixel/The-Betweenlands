@@ -1,7 +1,5 @@
 package thebetweenlands.common.entity;
 
-import java.util.Iterator;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -9,7 +7,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.network.syncher.SynchedEntityData.Builder;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,16 +17,17 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.item.misc.VolarkiteItem;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.PlayerUtil;
 
 public class VolarkiteEntity extends Entity {
-	public float prevRotationRoll;
-	public float rotationRoll;
+	public float zRotO;
+	public float zRot;
 
 	protected int updraftTicks = 0;
 	protected int downdraftTicks = 0;
@@ -79,15 +77,12 @@ public class VolarkiteEntity extends Entity {
 		rider.setOnGround(this.onGround());
 	}
 
-	/*
-	 * TODO ERRRRRR....
-	 * 
-	 * @Override public void updatePassenger(Entity passenger) {
-	 * super.updatePassenger(passenger);
-	 * 
-	 * PlayerUtil.resetFloating(passenger);
-	 * PlayerUtil.resetVehicleFloating(passenger); }
-	 */
+	@Override
+	protected void positionRider(Entity passenger, MoveFunction callback) {
+		super.positionRider(passenger, callback);
+		PlayerUtil.resetFloating(passenger);
+	 	PlayerUtil.resetVehicleFloating(passenger);
+	}
 
 	@Override
 	public void baseTick() {
@@ -96,7 +91,7 @@ public class VolarkiteEntity extends Entity {
 		this.zOld = this.getZ();
 		this.xRotO = this.getXRot();
 		this.yRotO = this.getYRot();
-		this.prevRotationRoll = this.rotationRoll;
+		this.zRotO = this.zRot;
 
 		Entity passenger = this.getControllingPassenger();
 		Entity riding = this.getVehicle();
@@ -131,11 +126,8 @@ public class VolarkiteEntity extends Entity {
 			}
 		}
 
-		if (riding != null)
-			this.setYRot(riding.getYRot());
-
 		double targetMotionY = -0.04D;
-		setDeltaMovement(getDeltaMovement().x, targetMotionY + (getDeltaMovement().y() - targetMotionY) * 0.92D, getDeltaMovement().z);
+		this.setDeltaMovement(this.getDeltaMovement().x(), targetMotionY + (this.getDeltaMovement().y() - targetMotionY) * 0.92D, this.getDeltaMovement().z());
 
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		this.updateInWaterStateAndDoWaterCurrentPushing();
@@ -153,33 +145,38 @@ public class VolarkiteEntity extends Entity {
 
 		}
 
-		this.setDeltaMovement(getDeltaMovement().multiply(invFriction, invFriction, invFriction));
+		this.setDeltaMovement(this.getDeltaMovement().multiply(invFriction, invFriction, invFriction));
 		Entity controller = passenger != null ? passenger : riding;
 		Vec3 kiteDir = new Vec3(Math.cos(Math.toRadians(this.getYRot() + 90)), 0, Math.sin(Math.toRadians(this.getYRot() + 90)));
 		double rotIncr = 0;
 		boolean hasValidUser = false;
 
-		if (controller != null) {
-			controller.fallDistance = 0;
+		if (controller instanceof LivingEntity entity) {
+			entity.resetFallDistance();
+
+			if (this.level().isClientSide()) {
+				this.setYRot(entity.yBodyRot);
+				if (controller == passenger) {
+					Vec3 controllerDir = new Vec3(Math.cos(Math.toRadians(entity.getYRot() + 90)), 0, Math.sin(Math.toRadians(entity.getYRot() + 90)));
+					double dotProduct = Math.clamp(kiteDir.dot(controllerDir), -1.0D, 1.0D);
+					double rotDiff = Math.toDegrees(Math.acos(dotProduct)) * -Math.signum(kiteDir.cross(controllerDir).y);
+
+					if (Double.isNaN(rotDiff))
+						rotDiff = 0.0D;
+
+					rotIncr = Math.clamp(rotDiff * 0.05D, -1.0D, 1.0D);
+					this.setYRot((float) (this.getYRot() + rotIncr));
+				}
+			}
 
 			if (this.getDeltaMovement().y() < 0 && !this.onGround()) {
 				double speedBoost = -this.getDeltaMovement().y() * 0.1D + Mth.clamp(Math.sin(Math.toRadians(this.getXRot())) * 0.5F, -0.02D, 0.02D);
 				this.setDeltaMovement(getDeltaMovement().add(kiteDir.x * (speedBoost + 0.01D), 0, kiteDir.z * (speedBoost + 0.01D)));
-				hasImpulse = true;
+				this.hasImpulse = true;
 			}
 
-			Vec3 controllerDir = new Vec3(Math.cos(Math.toRadians(controller.getYRot() + 90)), 0, Math.sin(Math.toRadians(controller.getYRot() + 90)));
-			double dotProduct = Math.clamp(kiteDir.dot(controllerDir), -1.0D, 1.0D);
-			double rotDiff = Math.toDegrees(Math.acos(dotProduct)) * -Math.signum(kiteDir.cross(controllerDir).y);
-
-			if (Double.isNaN(rotDiff))
-				rotDiff = 0.0D;
-
-			rotIncr = Math.clamp(rotDiff * 0.05D, -1.0D, 1.0D);
-			this.setYRot((float) (this.getYRot() + rotIncr));
-
-			if (!this.onGround() && controller instanceof LivingEntity livingController) {
-				float forward = livingController.zza;
+			if (!this.onGround()) {
+				float forward = entity.zza;
 
 				if (forward > 0.1F) {
 					float newPitch = 20.0F + (this.getXRot() - 20.0F) * 0.9F;
@@ -194,10 +191,8 @@ public class VolarkiteEntity extends Entity {
 				}
 			}
 
-			Iterator<ItemStack> it = ((LivingEntity) controller).getHandSlots().iterator();
-			while (it.hasNext()) {
-				ItemStack stack = it.next();
-				if (!stack.isEmpty() && stack.getItem() instanceof VolarkiteItem && ((VolarkiteItem) stack.getItem()).canRideKite(stack, controller)) {
+			for (ItemStack stack : entity.getHandSlots()) {
+				if (!stack.isEmpty() && stack.getItem() instanceof VolarkiteItem kite && kite.canRideKite(stack, controller)) {
 					hasValidUser = true;
 					break;
 				}
@@ -205,9 +200,9 @@ public class VolarkiteEntity extends Entity {
 		}
 
 		if (!this.onGround() && Math.abs(rotIncr) > 0.1D)
-			this.rotationRoll = (float) (rotIncr * 15 + (this.rotationRoll - rotIncr * 15) * 0.9D);
+			this.zRot = (float) (rotIncr * 15 + (this.zRot - rotIncr * 15) * 0.9D);
 		else
-			this.rotationRoll *= 0.9F;
+			this.zRot *= 0.9F;
 
 		this.setXRot(this.getXRot() * 0.9F);
 		this.updateUpdraft();
@@ -225,11 +220,11 @@ public class VolarkiteEntity extends Entity {
 				this.setDeltaMovement(targetX + (this.getDeltaMovement().x() - targetX) * 0.8D, getDeltaMovement().y(), targetZ + (this.getDeltaMovement().z() - targetZ) * 0.8D);
 			}
 
-			hasImpulse = true;
+			this.hasImpulse = true;
 		}
 
 		if (!this.level().isClientSide() && !hasValidUser)
-			this.kill();
+			this.discard();
 
 		this.firstTick = false;
 	}
@@ -255,12 +250,10 @@ public class VolarkiteEntity extends Entity {
 					this.downdraftTicks = 25;
 					hasSource = true;
 				}
-			}
-			//TODO This need changing to use tags probably
-			else if (state.is(Blocks.FIRE) || state.is(Blocks.SOUL_FIRE) || state.is(Blocks.LAVA) || state.is(BlockRegistry.OCTINE_ORE.get()) || state.is(BlockRegistry.OCTINE_BLOCK.get()) || state.is(BlockRegistry.SMOULDERING_PEAT.get())) {
+			} else if (state.is(BLBlockTagProvider.CREATES_VOLARKITE_UPDRAFTS)) {
 				this.updraftTicks = 25;
 				hasSource = true;
-			} else if (state.is(BlockTags.ICE) || state.is(Blocks.SNOW) || state.is(Blocks.SNOW_BLOCK)) {
+			} else if (state.is(BLBlockTagProvider.CREATES_VOLARKITE_DOWNDRAFTS)) {
 				this.downdraftTicks = 25;
 				hasSource = true;
 			} else if (!state.isAir()) {
@@ -312,12 +305,12 @@ public class VolarkiteEntity extends Entity {
 	@Override
 	@Nullable
 	public LivingEntity getControllingPassenger() {
-		return this.getPassengers().isEmpty() ? null : (LivingEntity) this.getPassengers().get(0);
+		return this.getPassengers().isEmpty() ? null : (LivingEntity) this.getPassengers().getFirst();
 	}
 
 	@Override
 	public boolean isControlledByLocalInstance() {
-		return getControllingPassenger() instanceof Player ? ((Player) getControllingPassenger()).isLocalPlayer() : !this.level().isClientSide;
+		return this.getControllingPassenger() instanceof Player player ? player.isLocalPlayer() : !this.level().isClientSide();
 	}
 
 	@Override
@@ -328,7 +321,7 @@ public class VolarkiteEntity extends Entity {
 	@Override
 	protected void removePassenger(Entity passenger) {
 		super.removePassenger(passenger);
-		passenger.fallDistance = 0;
+		passenger.resetFallDistance();
 		passenger.setDeltaMovement(this.getDeltaMovement());
 	}
 
@@ -340,5 +333,10 @@ public class VolarkiteEntity extends Entity {
 	@Override
 	public boolean shouldRenderAtSqrDistance(double distance) {
 		return super.shouldRenderAtSqrDistance(distance) || (this.getControllingPassenger() != null && this.getControllingPassenger().shouldRenderAtSqrDistance(distance));
+	}
+
+	@Override
+	public @Nullable ItemStack getPickResult() {
+		return new ItemStack(ItemRegistry.VOLARKITE.get());
 	}
 }
