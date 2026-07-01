@@ -109,6 +109,13 @@ public class BLModelLayers {
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT_LANTERN = register("weedwood_rowboat", "lantern");
 	public static final ModelLayerLocation WIGHT = register("wight");
 
+	public static final ModelLayerLocation PLAYER_ROWER = register("player_rower");
+	public static final ModelLayerLocation PLAYER_ROWER_INNER_ARMOR = register("player_rower", "inner_armor");
+	public static final ModelLayerLocation PLAYER_ROWER_OUTER_ARMOR = register("player_rower", "outer_armor");
+	public static final ModelLayerLocation SLIM_PLAYER_ROWER = register("slim_player_rower");
+	public static final ModelLayerLocation SLIM_PLAYER_ROWER_INNER_ARMOR = register("slim_player_rower", "inner_armor");
+	public static final ModelLayerLocation SLIM_PLAYER_ROWER_OUTER_ARMOR = register("slim_player_rower", "outer_armor");
+
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");
 	public static final ModelLayerLocation GECKO = register("gecko");
 	public static final ModelLayerLocation MUTATED_GECKO = register("mutated_gecko");

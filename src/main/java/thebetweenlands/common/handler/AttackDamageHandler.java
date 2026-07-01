@@ -16,6 +16,7 @@ import thebetweenlands.common.component.entity.circlegem.CircleGemHelper;
 import thebetweenlands.common.component.entity.equipment.EquipmentData;
 import thebetweenlands.common.component.entity.equipment.EquipmentInventoryType;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.rowboat.WeedwoodRowboat;
 import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -27,6 +28,7 @@ public class AttackDamageHandler {
 
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::handleAttacks);
+		NeoForge.EVENT_BUS.addListener(AttackDamageHandler::blockDamageBelowBoat);
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOW, AttackDamageHandler::handleCircleGemDamageBlock);
 	}
 
@@ -181,5 +183,17 @@ public class AttackDamageHandler {
 //		BLParticles.GREEN_FLAME.spawn(entityHit.level(), entityHit.getX(), entityHit.getY() + entityHit.getBbHeight() / 2.0D + 0.5D, entityHit.getZ() + entityHit.getBbWidth() / 2.0D, ParticleFactory.ParticleArgs.get().withMotion(0, -0.05D, 0.08D));
 //		BLParticles.GREEN_FLAME.spawn(entityHit.level(), entityHit.getX() - entityHit.getBbWidth() / 2.0D, entityHit.getY() + entityHit.getBbHeight() / 2.0D + 0.5D, entityHit.getZ(), ParticleFactory.ParticleArgs.get().withMotion(-0.08D, -0.05D, 0));
 //		BLParticles.GREEN_FLAME.spawn(entityHit.level(), entityHit.getX(), entityHit.getY() + entityHit.getBbHeight() / 2.0D + 0.5D, entityHit.getZ() - entityHit.getBbWidth() / 2.0D, ParticleFactory.ParticleArgs.get().withMotion(0, -0.05D, -0.08D));
+	}
+
+	private static void blockDamageBelowBoat(LivingIncomingDamageEvent event) {
+		Entity ridingEntity = event.getEntity().getVehicle();
+		if (ridingEntity instanceof WeedwoodRowboat && event.getSource().getDirectEntity() != null) {
+			Vec3 location = event.getSource().getSourcePosition();
+			Entity attacker = event.getSource().getDirectEntity();
+			if (location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.getY() + ridingEntity.getBbHeight() / 2) {
+				//Cancel any damage dealt from below the boat
+				event.setCanceled(true);
+			}
+		}
 	}
 }

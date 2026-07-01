@@ -329,6 +329,7 @@ public class CommonRegistrationEvents {
 		registrar.playToServer(HandleSwingPacket.TYPE, HandleSwingPacket.STREAM_CODEC, HandleSwingPacket::handle);
 		registrar.playToServer(OpenPouchPacket.TYPE, OpenPouchPacket.STREAM_CODEC, OpenPouchPacket::handle);
 		registrar.playToServer(RenameItemPacket.TYPE, RenameItemPacket.STREAM_CODEC, RenameItemPacket::handle);
+		registrar.playToServer(RowboatRowPacket.TYPE, RowboatRowPacket.STREAM_CODEC, RowboatRowPacket::handle);
 		registrar.playToServer(SetGalleryUrlPacket.TYPE, SetGalleryUrlPacket.STREAM_CODEC, SetGalleryUrlPacket::handle);
 		registrar.playToServer(SetLastPageDataPacket.TYPE, SetLastPageDataPacket.STREAM_CODEC, SetLastPageDataPacket::handle);
 		registrar.playToServer(UpdateRingStatePacket.TYPE, UpdateRingStatePacket.STREAM_CODEC, UpdateRingStatePacket::handle);
@@ -386,7 +387,7 @@ public class CommonRegistrationEvents {
 		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING_IF_UNBREAKABLE, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, false), ItemRegistry.LIFE_CRYSTAL);
 		event.registerItem(BLCapabilities.LifeCrystalHandler.ITEM, (stack, context) -> new DamageLifeCrystalHandler(stack, null, ChargeType.NO_CHARGING, DrainType.INFINITE_DRAINING_IF_UNBREAKABLE, true), ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
 	}
-	
+
 	private static void registerFallbackCapabilities(RegisterCapabilitiesEvent event) {
 		// NeoForge does the same thing (see net.neoforged.neoforge.capabilities.CapabilityHooks#registerFallbackVanillaProviders)
 		for(Item item : BuiltInRegistries.ITEM) {

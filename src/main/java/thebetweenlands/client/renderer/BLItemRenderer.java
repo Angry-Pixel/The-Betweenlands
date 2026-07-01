@@ -29,9 +29,10 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.item.*;
 import thebetweenlands.client.renderer.entity.DraetonRenderer;
-import thebetweenlands.client.renderer.entity.WeedwoodRowboatRenderer;
+import thebetweenlands.client.renderer.entity.rowboat.WeedwoodRowboatRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.ShieldSpitData;
+import thebetweenlands.common.entity.rowboat.WeedwoodRowboat;
 import thebetweenlands.common.item.shield.BaseShieldItem;
 import thebetweenlands.common.item.shield.LivingWeedwoodShieldItem;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -152,6 +153,9 @@ public class BLItemRenderer extends BlockEntityWithoutLevelRenderer {
 			pose.scale(1.0F, -1.0F, -1.0F);
 			pose.translate(1.0D, 0D, 0.0D);
 			this.weedwoodRowboat.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(WeedwoodRowboatRenderer.TEXTURE)), light, overlay);
+			if (WeedwoodRowboat.isTarred(stack)) {
+				this.weedwoodRowboat.render(pose, source.getBuffer(RenderType.entityCutoutNoCull(WeedwoodRowboatRenderer.TEXTURE_TAR_OVERLAY)), light, overlay);
+			}
 			pose.popPose();
 		} else if (stack.is(ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE)) {
 			pose.pushPose();

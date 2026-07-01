@@ -1,26 +1,40 @@
-package thebetweenlands.client.model.entity;
+package thebetweenlands.client.model.entity.rowboat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.Model;
+import net.minecraft.client.model.WaterPatchModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import thebetweenlands.client.model.MowzieModelBase;
+import thebetweenlands.client.model.definition.ExtendedLayerDefinition;
+import thebetweenlands.client.model.definition.ExtendedMeshDefinition;
+import thebetweenlands.client.model.definition.ExtendedPartDefinition;
+import thebetweenlands.common.entity.rowboat.ShipSide;
+import thebetweenlands.common.entity.rowboat.WeedwoodRowboat;
+import thebetweenlands.util.RotationOrder;
 
-//TODO add rowing logic once entity is moving along
-public class WeedwoodRowboatModel extends Model {
+import java.util.EnumMap;
 
-	private final ModelPart root;
+public class WeedwoodRowboatModel extends MowzieModelBase<WeedwoodRowboat> implements WaterPatchModel {
+
+	private final ModelPart lanternMount;
+	private final ModelPart waterPatch;
+	private final EnumMap<ShipSide, ModelPart> oars;
 
 	public WeedwoodRowboatModel(ModelPart root) {
-		super(RenderType::entityCutoutNoCull);
-		this.root = root;
+		super(root, RenderType::entityCutoutNoCull);
+		this.waterPatch = root.getChild("water_patch");
+		this.lanternMount = root.getChild("keel").getChild("fillupback1").getChild("backrim1").getChild("backrim2").getChild("lanternMount");
+		var leftOar = root.getChild("hullGunwaleRight").getChild("oarlockLeft").getChild("oarLoomLeft");
+		var rightOar = root.getChild("hullGunwaleLeft").getChild("oarlockRight").getChild("oarLoomRight");
+		this.oars = ShipSide.newEnumMap(ModelPart.class, leftOar, rightOar);
 	}
 
 	public static LayerDefinition createBoat() {
-		MeshDefinition definition = new MeshDefinition();
-		PartDefinition partDefinition = definition.getRoot();
+		ExtendedMeshDefinition definition = new ExtendedMeshDefinition();
+		ExtendedPartDefinition partDefinition = definition.getRoot();
 
 		var keel = partDefinition.addOrReplaceChild("keel", CubeListBuilder.create()
 				.texOffs(0, 92).addBox(-2.0F, -4.0F, -11.0F, 4, 2, 22),
@@ -126,8 +140,7 @@ public class WeedwoodRowboatModel extends Model {
 			PartPose.offset(0.0F, -6.0F, -5.0F));
 		var oarLoomRight = oarlockRight.addOrReplaceChild("oarLoomRight", CubeListBuilder.create()
 				.texOffs(180, 8).addBox(-1.0F, -8.0F, -1.0F, 2, 35, 2),
-			PartPose.offsetAndRotation(-1.0F, -1.0F, 2.0F, 0.31869712141416456F, 0.0F, 1.0016444577195458F));
-		//oarLoomRight.setRotationOrder(RotationOrder.ZXY);
+			PartPose.offsetAndRotation(-1.0F, -1.0F, 2.0F, 0.31869712141416456F, 0.0F, 1.0016444577195458F), RotationOrder.ZXY);
 		oarLoomRight.addOrReplaceChild("oarBladeRight", CubeListBuilder.create()
 				.texOffs(180, 46).addBox(-3.0F, 0.0F, -0.5F, 6, 12, 1),
 			PartPose.offset(0.0F, 25.0F, 0.0F));
@@ -140,33 +153,44 @@ public class WeedwoodRowboatModel extends Model {
 			PartPose.offset(0.0F, -6.0F, -5.0F));
 		var oarLoomLeft = oarlockLeft.addOrReplaceChild("oarLoomLeft", CubeListBuilder.create()
 				.texOffs(200, 8).addBox(-1.0F, -8.0F, -1.0F, 2, 35, 2),
-			PartPose.offsetAndRotation(1.0F, -1.0F, 2.0F, 0.31869712141416456F, 0.0F, -1.0016444577195458F));
-		//oarLoomLeft.setRotationOrder(RotationOrder.ZXY);
+			PartPose.offsetAndRotation(1.0F, -1.0F, 2.0F, 0.31869712141416456F, 0.0F, -1.0016444577195458F), RotationOrder.ZXY);
 		oarLoomLeft.addOrReplaceChild("oarBladeLeft", CubeListBuilder.create()
 				.texOffs(200, 46).addBox(-3.0F, 0.0F, -0.5F, 6, 12, 1),
 			PartPose.offset(0.0F, 25.0F, 0.0F));
 
-		return LayerDefinition.create(definition, 256, 128);
-	}
+		partDefinition.addOrReplaceChild("water_patch", CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-8.0F, -9.0F, -8.5F, 16.0F, 6.0F, 17.0F)
+				.addBox(-4.0F, -9.0F, -14.5F, 8.0F, 6.0F, 29.0F),
+			PartPose.offset(0, 0, 0));
 
-	public static LayerDefinition createLantern() {
-		MeshDefinition definition = new MeshDefinition();
-		PartDefinition partDefinition = definition.getRoot();
-
-		var base = partDefinition.addOrReplaceChild("base", CubeListBuilder.create()
-				.texOffs(218, 11).addBox(-2.5F, 0.0F, -2.5F, 5, 7, 5)
-				.texOffs(239, 13).addBox(-1.5F, 2.0F, -1.5F, 3, 4, 3),
-			PartPose.ZERO);
-
-		base.addOrReplaceChild("top", CubeListBuilder.create()
-				.texOffs(218, 24).addBox(-3.0F, -1.0F, -3.0F, 6, 2, 6),
-			PartPose.offsetAndRotation(0.0F, 0.5F, 0.0F, 0.13F, 0.0F, 0.0F));
-
-		return LayerDefinition.create(definition, 256, 128);
+		return ExtendedLayerDefinition.create(definition, 256, 128);
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		this.root.render(stack, consumer, light, overlay, color);
+	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int packedLight, int packedOverlay, int color) {
+		this.waterPatch().visible = false;
+		super.renderToBuffer(stack, consumer, packedLight, packedOverlay, color);
+		this.waterPatch().visible = true;
+	}
+
+	public void setLanternMount(boolean mount) {
+		this.lanternMount.visible = mount;
+	}
+
+	public ModelPart getOar(ShipSide side) {
+		return this.oars.get(side);
+	}
+
+	public void animateOars(WeedwoodRowboat rowboat, float delta) {
+		for (ShipSide side : ShipSide.values()) {
+			float theta = rowboat.getRowProgress(side, delta);
+			ModelPart oar = this.getOar(side);
+			oar.setRotation(rowboat.getOarRotationX(side, theta, delta), rowboat.getOarRotationY(side, theta), rowboat.getOarRotationZ(side, theta, delta));
+		}
+	}
+
+	@Override
+	public ModelPart waterPatch() {
+		return this.waterPatch;
 	}
 }

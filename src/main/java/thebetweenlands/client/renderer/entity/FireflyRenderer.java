@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -42,7 +43,7 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 		stack.pushPose();
 		stack.translate(0, Math.sin((entity.tickCount + partialTicks) / 10.0F) * 0.15F, 0);
 		super.render(entity, entityYaw, partialTicks, stack, buffer, light);
-		//renderFireflyGlow(stack, buffer.getBuffer(RenderType.eyes(GLOW)), glowStrength * 0.4f);
+		renderFireflyGlow(stack, buffer.getBuffer(RenderType.entityTranslucentEmissive(GLOW)), glowStrength * 0.4f);
 		stack.popPose();
 
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
@@ -68,15 +69,8 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 
 	public static void renderFireflyGlow(PoseStack stack, VertexConsumer consumer, float scale) {
 		stack.pushPose();
-		RenderSystem.depthMask(false);
-		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		//GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
 
 		Quaternionf angle = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
-
-		// Height adjustment
-		stack.translate(0.0, 1.3, 0.0);
 
 		float red = 0.4F;
 		float green = 0.2F;
@@ -106,10 +100,7 @@ public class FireflyRenderer extends MobRenderer<Firefly, FireflyModel> {
 			renderQuad(pose, consumer, currentScale, red, green, blue);
 		}
 
-		RenderSystem.depthMask(false);
 		stack.popPose();
-
-		RenderSystem.defaultBlendFunc();
 	}
 
 	private static void renderQuad(PoseStack.Pose pose, VertexConsumer consumer, float scale, float red, float green, float blue) {
