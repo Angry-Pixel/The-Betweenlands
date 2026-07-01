@@ -50,7 +50,7 @@ public record RandomAspectCalculator(float amountMultiplier, float amountVariati
 		}
 
 		for (int i = 0; i < this.rolls(); i++) {
-			Collections.shuffle(possibleAspects, RandomGeneratorFactory.getDefault().create(random.seed.get()));
+			Collections.shuffle(possibleAspects, new Random(random.seed.get()));
 			Holder<AspectType> fetchedAspect = possibleAspects.removeFirst();
 			float baseAmount = fetchedAspect.value().amount() * this.amountMultiplier;
 			aspects.add(new Aspect(fetchedAspect, (int) (baseAmount + baseAmount * this.amountVariation * (random.nextFloat() * 2.0F - 1.0F))));
