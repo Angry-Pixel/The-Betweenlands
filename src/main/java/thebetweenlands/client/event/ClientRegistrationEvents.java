@@ -57,6 +57,7 @@ import thebetweenlands.client.extensions.effect.ElixirEffectExtension;
 import thebetweenlands.client.extensions.effect.InvisibleEffectRegistration;
 import thebetweenlands.client.extensions.item.BigSwingExtension;
 import thebetweenlands.client.extensions.item.armor.AmphibiousArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.AncientArmorRenderer;
 import thebetweenlands.client.extensions.item.armor.BoneArmorRenderer;
 import thebetweenlands.client.extensions.item.armor.ExplorersHatRenderer;
 import thebetweenlands.client.extensions.item.armor.LargeSpiritTreeMaskRenderer;
@@ -88,6 +89,7 @@ import thebetweenlands.client.gui.screen.SmokingRackScreen;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
+import thebetweenlands.client.model.armor.AncientArmorModel;
 import thebetweenlands.client.model.armor.BoneArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
@@ -714,6 +716,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.ANCIENT_ARMOR, AncientArmorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.BONE_ARMOR, BoneArmorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.EXPLORERS_HAT, ExplorersHatModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_MASK, () -> LargeSpiritTreeFaceModel.create(true));
@@ -1062,6 +1065,7 @@ public class ClientRegistrationEvents {
 
 		// Armour extensions
 		event.registerReloadListener(AmphibiousArmorRenderer.INSTANCE);
+		event.registerReloadListener(AncientArmorRenderer.INSTANCE);
 		event.registerReloadListener(BoneArmorRenderer.INSTANCE);
 		event.registerReloadListener(SyrmoriteArmorRenderer.INSTANCE);
 
@@ -1104,6 +1108,9 @@ public class ClientRegistrationEvents {
 		event.registerItem(AmphibiousArmorRenderer.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
 			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
+		event.registerItem(AncientArmorRenderer.INSTANCE,
+				ItemRegistry.ANCIENT_HELMET.get(), ItemRegistry.ANCIENT_CHESTPLATE.get(),
+				ItemRegistry.ANCIENT_LEGGINGS.get(), ItemRegistry.ANCIENT_BOOTS.get());
 		event.registerItem(BoneArmorRenderer.INSTANCE,
 			ItemRegistry.BONE_HELMET, ItemRegistry.BONE_CHESTPLATE,
 			ItemRegistry.BONE_LEGGINGS, ItemRegistry.BONE_BOOTS);
