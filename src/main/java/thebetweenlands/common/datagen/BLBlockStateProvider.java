@@ -1005,7 +1005,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
 		this.swampPlant(BlockRegistry.SWAMP_PLANT);
 		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
-		this.pitcherPlant(BlockRegistry.PITCHER_PLANT);
+//		this.pitcherPlant(BlockRegistry.PITCHER_PLANT);
 //		this.weepingBlue(BlockRegistry.WEEPING_BLUE);
 		this.sundew(BlockRegistry.SUNDEW);
 		this.volarpad(BlockRegistry.VOLARPAD);

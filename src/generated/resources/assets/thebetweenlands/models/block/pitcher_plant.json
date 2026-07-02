@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:pitcher_plant",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/pitcher_plant_particle",
-    "texture": "thebetweenlands:block/pitcher_plant"
-  }
-}
