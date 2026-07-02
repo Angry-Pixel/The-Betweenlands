@@ -692,6 +692,7 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("fungus_crop"), FungusCropModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("white_pear_crop"), WhitePearCropModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("barnacle"), BarnacleModelLoader.INSTANCE);
+		
 		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
@@ -704,9 +705,10 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
+		
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("elements"), CustomElementsModel.Loader.INSTANCE);
 		event.register(TheBetweenlands.prefix("slant"), SlantModelLoader.INSTANCE);

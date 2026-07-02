@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:weeping_blue",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/weeping_blue_particle",
-    "texture": "thebetweenlands:block/weeping_blue"
-  }
-}
