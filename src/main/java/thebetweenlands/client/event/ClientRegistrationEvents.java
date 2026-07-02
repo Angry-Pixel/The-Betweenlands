@@ -109,9 +109,6 @@ import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
 import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
 import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
-import thebetweenlands.client.model.baked.sundew.SundewModelLoader;
-import thebetweenlands.client.model.baked.swampplant.SwampPlantModelLoader;
-import thebetweenlands.client.model.baked.venusflytrap.VenusFlyTrapModelLoader;
 import thebetweenlands.client.model.baked.volarpad.VolarpadModelLoader;
 import thebetweenlands.client.model.baked.walkway.WalkwayModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
@@ -1016,7 +1013,7 @@ public class ClientRegistrationEvents {
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("bush"), BushModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("swamp_plant"), SwampPlantModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("swamp_plant"), SwampPlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
@@ -1039,10 +1036,10 @@ public class ClientRegistrationEvents {
 
 		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
 		
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);

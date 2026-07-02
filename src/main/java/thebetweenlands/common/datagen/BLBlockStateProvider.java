@@ -1003,11 +1003,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlock(BlockRegistry.SWAMP_KELP_PLANT);
 		this.crossBlock(BlockRegistry.SWAMP_KELP);
 		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
-		this.swampPlant(BlockRegistry.SWAMP_PLANT);
-		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
+//		this.swampPlant(BlockRegistry.SWAMP_PLANT);
+//		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
 //		this.pitcherPlant(BlockRegistry.PITCHER_PLANT);
 //		this.weepingBlue(BlockRegistry.WEEPING_BLUE);
-		this.sundew(BlockRegistry.SUNDEW);
+//		this.sundew(BlockRegistry.SUNDEW);
 		this.volarpad(BlockRegistry.VOLARPAD);
 		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
 		this.builtinEntity(BlockRegistry.ASPECTRUS_CROP, this.modLoc("block/particle/aspectrus_crop_particle"));

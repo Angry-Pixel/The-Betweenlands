@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:swamp_plant",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/swamp_plant_particle",
-    "texture": "thebetweenlands:block/swamp_plant"
-  }
-}
