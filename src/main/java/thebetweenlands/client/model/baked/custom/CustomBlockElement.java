@@ -110,10 +110,10 @@ public record CustomBlockElement(BlockElement baseBlockElement, CustomElementRot
             	return 0.0f;
         	}
         	
-        	// Get the angle in the range [-90, 90]
+        	// Get the angle in the range [-180, 180]
     		float angle = GsonHelper.getAsFloat(json, memberName);
-    		if (angle < -90.0f || angle > 90.0f) {
-    			throw new JsonParseException("Expected rotation between -90.0 and 90.0, got " + angle);
+    		if (angle < -180.0f || angle > 180.0f) {
+    			throw new JsonParseException("Expected rotation between -180.0 and 180.0, got " + angle);
     		}
     		
     		return angle;
