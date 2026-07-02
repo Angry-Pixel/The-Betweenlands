@@ -1,13 +1,13 @@
 {
 	"parent": "minecraft:block/block",
 	"ambientocclusion": false,
+	"render_type": "cutout",
 	"texture_size": [32, 32],
-	"loader": "thebetweenlands:elements",
 	"textures": {
 		"particle": "thebetweenlands:block/betweenstone",
 		"texture": "thebetweenlands:block/betweenstone_pebble_pile"
     },
-	"render_type": "cutout",
+	"loader": "thebetweenlands:elements",
 	"custom_elements": [
 		{
 			"name": "plant_1_a",
