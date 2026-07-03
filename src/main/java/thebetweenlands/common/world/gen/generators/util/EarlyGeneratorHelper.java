@@ -1,11 +1,12 @@
 package thebetweenlands.common.world.gen.generators.util;
 
-import java.util.Optional;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import thebetweenlands.api.world.biome.BiomeWeights;
+import thebetweenlands.common.world.gen.util.config.FractalOpenSimplexNoiseSettings2D;
+import thebetweenlands.common.world.gen.util.config.FractalOpenSimplexNoiseSettings3D;
 import thebetweenlands.common.world.gen.util.config.SimplexNoiseSettings;
+import thebetweenlands.util.FractalOpenSimplexNoise;
+import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.legacy.BLLegacyPerlinSimplexNoise;
 
 public class EarlyGeneratorHelper {
@@ -111,4 +112,77 @@ public class EarlyGeneratorHelper {
 		return noiseGenerator.getValue(z * scale, x * scale, true);
 	}
 	
+	// ======== Fractal Open Simplex Noise Samplers ========
+
+	@FunctionalInterface
+	public static interface NoiseSampler2D {
+		public double eval(double x, double y);
+	}
+	
+	@FunctionalInterface
+	public static interface NoiseSampler3D {
+		public double eval(double x, double y, double z);
+	}
+	
+	/**
+	 * Creates a 2D sampler that returns values in the range [{@code (-noiseValueMultiplier) + noiseValueOffset}, {@code noiseValueMultiplier + noiseValueOffset}]
+	 * @param noise
+	 * @param settings
+	 * @return
+	 */
+	public static NoiseSampler2D createConfiguredSampler2D(FractalOpenSimplexNoise noise, FractalOpenSimplexNoiseSettings2D settings) {
+		final double noiseScaleX = settings.noiseScaleX();
+		final double noiseScaleY = settings.noiseScaleY();
+		final double noiseValueMultiplier = settings.noiseValueMultiplier();
+		final double noiseValueOffset = settings.noiseValueOffset();
+		
+		return (double x, double y) -> noise.eval(x * noiseScaleX, y * noiseScaleY) * noiseValueMultiplier + noiseValueOffset;
+	}
+
+	/**
+	 * Creates a 2D sampler that returns values in the range [{@code noiseValueOffset}, {@code noiseValueMultiplier + noiseValueOffset}]
+	 * @param noise
+	 * @param settings
+	 * @return
+	 */
+	public static NoiseSampler2D createConfiguredSampler2DNormalized(FractalOpenSimplexNoise noise, FractalOpenSimplexNoiseSettings2D settings) {
+		final double noiseScaleX = settings.noiseScaleX();
+		final double noiseScaleY = settings.noiseScaleY();
+		final double noiseValueMultiplier = settings.noiseValueMultiplier();
+		final double noiseValueOffset = settings.noiseValueOffset();
+		
+		return (double x, double y) -> MathUtils.linearTransformd(noise.eval(x * noiseScaleX, y * noiseScaleY), -1, 1, 0, 1) * noiseValueMultiplier + noiseValueOffset;
+	}
+
+	/**
+	 * Creates a 3D sampler that returns values in the range [{@code (-noiseValueMultiplier) + noiseValueOffset}, {@code noiseValueMultiplier + noiseValueOffset}]
+	 * @param noise
+	 * @param settings
+	 * @return
+	 */
+	public static NoiseSampler3D createConfiguredSampler3D(FractalOpenSimplexNoise noise, FractalOpenSimplexNoiseSettings3D settings) {
+		final double noiseScaleX = settings.noiseScaleX();
+		final double noiseScaleY = settings.noiseScaleY();
+		final double noiseScaleZ = settings.noiseScaleZ();
+		final double noiseValueMultiplier = settings.noiseValueMultiplier();
+		final double noiseValueOffset = settings.noiseValueOffset();
+		
+		return (double x, double y, double z) -> noise.eval(x * noiseScaleX, y * noiseScaleY, z * noiseScaleZ) * noiseValueMultiplier + noiseValueOffset;
+	}
+
+	/**
+	 * Creates a 3D sampler that returns values in the range [{@code noiseValueOffset}, {@code noiseValueMultiplier + noiseValueOffset}]
+	 * @param noise
+	 * @param settings
+	 * @return
+	 */
+	public static NoiseSampler3D createConfiguredSampler3DNormalized(FractalOpenSimplexNoise noise, FractalOpenSimplexNoiseSettings3D settings) {
+		final double noiseScaleX = settings.noiseScaleX();
+		final double noiseScaleY = settings.noiseScaleY();
+		final double noiseScaleZ = settings.noiseScaleZ();
+		final double noiseValueMultiplier = settings.noiseValueMultiplier();
+		final double noiseValueOffset = settings.noiseValueOffset();
+		
+		return (double x, double y, double z) -> MathUtils.linearTransformd(noise.eval(x * noiseScaleX, y * noiseScaleY, z * noiseScaleZ), -1, 1, 0, 1) * noiseValueMultiplier + noiseValueOffset;
+	}
 }
