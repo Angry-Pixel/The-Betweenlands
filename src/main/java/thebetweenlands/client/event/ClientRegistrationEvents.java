@@ -100,7 +100,6 @@ import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1Mod
 import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
 import thebetweenlands.client.model.baked.brazier.BrazierModelLoader;
-import thebetweenlands.client.model.baked.bulbcappedmushroom.BulbCappedMushroomModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.custom.CustomElementsModel;
@@ -1017,7 +1016,7 @@ public class ClientRegistrationEvents {
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("bush"), BushModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("swamp_plant"), SwampPlantModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
 
