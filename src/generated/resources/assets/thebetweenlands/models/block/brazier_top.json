@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/air",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/mud_tower_brazier_particle"
-  }
-}

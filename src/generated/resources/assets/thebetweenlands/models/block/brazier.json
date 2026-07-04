@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "ambientocclusion": false,
-  "loader": "thebetweenlands:brazier",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/mud_tower_brazier_particle",
-    "texture": "thebetweenlands:block/mud_tower_brazier"
-  }
-}

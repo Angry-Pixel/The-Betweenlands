@@ -99,7 +99,6 @@ import thebetweenlands.client.model.baked.barnacle.BarnacleModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
 import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
-import thebetweenlands.client.model.baked.brazier.BrazierModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.custom.CustomElementsModel;
@@ -1035,7 +1034,7 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("wooden_support_beam_2"), WoodenSupportBeam2ModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("wooden_support_beam_3"), WoodenSupportBeam3ModelLoader.INSTANCE);
 
-		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
