@@ -1,24 +1,10 @@
 {
-  "variants": {
-    "half=lower": [
-      {
-        "model": "thebetweenlands:block/sundew"
-      },
-      {
-        "model": "thebetweenlands:block/sundew",
-        "y": 90
-      },
-      {
-        "model": "thebetweenlands:block/sundew",
-        "y": 180
-      },
-      {
-        "model": "thebetweenlands:block/sundew",
-        "y": 270
-      }
-    ],
-    "half=upper": {
-      "model": "thebetweenlands:block/sundew_top"
-    }
-  }
+	"variants": {
+		"half=lower": {
+			"model": "thebetweenlands:block/sundew"
+		},
+		"half=upper": {
+			"model": "thebetweenlands:block/sundew_top"
+		}
+	}
 }
