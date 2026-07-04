@@ -11,31 +11,17 @@ import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
-import thebetweenlands.client.handler.AmbienceHandler;
-import thebetweenlands.client.handler.BossHandler;
-import thebetweenlands.client.handler.CameraPositionHandler;
-import thebetweenlands.client.handler.ElixirClientHandler;
-import thebetweenlands.client.handler.EquipmentRenderingHandler;
-import thebetweenlands.client.handler.InputHandler;
-import thebetweenlands.client.handler.ItemTooltipHandler;
-import thebetweenlands.client.handler.MainMenuHandler;
-import thebetweenlands.client.handler.MusicHandler;
-import thebetweenlands.client.handler.ScreenHandler;
-import thebetweenlands.client.handler.ShaderHandler;
-import thebetweenlands.client.handler.equipment.RadialMenuHandler;
-import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.client.handler.*;
+import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.sky.BLSkyRenderer;
+import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.EntityUnmountHandler;
-import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.shield.SwatShieldItem;
 import thebetweenlands.common.item.tool.SlingshotItem;
 import thebetweenlands.util.RenderUtils;
-
-import java.util.Optional;
 
 public class ClientEvents {
 
@@ -43,6 +29,7 @@ public class ClientEvents {
 		AmbienceHandler.init();
 		BossHandler.init();
 		CameraPositionHandler.INSTANCE.init();
+		ClientSwingHandler.init();
 		ElixirClientHandler.init();
 		EquipmentRenderingHandler.init();
 		ItemTooltipHandler.init();
@@ -50,6 +37,7 @@ public class ClientEvents {
 		MusicHandler.INSTANCE.init();
 		RadialMenuHandler.INSTANCE.init();
 		ScreenHandler.init();
+		WeedwoodRowboatHandler.INSTANCE.init();
 
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
 
@@ -73,6 +61,10 @@ public class ClientEvents {
 		NeoForge.EVENT_BUS.addListener(FogHandler::onClientTick);
 		NeoForge.EVENT_BUS.addListener(FogHandler::onFogColor);
 		NeoForge.EVENT_BUS.addListener(FogHandler::updateFog);
+
+		NeoForge.EVENT_BUS.addListener(ArmSwingSpeedHandler::fireArmSwingEvent);
+		NeoForge.EVENT_BUS.addListener(VolarkiteHandler::replacePlayerRenderer);
+		NeoForge.EVENT_BUS.addListener(VolarkiteHandler::removeHandWhenVolarkiting);
 	}
 
 	static void renderMobsOnFrame(RenderItemInFrameEvent event) {

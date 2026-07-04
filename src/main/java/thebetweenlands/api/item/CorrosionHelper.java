@@ -2,6 +2,8 @@ package thebetweenlands.api.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -15,16 +17,16 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.capability.BLCapabilities;
+import thebetweenlands.api.capability.corrosion.ICorrosionHandler;
+import thebetweenlands.api.capability.corrosion.ICorrosionHandlerModifiable;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.datagen.tags.BLDimensionTypeTagProvider;
 import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.AttributeRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class CorrosionHelper {
 
@@ -50,15 +52,12 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static int getMaximumCorrosion(ItemStack stack) {
-		if(!isCorrodible(stack)) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
-			return ((CustomCorrodible) stack.getItem()).getMaxCorrosion(stack);
-		} else {
-			return stack.getOrDefault(DataComponentRegistry.MAX_CORROSION, MAX_CORROSION);
-		}
+		return handler.getMaxCorrosion();
 	}
 
 	/**
@@ -67,17 +66,12 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCorrosion(ItemStack stack) {
-		if(!isCorrodible(stack)) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
-			return ((CustomCorrodible) stack.getItem()).getCorrosion(stack);
-		} else if(stack.has(DataComponentRegistry.CORROSION)) {
-			return stack.get(DataComponentRegistry.CORROSION).corrosion();
-		} else {
-			return 0; // Hasn't been tagged yet
-		}
+		return handler.getCorrosion();
 	}
 
 	/**
@@ -86,15 +80,12 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static int getMaximumCoating(ItemStack stack) {
-		if(!isCorrodible(stack)) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
-			return ((CustomCorrodible) stack.getItem()).getMaxCoating(stack);
-		} else {
-			return stack.getOrDefault(DataComponentRegistry.MAX_COATING, MAX_COATING);
-		}
+		return handler.getMaxCoating();
 	}
 
 	/**
@@ -103,51 +94,93 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCoating(ItemStack stack) {
-		if(!isCorrodible(stack)) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
 			return -1;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
-			return ((CustomCorrodible) stack.getItem()).getCoating(stack);
-		} else if(stack.has(DataComponentRegistry.CORROSION)) {
-			return stack.get(DataComponentRegistry.CORROSION).coating();
-		} else {
-			return 0; // Hasn't been tagged yet
-		}
+		return handler.getCoating();
 	}
 
 
 	/**
-	 * Sets the corrosion on a stack.
+	 * Sets the corrosion on a stack if possible.
 	 * @param stack
-	 * @return
+	 * @param corrosion
+	 * @return true if the corrosion could be directly set
 	 */
-	public static void setCorrosion(ItemStack stack, int corrosion) {
-		if(!isCorrodible(stack)) {
-			return;
+	public static boolean setCorrosion(ItemStack stack, int corrosion) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
+			return false;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
-			((CustomCorrodible) stack.getItem()).setCorrosion(stack, corrosion);
-		} else {
-			stack.set(DataComponentRegistry.CORROSION, stack.getOrDefault(DataComponentRegistry.CORROSION, new CorrosionData(0, 0)).withCorrosion(corrosion));
-		}
+		return setCorrosion(handler, corrosion);
 	}
-
 	/**
 	 * Sets the coating on a stack.
 	 * @param stack
-	 * @return
+	 * @param coating
+	 * @return true if the coating could be directly set
 	 */
-	public static void setCoating(ItemStack stack, int coating) {
-		if(!isCorrodible(stack)) {
+	public static boolean setCoating(ItemStack stack, int coating) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
+			return false;
+		}
+
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCoating(coating);
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Attempts to directly set the corrosion on a corrosion handler if possible.
+	 * @param handler
+	 * @param corrosion
+	 * @return true if the corrosion could be directly set
+	 */
+	public static boolean setCorrosion(ICorrosionHandler handler, int corrosion) {
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCorrosion(corrosion);
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Attempts to directly set the coating on a corrosion handler if possible.
+	 * @param handler
+	 * @param coating
+	 * @return true if the coating could be directly set
+	 */
+	public static boolean setCoating(ICorrosionHandler handler, int coating) {
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCorrosion(coating);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Attempts to reset the corrosion on an item stack to 0.
+	 * @param stack
+	 */
+	public static void resetCorrosion(ItemStack stack) {
+		ICorrosionHandler handler = getCorrosionHandler(stack);
+		if(handler == null) {
 			return;
 		}
 
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible) {
-			((CustomCorrodible) stack.getItem()).setCoating(stack, coating);
+		if(handler instanceof ICorrosionHandlerModifiable modifiable) {
+			modifiable.setCorrosion(0);
 		} else {
-			stack.set(DataComponentRegistry.CORROSION, stack.getOrDefault(DataComponentRegistry.CORROSION, new CorrosionData(0, 0)).withCoating(coating));
+			handler.removeCorrosion(handler.getCoating(), false);
 		}
 	}
 
@@ -157,26 +190,27 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static float getModifier(ItemStack stack) {
-		if(!isCorrodible(stack)) {
+		final ICorrosionHandler handler;
+		if(!isCorrodible(stack) || (handler = getCorrosionHandler(stack)) == null) {
 			return 1.0F;
 		}
 
-		int corrosion, maxCorrosion;
-		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof CustomCorrodible corrodible) {
-			corrosion = corrodible.getCorrosion(stack);
-			maxCorrosion = corrodible.getMaxCorrosion(stack);
-		} else if(stack.has(DataComponentRegistry.CORROSION)) {
-			maxCorrosion = MAX_CORROSION;
-			corrosion = stack.get(DataComponentRegistry.CORROSION).corrosion();
-		} else {
-			return 1.0F;
-		}
+		final int corrosion = handler.getCorrosion();
+		final int maxCorrosion = handler.getMaxCorrosion();
+		
 		int oneStage = maxCorrosion / CORROSION_STAGE_COUNT;
 		return (-0.7F * Math.max(0, ((corrosion - oneStage) / (float)(maxCorrosion - oneStage))) + 1);
 	}
 
 	public static boolean isCorrodible(ItemStack stack) {
 		return !stack.isEmpty() && stack.is(BLItemTagProvider.CORRODIBLE);
+	}
+
+	public static @Nullable ICorrosionHandler getCorrosionHandler(ItemStack stack) {
+		if(isCorrodible(stack)) {
+			return stack.getCapability(BLCapabilities.CorrosionHandler.ITEM);
+		}
+		return null;
 	}
 
 	/**
@@ -207,7 +241,7 @@ public class CorrosionHelper {
 	public static boolean shouldEntityCorrode(Entity entity) {
 		// If corrosion is disabled: false
 		Level level = entity.level();
-		if(!(BetweenlandsConfig.useCorrosion && level.getGameRules().getBoolean(TheBetweenlands.CORROSION_GAMERULE)))
+		if(!isCorrosionEnabled(level))
 			return false;
 
 		// If player is in creative: false
@@ -260,27 +294,22 @@ public class CorrosionHelper {
 	 * @param isHeldItem
 	 */
 	public static void updateCorrosion(ItemStack stack, Level world, Entity holder, int slot, boolean isHeldItem) {
-		if (world.isClientSide()) {
+		if (world.isClientSide() || !isCorrodible(stack) || (holder != null && holder.isSpectator())) {
 			return;
 		}
 		
-		if(!shouldEntityCorrode(holder) || !isCorrodible(stack)) {
-			return;
-		}
-		
-		int corrosion = getCorrosion(stack);
+		// If there is no corrosion in this world, reset the corrosion value of this item
 		if(!isCorrosionEnabled(world)) {
-			if(corrosion != 0) {
-				setCorrosion(stack, 0);
-			}
-		} else if (corrosion < getMaximumCorrosion(stack)) {
-			float probability = getCorrosionProbability(stack, world, holder, isHeldItem);
-			if (world.getRandom().nextFloat() < probability) {
-				int coating = getCoating(stack);
-				if(coating > 0) {
-					setCoating(stack, coating - 1);
-				} else {
-					setCorrosion(stack, corrosion + 1);
+			resetCorrosion(stack);
+			return;
+		} 
+		
+		if(shouldEntityCorrode(holder)) {
+			ICorrosionHandler handler = stack.getCapability(BLCapabilities.CorrosionHandler.ITEM);
+			if(handler != null && handler.getCorrosion() < handler.getMaxCorrosion()) {
+				float probability = getCorrosionProbability(stack, world, holder, isHeldItem);
+				if (world.getRandom().nextFloat() < probability) {
+					handler.corrode(1, false);
 				}
 			}
 		}

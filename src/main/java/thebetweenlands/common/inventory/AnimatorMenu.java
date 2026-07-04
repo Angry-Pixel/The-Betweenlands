@@ -1,5 +1,7 @@
 package thebetweenlands.common.inventory;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,31 +14,32 @@ import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.inventory.slot.FilteredSlot;
 import thebetweenlands.common.inventory.slot.SingleItemSlot;
-import thebetweenlands.common.item.misc.LifeCrystalItem;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
-
-import java.util.Objects;
 
 public class AnimatorMenu extends AbstractContainerMenu {
 	private final AnimatorBlockEntity animator;
 	private final ContainerData data;
 
 	public AnimatorMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
-		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(6));
+		this(i, playerInventory, (AnimatorBlockEntity) Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(buf.readBlockPos()) : null), new SimpleContainerData(10));
 	}
 
 	public AnimatorMenu(int containerId, Inventory playerInventory, AnimatorBlockEntity animator, ContainerData data) {
 		super(MenuRegistry.ANIMATOR.get(), containerId);
 		checkContainerSize(animator, 3);
-		checkContainerDataCount(data, 6);
+		checkContainerDataCount(data, 10);
 		animator.startOpen(playerInventory.player);
 		this.animator = animator;
 		this.data = data;
 
-		this.addSlot(new SingleItemSlot(animator, 0, 79, 23));
-		this.addSlot(new FilteredSlot(animator, 1, 34, 57, stack -> stack.getItem() instanceof LifeCrystalItem));
-		this.addSlot(new FilteredSlot(animator, 2, 124, 57, stack -> stack.is(ItemRegistry.SULFUR)));
+		this.addSlot(new SingleItemSlot(animator, AnimatorBlockEntity.FOCAL_SLOT, 79, 23) {
+			@Override
+			public boolean mayPickup(Player player) {
+				return super.mayPickup(player) && !animator.requiresPlayerRetrieval();
+			}
+		});
+		this.addSlot(new FilteredSlot(animator, AnimatorBlockEntity.LIFE_CRYSTAL_SLOT, 34, 57, animator::isValidLifeCrystal));
+		this.addSlot(new FilteredSlot(animator, AnimatorBlockEntity.FUEL_SLOT, 124, 57, animator::isValidFuel));
 
 		for (int k = 0; k < 3; k++) {
 			for (int i1 = 0; i1 < 9; i1++) {
@@ -55,20 +58,99 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		return this.animator;
 	}
 
-	public float getCrystalLife() {
-		return this.data.get(1);
-	}
-
-	public int getLifeCount() {
-		return this.data.get(5);
-	}
-
-	public int getFuelProgress() {
+	public int getFuelBurnProgress() {
 		return this.data.get(0);
 	}
 
-	public double getBurnProgress() {
-		return (this.data.get(3) + (this.getFuelProgress() / 42.0D)) / (double) this.data.get(4);
+	public int getFuelBurnTime() {
+		return this.data.get(1);
+	}
+
+	public int getFuelBurnValue() {
+		return this.data.get(2);
+	}
+
+	public int getCrystalLife() {
+		return Math.max(this.data.get(3), 0);
+	}
+
+	public int getCrystalMaxLife() {
+		return Math.max(this.data.get(4), 0);
+	}
+	
+	public int getCrystalLifeToDrain() {
+		return Math.max(this.data.get(5), 0);
+	}
+
+	public int getFuelConsumed() {
+		return this.data.get(6);
+	}
+
+	public int getRecipeFuelRequired() {
+		return this.data.get(7);
+	}
+
+	public int getRecipeLifeRequired() {
+		return this.data.get(8);
+	}
+
+	public boolean isRunning() {
+		return this.data.get(9) != 0;
+	}
+
+	public float getFuelBurnPercentage(float partialTick) {
+		float progress = (float)this.getFuelBurnProgress();
+		// Seems to cause visual jitters
+//		if(this.isRunning()) {
+//			progress += partialTick;
+//		}
+		return progress / (float)this.getFuelBurnTime();
+	}
+	
+	protected int getVisualFuelBurnValue() {
+		int requiredFuel = this.getRecipeFuelRequired();
+		
+		// Don't do anything special if there is no recipe
+		if(requiredFuel <= 0) {
+			return this.getFuelBurnValue();
+		}
+		
+		int consumedFuel = this.getFuelConsumed();
+		int remainingFuel = requiredFuel - consumedFuel;
+		
+		int fuelBurnValue = this.getFuelBurnValue();
+		
+		return Math.min(fuelBurnValue, remainingFuel);
+	}
+	
+	/**
+	 * Returns a visual percentage of recipe progress, to be displayed by the animator screen
+	 * @param partialTick
+	 * @return
+	 */
+	public float getTotalBurnProgress(float partialTick) {
+		int requiredFuel = this.getRecipeFuelRequired();
+
+		// No progress if there is no recipe
+		if(requiredFuel <= 0) {
+			return 0.0f;
+		}
+		
+		int consumedFuel = this.getFuelConsumed();
+		float partiallyConsumedFuel = this.getFuelBurnPercentage(partialTick) * this.getVisualFuelBurnValue();
+		float totalProgress = consumedFuel + partiallyConsumedFuel;
+
+		if(totalProgress >= requiredFuel) {
+			return 1.0f;
+		} else {
+			return totalProgress / requiredFuel;
+		}
+	}
+	
+	@Override
+	public void removed(Player player) {
+		super.removed(player);
+		this.animator.stopOpen(player);
 	}
 
 	@Override
@@ -79,13 +161,15 @@ public class AnimatorMenu extends AbstractContainerMenu {
 			ItemStack stack1 = slot.getItem();
 			stack = stack1.copy();
 			if (index > 2) {
-				if (stack1.is(ItemRegistry.SULFUR))
+				final boolean validFuel = this.animator.isValidFuel(stack1);
+				final boolean validLifeCrystal = this.animator.isValidLifeCrystal(stack1);
+				if (validFuel)
 					if (!this.moveItemStackTo(stack1, 2, 3, true))
 						return ItemStack.EMPTY;
-				if (stack1.getItem() instanceof LifeCrystalItem)
+				if (validLifeCrystal)
 					if (!this.moveItemStackTo(stack1, 1, 2, true))
 						return ItemStack.EMPTY;
-				if (stack1.getCount() == 1 && !stack1.is(ItemRegistry.SULFUR) && !(stack1.getItem() instanceof LifeCrystalItem))
+				if (stack1.getCount() == 1 && !validFuel && !validLifeCrystal)
 					if (!this.moveItemStackTo(stack1, 0, 1, true))
 						return ItemStack.EMPTY;
 			} else if (!this.moveItemStackTo(stack1, 3, this.slots.size(), false))

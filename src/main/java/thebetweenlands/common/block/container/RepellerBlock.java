@@ -70,6 +70,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 			if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
 				if (stack.is(ItemRegistry.SHIMMER_STONE) && !repeller.hasShimmerstone()) {
 					repeller.addShimmerstone(level);
+					repeller.setShimmerstoneStack(stack.copyWithCount(1));
 					stack.consume(1, player);
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				} else if (stack.getItem() instanceof AspectVialItem) {
@@ -120,10 +121,11 @@ public class RepellerBlock extends HorizontalBaseEntityBlock implements SwampWat
 		} else if (state.getValue(HALF) == DoubleBlockHalf.LOWER && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
 			if (player.isShiftKeyDown() && repeller.hasShimmerstone()) {
 				repeller.removeShimmerstone(level);
-				ItemStack stack = new ItemStack(ItemRegistry.SHIMMER_STONE.get());
+				ItemStack stack = repeller.getShimmerstoneStack();
 				if (!player.getInventory().add(stack)) {
 					player.drop(stack, false);
 				}
+				repeller.setShimmerstoneStack(ItemStack.EMPTY);
 				return InteractionResult.sidedSuccess(level.isClientSide());
 			} else if (!player.isShiftKeyDown()) {
 				if (!level.isClientSide()) {

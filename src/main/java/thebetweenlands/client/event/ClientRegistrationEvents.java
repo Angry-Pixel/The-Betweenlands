@@ -2,13 +2,10 @@ package thebetweenlands.client.event;
 
 import java.io.File;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.model.geom.LayerDefinitions;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -22,7 +19,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
@@ -44,25 +40,38 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.client.AspectIconTextureManager;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.BetweenlandsKeybinds;
 import thebetweenlands.client.BetweenlandsSpecialEffects;
 import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
+import thebetweenlands.client.extensions.effect.ElixirEffectExtension;
+import thebetweenlands.client.extensions.effect.InvisibleEffectRegistration;
+import thebetweenlands.client.extensions.item.BigSwingExtension;
+import thebetweenlands.client.extensions.item.armor.AmphibiousArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.AncientArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.BoneArmorRenderer;
+import thebetweenlands.client.extensions.item.armor.ExplorersHatRenderer;
+import thebetweenlands.client.extensions.item.armor.LargeSpiritTreeMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SilkMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SkullMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SmallSpiritTreeMaskRenderer;
+import thebetweenlands.client.extensions.item.armor.SyrmoriteArmorRenderer;
 import thebetweenlands.client.gui.overlay.AprilFoolsOverlay;
 import thebetweenlands.client.gui.overlay.CircleGemItemOverlay;
 import thebetweenlands.client.gui.overlay.CorrosiveBootsOverlay;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.EquipmentOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
+import thebetweenlands.client.gui.overlay.GunkOverlay;
 import thebetweenlands.client.gui.overlay.swarm.SwarmOverlay;
 import thebetweenlands.client.gui.screen.AmphibiousArmorScreen;
 import thebetweenlands.client.gui.screen.AnimatorScreen;
@@ -79,23 +88,31 @@ import thebetweenlands.client.gui.screen.SilkBundleScreen;
 import thebetweenlands.client.gui.screen.SmokingRackScreen;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
-import thebetweenlands.client.item.armor.extension.AmphibiousArmorRenderer;
-import thebetweenlands.client.item.armor.extension.BoneArmorRenderer;
-import thebetweenlands.client.item.armor.extension.ExplorersHatRenderer;
-import thebetweenlands.client.item.armor.extension.LargeSpiritTreeMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SilkMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SkullMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SmallSpiritTreeMaskRenderer;
-import thebetweenlands.client.item.armor.extension.SyrmoriteArmorRenderer;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
+import thebetweenlands.client.model.armor.AncientArmorModel;
 import thebetweenlands.client.model.armor.BoneArmorModel;
 import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.baked.barnacle.BarnacleModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom1.BlackHatMushroom1ModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom2.BlackHatMushroom2ModelLoader;
+import thebetweenlands.client.model.baked.blackhatmushroom3.BlackHatMushroom3ModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
+import thebetweenlands.client.model.baked.custom.CustomElementsModel;
+import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
+import thebetweenlands.client.model.baked.flatheadmushroom1.FlatHeadMushroom1ModelLoader;
+import thebetweenlands.client.model.baked.flatheadmushroom2.FlatHeadMushroom2ModelLoader;
+import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
+import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
+import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
+import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
+import thebetweenlands.client.model.baked.woodensupportbeam1.WoodenSupportBeam1ModelLoader;
+import thebetweenlands.client.model.baked.woodensupportbeam2.WoodenSupportBeam2ModelLoader;
+import thebetweenlands.client.model.baked.woodensupportbeam3.WoodenSupportBeam3ModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
 import thebetweenlands.client.model.block.AlembicModel;
 import thebetweenlands.client.model.block.AnimatorModel;
@@ -131,6 +148,10 @@ import thebetweenlands.client.model.block.SteepingPotModel;
 import thebetweenlands.client.model.block.WaterFilterModel;
 import thebetweenlands.client.model.block.WaystoneModel;
 import thebetweenlands.client.model.block.WindChimeModel;
+import thebetweenlands.client.model.block.aspectrus.AspectrusCrop1Model;
+import thebetweenlands.client.model.block.aspectrus.AspectrusCrop2Model;
+import thebetweenlands.client.model.block.aspectrus.AspectrusCrop3Model;
+import thebetweenlands.client.model.block.aspectrus.AspectrusCrop4Model;
 import thebetweenlands.client.model.block.cage.CagedGeckoModel;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
 import thebetweenlands.client.model.block.simulacrum.DeepmanSimulacrumModels;
@@ -143,7 +164,9 @@ import thebetweenlands.client.model.entity.BLFishHookModel;
 import thebetweenlands.client.model.entity.BarrisheeModel;
 import thebetweenlands.client.model.entity.BipedCryptCrawlerModel;
 import thebetweenlands.client.model.entity.BloodSnailModel;
+import thebetweenlands.client.model.entity.BonePuppetMeleeModel;
 import thebetweenlands.client.model.entity.BonePuppetRangedModel;
+import thebetweenlands.client.model.entity.BoneShamanModel;
 import thebetweenlands.client.model.entity.BubblerCrabModel;
 import thebetweenlands.client.model.entity.CaveFishModel;
 import thebetweenlands.client.model.entity.CaveJellyfishModel;
@@ -208,11 +231,17 @@ import thebetweenlands.client.model.entity.SwordEnergyModel;
 import thebetweenlands.client.model.entity.TarBeastModel;
 import thebetweenlands.client.model.entity.TarminionModel;
 import thebetweenlands.client.model.entity.TermiteModel;
+import thebetweenlands.client.model.entity.ThrownBoneModel;
 import thebetweenlands.client.model.entity.TinySludgeWormModel;
 import thebetweenlands.client.model.entity.WallHoleModel;
 import thebetweenlands.client.model.entity.WallLampreyModel;
-import thebetweenlands.client.model.entity.WeedwoodRowboatModel;
+import thebetweenlands.client.model.entity.WatcherEyesModel;
 import thebetweenlands.client.model.entity.WightModel;
+import thebetweenlands.client.model.entity.rowboat.HumanoidRowerModel;
+import thebetweenlands.client.model.entity.rowboat.PlayerRowerModel;
+import thebetweenlands.client.model.entity.rowboat.RowboatLanternModel;
+import thebetweenlands.client.model.entity.rowboat.WeedwoodRowboatModel;
+import thebetweenlands.client.model.entity.volarkite.VolarkiteModel;
 import thebetweenlands.client.model.item.BoneShieldModel;
 import thebetweenlands.client.model.item.DentrothystShieldModel;
 import thebetweenlands.client.model.item.LurkerSkinShieldModel;
@@ -239,14 +268,16 @@ import thebetweenlands.client.particle.ScrapParticle;
 import thebetweenlands.client.particle.SimpleParticle;
 import thebetweenlands.client.particle.SleepingParticle;
 import thebetweenlands.client.particle.SonicScreamParticle;
+import thebetweenlands.client.particle.SpikeParticle;
 import thebetweenlands.client.particle.SpiritButterflyParticle;
 import thebetweenlands.client.particle.SwarmParticle;
-import thebetweenlands.client.particle.UrchinSpikeParticle;
 import thebetweenlands.client.particle.WaterRippleParticle;
 import thebetweenlands.client.renderer.BLItemRenderer;
 import thebetweenlands.client.renderer.block.AlcoveRenderer;
 import thebetweenlands.client.renderer.block.AlembicRenderer;
 import thebetweenlands.client.renderer.block.AnimatorRenderer;
+import thebetweenlands.client.renderer.block.AspectVialRenderer;
+import thebetweenlands.client.renderer.block.AspectrusCropRenderer;
 import thebetweenlands.client.renderer.block.BarrelRenderer;
 import thebetweenlands.client.renderer.block.BeamOriginRenderer;
 import thebetweenlands.client.renderer.block.CenserRenderer;
@@ -298,7 +329,10 @@ import thebetweenlands.client.renderer.entity.BLItemFrameRenderer;
 import thebetweenlands.client.renderer.entity.BarrisheeRenderer;
 import thebetweenlands.client.renderer.entity.BipedCryptCrawlerRenderer;
 import thebetweenlands.client.renderer.entity.BloodSnailRenderer;
+import thebetweenlands.client.renderer.entity.BonePuppetMeleeRenderer;
 import thebetweenlands.client.renderer.entity.BonePuppetRangedRenderer;
+import thebetweenlands.client.renderer.entity.BoneShamanProjectileRenderer;
+import thebetweenlands.client.renderer.entity.BoneShamanRenderer;
 import thebetweenlands.client.renderer.entity.BubblerCrabBubbleRenderer;
 import thebetweenlands.client.renderer.entity.BubblerCrabRenderer;
 import thebetweenlands.client.renderer.entity.CCGroundSpawnerRenderer;
@@ -331,6 +365,7 @@ import thebetweenlands.client.renderer.entity.GreeblingVolarpadFloaterRenderer;
 import thebetweenlands.client.renderer.entity.InfestationRenderer;
 import thebetweenlands.client.renderer.entity.JellyfishRenderer;
 import thebetweenlands.client.renderer.entity.LargeSludgeWormRenderer;
+import thebetweenlands.client.renderer.entity.LargeSpiritTreeFaceRenderer;
 import thebetweenlands.client.renderer.entity.LeechRenderer;
 import thebetweenlands.client.renderer.entity.LurkerRenderer;
 import thebetweenlands.client.renderer.entity.LurkerSkinRaftRenderer;
@@ -351,6 +386,7 @@ import thebetweenlands.client.renderer.entity.PrimordialMalevolenceTurretRendere
 import thebetweenlands.client.renderer.entity.PyradRenderer;
 import thebetweenlands.client.renderer.entity.RockSnotRenderer;
 import thebetweenlands.client.renderer.entity.RockSnotTendrilRenderer;
+import thebetweenlands.client.renderer.entity.RootGrabberRenderer;
 import thebetweenlands.client.renderer.entity.RootSpriteRenderer;
 import thebetweenlands.client.renderer.entity.ShamblerRenderer;
 import thebetweenlands.client.renderer.entity.ShockwaveBlockRenderer;
@@ -361,7 +397,9 @@ import thebetweenlands.client.renderer.entity.SludgeRenderer;
 import thebetweenlands.client.renderer.entity.SludgeWormArrowRenderer;
 import thebetweenlands.client.renderer.entity.SludgeWormEggSacRenderer;
 import thebetweenlands.client.renderer.entity.SludgeWormRenderer;
+import thebetweenlands.client.renderer.entity.SmallSpiritTreeFaceRenderer;
 import thebetweenlands.client.renderer.entity.SmolSludgeRenderer;
+import thebetweenlands.client.renderer.entity.SpikeWaveRenderer;
 import thebetweenlands.client.renderer.entity.SpiritTreeFaceMaskRenderer;
 import thebetweenlands.client.renderer.entity.SplodeshroomRenderer;
 import thebetweenlands.client.renderer.entity.SporelingRenderer;
@@ -373,22 +411,28 @@ import thebetweenlands.client.renderer.entity.TameChiromawRenderer;
 import thebetweenlands.client.renderer.entity.TarBeastRenderer;
 import thebetweenlands.client.renderer.entity.TarminionRenderer;
 import thebetweenlands.client.renderer.entity.TermiteRenderer;
+import thebetweenlands.client.renderer.entity.ThrownBoneRenderer;
 import thebetweenlands.client.renderer.entity.ThrownTarminionRenderer;
 import thebetweenlands.client.renderer.entity.TinySludgeWormRenderer;
 import thebetweenlands.client.renderer.entity.TriggeredFallingBlockRenderer;
 import thebetweenlands.client.renderer.entity.VolatileSoulRenderer;
 import thebetweenlands.client.renderer.entity.WallLampreyRenderer;
+import thebetweenlands.client.renderer.entity.WallRootRenderer;
+import thebetweenlands.client.renderer.entity.WatcherEyesRenderer;
 import thebetweenlands.client.renderer.entity.WightRenderer;
 import thebetweenlands.client.renderer.entity.WormGroundSpawnerRenderer;
+import thebetweenlands.client.renderer.entity.rowboat.WeedwoodRowboatRenderer;
+import thebetweenlands.client.renderer.entity.volarkite.VolarkiteRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.PresentBlock;
+import thebetweenlands.common.block.entity.AspectrusCropBlockEntity;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.ShockwaveSwordData;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
-import thebetweenlands.common.fluid.BasicFluidType;
-import thebetweenlands.common.fluid.ColoredFluidType;
-import thebetweenlands.common.fluid.SwampWaterFluidType;
+import thebetweenlands.common.fluid.BasicFluidTypeExtension;
+import thebetweenlands.common.fluid.ColoredFluidTypeExtension;
+import thebetweenlands.common.fluid.SwampWaterFluidTypeExtension;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.item.misc.BLItemFrameItem;
@@ -410,9 +454,13 @@ import thebetweenlands.common.registries.MenuRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.util.BLDyeColor;
+import thebetweenlands.util.BipedTextureUVs;
 import thebetweenlands.util.DrinkableBrew;
 
 public class ClientRegistrationEvents {
+
+	public static final ResourceLocation DECAY_METER_OVERLAY_LAYER = TheBetweenlands.prefix("decay_meter");
+	public static final ResourceLocation GUNK_METER_OVERLAY_LAYER = TheBetweenlands.prefix("gunk_meter");
 
 	public static RiftVariantReloadListener riftVariantListener;
 	public static AspectIconTextureManager aspectIcons;
@@ -463,7 +511,8 @@ public class ClientRegistrationEvents {
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
 		event.registerAbove(VanillaGuiLayers.HOTBAR, TheBetweenlands.prefix("item_equipment"), EquipmentOverlay::renderEquipment);
 		event.registerAbove(VanillaGuiLayers.HOTBAR, TheBetweenlands.prefix("radial_equipment_menu"), RadialMenuHandler.INSTANCE::renderRadialMenu);
-		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
+		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, DECAY_METER_OVERLAY_LAYER, DecayBarOverlay::renderDecayBar);
+		event.registerAbove(DECAY_METER_OVERLAY_LAYER, GUNK_METER_OVERLAY_LAYER, GunkOverlay::renderGunkBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 		event.registerAboveAll(TheBetweenlands.prefix("swarm"), SwarmOverlay.INSTANCE::renderSwarm);
 		event.registerAboveAll(TheBetweenlands.prefix("april_fools"), AprilFoolsOverlay.INSTANCE::renderAprilFools);
@@ -603,8 +652,24 @@ public class ClientRegistrationEvents {
 
 		event.registerEntityRenderer(EntityRegistry.WALL_LAMPREY.get(), WallLampreyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SLUDGE_WALL_JET.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BONE_PUPPET_MELEE.get(), BonePuppetMeleeRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.BONE_PUPPET_RANGED.get(), BonePuppetRangedRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.THROWN_BONE.get(), ThrownBoneRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BONE_SHAMAN.get(), BoneShamanRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SMALL_SPIRIT_TREE_FACE.get(), SmallSpiritTreeFaceRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SMALL_TAMED_SPIRIT_TREE_FACE.get(), SmallSpiritTreeFaceRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.LARGE_SPIRIT_TREE_FACE.get(), LargeSpiritTreeFaceRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ROOT_GRABBER.get(), RootGrabberRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SPIKE_WAVE.get(), SpikeWaveRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.WATCHER_EYES.get(), WatcherEyesRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.BONE_SHAMAN_PROJECTILE.get(), BoneShamanProjectileRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.WALL_ROOT.get(), WallRootRenderer::new);
+		//Temp for teting
+		event.registerEntityRenderer(EntityRegistry.VOLARKITE.get(), VolarkiteRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.WEEDWOOD_ROWBOAT.get(), WeedwoodRowboatRenderer::new);
 
+		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECTRUS_CROP.get(), AspectrusCropRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.ASPECT_VIAL.get(), AspectVialRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), AlcoveRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
@@ -652,10 +717,12 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CHEST.get(), WeedwoodChestRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), WeedwoodCraftingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.MIST_BRIDGE.get(), NoopRenderer::new);
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(BLModelLayers.AMPHIBIOUS_ARMOR, AmphibiousArmorModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.ANCIENT_ARMOR, AncientArmorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.BONE_ARMOR, BoneArmorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.EXPLORERS_HAT, ExplorersHatModel::create);
 		event.registerLayerDefinition(BLModelLayers.LARGE_SPIRIT_TREE_MASK, () -> LargeSpiritTreeFaceModel.create(true));
@@ -681,6 +748,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_1, GreeblingModel::createVariant1);
 		event.registerLayerDefinition(BLModelLayers.GREEBLING_2, GreeblingModel::createVariant2);
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM_ARROW, SludgeWormArrowModel::create);
+		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_1, SmallSpiritTreeFaceModel::createFace1);
 		event.registerLayerDefinition(BLModelLayers.SMALL_SPIRIT_TREE_FACE_2, () -> SmallSpiritTreeFaceModel.createFace2(false));
 		event.registerLayerDefinition(BLModelLayers.SLUDGE_WORM, SludgeWormModel::create);
 		event.registerLayerDefinition(BLModelLayers.TINY_SLUDGE_WORM, TinySludgeWormModel::create);
@@ -742,7 +810,12 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ROCK_SNOT_GRABBER, RockSnotGrabberModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.WALL_LAMPREY, WallLampreyModel::create);
 		event.registerLayerDefinition(BLModelLayers.WALL_HOLE, WallHoleModel::create);
+		event.registerLayerDefinition(BLModelLayers.BONE_PUPPET_MELEE, BonePuppetMeleeModel::createBodyLayer);
 		event.registerLayerDefinition(BLModelLayers.BONE_PUPPET_RANGED, BonePuppetRangedModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.THROWN_BONE, ThrownBoneModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.BONE_SHAMAN, BoneShamanModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.WATCHER_EYES, WatcherEyesModel::createBodyLayer);
+		event.registerLayerDefinition(BLModelLayers.VOLARKITE, VolarkiteModel::createBodyLayer);
 
 		event.registerLayerDefinition(BLModelLayers.DRAETON_CARRIAGE, DraetonModel::createCarriage);
 		event.registerLayerDefinition(BLModelLayers.DRAETON_ANCHOR, DraetonModel::createAnchor);
@@ -750,11 +823,25 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.DRAETON_FURNACE, DraetonModel::createFurnaceUpgrade);
 
 		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_ROWBOAT, WeedwoodRowboatModel::createBoat);
-		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_ROWBOAT_LANTERN, WeedwoodRowboatModel::createLantern);
+		event.registerLayerDefinition(BLModelLayers.WEEDWOOD_ROWBOAT_LANTERN, RowboatLanternModel::createLantern);
+
+		event.registerLayerDefinition(BLModelLayers.PLAYER_ROWER, () -> PlayerRowerModel.create(CubeDeformation.NONE, false, BipedTextureUVs.forPlayer()));
+		event.registerLayerDefinition(BLModelLayers.PLAYER_ROWER_OUTER_ARMOR, () -> HumanoidRowerModel.create(LayerDefinitions.OUTER_ARMOR_DEFORMATION, false, BipedTextureUVs.forBasicHumanoid(64, 32)));
+		event.registerLayerDefinition(BLModelLayers.PLAYER_ROWER_INNER_ARMOR, () -> HumanoidRowerModel.create(LayerDefinitions.INNER_ARMOR_DEFORMATION, false, BipedTextureUVs.forBasicHumanoid(64, 32)));
+		event.registerLayerDefinition(BLModelLayers.SLIM_PLAYER_ROWER, () -> PlayerRowerModel.create(CubeDeformation.NONE, true, BipedTextureUVs.forPlayer()));
+		event.registerLayerDefinition(BLModelLayers.SLIM_PLAYER_ROWER_OUTER_ARMOR, () -> HumanoidRowerModel.create(LayerDefinitions.OUTER_ARMOR_DEFORMATION, true, BipedTextureUVs.forBasicHumanoid(64, 32)));
+		event.registerLayerDefinition(BLModelLayers.SLIM_PLAYER_ROWER_INNER_ARMOR, () -> HumanoidRowerModel.create(LayerDefinitions.INNER_ARMOR_DEFORMATION, true, BipedTextureUVs.forBasicHumanoid(64, 32)));
 
 		event.registerLayerDefinition(BLModelLayers.CORRUPT_GECKO, CagedGeckoModel::createCorruptGecko);
 		event.registerLayerDefinition(BLModelLayers.GECKO, GeckoModel::create);
 		event.registerLayerDefinition(BLModelLayers.MUTATED_GECKO, CagedGeckoModel::createMutatedGecko);
+
+		event.registerLayerDefinition(BLModelLayers.ASPECTRUS_CROP_1, AspectrusCrop1Model::makeModel);
+		event.registerLayerDefinition(BLModelLayers.ASPECTRUS_CROP_2, AspectrusCrop2Model::makeModel);
+		event.registerLayerDefinition(BLModelLayers.ASPECTRUS_CROP_3, AspectrusCrop3Model::makeModel);
+		event.registerLayerDefinition(BLModelLayers.ASPECTRUS_CROP_3_ASPECT, AspectrusCrop3Model::makeAspectModel);
+		event.registerLayerDefinition(BLModelLayers.ASPECTRUS_CROP_4, AspectrusCrop4Model::makeModel);
+		event.registerLayerDefinition(BLModelLayers.ASPECTRUS_CROP_4_ASPECT, AspectrusCrop4Model::makeAspectModel);
 
 		event.registerLayerDefinition(BLModelLayers.ALCOVE, AlcoveModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ALEMBIC, AlembicModel::makeModel);
@@ -939,7 +1026,37 @@ public class ClientRegistrationEvents {
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(TheBetweenlands.prefix("bush"), BushModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("swamp_plant"), SwampPlantModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("black_hat_mushroom_1"), BlackHatMushroom1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("black_hat_mushroom_2"), BlackHatMushroom2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("black_hat_mushroom_3"), BlackHatMushroom3ModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("fungus_crop"), FungusCropModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("white_pear_crop"), WhitePearCropModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("barnacle"), BarnacleModelLoader.INSTANCE);
+		
+		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
+
+		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("wooden_support_beam_2"), WoodenSupportBeam2ModelLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("wooden_support_beam_3"), WoodenSupportBeam3ModelLoader.INSTANCE);
+
+//		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("venus_fly_trap"), VenusFlyTrapModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
+		
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
+		event.register(TheBetweenlands.prefix("elements"), CustomElementsModel.Loader.INSTANCE);
 		event.register(TheBetweenlands.prefix("slant"), SlantModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("connected_texture"), ConnectedTextureGeometry.ConnectedTextureGeometryLoader.INSTANCE);
 	}
@@ -958,9 +1075,10 @@ public class ClientRegistrationEvents {
 
 		// Armour extensions
 		event.registerReloadListener(AmphibiousArmorRenderer.INSTANCE);
+		event.registerReloadListener(AncientArmorRenderer.INSTANCE);
 		event.registerReloadListener(BoneArmorRenderer.INSTANCE);
 		event.registerReloadListener(SyrmoriteArmorRenderer.INSTANCE);
-		
+
 		event.registerReloadListener(ExplorersHatRenderer.INSTANCE);
 		event.registerReloadListener(SilkMaskRenderer.INSTANCE);
 		event.registerReloadListener(SmallSpiritTreeMaskRenderer.INSTANCE);
@@ -995,10 +1113,15 @@ public class ClientRegistrationEvents {
 			ItemRegistry.DRAETON.get(), ItemRegistry.DRAETON_ANCHOR_UPGRADE.get(), ItemRegistry.DRAETON_CRAFTING_UPGRADE.get(), ItemRegistry.DRAETON_FURNACE_UPGRADE.get(),
 			ItemRegistry.WEEDWOOD_ROWBOAT.get(), ItemRegistry.WEEDWOOD_ROWBOAT_LANTERN_UPGRADE.get());
 
+		event.registerItem(BigSwingExtension.INSTANCE, ItemRegistry.VALONITE_GREATAXE.get(), ItemRegistry.ANCIENT_BATTLEAXE.get(), ItemRegistry.ANCIENT_GREATSWORD.get());
+
 		event.registerItem(AmphibiousArmorRenderer.INSTANCE,
 			ItemRegistry.AMPHIBIOUS_HELMET.get(), ItemRegistry.AMPHIBIOUS_CHESTPLATE.get(),
 			ItemRegistry.AMPHIBIOUS_LEGGINGS.get(), ItemRegistry.AMPHIBIOUS_BOOTS.get());
-		event.registerItem(BoneArmorRenderer.INSTANCE, 
+		event.registerItem(AncientArmorRenderer.INSTANCE,
+				ItemRegistry.ANCIENT_HELMET.get(), ItemRegistry.ANCIENT_CHESTPLATE.get(),
+				ItemRegistry.ANCIENT_LEGGINGS.get(), ItemRegistry.ANCIENT_BOOTS.get());
+		event.registerItem(BoneArmorRenderer.INSTANCE,
 			ItemRegistry.BONE_HELMET, ItemRegistry.BONE_CHESTPLATE,
 			ItemRegistry.BONE_LEGGINGS, ItemRegistry.BONE_BOOTS);
 		event.registerItem(SyrmoriteArmorRenderer.INSTANCE,
@@ -1011,93 +1134,50 @@ public class ClientRegistrationEvents {
 		event.registerItem(SmallSpiritTreeMaskRenderer.INSTANCE, ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK.get());
 		event.registerItem(LargeSpiritTreeMaskRenderer.INSTANCE, ItemRegistry.LARGE_SPIRIT_TREE_FACE_MASK.get());
 
-
-		event.registerMobEffect(new IClientMobEffectExtensions() {
-			@Override
-			public boolean isVisibleInInventory(MobEffectInstance instance) {
-				return false;
-			}
-
-			@Override
-			public boolean isVisibleInGui(MobEffectInstance instance) {
-				return false;
-			}
-		}, MobEffectRegistry.ENLIGHTENED.get(), MobEffectRegistry.ROOT_BOUND.get());
+		event.registerMobEffect(InvisibleEffectRegistration.INSTANCE, MobEffectRegistry.ENLIGHTENED.get(), MobEffectRegistry.ROOT_BOUND.get());
 
 		for (DeferredHolder<MobEffect, ?> effect : MobEffectRegistry.EFFECTS.getEntries().stream().filter(holder -> holder.get() instanceof ElixirEffect.ElixirPotionEffect).toList()) {
 			ElixirEffect.ElixirPotionEffect potEffect = (ElixirEffect.ElixirPotionEffect) effect.get();
-			event.registerMobEffect(new IClientMobEffectExtensions() {
-				@Override
-				public boolean isVisibleInInventory(MobEffectInstance instance) {
-					return potEffect.getIcon() != null;
-				}
-
-				@Override
-				public boolean isVisibleInGui(MobEffectInstance instance) {
-					return potEffect.getIcon() != null;
-				}
-
-				@Override
-				public boolean renderInventoryIcon(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
-					if (potEffect.getIcon() != null) {
-						RenderSystem.enableBlend();
-						graphics.blit(potEffect.getIcon(), x + 1, y + 7, 0, 0, 0, 16, 16, 16, 16);
-					}
-					return true;
-				}
-
-				@Override
-				public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
-					return true;
-				}
-
-				@Override
-				public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
-					if (potEffect.getIcon() != null) {
-						graphics.blit(potEffect.getIcon(), x + 4, y + 4, 0, 0, 0, 16, 16, 16, 16);
-					}
-					return true;
-				}
-			}, potEffect);
+			event.registerMobEffect(new ElixirEffectExtension(potEffect), potEffect);
 		}
 
-		event.registerFluidType(new SwampWaterFluidType(), FluidTypeRegistry.SWAMP_WATER.get());
-		event.registerFluidType(new BasicFluidType("stagnant_water"), FluidTypeRegistry.STAGNANT_WATER.get());
-		event.registerFluidType(new BasicFluidType("tar"), FluidTypeRegistry.TAR.get());
-		event.registerFluidType(new BasicFluidType("rubber"), FluidTypeRegistry.RUBBER.get());
-		event.registerFluidType(new BasicFluidType("fog"), FluidTypeRegistry.FOG.get());
-		event.registerFluidType(new BasicFluidType("shallowbreath"), FluidTypeRegistry.SHALLOWBREATH.get());
-		event.registerFluidType(new BasicFluidType("clean_water"), FluidTypeRegistry.CLEAN_WATER.get());
-		event.registerFluidType(new BasicFluidType("fish_oil"), FluidTypeRegistry.FISH_OIL.get());
+		event.registerFluidType(new SwampWaterFluidTypeExtension(), FluidTypeRegistry.SWAMP_WATER.get());
+		event.registerFluidType(new BasicFluidTypeExtension("stagnant_water"), FluidTypeRegistry.STAGNANT_WATER.get());
+		event.registerFluidType(new BasicFluidTypeExtension("tar"), FluidTypeRegistry.TAR.get());
+		event.registerFluidType(new BasicFluidTypeExtension("rubber"), FluidTypeRegistry.RUBBER.get());
+		event.registerFluidType(new BasicFluidTypeExtension("fog"), FluidTypeRegistry.FOG.get());
+		event.registerFluidType(new BasicFluidTypeExtension("shallowbreath"), FluidTypeRegistry.SHALLOWBREATH.get());
+		event.registerFluidType(new BasicFluidTypeExtension("clean_water"), FluidTypeRegistry.CLEAN_WATER.get());
+		event.registerFluidType(new BasicFluidTypeExtension("fish_oil"), FluidTypeRegistry.FISH_OIL.get());
 
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.DULL_LAVENDER.getColorValue(), "dye"), FluidTypeRegistry.DULL_LAVENDER_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.MAROON.getColorValue(), "dye"), FluidTypeRegistry.MAROON_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.SHADOW_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SHADOW_GREEN_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.CAMELOT_MAGENTA.getColorValue(), "dye"), FluidTypeRegistry.CAMELOT_MAGENTA_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.SAFFRON.getColorValue(), "dye"), FluidTypeRegistry.SAFFRON_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.CARIBBEAN_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CARIBBEAN_GREEN_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.VIVID_TANGERINE.getColorValue(), "dye"), FluidTypeRegistry.VIVID_TANGERINE_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.CHAMPAGNE.getColorValue(), "dye"), FluidTypeRegistry.CHAMPAGNE_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.RAISIN_BLACK.getColorValue(), "dye"), FluidTypeRegistry.RAISIN_BLACK_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.SUSHI_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SUSHI_GREEN_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.ELM_CYAN.getColorValue(), "dye"), FluidTypeRegistry.ELM_CYAN_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.CADMIUM_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CADMIUM_GREEN_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.LAVENDER_BLUE.getColorValue(), "dye"), FluidTypeRegistry.LAVENDER_BLUE_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.BROWN_RUST.getColorValue(), "dye"), FluidTypeRegistry.BROWN_RUST_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.MIDNIGHT_PURPLE.getColorValue(), "dye"), FluidTypeRegistry.MIDNIGHT_PURPLE_DYE.get());
-		event.registerFluidType(new ColoredFluidType(BLDyeColor.PEWTER_GREY.getColorValue(), "dye"), FluidTypeRegistry.PEWTER_GREY_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.DULL_LAVENDER.getColorValue(), "dye"), FluidTypeRegistry.DULL_LAVENDER_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.MAROON.getColorValue(), "dye"), FluidTypeRegistry.MAROON_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.SHADOW_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SHADOW_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.CAMELOT_MAGENTA.getColorValue(), "dye"), FluidTypeRegistry.CAMELOT_MAGENTA_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.SAFFRON.getColorValue(), "dye"), FluidTypeRegistry.SAFFRON_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.CARIBBEAN_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CARIBBEAN_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.VIVID_TANGERINE.getColorValue(), "dye"), FluidTypeRegistry.VIVID_TANGERINE_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.CHAMPAGNE.getColorValue(), "dye"), FluidTypeRegistry.CHAMPAGNE_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.RAISIN_BLACK.getColorValue(), "dye"), FluidTypeRegistry.RAISIN_BLACK_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.SUSHI_GREEN.getColorValue(), "dye"), FluidTypeRegistry.SUSHI_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.ELM_CYAN.getColorValue(), "dye"), FluidTypeRegistry.ELM_CYAN_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.CADMIUM_GREEN.getColorValue(), "dye"), FluidTypeRegistry.CADMIUM_GREEN_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.LAVENDER_BLUE.getColorValue(), "dye"), FluidTypeRegistry.LAVENDER_BLUE_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.BROWN_RUST.getColorValue(), "dye"), FluidTypeRegistry.BROWN_RUST_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.MIDNIGHT_PURPLE.getColorValue(), "dye"), FluidTypeRegistry.MIDNIGHT_PURPLE_DYE.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(BLDyeColor.PEWTER_GREY.getColorValue(), "dye"), FluidTypeRegistry.PEWTER_GREY_DYE.get());
 
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.NETTLE_SOUP.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_SOUP.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.NETTLE_TEA.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_TEA.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.PHEROMONE_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.PHEROMONE_EXTRACT.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SWAMP_BROTH.getColorValue(), "brew"), FluidTypeRegistry.SWAMP_BROTH.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.STURDY_STOCK.getColorValue(), "brew"), FluidTypeRegistry.STURDY_STOCK.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.PEAR_CORDIAL.getColorValue(), "brew"), FluidTypeRegistry.PEAR_CORDIAL.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SHAMANS_BREW.getColorValue(), "brew"), FluidTypeRegistry.SHAMANS_BREW.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.LAKE_BROTH.getColorValue(), "brew"), FluidTypeRegistry.LAKE_BROTH.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.SHELL_STOCK.getColorValue(), "brew"), FluidTypeRegistry.SHELL_STOCK.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.FROG_LEG_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.FROG_LEG_EXTRACT.get());
-		event.registerFluidType(new ColoredFluidType(DrinkableBrew.WITCH_TEA.getColorValue(), "brew"), FluidTypeRegistry.WITCH_TEA.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.NETTLE_SOUP.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_SOUP.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.NETTLE_TEA.getColorValue(), "brew"), FluidTypeRegistry.NETTLE_TEA.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.PHEROMONE_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.PHEROMONE_EXTRACT.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.SWAMP_BROTH.getColorValue(), "brew"), FluidTypeRegistry.SWAMP_BROTH.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.STURDY_STOCK.getColorValue(), "brew"), FluidTypeRegistry.STURDY_STOCK.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.PEAR_CORDIAL.getColorValue(), "brew"), FluidTypeRegistry.PEAR_CORDIAL.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.SHAMANS_BREW.getColorValue(), "brew"), FluidTypeRegistry.SHAMANS_BREW.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.LAKE_BROTH.getColorValue(), "brew"), FluidTypeRegistry.LAKE_BROTH.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.SHELL_STOCK.getColorValue(), "brew"), FluidTypeRegistry.SHELL_STOCK.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.FROG_LEG_EXTRACT.getColorValue(), "brew"), FluidTypeRegistry.FROG_LEG_EXTRACT.get());
+		event.registerFluidType(new ColoredFluidTypeExtension(DrinkableBrew.WITCH_TEA.getColorValue(), "brew"), FluidTypeRegistry.WITCH_TEA.get());
 	}
 
 	private static void registerParticleSprites(final RegisterParticleProvidersEvent event) {
@@ -1115,7 +1195,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.FANCY_BUBBLE.get(), FancyBubbleParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.FANCY_DRIP.get(), FancyDripParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.RAIN.get(), BLRainParticle.Factory::new);
-		event.registerSpecial(ParticleRegistry.URCHIN_SPIKE.get(), new UrchinSpikeParticle.Factory());
+		event.registerSpecial(ParticleRegistry.SPIKE.get(), new SpikeParticle.Factory());
 		event.registerSpriteSet(ParticleRegistry.FISH_VORTEX.get(), FishVortexParticle.Factory::new);
 		event.registerSpriteSet(ParticleRegistry.INFUSER_BUBBLE.get(), BLBubbleParticle.InfuserFactory::new);
 		event.registerSpriteSet(ParticleRegistry.PURIFIER_BUBBLE.get(), BLBubbleParticle.PurifierFactory::new);
@@ -1139,6 +1219,9 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.LEAF_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 		event.registerSpriteSet(ParticleRegistry.WATER_RIPPLE.get(), WaterRippleParticle.Factory::new);
 		event.registerSpecial(ParticleRegistry.LIGHTNING_ARC.get(), new LightningArcParticle.Factory());
+		event.registerSpriteSet(ParticleRegistry.FLY_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
+		event.registerSpriteSet(ParticleRegistry.WIGHT_FACE_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
+		event.registerSpriteSet(ParticleRegistry.WIGHT_FACE.get(), BugParticle.FlyFactory::new);
 
 	}
 
@@ -1174,6 +1257,18 @@ public class ClientRegistrationEvents {
 				return 0xFFFFFFFF;
 			},
 			BlockRegistry.WEEDWOOD_BUSH.get());
+
+		event.register((state, level, pos, tintIndex) -> {
+			if (tintIndex == 1 && level != null && pos != null) {
+				if (level.getBlockEntity(pos) instanceof AspectrusCropBlockEntity crop) {
+					Aspect aspect = crop.getAspect();
+					if (aspect != null) {
+						return aspect.type().value().color();
+					}
+				}
+			}
+			return 0xFFFFFFFF;
+		}, BlockRegistry.ASPECTRUS_CROP.get());
 
 		event.register((state, level, pos, tintIndex) -> {
 				if (tintIndex <= 0) {

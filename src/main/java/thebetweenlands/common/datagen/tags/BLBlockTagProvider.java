@@ -31,6 +31,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> EMBERLING_HEALS_ON = tag("emberling_heals_on");
 	public static final TagKey<Block> HEATS_INFUSER = tag("heats_infuser");
 	public static final TagKey<Block> HEATS_SMOKING_RACK = tag("heats_smoking_rack");
+	public static final TagKey<Block> CREATES_VOLARKITE_UPDRAFTS = tag("volarkite/creates_updrafts");
+	public static final TagKey<Block> CREATES_VOLARKITE_DOWNDRAFTS = tag("volarkite/creates_downdrafts");
 
 	// Blocks tagged with this can be broken even inside structure guards
 	public static final TagKey<Block> CAN_BREAK_WHEN_GUARDED = tag("can_break_when_guarded");
@@ -46,6 +48,13 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> SPIKE_TRAPS_BLOCKED_BY = tag("spike_traps_blocked_by");
 	public static final TagKey<Block> SPIKE_TRAPS_IGNORE = tag("spike_traps_ignore");
 
+	public static final TagKey<Block> BONE_PUPPET_CONVERTABLE = tag("bone_puppet_convertable");
+
+	public static final TagKey<Block> BASE_STONE_THEBETWEENLANDS = tag("base_stone_thebetweenlands");
+	public static final TagKey<Block> THEBETWEENLANDS_CARVER_REPLACABLES = tag("thebetweenlands_carver_replaceables");
+
+	public static final TagKey<Block> BL_CAVE_BUFFER_REPLACABLE = tag("bl_caves_buffer_replacable");
+	
 	public static final TagKey<Block> DYED_DULL_LAVENDER = commonTag("dyed/dull_lavender");
 	public static final TagKey<Block> DYED_MAROON = commonTag("dyed/maroon");
 	public static final TagKey<Block> DYED_SHADOW_GREEN = commonTag("dyed/shadow_green");
@@ -117,6 +126,18 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(INCORRECT_FOR_WEEDWOOD_TOOL).addTag(BlockTags.INCORRECT_FOR_WOODEN_TOOL);
 		this.tag(INCORRECT_FOR_LEGENDARY_TOOL);
 
+		this.tag(CREATES_VOLARKITE_UPDRAFTS)
+			.addTag(BlockTags.FIRE)
+			.addTag(BlockTags.CAMPFIRES)
+			.addTag(ORES_OCTINE)
+			.addTag(STORAGE_BLOCKS_OCTINE)
+			.add(Blocks.LAVA, Blocks.MAGMA_BLOCK)
+			.add(BlockRegistry.SMOULDERING_PEAT.get());
+
+		this.tag(CREATES_VOLARKITE_DOWNDRAFTS)
+			.addTag(BlockTags.ICE)
+			.addTag(BlockTags.SNOW);
+
 		this.tag(CAN_BREAK_WHEN_GUARDED).addOptionalTag(commonTag("graves"));
 
 		this.tag(MOVING_WALL_UNBREAKABLE).add(
@@ -167,6 +188,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(SPIKE_TRAPS).add(BlockRegistry.SPIKE_TRAP.get(), BlockRegistry.MUD_BRICK_SPIKE_TRAP.get(), BlockRegistry.MUD_TILES_SPIKE_TRAP.get());
 		this.tag(SPIKE_TRAPS_BLOCKED_BY).addTag(SPIKE_TRAPS).addTag(BlockTags.WITHER_IMMUNE);
 		this.tag(SPIKE_TRAPS_IGNORE).add(BlockRegistry.SLUDGE.get(), Blocks.SNOW, Blocks.STRUCTURE_VOID);
+
+		this.tag(BONE_PUPPET_CONVERTABLE).add(BlockRegistry.SLIMY_BONE_ORE.get());
 
 		this.tag(FILTERED_SILT_GLASS).add(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS.get(), BlockRegistry.MAROON_FILTERED_SILT_GLASS.get(),
 			BlockRegistry.SHADOW_GREEN_FILTERED_SILT_GLASS.get(), BlockRegistry.CAMELOT_MAGENTA_FILTERED_SILT_GLASS.get(),
@@ -304,7 +327,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		//TODO flower tags? look into repercussions of using these
 		this.tag(BlockTags.BEDS).add(BlockRegistry.MOSS_BED.get());
 		this.tag(BlockTags.DIRT).add(BlockRegistry.SLUDGY_DIRT.get(), BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.COARSE_SWAMP_DIRT.get(), BlockRegistry.SLIMY_DIRT.get(),
-			BlockRegistry.PURIFIED_SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_GRASS.get(), BlockRegistry.SLIMY_GRASS.get(), BlockRegistry.MUD.get());
+			BlockRegistry.PURIFIED_SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_GRASS.get(), BlockRegistry.PURIFIED_DUG_SWAMP_DIRT.get(),
+			BlockRegistry.PURIFIED_DUG_SWAMP_GRASS.get(), BlockRegistry.DUG_SWAMP_DIRT.get(), BlockRegistry.DUG_SWAMP_GRASS.get(), BlockRegistry.SLIMY_GRASS.get(), BlockRegistry.MUD.get());
 		this.tag(BlockTags.FLOWER_POTS).add(BlockRegistry.POTTED_WEEDWOOD_SAPLING.get(), BlockRegistry.POTTED_SAP_SAPLING.get(), BlockRegistry.POTTED_RUBBER_SAPLING.get(),
 			BlockRegistry.POTTED_HEARTHGROVE_SAPLING.get(), BlockRegistry.POTTED_NIBBLETWIG_SAPLING.get(), BlockRegistry.POTTED_SPIRIT_TREE_SAPLING.get(), BlockRegistry.POTTED_ARROW_ARUM.get(),
 			BlockRegistry.POTTED_BLUE_IRIS.get(), BlockRegistry.POTTED_BONESET.get(), BlockRegistry.POTTED_COPPER_IRIS.get(), BlockRegistry.POTTED_DEAD_WEEDWOOD_BUSH.get(),
@@ -576,6 +600,16 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		this.tag(STORAGE_BLOCKS_ANCIENT_REMNANT).add(BlockRegistry.ANCIENT_REMNANT_BLOCK.get());
 		this.tag(STORAGE_BLOCKS_RUBBER).add(BlockRegistry.RUBBER_BLOCK.get());
 		this.tag(STORAGE_BLOCKS_COMPOST).add(BlockRegistry.COMPOST_BLOCK.get());
+		
+		this.tag(BASE_STONE_THEBETWEENLANDS).add(BlockRegistry.BETWEENSTONE.get(), BlockRegistry.PITSTONE.get());
+		this.tag(THEBETWEENLANDS_CARVER_REPLACABLES)
+			.addTag(BASE_STONE_THEBETWEENLANDS)
+			.addTag(BlockTags.DIRT)
+			.addTag(BlockTags.SAND)
+			.add(BlockRegistry.SWAMP_WATER.get());
+		
+		this.tag(BL_CAVE_BUFFER_REPLACABLE)
+			.add(BlockRegistry.SWAMP_WATER.get());
 	}
 
 	public static TagKey<Block> tag(String tagName) {

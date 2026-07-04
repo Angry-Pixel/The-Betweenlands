@@ -1,0 +1,38 @@
+{
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "spirit_tree": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:large_spirit_tree_face"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.fighter.illegal_logging.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:spirit_tree_sapling"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.fighter.illegal_logging"
+    }
+  },
+  "requirements": [
+    [
+      "spirit_tree"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

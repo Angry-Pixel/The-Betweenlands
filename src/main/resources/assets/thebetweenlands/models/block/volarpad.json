@@ -1,0 +1,15 @@
+{
+	"parent": "minecraft:block/block",
+	"loader": "neoforge:composite",
+    "children": {
+        "base": {
+            "parent": "thebetweenlands:block/volarpad_base"
+        },
+        "top": {
+            "parent": "thebetweenlands:block/volarpad_top",
+			"transform": {
+				"translation": [0, 1, 0.3125]
+			}
+        }
+    }
+}

@@ -53,7 +53,7 @@ public class DenseFogEvent extends TimedEnvironmentEvent {
 	}
 
 	public float getFade(float partialTicks) {
-		return Mth.lerp(partialTicks, this.fade, this.fade);
+		return Mth.lerp(partialTicks, this.lastFade, this.fade);
 	}
 
 	public static boolean isDenseFog(Level level) {

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -18,8 +19,10 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.client.BLModelLayers;
+import thebetweenlands.client.renderer.entity.SmallSpiritTreeFaceRenderer;
 import thebetweenlands.client.renderer.entity.SpiritTreeFaceMaskRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.GrubHubBlock;
 import thebetweenlands.common.block.entity.GrubHubBlockEntity;
 import thebetweenlands.util.RenderUtils;
 
@@ -27,9 +30,9 @@ import java.util.SplittableRandom;
 
 public class GrubHubRenderer implements BlockEntityRenderer<GrubHubBlockEntity> {
 
-	private final RenderType MASK_TYPE = RenderType.entityCutout(SpiritTreeFaceMaskRenderer.TEXTURE_SMALL);
-	private final RenderType EYE_TYPE = RenderType.EYES.apply(TheBetweenlands.prefix("textures/entity/small_spirit_tree_face_glow.png"), RenderType.TRANSLUCENT_TRANSPARENCY);
-	private static final RenderType TEXTURE_BLOCKS = RenderType.entityTranslucent(InventoryMenu.BLOCK_ATLAS);
+	private final RenderType MASK_TYPE = RenderType.entityCutout(SmallSpiritTreeFaceRenderer.TEXTURE);
+	private final RenderType EYE_TYPE = RenderType.EYES.apply(SmallSpiritTreeFaceRenderer.GLOW_TEXTURE, RenderType.TRANSLUCENT_TRANSPARENCY);
+
 	private final ModelPart mask;
 	private final ItemRenderer itemRenderer;
 
@@ -45,13 +48,20 @@ public class GrubHubRenderer implements BlockEntityRenderer<GrubHubBlockEntity> 
 
 		for (Direction dir : Direction.Plane.HORIZONTAL) {
 			stack.pushPose();
-			stack.translate(0.5F + (0.9F * dir.getStepX()), 0.0F, 0.5F + (0.9F * dir.getStepZ()));
+			stack.translate(0.5F + (0.4F * dir.getStepX()), 0.5F, 0.5F + (0.4F * dir.getStepZ()));
 			stack.scale(1.0F, -1.0F, -1.0F);
 			stack.mulPose(Axis.YP.rotationDegrees(dir.toYRot()));
 			this.mask.render(stack, buffer.getBuffer(MASK_TYPE), light, overlay);
-			if (entity.switchTextureCount > 0) {
-				float opacity = Math.min(1.0F, entity.switchTextureCount / 10.0F);
-				this.mask.render(stack, buffer.getBuffer(EYE_TYPE), light, overlay, FastColor.ARGB32.colorFromFloat(opacity, 1.0F, 1.0F, 1.0F));
+			boolean powered = entity.getBlockState().getValue(GrubHubBlock.POWERED);
+			if (powered || entity.switchTextureCount > 0) {
+				final int eyeColour;
+				if (powered) {
+					eyeColour = FastColor.ARGB32.colorFromFloat(0.75F, 0.75F, 0.0F, 0.0F);
+				} else {
+					float opacity = Math.min(1.0F, entity.switchTextureCount / 10.0F);
+					eyeColour = FastColor.ARGB32.colorFromFloat(opacity, 1.0F, 1.0F, 1.0F);
+				}
+				this.mask.render(stack, buffer.getBuffer(EYE_TYPE), light, overlay, eyeColour);
 			}
 			stack.popPose();
 		}

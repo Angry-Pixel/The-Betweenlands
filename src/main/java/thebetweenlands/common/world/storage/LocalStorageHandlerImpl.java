@@ -5,9 +5,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -32,7 +35,16 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.network.GenericDataAccessorAccess;
-import thebetweenlands.api.storage.*;
+import thebetweenlands.api.storage.IChunkStorage;
+import thebetweenlands.api.storage.IDeferredStorageOperation;
+import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.ILocalStorageHandle;
+import thebetweenlands.api.storage.ILocalStorageHandler;
+import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.LocalStorageReference;
+import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.SyncLocalStorageDataPacket;
 import thebetweenlands.common.registries.StorageRegistry;
@@ -42,11 +54,19 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	private final IWorldStorage worldStorage;
 	private final File localStorageDir;
 
-	private final Map<StorageID, ILocalStorage> localStorage = new HashMap<>();
+	private final Map<StorageID, ILocalStorage> localStorage = new ConcurrentHashMap<>();
 	private final List<ILocalStorage> tickableLocalStorage = new ArrayList<>();
 	private final List<ILocalStorage> pendingUnreferencedStorages = new ArrayList<>();
 
 	private final Object2LongMap<LocalRegionData> pendingUnreferencedRegions = new Object2LongOpenHashMap<>();
+
+	// Multithreading add to tickable queue
+	private final Queue<ILocalStorage> pendingConcurrentTickableLocalStorage = new ConcurrentLinkedQueue<>();
+	// Multithreading add to unreferenced storages
+	private final Queue<ILocalStorage> pendingConcurrentUnreferencedStorages = new ConcurrentLinkedQueue<>();
+
+	// Multithreading remove from tickable & unreferenced queue
+	private final Queue<StorageID> removingConcurrentStorages = new ConcurrentLinkedQueue<>();
 
 	private final LocalRegionCache regionCache;
 
@@ -74,7 +94,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			this.localStorage.put(storage.getID(), storage);
 
 			if (storage instanceof TickableStorage) {
-				this.tickableLocalStorage.add(storage);
+				this.pendingConcurrentTickableLocalStorage.add(storage);
 			}
 
 			if (isInitialAdd) {
@@ -107,7 +127,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			if (!isReferenced && isInitialAdd && !level.isClientSide()) {
 				//Queue storage to be checked in the next tick.
 				//If it is still unreferenced it will be unloaded.
-				this.pendingUnreferencedStorages.add(storage);
+				this.pendingConcurrentUnreferencedStorages.add(storage);
 			}
 
 			return true;
@@ -125,8 +145,11 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			}
 
 			this.localStorage.remove(storage.getID());
-			this.tickableLocalStorage.removeIf(tickableStorage -> storage.getID().equals(tickableStorage.getID()));
-			this.pendingUnreferencedStorages.removeIf(pendingStorage -> storage.getID().equals(pendingStorage.getID()));
+			
+			this.removingConcurrentStorages.add(storage.getID());
+			
+			this.pendingConcurrentTickableLocalStorage.removeIf(tickableStorage -> storage.getID().equals(tickableStorage.getID()));
+			this.pendingConcurrentUnreferencedStorages.removeIf(pendingStorage -> storage.getID().equals(pendingStorage.getID()));
 
 			boolean wasSavedToRegion = false;
 
@@ -390,9 +413,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			this.localStorage.remove(storage.getID());
 
-			this.tickableLocalStorage.removeIf(tickableStorage -> storage.getID().equals(tickableStorage.getID()));
-
-			this.pendingUnreferencedStorages.removeIf(pendingStorage -> storage.getID().equals(pendingStorage.getID()));
+			this.removingConcurrentStorages.add(storage.getID());
 
 			storage.onUnloaded();
 
@@ -423,8 +444,30 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		return this.localStorageDir;
 	}
 
+	private void addAllPendingStorages() {
+		// Add pending tickable storage
+		ILocalStorage storage = null;
+		while((storage = this.pendingConcurrentTickableLocalStorage.poll()) != null) {
+			this.tickableLocalStorage.add(storage);
+		}
+		// Add pending unreferenced storage
+		storage = null;
+		while((storage = this.pendingConcurrentUnreferencedStorages.poll()) != null) {
+			this.pendingUnreferencedStorages.add(storage);
+		}
+		
+		// Remove storages that are pending removal
+		StorageID storageID = null;
+		while((storageID = this.removingConcurrentStorages.poll()) != null) {
+			final StorageID removingID = storageID;
+			this.tickableLocalStorage.removeIf(tickableStorage -> Objects.equals(removingID, tickableStorage.getID()));
+			this.pendingUnreferencedStorages.removeIf(pendingStorage -> Objects.equals(removingID, pendingStorage.getID()));
+		}
+	}
+	
 	@Override
 	public void tick(Level level) {
+		this.addAllPendingStorages();
 		for (ILocalStorage localStorage : this.tickableLocalStorage) {
 			if (localStorage instanceof TickableStorage ticking) {
 				ticking.tick(level);
@@ -435,21 +478,23 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				dataManager.tick(level);
 				if (dataManager.isDirty()) {
 					SyncLocalStorageDataPacket message = new SyncLocalStorageDataPacket(localStorage, false);
-					for (ServerPlayer watcher : localStorage.getWatchers()) {
+					// forEach to avoid ConcurrentModificationException
+					localStorage.getWatchers().forEach((ServerPlayer watcher) -> {
 						PacketDistributor.sendToPlayer(watcher, message);
-					}
+					});
 				}
 			}
 		}
 
 		if (!level.isClientSide()) {
-			for (ILocalStorage localStorage : this.pendingUnreferencedStorages) {
+			for (ILocalStorage localStorage : new ArrayList<>(this.pendingUnreferencedStorages)) {
 				if (localStorage.getLoadedReferences().isEmpty() && this.getLocalStorage(localStorage.getID()) != null) {
 					//Storage is not referenced by any chunk and being added for the first time.
 					//Linking probably deferred. Save and unload storage until needed.
 					this.unloadLocalStorage(level, localStorage);
 				}
 			}
+			this.pendingUnreferencedStorages.clear();
 			//FIXME
 //			TObjectLongIterator<LocalRegionData> pendingUnreferencedRegionsIT = this.pendingUnreferencedRegions.iterator();
 //			while (pendingUnreferencedRegionsIT.hasNext()) {
@@ -467,8 +512,8 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 //					this.regionCache.removeRegion(data.getRegion());
 //				}
 //			}
+			this.pendingUnreferencedStorages.clear();
 		}
-		this.pendingUnreferencedStorages.clear();
 	}
 
 	@Override

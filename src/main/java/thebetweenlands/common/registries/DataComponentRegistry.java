@@ -23,6 +23,7 @@ import thebetweenlands.api.item.amphibious.AmphibiousArmorUpgrade;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.*;
+import thebetweenlands.common.datamap.item.AnimatorFuel;
 
 public class DataComponentRegistry {
 
@@ -52,12 +53,18 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ShockwaveSwordData>> SHOCKWAVE_DATA = COMPONENTS.register("shockwave_data", () -> DataComponentType.<ShockwaveSwordData>builder().persistent(ShockwaveSwordData.CODEC).networkSynchronized(ShockwaveSwordData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SimpleFluidContent>> STORED_FLUID = COMPONENTS.register("stored_fluid", () -> DataComponentType.<SimpleFluidContent>builder().persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemAttributeModifiers>> STORED_BROKEN_ATTRIBUTES = COMPONENTS.register("stored_broken_attributes", () -> DataComponentType.<ItemAttributeModifiers>builder().persistent(ItemAttributeModifiers.CODEC).networkSynchronized(ItemAttributeModifiers.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<SwingData>> SWING_DATA = COMPONENTS.register("swing_data", () -> DataComponentType.<SwingData>builder().persistent(SwingData.CODEC).networkSynchronized(SwingData.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<GlobalPos>> TALISMAN_LINK = COMPONENTS.register("talisman_link", () -> DataComponentType.<GlobalPos>builder().persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> THROWING = COMPONENTS.register("throwing", () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WALK_TICKS = COMPONENTS.register("walk_ticks", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UpgradeDamage>> UPGRADE_DAMAGE = COMPONENTS.register("upgrade_damage", () -> DataComponentType.<UpgradeDamage>builder().persistent(UpgradeDamage.CODEC).networkSynchronized(UpgradeDamage.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<BlockPos>> WAYFINDER_LINK = COMPONENTS.register("wayfinder_link", () -> DataComponentType.<BlockPos>builder().persistent(BlockPos.CODEC).networkSynchronized(BlockPos.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WORMS = COMPONENTS.register("worms", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> RING_ACTIVE = COMPONENTS.register("ring_active", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> RING_PUPPET_UUID = COMPONENTS.register("ring_puppet_uuid", () -> DataComponentType.<UUID>builder().persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build());
+
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ChirobarbErrupterData>> CHIROBARB_ERRUPTER_DATA = COMPONENTS.register("chirobarb_errupter_data", () -> DataComponentType.<ChirobarbErrupterData>builder().persistent(ChirobarbErrupterData.CODEC).networkSynchronized(ChirobarbErrupterData.STREAM_CODEC).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<MagicItemMagnetData>> MAGIC_ITEM_MAGNET_DATA = COMPONENTS.register("magic_item_magnet_data", () -> DataComponentType.<MagicItemMagnetData>builder().persistent(MagicItemMagnetData.CODEC).networkSynchronized(MagicItemMagnetData.STREAM_CODEC).build());
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_CORROSION = COMPONENTS.register("max_corrosion", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
@@ -65,6 +72,12 @@ public class DataComponentRegistry {
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<RenamableData>> RENAMABLE = COMPONENTS.register("renamable", () -> DataComponentType.<RenamableData>builder().persistent(RenamableData.CODEC).networkSynchronized(RenamableData.STREAM_CODEC).build());
 
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> LIFE_POWER = COMPONENTS.register("life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_LIFE_POWER = COMPONENTS.register("max_life_power", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<AnimatorFuel>> ANIMATOR_FUEL = COMPONENTS.register("animator_fuel", () -> DataComponentType.<AnimatorFuel>builder().persistent(AnimatorFuel.CODEC).networkSynchronized(AnimatorFuel.STREAM_CODEC).build());
+	
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> VOLARKITE_DATA = COMPONENTS.register("using_volarkite", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
 	// Transient Component
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> INVENTORY_ITEM_UUID = COMPONENTS.register("inventory_item_uuid", () -> DataComponentType.<UUID>builder().networkSynchronized(UUIDUtil.STREAM_CODEC).build());
 }

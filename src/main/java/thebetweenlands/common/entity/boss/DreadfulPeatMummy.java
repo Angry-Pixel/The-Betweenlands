@@ -39,7 +39,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.api.entity.bossbar.BetweenlandsBossBar;
+import thebetweenlands.api.entity.bossbar.BetweenlandsBoss;
 import thebetweenlands.api.entity.CameraOffsetter;
 import thebetweenlands.api.entity.MusicPlayer;
 import thebetweenlands.api.entity.ScreenShaker;
@@ -58,16 +58,19 @@ import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 
-public class DreadfulPeatMummy extends Monster implements BLEntity, BetweenlandsBossBar, ScreenShaker, CameraOffsetter, MusicPlayer, PathObstructionAwareEntity {
+public class DreadfulPeatMummy extends Monster implements BLEntity, BetweenlandsBoss, ScreenShaker, CameraOffsetter, MusicPlayer, PathObstructionAwareEntity {
 
-	private final BetweenlandsServerBossBar bossInfo = new BetweenlandsServerBossBar(this.getDisplayName(), BossType.NORMAL_BOSS);
+	private final BetweenlandsServerBossBar bossInfo;
 
 	private static final EntityDataAccessor<Integer> SPAWNING_STATE_DW = SynchedEntityData.defineId(DreadfulPeatMummy.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> SPEW = SynchedEntityData.defineId(DreadfulPeatMummy.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> PREY = SynchedEntityData.defineId(DreadfulPeatMummy.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Float> Y_OFFSET = SynchedEntityData.defineId(DreadfulPeatMummy.class, EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Optional<UUID>> BOSS_BAR_ID = SynchedEntityData.defineId(DreadfulPeatMummy.class, EntityDataSerializers.OPTIONAL_UUID);
 
 	private int prevSpawningState;
 
@@ -95,6 +98,7 @@ public class DreadfulPeatMummy extends Monster implements BLEntity, Betweenlands
 
 	public DreadfulPeatMummy(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
+		this.bossInfo = new BetweenlandsServerBossBar(this.getDisplayName(), BossType.NORMAL_BOSS);
 	}
 
 	@Override
@@ -104,6 +108,7 @@ public class DreadfulPeatMummy extends Monster implements BLEntity, Betweenlands
 		builder.define(SPEW, false);
 		builder.define(PREY, -1);
 		builder.define(Y_OFFSET, 0.0F);
+		builder.define(BOSS_BAR_ID, Optional.empty());
 	}
 
 	@Override
@@ -673,9 +678,12 @@ public class DreadfulPeatMummy extends Monster implements BLEntity, Betweenlands
 	}
 
 	@Override
-	public void aiStep() {
-		super.aiStep();
+	public void customServerAiStep() {
+		super.customServerAiStep();
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+		if (this.bossInfo.getId() != this.getBossBarId()) {
+			this.getEntityData().set(BOSS_BAR_ID, Optional.of(this.bossInfo.getId()));
+		}
 	}
 
 	private void spawnMummy() {
@@ -959,27 +967,28 @@ public class DreadfulPeatMummy extends Monster implements BLEntity, Betweenlands
 	}
 
 	@Override
-	public SoundEvent getMusicFile(Player listener) {
+	public SoundEvent getMusicFile(@Nullable Player listener) {
 		return SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP.get();
 	}
 
 	@Override
-	public double getMusicRange(Player listener) {
+	public double getMusicRange(@Nullable Player listener) {
 		return 32.0D;
 	}
 
 	@Override
-	public boolean isMusicActive(Player listener) {
+	public boolean isMusicActive(@Nullable Player listener) {
 		return this.isAlive();
 	}
 
 	@Override
-	public int getMusicLayer(Player listener) {
+	public int getMusicLayer(@Nullable Player listener) {
 		return EntityMusicLayers.BOSS;
 	}
 
+	@Nullable
 	@Override
-	public BetweenlandsServerBossBar getBar() {
-		return this.bossInfo;
+	public UUID getBossBarId() {
+		return this.getEntityData().get(BOSS_BAR_ID).orElse(null);
 	}
 }

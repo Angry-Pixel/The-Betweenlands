@@ -4,9 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class LootPotBlockEntity extends NoMenuContainerBlockEntity {
@@ -58,5 +60,15 @@ public class LootPotBlockEntity extends NoMenuContainerBlockEntity {
 	@Override
 	public int getContainerSize() {
 		return 3;
+	}
+
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		return true;
 	}
 }

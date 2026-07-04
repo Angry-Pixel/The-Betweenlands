@@ -21,6 +21,7 @@ import thebetweenlands.client.shader.ResizableFramebuffer;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.DenseFogEvent;
 import thebetweenlands.common.world.event.RiftEvent;
 
 import javax.annotation.Nullable;
@@ -39,7 +40,7 @@ public class RiftRenderer implements IRiftRenderer {
 	@Nullable
 	private static ResizableFramebuffer overworldSkyFbo;
 
-	private IRiftMaskRenderer riftMaskRenderer;
+	private IRiftMaskRenderer riftMaskRenderer;	// unused
 	private IRiftSkyRenderer riftSkyRenderer;
 
 	@Nullable
@@ -77,10 +78,11 @@ public class RiftRenderer implements IRiftRenderer {
 	@Override
 	public void render(ClientLevel level, float partialTicks, Matrix4f viewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable skyFogSetup) {
 
-		RiftEvent event = EnvironmentEventRegistry.RIFT.get();
-		RiftVariant variant = event.getVariant();
+		RiftEvent riftevent = EnvironmentEventRegistry.RIFT.get();
+		DenseFogEvent fogevent = EnvironmentEventRegistry.DENSE_FOG.get();
+		RiftVariant variant = riftevent.getVariant();
 
-		if (event.getActivationTicks() > 0 && event.getVisibility(partialTicks) > 0) {
+		if (riftevent.getActivationTicks() > 0 && riftevent.getVisibility(partialTicks) > 0) {
 
 			// Set sky draw state
 			BLSkyRenderer.drawOverworldSky = true;
@@ -103,24 +105,30 @@ public class RiftRenderer implements IRiftRenderer {
 
 			// Reset sky draw state
 			BLSkyRenderer.drawOverworldSky = false;
+			FogRenderer.setupColor(camera, partialTicks, level, Minecraft.getInstance().options.getEffectiveRenderDistance(), 0.0F);
+			FogRenderer.setupFog(camera, FogRenderer.FogMode.FOG_SKY, Minecraft.getInstance().gameRenderer.getRenderDistance(), false, partialTicks);
+			fogColor = level.effects().getBrightnessDependentFogColor(Vec3.ZERO, skyBrightness);
+			FogRenderer.fogRed = (float)fogColor.x;
+			FogRenderer.fogGreen = (float)fogColor.y;
+			FogRenderer.fogBlue = (float)fogColor.z;
+			FogRenderer.levelFogColor();
 			Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
 
-			// DEBUG: show rift location
 			PoseStack riftView = new PoseStack();
 			riftView.mulPose(viewMatrix);
 
 			PoseStack textureMatrix = new PoseStack();
-			int mirrorU = event.getRiftMirrorU() ? -1 : 1;
-			int mirrorV = event.getRiftMirrorV() ? -1 : 1;
+			int mirrorU = riftevent.getRiftMirrorU() ? -1 : 1;
+			int mirrorV = riftevent.getRiftMirrorV() ? -1 : 1;
 
-			float scale = event.getRiftScale(partialTicks);
+			float scale = riftevent.getRiftScale(partialTicks);
 
 			textureMatrix.pushPose();
 			textureMatrix.translate(mirrorU * -0.5f / scale, mirrorV * -0.5f / scale, 0);
 			textureMatrix.scale(mirrorU / scale, mirrorV / scale, 1);
 			textureMatrix.translate(mirrorU * 0.5f * scale, mirrorV * 0.5f * scale, 0);
 
-			float[] riftAngles = event.getRiftAngles(partialTicks);
+			float[] riftAngles = riftevent.getRiftAngles(partialTicks);
 
 			riftView.pushPose();
 			riftView.translate(0, -1, 0);
@@ -129,9 +137,9 @@ public class RiftRenderer implements IRiftRenderer {
 			riftView.mulPose(Axis.YP.rotationDegrees(riftAngles[2]));
 
 			RenderSystem.enableBlend();
-			FogRenderer.setupNoFog();
+			RenderSystem.disableDepthTest();
 
-			float visibility = event.getVisibility(partialTicks);
+			float visibility = riftevent.getVisibility(partialTicks);
 			float visibilitySq = visibility * visibility;
 
 			this.skyDomeMesh.bind();
@@ -167,6 +175,7 @@ public class RiftRenderer implements IRiftRenderer {
 			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			RenderSystem.setShaderColor(1.0F,1.0F,1.0F,1.0F);
+			RenderSystem.disableDepthTest();
 
 			// Set to betweenlands fog color
 			FogRenderer.setupFog(camera, FogRenderer.FogMode.FOG_TERRAIN, Minecraft.getInstance().gameRenderer.getRenderDistance(), false, partialTicks);

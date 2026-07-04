@@ -7,7 +7,9 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
+import thebetweenlands.common.datamap.block.WaterPlant;
 import thebetweenlands.common.datamap.entity.AmuletSpawn;
+import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.datamap.item.DecayFood;
 import thebetweenlands.common.datamap.item.FluxMultiplier;
@@ -104,6 +106,9 @@ public class BLDataMapProvider extends DataMapProvider {
 		amuletMap.add(EntityRegistry.CRYPT_CRAWLER, new AmuletSpawn(40), false);
 		amuletMap.add(EntityRegistry.BIPED_CRYPT_CRAWLER, new AmuletSpawn(40), false);
 
+		var animatorFuel = this.builder(DataMapRegistry.ANIMATOR_FUEL);
+		animatorFuel.add(ItemRegistry.SULFUR, new AnimatorFuel(42, 1), false);
+		
 		var decayMap = this.builder(DataMapRegistry.DECAY_FOOD);
 		decayMap.add(ItemRegistry.SAP_BALL, new DecayFood(2, 0.0F), false);
 		decayMap.add(ItemRegistry.FORBIDDEN_FIG, new DecayFood(20, 0.2F), false);
@@ -316,5 +321,8 @@ public class BLDataMapProvider extends DataMapProvider {
 		compostMap.add(ItemRegistry.PALE_GRASS_BLADES, new CompostableItem(3, 4000), false);
 		compostMap.add(ItemRegistry.STRING_ROOT_FIBERS, new CompostableItem(3, 4000), false);
 		compostMap.add(ItemRegistry.CRYPTWEED_BLADES, new CompostableItem(3, 4000), false);
+		
+		var gunkMap = this.builder(DataMapRegistry.WATER_PLANT);
+		gunkMap.add(BlockRegistry.ALGAE, new WaterPlant(10.0f, 0.05f), false);
 	}
 }

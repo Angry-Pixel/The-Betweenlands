@@ -255,6 +255,10 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.SHIMMER_STONE);
 		this.basicItem(ItemRegistry.TARMINION);
 		this.basicItem(ItemRegistry.SLUDGE_BALL);
+		this.basicItem(ItemRegistry.ASPECTRUS_SEEDS);
+		this.basicItem(ItemRegistry.SPORES);
+		this.basicItem(ItemRegistry.BARNACLE_LARVAE);
+		this.basicItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
 		//rope
 		Function<DeferredItem<?>, ModelFile> pebbleOverlay = item -> this.multiLayerItem(item.getId().getPath() + "_active", this.itemTexture(item), TheBetweenlands.prefix("item/angry_pebble_overlay"));
 		this.basicItem(ItemRegistry.ANGRY_PEBBLE).override().predicate(TheBetweenlands.prefix("charging"), 1.0F).model(pebbleOverlay.apply(ItemRegistry.ANGRY_PEBBLE));
@@ -375,7 +379,7 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.toolItem(ItemRegistry.VALONITE_SWORD);
 		this.toolItem(ItemRegistry.VALONITE_SHOVEL);
 		this.toolItem(ItemRegistry.VALONITE_PICKAXE);
-		this.toolItem(ItemRegistry.VALONITE_GREATAXE);
+		this.bigToolItem(ItemRegistry.VALONITE_GREATAXE);
 		this.toolItem(ItemRegistry.VALONITE_AXE);
 		this.basicItem(ItemRegistry.SYRMORITE_SHEARS);
 		this.basicItem(ItemRegistry.SICKLE);
@@ -390,7 +394,8 @@ public class BLItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.CHIROMAW_BARB);
 		this.bow(ItemRegistry.WEEDWOOD_BOW);
 		this.bow(ItemRegistry.PREDATOR_BOW);
-		//ancient weps
+		this.bigToolItem(ItemRegistry.ANCIENT_GREATSWORD);
+		this.bigToolItem(ItemRegistry.ANCIENT_BATTLEAXE);
 		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
 		this.toolItem(ItemRegistry.NET);
 		this.pouch(ItemRegistry.SMALL_LURKER_SKIN_POUCH);
@@ -652,6 +657,16 @@ public class BLItemModelProvider extends ItemModelProvider {
 		return this.getBuilder(item.toString())
 			.parent(new ModelFile.UncheckedModelFile("item/handheld"))
 			.texture("layer0", item.withPrefix("item/"));
+	}
+
+	public ItemModelBuilder bigToolItem(DeferredItem<? extends Item> item) {
+		return this.bigToolItem(item.getId());
+	}
+
+	public ItemModelBuilder bigToolItem(ResourceLocation item) {
+		return this.getBuilder(item.toString())
+				.parent(new ModelFile.ExistingModelFile(this.modLoc("item/big_tool"), this.existingFileHelper))
+				.texture("layer0", item.withPrefix("item/"));
 	}
 
 	public ItemModelBuilder itemFrame(DeferredItem<? extends Item> item) {

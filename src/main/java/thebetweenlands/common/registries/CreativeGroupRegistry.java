@@ -763,6 +763,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RAW_ANADIA_MEAT);
 			output.accept(ItemRegistry.COOKED_ANADIA_MEAT);
 			output.accept(ItemRegistry.SMOKED_ANADIA_MEAT);
+			output.accept(ItemRegistry.BARNACLE_LARVAE);
 			output.accept(ItemRegistry.BARNACLE);
 			output.accept(ItemRegistry.COOKED_BARNACLE);
 			output.accept(ItemRegistry.SMOKED_BARNACLE);
@@ -939,8 +940,8 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.CHIROMAW_BARB);
 			output.accept(ItemRegistry.WEEDWOOD_BOW);
 			output.accept(ItemRegistry.PREDATOR_BOW);
-			//ancient greatsword
-			//ancient battleaxe
+			output.accept(ItemRegistry.ANCIENT_GREATSWORD);
+			output.accept(ItemRegistry.ANCIENT_BATTLEAXE);
 			output.accept(ItemRegistry.PESTLE);
 			output.accept(ItemRegistry.NET);
 			output.accept(ItemRegistry.SMALL_LURKER_SKIN_POUCH);

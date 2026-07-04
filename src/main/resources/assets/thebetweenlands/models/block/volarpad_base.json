@@ -1,0 +1,56 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "cutout",
+	"texture_size": [128, 128],
+	"textures": {
+		"particle": "thebetweenlands:block/particle/volarpad_particle",
+		"texture": "thebetweenlands:block/volarpad_1"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "stalk2",
+			"from": [6.5, 9.15703, 0.99124],
+			"to": [9.5, 19.15703, 3.99124],
+			"rotation": {"angle": 15.65, "axis": "x", "origin": [8, 9.15703, 2.49124]},
+			"faces": {
+				"north": {"uv": [2, 0.375, 2.375, 1.625], "texture": "#texture"},
+				"east": {"uv": [1.625, 0.375, 2, 1.625], "texture": "#texture"},
+				"south": {"uv": [2.75, 0.375, 3.125, 1.625], "texture": "#texture"},
+				"west": {"uv": [2.375, 0.375, 2.75, 1.625], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stalk1",
+			"from": [6.5, -4, -2.5],
+			"to": [9.5, 10, 0.5],
+			"rotation": {"angle": 20.87, "axis": "x", "origin": [8, 0, -1]},
+			"faces": {
+				"north": {"uv": [0.375, 0.375, 0.75, 2.125], "texture": "#texture"},
+				"east": {"uv": [0, 0.375, 0.375, 2.125], "texture": "#texture"},
+				"south": {"uv": [1.125, 0.375, 1.5, 2.125], "texture": "#texture"},
+				"west": {"uv": [0.75, 0.375, 1.125, 2.125], "texture": "#texture"},
+				"up": {"uv": [0.75, 0.375, 0.375, 0], "texture": "#texture"},
+				"down": {"uv": [1.125, 0, 0.75, 0.375], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "roots",
+			"from": [6.5, -1.5, 1.5],
+			"to": [9.5, 11.5, 4.5],
+			"rotation": {"x": -5.22, "y": 5.22, "z": 10.43, "origin": [8, 11.5, 3]},
+			"faces": {
+				"north": {"uv": [14.875, 0.375, 15.25, 2], "texture": "#texture"},
+				"east": {"uv": [14.5, 0.375, 14.875, 2], "texture": "#texture"},
+				"south": {"uv": [15.625, 0.375, 16, 2], "texture": "#texture"},
+				"west": {"uv": [15.25, 0.375, 15.625, 2], "texture": "#texture"},
+				"up": {"uv": [15.25, 0.375, 14.875, 0], "texture": "#texture"},
+				"down": {"uv": [15.625, 0, 15.25, 0.375], "texture": "#texture"}
+			}
+		}
+	],
+	"transform": {
+		"translation": [0, 0, 0.3125]
+	}
+}

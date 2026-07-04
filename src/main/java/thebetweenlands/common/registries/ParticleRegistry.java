@@ -15,6 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.client.particle.options.LightningArcParticleOptions;
+import thebetweenlands.client.particle.options.SpikeParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 
 public class ParticleRegistry {
@@ -25,6 +26,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PORTAL_EFFECT = PARTICLES.register("portal_effect", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ANIMATOR = PARTICLES.register("animator", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FLY = PARTICLES.register("fly", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> FLY_SWIRL = register("fly_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOSQUITO = PARTICLES.register("mosquito", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOTH = PARTICLES.register("moth", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SWARM = PARTICLES.register("swarm", () -> new SimpleParticleType(false));
@@ -37,7 +39,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FANCY_BUBBLE = PARTICLES.register("fancy_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<DripParticleOptions>> FANCY_DRIP = register("fancy_drip", false, type -> DripParticleOptions.CODEC, type -> DripParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> RAIN = PARTICLES.register("rain", () -> new SimpleParticleType(false));
-	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> URCHIN_SPIKE = PARTICLES.register("urchin_spike", () -> new SimpleParticleType(false));
+	public static final DeferredHolder<ParticleType<?>, ParticleType<SpikeParticleOptions>> SPIKE = register("spike", false, type -> SpikeParticleOptions.CODEC, type -> SpikeParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> FISH_VORTEX = register("fish_vortex", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INFUSER_BUBBLE = PARTICLES.register("infuser_bubble", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PURIFIER_BUBBLE = PARTICLES.register("purifier_bubble", () -> new SimpleParticleType(false));
@@ -61,7 +63,10 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> LEAF_SWIRL = register("leaf_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_RIPPLE = PARTICLES.register("water_ripple", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<LightningArcParticleOptions>> LIGHTNING_ARC = register("lightning_arc", false, type -> LightningArcParticleOptions.CODEC, type -> LightningArcParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> WIGHT_FACE_SWIRL = register("wight_face_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WIGHT_FACE = PARTICLES.register("wight_face", () -> new SimpleParticleType(false));
 
+	
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
 		return PARTICLES.register(name, () -> new ParticleType<T>(overrideLimiter) {
 			@Override

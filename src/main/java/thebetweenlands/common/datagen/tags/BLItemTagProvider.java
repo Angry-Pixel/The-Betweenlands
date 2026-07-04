@@ -13,7 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import thebetweenlands.api.item.CustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -32,6 +31,11 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> REPAIRS_SYRMORITE_SHIELD = tag("repairs_syrmorite_shield");
 	public static final TagKey<Item> REPAIRS_LURKER_SKIN_SHIELD = tag("repairs_lurker_skin_shield");
 
+	public static final TagKey<Item> ASPECT_VIALS = tag("aspect_vials");
+	public static final TagKey<Item> EMPTY_ASPECT_VIALS = tag("empty_aspect_vials");
+	public static final TagKey<Item> FILLED_ASPECT_VIALS = tag("filled_aspect_vials");
+	public static final TagKey<Item> FILLABLE_ASPECT_VIALS = tag("fillable_aspect_vials");
+	
 	public static final TagKey<Item> BL_LOGS = tag("betweenlands_logs");
 	public static final TagKey<Item> FILTERED_SILT_GLASS = tag("filtered_silt_glass");
 	public static final TagKey<Item> MUD_BRICK_SHINGLES = tag("mud_brick_shingles");
@@ -40,6 +44,10 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> SAMITE_CANVAS_PANELS = tag("samite_canvas_panels");
 	public static final TagKey<Item> ITEM_FRAMES = tag("item_frames");
 	public static final TagKey<Item> SLINGSHOT_AMMO = tag("slingshot_ammo");
+
+	public static final TagKey<Item> WATER_FILTERS = tag("water_filters");
+	public static final TagKey<Item> WATER_FILTERS_MOSS = tag("water_filters/moss");
+	public static final TagKey<Item> WATER_FILTERS_SILK = tag("water_filters/silk");
 
 	/**
 	 * Whether an item ignores the weakness on non-betweenlands tools
@@ -55,11 +63,6 @@ public class BLItemTagProvider extends ItemTagsProvider {
 	 * Use default corrosion on an item. Apply to items from other mods you want to be corrodible.
 	 */
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
-
-	/**
-	 * Whether an item has custom corrosion information. The item should implement {@link CustomCorrodible}; this tag will be ignored if it doesn't.
-	 */
-	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
 
 	public static final TagKey<Item> DOES_NOT_ROT = tag("does_not_rot");
 	public static final TagKey<Item> CIRCLE_GEM_APPLICABLE = tag("circle_gem_applicable");
@@ -104,11 +107,21 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.LAVENDER_BLUE_ITEM_FRAME.get(), ItemRegistry.BROWN_RUST_ITEM_FRAME.get(),
 			ItemRegistry.MIDNIGHT_PURPLE_ITEM_FRAME.get(), ItemRegistry.PEWTER_GREY_ITEM_FRAME.get());
 
-		// Those two "inherit" from this one
-		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
-		this.tag(DEFAULT_CORRODIBLE);
-		this.tag(CUSTOM_CORRODIBLE);
-
+		this.tag(ASPECT_VIALS)
+			.addTag(FILLED_ASPECT_VIALS).addTag(FILLABLE_ASPECT_VIALS).addTag(EMPTY_ASPECT_VIALS);
+		this.tag(EMPTY_ASPECT_VIALS)
+			.add(ItemRegistry.GREEN_DENTROTHYST_VIAL.getKey(), ItemRegistry.ORANGE_DENTROTHYST_VIAL.getKey(), ItemRegistry.DIRTY_DENTROTHYST_VIAL.getKey());
+		this.tag(FILLED_ASPECT_VIALS)
+			.add(ItemRegistry.GREEN_ASPECT_VIAL.getKey(), ItemRegistry.ORANGE_ASPECT_VIAL.getKey());
+		this.tag(FILLABLE_ASPECT_VIALS).add(
+				ItemRegistry.GREEN_DENTROTHYST_VIAL.getKey(), ItemRegistry.ORANGE_DENTROTHYST_VIAL.getKey(),
+				ItemRegistry.GREEN_ASPECT_VIAL.getKey(), ItemRegistry.ORANGE_ASPECT_VIAL.getKey()
+			);
+		
+		this.tag(WATER_FILTERS).addTag(WATER_FILTERS_MOSS).addTag(WATER_FILTERS_SILK);
+		this.tag(WATER_FILTERS_MOSS).add(ItemRegistry.MOSS_FILTER.getKey());
+		this.tag(WATER_FILTERS_SILK).add(ItemRegistry.SILK_FILTER.getKey());
+		
 		this.tag(GIVES_FOOD_SICKNESS).add(ItemRegistry.MIRE_SNAIL_EGG.get(), ItemRegistry.COOKED_MIRE_SNAIL_EGG.get(),
 			ItemRegistry.RAW_FROG_LEGS.get(), ItemRegistry.COOKED_FROG_LEGS.get(),
 			ItemRegistry.RAW_SNAIL_FLESH.get(), ItemRegistry.COOKED_SNAIL_FLESH.get(),
@@ -207,6 +220,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.VALONITE_SHOVEL.get()
 		);
 
+		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE);
 		this.tag(DEFAULT_CORRODIBLE).add(
 			//Swords
 			ItemRegistry.WEEDWOOD_SWORD.get(),
@@ -217,7 +231,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.WIGHTS_BANE.get(),
 			ItemRegistry.SLUDGE_SLICER.get(),
 			ItemRegistry.SHOCKWAVE_SWORD.get(),
-			// TODO Ancient
+			ItemRegistry.ANCIENT_GREATSWORD.get(),
 
 			// Pickaxes
 			ItemRegistry.WEEDWOOD_PICKAXE.get(),
@@ -233,7 +247,7 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.VALONITE_AXE.get(),
 			ItemRegistry.VALONITE_GREATAXE.get(),
 			ItemRegistry.HAG_HACKER.get(),
-			// TODO Ancient Greataxe
+			ItemRegistry.ANCIENT_BATTLEAXE.get(),
 
 			// Shovels
 			ItemRegistry.WEEDWOOD_SHOVEL.get(),
@@ -251,7 +265,31 @@ public class BLItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.OCTINE_ARROW.get(), ItemRegistry.BASILISK_ARROW.get(), ItemRegistry.SLUDGE_WORM_ARROW.get(),
 			ItemRegistry.SHOCK_ARROW.get(), ItemRegistry.CHIROMAW_BARB.get());
 
-		this.tag(DOES_NOT_ROT).add(Items.ROTTEN_FLESH); // TODO: add BL food items here
+		this.tag(DOES_NOT_ROT).add(Items.ROTTEN_FLESH).add(ItemRegistry.SAP_BALL.get()).add(ItemRegistry.ROTTEN_FOOD.get())//TODO double check whther rotten_food should have this tag
+			.add(ItemRegistry.MIRE_SNAIL_EGG.get()).add(ItemRegistry.COOKED_MIRE_SNAIL_EGG.get())
+			.add(ItemRegistry.RAW_FROG_LEGS.get()).add(ItemRegistry.COOKED_FROG_LEGS.get()).add(ItemRegistry.RAW_SNAIL_FLESH.get())
+			.add(ItemRegistry.COOKED_SNAIL_FLESH.get()).add(ItemRegistry.REED_DONUT.get()).add(ItemRegistry.JAM_DONUT.get())
+			.add(ItemRegistry.GERTS_DONUT.get()).add(ItemRegistry.PUFFSHROOM_TENDRIL.get()).add(ItemRegistry.KRAKEN_TENTACLE.get())
+			.add(ItemRegistry.KRAKEN_CALAMARI.get()).add(ItemRegistry.MIDDLE_FRUIT.get()).add(ItemRegistry.MINCE_PIE.get())
+			.add(ItemRegistry.CHRISTMAS_PUDDING.get()).add(ItemRegistry.CANDY_CANE.get()).add(ItemRegistry.WEEPING_BLUE_PETAL.get())
+			.add(ItemRegistry.WIGHT_HEART.get()).add(ItemRegistry.YELLOW_DOTTED_FUNGUS.get()).add(ItemRegistry.SILT_CRAB_CLAW.get())
+			.add(ItemRegistry.CRAB_STICK.get()).add(ItemRegistry.SLUDGE_JELLO.get()).add(ItemRegistry.MIDDLE_FRUIT_JELLO.get())
+			.add(ItemRegistry.SAP_JELLO.get()).add(ItemRegistry.GREEN_MARSHMALLOW.get()).add(ItemRegistry.PINK_MARSHMALLOW.get())
+			.add(ItemRegistry.FLATHEAD_MUSHROOM.get()).add(ItemRegistry.BLACK_HAT_MUSHROOM.get()).add(ItemRegistry.BULB_CAPPED_MUSHROOM.get())
+			.add(ItemRegistry.FRIED_SWAMP_KELP.get()).add(ItemRegistry.FORBIDDEN_FIG.get()).add(ItemRegistry.BLUE_CANDY.get())
+			.add(ItemRegistry.RED_CANDY.get()).add(ItemRegistry.YELLOW_CANDY.get()).add(ItemRegistry.CHIROMAW_WING.get())
+			.add(ItemRegistry.TANGLED_ROOT.get()).add(ItemRegistry.MIRE_SCRAMBLE.get()).add(ItemRegistry.WEEPING_BLUE_PETAL_SALAD.get())
+			.add(ItemRegistry.NIBBLESTICK.get()).add(ItemRegistry.SPIRIT_FRUIT.get()).add(ItemRegistry.SUSHI.get())
+			.add(ItemRegistry.ROCK_SNOT_PEARL.get()).add(ItemRegistry.PEARLED_PEAR.get()).add(ItemRegistry.RAW_ANADIA_MEAT.get())
+			.add(ItemRegistry.COOKED_ANADIA_MEAT.get()).add(ItemRegistry.SMOKED_ANADIA_MEAT.get()).add(ItemRegistry.BARNACLE.get())
+			.add(ItemRegistry.COOKED_BARNACLE.get()).add(ItemRegistry.SMOKED_BARNACLE.get()).add(ItemRegistry.SMOKED_CRAB_STICK.get())
+			.add(ItemRegistry.SMOKED_FROG_LEGS.get()).add(ItemRegistry.SMOKED_PUFFSHROOM_TENDRIL.get()).add(ItemRegistry.SMOKED_SILT_CRAB_CLAW.get())
+			.add(ItemRegistry.SMOKED_SNAIL_FLESH.get()).add(ItemRegistry.RAW_OLM_EGG.get()).add(ItemRegistry.COOKED_OLM_EGG.get())
+			.add(ItemRegistry.OLMLETTE.get()).add(ItemRegistry.SILK_GRUB.get()).add(ItemRegistry.NETTLE_SOUP.get())
+			.add(ItemRegistry.NETTLE_TEA.get()).add(ItemRegistry.PHEROMONE_EXTRACT.get()).add(ItemRegistry.SWAMP_BROTH.get())
+			.add(ItemRegistry.STURDY_STOCK.get()).add(ItemRegistry.PEAR_CORDIAL.get()).add(ItemRegistry.SHAMANS_BREW.get())
+			.add(ItemRegistry.LAKE_BROTH.get()).add(ItemRegistry.SHELL_STOCK.get()).add(ItemRegistry.FROG_LEG_EXTRACT.get())
+			.add(ItemRegistry.WITCH_TEA.get());
 
 		this.tag(IGNORES_TOOL_WEAKNESS).addTag(CORRODIBLE);
 

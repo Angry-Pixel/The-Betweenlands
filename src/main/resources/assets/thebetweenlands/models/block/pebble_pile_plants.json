@@ -1,0 +1,133 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "cutout",
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "thebetweenlands:block/betweenstone",
+		"texture": "thebetweenlands:block/betweenstone_pebble_pile"
+    },
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "plant_1_a",
+			"from": [9.5, 0, 13],
+			"to": [12.5, 5, 13],
+			"rotation": {"angle": -45, "axis": "y", "origin": [11, 0, 13]},
+			"color": 1,
+			"faces": {
+				"north": {"uv": [9.5, 0, 11, 2.5], "texture": "#texture"},
+				"east": {"uv": [9.5, 0, 9.5, 2.5], "texture": "#texture"},
+				"south": {"uv": [11, 0, 12.5, 2.5], "texture": "#texture"},
+				"west": {"uv": [11, 0, 11, 2.5], "texture": "#texture"},
+				"up": {"uv": [11, 0, 9.5, 0], "texture": "#texture"},
+				"down": {"uv": [12.5, 0, 11, 0], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_2_a",
+			"from": [2, 0, 7.5],
+			"to": [5, 9, 7.5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [3.5, 0, 7.5]},
+			"color": 8,
+			"faces": {
+				"north": {"uv": [9.5, 3, 11, 7.5], "texture": "#texture"},
+				"east": {"uv": [9.5, 3, 9.5, 7.5], "texture": "#texture"},
+				"south": {"uv": [11, 3, 12.5, 7.5], "texture": "#texture"},
+				"west": {"uv": [11, 3, 11, 7.5], "texture": "#texture"},
+				"up": {"uv": [11, 3, 9.5, 3], "texture": "#texture"},
+				"down": {"uv": [12.5, 3, 11, 3], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_3_a",
+			"from": [12.5, 0, 8],
+			"to": [13.5, 3, 8],
+			"rotation": {"angle": -45, "axis": "y", "origin": [13, 0, 8]},
+			"color": 7,
+			"faces": {
+				"north": {"uv": [9.5, 8, 10, 9.5], "texture": "#texture"},
+				"east": {"uv": [9.5, 8, 9.5, 9.5], "texture": "#texture"},
+				"south": {"uv": [10, 8, 10.5, 9.5], "texture": "#texture"},
+				"west": {"uv": [10, 8, 10, 9.5], "texture": "#texture"},
+				"up": {"uv": [10, 8, 9.5, 8], "texture": "#texture"},
+				"down": {"uv": [10.5, 8, 10, 8], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_4_a",
+			"from": [7, 0, 4],
+			"to": [9, 5, 4],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0, 4]},
+			"color": 9,
+			"faces": {
+				"north": {"uv": [9.5, 10, 10.5, 12.5], "texture": "#texture"},
+				"east": {"uv": [9.5, 10, 9.5, 12.5], "texture": "#texture"},
+				"south": {"uv": [10.5, 10, 11.5, 12.5], "texture": "#texture"},
+				"west": {"uv": [10.5, 10, 10.5, 12.5], "texture": "#texture"},
+				"up": {"uv": [10.5, 10, 9.5, 10], "texture": "#texture"},
+				"down": {"uv": [11.5, 10, 10.5, 10], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_1_b",
+			"from": [9.5, 0, 13],
+			"to": [12.5, 5, 13],
+			"rotation": {"angle": 45, "axis": "y", "origin": [11, 0, 13]},
+			"color": 5,
+			"faces": {
+				"north": {"uv": [13, 0, 14.5, 2.5], "texture": "#texture"},
+				"east": {"uv": [13, 0, 13, 2.5], "texture": "#texture"},
+				"south": {"uv": [14.5, 0, 16, 2.5], "texture": "#texture"},
+				"west": {"uv": [14.5, 0, 14.5, 2.5], "texture": "#texture"},
+				"up": {"uv": [14.5, 0, 13, 0], "texture": "#texture"},
+				"down": {"uv": [16, 0, 14.5, 0], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_2_b",
+			"from": [2, 0, 7.5],
+			"to": [5, 9, 7.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [3.5, 0, 7.5]},
+			"color": 9,
+			"faces": {
+				"north": {"uv": [13, 3, 14.5, 7.5], "texture": "#texture"},
+				"east": {"uv": [13, 3, 13, 7.5], "texture": "#texture"},
+				"south": {"uv": [14.5, 3, 16, 7.5], "texture": "#texture"},
+				"west": {"uv": [14.5, 3, 14.5, 7.5], "texture": "#texture"},
+				"up": {"uv": [14.5, 3, 13, 3], "texture": "#texture"},
+				"down": {"uv": [16, 3, 14.5, 3], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_3_b",
+			"from": [12.5, 0, 8],
+			"to": [13.5, 3, 8],
+			"rotation": {"angle": 45, "axis": "y", "origin": [13, 0, 8]},
+			"color": 1,
+			"faces": {
+				"north": {"uv": [11, 8, 11.5, 9.5], "texture": "#texture"},
+				"east": {"uv": [11, 8, 11, 9.5], "texture": "#texture"},
+				"south": {"uv": [11.5, 8, 12, 9.5], "texture": "#texture"},
+				"west": {"uv": [11.5, 8, 11.5, 9.5], "texture": "#texture"},
+				"up": {"uv": [11.5, 8, 11, 8], "texture": "#texture"},
+				"down": {"uv": [12, 8, 11.5, 8], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "plant_4_b",
+			"from": [7, 0, 4],
+			"to": [9, 5, 4],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 0, 4]},
+			"color": 6,
+			"faces": {
+				"north": {"uv": [12, 10, 13, 12.5], "texture": "#texture"},
+				"east": {"uv": [12, 10, 12, 12.5], "texture": "#texture"},
+				"south": {"uv": [13, 10, 14, 12.5], "texture": "#texture"},
+				"west": {"uv": [13, 10, 13, 12.5], "texture": "#texture"},
+				"up": {"uv": [13, 10, 12, 10], "texture": "#texture"},
+				"down": {"uv": [14, 10, 13, 10], "texture": "#texture"}
+			}
+		}
+	]
+}

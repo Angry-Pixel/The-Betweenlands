@@ -6,10 +6,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.gen.structure.DruidCirclePiece;
-import thebetweenlands.common.world.gen.structure.DruidCircleStructure;
-import thebetweenlands.common.world.gen.structure.WightFortressPiece;
-import thebetweenlands.common.world.gen.structure.WightFortressStructure;
+import thebetweenlands.common.world.gen.structure.*;
 
 public class StructureTypeRegistry {
 	public static final DeferredRegister<StructureType<?>> TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, TheBetweenlands.ID);
@@ -20,6 +17,9 @@ public class StructureTypeRegistry {
 
 	public static final DeferredHolder<StructureType<?>, StructureType<WightFortressStructure>> WIGHT_FORTRESS = TYPES.register("wight_fortress", () -> () -> WightFortressStructure.CODEC);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> WIGHT_FORTRESS_PIECE = registerPiece("wight_fortress", WightFortressPiece::new);
+
+	public static final DeferredHolder<StructureType<?>, StructureType<SpiritTreeStructure>> SPIRIT_TREE = TYPES.register("spirit_tree", () -> () -> SpiritTreeStructure.CODEC);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> SPIRIT_TREE_PIECE = registerPiece("spirit_tree", SpiritTreePiece::new);
 
 	private static DeferredHolder<StructurePieceType, StructurePieceType> registerPiece(String name, StructurePieceType structurePieceType) {
 		return PIECE_TYPES.register(name, () -> structurePieceType);

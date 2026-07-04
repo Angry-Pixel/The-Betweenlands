@@ -8,7 +8,9 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -40,6 +42,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.inventory.PositionSupplyingMenuProvider;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 
@@ -89,10 +92,17 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 			return InteractionResult.SUCCESS;
 		} else {
 			if (level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
-				player.openMenu(censer, buf -> buf.writeBlockPos(pos));
+				player.openMenu(censer, pos);
 			}
 			return InteractionResult.CONSUME;
 		}
+	}
+
+	@Override
+	protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+		// Special menu provider for spectators
+		MenuProvider menuProvider = super.getMenuProvider(state, level, pos);
+		return PositionSupplyingMenuProvider.ofNullable(menuProvider, pos);
 	}
 
 	@Override
@@ -105,6 +115,16 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 			level.updateNeighbourForOutputSignal(pos, this);
 		}
 		super.onRemove(state, level, pos, newState, movedByPiston);
+	}
+	
+	@Override
+	protected boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+		return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
 	}
 
 	@Override

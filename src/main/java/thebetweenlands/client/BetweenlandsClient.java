@@ -8,13 +8,16 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.gui.screen.GalleryFrameScreen;
+import thebetweenlands.client.handler.WeedwoodRowboatHandler;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.VanillaParticleFactory;
 import thebetweenlands.common.entity.GalleryFrame;
+import thebetweenlands.common.entity.rowboat.WeedwoodRowboat;
 
 import javax.annotation.Nullable;
 
@@ -63,6 +66,14 @@ public class BetweenlandsClient {
 
 	public static void openGalleryScreen(GalleryFrame frame) {
 		Minecraft.getInstance().setScreen(new GalleryFrameScreen(frame));
+	}
+
+	public static void onPilotEnterWeedwoodRowboat(Entity pilot) {
+		WeedwoodRowboatHandler.INSTANCE.onPilotEnterWeedwoodRowboat(pilot);
+	}
+
+	public static void onPilotExitWeedwoodRowboat(WeedwoodRowboat rowboat, Entity pilot) {
+		WeedwoodRowboatHandler.INSTANCE.onPilotExitWeedwoodRowboat(rowboat, pilot);
 	}
 
 	/**

@@ -29,7 +29,9 @@ public class BLModelLayers {
 	public static final ModelLayerLocation BARRISHEE = register("barrishee");
 	public static final ModelLayerLocation BIPED_CRYPT_CRAWLER = register("biped_crypt_crawler");
 	public static final ModelLayerLocation BLOOD_SNAIL = register("blood_snail");
+	public static final ModelLayerLocation BONE_PUPPET_MELEE = register("bone_puppet_melee");
 	public static final ModelLayerLocation BONE_PUPPET_RANGED = register("bone_puppet_ranged");
+	public static final ModelLayerLocation BONE_SHAMAN = register("bone_shaman");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
 	public static final ModelLayerLocation CAVE_FISH = register("cave_fish");
 	public static final ModelLayerLocation CHIROMAW = register("chiromaw");
@@ -87,6 +89,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation SLUDGE_WORM = register("sludge_worm");
 	public static final ModelLayerLocation SLUDGE_WORM_ARROW = register("sludge_worm_arrow");
 	public static final ModelLayerLocation SLUDGE_WORM_EGG_SAC = register("sludge_worm_egg_sac");
+	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_1 = register("small_spirit_tree_face_1");
 	public static final ModelLayerLocation SMALL_SPIRIT_TREE_FACE_2 = register("small_spirit_tree_face_2");
 	public static final ModelLayerLocation SMOL_SLUDGE = register("smol_sludge");
 	public static final ModelLayerLocation SPLODESHROOM = register("splodeshroom");
@@ -97,16 +100,32 @@ public class BLModelLayers {
 	public static final ModelLayerLocation TAR_BEAST = register("tar_beast");
 	public static final ModelLayerLocation TARMINION = register("tarminion");
 	public static final ModelLayerLocation TERMITE = register("termite");
+	public static final ModelLayerLocation THROWN_BONE = register("thrown_bone");
 	public static final ModelLayerLocation TINY_SLUDGE_WORM = register("tiny_sludge_worm");
 	public static final ModelLayerLocation WALL_HOLE = register("wall_hole");
 	public static final ModelLayerLocation WALL_LAMPREY = register("wall_lamprey");
+	public static final ModelLayerLocation WATCHER_EYES = register("watcher_eyes");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT = register("weedwood_rowboat");
 	public static final ModelLayerLocation WEEDWOOD_ROWBOAT_LANTERN = register("weedwood_rowboat", "lantern");
 	public static final ModelLayerLocation WIGHT = register("wight");
 
+	public static final ModelLayerLocation PLAYER_ROWER = register("player_rower");
+	public static final ModelLayerLocation PLAYER_ROWER_INNER_ARMOR = register("player_rower", "inner_armor");
+	public static final ModelLayerLocation PLAYER_ROWER_OUTER_ARMOR = register("player_rower", "outer_armor");
+	public static final ModelLayerLocation SLIM_PLAYER_ROWER = register("slim_player_rower");
+	public static final ModelLayerLocation SLIM_PLAYER_ROWER_INNER_ARMOR = register("slim_player_rower", "inner_armor");
+	public static final ModelLayerLocation SLIM_PLAYER_ROWER_OUTER_ARMOR = register("slim_player_rower", "outer_armor");
+
 	public static final ModelLayerLocation CORRUPT_GECKO = register("corrupt_gecko");
 	public static final ModelLayerLocation GECKO = register("gecko");
 	public static final ModelLayerLocation MUTATED_GECKO = register("mutated_gecko");
+
+	public static final ModelLayerLocation ASPECTRUS_CROP_1 = register("aspectrus_crop_1");
+	public static final ModelLayerLocation ASPECTRUS_CROP_2 = register("aspectrus_crop_2");
+	public static final ModelLayerLocation ASPECTRUS_CROP_3 = register("aspectrus_crop_3");
+	public static final ModelLayerLocation ASPECTRUS_CROP_3_ASPECT = register("aspectrus_crop_3", "aspect");
+	public static final ModelLayerLocation ASPECTRUS_CROP_4 = register("aspectrus_crop_4");
+	public static final ModelLayerLocation ASPECTRUS_CROP_4_ASPECT = register("aspectrus_crop_4", "aspect");
 
 	public static final ModelLayerLocation ALCOVE = register("alcove");
 	public static final ModelLayerLocation ALEMBIC = register("alembic");
@@ -164,6 +183,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation WATER_FILTER = register("water_filter");
 	public static final ModelLayerLocation WAYSTONE = register("waystone");
 	public static final ModelLayerLocation WIND_CHIME = register("wind_chime");
+	public static final ModelLayerLocation VOLARKITE = register("volarkite");
 
 	//Testing stuff
 	public static final ModelLayerLocation SWINGING_HAMMER_TRAP = register("swinging_hammer_trap");

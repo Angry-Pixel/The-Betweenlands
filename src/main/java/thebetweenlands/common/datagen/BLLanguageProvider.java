@@ -518,7 +518,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.GOLDEN_CLUB_FLOWER, "Golden Club Flower");
 		this.addBlock(BlockRegistry.GOLDEN_CLUB_STALK, "Golden Club Stalk");
 		this.addBlock(BlockRegistry.GRAY_PRESENT, "Gray Present");
-		this.addBlock(BlockRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
+		// this.addBlock(BlockRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
 		this.addBlock(BlockRegistry.GREEN_BAUBLE, "Green Bauble");
 		this.addBlock(BlockRegistry.GREEN_DENTROTHYST, "Green Dentrothyst");
 		this.addBlock(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK, "Block of Green Middle Gem");
@@ -666,7 +666,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.OCTINE_BLOCK, "Block of Octine");
 		this.addBlock(BlockRegistry.OCTINE_ORE, "Octine Ore");
 		this.addBlock(BlockRegistry.OFFERING_TABLE, "Offering Table");
-		this.addBlock(BlockRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
+		// this.addBlock(BlockRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
 		this.addBlock(BlockRegistry.ORANGE_DENTROTHYST, "Orange Dentrothyst");
 		this.addBlock(BlockRegistry.ORANGE_PRESENT, "Orange Present");
 		this.addBlock(BlockRegistry.PALE_GRASS, "Pale Grass");
@@ -1140,6 +1140,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityAndEgg(EntityRegistry.ANGLER, "Angler");
 		this.addEntityAndEgg(EntityRegistry.CAVE_JELLYFISH, "Cave Jellyfish");
 		this.addEntityAndEgg(EntityRegistry.WALL_LAMPREY, "Wall Lamprey");
+		this.addEntityAndEgg(EntityRegistry.WALL_ROOT, "Living Root");
 
 		this.addEntityType(EntityRegistry.ANGRY_PEBBLE, "Thrown Angry Pebble");
 		this.addEntityType(EntityRegistry.BETWEENSTONE_PEBBLE, "Betweenstone Pebble");
@@ -1186,6 +1187,13 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addEntityType(EntityRegistry.ROCK_SNOT_TENDRIL, "Rock Snot Tendril");
 		this.addEntityType(EntityRegistry.LIGHTNING_BOLT, "Lightning Bolt");
 		this.addEntityType(EntityRegistry.SLUDGE_WALL_JET, "Sludge Spit");
+		this.addEntityType(EntityRegistry.SMALL_SPIRIT_TREE_FACE, "Small Spirit Tree Face");
+		this.addEntityType(EntityRegistry.SMALL_TAMED_SPIRIT_TREE_FACE, "Tamed Spirit Tree Face");
+		this.addEntityType(EntityRegistry.LARGE_SPIRIT_TREE_FACE, "Large Spirit Tree Face");
+		this.addEntityType(EntityRegistry.ROOT_GRABBER, "Root Grabber");
+		this.addEntityType(EntityRegistry.SPIKE_WAVE, "Spike Wave");
+		this.addEntityType(EntityRegistry.WEEDWOOD_ROWBOAT, "Weedwood Rowboat");
+		this.addEntityType(EntityRegistry.VOLARKITE, "Volarkite");
 
 		this.add("entity.thebetweenlands.small_gallery_frame", "Small Gallery Frame");
 		this.add("entity.thebetweenlands.large_gallery_frame", "Large Gallery Frame");
@@ -1220,9 +1228,9 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.coated.4", "Well coated");
 		this.add("item.thebetweenlands.coated.5", "Well coated");
 
-		this.add("item.thebetweenlands.food_sickness.fine", "Tastes good");
-		this.add("item.thebetweenlands.food_sickness.half", "Tastes fine");
-		this.add("item.thebetweenlands.food_sickness.sick", "Can't eat this anymore");
+		this.add("item.thebetweenlands.food_sickness.state.fine", "Tastes good");
+		this.add("item.thebetweenlands.food_sickness.state.half", "Tastes fine");
+		this.add("item.thebetweenlands.food_sickness.state.sick", "Can't eat this anymore");
 
 		this.add("item.thebetweenlands.circle_gem.green", "Green Gem");
 		this.add("item.thebetweenlands.circle_gem.crimson", "Crimson Gem");
@@ -1587,7 +1595,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.CHIROMAW_BARB, "Chiromaw Barb");
 		this.addItem(ItemRegistry.WEEDWOOD_BOW, "Weedwood Bow");
 		this.addItem(ItemRegistry.PREDATOR_BOW, "Predator Bow");
-		//ancient weps
+		this.addItem(ItemRegistry.ANCIENT_GREATSWORD, "Ancient Greatsword");
+		this.addItem(ItemRegistry.ANCIENT_BATTLEAXE, "Ancient Battleaxe");
 		this.addItem(ItemRegistry.PESTLE, "Pestle");
 		this.add("item.thebetweenlands.pestle.desc", "Place Pestle in Mortar");
 		this.add("item.thebetweenlands.pestle.remaining", "%d%% Remaining: %d more uses.");
@@ -1655,6 +1664,8 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.VOODOO_DOLL, "Voodoo Doll");
 		this.addItem(ItemRegistry.SWIFT_PICK, "Swift Pick");
 		this.addItem(ItemRegistry.CHIROBARB_ERUPTER, "Chirobarb Erupter");
+		this.add("item.thebetweenlands.chirobarb_erupter.desc", "Right-click to fire 360 degree volley of barbs.");
+		this.add("item.thebetweenlands.chirobarb_erupter.cooldown", "Has a 3 second cooldown.");
 		this.addItem(ItemRegistry.CHIROBARB_SHOCK_ERUPTER, "Chirobarb Shock Erupter");
 		this.addItem(ItemRegistry.MIST_STAFF, "Staff of the Mist Walker");
 		this.addItem(ItemRegistry.SHADOW_STAFF, "Staff of the Shadow Walker");
@@ -1882,6 +1893,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.PALE_GRASS_BLADES, "Pale Grass Blades");
 		this.addItem(ItemRegistry.STRING_ROOT_FIBERS, "String Root Fibers");
 		this.addItem(ItemRegistry.CRYPTWEED_BLADES, "Cryptweed Blades");
+		this.addItem(ItemRegistry.ASPECTRUS_SEEDS, "Aspectrus Seeds");
+		this.addItem(ItemRegistry.SPORES, "Spores");
+		this.addItem(ItemRegistry.BARNACLE_LARVAE, "Barnacle Larvae");
+		this.addItem(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS, "White Pear Seeds");
 
 		this.addItem(ItemRegistry.ASPECTRUS_FRUIT, "Aspectrus Fruit");
 		this.add(ItemRegistry.ASPECTRUS_FRUIT.get().getDescriptionId() + ".aspect", "Aspectrus Fruit - %s");
@@ -1890,11 +1905,14 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.DIRTY_DENTROTHYST_VIAL, "Dirty Dentrothyst Vial");
 		this.addItem(ItemRegistry.ORANGE_DENTROTHYST_VIAL, "Orange Dentrothyst Vial");
 
-		this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
-		this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
+		// this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
+		// this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
 		this.add("item.thebetweenlands.aspect_vial.aspect", "%s (%d)");
 		this.add("item.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
 		this.add("item.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");
+		this.add("block.thebetweenlands.aspect_vial.aspect", "%s (%d)");
+		this.add("block.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
+		this.add("block.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");
 
 		this.addItem(ItemRegistry.GREEN_ELIXIR, "Green Elixir Vial");
 		this.addItem(ItemRegistry.ORANGE_ELIXIR, "Orange Elixir Vial");
@@ -2020,7 +2038,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("death.attack.thebetweenlands.swarm", "%s was decomposed by infestation");
 		this.add("death.attack.thebetweenlands.urchin_spike", "%s was impaled by urchin spikes");
 		this.add("death.attack.thebetweenlands.suffocation", "%s was suffocated by a Shallowbreath");
-		this.add("death.attack.thebetweenlands.spikewave", "%s was impaled by roots");
+		this.add("death.attack.thebetweenlands.spike_wave", "%s was impaled by roots");
 		this.add("death.attack.thebetweenlands.voodoo", "%s was taken out by Voodoo magic");
 
 		this.add("event.thebetweenlands.winter.message", "You hear the sound of sleigh bells in the distance...");

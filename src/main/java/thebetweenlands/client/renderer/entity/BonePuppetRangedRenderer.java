@@ -17,10 +17,16 @@ public class BonePuppetRangedRenderer<T extends BonePuppetRanged> extends MobRen
 	public BonePuppetRangedRenderer(EntityRendererProvider.Context context) {
 		super(context, new BonePuppetRangedModel<>(context.bakeLayer(BLModelLayers.BONE_PUPPET_RANGED)), 0.5F);
 	}
-	
+
 	@Override
 	protected void scale(BonePuppetRanged entity, PoseStack stack, float partialTick) {
 		stack.translate(0.0D, 1.25D - entity.getSpawningAnimation(partialTick) * 1.25D, 0.0D);
+		shadowRadius = (float) (entity.getSpawningAnimation(partialTick) * 0.5D);
+	}
+
+	@Override
+	protected float getFlipDegrees(BonePuppetRanged livingEntity) {
+		return 0F;
 	}
 
 	@Override

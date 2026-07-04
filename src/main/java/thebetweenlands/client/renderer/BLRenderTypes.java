@@ -9,8 +9,10 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.event.BetweenlandsShaders;
+import thebetweenlands.client.model.block.DungeonDoorRunesModel;
 
 import java.util.OptionalDouble;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class BLRenderTypes extends RenderType {
@@ -163,6 +165,46 @@ public class BLRenderTypes extends RenderType {
 				.createCompositeState(true));
 	}
 
+	// Creates a new dungeon door rune RenderType, without memoizing it
+	// However, memoized is preferred because there should only around 8 rune textures
+	@Deprecated
+	public static RenderType dungeonDoorRunesUnmemoized(ResourceLocation texture, boolean additive) {
+		return create(
+				"thebetweenlands:dungeon_door_runes",
+				BLVertexFormats.DUNGEON_DOOR_RUNE,
+				VertexFormat.Mode.QUADS,
+				RenderType.TRANSIENT_BUFFER_SIZE,
+				true,
+				false, 
+				RenderType.CompositeState.builder()
+					.setShaderState(new ShaderStateShard(() -> BetweenlandsShaders.DUNGEON_DOOR_RUNES))
+					.setTextureState(
+							MultiTextureStateShard.builder()
+								.add(DungeonDoorRunesModel.TEXTURE_RUNE_GLOW, false, false) // Rune glow is texture 0
+								.add(texture, false, false) // Mask texture is texture 1
+								.build()
+						)
+					.setTransparencyState(additive ? ADDITIVE_TRANSPARENCY : WIGHT_TRANSPARENCY)
+					.setWriteMaskState(additive ? COLOR_DEPTH_WRITE : COLOR_WRITE)
+					.setCullState(NO_CULL)
+					.setLightmapState(NO_LIGHTMAP)
+					.setLayeringState(POLYGON_OFFSET_LAYERING)
+					.setOverlayState(NO_OVERLAY)
+					.createCompositeState(false) // false because no outline
+			);
+	}
+	
+	// We can memoize this one, it should only have 16 or so values
+	public static final BiFunction<ResourceLocation, Boolean, RenderType> DUNGEON_DOOR_RUNES = Util.memoize(BLRenderTypes::dungeonDoorRunesUnmemoized);
+
+	public static RenderType dungeonDoorRunes(ResourceLocation maskTexture) {
+		return DUNGEON_DOOR_RUNES.apply(maskTexture, false);
+	}
+	
+	public static RenderType dungeonDoorRunesAdditive(ResourceLocation maskTexture) {
+		return DUNGEON_DOOR_RUNES.apply(maskTexture, true);
+	}
+	
 	public BLRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
 		super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
 	}

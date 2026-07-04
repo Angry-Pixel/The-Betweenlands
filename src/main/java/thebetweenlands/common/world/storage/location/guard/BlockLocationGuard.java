@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 
 import java.util.Arrays;
 
@@ -46,7 +47,7 @@ public class BlockLocationGuard implements ILocationGuard {
 	}
 
 	@Override
-	public boolean setGuarded(Level level, BlockPos pos, boolean guarded) {
+	public boolean setGuarded(LevelAccessor level, BlockPos pos, boolean guarded) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -64,7 +65,7 @@ public class BlockLocationGuard implements ILocationGuard {
 	}
 
 	@Override
-	public boolean isGuarded(Level level, @Nullable Entity entity, BlockPos pos) {
+	public boolean isGuarded(LevelAccessor level, @Nullable Entity entity, BlockPos pos) {
 		if(pos.getY() >= 0) {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -77,17 +78,17 @@ public class BlockLocationGuard implements ILocationGuard {
 	}
 
 	@Override
-	public void clear(Level level) {
+	public void clear(LevelAccessor level) {
 		this.chunkMap.clear();
 	}
 
 	@Override
-	public boolean isClear(Level level) {
+	public boolean isClear(LevelAccessor level) {
 		return this.chunkMap.isEmpty();
 	}
 
 	@Override
-	public void handleExplosion(Level level, Explosion explosion) {
+	public void handleExplosion(LevelAccessor level, Explosion explosion) {
 		/*Iterator<BlockPos> posIT = explosion.getAffectedBlockPositions().iterator();
 		while(posIT.hasNext()) {
 			BlockPos pos = posIT.next();

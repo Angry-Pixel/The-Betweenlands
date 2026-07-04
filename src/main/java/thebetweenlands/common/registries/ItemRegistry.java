@@ -25,6 +25,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.ChirobarbErrupterData;
 import thebetweenlands.common.component.item.DiscoveryContainerData;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.RenamableData;
@@ -48,6 +49,7 @@ import thebetweenlands.common.entity.monster.TinySludgeWorm;
 import thebetweenlands.common.entity.monster.TinySludgeWormHelper;
 import thebetweenlands.common.entity.monster.chiromaw.TameChiromaw;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.aspect.IAspectVial;
 import thebetweenlands.common.item.armor.AncientArmorItem;
 import thebetweenlands.common.item.armor.BoneArmorItem;
 import thebetweenlands.common.item.armor.LurkerSkinArmorItem;
@@ -61,6 +63,10 @@ import thebetweenlands.common.item.armor.amphibious.UpgradeTriggerItem;
 import thebetweenlands.common.item.equipment.AmuletItem;
 import thebetweenlands.common.item.equipment.LurkerSkinPouchItem;
 import thebetweenlands.common.item.equipment.RingOfPowerItem;
+import thebetweenlands.common.item.equipment.RingOfRecruitmentItem;
+import thebetweenlands.common.item.equipment.RingOfSummoningItem;
+import thebetweenlands.common.item.farming.AspectrusSeedItem;
+import thebetweenlands.common.item.farming.PlantableSeedItem;
 import thebetweenlands.common.item.food.ChiromawWingItem;
 import thebetweenlands.common.item.food.FallDamageReductionBrewItem;
 import thebetweenlands.common.item.food.ForbiddenFigItem;
@@ -102,17 +108,21 @@ import thebetweenlands.common.item.misc.GlowingGoopItem;
 import thebetweenlands.common.item.misc.HoverTextItem;
 import thebetweenlands.common.item.misc.LifeCrystalItem;
 import thebetweenlands.common.item.misc.LoreScrapItem;
+import thebetweenlands.common.item.misc.MagicItemMagnetItem;
 import thebetweenlands.common.item.misc.MiddleGemItem;
 import thebetweenlands.common.item.misc.MireSnailEggItem;
+import thebetweenlands.common.item.misc.MistStaffItem;
 import thebetweenlands.common.item.misc.MobItem;
 import thebetweenlands.common.item.misc.MummyBaitItem;
 import thebetweenlands.common.item.misc.OctineIngotItem;
 import thebetweenlands.common.item.misc.PheromoneThoraxItem;
 import thebetweenlands.common.item.misc.PyradFlameItem;
+import thebetweenlands.common.item.misc.ShadowStaffItem;
 import thebetweenlands.common.item.misc.SnotPodItem;
 import thebetweenlands.common.item.misc.TarminionItem;
 import thebetweenlands.common.item.misc.TestChimpItem;
 import thebetweenlands.common.item.misc.TestFlagItem;
+import thebetweenlands.common.item.misc.VolarkiteItem;
 import thebetweenlands.common.item.misc.WallCreatureSpawnEgg;
 import thebetweenlands.common.item.misc.WeedwoodRowboatItem;
 import thebetweenlands.common.item.misc.bucket.BLBucketItem;
@@ -127,9 +137,14 @@ import thebetweenlands.common.item.shield.OctineShieldItem;
 import thebetweenlands.common.item.shield.SyrmoriteShieldItem;
 import thebetweenlands.common.item.shield.ValoniteShieldItem;
 import thebetweenlands.common.item.shield.WeedwoodShieldItem;
+import thebetweenlands.common.item.tool.AncientBattleaxeItem;
+import thebetweenlands.common.item.tool.AncientGreatswordItem;
 import thebetweenlands.common.item.tool.BLFishingRodItem;
+import thebetweenlands.common.item.tool.ChirobarbErupterItem;
 import thebetweenlands.common.item.tool.FishingSpearItem;
 import thebetweenlands.common.item.tool.GemSingerItem;
+import thebetweenlands.common.item.tool.GreataxeItem;
+import thebetweenlands.common.item.tool.GreatswordItem;
 import thebetweenlands.common.item.tool.HagHackerItem;
 import thebetweenlands.common.item.tool.InstakillWeaponItem;
 import thebetweenlands.common.item.tool.NetItem;
@@ -141,7 +156,6 @@ import thebetweenlands.common.item.tool.SilkBundleItem;
 import thebetweenlands.common.item.tool.SlingshotItem;
 import thebetweenlands.common.item.tool.SwampTalismanItem;
 import thebetweenlands.common.item.tool.SwiftPickItem;
-import thebetweenlands.common.item.tool.ValoniteGreataxeItem;
 import thebetweenlands.common.item.tool.VoodooDollItem;
 import thebetweenlands.common.item.tool.WeedwoodBowItem;
 import thebetweenlands.common.item.tool.arrow.AnglerToothArrowItem;
@@ -228,9 +242,10 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 	public static final DeferredItem<Item> ROTTEN_FOOD = ITEMS.register("rotten_food", () -> new RottenFoodItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(-1).saturationModifier(-1.0F).effect(() -> new MobEffectInstance(MobEffects.HUNGER, 200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.POISON, 200, 1), 1.0F).build())));
 	public static final DeferredItem<Item> TAINTED_POTION = ITEMS.register("tainted_potion", () -> new TaintedPotionItem(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new ItemNameBlockItem(BlockRegistry.ASPECTRUS_CROP.get(), new Item.Properties()));
-	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new ItemNameBlockItem(BlockRegistry.FUNGUS_CROP.get(), new Item.Properties()));
-	public static final DeferredItem<Item> MIDDLE_FRUIT_BUSH_SEEDS = ITEMS.register("middle_fruit_bush_seeds", () -> new ItemNameBlockItem(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), new Item.Properties()));
+	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new AspectrusSeedItem(new Item.Properties()));
+	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new PlantableSeedItem(BlockRegistry.FUNGUS_CROP.get(), PlantableSeedItem.nonDecayedSoil(), new Item.Properties()));
+	public static final DeferredItem<Item> MIDDLE_FRUIT_BUSH_SEEDS = ITEMS.register("middle_fruit_bush_seeds", () -> new PlantableSeedItem(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), PlantableSeedItem.nonDecayedSoil(), new Item.Properties()));
+	public static final DeferredItem<Item> BARNACLE_LARVAE = ITEMS.register("barnacle_larvae", () -> new ItemNameBlockItem(BlockRegistry.BARNACLE.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIRE_SNAIL_EGG = ITEMS.register("mire_snail_egg", () -> new MireSnailEggItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> COOKED_MIRE_SNAIL_EGG = ITEMS.register("cooked_mire_snail_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RAW_FROG_LEGS = ITEMS.register("raw_frog_legs", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4F).build())));
@@ -259,7 +274,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PINK_MARSHMALLOW = ITEMS.register("pink_marshmallow", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3F).effect(() -> new MobEffectInstance(MobEffects.JUMP, 400, 1), 1.0F).build())));
 	public static final DeferredItem<Item> FLATHEAD_MUSHROOM = ITEMS.register("flathead_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.FLATHEAD_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> BLACK_HAT_MUSHROOM = ITEMS.register("black_hat_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
-	public static final DeferredItem<Item> BULB_CAPPED_MUSHROOM = ITEMS.register("bulb_capped_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
+	public static final DeferredItem<Item> BULB_CAPPED_MUSHROOM = ITEMS.register("bulb_capped_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BULB_CAPPED_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> FRIED_SWAMP_KELP = ITEMS.register("fried_swamp_kelp", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> FORBIDDEN_FIG = ITEMS.register("forbidden_fig", () -> new ForbiddenFigItem(new Item.Properties().rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(20).saturationModifier(0.6F).effect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 1200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 1200, 1), 1.0F).build())));
 	public static final DeferredItem<Item> BLUE_CANDY = ITEMS.register("blue_candy", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.0F).build())));
@@ -329,7 +344,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new TarminionItem(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(16)));
 	public static final DeferredItem<Item> SLUDGE_BALL = ITEMS.register("sludge_ball", () -> new Item(new Item.Properties()));
 	//rope
-	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, new Item.Properties()));
+	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new AngryPebbleItem(4.5F, SoundRegistry.SORRY, new Item.Properties()));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new HoverTextItem(new Item.Properties()));
 	public static final DeferredItem<Item> SHAMBLER_TONGUE = ITEMS.register("shambler_tongue", () -> new Item(new Item.Properties()));
@@ -378,7 +393,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PHEROMONE_THORAX = ITEMS.register("pheromone_thorax", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().durability(2000)));
-	public static final DeferredItem<Item> SILKY_PEBBLE = ITEMS.register("silky_pebble", () -> new AngryPebbleItem(3.0F, new Item.Properties()));
+	public static final DeferredItem<Item> SILKY_PEBBLE = ITEMS.register("silky_pebble", () -> new AngryPebbleItem(3.0F, SoundRegistry.SILKY_PEBBLE_THROW, new Item.Properties()));
 
 	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6))));
 	public static final DeferredItem<Item> BONE_CHESTPLATE = ITEMS.register("bone_chestplate", () -> new BoneArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(6))));
@@ -421,7 +436,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> VALONITE_SWORD = ITEMS.register("valonite_sword", () -> new SwordItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(SwordItem.createAttributes(ToolMaterialRegistry.VALONITE, 3.0F, -2.4F))));
 	public static final DeferredItem<Item> VALONITE_PICKAXE = ITEMS.register("valonite_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(PickaxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 1.0F, -2.8F))));
 	public static final DeferredItem<Item> VALONITE_AXE = ITEMS.register("valonite_axe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(AxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.2F))));
-	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new ValoniteGreataxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(AxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.0F))));
+	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new GreataxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(GreataxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.3F, 0.5F))));
 	public static final DeferredItem<Item> VALONITE_SHOVEL = ITEMS.register("valonite_shovel", () -> new ShovelItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(ShovelItem.createAttributes(ToolMaterialRegistry.VALONITE, 1.5F, -3.0F))));
 	public static final DeferredItem<Item> OCTINE_SHIELD = ITEMS.register("octine_shield", () -> new OctineShieldItem(new Item.Properties()));
 	public static final DeferredItem<Item> VALONITE_SHIELD = ITEMS.register("valonite_shield", () -> new ValoniteShieldItem(new Item.Properties()));
@@ -446,7 +461,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CHIROMAW_BARB = ITEMS.register("chiromaw_barb", () -> new ChiromawBarbItem(new Item.Properties()));
 	public static final DeferredItem<Item> WEEDWOOD_BOW = ITEMS.register("weedwood_bow", () -> new WeedwoodBowItem(new Item.Properties().durability(600)));
 	public static final DeferredItem<Item> PREDATOR_BOW = ITEMS.register("predator_bow", () -> new PredatorBowItem(new Item.Properties().durability(600).rarity(Rarity.RARE)));
-	//ancient weapons
+	public static final DeferredItem<Item> ANCIENT_GREATSWORD = ITEMS.register("ancient_greatsword", () -> new AncientGreatswordItem(ToolMaterialRegistry.VALONITE, new Item.Properties().rarity(Rarity.RARE).attributes(GreatswordItem.createAttributes(ToolMaterialRegistry.VALONITE, 3.0F, -2.6F, 2.5F))));
+	public static final DeferredItem<Item> ANCIENT_BATTLEAXE = ITEMS.register("ancient_battleaxe", () -> new AncientBattleaxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().rarity(Rarity.RARE).attributes(GreataxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.0F, 0.5F))));
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().durability(32)));
 	public static final DeferredItem<Item> SMALL_LURKER_SKIN_POUCH = ITEMS.register("small_lurker_skin_pouch", () -> new LurkerSkinPouchItem(9, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(9))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
@@ -455,7 +471,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> XL_LURKER_SKIN_POUCH = ITEMS.register("xl_lurker_skin_pouch", () -> new LurkerSkinPouchItem(36, new Item.Properties().stacksTo(1).component(DataComponents.CONTAINER, ItemContainerContents.fromItems(new ArrayList<>(36))).component(DataComponentRegistry.RENAMABLE, RenamableData.DEFAULT)));
 	public static final DeferredItem<Item> CAVING_ROPE = ITEMS.register("caving_rope", () -> new Item(new Item.Properties()));
 	//grapples
-	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VOLARKITE = ITEMS.register("volarkite", () -> new VolarkiteItem(new Item.Properties().stacksTo(1).durability(300)));
 	public static final DeferredItem<Item> SLINGSHOT = ITEMS.register("simple_slingshot", () -> new SlingshotItem(new Item.Properties().durability(64)));
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().durability(256)));
 	public static final DeferredItem<Item> FISHING_SPEAR = ITEMS.register("fishing_spear", () -> new FishingSpearItem(EntityRegistry.FISHING_SPEAR::get, 2, new Item.Properties().durability(64)));
@@ -492,10 +508,10 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> HAG_HACKER = ITEMS.register("hag_hacker", () -> new HagHackerItem(new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
 	public static final DeferredItem<Item> VOODOO_DOLL = ITEMS.register("voodoo_doll", () -> new VoodooDollItem(new Item.Properties().rarity(Rarity.RARE).durability(24).stacksTo(1)));
 	public static final DeferredItem<Item> SWIFT_PICK = ITEMS.register("swift_pick", () -> new SwiftPickItem(ToolMaterialRegistry.VALONITE, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1)));
-	public static final DeferredItem<Item> CHIROBARB_ERUPTER = ITEMS.register("chirobarb_erupter", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(64).stacksTo(1)));
-	public static final DeferredItem<Item> CHIROBARB_SHOCK_ERUPTER = ITEMS.register("chirobarb_shock_erupter", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)));
-	public static final DeferredItem<Item> MIST_STAFF = ITEMS.register("mist_staff", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SHADOW_STAFF = ITEMS.register("shadow_staff", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CHIROBARB_ERUPTER = ITEMS.register("chirobarb_erupter", () -> new ChirobarbErupterItem(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(64).stacksTo(1).component(DataComponentRegistry.CHIROBARB_ERRUPTER_DATA, ChirobarbErrupterData.DEFAULT), false));
+	public static final DeferredItem<Item> CHIROBARB_SHOCK_ERUPTER = ITEMS.register("chirobarb_shock_erupter", () -> new ChirobarbErupterItem(new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true).component(DataComponentRegistry.CHIROBARB_ERRUPTER_DATA, ChirobarbErrupterData.DEFAULT), true));
+	public static final DeferredItem<Item> MIST_STAFF = ITEMS.register("mist_staff", () -> new MistStaffItem(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(64)));
+	public static final DeferredItem<Item> SHADOW_STAFF = ITEMS.register("shadow_staff", () -> new ShadowStaffItem(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("music_disc_astatos", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ASTATOS)));
 	public static final DeferredItem<Item> RECORD_BETWEEN_YOU_AND_ME = ITEMS.register("music_disc_between_you_and_me", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
 	public static final DeferredItem<Item> RECORD_CHRISTMAS_ON_THE_MARSH = ITEMS.register("music_disc_christmas_on_the_marsh", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.CHRISTMAS_ON_THE_MARSH)));
@@ -518,8 +534,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> AMULET_SLOT = ITEMS.register("amulet_slot", () -> new AmuletSlotItem(new Item.Properties().stacksTo(1).durability(30).setNoRepair().rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new RingOfPowerItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_ASCENT = ITEMS.register("ring_of_ascent", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> RING_OF_RECRUITMENT = ITEMS.register("ring_of_recruitment", () -> new RingOfRecruitmentItem(new Item.Properties().stacksTo(1).durability(100).rarity(Rarity.EPIC).component(DataComponentRegistry.RING_ACTIVE, false)));
+	public static final DeferredItem<Item> RING_OF_SUMMONING = ITEMS.register("ring_of_summoning", () -> new RingOfSummoningItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponentRegistry.RING_ACTIVE, false)));
 	public static final DeferredItem<Item> RING_OF_DISPERSION = ITEMS.register("ring_of_dispersion", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> RING_OF_GATHERING = ITEMS.register("ring_of_gathering", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> THEM_SCRAP = ITEMS.register("them_lore_scrap", () -> new LoreScrapItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
@@ -537,7 +553,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new BoneWayfinderItem(new Item.Properties().durability(10).setNoRepair().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new MagicItemMagnetItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).durability(2048)));
 	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
 	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new SnotPodItem(new Item.Properties().stacksTo(1)));
 
@@ -651,12 +667,12 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PALE_GRASS_BLADES = ITEMS.register("pale_grass_blades", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STRING_ROOT_FIBERS = ITEMS.register("string_root_fibers", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> CRYPTWEED_BLADES = ITEMS.register("cryptweed_blades", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new AspectrusFruitItem(new Item.Properties().component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("aspectrus_fruit", () -> new AspectrusFruitItem(new Item.Properties().component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
 	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.GREEN_ELIXIR, new Item.Properties()));
 	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentrothyst_vial", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.ORANGE_ELIXIR, new Item.Properties()));
-	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
-	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(BlockRegistry.GREEN_ASPECT_VIAL.get(), new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY), IAspectVial.VialType.GREEN));
+	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(BlockRegistry.ORANGE_ASPECT_VIAL.get(), new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY), IAspectVial.VialType.ORANGE));
 	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(DIRTY_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 	public static final DeferredItem<Item> ORANGE_ELIXIR = ITEMS.register("orange_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 
@@ -710,4 +726,5 @@ public class ItemRegistry {
 	//special spawn eggs
 	public static final DeferredItem<Item> CRYPT_CRAWLER_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("crypt_crawler_spawn_egg", () -> new CryptCrawlerSpawnEggItem(new Item.Properties()));
 	public static final DeferredItem<Item> WALL_LAMPREY_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("wall_lamprey_spawn_egg", () -> new WallCreatureSpawnEgg(EntityRegistry.WALL_LAMPREY, 0x646B3E, 0x4B4335, new Item.Properties()));
+	public static final DeferredItem<Item> WALL_ROOT_SPAWN_EGG = EntityRegistry.SPAWN_EGGS.register("wall_root_spawn_egg", () -> new WallCreatureSpawnEgg(EntityRegistry.WALL_ROOT, 0x30251C, 0x67614A, new Item.Properties()));
 }

@@ -1,0 +1,50 @@
+{
+  "parent": "minecraft:block/thin_block",
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "neoforge_data": {
+            "ambient_occlusion": false
+          },
+          "texture": "#texture",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            16.0,
+            3.0,
+            0.0
+          ]
+        },
+        "up": {
+          "neoforge_data": {
+            "ambient_occlusion": false
+          },
+          "texture": "#texture",
+          "tintindex": 0,
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        16,
+        16.02,
+        0
+      ],
+      "to": [
+        19,
+        16.02,
+        16
+      ]
+    }
+  ],
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "texture": "thebetweenlands:block/mist_bridge_vertical"
+  }
+}

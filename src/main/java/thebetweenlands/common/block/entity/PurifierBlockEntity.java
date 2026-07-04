@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.entity;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -12,6 +15,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -31,12 +35,15 @@ import thebetweenlands.common.inventory.PurifierMenu;
 import thebetweenlands.common.item.recipe.PurifierRecipe;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
+public class PurifierBlockEntity extends BaseContainerBlockEntity implements IFluidHandler, WorldlyContainer {
 
-public class PurifierBlockEntity extends BaseContainerBlockEntity implements IFluidHandler {
+    private static final int[] SLOTS_FOR_UP = new int[]{0};
+    private static final int[] SLOTS_FOR_DOWN = new int[]{2};
+    private static final int[] SLOTS_FOR_SIDES = new int[]{1};
 
 	public final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME * 4, fluidStack -> fluidStack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
 	public int time;
@@ -191,7 +198,37 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity implements IFl
 			this.setChanged();
 		}
 	}
+	
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if(slot == 1 && !stack.is(ItemRegistry.SULFUR)) {
+			return false;
+		} else if(slot == 2) {
+			return false;
+		}
+		return super.canPlaceItem(slot, stack);
+	}
 
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		if(side == Direction.DOWN) {
+			return SLOTS_FOR_DOWN;
+		} else if(side == Direction.UP) {
+			return SLOTS_FOR_UP;
+		}
+		return SLOTS_FOR_SIDES;
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+		return this.canPlaceItem(index, itemStack);
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+		return true;
+	}
+	
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);

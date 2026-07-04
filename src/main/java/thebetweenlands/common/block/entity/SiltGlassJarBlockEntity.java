@@ -5,12 +5,15 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.common.block.entity.util.NoMenuContainerBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class SiltGlassJarBlockEntity extends NoMenuContainerBlockEntity {
 
@@ -37,6 +40,16 @@ public class SiltGlassJarBlockEntity extends NoMenuContainerBlockEntity {
 	}
 
 	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		return stack.is(ItemRegistry.TINY_SLUDGE_WORM);
+	}
+
+	@Override
+	public boolean canTakeItem(Container target, int slot, ItemStack stack) {
+		return true;
+	}
+
+	@Override
 	public int getMaxStackSize() {
 		return 1;
 	}
@@ -49,23 +62,32 @@ public class SiltGlassJarBlockEntity extends NoMenuContainerBlockEntity {
 		this.itemCount = amount;
 	}
 
-	public void updateItemCount(Level level, BlockPos pos, BlockState state) {
-		int prevCount = this.getItemCount();
-
+	public int calculateItemCount() {
 		int amount = 0;
-		for(int i = 0; i < this.getItems().size(); i++) {
+		for(int i = 0; i < this.getContainerSize(); i++) {
 			if (!this.getItem(i).isEmpty()) {
-				this.setItemCount(++amount);
+				++amount;
 			}
 		}
+		return amount;
+	}
 
-		if (this.isEmpty()) {
-			this.setItemCount(0);
-		}
+	public int updateItemCount() {
+		int amount = this.calculateItemCount();
+		
+		this.setItemCount(amount);
 
-		if(prevCount != this.getItemCount()) {
-			this.setChanged();
-		}
+		return amount;
+	}
+	
+	public int updateItemCount(Level level, BlockPos pos, BlockState state) {
+		return this.updateItemCount();
+	}
+	
+	@Override
+	public void setChanged() {
+		this.updateItemCount();
+		super.setChanged();
 	}
 
 	@Override

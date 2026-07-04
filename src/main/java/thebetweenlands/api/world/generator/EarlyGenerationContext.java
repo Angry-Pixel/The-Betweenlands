@@ -58,6 +58,12 @@ public record EarlyGenerationContext<GC extends EarlyGeneratorConfiguration>(
 		return new EarlyGenerationContext<>(this.parentGenerator, biomeOptional, this.chunkGenerator, this.worldSeed, this.chunkAccess, this.chunkHeightmaps, this.blockGenerator, this.config, this.extraChunkInfo);
 	}
 
+	// Update chunkAccess
+	public EarlyGenerationContext<GC> withChunkAccess(ChunkAccess chunkAccess) {
+		if(chunkAccess == this.chunkAccess) { return this; }
+		return new EarlyGenerationContext<>(this.parentGenerator, this.biome, this.chunkGenerator, this.worldSeed, chunkAccess, this.chunkHeightmaps, this.blockGenerator, this.config, this.extraChunkInfo);
+	}
+	
 	public record BlockGenerator(BlockState defaultTerrainState, BlockState defaultLiquidState, BlockGeneratorFunction generatorFunction) {
 
 		public BlockState getBlockState(double density, double y) {

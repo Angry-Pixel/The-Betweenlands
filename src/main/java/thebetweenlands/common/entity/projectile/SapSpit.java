@@ -11,6 +11,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import thebetweenlands.common.entity.RootGrabber;
+import thebetweenlands.common.entity.monster.spirit_tree.AbstractSpiritTreeFace;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -60,7 +62,7 @@ public class SapSpit extends ThrowableItemProjectile {
 
 	@Override
 	protected boolean canHitEntity(Entity target) {
-		return super.canHitEntity(target); // && !(target instanceof SpiritTreeFace) && !(target instanceof RootGrabber);
+		return super.canHitEntity(target) && !(target instanceof AbstractSpiritTreeFace) && !(target instanceof RootGrabber);
 	}
 
 	@Override

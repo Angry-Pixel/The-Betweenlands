@@ -47,12 +47,7 @@ import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 import thebetweenlands.common.world.gen.feature.structure.TarPoolDungeonFeature;
 import thebetweenlands.common.world.gen.feature.structure.UndergroundDungeonFeature;
 import thebetweenlands.common.world.gen.feature.structure.UnderwaterRuinsFeature;
-import thebetweenlands.common.world.gen.feature.tree.HearthgroveTree;
-import thebetweenlands.common.world.gen.feature.tree.NibbletwigTree;
-import thebetweenlands.common.world.gen.feature.tree.RottenWeedwoodTree;
-import thebetweenlands.common.world.gen.feature.tree.RubberTree;
-import thebetweenlands.common.world.gen.feature.tree.SapTree;
-import thebetweenlands.common.world.gen.feature.tree.WeedwoodTree;
+import thebetweenlands.common.world.gen.feature.tree.*;
 
 public class FeatureRegistry {
 
@@ -65,6 +60,8 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> RUBBER_TREE = FEATURES.register("rubber_tree", () -> new RubberTree(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> NIBBLETWIG_TREE = FEATURES.register("nibbletwig_tree", () -> new NibbletwigTree(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> HEARTHGROVE_TREE = FEATURES.register("hearthgrove_tree", () -> new HearthgroveTree(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SPIRIT_TREE = FEATURES.register("spirit_tree", () -> new SpiritTree(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SMALL_SPIRIT_TREE = FEATURES.register("small_spirit_tree", () -> new SmallSpiritTree(NoneFeatureConfiguration.CODEC));
 
 	//Biome Features
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> BARNACLE_CLUSTER = FEATURES.register("barnacle_cluster",
@@ -125,7 +122,7 @@ public class FeatureRegistry {
 //		() -> new AlgaePatchFeature(NoisePatchWithLevelFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<CragrockSpiresFeatureConfiguration>> CRAGROCK_SPIRES = FEATURES.register("cragrock_spires",
 		() -> new CragrockSpiresFeature(CragrockSpiresFeatureConfiguration.CODEC));
-	
+
 	//Structure Features
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> UNDERWATER_RUINS = FEATURES.register("underwater_ruins",
 		() -> new UnderwaterRuinsFeature(NoneFeatureConfiguration.CODEC));

@@ -1,5 +1,11 @@
 package thebetweenlands.client.handler;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
@@ -7,21 +13,20 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.entity.CameraOffsetter;
 import thebetweenlands.api.entity.ScreenShaker;
+import thebetweenlands.common.component.entity.RingOfSummoningEntityData;
+import thebetweenlands.common.item.equipment.RingOfSummoningItem;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.MobEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class CameraPositionHandler {
 
@@ -74,16 +79,16 @@ public class CameraPositionHandler {
 			}
 
 			//Ring of Summoning
-//			List<Player> nearbyPlayers = renderViewEntity.level().getEntitiesOfClass(Player.class, renderViewEntity.getBoundingBox().inflate(32), entity -> entity.distanceTo(renderViewEntity) <= 32.0D);
-//
-//			for(Player player : nearbyPlayers) {
-//				ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
-//				if (cap != null) {
-//					if(cap.isActive()) {
-//						screenShake += (ItemRingOfSummoning.MAX_USE_TIME - cap.getActiveTicks()) / (float)ItemRingOfSummoning.MAX_USE_TIME * 0.1F + 0.01F;
-//					}
-//				}
-//			}
+			List<Player> nearbyPlayers = renderViewEntity.level().getEntitiesOfClass(Player.class, renderViewEntity.getBoundingBox().inflate(32), entity -> entity.distanceTo(renderViewEntity) <= 32.0D);
+
+			for(Player player : nearbyPlayers) {
+				RingOfSummoningEntityData cap = player.getData(AttachmentRegistry.RING_OF_SUMMONING_ENTITY_DATA);
+				if (cap != null) {
+					if(cap.isActive()) {
+						screenShake += (RingOfSummoningItem.MAX_USE_TIME - cap.getActiveTicks()) / (float)RingOfSummoningItem.MAX_USE_TIME * 0.1F + 0.01F;
+					}
+				}
+			}
 
 			//Shock
 			if (renderViewEntity instanceof LivingEntity living) {

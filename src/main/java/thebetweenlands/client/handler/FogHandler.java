@@ -343,7 +343,7 @@ public class FogHandler {
 			} else {
 				fogBrightness = 0;
 			}
-		} else if(false) {//reg.isEventActive(EnvironmentEventRegistry.SPOOPY.getId())) {
+		} else if(reg.isEventActive(EnvironmentEventRegistry.SPOOPY.getId())) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.4F).setGreen(0.22F).setBlue(0.08F);
 			} else {

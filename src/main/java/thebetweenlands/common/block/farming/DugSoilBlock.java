@@ -48,6 +48,7 @@ public abstract class DugSoilBlock extends BaseEntityBlock implements ConnectedT
 	protected DugSoilBlock(boolean purified, Properties properties) {
 		super(properties);
 		this.purified = purified;
+		this.registerDefaultState(this.getStateDefinition().any().setValue(DECAYED, false).setValue(FOGGED, false).setValue(COMPOSTED, false));
 	}
 
 	@Override

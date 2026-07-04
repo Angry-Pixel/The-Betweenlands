@@ -1,0 +1,57 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
+	"loader": "thebetweenlands:elements",
+	"textures": {
+		"particle": "thebetweenlands:block/betweenstone",
+		"texture": "thebetweenlands:block/betweenstone_pebble_pile"
+    },
+	"custom_elements": [
+		{
+			"name": "pebble_1",
+			"from": [6.1, 0, 6],
+			"to": [11.1, 2, 10],
+			"rotation": {"angle": -30, "axis": "y", "origin": [8.6, 0, 8]},
+			"color": 4,
+			"faces": {
+				"north": {"uv": [2, 2, 4.5, 3], "texture": "#texture"},
+				"east": {"uv": [0, 2, 2, 3], "texture": "#texture"},
+				"south": {"uv": [6.5, 2, 9, 3], "texture": "#texture"},
+				"west": {"uv": [4.5, 2, 6.5, 3], "texture": "#texture"},
+				"up": {"uv": [4.5, 2, 2, 0], "texture": "#texture"},
+				"down": {"uv": [7, 0, 4.5, 2], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "pebble_2",
+			"from": [10.5, 0, 2],
+			"to": [13.5, 2, 6],
+			"rotation": {"x": -10.43, "y": 31.3, "z": 0, "origin": [12, 0, 4]},
+			"color": 1,
+			"faces": {
+				"north": {"uv": [2, 5.5, 3.5, 6.5], "texture": "#texture"},
+				"east": {"uv": [0, 5.5, 2, 6.5], "texture": "#texture"},
+				"south": {"uv": [5.5, 5.5, 7, 6.5], "texture": "#texture"},
+				"west": {"uv": [3.5, 5.5, 5.5, 6.5], "texture": "#texture"},
+				"up": {"uv": [3.5, 5.5, 2, 3.5], "texture": "#texture"},
+				"down": {"uv": [5, 3.5, 3.5, 5.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "pebble_3",
+			"from": [3.5, 1, 9],
+			"to": [8.5, 3, 13],
+			"rotation": {"x": 30, "y": 45, "z": 35, "origin": [6, 1, 11]},
+			"color": 5,
+			"faces": {
+				"north": {"uv": [2, 9, 4.5, 10], "texture": "#texture"},
+				"east": {"uv": [0, 9, 2, 10], "texture": "#texture"},
+				"south": {"uv": [6.5, 9, 9, 10], "texture": "#texture"},
+				"west": {"uv": [4.5, 9, 6.5, 10], "texture": "#texture"},
+				"up": {"uv": [4.5, 9, 2, 7], "texture": "#texture"},
+				"down": {"uv": [7, 7, 4.5, 9], "texture": "#texture"}
+			}
+		}
+	]
+}

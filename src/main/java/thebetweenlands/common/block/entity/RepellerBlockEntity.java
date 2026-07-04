@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -29,6 +31,7 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 	protected boolean hasShimmerstone = false;
 	protected int fuel = 0;
 	protected boolean running = false;
+	protected ItemStack shimmerstoneItem = ItemStack.EMPTY;
 
 	private boolean prevRunning = false;
 	private float lastRadius = 0.0F;
@@ -166,6 +169,9 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		tag.putBoolean("running", this.running);
 		tag.putInt("radius_state", this.radiusState);
 		tag.putFloat("accumulated_cost", this.accumulatedCost);
+		if(!this.shimmerstoneItem.isEmpty()) {
+			tag.put("shimmerstone", this.shimmerstoneItem.save(registries));
+		}
 	}
 
 	@Override
@@ -179,6 +185,11 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		this.prevRunning = this.running;
 		this.radiusState = tag.getInt("radius_state");
 		this.accumulatedCost = tag.getFloat("accumulated_cost");
+		if(tag.contains("shimmerstone", Tag.TAG_COMPOUND)) {
+			this.shimmerstoneItem = ItemStack.parseOptional(registries, tag.getCompound("shimmerstone"));
+		} else {
+			this.shimmerstoneItem = ItemStack.EMPTY;
+		}
 	}
 
 	public void setRadiusState(Level level, int state) {
@@ -229,6 +240,15 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
+	public void setShimmerstoneStack(ItemStack shimmerstoneItem) {
+		this.shimmerstoneItem = shimmerstoneItem;
+		this.setChanged();
+	}
+	
+	public ItemStack getShimmerstoneStack() {
+		return this.shimmerstoneItem;
+	}
+	
 	public int getMaxFuel() {
 		return 10000;
 	}

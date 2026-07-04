@@ -20,6 +20,9 @@ import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.event.EventHooks;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
+import thebetweenlands.common.entity.monster.BonePuppetMelee;
+import thebetweenlands.common.entity.monster.BonePuppetRanged;
+import thebetweenlands.common.entity.monster.BoneShaman;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -55,7 +58,7 @@ public class PrimordialMalevolenceProjectile extends Projectile implements BLEnt
 
 	@Override
 	protected boolean canHitEntity(Entity target) {
-		return target.getType() != this.getType() && super.canHitEntity(target);
+		return target.getType() != this.getType() && super.canHitEntity(target) && !(target instanceof BonePuppetMelee) && !(target instanceof BonePuppetRanged);
 	}
 
 	@Override

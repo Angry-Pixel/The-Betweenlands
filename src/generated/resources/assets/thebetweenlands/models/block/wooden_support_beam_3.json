@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:wooden_support_beam_3",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/wood_support_beam_particle",
+    "texture": "thebetweenlands:block/wooden_support_beam_rotten_3"
+  }
+}

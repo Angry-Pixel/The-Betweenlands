@@ -7,7 +7,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,6 +30,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.HorizontalBaseEntityBlock;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
+import thebetweenlands.common.inventory.PositionSupplyingMenuProvider;
 import thebetweenlands.common.item.misc.AnadiaMobItem;
 import thebetweenlands.common.registries.ParticleRegistry;
 
@@ -58,10 +61,17 @@ public class FishTrimmingTableBlock extends HorizontalBaseEntityBlock implements
 			return InteractionResult.SUCCESS;
 		} else {
 			if (level.getBlockEntity(pos) instanceof FishTrimmingTableBlockEntity table) {
-				player.openMenu(table, buf -> buf.writeBlockPos(pos));
+				player.openMenu(table, pos);
 			}
 			return InteractionResult.CONSUME;
 		}
+	}
+
+	@Override
+	protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+		// Special menu provider for spectators
+		MenuProvider menuProvider = super.getMenuProvider(state, level, pos);
+		return PositionSupplyingMenuProvider.ofNullable(menuProvider, pos);
 	}
 
 	@Override
@@ -97,6 +107,16 @@ public class FishTrimmingTableBlock extends HorizontalBaseEntityBlock implements
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		Containers.dropContentsOnDestroy(state, newState, level, pos);
 		super.onRemove(state, level, pos, newState, movedByPiston);
+	}
+	
+	@Override
+	protected boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+		return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
 	}
 
 	@Nullable

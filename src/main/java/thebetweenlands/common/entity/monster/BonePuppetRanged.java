@@ -1,52 +1,56 @@
 package thebetweenlands.common.entity.monster;
 
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
+import java.util.EnumSet;
+
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.entity.BLEntity;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.entity.projectile.ThrownBone;
+import thebetweenlands.common.registries.EntityRegistry;
 
-public class BonePuppetRanged extends Monster implements BLEntity {
+public class BonePuppetRanged extends BonePuppetBase {
 
-    private static final EntityDataAccessor<Integer> SPAWN_TIMER = SynchedEntityData.defineId(BonePuppetRanged.class, EntityDataSerializers.INT);
-
-    private int lastSpawningAnimationTicks = 0;
-    private int spawnDuration = 30;
+	public static final EntityDataAccessor<Boolean> RELOADING = SynchedEntityData.defineId(BonePuppetRanged.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Integer> RELOAD_TIMER= SynchedEntityData.defineId(BonePuppetRanged.class, EntityDataSerializers.INT);
+	public int prevReloadTimer;
 
     public BonePuppetRanged(EntityType<? extends Monster> type, Level level) {
         super(type, level);
     }
 
+    public BonePuppetRanged(Level level, LivingEntity master) {
+        super(EntityRegistry.BONE_PUPPET_RANGED.get(), level);
+        setParentEntity(master);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(SPAWN_TIMER, 0);
+        builder.define(RELOADING, false);
+        builder.define(RELOAD_TIMER, 0);
     }
 
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !player.isShiftKeyDown()));
+        goalSelector.addGoal(1, new ThrowBoneGoal(this, 1D, 8F));
+        goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.7D));
+        targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
@@ -58,105 +62,130 @@ public class BonePuppetRanged extends Monster implements BLEntity {
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
-    @Override
-    public void aiStep() {
-        lastSpawningAnimationTicks = getSpawnTimer();
-            if (getSpawnTimer() < spawnDuration)
-                setSpawnTimer(getSpawnTimer() + 1);
-            if(level().isClientSide())
-            	if(getSpawnTimer() < 10)
-            		spawnEmergingParticles();
+	@Override
+	public void aiStep() {
+		super.aiStep();
 
-        super.aiStep();
-    }
+		if (level().isClientSide()) {
+			prevReloadTimer = getReloadTimer();
+			if (getReloadTimer() == 0)
+				prevReloadTimer = 0;
+		}
 
-    private void spawnEmergingParticles() {
-		double px = getX();
-		double py = getY();
-		double pz = getZ();
-		for (int i = 0, amount = 5 + level().getRandom().nextInt(2); i < amount; i++) {
-			double ox = level().getRandom().nextDouble() * 0.1F - 0.05F;
-			double oz = level().getRandom().nextDouble() * 0.1F - 0.05F;
-			double motionX = level().getRandom().nextDouble() * 0.2F - 0.1F;
-			double motionY = level().getRandom().nextDouble() * 0.1F + 0.075F;
-			double motionZ = level().getRandom().nextDouble() * 0.2F - 0.1F;
-			level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, getBlockStateOn()), false, px + ox, py, pz + oz, motionX, motionY, motionZ);
+		if (!level().isClientSide()) {
+			if (isAlive()) {
+				if (isReloading()) {
+					setReloadTimer(getReloadTimer() + 1);
+					if (getReloadTimer() > 20) {
+						setReloadTimer(0);
+						setReloading(false);
+					}
+				} else
+					setReloadTimer(0);
+			}
+			else {
+				setReloadTimer(0);
+				setReloading(false);
+			}
 		}
 	}
 
-	@Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || getSpawnTimer() < spawnDuration;
+    public void setReloading(boolean attacking) {
+    	getEntityData().set(RELOADING, attacking);
     }
 
-    @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-        boolean isCreative = source.getEntity() instanceof Player player && player.isCreative();
-        return (isEmerging() && !isCreative) || super.isInvulnerableTo(source);
+    public boolean isReloading() {
+        return getEntityData().get(RELOADING);
     }
 
-    @Override
-    public boolean isPushable() {
-        return !isEmerging() && super.isPushable();
+    public void setReloadTimer(int progress) {
+    	getEntityData().set(RELOAD_TIMER, progress);
     }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (isEmerging() && source.is(DamageTypes.IN_WALL))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("spawn_timer", getSpawnTimer());
+    public int getReloadTimer() {
+        return getEntityData().get(RELOAD_TIMER);
     }
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        setSpawnTimer(compound.getInt("spawn_timer"));
-    }
+    public static class ThrowBoneGoal extends Goal {
+        public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
+        private final BonePuppetRanged puppet;
+        private final double speedModifier;
+        private final float attackRadiusSqr;
+        private int updatePathDelay;
 
-    @Override
-    protected SoundEvent getAmbientSound() {
-		return null;
-        //return SoundRegistry.WIGHT_MOAN.get();
-    }
+        public ThrowBoneGoal(BonePuppetRanged puppet, double speedModifier, float range) {
+            this.puppet = puppet;
+            this.speedModifier = speedModifier;
+            attackRadiusSqr = range * range;
+            setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
 
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
-		return null;
-        //return SoundRegistry.WIGHT_HURT.get();
-    }
+        @Override
+        public boolean canUse() {
+            return isValidTarget();
+        }
 
-    @Override
-    protected SoundEvent getDeathSound() {
-		return null;
-       // return SoundRegistry.WIGHT_DEATH.get();
-    }
+        @Override
+        public boolean canContinueToUse() {
+            return isValidTarget() || !puppet.getNavigation().isDone();
+        }
 
-    public boolean isEmerging() {
-        return getEntityData().get(SPAWN_TIMER) < spawnDuration;
-    }
+        private boolean isValidTarget() {
+            return puppet.getTarget() != null && puppet.getTarget().isAlive();
+        }
 
-    public int getSpawnTimer() {
-        return getEntityData().get(SPAWN_TIMER);
-    }
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-    public void setSpawnTimer(int timer) {
-        getEntityData().set(SPAWN_TIMER, timer);
-    }
+		@Override
+		public void tick() {
+			LivingEntity livingentity = puppet.getTarget();
+			if (livingentity != null) {
+				boolean canSee = puppet.getSensing().hasLineOfSight(livingentity);
+				if (canSee) {
+					double distanceToTarget = puppet.distanceToSqr(livingentity);
+					boolean outOfRange = distanceToTarget > (double) attackRadiusSqr;
+					if (outOfRange) {
+						updatePathDelay--;
+						if (updatePathDelay <= 0) {
+							puppet.getNavigation().moveTo(livingentity, speedModifier);
+							updatePathDelay = PATHFINDING_DELAY_RANGE.sample(puppet.getRandom());
+						}
+					} else {
+						updatePathDelay = 0;
+						puppet.getNavigation().stop();
+					}
 
-    public float getSpawningAnimation(float partialTicks) {
-        return Mth.lerp(partialTicks, lastSpawningAnimationTicks, getSpawnTimer()) / (float) spawnDuration;
-    }
+					puppet.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+					throwBone(livingentity);
+				}
+			}
+		}
 
-    // May need this for when wights do the thing and stuffs
-    public boolean isWearingSkullMask(LivingEntity entity) {
-        ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-        return !helmet.isEmpty() && helmet.is(ItemRegistry.SKULL_MASK);
-    }
+		private void throwBone(LivingEntity target) {
+			if (canPerformAttack(target)) {
+				if(!puppet.level().isClientSide()) {
+					puppet.setAttacking(true);
+					if (puppet.getAttackTimer() == 17) {
+						Level level = puppet.level();
+						ThrownBone bone = new ThrownBone(level, puppet, (float) puppet.getAttributeValue(Attributes.ATTACK_DAMAGE));
+						double targetX = target.getX() + target.getDeltaMovement().x() - puppet.getX();
+						double targetY = target.getY() - puppet.getY() + 0.5D;
+						double targetZ = target.getZ() + target.getDeltaMovement().z() - puppet.getZ();
+						double direction = Math.toRadians(puppet.getYRot());
+						bone.absMoveTo(puppet.getX() + -Math.sin(direction) * 0.5D, puppet.getY() + 1.5D, puppet.getZ() + Math.cos(direction) * 0.5D, puppet.getYRot(), 0F);
+						level.addFreshEntity(bone);
+						bone.shoot(targetX, targetY, targetZ, 0.5F, 0.0F);
+						puppet.setReloading(true);
+					}
+				}
+			}
+		}
 
+	    protected boolean canPerformAttack(LivingEntity entity) {
+	        return !puppet.isReloading() && puppet.getSensing().hasLineOfSight(entity);
+	    }
+    }
 }

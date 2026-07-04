@@ -19,10 +19,13 @@ import org.jetbrains.annotations.Nullable;
 public class ElixirEffect {
 	public static final int VIAL_INFUSION_MAX_POTENCY = 5;
 
+	@Nullable
 	private final ResourceLocation icon;
 	private final int color;
 	public final Map<Holder<Attribute>, AttributeTemplate> elixirAttributeModifiers = new Object2ObjectOpenHashMap<>();
+	@Nullable
 	private Holder<MobEffect> elixirEffect;
+	@Nullable
 	private Holder<MobEffect> effect;
 	private boolean isAntiInfusion = false;
 	private boolean showInBook = false;
@@ -40,7 +43,7 @@ public class ElixirEffect {
 		this(null, color);
 	}
 
-	public ElixirEffect(ResourceLocation icon, int color) {
+	public ElixirEffect(@Nullable ResourceLocation icon, int color) {
 		this.icon = icon;
 		this.color = color;
 	}
@@ -54,18 +57,21 @@ public class ElixirEffect {
 		return this.showInBook;
 	}
 
+	@Nullable
 	public MobEffectInstance createEffect(int duration, int strength) {
-		return new MobEffectInstance(this.effect, duration, strength);
+		return this.effect != null ? new MobEffectInstance(this.effect, duration, strength) : null;
 	}
 
+	@Nullable
 	public MobEffectInstance createEffect(int duration, int strength, boolean ambient, boolean showParticles) {
-		return new MobEffectInstance(this.effect, duration, strength, ambient, showParticles);
+		return this.effect != null ? new MobEffectInstance(this.effect, duration, strength, ambient, showParticles) : null;
 	}
 
 	public int getColor() {
 		return this.color;
 	}
 
+	@Nullable
 	public ResourceLocation getIcon() {
 		return this.icon;
 	}
@@ -115,8 +121,8 @@ public class ElixirEffect {
 		return this.isAntiInfusion;
 	}
 
-	public boolean isActive(LivingEntity entity) {
-		if (entity == null) return false;
+	public boolean isActive(@Nullable LivingEntity entity) {
+		if (entity == null || this.effect == null) return false;
 		Collection<MobEffectInstance> activePotions = entity.getActiveEffects();
 		for (MobEffectInstance effect : activePotions) {
 			if (effect.is(this.effect)) {
@@ -126,8 +132,8 @@ public class ElixirEffect {
 		return false;
 	}
 
-	public int getDuration(LivingEntity entity) {
-		if (entity == null) return -1;
+	public int getDuration(@Nullable LivingEntity entity) {
+		if (entity == null || this.effect == null) return -1;
 		Collection<MobEffectInstance> activePotions = entity.getActiveEffects();
 		for (MobEffectInstance effect : activePotions) {
 			if (effect.is(this.effect)) {
@@ -137,8 +143,8 @@ public class ElixirEffect {
 		return -1;
 	}
 
-	public int getStrength(LivingEntity entity) {
-		if (entity == null) return -1;
+	public int getStrength(@Nullable LivingEntity entity) {
+		if (entity == null || this.effect == null) return -1;
 		Collection<MobEffectInstance> activePotions = entity.getActiveEffects();
 		for (MobEffectInstance effect : activePotions) {
 			if (effect.is(this.effect)) {
@@ -150,16 +156,19 @@ public class ElixirEffect {
 
 	@Nullable
 	public MobEffectInstance getPotionEffect(LivingEntity entity) {
-		if (entity.hasEffect(this.effect)) {
+		if (this.effect != null && this.elixirEffect != null && entity.hasEffect(this.effect)) {
 			return entity.getEffect(this.elixirEffect);
 		}
 		return null;
 	}
 
 	public void removeElixir(LivingEntity entity) {
-		entity.removeEffect(this.effect);
+		if (this.effect != null) {
+			entity.removeEffect(this.effect);
+		}
 	}
 
+	@Nullable
 	public Holder<MobEffect> getElixirEffect() {
 		return this.elixirEffect;
 	}
@@ -170,14 +179,16 @@ public class ElixirEffect {
 
 	public static class ElixirPotionEffect extends MobEffect {
 		private final ElixirEffect effect;
+		@Nullable
 		private final ResourceLocation icon;
 
-		public ElixirPotionEffect(ElixirEffect effect, int color, ResourceLocation icon) {
+		public ElixirPotionEffect(ElixirEffect effect, int color, @Nullable ResourceLocation icon) {
 			super(MobEffectCategory.BENEFICIAL, color);
 			this.effect = effect;
 			this.icon = icon;
 		}
 
+		@Nullable
 		public ResourceLocation getIcon() {
 			return this.icon;
 		}

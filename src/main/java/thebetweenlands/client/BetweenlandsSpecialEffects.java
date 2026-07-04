@@ -7,6 +7,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -15,6 +16,7 @@ import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.client.sky.BLWeatherRenderer;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.RiftEvent;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageGetter;
 
@@ -108,5 +110,18 @@ public class BetweenlandsSpecialEffects extends DimensionSpecialEffects {
 	@Override
 	public boolean tickRain(ClientLevel level, int ticks, Camera camera) {
 		return true;
+	}
+
+	/**
+	 * Used by Level & ClientLevel mixins.
+	 */
+	public static float overworldSkyBrightness(Level level, float partialTicks) {
+		float riftVisibility = EnvironmentEventRegistry.RIFT.get().getVisibility(partialTicks);
+		float f = level.getTimeOfDay(partialTicks);
+		float f1 = 1.0F - (Mth.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.2F);
+		f1 = Mth.clamp(f1, 0.0F, 1.0F);
+		f1 = 1.0F - f1;
+		f1 *= 0.8F + 0.2F;
+		return riftVisibility * f1 * 0.6f + riftVisibility * 0.2f;
 	}
 }

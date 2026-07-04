@@ -4,6 +4,7 @@
   "package": "thebetweenlands.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "ClientLevelMixin",
     "GameRendererMixin",
     "HumanoidArmorLayerMixin",
     "LevelRendererMixin",
@@ -16,6 +17,7 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "LevelMixin",
     "RandomStateMixin",
     "StateHolderMixin"
   ]

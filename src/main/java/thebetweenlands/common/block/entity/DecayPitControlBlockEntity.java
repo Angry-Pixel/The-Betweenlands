@@ -25,6 +25,7 @@ import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.DecayPitGearsSoundInstance;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.RootGrabber;
 import thebetweenlands.common.entity.monster.*;
 import thebetweenlands.common.entity.monster.chiromaw.Chiromaw;
 import thebetweenlands.common.entity.projectile.ShockwaveBlock;
@@ -374,7 +375,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 	private void checkSurfaceCollisions(Level level, BlockPos pos) {
 		boolean reverse = false;
 		for (Entity entity : this.getEntityAbove(level, pos)) {
-			if (entity != null && !(entity instanceof SludgeJet) && /*!(entity instanceof RootGrabber) &&*/ !(entity instanceof BLEntity) && !(entity instanceof ShockwaveBlock)) {
+			if (entity != null && !(entity instanceof SludgeJet) && !(entity instanceof RootGrabber) && !(entity instanceof BLEntity) && !(entity instanceof ShockwaveBlock)) {
 				if (entity instanceof AbstractArrow)
 					entity.kill();
 				if (entity instanceof Player player && player.getAbilities().flying) return;

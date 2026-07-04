@@ -1,6 +1,11 @@
 package thebetweenlands.common.block.misc;
 
-import net.minecraft.Util;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Maps;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -11,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -22,23 +28,19 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ParticleRegistry;
 
-import javax.annotation.Nullable;
+public class MistBridgeBlock extends TransparentBlock {
 
-import java.util.Map;
-
-public class MistBridgeBlock extends Block {
-
-	public static final BooleanProperty NORTH = BooleanProperty.create("north");
-	public static final BooleanProperty EAST = BooleanProperty.create("east");
-	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
-	public static final BooleanProperty WEST = BooleanProperty.create("west");
+	public static final BooleanProperty NORTH = PipeBlock.NORTH;
+	public static final BooleanProperty EAST = PipeBlock.EAST;
+	public static final BooleanProperty SOUTH = PipeBlock.SOUTH;
+	public static final BooleanProperty WEST = PipeBlock.WEST;
 	public static final BooleanProperty SOLID = BooleanProperty.create("solid");
-	private static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter(directionPropertyPair -> directionPropertyPair.getKey().getAxis().isHorizontal()).collect(Util.toMap());
+	public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter(directionPropertyPair -> directionPropertyPair.getKey().getAxis().isHorizontal()).collect(Maps.toImmutableEnumMap(Map.Entry::getKey, Map.Entry::getValue));
 
 
 	public MistBridgeBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(SOLID, true));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(NORTH, true).setValue(EAST, true).setValue(SOUTH, true).setValue(WEST, true).setValue(SOLID, true));
 	}
 
 	@Override
@@ -48,7 +50,7 @@ public class MistBridgeBlock extends Block {
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction dir, BlockState neighborUpdated, LevelAccessor accessor, BlockPos pos, BlockPos posNeighbor) {
-		return dir.getAxis().isHorizontal() ? state.setValue(PROPERTY_BY_DIRECTION.get(dir), neighborUpdated.is(this)) : super.updateShape(state, dir, neighborUpdated, accessor, pos, posNeighbor);
+		return dir.getAxis().isHorizontal() ? state.setValue(PROPERTY_BY_DIRECTION.get(dir), !neighborUpdated.is(this)) : super.updateShape(state, dir, neighborUpdated, accessor, pos, posNeighbor);
 	}
 
 	@Override

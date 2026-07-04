@@ -1,6 +1,7 @@
 package thebetweenlands.client.renderer;
 
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.util.RandomSource;
 import thebetweenlands.util.StalactiteHelper;
 
@@ -31,8 +32,8 @@ public class SpikeRenderer {
 		this.z = z;
 	}
 
-	public void build(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, int color) {
-		for(int y = 0; y < this.length; y++) {
+	public void render(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, int color) {
+		for (int y = 0; y < this.length; y++) {
 			int distUp = this.length - 1 - y;
 			boolean noTop = true;
 			boolean noBottom = false;
@@ -54,9 +55,9 @@ public class SpikeRenderer {
 			int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
 
 			float umin = 0;
-			float umax = 16;
+			float umax = 1;
 			float vmin = 0;
-			float vmax = 16;
+			float vmax = 1;
 
 			float halfSize = (float) scaledValBottom / 16 * this.widthScale;
 			float halfSizeTexW = halfSize * (umax - umin);
@@ -65,7 +66,7 @@ public class SpikeRenderer {
 
 			StalactiteHelper core = StalactiteHelper.getValsFor(this.bx, this.by + y, this.bz);
 
-			if(y == 0 && !noBottom) {
+			if (y == 0 && !noBottom) {
 				core.bX = 0.5F;
 				core.bZ = 0.5F;
 			}
@@ -102,7 +103,7 @@ public class SpikeRenderer {
 			consumer.addVertex(pose, core.tX - halfSize1, this.y + (y + height) * this.heightScale, core.tZ + halfSize1).setUv(umin + halfSizeTex1 * 2, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 1.0F, 0.0F, 0.0F);
 
 			// top
-			if(distUp == 0) {
+			if (distUp == 0) {
 				consumer.addVertex(pose, core.tX - halfSize1, this.y + y + height, core.tZ - halfSize1).setUv(umin, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, -1.0F, 0.0F);
 				consumer.addVertex(pose, core.tX - halfSize1, this.y + y + height, core.tZ + halfSize1).setUv(umin + halfSizeTex1 * 2, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, -1.0F, 0.0F);
 				consumer.addVertex(pose, core.tX + halfSize1, this.y + y + height, core.tZ + halfSize1).setUv(umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, -1.0F, 0.0F);
@@ -110,7 +111,7 @@ public class SpikeRenderer {
 			}
 
 			// bottom
-			if(y == 0) {
+			if (y == 0) {
 				consumer.addVertex(pose, core.bX - halfSize, this.y + y, core.bZ + halfSize).setUv(umin + halfSizeTexW * 2, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, 1.0F, 0.0F);
 				consumer.addVertex(pose, core.bX - halfSize, this.y + y, core.bZ - halfSize).setUv(umin, vmin).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, 1.0F, 0.0F);
 				consumer.addVertex(pose, core.bX + halfSize, this.y + y, core.bZ - halfSize).setUv(umin, vmin + halfSizeTexW * 2).setColor(color).setLight(light).setOverlay(overlay).setNormal(pose, 0.0F, 1.0F, 0.0F);

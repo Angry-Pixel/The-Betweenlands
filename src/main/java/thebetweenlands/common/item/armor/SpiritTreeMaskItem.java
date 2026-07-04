@@ -20,7 +20,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.client.renderer.entity.SpiritTreeFaceMaskRenderer;
+import thebetweenlands.client.renderer.entity.LargeSpiritTreeFaceRenderer;
+import thebetweenlands.client.renderer.entity.SmallSpiritTreeFaceRenderer;
 import thebetweenlands.common.entity.SpiritTreeFaceMask;
 import thebetweenlands.common.registries.ArmorMaterialRegistry;
 
@@ -82,6 +83,6 @@ public class SpiritTreeMaskItem extends ArmorItem {
 
 	@Override
 	public @Nullable ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
-		return this.type == SpiritTreeFaceMask.MaskType.LARGE ? SpiritTreeFaceMaskRenderer.TEXTURE_LARGE : SpiritTreeFaceMaskRenderer.TEXTURE_SMALL;
+		return this.type == SpiritTreeFaceMask.MaskType.LARGE ? LargeSpiritTreeFaceRenderer.TEXTURE : SmallSpiritTreeFaceRenderer.TEXTURE;
 	}
 }

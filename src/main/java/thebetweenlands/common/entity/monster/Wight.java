@@ -1,11 +1,12 @@
 package thebetweenlands.common.entity.monster;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -44,17 +45,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.goals.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.ai.goals.WightBuffSwampHagGoal;
+import thebetweenlands.common.entity.ai.goals.WightSeekBonePileGoal;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
-import thebetweenlands.common.entity.projectile.VolatileSoul;
 import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
 import thebetweenlands.common.registries.AttributeRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO fix flight
@@ -63,10 +67,12 @@ public class Wight extends Monster implements BLEntity {
     protected static final EntityDataAccessor<Boolean> HIDING_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> VOLATILE_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> GROW_TIMER = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.INT);
-
-    private static final EntityDimensions VOLATILE_DIMENSIONS = EntityDimensions.scalable(0.7F, 0.7F)
-            .withAttachments(EntityAttachments.builder().attach(EntityAttachment.VEHICLE, new Vec3(0.0F, 0.5F, 0.0F)));
-
+    private static final EntityDimensions VOLATILE_DIMENSIONS = EntityDimensions.scalable(0.7F, 0.7F).withAttachments(EntityAttachments.builder().attach(EntityAttachment.VEHICLE, new Vec3(0.0F, 0.5F, 0.0F)));
+    public static final EntityDataAccessor<Optional<BlockPos>> TARGET_BLOCK = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    private static final EntityDataAccessor<Boolean> DO_HERO_LANDING = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> LANDING_FALL_HEIGHT = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> FALL_TIMER = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.INT);
+    
     protected final MoveControl flightMoveControl;
     protected final MoveControl groundMoveControl;
     private int hidingAnimationTicks = 0;
@@ -78,6 +84,11 @@ public class Wight extends Monster implements BLEntity {
     private boolean canTurnVolatileOnTarget = false;
     private boolean didTurnVolatileOnPlayer = false;
     private int growCount, prevGrowCount = 40;
+	public boolean canTransformInToShaman = true;
+	public boolean ignoreHidingOnSpawn = false;
+    public int lastLandingAnimationTicks = 0;
+    public int landingDelayCount = 10;
+    public boolean oneShotParticle = true;
 
     public Wight(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -93,28 +104,37 @@ public class Wight extends Monster implements BLEntity {
         builder.define(HIDING_STATE_DW, false);
         builder.define(VOLATILE_STATE_DW, false);
         builder.define(GROW_TIMER, this.growCount);
+        builder.define(TARGET_BLOCK, Optional.empty());
+        builder.define(DO_HERO_LANDING, false);
+        builder.define(LANDING_FALL_HEIGHT, 0F);
+        builder.define(FALL_TIMER, 0);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new WightAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(2, new WightBuffSwampHagGoal(this));
-        this.goalSelector.addGoal(3, new EntityAIMoveToDirect<>(this, this.getAttributeValue(Attributes.FLYING_SPEED)) {
+        this.goalSelector.addGoal(2, new WightSeekBonePileGoal(this));
+        this.goalSelector.addGoal(3, new WightBuffSwampHagGoal(this));
+        this.goalSelector.addGoal(4, new EntityAIMoveToDirect<>(this, this.getAttributeValue(Attributes.FLYING_SPEED)) {
+        	@Override
+        	public boolean canUse() {
+        		return this.entity.getTarget() != null;
+        	}
+        	
             @Nullable
             @Override
-            protected Vec3 getTarget() {
-                if (this.entity.volatileTicks >= 20) {
-                    LivingEntity target = this.entity.getTarget();
-                    if (target != null) {
-                        return new Vec3(target.getX(), target.getEyeY(), target.getZ());
-                    }
-                }
-                return null;
-            }
+			protected Vec3 getTarget() {
+				if (this.entity.volatileTicks >= 20) {
+					LivingEntity target = this.entity.getTarget();
+					if (target != null)
+						return new Vec3(target.getX(), target.getEyeY(), target.getZ());
+				}
+				return null;
+			}
         });
-        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.4D));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.3D));
+        this.goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.4D));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.3D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(9, new EntityAIFlyRandomly<>(this) {
@@ -133,34 +153,39 @@ public class Wight extends Monster implements BLEntity {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
-    public static AttributeSupplier.Builder registerAttributes() {
-        return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 76.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.33D)
-                .add(Attributes.FLYING_SPEED, 0.32D)
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(AttributeRegistry.VOLATILE_COOLDOWN)
-                .add(AttributeRegistry.VOLATILE_HEALTH_START)
-                .add(AttributeRegistry.VOLATILE_MAX_DAMAGE)
-                .add(AttributeRegistry.VOLATILE_LENGTH);
-    }
+	public static AttributeSupplier.Builder registerAttributes() {
+		return Mob.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 76.0D)
+				.add(Attributes.MOVEMENT_SPEED, 0.33D)
+				.add(Attributes.FLYING_SPEED, 0.32D)
+				.add(Attributes.ATTACK_DAMAGE, 6.0D)
+				.add(Attributes.FOLLOW_RANGE, 64.0D)
+				.add(AttributeRegistry.VOLATILE_COOLDOWN)
+				.add(AttributeRegistry.VOLATILE_HEALTH_START)
+				.add(AttributeRegistry.VOLATILE_MAX_DAMAGE)
+				.add(AttributeRegistry.VOLATILE_LENGTH);
+	}
 
     @Override
     public void aiStep() {
         if (this.level().isClientSide()) {
+        	lastLandingAnimationTicks = getLandingAnimationTicks();
             this.prevGrowCount = this.growCount;
             this.growCount = this.getGrowTimer();
             if (this.getGrowTimer() > 0 && this.getGrowTimer() < 40)
                 if (this.tickCount % 4 == 0)
                     this.spawnVolatileParticles(true);
+            
+            if(getLandingAnimationTicks() >= 20 && onGround() && oneShotParticle) {
+            	spawnLandingParticles();
+            }
         } else {
             if (this.isInTar()) {
                 if (this.getGrowTimer() > 0)
                     this.setGrowTimer(Math.max(0, this.getGrowTimer() - 1));
                 if (this.getGrowTimer() <= 0) {
                     this.convertTo(EntityRegistry.TAR_BEAST.get(), false);
-                }
+                }   
             }
 
             if (!this.isInTar() && this.getGrowTimer() < 40)
@@ -193,6 +218,20 @@ public class Wight extends Monster implements BLEntity {
                     this.didTurnVolatileOnPlayer = false;
                 }
             }
+            
+            if (doHeroLanding()) {
+                if (getLandingAnimationTicks() < 20) // needs to be scaled distance
+                    setLandingAnimationTicks(getLandingAnimationTicks() + 1);
+                if (getLandingAnimationTicks() >= 20) { // needs to be scaled distance
+                	landingDelayCount--;
+                	if(onGround() && landingDelayCount <= 0)
+                		setDoHeroLanding(false);
+                }
+            } else {
+            	if (getLandingAnimationTicks() > 0)
+            		setLandingAnimationTicks(getLandingAnimationTicks() - 1);
+            }   
+            
         }
 
         if (this.isVolatile()) {
@@ -200,9 +239,10 @@ public class Wight extends Monster implements BLEntity {
                 if (this.volatileTicks < this.getAttribute(AttributeRegistry.VOLATILE_LENGTH).getValue()) {
                     this.volatileTicks++;
 
-                    if (this.volatileTicks >= 20) {
-                        this.noPhysics = true;
-                    }
+					if (this.volatileTicks >= 20) {
+						this.noPhysics = true;
+					}
+
                 } else {
                     if (!this.level().isClientSide()) {
                         this.setDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.075D, 0.0D));
@@ -214,7 +254,6 @@ public class Wight extends Monster implements BLEntity {
                             this.didTurnVolatileOnPlayer = false;
                         }
                     }
-
                     this.noPhysics = false;
                 }
 
@@ -244,7 +283,7 @@ public class Wight extends Monster implements BLEntity {
                         this.setYHeadRot(0);
 
 						if (this.tickCount % 5 == 0 && this.hasLineOfSight(this.getTarget()) && !this.isWearingSkullMask(this.getTarget())) {
-							List<VolatileSoul> existingSouls = this.level().getEntitiesOfClass(VolatileSoul.class, this.getBoundingBox().inflate(16.0D));
+						/*	List<VolatileSoul> existingSouls = this.level().getEntitiesOfClass(VolatileSoul.class, this.getBoundingBox().inflate(16.0D));
 							if (existingSouls.size() < 16) {
 								VolatileSoul soul = new VolatileSoul(this.level(), this);
 								float mx = this.level().getRandom().nextFloat() - 0.5F;
@@ -254,7 +293,8 @@ public class Wight extends Monster implements BLEntity {
 								soul.moveTo(this.getX() + dir.x * 0.5D, this.getY() + dir.y * 1.5D, this.getZ() + dir.z * 0.5D, 0, 0);
 								soul.shoot(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
 								this.level().addFreshEntity(soul);
-							}
+						
+							}*/ //This is fucking annoying and too random imo
 						}
                     }
                 }
@@ -277,6 +317,10 @@ public class Wight extends Monster implements BLEntity {
         }
 
         this.lastHidingAnimationTicks = this.hidingAnimationTicks;
+        if(this.ignoreHidingOnSpawn && tickCount <= 12) {
+        	this.lastHidingAnimationTicks = hidingAnimationTicks = 12;
+        }
+
         if (this.isHiding()) {
             if (this.hidingAnimationTicks > 0)
                 this.hidingAnimationTicks--;
@@ -287,7 +331,7 @@ public class Wight extends Monster implements BLEntity {
         super.aiStep();
     }
 
-    @Override
+	@Override
     public void travel(Vec3 travelVector) {
         if (this.isVolatile()) {
             //[VanillaCopy] of FlyingMob.travel (for easier porting)
@@ -336,7 +380,7 @@ public class Wight extends Monster implements BLEntity {
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.isInTar() || this.getGrowTimer() < 40;
+        return super.isImmobile() || this.isInTar() || this.getGrowTimer() < 40 || getLandingAnimationTicks() > 0;
     }
 
     @Override
@@ -416,6 +460,11 @@ public class Wight extends Monster implements BLEntity {
         compound.putBoolean("can_turn_volatile", this.canTurnVolatile);
         compound.putBoolean("turned_volatile_on_player", this.didTurnVolatileOnPlayer);
         compound.putInt("grow_timer", this.getGrowTimer());
+        compound.putBoolean("can_transform_in_to_shaman", this.canTransformInToShaman);	
+        compound.putBoolean("ignore_hiding_on_spawn", this.ignoreHidingOnSpawn);	
+        getTargetBlock().ifPresent(blockpos -> {
+        	compound.put("targetBlock", NbtUtils.writeBlockPos(blockpos));
+        });
     }
 
     @Override
@@ -429,6 +478,10 @@ public class Wight extends Monster implements BLEntity {
         this.canTurnVolatile = compound.getBoolean("can_turn_volatile");
         this.didTurnVolatileOnPlayer = compound.getBoolean("turned_volatile_on_player");
         this.setGrowTimer(compound.getInt("grow_timer"));
+        this.canTransformInToShaman = compound.getBoolean("can_transform_in_to_shaman");
+        this.ignoreHidingOnSpawn = compound.getBoolean("ignore_hiding_on_spawn");
+        if (compound.contains("targetBlock", 99))
+        	this.setTargetBlock(NbtUtils.readBlockPos(compound, "targetBlock").get());
     }
 
     @Override
@@ -462,8 +515,20 @@ public class Wight extends Monster implements BLEntity {
         this.getEntityData().set(GROW_TIMER, timer);
     }
 
+	private void setLandingAnimationTicks(int timer) {
+		getEntityData().set(FALL_TIMER, timer);
+	} 
+
+    public int getLandingAnimationTicks() {
+    	return getEntityData().get(FALL_TIMER);
+	}
+
     public float getHidingAnimation(float partialTicks) {
         return Mth.lerp(partialTicks, this.lastHidingAnimationTicks, this.hidingAnimationTicks) / 12.0F;
+    }
+
+    public float getLandingAnimation(float partialTicks) {
+        return Mth.lerp(partialTicks, this.lastLandingAnimationTicks, getLandingAnimationTicks()) / 20.0F;
     }
 
     public float getGrowthFactor(float partialTicks) {
@@ -492,15 +557,46 @@ public class Wight extends Monster implements BLEntity {
         return (int) this.getAttribute(AttributeRegistry.VOLATILE_COOLDOWN).getValue();
     }
 
-    public boolean canPossess(LivingEntity entity) {
-        if (entity instanceof SwampHag) {
-            return true;
-        }
-        if (entity instanceof Player) {
-            return !this.isWearingSkullMask(entity);
-        }
-        return false;
+    public Optional<BlockPos> getTargetBlock() {
+    	return this.getEntityData().get(TARGET_BLOCK);
+	}
+
+    public void setTargetBlock(BlockPos pos) {
+    	this.getEntityData().set(TARGET_BLOCK, Optional.of(pos));
+	}
+
+    public void clearTargetBlock() {
+        this.entityData.set(TARGET_BLOCK, Optional.empty());
     }
+
+    public void setDoHeroLanding(boolean landingState) {
+        this.getEntityData().set(DO_HERO_LANDING, landingState);
+    }
+
+    public boolean doHeroLanding() {
+        return this.getEntityData().get(DO_HERO_LANDING);
+    }
+
+	public void setHeroLandingFallHeight(float distance) {
+		this.getEntityData().set(LANDING_FALL_HEIGHT, distance);
+	}
+	
+    public float getHeroLandingFallHeight() {
+        return getEntityData().get(LANDING_FALL_HEIGHT);
+    }
+
+	public boolean canPossess(LivingEntity entity) {
+		if (entity instanceof SwampHag)
+			return true;
+
+		if (entity instanceof BonePuppetRanged)
+			return true;
+
+		if (entity instanceof Player)
+			return !this.isWearingSkullMask(entity);
+
+		return false;
+	}
 
     public boolean isWearingSkullMask(LivingEntity entity) {
         ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
@@ -534,6 +630,14 @@ public class Wight extends Monster implements BLEntity {
 //				BLParticles.STEAM_PURIFIER.spawn(this.level(), px, py, pz);
         }
     }
+
+	private void spawnLandingParticles() {
+		oneShotParticle = false;
+		for (int a = 0; a < 360; a += 4) {
+			double ang = a * Math.PI / 180D;
+			TheBetweenlands.createParticle(ParticleRegistry.WIGHT_FACE.get(), level(), getX() -Math.sin((float) ang) * 0.75D, getY(), getZ() + Math.cos((float) ang) * 0.75D, ParticleFactory.ParticleArgs.get().withMotion(-Math.sin((float) ang) * 0.3D, 0D, Math.cos((float) ang) * 0.3D).withScale(1F).withData(40)); 
+		}
+	}
 
     @Override
     public boolean canRiderInteract() {

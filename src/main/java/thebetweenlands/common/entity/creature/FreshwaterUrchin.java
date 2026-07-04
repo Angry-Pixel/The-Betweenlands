@@ -27,10 +27,11 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.particle.SpikeParticle;
+import thebetweenlands.client.particle.options.SpikeParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ProximitySpawner;
 import thebetweenlands.common.registries.DamageTypeRegistry;
-import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner {
@@ -166,7 +167,7 @@ public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner 
 				float rz = rnd.nextFloat() * 4.0F - 2.0F;
 				Vec3 vec = new Vec3(rx, ry, rz);
 				vec = vec.normalize();
-				TheBetweenlands.createParticle(ParticleRegistry.URCHIN_SPIKE.get(), this.level(), frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleFactory.ParticleArgs.get().withMotion(vec.x * 0.175F, vec.y * 0.15F + 0.35F, vec.z * 0.175F).withScale(0.2F));
+				TheBetweenlands.createParticle(new SpikeParticleOptions(SpikeParticle.URCHIN_TEXTURE, this.level().getRandom().nextInt(15) == 0), this.level(), frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleFactory.ParticleArgs.get().withMotion(vec.x * 0.175F, vec.y * 0.15F + 0.35F, vec.z * 0.175F).withScale(0.2F));
 			}
 		}
 	}

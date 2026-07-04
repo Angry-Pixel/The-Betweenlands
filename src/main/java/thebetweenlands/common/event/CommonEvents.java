@@ -20,9 +20,12 @@ import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.handler.ItemEquipmentHandler;
+import thebetweenlands.common.handler.MagicItemMagnetHandler;
 import thebetweenlands.common.handler.PlayerDecayHandler;
+import thebetweenlands.common.handler.PlayerGunkHandler;
 import thebetweenlands.common.handler.ShieldHandler;
 import thebetweenlands.common.handler.SimulacrumHandler;
+import thebetweenlands.common.handler.VolarkiteMountHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.network.clientbound.SyncStaticAspectsPacket;
@@ -43,12 +46,15 @@ public class CommonEvents {
 		ShieldHandler.init();
 		SimulacrumHandler.init();
 		WorldEventHandler.init();
+		PlayerGunkHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);
 		NeoForge.EVENT_BUS.addListener(EntitySpawnHandler::handleAmuletSpawns);
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onEntityMountEvent);
 		NeoForge.EVENT_BUS.addListener(CorrosiveBootsHandler::onPlayerTick);
+		NeoForge.EVENT_BUS.addListener(MagicItemMagnetHandler::onItemPickup);
+		NeoForge.EVENT_BUS.addListener(VolarkiteMountHandler::onMountEvent);
 	}
 
 	static void syncAspects(EntityJoinLevelEvent event) {

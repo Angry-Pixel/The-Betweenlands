@@ -214,6 +214,7 @@ public class TestChimpItem extends Item {
 			context.getLevel().addFreshEntity(triggeredblock);
 			*/
 /*
+
 			RockSnot spawner = EntityRegistry.ROCK_SNOT.get().create(context.getLevel());
 			if (spawner != null) {
 				spawner.setPos(context.getClickedPos().above().getCenter());
@@ -241,6 +242,41 @@ public class TestChimpItem extends Item {
 				platform.setYRot(context.getHorizontalDirection().toYRot());
 				platform.setOriginBlockPos(context.getClickedPos());
 			}
+/*
+			BonePuppetRanged puppet1 = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
+			BonePuppetMelee puppet2 = EntityRegistry.BONE_PUPPET_MELEE.get().create(context.getLevel());
+			if (context.getLevel().getRandom().nextBoolean()) {
+				if (puppet1 != null) {
+					puppet1.setPos(context.getClickedPos().above().getBottomCenter());
+					context.getLevel().addFreshEntity(puppet1);
+				}
+			} else
+		if (puppet2 != null) {
+				puppet2.setPos(context.getClickedPos().above().getBottomCenter());
+				context.getLevel().addFreshEntity(puppet2);
+			}
+			
+
+			BoneShaman shaman = EntityRegistry.BONE_SHAMAN.get().create(context.getLevel());
+			if (shaman != null) {
+				shaman.setPos(context.getClickedPos().above().getBottomCenter());
+				context.getLevel().addFreshEntity(shaman);
+			}
+			/*
+			WatcherEyes spy_eye = EntityRegistry.WATCHER_EYES.get().create(context.getLevel());
+			if (spy_eye != null) {
+				spy_eye.setPos(context.getClickedPos().getBottomCenter());
+				context.getLevel().addFreshEntity(spy_eye);
+				spy_eye.setYRot(context.getHorizontalDirection().getOpposite().toYRot());
+			}*/
+		/*	
+			BoneShamanProjectile bone = EntityRegistry.BONE_SHAMAN_PROJECTILE.get().create(context.getLevel());
+			if (bone != null) {
+				bone.setPos(context.getClickedPos().above().getBottomCenter());
+				context.getLevel().addFreshEntity(bone);
+			}
+			*/
+
 		}
 
 		return InteractionResult.SUCCESS;

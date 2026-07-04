@@ -1,8 +1,15 @@
 package thebetweenlands.common.item.misc;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.commands.PlaceCommand;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,19 +22,20 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
 import thebetweenlands.common.block.entity.ItemCageBlockEntity;
 import thebetweenlands.common.block.structure.DecayPitGroundChainBlock;
 import thebetweenlands.common.component.entity.BlessingData;
-import thebetweenlands.common.entity.DecayPitTarget;
-import thebetweenlands.common.entity.GreeblingCorpse;
-import thebetweenlands.common.entity.MovingWall;
-import thebetweenlands.common.entity.SwordEnergy;
+import thebetweenlands.common.entity.*;
 import thebetweenlands.common.entity.boss.Barrishee;
 import thebetweenlands.common.entity.creature.Greebling;
 import thebetweenlands.common.registries.*;
+import thebetweenlands.common.world.gen.feature.tree.SpiritTree;
+import thebetweenlands.common.world.gen.structure.SpiritTreeStructure;
 
 import java.util.List;
 
@@ -104,6 +112,10 @@ public class TestFlagItem extends Item {
 			entity.level().addFreshEntity(corpse);
 			entity.playSound(SoundRegistry.GREEBLING_FALL.get());
 			entity.discard();
+		} else {
+			RootGrabber grabber = new RootGrabber(EntityRegistry.ROOT_GRABBER.get(), entity.level(), player.isSecondaryUseActive());
+			grabber.setPosAndDelay(entity.blockPosition(), 40);
+			entity.level().addFreshEntity(grabber);
 		}
 		return super.interactLivingEntity(stack, player, entity, hand);
 	}

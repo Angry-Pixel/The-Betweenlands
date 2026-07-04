@@ -71,6 +71,7 @@ public class SiltGlassJarBlock extends BaseEntityBlock implements SwampWaterLogg
 							stack.set(DataComponentRegistry.FISHING_ROD_BAIT, true);
 							jar.setItem(i, ItemStack.EMPTY);
 							jar.updateItemCount(level, pos, state);
+							jar.setChanged();
 							if (player instanceof ServerPlayer sp)
 								AdvancementCriteriaRegistry.USED_ROD_ON_JAR.get().trigger(sp);
 						}
@@ -92,6 +93,7 @@ public class SiltGlassJarBlock extends BaseEntityBlock implements SwampWaterLogg
 							if (!jarStack.isEmpty()) {
 								jar.setItem(i, stack);
 								jar.updateItemCount(level, pos, state);
+								jar.setChanged();
 								break;
 							}
 						}
@@ -116,6 +118,7 @@ public class SiltGlassJarBlock extends BaseEntityBlock implements SwampWaterLogg
 							level.addFreshEntity(item);
 							jar.setItem(i, ItemStack.EMPTY);
 							jar.updateItemCount(level, pos, state);
+							jar.setChanged();
 						}
 						return InteractionResult.sidedSuccess(level.isClientSide());
 					}

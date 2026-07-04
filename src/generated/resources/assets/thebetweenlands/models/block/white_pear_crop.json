@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "thebetweenlands:white_pear_crop",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/white_pear_crop_particle",
+    "texture": "thebetweenlands:block/white_pear_crop_1",
+    "white_pear_crop_2": "thebetweenlands:block/white_pear_crop_2",
+    "white_pear_crop_3": "thebetweenlands:block/white_pear_crop_3",
+    "white_pear_crop_4": "thebetweenlands:block/white_pear_crop_4",
+    "white_pear_crop_5": "thebetweenlands:block/white_pear_crop_5",
+    "white_pear_crop_6": "thebetweenlands:block/white_pear_crop_6",
+    "white_pear_crop_6_decayed": "thebetweenlands:block/white_pear_crop_6_decayed"
+  }
+}

@@ -1,21 +1,16 @@
 package thebetweenlands.client.model.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidArmorModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
+import thebetweenlands.client.model.MowzieModelBase;
+import thebetweenlands.common.entity.monster.spirit_tree.AbstractSmallSpritTreeFace;
 
-public class SmallSpiritTreeFaceModel extends Model {
-
-	private final ModelPart root;
+public class SmallSpiritTreeFaceModel<T extends AbstractSmallSpritTreeFace> extends MowzieModelBase<T> {
 
 	public SmallSpiritTreeFaceModel(ModelPart root) {
-		super(RenderType::entityCutoutNoCull);
-		this.root = root;
+		super(root);
 	}
 
 	public static LayerDefinition createFace1() {
@@ -68,7 +63,7 @@ public class SmallSpiritTreeFaceModel extends Model {
 		var head = partDefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-5.0F, -4.0F, -2.0F, 10, 8, 2),
-			PartPose.offset(0.0F, headModel ? 0.0F : -7.5F, headModel ? -2.0F : 8.0F));
+			PartPose.offset(0.0F, 0.0F, headModel ? -2.0F : 0.0F));
 
 		head.addOrReplaceChild("chin", CubeListBuilder.create()
 				.texOffs(0, 11)
@@ -86,10 +81,5 @@ public class SmallSpiritTreeFaceModel extends Model {
 			PartPose.offsetAndRotation(0.0F, -3.0F, -2.0F, -0.18203784098300857F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(definition, 64, 64);
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		this.root.render(stack, consumer, light, overlay, color);
 	}
 }

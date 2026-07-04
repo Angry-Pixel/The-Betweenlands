@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/air",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/weeping_blue_particle"
+  }
+}

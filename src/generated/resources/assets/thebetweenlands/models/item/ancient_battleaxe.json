@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:item/big_tool",
+  "textures": {
+    "layer0": "thebetweenlands:item/ancient_battleaxe"
+  }
+}

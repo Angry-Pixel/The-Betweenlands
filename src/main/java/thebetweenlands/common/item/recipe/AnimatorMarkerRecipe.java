@@ -54,6 +54,11 @@ public record AnimatorMarkerRecipe(Ingredient input, int requiredFuel, int requi
 	public ItemStack onAnimated(ServerLevel level, BlockPos pos, SingleRecipeInput input) {
 		return ItemStack.EMPTY;
 	}
+	
+	@Override
+	public boolean requiresPlayerRetrieval(Level level, BlockPos pos, SingleRecipeInput input) {
+		return false;
+	}
 
 	@Override
 	public boolean onRetrieved(Player player, BlockPos pos, SingleRecipeInput input) {

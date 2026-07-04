@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -19,15 +20,15 @@ import java.util.UUID;
 public class BetweenlandsClientBossBar extends LerpingBossEvent {
 
 	private static final ResourceLocation BOSS_BAR_TEXTURE = TheBetweenlands.prefix("textures/gui/overlay/boss_health_bar.png");
-	private static final ResourceLocation MINIBOSS_BAR_TEXTURE = TheBetweenlands.prefix("textures/gui/overlay/miniboss_health_bar.png");
-	private final BetweenlandsBossBar.BossType type;
+	private static final ResourceLocation MINIBOSS_BAR = TheBetweenlands.prefix("textures/gui/overlay/miniboss_health_bar.png");
+	private final BetweenlandsBoss.BossType type;
 
-	public BetweenlandsClientBossBar(UUID id, Component name, float progress, BetweenlandsBossBar.BossType type) {
+	public BetweenlandsClientBossBar(UUID id, Component name, float progress, BetweenlandsBoss.BossType type) {
 		super(id, name, progress, BossBarColor.RED, BossBarOverlay.PROGRESS, false, false, false);
 		this.type = type;
 	}
 
-	public BetweenlandsBossBar.BossType getType() {
+	public BetweenlandsBoss.BossType getType() {
 		return this.type;
 	}
 
@@ -49,39 +50,35 @@ public class BetweenlandsClientBossBar extends LerpingBossEvent {
 		RenderSystem.disableBlend();
 	}
 
-	public void renderMiniBossBar(BetweenlandsBossBar entity, PoseStack stack, float partialTick) {
+	public void renderMiniBossBar(PoseStack stack, Vec3 offset, float size) {
 		Tesselator tesselator = Tesselator.getInstance();
 		float viewerYaw = Minecraft.getInstance().gameRenderer.getMainCamera().getYRot();
 		float viewerPitch = Minecraft.getInstance().gameRenderer.getMainCamera().getXRot();
 		boolean isThirdPersonFrontal = Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_FRONT;
 
-		Vec3 offset = entity.getMiniBossTagOffset(partialTick);
-
-		float emptyPercentage = 1.0F - entity.getBar().getProgress();
-
+		RenderSystem.enableDepthTest();
 		stack.pushPose();
 		stack.translate(offset.x, offset.y, offset.z);
 		stack.mulPose(Axis.YP.rotationDegrees(-viewerYaw));
 		stack.mulPose(Axis.XP.rotationDegrees((isThirdPersonFrontal ? -1 : 1) * viewerPitch));
 
-		float width = entity.getMiniBossTagSize(partialTick);
-		float height = width;
+		float emptyProgress = 1.0F - this.getProgress();
 
 		//base
-		this.renderTagQuad(tesselator, -width, -height - (height - 0.2F) * emptyPercentage, width, height - height * emptyPercentage, 0.0F, 0.5F);
+		renderTagQuad(stack.last(), tesselator, -size, -size, size, size, 0.0F, 0.5F, 1.0F, 0.0F);
 		//progress
-		this.renderTagQuad(tesselator, -width, -height - (height - 0.2F) * emptyPercentage, width, height - height * emptyPercentage, 0.5F, 1.0F);
+		renderTagQuad(stack.last(), tesselator, -size, -size, size, size - size * (emptyProgress * 2), 0.5F, 1.0F, 1.0F, 0.0F + emptyProgress);
 		stack.popPose();
 	}
 
-	private void renderTagQuad(Tesselator tesselator, float minX, float minY, float maxX, float maxY, float minU, float maxU) {
+	private static void renderTagQuad(PoseStack.Pose pose, Tesselator tesselator, float minX, float minY, float maxX, float maxY, float minU, float maxU, float minV, float maxV) {
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		RenderSystem.setShaderTexture(0, MINIBOSS_BAR_TEXTURE);
+		RenderSystem.setShaderTexture(0, MINIBOSS_BAR);
 		BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-		buffer.addVertex(minX, minY, 0.0F).setUv(minU, 0.5F).setColor(-1);
-		buffer.addVertex(minX, maxY, 0.0F).setUv(minU, 0.0F).setColor(-1);
-		buffer.addVertex(maxX, maxY, 0.0F).setUv(maxU, 0.0F).setColor(-1);
-		buffer.addVertex(maxX, minY, 0.0F).setUv(maxU, 0.5F).setColor(-1);
+		buffer.addVertex(pose, minX, minY, 0.0F).setUv(minU, minV).setColor(-1);
+		buffer.addVertex(pose, minX, maxY, 0.0F).setUv(minU, maxV).setColor(-1);
+		buffer.addVertex(pose, maxX, maxY, 0.0F).setUv(maxU, maxV).setColor(-1);
+		buffer.addVertex(pose, maxX, minY, 0.0F).setUv(maxU, minV).setColor(-1);
 		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 }

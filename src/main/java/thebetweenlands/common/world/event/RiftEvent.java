@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.event;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -148,25 +150,26 @@ public class RiftEvent extends TimedEnvironmentEvent {
 
 		this.lastActivationTicks = this.getActivationTicks();
 
-		if (this.isActive()) {
-			if (this.getActivationTicks() < MAX_ACTIVATION_TICKS) {
-				if (this.getActivationTicks() == 108) {
-					this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() + 180).syncImmediately();
+		if(level.isClientSide()) {
+			if (this.isActive()) {
+				if (this.getActivationTicks() < MAX_ACTIVATION_TICKS) {
+					if (this.getActivationTicks() == 108) {
+						this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() + 180).syncImmediately();
+					}
+					this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() + 1);
+				} else if (this.getActivationTicks() != MAX_ACTIVATION_TICKS) {
+					this.dataManager.set(ACTIVATION_TICKS, MAX_ACTIVATION_TICKS).syncImmediately();
 				}
-				this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() + 1);
-			} else if (this.getActivationTicks() != MAX_ACTIVATION_TICKS) {
-				this.dataManager.set(ACTIVATION_TICKS, MAX_ACTIVATION_TICKS).syncImmediately();
-			}
-		} else {
-			if (this.getActivationTicks() > 0) {
-				this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() - 4);
-			}
-			if (this.getActivationTicks() < 0) {
-				this.dataManager.set(ACTIVATION_TICKS, 0).syncImmediately();
+			} else {
+				if (this.getActivationTicks() > 0) {
+					this.dataManager.set(ACTIVATION_TICKS, this.getActivationTicks() - 4);
+				}
+				if (this.getActivationTicks() < 0) {
+					this.dataManager.set(ACTIVATION_TICKS, 0).syncImmediately();
+				}
 			}
 		}
-
-		if (!level.isClientSide()) {
+		else {
 			int remainingTicks = this.getTicks();
 			if ((!this.isActive() && remainingTicks < 1800 && remainingTicks > 80) || (this.isActive() && remainingTicks < 1800 && remainingTicks > 80)) {
 				if (this.soundTicks-- <= 0) {

@@ -20,6 +20,7 @@ import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.boss.PrimordialMalevolence;
+import thebetweenlands.common.entity.monster.BonePuppetRanged;
 import thebetweenlands.common.entity.monster.SwampHag;
 import thebetweenlands.common.entity.monster.Wight;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -127,7 +128,7 @@ public class VolatileSoul extends Projectile implements BLEntity {
 	//TODO tag?
 	@Override
 	protected boolean canHitEntity(Entity target) {
-		return !(target instanceof Wight) && !(target instanceof SwampHag) && super.canHitEntity(target);
+		return !(target instanceof Wight) && !(target instanceof SwampHag) && !(target instanceof BonePuppetRanged)&& super.canHitEntity(target);
 	}
 
 	@Override

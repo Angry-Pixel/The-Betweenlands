@@ -15,7 +15,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ExtinguishedSulfurTorchBlock extends BaseTorchBlock {
+public class ExtinguishedSulfurTorchBlock extends SulfurTorchBlock {
 
 	public ExtinguishedSulfurTorchBlock(Properties properties) {
 		super(properties);

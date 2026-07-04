@@ -1,7 +1,41 @@
 {
-  "variants": {
-    "": {
-      "model": "thebetweenlands:block/mist_bridge"
+  "multipart": [
+    {
+      "apply": {
+        "model": "thebetweenlands:block/mist_bridge"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/mist_bridge_north"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/mist_bridge_south"
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/mist_bridge_west"
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/mist_bridge_east"
+      },
+      "when": {
+        "east": "true"
+      }
     }
-  }
+  ]
 }

@@ -39,7 +39,6 @@ public class AuroraRenderer {
 	private int lastFadeTicks;
 	private boolean active = true;
 	private boolean removed;
-	private VertexBuffer mesh;
 
 	public AuroraRenderer(double x, double y, double z, Vector2d direction, int tiles, List<Vector4f> colorGradients) {
 		this.x = x;
@@ -47,9 +46,8 @@ public class AuroraRenderer {
 		this.z = z;
 		direction.normalize();
 		this.direction = direction;
-		this.tiles = tiles +14;
+		this.tiles = tiles;
 		this.colorGradients = colorGradients;
-		mesh = new VertexBuffer(VertexBuffer.Usage.STATIC);
 	}
 
 	private Vector2d getRotatedVec(double offset, Vector2d direction) {
@@ -144,10 +142,8 @@ public class AuroraRenderer {
 		double segmentHeight = 25.0D;
 		int cGradients = this.colorGradients.size();
 
-		//GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
-		//GL11.glShadeModel(GL11.GL_SMOOTH);
 
 		stack.pushPose();
 		stack.translate(this.x, 0, this.z);
@@ -256,12 +252,7 @@ public class AuroraRenderer {
 		ShaderHelper.INSTANCE.getAuroraShader().clear();
 		VertexBuffer.unbind();
 
-		//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-
-		//RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.disableBlend();
-		//GL11.glShadeModel(GL11.GL_FLAT);
-		//GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 		RenderSystem.enableCull();
 
 		stack.popPose();

@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +18,7 @@ public interface ILocationGuard {
 	 * @param guarded Whether the block is guarded
 	 * @return true if the guard state was successfully changed
 	 */
-	boolean setGuarded(Level level, BlockPos pos, boolean guarded);
+	boolean setGuarded(LevelAccessor level, BlockPos pos, boolean guarded);
 
 	/**
 	 * Returns whether the location is guarded at the specified position.
@@ -27,14 +28,14 @@ public interface ILocationGuard {
 	 * @param pos    Position
 	 * @return
 	 */
-	boolean isGuarded(Level level, @Nullable Entity entity, BlockPos pos);
+	boolean isGuarded(LevelAccessor level, @Nullable Entity entity, BlockPos pos);
 
 	/**
 	 * Clears all guards
 	 *
 	 * @param level
 	 */
-	void clear(Level level);
+	void clear(LevelAccessor level);
 
 	/**
 	 * Returns if the location is cleared
@@ -42,7 +43,7 @@ public interface ILocationGuard {
 	 * @param level World
 	 * @return
 	 */
-	boolean isClear(Level level);
+	boolean isClear(LevelAccessor level);
 
 	/**
 	 * Handles explosions that affect the location
@@ -50,7 +51,7 @@ public interface ILocationGuard {
 	 * @param level
 	 * @param explosion
 	 */
-	void handleExplosion(Level level, Explosion explosion);
+	void handleExplosion(LevelAccessor level, Explosion explosion);
 
 	/**
 	 * Writes the guard to NBT

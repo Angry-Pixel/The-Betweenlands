@@ -98,9 +98,21 @@ public class FighterAdvancementProvider implements AdvancementGenerator {
 			.addCriterion("primordial_malevolence", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(EntityRegistry.PRIMORDIAL_MALEVOLENCE.get())))
 			.save(consumer, "thebetweenlands:fighter/staring_contest");
 
-		//TODO crypt secret + not a boss
+		var secret = Advancement.Builder.advancement().parent(chopping).display(ItemRegistry.ANCIENT_GREATSWORD,
+				Component.translatable("advancement.thebetweenlands.fighter.secret_of_the_crypt"),
+				Component.translatable("advancement.thebetweenlands.fighter.secret_of_the_crypt.desc"),
+				null, AdvancementType.TASK, true, true, false)
+			.addCriterion("greatsword", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.ANCIENT_GREATSWORD))
+			.save(consumer, "thebetweenlands:fighter/secret_of_the_crypt");
 
-		//TODO illegal logging
+		//TODO not a boss advancement
+
+		Advancement.Builder.advancement().parent(chopping).display(BlockRegistry.SPIRIT_TREE_SAPLING,
+				Component.translatable("advancement.thebetweenlands.fighter.illegal_logging"),
+				Component.translatable("advancement.thebetweenlands.fighter.illegal_logging.desc"),
+				null, AdvancementType.CHALLENGE, true, true, false)
+			.addCriterion("spirit_tree", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(EntityRegistry.LARGE_SPIRIT_TREE_FACE.get())))
+			.save(consumer, "thebetweenlands:fighter/illegal_logging");
 
 		Advancement.Builder.advancement().parent(chopping).display(ItemRegistry.CHIROBARB_ERUPTER,
 				Component.translatable("advancement.thebetweenlands.fighter.spiky_matter"),
