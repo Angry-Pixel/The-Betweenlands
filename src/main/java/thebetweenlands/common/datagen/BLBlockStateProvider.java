@@ -1006,7 +1006,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 //		this.pitcherPlant(BlockRegistry.PITCHER_PLANT);
 //		this.weepingBlue(BlockRegistry.WEEPING_BLUE);
 //		this.sundew(BlockRegistry.SUNDEW);
-		this.volarpad(BlockRegistry.VOLARPAD);
+//		this.volarpad(BlockRegistry.VOLARPAD);
 //		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
 		this.builtinEntity(BlockRegistry.ASPECTRUS_CROP, this.modLoc("block/particle/aspectrus_crop_particle"));
 		this.fungusCrop(BlockRegistry.FUNGUS_CROP);

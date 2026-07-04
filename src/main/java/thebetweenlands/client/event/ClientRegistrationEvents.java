@@ -110,7 +110,6 @@ import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
 import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
 import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
-import thebetweenlands.client.model.baked.volarpad.VolarpadModelLoader;
 import thebetweenlands.client.model.baked.walkway.WalkwayModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
 import thebetweenlands.client.model.baked.woodensupportbeam1.WoodenSupportBeam1ModelLoader;
@@ -1042,7 +1041,7 @@ public class ClientRegistrationEvents {
 //		event.register(TheBetweenlands.prefix("pitcher_plant"), PitcherPlantModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("weeping_blue"), WeepingBlueModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("sundew"), SundewModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("volarpad"), VolarpadModelLoader.INSTANCE);
 		
 		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("elements"), CustomElementsModel.Loader.INSTANCE);

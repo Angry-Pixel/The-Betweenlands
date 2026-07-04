@@ -1,5 +1,5 @@
 {
-  "parent": "thebetweenlands:block/volarpad_1",
+  "parent": "thebetweenlands:block/volarpad",
   "display": {
     "firstperson_lefthand": {
       "rotation": [
