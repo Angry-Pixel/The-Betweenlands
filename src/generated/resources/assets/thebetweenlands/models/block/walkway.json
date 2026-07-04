@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "ambientocclusion": false,
-  "loader": "thebetweenlands:walkway",
-  "textures": {
-    "particle": "thebetweenlands:block/weedwood_planks",
-    "texture": "thebetweenlands:block/walkway"
-  }
-}
