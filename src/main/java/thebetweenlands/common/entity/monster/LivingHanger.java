@@ -195,13 +195,14 @@ public class LivingHanger extends Monster implements BLEntity {
 	        LivingHangerMultipart part = this.parts[i];
 	        double targetY = midPoint.y - (part.getBbHeight() / 2.0);
 
+	        part.xo = part.getX();
+	        part.yo = part.getY();
+	        part.zo = part.getZ();
+	        part.xOld = part.getX();
+	        part.yOld = part.getY();
+	        part.zOld = part.getZ();
+
 	        part.setPos(midPoint.x, targetY, midPoint.z); 
-	        part.xo = midPoint.x;
-	        part.yo = targetY;
-	        part.zo = midPoint.z;
-	        part.xOld = midPoint.x;
-	        part.yOld = targetY;
-	        part.zOld = midPoint.z;
 	    }
 	}
 
