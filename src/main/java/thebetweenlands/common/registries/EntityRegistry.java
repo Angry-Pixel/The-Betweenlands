@@ -89,6 +89,7 @@ import thebetweenlands.common.entity.monster.EmberlingShaman;
 import thebetweenlands.common.entity.monster.GasCloud;
 import thebetweenlands.common.entity.monster.LargeSludgeWorm;
 import thebetweenlands.common.entity.monster.Leech;
+import thebetweenlands.common.entity.monster.LivingHanger;
 import thebetweenlands.common.entity.monster.MummyArm;
 import thebetweenlands.common.entity.monster.PeatMummy;
 import thebetweenlands.common.entity.monster.Pyrad;
@@ -226,7 +227,8 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<WallRoot>> WALL_ROOT = registerWithAttributes("wall_root", EntityType.Builder.of(WallRoot::new, MobCategory.MONSTER).sized(0.9F, 0.9F), WallRoot::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<WatcherEyes>> WATCHER_EYES = registerWithAttributes("watcher_eyes", EntityType.Builder.of(WatcherEyes::new, MobCategory.MISC).sized(1F, 1F), BasicProximitySpawnerExtended::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B, Wight::registerAttributes);
-
+	public static final DeferredHolder<EntityType<?>, EntityType<LivingHanger>> LIVING_HANGER = registerWithAttributes("living_hanger", EntityType.Builder.<LivingHanger>of(LivingHanger::new, MobCategory.MISC).sized(0.5F, 1.0F).clientTrackingRange(4).updateInterval(20), LivingHanger::registerAttributes);
+	
 	//misc
 	public static final DeferredHolder<EntityType<?>, EntityType<AmphibiousFishingSpear>> AMPHIBIOUS_FISHING_SPEAR = register("amphibious_fishing_spear", EntityType.Builder.of(AmphibiousFishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
 	public static final DeferredHolder<EntityType<?>, EntityType<AnglerToothArrow>> ANGLER_TOOTH_ARROW = register("angler_tooth_arrow", EntityType.Builder.<AnglerToothArrow>of(AnglerToothArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));

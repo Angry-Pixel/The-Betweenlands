@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.entity.MovingShrinkform;
+import thebetweenlands.common.entity.monster.LivingHanger;
 import thebetweenlands.common.item.armor.amphibious.ArmorEffectHelper;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -234,7 +234,7 @@ public class TestChimpItem extends Item {
 				context.getLevel().addFreshEntity(swinger);
 				swinger.setYRot(context.getHorizontalDirection().toYRot());
 			}
-		*/	
+	
 			MovingShrinkform platform = EntityRegistry.MOVING_SHRINKFORM.get().create(context.getLevel());
 			if (platform != null) {
 				platform.setPos(context.getClickedPos().above().getBottomCenter());
@@ -242,7 +242,7 @@ public class TestChimpItem extends Item {
 				platform.setYRot(context.getHorizontalDirection().toYRot());
 				platform.setOriginBlockPos(context.getClickedPos());
 			}
-/*
+
 			BonePuppetRanged puppet1 = EntityRegistry.BONE_PUPPET_RANGED.get().create(context.getLevel());
 			BonePuppetMelee puppet2 = EntityRegistry.BONE_PUPPET_MELEE.get().create(context.getLevel());
 			if (context.getLevel().getRandom().nextBoolean()) {
@@ -276,7 +276,12 @@ public class TestChimpItem extends Item {
 				context.getLevel().addFreshEntity(bone);
 			}
 			*/
-
+			
+			LivingHanger spawner = EntityRegistry.LIVING_HANGER.get().create(context.getLevel());
+			if (spawner != null) {
+				spawner.setPos(context.getClickedPos().below().getBottomCenter());
+				context.getLevel().addFreshEntity(spawner);
+			}
 		}
 
 		return InteractionResult.SUCCESS;
