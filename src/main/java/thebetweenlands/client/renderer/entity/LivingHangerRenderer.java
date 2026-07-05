@@ -76,7 +76,7 @@ public class LivingHangerRenderer extends EntityRenderer<LivingHanger> {
 				calculatedPitch = (float) (Math.atan2(-dy, distanceXZ) * (180.0 / Math.PI)) - 90.0F;
 			}
 
-			boolean renderTopHalf = (i % 2 != 0);
+			boolean renderTopHalf = (i % 2 == 0);
 
 			stack.pushPose();
 			stack.translate(partX, partY, partZ);
@@ -85,7 +85,7 @@ public class LivingHangerRenderer extends EntityRenderer<LivingHanger> {
 			stack.mulPose(new Quaternionf().rotationY(calculatedYaw * Mth.DEG_TO_RAD));
 			stack.mulPose(new Quaternionf().rotationX(calculatedPitch * Mth.DEG_TO_RAD));
 
-			stack.translate(-0.5D, -0.5D, -0.5D);
+			stack.translate(-0.5D, renderTopHalf ? -0.5D : 0, -0.5D);
 
 			List<BakedQuad> targetQuads = HalfBlockModelRenderer.getHalfQuads(fullModel, renderTopHalf, 8.0f);
 
