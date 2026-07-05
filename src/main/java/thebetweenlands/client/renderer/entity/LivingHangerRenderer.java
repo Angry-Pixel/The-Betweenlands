@@ -84,8 +84,10 @@ public class LivingHangerRenderer extends EntityRenderer<LivingHanger> {
 			stack.mulPose(new Quaternionf().rotationY(-rootYaw * Mth.DEG_TO_RAD));
 			stack.mulPose(new Quaternionf().rotationY(calculatedYaw * Mth.DEG_TO_RAD));
 			stack.mulPose(new Quaternionf().rotationX(calculatedPitch * Mth.DEG_TO_RAD));
+			
+			double pivotY = renderTopHalf ? -0.75D : -0.25D;
+			stack.translate(-0.5D, pivotY, -0.5D);
 
-			stack.translate(-0.5D, renderTopHalf ? -0.5D : 0, -0.5D);
 
 			List<BakedQuad> targetQuads = HalfBlockModelRenderer.getHalfQuads(fullModel, renderTopHalf, 8.0f);
 
