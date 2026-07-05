@@ -987,7 +987,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.mossBlockWithItem(BlockRegistry.DEAD_MOSS);
 		this.lichenBlockWithItem(BlockRegistry.LICHEN);
 		this.lichenBlockWithItem(BlockRegistry.DEAD_LICHEN);
-		this.tintedCrossBlockWithItem(BlockRegistry.HANGER);
+//		this.tintedCrossBlockWithItem(BlockRegistry.HANGER);
 		this.basicItemTex(BlockRegistry.HANGER, false);
 		this.simpleBlock(BlockRegistry.SEEDED_HANGER.get(), this.models().withExistingParent(BlockRegistry.SEEDED_HANGER.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
 			.texture("cross", this.modLoc("block/seeded_hanger_tinted"))
