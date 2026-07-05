@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -17,10 +18,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
+import thebetweenlands.api.entity.NonDismountable;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.multipart.LivingHangerMultipart;
+import thebetweenlands.common.registries.SoundRegistry;
 
-public class LivingHanger extends Monster implements BLEntity {
+public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	private final int hangerSegments = 10;
 	private final double segmentLength = 0.5D;
 	private final double attackRange = 8.0D;
@@ -140,19 +143,43 @@ public class LivingHanger extends Monster implements BLEntity {
 	            if (currentTicks >= TICKS_RIDING_PER_SEGMENT) {
 	                currentTicks = 0;
 	                currentSegment--; 
+	                playSound(SoundRegistry.GECKO_HIDE.get(), 0.75F, getRandom().nextFloat() * 0.3F - 0.9F);
 	            }
 
 	            setSegmentRiderAttachedTo(currentSegment);
 	            setSegmentRiderAttachedMoveTicks(currentTicks);
+	        } else if (currentSegment == 2)
+	            suffocatePLayer();
+	    }
+	}
+	
+	private void suffocatePLayer() {
+	    if (level().isClientSide())
+	    	return;
+
+	    Entity passenger = getFirstPassenger();
+	    if (passenger instanceof Player player) {
+	        if (!player.isAlive()) {
+	        	player.stopRiding();
+	        	targetPlayer = null;
+	        	resetSegmentData();
+	            return;
+	        }
+	        //temp - I don't want the vanilla hurt sounds and we need a choking sound from Compost.
+	        if (tickCount % 20 == 0) {
+	        	player.hurt(damageSources().inWall(), 2.0F);
+	            level().playSound(null, player.getX(), player.getY() + player.getEyeHeight(), player.getZ(), SoundRegistry.BL_FISHING_ROD_CREAK.get(), SoundSource.PLAYERS, 0.75F, 0.25F);
+	            playSound(SoundRegistry.GECKO_HIDE.get(), 0.25F, getRandom().nextFloat() * 0.3F - 0.9F);
 	        }
 	    }
 	}
 
 	public void setPiecePos() {
-	    if (jointPositions == null) return;
+	    if (jointPositions == null)
+	    	return;
 
 	    jointPositions[0] = anchorPos;
-	    
+
 	    for (int i = 1; i <= hangerSegments; i++) {
 	        if (jointPositions[i] == null || Double.isNaN(jointPositions[i].x) || jointPositions[i].distanceToSqr(anchorPos) > 400.0)
 	            jointPositions[i] = anchorPos.subtract(0, i * segmentLength, 0);
@@ -284,7 +311,8 @@ public class LivingHanger extends Monster implements BLEntity {
 	    int currentIdx = getSegmentRiderAttachedTo();
 	    int currentTicks = getSegmentRiderAttachedMoveTicks();
 	    int nextIdx = Math.max(2, currentIdx - 1);
-	    if (currentIdx >= jointPositions.length || nextIdx >= jointPositions.length) return;
+	    if (currentIdx >= jointPositions.length || nextIdx >= jointPositions.length)
+	    	return;
 	    Vec3 currentPos = jointPositions[currentIdx];
 	    Vec3 nextPos = jointPositions[nextIdx];
 
@@ -368,5 +396,10 @@ public class LivingHanger extends Monster implements BLEntity {
 
 	public int getSegmentRiderAttachedMoveTicks() {
 		return getEntityData().get(MOVEMENT_TICKS);
+	}
+
+	@Override
+	public boolean isUnmountBlocked(Player rider) {
+		return !level().isClientSide() && !rider.isCreative();
 	}
 }
