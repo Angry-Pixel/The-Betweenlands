@@ -227,7 +227,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<WallRoot>> WALL_ROOT = registerWithAttributes("wall_root", EntityType.Builder.of(WallRoot::new, MobCategory.MONSTER).sized(0.9F, 0.9F), WallRoot::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<WatcherEyes>> WATCHER_EYES = registerWithAttributes("watcher_eyes", EntityType.Builder.of(WatcherEyes::new, MobCategory.MISC).sized(1F, 1F), BasicProximitySpawnerExtended::registerAttributes);
 	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B, Wight::registerAttributes);
-	public static final DeferredHolder<EntityType<?>, EntityType<LivingHanger>> LIVING_HANGER = registerWithAttributes("living_hanger", EntityType.Builder.<LivingHanger>of(LivingHanger::new, MobCategory.MISC).sized(0.5F, 1.0F).clientTrackingRange(4).updateInterval(20), LivingHanger::registerAttributes);
+	public static final DeferredHolder<EntityType<?>, EntityType<LivingHanger>> LIVING_HANGER = registerWithAttributes("living_hanger", EntityType.Builder.<LivingHanger>of(LivingHanger::new, MobCategory.MISC).sized(0.5F, 1.0F).clientTrackingRange(64).updateInterval(1), LivingHanger::registerAttributes);
 	
 	//misc
 	public static final DeferredHolder<EntityType<?>, EntityType<AmphibiousFishingSpear>> AMPHIBIOUS_FISHING_SPEAR = register("amphibious_fishing_spear", EntityType.Builder.of(AmphibiousFishingSpear::new, MobCategory.MISC).sized(0.25F, 0.25F));
