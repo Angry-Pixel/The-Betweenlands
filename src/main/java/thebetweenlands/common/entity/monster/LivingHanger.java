@@ -1,30 +1,43 @@
 package thebetweenlands.common.entity.monster;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.api.entity.NonDismountable;
 import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.multipart.LivingHangerMultipart;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class LivingHanger extends Monster implements BLEntity, NonDismountable {
-	private final int hangerSegments = 10;
+	private final int DEFAULT_LENGTH = 10; // this size for testing, but may end up longer
 	private final double segmentLength = 0.5D;
 	private final double attackRange = 8.0D;
 	private final double grabDistance = 1.25D; // Distance to grab will need to testy
@@ -33,26 +46,29 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	
 	private static final EntityDataAccessor<Integer> CURRENT_SEGMENT = SynchedEntityData.defineId(LivingHanger.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> MOVEMENT_TICKS = SynchedEntityData.defineId(LivingHanger.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> HANGER_LENGTH = SynchedEntityData.defineId(LivingHanger.class, EntityDataSerializers.INT);
 	private final int TICKS_RIDING_PER_SEGMENT = 10; // can be tweaked but half a second seems good atm
 	public final LivingHangerMultipart[] parts;
 	private final Vec3[] jointPositions;
 	private final Vec3[] prevJointPositions;
 	private Vec3 anchorPos;
+	public boolean isFalling = false;
+	private int fallTime = 0;
 
 	public LivingHanger(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
-		parts = new LivingHangerMultipart[hangerSegments];
-		jointPositions = new Vec3[hangerSegments + 1];
-		prevJointPositions = new Vec3[hangerSegments + 1];
+		parts = new LivingHangerMultipart[DEFAULT_LENGTH ];
+		jointPositions = new Vec3[DEFAULT_LENGTH  + 1];
+		prevJointPositions = new Vec3[DEFAULT_LENGTH  + 1];
 
-		for (int i = 0; i < hangerSegments; i++)
-			parts[i] = new LivingHangerMultipart(this, 0.5F, 0.5F);
+		for (int i = 0; i < DEFAULT_LENGTH; i++)
+			parts[i] = new LivingHangerMultipart(this, 0.5F, 0.5F, i);
 
 		setId(ENTITY_COUNTER.getAndAdd(parts.length + 1) + 1);
 		renderBoundingBox = getBoundingBox();
-		
+
 		Vec3 initialAnchor = position();
-		for (int i = 0; i <= hangerSegments; i++) {
+		for (int i = 0; i <= DEFAULT_LENGTH; i++) {
 			jointPositions[i] = initialAnchor.subtract(0, i * segmentLength, 0);
 			prevJointPositions[i] = initialAnchor.subtract(0, i * segmentLength, 0);
 		}
@@ -88,8 +104,9 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	    super.defineSynchedData(builder);
 	    builder.define(CURRENT_SEGMENT, 9);
 	    builder.define(MOVEMENT_TICKS, 0);
+	    builder.define(HANGER_LENGTH, DEFAULT_LENGTH);
 	}
-	
+
 	public static AttributeSupplier.Builder registerAttributes() {
 		return Mob.createMobAttributes()
 			.add(Attributes.MOVEMENT_SPEED, 0.08D)
@@ -99,14 +116,22 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	@Override
 	public void tick() {
 	    anchorPos = position();
-	    setPos(anchorPos.x, anchorPos.y, anchorPos.z);
-	    setDeltaMovement(Vec3.ZERO);
+		setPos(anchorPos.x, anchorPos.y, anchorPos.z);
+		setDeltaMovement(Vec3.ZERO);
 
-	    for (int i = 0; i <= hangerSegments; i++) {
-	        if (jointPositions[i] != null) {
+		// I hate this hack!!! - (but it works I suppose)
+		for (int i = 0; i < parts.length; i++) {
+			LivingHangerMultipart part = parts[i];
+
+			if (i >= getHangerLength()) {
+				part.setBoundingBox(new AABB(0, 0, 0, 0, 0, 0));
+				refreshDimensions();
+			}
+		}
+
+	    for (int i = 0; i <= getHangerLength(); i++)
+	        if (jointPositions[i] != null)
 	            prevJointPositions[i] = jointPositions[i];
-	        }
-	    }
 
 	    super.tick();
 
@@ -114,6 +139,15 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	    	//maybe move this block to an AI later?
 	        grabPlayer();
 	        checkTargeting();
+
+			if (!isFalling) {
+				BlockPos anchorPos = BlockPos.containing(getX(), getY() + 0.5D, getZ()).above();
+				if (level().getBlockState(anchorPos).isAir())
+					startFalling();
+			} else {
+				fallDown();
+			}
+
 	    } else {
 	        if (targetPlayer == null || !targetPlayer.isAlive() || targetPlayer.isSpectator())
 	            targetPlayer = level().getNearestPlayer(getX(), getY(), getZ(), attackRange, true);
@@ -129,10 +163,10 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	    movePiecePos();
 
 	    renderBoundingBox = getBoundingBox();
- 
+
 	    for (LivingHangerMultipart part : parts)
 	        renderBoundingBox = renderBoundingBox.minmax(part.getBoundingBox());
-	    
+
 	    if (!level().isClientSide() && hasPassenger(passenger -> passenger instanceof Player)) {
 	        int currentSegment = getSegmentRiderAttachedTo();
 	        int currentTicks = getSegmentRiderAttachedMoveTicks();
@@ -148,11 +182,12 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 
 	            setSegmentRiderAttachedTo(currentSegment);
 	            setSegmentRiderAttachedMoveTicks(currentTicks);
+
 	        } else if (currentSegment == 2)
 	            suffocatePLayer();
 	    }
 	}
-	
+
 	private void suffocatePLayer() {
 	    if (level().isClientSide())
 	    	return;
@@ -180,7 +215,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 
 	    jointPositions[0] = anchorPos;
 
-	    for (int i = 1; i <= hangerSegments; i++) {
+	    for (int i = 1; i <= getHangerLength(); i++) {
 	        if (jointPositions[i] == null || Double.isNaN(jointPositions[i].x) || jointPositions[i].distanceToSqr(anchorPos) > 400.0)
 	            jointPositions[i] = anchorPos.subtract(0, i * segmentLength, 0);
 
@@ -193,7 +228,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	            double maxWaveRadius = 0.65;  // swing
 	            double phaseShift = i * waveFrequency;
 	            double angle = (tickCount * searchSpeed) - phaseShift;
-	            double segmentScale = (double) i / hangerSegments;
+	            double segmentScale = (double) i / getHangerLength();
 	            double currentRadius = maxWaveRadius * segmentScale;
 	            double offsetX = Math.cos(angle) * currentRadius;
 	            double offsetZ = Math.sin(angle) * currentRadius;
@@ -204,23 +239,23 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	            Vec3 pullDirection = targetPoint.subtract(jointPositions[i]);
 
 	            if (pullDirection.lengthSqr() > 0.001) {
-	                double segmentInfluence = (double) i / hangerSegments; 
+	                double segmentInfluence = (double) i / getHangerLength(); 
 	                double pullStrength = 0.22 * segmentInfluence; 
 	                jointPositions[i] = jointPositions[i].add(pullDirection.normalize().scale(pullStrength));
 	            }
-	        } else {
-	            // Go sleepy bye-byes when player out of range
-	            Vec3 restingPos = anchorPos.subtract(0, i * segmentLength, 0);
-	            double returnSpeed = 0.15; 
-	            jointPositions[i] = jointPositions[i].lerp(restingPos, returnSpeed);
 	        }
-	    }
+			else {
+				// Go sleepy bye-byes when player out of range
+				Vec3 restingPos = anchorPos.subtract(0, i * segmentLength, 0);
+				double returnSpeed = 0.15;
+				jointPositions[i] = jointPositions[i].lerp(restingPos, returnSpeed);
+			}
+		}
 
 	    for (int x = 0; x < 4; x++) {
-	        for (int i = 1; i <= hangerSegments; i++) {
+	        for (int i = 1; i <= getHangerLength(); i++) {
 	            Vec3 partPrev = jointPositions[i - 1];
 	            Vec3 part = jointPositions[i];
-
 	            Vec3 delta = part.subtract(partPrev);
 	            double currentDist = delta.length();
 
@@ -233,7 +268,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	}
 
 	public void movePiecePos() {
-	    for (int i = 0; i < hangerSegments; i++) {
+	    for (int i = 0; i < getHangerLength(); i++) {
 	        Vec3 topJoint = jointPositions[i];
 	        Vec3 bottomJoint = jointPositions[i + 1];
 
@@ -255,6 +290,30 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	    }
 	}
 
+	private void startFalling() {
+	    isFalling = true;
+	    fallTime = 0;
+	    hasImpulse = true;
+	}
+
+	private void fallDown() {
+		//TODO Add some movement to the multipart so they don't just clip in to the ground.
+
+	    fallTime++;
+	    setDeltaMovement(getDeltaMovement().add(0.0D, -0.04D, 0.0D));
+	    move(MoverType.SELF, getDeltaMovement());
+	    setDeltaMovement(getDeltaMovement().scale(0.98D));
+	    if (onGround() || fallTime > 100) {
+			int itemsToDrop = getHangerLength() / 2;
+			if (itemsToDrop > 0) {
+				ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), new ItemStack(BlockRegistry.HANGER.get(), itemsToDrop));
+				itemEntity.setDefaultPickUpDelay();
+				level().addFreshEntity(itemEntity);
+			}
+			discard();
+	    }
+	}
+
 	@Override
 	public AABB getBoundingBoxForCulling() {
 		return renderBoundingBox;
@@ -266,7 +325,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 		}
 
 		if (targetPlayer != null) {
-			Vec3 tipPos = jointPositions[hangerSegments];
+			Vec3 tipPos = jointPositions[getHangerLength()];
 			Vec3 playerPos = targetPlayer.position().add(0, targetPlayer.getBbHeight() / 2.0, 0);
 			double distanceToPlayer = tipPos.distanceTo(playerPos);
 
@@ -274,10 +333,10 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 				targetPlayer.startRiding(this, true);
 		}
 	}
-	
+
 	public void resetSegmentData() {
-		if (getSegmentRiderAttachedTo() != 9)
-			setSegmentRiderAttachedTo(9);
+		if (getSegmentRiderAttachedTo() != getHangerLength())
+			setSegmentRiderAttachedTo(getHangerLength());
 		if (getSegmentRiderAttachedMoveTicks() != 0)
 			setSegmentRiderAttachedMoveTicks(0);
 	}
@@ -293,7 +352,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	protected void addPassenger(Entity passenger) {
 	    super.addPassenger(passenger);
 	    if (!level().isClientSide() && passenger instanceof Player)
-	        resetSegmentData();;
+	        resetSegmentData();
 	}
 
 	@Override
@@ -311,8 +370,10 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	    int currentIdx = getSegmentRiderAttachedTo();
 	    int currentTicks = getSegmentRiderAttachedMoveTicks();
 	    int nextIdx = Math.max(2, currentIdx - 1);
+
 	    if (currentIdx >= jointPositions.length || nextIdx >= jointPositions.length)
 	    	return;
+
 	    Vec3 currentPos = jointPositions[currentIdx];
 	    Vec3 nextPos = jointPositions[nextIdx];
 
@@ -351,6 +412,8 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 		super.readAdditionalSaveData(tag);
 		if (tag.contains("anchor_x"))
 			anchorPos = new Vec3(tag.getDouble("anchor_x"), tag.getDouble("anchor_y"), tag.getDouble("anchor_z"));
+		if (tag.contains("length"))
+			setHangerLength(tag.getInt("length"));
 	}
 
 	@Override
@@ -361,6 +424,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 			tag.putDouble("anchor_y", anchorPos.y);
 			tag.putDouble("anchor_z", anchorPos.z);
 		}
+		tag.putDouble("length", getHangerLength());
 	}
 
 	// can be set to any part(s) - dunno if we want this either
@@ -381,7 +445,7 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	protected boolean damageHanger(DamageSource source, float amount) {
 		return super.hurt(source, amount);
 	}
-	
+
 	public void setSegmentRiderAttachedTo(int segment) {
 		getEntityData().set(CURRENT_SEGMENT, segment);
 	}
@@ -398,8 +462,75 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 		return getEntityData().get(MOVEMENT_TICKS);
 	}
 
+	public void setHangerLength(int length) {
+		getEntityData().set(HANGER_LENGTH, length);
+	}
+
+	public int getHangerLength() {
+		return getEntityData().get(HANGER_LENGTH);
+	}
+
 	@Override
 	public boolean isUnmountBlocked(Player rider) {
 		return !level().isClientSide() && !rider.isCreative();
 	}
+
+	public void cutAtPart(int index, Player player, InteractionHand hand) {
+		Entity passenger = getFirstPassenger();
+
+		if (passenger != null && passenger == player) {
+			player.stopRiding();
+			targetPlayer = null;
+			resetSegmentData();
+		}
+
+		int partsFromBottom = parts.length - index;
+		int partPairs = partsFromBottom + (partsFromBottom % 2);
+		int newLength = parts.length - partPairs;
+		int partsRemoved = getHangerLength() - newLength;
+	    int itemsToDrop = partsRemoved / 2;
+
+		if (itemsToDrop > 0 && !level().isClientSide()) {
+			ItemEntity itemEntity = new ItemEntity(level(), parts[index].getX(), parts[index].getY(), parts[index].getZ(), new ItemStack(BlockRegistry.HANGER.get(), itemsToDrop));
+			itemEntity.setDefaultPickUpDelay();
+			level().addFreshEntity(itemEntity);
+		}
+
+		setHangerLength(newLength);
+
+		if (newLength <= 0)
+			discard();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data) {
+		SpawnGroupData finalizedData = super.finalizeSpawn(level, difficulty, type, data);
+
+		if (!level().isClientSide()) {
+		        int maxSegments = DEFAULT_LENGTH;
+		        int length = 0;
+		        double checkY = getY() - segmentLength;
+		        int checkX = getBlockX();
+		        int checkZ = getBlockZ();
+
+		        for (int i = 0; i < maxSegments; i++) {
+		            BlockPos currentBlockPos = BlockPos.containing(checkX, checkY, checkZ);
+		            BlockState state = level.getBlockState(currentBlockPos);
+
+		            if (state.isAir() || !state.isSolid()) {
+		            	length++;
+		                checkY -= segmentLength; 
+		            } else
+		                break;
+		        }
+		        if (length < 1)
+		        	length = 1;
+
+		        setHangerLength(length);
+		    }
+	    return finalizedData;
+	}
+
 }

@@ -82,7 +82,7 @@ public class LivingHangerRenderer extends EntityRenderer<LivingHanger> {
 
 		stack.popPose();
 
-		for (int i = 0; i != entity.parts.length; i++) {
+		for (int i = 0; i != entity.getHangerLength(); i++) {
 			var part = entity.parts[i];
 			double partX = Mth.lerp(partialTick, part.xo, part.getX()) - rootX;
 			double partY = Mth.lerp(partialTick, part.yo, part.getY()) - rootY;
