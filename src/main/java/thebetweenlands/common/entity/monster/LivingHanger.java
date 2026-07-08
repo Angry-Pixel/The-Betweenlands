@@ -24,10 +24,13 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.api.entity.NonDismountable;
@@ -144,9 +147,8 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 				BlockPos anchorPos = BlockPos.containing(getX(), getY() + 0.5D, getZ()).above();
 				if (level().getBlockState(anchorPos).isAir())
 					startFalling();
-			} else {
+			} else
 				fallDown();
-			}
 
 	    } else {
 	        if (targetPlayer == null || !targetPlayer.isAlive() || targetPlayer.isSpectator())
@@ -297,21 +299,49 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 	}
 
 	private void fallDown() {
-		//TODO Add some movement to the multipart so they don't just clip in to the ground.
-
 	    fallTime++;
 	    setDeltaMovement(getDeltaMovement().add(0.0D, -0.04D, 0.0D));
 	    move(MoverType.SELF, getDeltaMovement());
 	    setDeltaMovement(getDeltaMovement().scale(0.98D));
-	    if (onGround() || fallTime > 100) {
-			int itemsToDrop = getHangerLength() / 2;
-			if (itemsToDrop > 0) {
-				ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), new ItemStack(BlockRegistry.HANGER.get(), itemsToDrop));
-				itemEntity.setDefaultPickUpDelay();
-				level().addFreshEntity(itemEntity);
-			}
-			discard();
-	    }
+
+	    double spaceLeft = this.getDistanceToGround();
+
+	        for (int i = getHangerLength() - 1; i >= 0; i--) {
+	            double segmentBottomY = this.getSegmentBottomY(i);
+	            if (segmentBottomY < (this.getY() - spaceLeft)) {
+	    			ItemEntity itemEntity = new ItemEntity(level(), getX(), getY() - spaceLeft, getZ(), new ItemStack(BlockRegistry.HANGER.get(), 1));
+	    			itemEntity.setDefaultPickUpDelay();
+	    			level().addFreshEntity(itemEntity);
+	                setHangerLength(getHangerLength() - 2);
+	            }
+	        }
+
+	    if (onGround() || fallTime > 100)
+	    	dropItemAndDiscard();
+	}
+	
+	public void dropItemAndDiscard() {
+		// TODO this part of the death drop (main entity) should be handled by a loot table
+		// loot table should have conditional that drops getHangerLength() + 1
+		spawnAtLocation(BlockRegistry.HANGER.get().asItem()); 
+		discard();
+	}
+	
+	private double getSegmentBottomY(int index) {
+	    double offsetFromTop = (index + 1) * segmentLength;
+	    return this.getY() - offsetFromTop;
+	}
+	
+	private double getDistanceToGround() {
+	    Vec3 startPos = this.position();
+	    Vec3 endPos = startPos.add(0, - getHangerLength(), 0); 
+	    ClipContext context = new ClipContext(startPos, endPos,  ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this);
+	    BlockHitResult result = this.level().clip(context);
+
+	    if (result.getType() == HitResult.Type.BLOCK)
+	        return startPos.y - result.getLocation().y;
+
+	    return getHangerLength();
 	}
 
 	@Override
@@ -498,8 +528,9 @@ public class LivingHanger extends Monster implements BLEntity, NonDismountable {
 
 		setHangerLength(newLength);
 
-		if (newLength <= 0)
-			discard();
+		//TODO - atm it just kills the entity and drops a hanger it has no parts 
+		if (newLength <= 0) 
+			dropItemAndDiscard();
 	}
 
 	@SuppressWarnings("deprecation")
