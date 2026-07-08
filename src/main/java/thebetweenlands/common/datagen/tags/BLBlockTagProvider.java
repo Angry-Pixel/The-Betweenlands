@@ -104,6 +104,8 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> STORAGE_BLOCKS_RUBBER = commonTag("storage_blocks/rubber");
 	public static final TagKey<Block> STORAGE_BLOCKS_COMPOST = commonTag("storage_blocks/compost");
 
+	public static final TagKey<Block> SUPPORTS_HANGERS = tag("supports_hangers");
+
 	public BLBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
@@ -610,6 +612,10 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 		
 		this.tag(BL_CAVE_BUFFER_REPLACABLE)
 			.add(BlockRegistry.SWAMP_WATER.get());
+		
+		this.tag(SUPPORTS_HANGERS)
+			.addTag(BlockTags.LEAVES)
+			.add(BlockRegistry.HANGER.get(), BlockRegistry.SEEDED_HANGER.get());
 	}
 
 	public static TagKey<Block> tag(String tagName) {
