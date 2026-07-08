@@ -45,12 +45,15 @@ public class HangerBlock extends Block {
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		BlockState above = level.getBlockState(pos.above());
-		return above.is(BlockTags.LEAVES) || above.isFaceSturdy(level, pos.above(), Direction.DOWN) || state.is(this);
+		return above.is(BlockTags.LEAVES) || above.isFaceSturdy(level, pos.above(), Direction.DOWN) || above.is(this);
 	}
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		return state.canSurvive(level, pos) ? super.updateShape(state, direction, neighborState, level, pos, neighborPos) : Blocks.AIR.defaultBlockState();
+		if (direction == Direction.UP && !state.canSurvive(level, pos)) {
+			return Blocks.AIR.defaultBlockState();
+		}
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
 	}
 
 	@Override
