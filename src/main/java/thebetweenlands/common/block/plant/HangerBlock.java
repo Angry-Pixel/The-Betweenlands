@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -45,7 +46,7 @@ public class HangerBlock extends Block {
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		BlockState above = level.getBlockState(pos.above());
-		return above.is(BlockTags.LEAVES) || above.isFaceSturdy(level, pos.above(), Direction.DOWN) || above.is(this);
+		return above.is(BlockTags.LEAVES) || above.isFaceSturdy(level, pos.above(), Direction.DOWN) || above.is(BLBlockTagProvider.SUPPORTS_HANGERS);
 	}
 
 	@Override
