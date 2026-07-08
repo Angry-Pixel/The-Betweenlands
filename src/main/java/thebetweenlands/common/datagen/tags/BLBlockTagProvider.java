@@ -614,6 +614,7 @@ public class BLBlockTagProvider extends BlockTagsProvider {
 			.add(BlockRegistry.SWAMP_WATER.get());
 		
 		this.tag(SUPPORTS_HANGERS)
+			.addTag(BlockTags.LEAVES)
 			.add(BlockRegistry.HANGER.get(), BlockRegistry.SEEDED_HANGER.get());
 	}
 

@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -46,7 +45,7 @@ public class HangerBlock extends Block {
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		BlockState above = level.getBlockState(pos.above());
-		return above.is(BlockTags.LEAVES) || above.isFaceSturdy(level, pos.above(), Direction.DOWN) || above.is(BLBlockTagProvider.SUPPORTS_HANGERS);
+		return above.is(BLBlockTagProvider.SUPPORTS_HANGERS) || above.isFaceSturdy(level, pos.above(), Direction.DOWN) || above.is(this);
 	}
 
 	@Override

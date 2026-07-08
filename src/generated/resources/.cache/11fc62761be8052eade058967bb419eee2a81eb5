@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-08T20:07:43.9094703	Tags for minecraft:block mod id thebetweenlands
+// 1.21.1	2026-07-08T20:13:30.195971	Tags for minecraft:block mod id thebetweenlands
 8fa1aae501231e311bdf3374ba19975117ab887d data/c/tags/block/chests/wooden.json
 70ffaab2543a089637b379c1f78fa17640ad0b35 data/c/tags/block/dyed.json
 477cb0eab02456af48ad8417087d6c6c5d0cf348 data/c/tags/block/dyed/brown_rust.json
@@ -130,7 +130,7 @@ ee72b4ea91deb77e44bb2c0d99dfaf2af014f78e data/thebetweenlands/tags/block/spike_t
 36d9334abcc13c9c6daefb432971f922bbff3c0d data/thebetweenlands/tags/block/spike_traps_blocked_by.json
 f004a800c067ef6ca461ea240c3889f187f98045 data/thebetweenlands/tags/block/spike_traps_ignore.json
 692d9df04d174258006907e60ddb37e30c779b2f data/thebetweenlands/tags/block/stalker_ignored_light_sources.json
-7cde30c40cf36549acf2bbfacda96ecc583a9ec1 data/thebetweenlands/tags/block/supports_hangers.json
+0a06e7af25d193ca3ad3b7284120184e8bb69895 data/thebetweenlands/tags/block/supports_hangers.json
 e2c8ebedaca5478ba6f7b54df5d75b204075bf72 data/thebetweenlands/tags/block/thebetweenlands_carver_replaceables.json
 41297dc5d6cb4f38f3432511574a09cf7562b002 data/thebetweenlands/tags/block/volarkite/creates_downdrafts.json
 cd351c4d66694e191beaf2b55ab1c37768c7089d data/thebetweenlands/tags/block/volarkite/creates_updrafts.json
