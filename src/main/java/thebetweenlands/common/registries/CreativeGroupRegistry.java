@@ -743,9 +743,6 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SAP_JELLO);
 			output.accept(ItemRegistry.GREEN_MARSHMALLOW);
 			output.accept(ItemRegistry.PINK_MARSHMALLOW);
-			output.accept(ItemRegistry.FLATHEAD_MUSHROOM);
-			output.accept(ItemRegistry.BLACK_HAT_MUSHROOM);
-			output.accept(ItemRegistry.BULB_CAPPED_MUSHROOM);
 			output.accept(ItemRegistry.FRIED_SWAMP_KELP);
 			output.accept(ItemRegistry.FORBIDDEN_FIG);
 			output.accept(ItemRegistry.BLUE_CANDY);
