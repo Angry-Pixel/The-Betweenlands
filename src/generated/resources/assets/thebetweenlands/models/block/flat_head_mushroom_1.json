@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:flat_head_mushroom_1",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/flat_head_mushroom_particle",
-    "texture": "thebetweenlands:block/flat_head_mushroom_1"
-  }
-}
