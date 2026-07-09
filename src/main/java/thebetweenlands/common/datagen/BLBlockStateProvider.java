@@ -1607,11 +1607,14 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void blackHatMushroom(DeferredBlock<Block> block) {
-		ModelFile blackHatMushroom1 = this.customLoaderModel("black_hat_mushroom_1", this.modLoc("black_hat_mushroom_1"), this.modLoc("block/black_hat_mushroom_1"), this.modLoc("block/particle/black_hat_mushroom_particle"));
-		ModelFile blackHatMushroom2 = this.customLoaderModel("black_hat_mushroom_2", this.modLoc("black_hat_mushroom_2"), this.modLoc("block/black_hat_mushroom_2"), this.modLoc("block/particle/black_hat_mushroom_particle"));
-		ModelFile blackHatMushroom3 = this.customLoaderModel("black_hat_mushroom_3", this.modLoc("black_hat_mushroom_3"), this.modLoc("block/black_hat_mushroom_3"), this.modLoc("block/particle/black_hat_mushroom_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), blackHatMushroom1, blackHatMushroom2, blackHatMushroom3);
-//		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/black_hat_mushroom_1")));
+		ModelFile model1 = this.models().getExistingFile(this.modLoc("block/black_hat_mushroom_1"));
+		ModelFile model2 = this.models().getExistingFile(this.modLoc("block/black_hat_mushroom_2"));
+		ModelFile model3 = this.models().getExistingFile(this.modLoc("block/black_hat_mushroom_3"));
+
+		var modelBuilder = this.getVariantBuilder(block.get()).partialState().modelForState();
+		modelBuilder = addRotatedVariants(modelBuilder, model -> model.weight(1), model1);
+		modelBuilder = addRotatedVariants(modelBuilder, model -> model.weight(2), model2, model3);
+		modelBuilder.addModel();
 	}
 
 	public void barnacle(DeferredBlock<Block> block) {

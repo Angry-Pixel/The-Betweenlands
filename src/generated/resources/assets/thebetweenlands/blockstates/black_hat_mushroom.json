@@ -13,37 +13,42 @@
         "y": 180
       },
       {
-        "model": "thebetweenlands:block/black_hat_mushroom_1",
+        "model": "thebetweenlands:block/black_hat_mushroom_2",
+        "weight": 2,
         "y": 270
       },
       {
-        "model": "thebetweenlands:block/black_hat_mushroom_2"
-      },
-      {
         "model": "thebetweenlands:block/black_hat_mushroom_2",
+        "weight": 2,
         "y": 90
       },
       {
         "model": "thebetweenlands:block/black_hat_mushroom_2",
+        "weight": 2,
         "y": 180
       },
       {
         "model": "thebetweenlands:block/black_hat_mushroom_2",
+        "weight": 2,
         "y": 270
       },
       {
-        "model": "thebetweenlands:block/black_hat_mushroom_3"
+        "model": "thebetweenlands:block/black_hat_mushroom_3",
+        "weight": 2
       },
       {
         "model": "thebetweenlands:block/black_hat_mushroom_3",
+        "weight": 2,
         "y": 90
       },
       {
         "model": "thebetweenlands:block/black_hat_mushroom_3",
+        "weight": 2,
         "y": 180
       },
       {
         "model": "thebetweenlands:block/black_hat_mushroom_3",
+        "weight": 2,
         "y": 270
       }
     ]
