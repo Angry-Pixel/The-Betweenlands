@@ -1,9 +1,5 @@
 {
   "values": {
-    "minecraft:air": {
-      "amount": 5,
-      "time": 8000
-    },
     "thebetweenlands:algae": {
       "amount": 3,
       "time": 5000
