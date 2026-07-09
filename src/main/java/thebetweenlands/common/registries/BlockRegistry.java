@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.AlembicBlock;
@@ -702,7 +703,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> WEEPING_BLUE = register("weeping_blue", () -> new WeepingBlueBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> SUNDEW = register("sundew", () -> new SundewBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BLACK_HAT_MUSHROOM = register("black_hat_mushroom", () -> new PlantBlock(PlantBlock.FLOWER_SHAPE, true, BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM = register("bulb_capped_mushroom", () -> new PlantBlock(PlantBlock.GRASS_SHAPE, false, BlockBehaviour.Properties.of().lightLevel(value -> 15).noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM = register("bulb_capped_mushroom", () -> new PlantBlock(PlantBlock.GRASS_SHAPE, false, BlockBehaviour.Properties.of().lightLevel(value -> 15).noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)), ItemRegistry.BULB_CAPPED_MUSHROOM);
 	public static final DeferredBlock<Block> FLATHEAD_MUSHROOM = register("flathead_mushroom", () -> new PlantBlock(PlantBlock.GRASS_SHAPE, false, BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> VENUS_FLY_TRAP = register("venus_fly_trap", () -> new VenusFlyTrapBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).randomTicks().instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> VOLARPAD = register("volarpad", () -> new FarmableDoublePlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XZ).instabreak().sound(SoundType.GRASS)));
@@ -1012,7 +1013,16 @@ public class BlockRegistry {
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
 	}
+	
+	// Exists solely to indicate that there's already specific item for this block
+	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block, DeferredItem<?> item) {
+		return BLOCKS.register(name, block);
+	}
 
+	public static <T extends Block> DeferredBlock<T> registerWithoutItem(String name, Supplier<? extends T> block) {
+		return BLOCKS.register(name, block);
+	}
+	
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block, Function<DeferredBlock<T>, Supplier<? extends Item>> item) {
 		DeferredBlock<T> reg = BLOCKS.register(name, block);
 		ItemRegistry.ITEMS.register(name, item.apply(reg));

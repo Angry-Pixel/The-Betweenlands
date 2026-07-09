@@ -2,18 +2,45 @@
   "variants": {
     "": [
       {
-        "model": "thebetweenlands:block/bulb_capped_mushroom"
+        "model": "thebetweenlands:block/bulb_capped_mushroom_1"
       },
       {
-        "model": "thebetweenlands:block/bulb_capped_mushroom",
+        "model": "thebetweenlands:block/bulb_capped_mushroom_1",
         "y": 90
       },
       {
-        "model": "thebetweenlands:block/bulb_capped_mushroom",
+        "model": "thebetweenlands:block/bulb_capped_mushroom_1",
         "y": 180
       },
       {
-        "model": "thebetweenlands:block/bulb_capped_mushroom",
+        "model": "thebetweenlands:block/bulb_capped_mushroom_2",
+        "weight": 2,
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom_2",
+        "weight": 2,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom_2",
+        "weight": 2,
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom_3",
+        "y": 270
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom_3",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom_3",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/bulb_capped_mushroom_3",
         "y": 270
       }
     ]

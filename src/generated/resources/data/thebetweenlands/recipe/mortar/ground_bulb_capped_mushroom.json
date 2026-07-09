@@ -1,7 +1,7 @@
 {
   "type": "thebetweenlands:mortar_grind",
   "input": {
-    "item": "thebetweenlands:bulb_capped_mushroom_item"
+    "item": "thebetweenlands:bulb_capped_mushroom"
   },
   "result": {
     "count": 1,

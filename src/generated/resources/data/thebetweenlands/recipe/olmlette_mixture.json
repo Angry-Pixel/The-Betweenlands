@@ -3,10 +3,10 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "thebetweenlands:flathead_mushroom_item"
+      "item": "thebetweenlands:flathead_mushroom"
     },
     {
-      "item": "thebetweenlands:black_hat_mushroom_item"
+      "item": "thebetweenlands:black_hat_mushroom"
     },
     {
       "item": "thebetweenlands:raw_olm_egg"

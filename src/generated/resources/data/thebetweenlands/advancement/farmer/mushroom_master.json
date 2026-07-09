@@ -15,7 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": "thebetweenlands:bulb_capped_mushroom_item"
+            "items": "thebetweenlands:bulb_capped_mushroom"
           }
         ]
       },
@@ -68,7 +68,7 @@
     },
     "icon": {
       "count": 1,
-      "id": "thebetweenlands:bulb_capped_mushroom_item"
+      "id": "thebetweenlands:bulb_capped_mushroom"
     },
     "title": {
       "translate": "advancement.thebetweenlands.farmer.mushroom_master"

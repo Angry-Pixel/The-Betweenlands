@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thebetweenlands:bulb_capped_mushroom_item"
+          "name": "thebetweenlands:bulb_capped_mushroom"
         }
       ],
       "rolls": 1.0

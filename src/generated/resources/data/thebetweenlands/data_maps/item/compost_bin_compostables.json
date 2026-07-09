@@ -1,5 +1,9 @@
 {
   "values": {
+    "minecraft:air": {
+      "amount": 5,
+      "time": 8000
+    },
     "thebetweenlands:algae": {
       "amount": 3,
       "time": 5000
@@ -19,10 +23,6 @@
     "thebetweenlands:aspectrus_seeds": {
       "amount": 10,
       "time": 6000
-    },
-    "thebetweenlands:black_hat_mushroom": {
-      "amount": 5,
-      "time": 8000
     },
     "thebetweenlands:black_hat_mushroom_item": {
       "amount": 5,
@@ -97,10 +97,6 @@
       "time": 4000
     },
     "thebetweenlands:bulb_capped_mushroom": {
-      "amount": 5,
-      "time": 8000
-    },
-    "thebetweenlands:bulb_capped_mushroom_item": {
       "amount": 5,
       "time": 8000
     },
@@ -215,10 +211,6 @@
     "thebetweenlands:fallen_leaves": {
       "amount": 4,
       "time": 11000
-    },
-    "thebetweenlands:flathead_mushroom": {
-      "amount": 5,
-      "time": 8000
     },
     "thebetweenlands:flathead_mushroom_item": {
       "amount": 5,

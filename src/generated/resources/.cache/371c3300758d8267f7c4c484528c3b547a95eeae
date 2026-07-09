@@ -1,4 +1,4 @@
-// 1.21.1	2026-06-15T02:44:29.988630887	Tags for minecraft:item mod id thebetweenlands
+// 1.21.1	2026-07-09T12:11:52.7413099	Tags for minecraft:item mod id thebetweenlands
 c52bc0ad31b0f40c13d2ffd2048266c5e707feda data/minecraft/tags/item/arrows.json
 809b802601cd2591038b51e7d53c3fc0467680b2 data/minecraft/tags/item/axes.json
 3c8338bc22db2497bf01321405dcacecc18dd51c data/minecraft/tags/item/chest_armor.json
@@ -13,12 +13,12 @@ a4c743895b60b03c27274f97543c63320a2cb51a data/minecraft/tags/item/swords.json
 a7598dbab37e1a8e21a417106272d54c15d70163 data/thebetweenlands/tags/item/circle_gem_applicable.json
 1627b0d01b77b4fe15d142484da986ff54349972 data/thebetweenlands/tags/item/corrodible.json
 afa2fcc30df5be5a8fd33da3dd27bafe0fe96a48 data/thebetweenlands/tags/item/corrodible/default.json
-e997711a931662398c40e17bbd6ec357806900bf data/thebetweenlands/tags/item/does_not_rot.json
+b71280ffccb8a175876e0e586c4f612c03c24aa2 data/thebetweenlands/tags/item/does_not_rot.json
 d23ebea9a4ef324360a9fbf019f73418362b9474 data/thebetweenlands/tags/item/empty_aspect_vials.json
 8b9adc408104fceecb9611e08828a6afaeb7e7c6 data/thebetweenlands/tags/item/fillable_aspect_vials.json
 a9170b0c494355ef59be0d1ff25a6f0502f0969d data/thebetweenlands/tags/item/filled_aspect_vials.json
 e39599083a08fd0b74e2f8af9a0e617c34222b57 data/thebetweenlands/tags/item/filtered_silt_glass.json
-ba1aefcc3cb9b53ae9fa889e92a2505d08b2c486 data/thebetweenlands/tags/item/gives_food_sickness.json
+b3c7864e4e89c182d70bacc87d23b10f44b61cc4 data/thebetweenlands/tags/item/gives_food_sickness.json
 4aefcf1e42362b88f2c9227f266db365af2163d1 data/thebetweenlands/tags/item/ignores_tool_weakness.json
 73fbcfa979e96dc3dde4a6da962942cc383a54a4 data/thebetweenlands/tags/item/item_frames.json
 dab1a03dad5eaa4505b23e07e83731aba7ec66c5 data/thebetweenlands/tags/item/mud_brick_shingles.json

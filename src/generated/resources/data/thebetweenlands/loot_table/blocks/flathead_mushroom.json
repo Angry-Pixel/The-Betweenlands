@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thebetweenlands:flathead_mushroom_item"
+          "name": "thebetweenlands:flathead_mushroom"
         }
       ],
       "rolls": 1.0

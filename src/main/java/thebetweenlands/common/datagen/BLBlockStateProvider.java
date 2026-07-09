@@ -2,6 +2,7 @@ package thebetweenlands.common.datagen;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -42,7 +43,6 @@ import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
-import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder.PartialBlockstate;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
@@ -1003,7 +1003,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlock(BlockRegistry.SWAMP_KELP);
 		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
 		this.existingModelShortPlantBlock(BlockRegistry.SWAMP_PLANT, this.modLoc("block/swamp_plant"));
-		this.existingModelShortPlantBlock(BlockRegistry.BULB_CAPPED_MUSHROOM, this.modLoc("block/bulb_capped_mushroom"), false);
+//		this.existingModelShortPlantBlock(BlockRegistry.BULB_CAPPED_MUSHROOM, this.modLoc("block/bulb_capped_mushroom"), false);
+		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
 		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
 		this.existingBaseDoublePlantBlock(BlockRegistry.PITCHER_PLANT, "pitcher_plant", this.modLoc("block/particle/pitcher_plant_particle"));
 		this.existingBaseDoublePlantBlock(BlockRegistry.WEEPING_BLUE, "weeping_blue", this.modLoc("block/particle/weeping_blue_particle"));
@@ -1452,6 +1453,26 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		return cmb.addModel();
 	}
 
+	private <T> T acceptConsumer(T obj, Consumer<T> consumer) {
+		consumer.accept(obj);
+		return obj;
+	}
+	
+	private ConfiguredModel.Builder<VariantBlockStateBuilder> addRotatedVariants(ConfiguredModel.Builder<VariantBlockStateBuilder> partialBuilder, Consumer<ConfiguredModel.Builder<VariantBlockStateBuilder>> modifier, ModelFile... model) {
+		ConfiguredModel.Builder<VariantBlockStateBuilder> cmb = partialBuilder;
+		cmb = acceptConsumer(cmb.modelFile(model[0]), modifier).nextModel();
+		cmb = acceptConsumer(cmb.modelFile(model[0]).rotationY(90), modifier).nextModel();
+		cmb = acceptConsumer(cmb.modelFile(model[0]).rotationY(180), modifier).nextModel();
+		cmb = acceptConsumer(cmb.modelFile(model[0]).rotationY(270), modifier);
+		for (int i = 1; i < model.length; i++) {
+			cmb = acceptConsumer(cmb.nextModel().modelFile(model[i]), modifier);
+			cmb = acceptConsumer(cmb.nextModel().modelFile(model[i]).rotationY(90), modifier);
+			cmb = acceptConsumer(cmb.nextModel().modelFile(model[i]).rotationY(180), modifier);
+			cmb = acceptConsumer(cmb.nextModel().modelFile(model[i]).rotationY(270), modifier);
+		}
+		return cmb;
+	}
+
 	private void shortPlantItemTransforms(ItemModelBuilder builder) {
 		builder.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.75f).end()
@@ -1484,6 +1505,17 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		if (addItem) {
 			shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), modelId));
 		}
+	}
+
+	public void bulbCappedMushroom(DeferredBlock<Block> block) {
+		ModelFile model1 = this.models().getExistingFile(this.modLoc("block/bulb_capped_mushroom_1"));
+		ModelFile model2 = this.models().getExistingFile(this.modLoc("block/bulb_capped_mushroom_2"));
+		ModelFile model3 = this.models().getExistingFile(this.modLoc("block/bulb_capped_mushroom_3"));
+		var modelBuilder = this.getVariantBuilder(block.get()).partialState().modelForState();
+		modelBuilder = addRotatedVariants(modelBuilder, model -> model.weight(1), model1);
+		modelBuilder = addRotatedVariants(modelBuilder, model -> model.weight(2), model2);
+		modelBuilder = addRotatedVariants(modelBuilder, model -> model.weight(1), model3);
+		modelBuilder.addModel();
 	}
 
 	public void venusFlyTrap(DeferredBlock<Block> block) {

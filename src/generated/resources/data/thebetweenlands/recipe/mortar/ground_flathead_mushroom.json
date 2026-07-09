@@ -1,7 +1,7 @@
 {
   "type": "thebetweenlands:mortar_grind",
   "input": {
-    "item": "thebetweenlands:flathead_mushroom_item"
+    "item": "thebetweenlands:flathead_mushroom"
   },
   "result": {
     "count": 1,

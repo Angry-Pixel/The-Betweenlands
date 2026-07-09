@@ -2,10 +2,10 @@
   "type": "thebetweenlands:fluid_steeping",
   "ingredients": [
     {
-      "item": "thebetweenlands:black_hat_mushroom_item"
+      "item": "thebetweenlands:black_hat_mushroom"
     },
     {
-      "item": "thebetweenlands:flathead_mushroom_item"
+      "item": "thebetweenlands:flathead_mushroom"
     },
     [
       {

@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thebetweenlands:black_hat_mushroom_item"
+          "name": "thebetweenlands:black_hat_mushroom"
         }
       ],
       "rolls": 1.0
