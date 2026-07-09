@@ -1,5 +1,6 @@
 {
 	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
 	"texture_size": [64, 64],
 	"textures": {
 		"particle": "thebetweenlands:block/particle/wood_support_beam_particle",
