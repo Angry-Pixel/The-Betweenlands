@@ -42,6 +42,7 @@ import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
+import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder.PartialBlockstate;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
@@ -1007,7 +1008,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.existingBaseDoublePlantBlock(BlockRegistry.PITCHER_PLANT, "pitcher_plant", this.modLoc("block/particle/pitcher_plant_particle"));
 		this.existingBaseDoublePlantBlock(BlockRegistry.WEEPING_BLUE, "weeping_blue", this.modLoc("block/particle/weeping_blue_particle"));
 		this.existingBaseDoublePlantBlock(BlockRegistry.SUNDEW, "sundew", this.modLoc("block/particle/sundew_particle"));
-//		this.volarpad(BlockRegistry.VOLARPAD);
+		this.volarpad(BlockRegistry.VOLARPAD);
 		this.builtinEntity(BlockRegistry.ASPECTRUS_CROP, this.modLoc("block/particle/aspectrus_crop_particle"));
 		this.fungusCrop(BlockRegistry.FUNGUS_CROP);
 		this.middleFruitBush(BlockRegistry.MIDDLE_FRUIT_BUSH);
@@ -1516,17 +1517,30 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void volarpad(DeferredBlock<Block> block) {
-		ModelFile volarpad1 = this.customLoaderModel("volarpad_1", this.modLoc("volarpad"), this.modLoc("block/volarpad_1"), this.modLoc("block/particle/volarpad_particle"));
-		ModelFile volarpad2 = this.customLoaderModel("volarpad_2", this.modLoc("volarpad"), this.modLoc("block/volarpad_2"), this.modLoc("block/particle/volarpad_particle"));
-		ModelFile volarpad3 = this.customLoaderModel("volarpad_3", this.modLoc("volarpad"), this.modLoc("block/volarpad_3"), this.modLoc("block/particle/volarpad_particle"));
-		ModelFile volarpadTop = this.models().withExistingParent("volarpad_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/volarpad_particle"));
+		ModelFile volarpadBase = this.models().getExistingFile(this.modLoc("block/volarpad_base"));
+		ModelFile volarpadTop = this.models().getExistingFile(this.modLoc("block/volarpad_top"));
+		ModelFile volarpadCombined = this.models().getExistingFile(this.modLoc("block/volarpad"));
 
-		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), volarpad1, volarpad2, volarpad3)).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-		.modelFile(volarpadTop).addModel();
+		VariantBlockStateBuilder builder = this.getVariantBuilder(block.get());
+		var lowerVariant = builder.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState();
+		var upperVariant = builder.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState();
+		
+		for(int i = 1; i <= 3; ++i) {
+			ResourceLocation texture = this.modLoc("block/volarpad_" + i);
+			ModelFile baseModel = this.models().withExistingParent("volarpad_base_" + i, volarpadBase.getLocation()).texture("texture", texture);
+			ModelFile topModel = this.models().withExistingParent("volarpad_top_" + i, volarpadTop.getLocation()).texture("texture", texture);
+			lowerVariant.modelFile(baseModel);
+			upperVariant.modelFile(topModel);
+			if (i != 3) {
+				lowerVariant = lowerVariant.nextModel();
+				upperVariant = upperVariant.nextModel();
+			} else {
+				lowerVariant.addModel();
+				upperVariant.addModel();
+			}
+		}
 
-		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/volarpad_1"))
+		this.itemModels().withExistingParent(block.getId().toString(), volarpadCombined.getLocation())
 			.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, -4, 0).scale(0.25f).end()
 			.transform(ItemDisplayContext.GROUND).scale(0.2f).end()
@@ -1551,12 +1565,6 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0, 315, 0).translation(0, 4f, 2.4f).scale(0.5f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0, 135, 0).translation(0, 4f, 0).scale(0.5f).end()
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, 135, 0).translation(0, 4f, 0).scale(0.5f).end();
-	}
-
-	public void bulbCappedMushroom(DeferredBlock<Block> block) {
-		ModelFile bulbCappedMushroom = this.customLoaderModel("bulb_capped_mushroom", this.modLoc("bulb_capped_mushroom"), this.modLoc("block/bulb_capped_mushroom"), this.modLoc("block/particle/bulb_capped_mushroom_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), bulbCappedMushroom);
-		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/bulb_capped_mushroom")));
 	}
 
 	public void flatHeadMushroom(DeferredBlock<Block> block) {

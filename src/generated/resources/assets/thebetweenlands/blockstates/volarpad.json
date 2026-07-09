@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "half=lower": [
+      {
+        "model": "thebetweenlands:block/volarpad_base_1"
+      },
+      {
+        "model": "thebetweenlands:block/volarpad_base_2"
+      },
+      {
+        "model": "thebetweenlands:block/volarpad_base_3"
+      }
+    ],
+    "half=upper": [
+      {
+        "model": "thebetweenlands:block/volarpad_top_1"
+      },
+      {
+        "model": "thebetweenlands:block/volarpad_top_2"
+      },
+      {
+        "model": "thebetweenlands:block/volarpad_top_3"
+      }
+    ]
+  }
+}

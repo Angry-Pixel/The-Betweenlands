@@ -2,7 +2,7 @@
 	"parent": "minecraft:block/block",
 	"ambientocclusion": false,
 	"render_type": "cutout",
-	"texture_size": [64, 32],
+	"texture_size": [128, 128],
 	"textures": {
 		"particle": "thebetweenlands:block/particle/volarpad_particle",
 		"texture": "thebetweenlands:block/volarpad_1"

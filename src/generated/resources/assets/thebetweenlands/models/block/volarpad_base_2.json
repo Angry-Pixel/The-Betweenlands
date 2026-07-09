@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/volarpad_base",
+  "textures": {
+    "texture": "thebetweenlands:block/volarpad_2"
+  }
+}
