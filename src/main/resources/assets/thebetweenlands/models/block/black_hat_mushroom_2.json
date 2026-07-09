@@ -1,7 +1,7 @@
 {
 	"parent": "minecraft:block/block",
 	"ambientocclusion": false,
-	"render_type": "translucent",
+	"render_type": "cutout",
 	"texture_size": [64, 32],
 	"textures": {
 		"particle": "thebetweenlands:block/particle/black_hat_mushroom_particle",
