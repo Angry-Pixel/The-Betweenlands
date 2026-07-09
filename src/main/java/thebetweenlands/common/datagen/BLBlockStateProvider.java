@@ -1021,9 +1021,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.lantern(BlockRegistry.PAPER_LANTERN_3, "lantern_paper_3", this.modLoc("paper_lantern"), this.modLoc("block/lantern_paper_3"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
 		this.lantern(BlockRegistry.SILT_GLASS_LANTERN, "lantern_silt_glass", this.modLoc("silt_glass_lantern"), this.modLoc("block/lantern_silt_glass"), this.modLoc("block/silt_glass"), this.modLoc("block/lantern_rope"));
 		this.dungeonWallCandle(BlockRegistry.DUNGEON_WALL_CANDLE);
-		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_1, "wooden_support_beam_1", this.modLoc("wooden_support_beam_1"), this.modLoc("block/wooden_support_beam_rotten_1"), this.modLoc("block/particle/wood_support_beam_particle"));
-		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_2, "wooden_support_beam_2", this.modLoc("wooden_support_beam_2"), this.modLoc("block/wooden_support_beam_rotten_2"), this.modLoc("block/particle/wood_support_beam_particle"));
-		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, "wooden_support_beam_3", this.modLoc("wooden_support_beam_3"), this.modLoc("block/wooden_support_beam_rotten_3"), this.modLoc("block/particle/wood_support_beam_particle"));
+		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_1, this.modLoc("block/wooden_support_beam_1"));
+		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_2, this.modLoc("block/wooden_support_beam_2"));
+		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, this.modLoc("block/wooden_support_beam_3"));
 //		this.brazier(BlockRegistry.BRAZIER);
 //		this.walkway(BlockRegistry.WALKWAY);
 //		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
@@ -1675,8 +1675,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "item/mud_flower_pot_candle"));
 	}
-	public void woodenSupportBeam(DeferredBlock<Block> block, String name, ResourceLocation model, ResourceLocation modelTexture, ResourceLocation particleTexture) {
-		ModelFile woodenSupportBeam = this.customLoaderModel(name, model, modelTexture, particleTexture);
+	public void woodenSupportBeam(DeferredBlock<Block> block, ResourceLocation model) {
+		ModelFile woodenSupportBeam = this.models().getExistingFile(model);
 
 		this.getVariantBuilder(block.get())
 			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.NORTH).modelForState().modelFile(woodenSupportBeam).addModel()
@@ -1684,7 +1684,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.SOUTH).modelForState().modelFile(woodenSupportBeam).rotationY(180).addModel()
 			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(woodenSupportBeam).rotationY(270).addModel();
 
-		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/" + name))
+		this.itemModels().withExistingParent(block.getId().toString(), model)
 			.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(120, 30, 20).translation(0, 2.4f, 0).scale(.725f).end()
 			.transform(ItemDisplayContext.GROUND).rotation(90, 0, 180).translation(0, 3.2f, 0).scale(0.3f).end()

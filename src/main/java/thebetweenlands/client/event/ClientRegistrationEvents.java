@@ -105,9 +105,6 @@ import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
 import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
-import thebetweenlands.client.model.baked.woodensupportbeam1.WoodenSupportBeam1ModelLoader;
-import thebetweenlands.client.model.baked.woodensupportbeam2.WoodenSupportBeam2ModelLoader;
-import thebetweenlands.client.model.baked.woodensupportbeam3.WoodenSupportBeam3ModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
 import thebetweenlands.client.model.block.AlembicModel;
 import thebetweenlands.client.model.block.AnimatorModel;
@@ -1024,9 +1021,9 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
 
-		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("wooden_support_beam_2"), WoodenSupportBeam2ModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("wooden_support_beam_3"), WoodenSupportBeam3ModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("wooden_support_beam_2"), WoodenSupportBeam2ModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("wooden_support_beam_3"), WoodenSupportBeam3ModelLoader.INSTANCE);
 
 //		event.register(TheBetweenlands.prefix("brazier"), BrazierModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("walkway"), WalkwayModelLoader.INSTANCE);

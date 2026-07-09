@@ -1,0 +1,101 @@
+{
+	"parent": "minecraft:block/block",
+	"texture_size": [64, 64],
+	"textures": {
+		"particle": "thebetweenlands:block/particle/wood_support_beam_particle",
+		"texture": "thebetweenlands:block/wooden_support_beam_rotten_3"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "beampart2",
+			"from": [4.96777, 9.95279, 11.41155],
+			"to": [10.96777, 12.95279, 17.41155],
+			"rotation": {"x": -54.78, "y": -7.83, "z": 0, "origin": [7.86777, 9.95279, 17.46155]},
+			"color": 9,
+			"faces": {
+				"north": {"uv": [1.5, 5.25, 3, 6], "texture": "#texture"},
+				"east": {"uv": [0, 5.25, 1.5, 6], "texture": "#texture"},
+				"south": {"uv": [4.5, 5.25, 6, 6], "texture": "#texture"},
+				"west": {"uv": [3, 5.25, 4.5, 6], "texture": "#texture"},
+				"up": {"uv": [3, 5.25, 1.5, 3.75], "texture": "#texture"},
+				"down": {"uv": [4.5, 3.75, 3, 5.25], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "beampart4",
+			"from": [5.63117, 8.20959, 9.47909],
+			"to": [11.63117, 12.20959, 15.47909],
+			"rotation": {"x": -47.3141, "y": -1.4157, "z": 4.5077, "origin": [8.58117, 8.25959, 9.47909]},
+			"color": 5,
+			"faces": {
+				"north": {"uv": [1.5, 10.25, 3, 11.25], "texture": "#texture"},
+				"east": {"uv": [0, 10.25, 1.5, 11.25], "texture": "#texture"},
+				"south": {"uv": [4.5, 10.25, 6, 11.25], "texture": "#texture"},
+				"west": {"uv": [3, 10.25, 4.5, 11.25], "texture": "#texture"},
+				"up": {"uv": [3, 10.25, 1.5, 8.75], "texture": "#texture"},
+				"down": {"uv": [4.5, 8.75, 3, 10.25], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "ropeboi",
+			"from": [4.48066, 16.00668, -0.61397],
+			"to": [11.48066, 18.00668, 6.38603],
+			"rotation": {"x": -81.1073, "y": -6.3438, "z": 2.7821, "origin": [7.98066, 17.00668, 5.88603]},
+			"color": 6,
+			"faces": {
+				"north": {"uv": [8, 1.75, 9.75, 2.25], "texture": "#texture"},
+				"east": {"uv": [6.25, 1.75, 8, 2.25], "texture": "#texture"},
+				"south": {"uv": [11.5, 1.75, 13.25, 2.25], "texture": "#texture"},
+				"west": {"uv": [9.75, 1.75, 11.5, 2.25], "texture": "#texture"},
+				"up": {"uv": [9.75, 1.75, 8, 0], "texture": "#texture"},
+				"down": {"uv": [11.5, 0, 9.75, 1.75], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "beampart5",
+			"from": [4.99363, 15.35777, 4.6063],
+			"to": [10.99363, 23.35777, 10.6063],
+			"rotation": {"x": -70.7941, "y": -1.4157, "z": 4.5077, "origin": [7.99363, 15.35777, 10.6063]},
+			"color": 0,
+			"faces": {
+				"north": {"uv": [1.5, 13, 3, 15], "texture": "#texture"},
+				"east": {"uv": [0, 13, 1.5, 15], "texture": "#texture"},
+				"south": {"uv": [4.5, 13, 6, 15], "texture": "#texture"},
+				"west": {"uv": [3, 13, 4.5, 15], "texture": "#texture"},
+				"up": {"uv": [3, 13, 1.5, 11.5], "texture": "#texture"},
+				"down": {"uv": [4.5, 11.5, 3, 13], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "beampart3",
+			"from": [5.17369, 11.68294, 9.36227],
+			"to": [11.17369, 14.68294, 15.36227],
+			"rotation": {"x": -55.1441, "y": -1.4157, "z": 4.5077, "origin": [11.17369, 11.68294, 15.44227]},
+			"color": 2,
+			"faces": {
+				"north": {"uv": [1.5, 7.75, 3, 8.5], "texture": "#texture"},
+				"east": {"uv": [0, 7.75, 1.5, 8.5], "texture": "#texture"},
+				"south": {"uv": [4.5, 7.75, 6, 8.5], "texture": "#texture"},
+				"west": {"uv": [3, 7.75, 4.5, 8.5], "texture": "#texture"},
+				"up": {"uv": [3, 7.75, 1.5, 6.25], "texture": "#texture"},
+				"down": {"uv": [4.5, 6.25, 3, 7.75], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "beampart1",
+			"from": [5, 0, 16.5],
+			"to": [11, 8, 22.5],
+			"rotation": {"x": -31.3, "y": -7.83, "z": 0, "origin": [8, 0, 16.5]},
+			"color": 3,
+			"faces": {
+				"north": {"uv": [1.5, 1.5, 3, 3.5], "texture": "#texture"},
+				"east": {"uv": [0, 1.5, 1.5, 3.5], "texture": "#texture"},
+				"south": {"uv": [4.5, 1.5, 6, 3.5], "texture": "#texture"},
+				"west": {"uv": [3, 1.5, 4.5, 3.5], "texture": "#texture"},
+				"up": {"uv": [3, 1.5, 1.5, 0], "texture": "#texture"},
+				"down": {"uv": [4.5, 0, 3, 1.5], "texture": "#texture"}
+			}
+		}
+	]
+}

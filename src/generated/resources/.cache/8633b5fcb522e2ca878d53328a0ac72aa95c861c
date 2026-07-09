@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-09T15:49:42.6990056	Block States: thebetweenlands
+// 1.21.1	2026-07-09T16:18:26.423969	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 5e616fe21bb0abaab4f1e2c2a994e516eb5c0af3 assets/thebetweenlands/blockstates/algae.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
@@ -1956,9 +1956,6 @@ e47933cf2c4a6a9c4d90cb9b01170be15edaf4ca assets/thebetweenlands/models/block/wee
 2203428040630d86c748f36e5e3cd394a2049d24 assets/thebetweenlands/models/block/white_pear_crop.json
 b2b45213088ebc993ab50f57b53fdeb4e4d2eae0 assets/thebetweenlands/models/block/wind_chime.json
 dde52d6f16f0d74fda60f85d50a55b0e2a8c6705 assets/thebetweenlands/models/block/wisp.json
-8eef8abe938da28fb27df49f7a910c1ca9fbe764 assets/thebetweenlands/models/block/wooden_support_beam_1.json
-ae9a5626bd00b18a9cbc74c7eecae47391fded7b assets/thebetweenlands/models/block/wooden_support_beam_2.json
-2a345881619c10c2e4fe74d0239a220300627c95 assets/thebetweenlands/models/block/wooden_support_beam_3.json
 a50245a26d75ff43b6c267ebd2c3c9d470a71a82 assets/thebetweenlands/models/block/worm_pillar.json
 dc6580e6390aaa3312646357912caceb1795563e assets/thebetweenlands/models/block/worm_pillar_top.json
 0088f46cd928410a52813d68778910055ba6498e assets/thebetweenlands/models/item/alembic.json
