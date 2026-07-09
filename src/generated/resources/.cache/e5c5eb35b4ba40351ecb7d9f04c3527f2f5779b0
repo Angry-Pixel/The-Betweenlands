@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-09T12:11:52.7524042	Advancements
+// 1.21.1	2026-07-09T12:24:46.8810045	Advancements
 529cf42757adbfaa1f8bfa25376c898886cd14cc data/thebetweenlands/advancement/adventurer/3spoopy5me.json
 71e234b3c5d4d4f3bccffebf10769ba48a7225c6 data/thebetweenlands/advancement/adventurer/a_real_poopy_experience.json
 4519e4e2bcb02e86d631d224155596746959b25a data/thebetweenlands/advancement/adventurer/big_wood.json
@@ -60,7 +60,7 @@ b14ed1ee32d670f3f69f682a1a40d8c2fc436df1 data/thebetweenlands/advancement/farmer
 1dd43c287cc70e102c54327bcc94c2ef5066a1f1 data/thebetweenlands/advancement/farmer/moving_day.json
 8eb87b55853521c9e6cb54bb17680f29341ea8cb data/thebetweenlands/advancement/farmer/mr_compost.json
 5cbb5abbde804412c9362e63259d54e02aea83fa data/thebetweenlands/advancement/farmer/multicore_threading.json
-9fb26a440b48cceb31a1a09c4f91765c1cc7400e data/thebetweenlands/advancement/farmer/mushroom_master.json
+bae699f28dc581d780eb84b7d3ae77984fdad3b1 data/thebetweenlands/advancement/farmer/mushroom_master.json
 ed4a6544a72e158bdbeff3408d11172703ac8036 data/thebetweenlands/advancement/farmer/necrofarmer.json
 9e4bcbb6e118ac05c7103cf3affb3b4dde717e13 data/thebetweenlands/advancement/farmer/now_kiss.json
 8aa4d388e7d9e1ad2ede4b47adcca8709afbf2e2 data/thebetweenlands/advancement/farmer/premium_produce.json

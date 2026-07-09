@@ -24,7 +24,7 @@
       "amount": 10,
       "time": 6000
     },
-    "thebetweenlands:black_hat_mushroom_item": {
+    "thebetweenlands:black_hat_mushroom": {
       "amount": 5,
       "time": 8000
     },
@@ -212,7 +212,7 @@
       "amount": 4,
       "time": 11000
     },
-    "thebetweenlands:flathead_mushroom_item": {
+    "thebetweenlands:flathead_mushroom": {
       "amount": 5,
       "time": 8000
     },

@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-09T12:11:52.7117997	Block States: thebetweenlands
+// 1.21.1	2026-07-09T12:25:50.5338716	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 5e616fe21bb0abaab4f1e2c2a994e516eb5c0af3 assets/thebetweenlands/blockstates/algae.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
@@ -1990,7 +1990,6 @@ e408dc50c0af8dc90d007014c2b31e3335724e04 assets/thebetweenlands/models/item/betw
 ad3d6d7e28030bbff15deff04109987dcbb817a2 assets/thebetweenlands/models/item/betweenstone_stairs.json
 ae439665829eb0b695abba1307a983f19ecc0896 assets/thebetweenlands/models/item/betweenstone_tiles.json
 20b282c048a5ebd7f7859aa4fa4ea92e8eb53967 assets/thebetweenlands/models/item/betweenstone_wall.json
-1c81d91c9e56c45e5a6c3f871a705aa3831aea82 assets/thebetweenlands/models/item/black_hat_mushroom.json
 2971d129e28a9067481b85141146a8faa59e2ca9 assets/thebetweenlands/models/item/black_ice.json
 cdb030a91b09386d714b70f642847649d44ae072 assets/thebetweenlands/models/item/black_present.json
 08c60f120ef35fa809460a5925c27ea4f08a65de assets/thebetweenlands/models/item/bladderwort_flower.json
@@ -2173,7 +2172,6 @@ d68ccf91215542e04cdb4f1a01ed5953cea49544 assets/thebetweenlands/models/item/elm_
 efae734fed9b6e3ed65e11114420eaa4bd16bd72 assets/thebetweenlands/models/item/fine_lattice.json
 d79e934ce9ca7eeae4c3c9112507667571b31da9 assets/thebetweenlands/models/item/fishing_tackle_box.json
 97ddd42bc95650a73399483579aa44d7becf90bb assets/thebetweenlands/models/item/fish_trimming_table.json
-f6ef35d08244cf2c70c846dc4da148b640ce3864 assets/thebetweenlands/models/item/flathead_mushroom.json
 dbd12f70e45b16247976bd06aaaec2c08ae00bb6 assets/thebetweenlands/models/item/flowered_nettle.json
 820d2da3362a1da8b8c3c87d5a8f9c3ad497d3c7 assets/thebetweenlands/models/item/gecko_cage.json
 604ce22c703a59f51c502afc9293ff6817a5b882 assets/thebetweenlands/models/item/giant_root.json

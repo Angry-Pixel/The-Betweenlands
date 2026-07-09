@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "thebetweenlands:black_hat_mushroom_item"
+            "items": "thebetweenlands:black_hat_mushroom"
           }
         ]
       },
@@ -35,7 +35,7 @@
       "conditions": {
         "items": [
           {
-            "items": "thebetweenlands:flathead_mushroom_item"
+            "items": "thebetweenlands:flathead_mushroom"
           }
         ]
       },

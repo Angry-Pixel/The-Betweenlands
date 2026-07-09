@@ -1603,7 +1603,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile flatHeadMushroom1 = this.customLoaderModel("flat_head_mushroom_1", this.modLoc("flat_head_mushroom_1"), this.modLoc("block/flat_head_mushroom_1"), this.modLoc("block/particle/flat_head_mushroom_particle"));
 		ModelFile flatHeadMushroom2 = this.customLoaderModel("flat_head_mushroom_2", this.modLoc("flat_head_mushroom_2"), this.modLoc("block/flat_head_mushroom_2"), this.modLoc("block/particle/flat_head_mushroom_particle"));
 		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), flatHeadMushroom1, flatHeadMushroom2);
-		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/flat_head_mushroom_1")));
+//		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/flat_head_mushroom_1")));
 	}
 
 	public void blackHatMushroom(DeferredBlock<Block> block) {
@@ -1611,7 +1611,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		ModelFile blackHatMushroom2 = this.customLoaderModel("black_hat_mushroom_2", this.modLoc("black_hat_mushroom_2"), this.modLoc("block/black_hat_mushroom_2"), this.modLoc("block/particle/black_hat_mushroom_particle"));
 		ModelFile blackHatMushroom3 = this.customLoaderModel("black_hat_mushroom_3", this.modLoc("black_hat_mushroom_3"), this.modLoc("block/black_hat_mushroom_3"), this.modLoc("block/particle/black_hat_mushroom_particle"));
 		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), blackHatMushroom1, blackHatMushroom2, blackHatMushroom3);
-		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/black_hat_mushroom_1")));
+//		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/black_hat_mushroom_1")));
 	}
 
 	public void barnacle(DeferredBlock<Block> block) {

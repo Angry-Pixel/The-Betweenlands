@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-09T12:11:52.7418209	Item Models: thebetweenlands
+// 1.21.1	2026-07-09T12:24:46.8703982	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 0b2d09cfced89c59c75690e9b819a6339417a526 assets/thebetweenlands/models/item/amate_name_tag.json
@@ -79,7 +79,7 @@ f83db78105c7f24fbb5263d228c22920f240f26b assets/thebetweenlands/models/item/basi
 d6df531a6d423dfe5bb39f81bbd41d05fc15782b assets/thebetweenlands/models/item/biopathic_triggerstone_electric.json
 34f10c051cfecb42c2c5532e528aad29b6e2736b assets/thebetweenlands/models/item/biopathic_triggerstone_urchin.json
 43300e995d047452443518f1816b7fb9fd5bf534 assets/thebetweenlands/models/item/biopathic_triggerstone_vortex.json
-d29f7205657e48772892cf19459988fd63a62ce4 assets/thebetweenlands/models/item/black_hat_mushroom_item.json
+c5ed7f8730861a7328f9b649ec2a178f95696e47 assets/thebetweenlands/models/item/black_hat_mushroom.json
 2b292d380946e9fbc379ed3e7e148a82759359a2 assets/thebetweenlands/models/item/bladderwort_flower_drop.json
 193b9d3cc76be58c6bcec3ae105899531f1f50f0 assets/thebetweenlands/models/item/bladderwort_stalk_drop.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/thebetweenlands/models/item/blood_snail_spawn_egg.json
@@ -195,7 +195,7 @@ eb427327c3bcdff2208d76aa9f990d674c77a12c assets/thebetweenlands/models/item/fish
 c9b3e6ff10ebc79a86c2054108fdbfaf37a0b262 assets/thebetweenlands/models/item/fish_bait.json
 52f2382b5108b4debbe2b53fc7cdc518a0edc437 assets/thebetweenlands/models/item/fish_oil_bucket.json
 e38fc4a6ce45ef32e5d705b09f2d6867b5f8e4da assets/thebetweenlands/models/item/fish_vortex_upgrade.json
-d7aec488e0f4b0904e3d37516c79531f195fa8ef assets/thebetweenlands/models/item/flathead_mushroom_item.json
+8a45939e9a19d679908d30886ee14ed3ef9df8a2 assets/thebetweenlands/models/item/flathead_mushroom.json
 d0a1c08222716a5a4bc3e5963ab0a529a096d0e0 assets/thebetweenlands/models/item/forbidden_fig.json
 552566da3e292c91efc3e3fc55e14cdd4f7e21fa assets/thebetweenlands/models/item/fort_lore_scrap.json
 21d4a710538d84a5e6a4ebf795bd9866af032bc7 assets/thebetweenlands/models/item/freshwater_urchin.json
