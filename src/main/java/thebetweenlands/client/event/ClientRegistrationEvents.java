@@ -100,8 +100,6 @@ import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.custom.CustomElementsModel;
 import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
-import thebetweenlands.client.model.baked.flatheadmushroom1.FlatHeadMushroom1ModelLoader;
-import thebetweenlands.client.model.baked.flatheadmushroom2.FlatHeadMushroom2ModelLoader;
 import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
 import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
 import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
@@ -1011,8 +1009,8 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("bush"), BushModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("swamp_plant"), SwampPlantModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("bulb_capped_mushroom"), BulbCappedMushroomModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("flat_head_mushroom_1"), FlatHeadMushroom1ModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("flat_head_mushroom_2"), FlatHeadMushroom2ModelLoader.INSTANCE);
 
 //		event.register(TheBetweenlands.prefix("black_hat_mushroom_1"), BlackHatMushroom1ModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("black_hat_mushroom_2"), BlackHatMushroom2ModelLoader.INSTANCE);
