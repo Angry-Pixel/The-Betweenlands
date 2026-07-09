@@ -1,8 +1,0 @@
-{
-	"parent": "minecraft:block/air",
-	"texture_size": [32, 32],
-	"textures": {
-		"particle": "thebetweenlands:block/particle/sundew_particle",
-		"texture": "thebetweenlands:block/sundew"
-	}
-}

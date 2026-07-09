@@ -1001,13 +1001,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.crossBlock(BlockRegistry.SWAMP_KELP_PLANT);
 		this.crossBlock(BlockRegistry.SWAMP_KELP);
 		this.basicItemTex(BlockRegistry.SWAMP_KELP, false);
-//		this.swampPlant(BlockRegistry.SWAMP_PLANT);
-//		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
-//		this.pitcherPlant(BlockRegistry.PITCHER_PLANT);
-//		this.weepingBlue(BlockRegistry.WEEPING_BLUE);
-//		this.sundew(BlockRegistry.SUNDEW);
+		this.existingModelShortPlantBlock(BlockRegistry.SWAMP_PLANT, this.modLoc("block/swamp_plant"));
+		this.existingModelShortPlantBlock(BlockRegistry.BULB_CAPPED_MUSHROOM, this.modLoc("block/bulb_capped_mushroom"), false);
+		this.venusFlyTrap(BlockRegistry.VENUS_FLY_TRAP);
+		this.existingBaseDoublePlantBlock(BlockRegistry.PITCHER_PLANT, "pitcher_plant", this.modLoc("block/particle/pitcher_plant_particle"));
+		this.existingBaseDoublePlantBlock(BlockRegistry.WEEPING_BLUE, "weeping_blue", this.modLoc("block/particle/weeping_blue_particle"));
+		this.existingBaseDoublePlantBlock(BlockRegistry.SUNDEW, "sundew", this.modLoc("block/particle/sundew_particle"));
 //		this.volarpad(BlockRegistry.VOLARPAD);
-//		this.bulbCappedMushroom(BlockRegistry.BULB_CAPPED_MUSHROOM);
 		this.builtinEntity(BlockRegistry.ASPECTRUS_CROP, this.modLoc("block/particle/aspectrus_crop_particle"));
 		this.fungusCrop(BlockRegistry.FUNGUS_CROP);
 		this.middleFruitBush(BlockRegistry.MIDDLE_FRUIT_BUSH);
@@ -1473,59 +1473,46 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).scale(0.34f).end();
 	}
 
-	public void swampPlant(DeferredBlock<Block> block) {
-		ModelFile swampPlant = this.customLoaderModel("swamp_plant", this.modLoc("swamp_plant"), this.modLoc("block/swamp_plant"), this.modLoc("block/particle/swamp_plant_particle"));
-		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), swampPlant);
-		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/swamp_plant")));
+	public void existingModelShortPlantBlock(DeferredBlock<Block> block, ResourceLocation modelId) {
+		this.existingModelShortPlantBlock(block, modelId, true);
+	}
+	
+	public void existingModelShortPlantBlock(DeferredBlock<Block> block, ResourceLocation modelId, boolean addItem) {
+		ModelFile model = this.models().getExistingFile(modelId);
+		addRotatedVariants(this.getVariantBuilder(block.get()).partialState(), model);
+		if (addItem) {
+			shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), modelId));
+		}
 	}
 
 	public void venusFlyTrap(DeferredBlock<Block> block) {
-		ModelFile venusFlyTrap = this.customLoaderModel("venus_fly_trap", this.modLoc("venus_fly_trap"), this.modLoc("block/venus_fly_trap"), this.modLoc("block/particle/venus_fly_trap_particle"));
-		ModelFile venusFlyTrapBlooming = this.customLoaderModel("venus_fly_trap_blooming", this.modLoc("venus_fly_trap"), this.modLoc("block/venus_fly_trap_blooming"), this.modLoc("block/particle/venus_fly_trap_blooming_particle"));
+		ModelFile venusFlyTrap = this.models().getExistingFile(this.modLoc("block/venus_fly_trap"));
+		ModelFile venusFlyTrapBlooming = this.models().getExistingFile(this.modLoc("block/venus_fly_trap_blooming"));
 
-		addRotatedVariants((addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
-		.with(VenusFlyTrapBlock.BLOOMING, false), venusFlyTrap)).partialState()
-		.with(VenusFlyTrapBlock.BLOOMING, true), venusFlyTrapBlooming);
+		VariantBlockStateBuilder builder = this.getVariantBuilder(block.get());
+		addRotatedVariants(builder.partialState().with(VenusFlyTrapBlock.BLOOMING, false), venusFlyTrap);
+		addRotatedVariants(builder.partialState().with(VenusFlyTrapBlock.BLOOMING, true), venusFlyTrapBlooming);
 
 		shortPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/venus_fly_trap")));
 	}
 
-	public void pitcherPlant(DeferredBlock<Block> block) {
-		ModelFile pitcherPlant = this.customLoaderModel("pitcher_plant", this.modLoc("pitcher_plant"), this.modLoc("block/pitcher_plant"), this.modLoc("block/particle/pitcher_plant_particle"));
-		ModelFile pitcherPlantTop = this.models().withExistingParent("pitcher_plant_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/pitcher_plant_particle"));
+	/**
+	 * Creates a blockstate for a double-high plant based on an existing "base" model.
+	 * Generates a new model for the top half with the specified particle texture.
+	 * Generates an item model based on just the "base" model.
+	 * @param block
+	 * @param name
+	 */
+	public void existingBaseDoublePlantBlock(DeferredBlock<Block> block, String name, ResourceLocation particle) {
+		ResourceLocation existingModel = this.modLoc(name).withPrefix("block/");
+		ModelFile baseModel = this.models().getExistingFile(existingModel);
+		ModelFile topModel = this.models().withExistingParent(name + "_top", this.mcLoc("block/air")).texture("particle", particle);
 
-		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), pitcherPlant)).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-		.modelFile(pitcherPlantTop).addModel();
+		VariantBlockStateBuilder builder = this.getVariantBuilder(block.get());
+		addRotatedVariants(builder.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), baseModel);
+		builder.partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState().modelFile(topModel).addModel();
 
-		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/pitcher_plant")));
-	}
-
-	public void weepingBlue(DeferredBlock<Block> block) {
-		ModelFile weepingBlue = this.customLoaderModel("weeping_blue", this.modLoc("weeping_blue"), this.modLoc("block/weeping_blue"), this.modLoc("block/particle/weeping_blue_particle"));
-		ModelFile weepingBlueTop = this.models().withExistingParent("weeping_blue_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/weeping_blue_particle"));
-
-		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), weepingBlue)).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-		.modelFile(weepingBlueTop).addModel();
-
-
-		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/weeping_blue")));
-	}
-
-	public void sundew(DeferredBlock<Block> block) {
-		ModelFile sundew = this.customLoaderModel("sundew", this.modLoc("sundew"), this.modLoc("block/sundew"), this.modLoc("block/particle/sundew_particle"));
-		ModelFile sundewTop = this.models().withExistingParent("sundew_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/sundew_particle"));
-
-		(addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), sundew)).partialState()
-		.with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState()
-		.modelFile(sundewTop).addModel();
-
-
-		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/sundew")));
+		tallPlantItemTransforms(this.itemModels().withExistingParent(block.getId().toString(), existingModel));
 	}
 
 	public void volarpad(DeferredBlock<Block> block) {
