@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.LevelAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,6 +17,7 @@ import net.minecraft.server.RunningOnDifferentThreadException;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -30,9 +30,43 @@ import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.config.BetweenlandsConfigSetup;
 import thebetweenlands.common.event.CommonRegistrationEvents;
+import thebetweenlands.common.handler.EntitySpawnPlacementsHandler;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
+import thebetweenlands.common.registries.AmphibiousArmorUpgradeRegistry;
+import thebetweenlands.common.registries.ArmorMaterialRegistry;
+import thebetweenlands.common.registries.AspectCalculatorRegistry;
+import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.AttributeRegistry;
+import thebetweenlands.common.registries.BiomeLayerRegistry;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CarverRegistry;
+import thebetweenlands.common.registries.CenserRecipeRegistry;
+import thebetweenlands.common.registries.CreativeGroupRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.common.registries.EarlyGeneratorRegistry;
+import thebetweenlands.common.registries.EntityDataSerializerRegistry;
+import thebetweenlands.common.registries.EntityPredicateRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.registries.FeatureRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.FluidTypeRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootFunctionRegistry;
+import thebetweenlands.common.registries.MapDecorationRegistry;
+import thebetweenlands.common.registries.MenuRegistry;
+import thebetweenlands.common.registries.MobEffectRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
+import thebetweenlands.common.registries.PlacementModifierRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.common.registries.SimulacrumEffectRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.StorageRegistry;
+import thebetweenlands.common.registries.StructureTypeRegistry;
 import thebetweenlands.common.world.BetweenlandsSurfaceRules;
 
 @Mod(TheBetweenlands.ID)
@@ -84,6 +118,7 @@ public class TheBetweenlands {
 		CreativeGroupRegistry.CREATIVE_TABS.register(eventbus);
 		AttributeRegistry.ATTRIBUTES.register(eventbus);
 		EntityRegistry.ENTITY_TYPES.register(eventbus);
+		eventbus.addListener(EntitySpawnPlacementsHandler::registerSpawnPlacements); //hnnnnggghhhhn
 		ElixirEffectRegistry.ELIXIRS.register(eventbus);
 		MobEffectRegistry.EFFECTS.register(eventbus);
 		AttachmentRegistry.ATTACHMENT_TYPES.register(eventbus);
