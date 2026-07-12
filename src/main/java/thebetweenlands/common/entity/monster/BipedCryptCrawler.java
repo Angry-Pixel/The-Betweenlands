@@ -2,7 +2,6 @@ package thebetweenlands.common.entity.monster;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -33,12 +32,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.neoforged.neoforge.common.ItemAbilities;
-import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ai.goals.CryptCrawlerBlockGoal;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class BipedCryptCrawler extends Monster implements BLEntityWithSpawnRules <BipedCryptCrawler> {
+public class BipedCryptCrawler extends Monster implements BLEntity {
 
 	private static final byte EVENT_SHIELD_BLOCKED = 80;
 	private static final EntityDataAccessor<Boolean> IS_BLOCKING = SynchedEntityData.defineId(BipedCryptCrawler.class, EntityDataSerializers.BOOLEAN);
@@ -209,10 +207,5 @@ public class BipedCryptCrawler extends Monster implements BLEntityWithSpawnRules
 	public float getSpeed() {
 		//Half move speed when blocking
 		return (this.isBlocking() ? 0.5F : 1.0F) * super.getSpeed();
-	}
-
-	@Override
-	public boolean canSpawnHere(EntityType<BipedCryptCrawler> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-		return true;
 	}
 }

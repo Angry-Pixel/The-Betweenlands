@@ -3,6 +3,8 @@ package thebetweenlands.common.entity.monster;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,21 +35,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.Tags;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.BasicProximitySpawnerExtended;
 import thebetweenlands.common.entity.creature.Lurker;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
-
-public class RockSnot extends BasicProximitySpawnerExtended {
+public class RockSnot extends BasicProximitySpawnerExtended implements BLEntityWithSpawnRules <RockSnot> {
 	private static final EntityDataAccessor<Integer> TENDRIL_COUNT = SynchedEntityData.defineId(RockSnot.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> JAW_ANGLE = SynchedEntityData.defineId(RockSnot.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> EATING_TIMER = SynchedEntityData.defineId(RockSnot.class, EntityDataSerializers.INT);
@@ -508,5 +511,10 @@ public class RockSnot extends BasicProximitySpawnerExtended {
 		public void stop() {
 			target = null;
 		}
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<RockSnot> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER);
 	}
 }

@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.creature;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -7,10 +11,18 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
@@ -19,20 +31,21 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.movement.JellyfishMoveControl;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import java.util.List;
-
-public class Jellyfish extends WaterAnimal implements BLEntity {
+public class Jellyfish extends WaterAnimal implements BLEntityWithSpawnRules <Jellyfish> {
 
 	protected Vec3 prevOrientationPos = Vec3.ZERO;
 	protected Vec3 orientationPos = Vec3.ZERO;
@@ -271,5 +284,15 @@ public class Jellyfish extends WaterAnimal implements BLEntity {
 
 	public Vec3 getOrientationPos(float partialTicks) {
 		return this.prevOrientationPos.add(this.orientationPos.subtract(this.prevOrientationPos).scale(partialTicks));
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<Jellyfish> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		return level.getDifficulty() != Difficulty.PEACEFUL && pos.getY() <= TheBetweenlands.LAYER_HEIGHT && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER);
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 }

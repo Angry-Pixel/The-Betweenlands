@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.creature;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -12,11 +14,15 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -26,6 +32,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -35,15 +43,14 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ai.goals.WaterStrollGoal;
 import thebetweenlands.common.entity.movement.AboveWaterPathNavigation;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import java.util.List;
-
-public class GreeblingCoracle extends PathfinderMob implements BLEntity {
+public class GreeblingCoracle extends PathfinderMob implements BLEntityWithSpawnRules <GreeblingCoracle> {
 
 	protected static final byte EVENT_DISAPPEAR = 41;
 	protected static final byte EVENT_SPOUT = 42;
@@ -353,5 +360,15 @@ public class GreeblingCoracle extends PathfinderMob implements BLEntity {
 				this.spawnAtLocation(stack, 0.0F);
 			}
 		}
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<GreeblingCoracle> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		return pos.below().getY() <= TheBetweenlands.LAYER_HEIGHT && pos.below().getY() > TheBetweenlands.CAVE_START && level.getBlockState(pos.below()).is(BlockRegistry.SWAMP_WATER);
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 }

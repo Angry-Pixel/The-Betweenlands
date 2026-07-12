@@ -14,7 +14,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -25,15 +24,14 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ai.goals.AshSpriteChargeGoal;
 import thebetweenlands.common.entity.ai.goals.AshSpriteMoveGoal;
 import thebetweenlands.common.entity.movement.AshSpriteMoveControl;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class AshSprite extends Monster implements BLEntityWithSpawnRules <AshSprite> {
+public class AshSprite extends Monster implements BLEntity {
 
 	protected static final byte EVENT_ENABLE_NO_CLIP = 80;
 	protected static final byte EVENT_DISABLE_NO_CLIP = 81;
@@ -199,7 +197,7 @@ public class AshSprite extends Monster implements BLEntityWithSpawnRules <AshSpr
 	}
 
 	@Override
-	public boolean canSpawnHere(EntityType<AshSprite> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-		return true;
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.isUnobstructed(this);
 	}
 }

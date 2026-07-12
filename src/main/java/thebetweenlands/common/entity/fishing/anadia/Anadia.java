@@ -1,5 +1,12 @@
 package thebetweenlands.common.entity.fishing.anadia;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -12,17 +19,28 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -30,20 +48,16 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.fishing.BLFishHook;
 import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class Anadia extends PathfinderMob implements BLEntity {
+public class Anadia extends PathfinderMob implements BLEntityWithSpawnRules <Anadia> {
 	public static final String HEAD_KEY = "head_item";
 	public static final String BODY_KEY = "body_item";
 	public static final String TAIL_KEY = "tail_item";
@@ -717,5 +731,15 @@ public class Anadia extends PathfinderMob implements BLEntity {
 		return Component.translatable("entity.thebetweenlands.anadia.body_" + body).append(" ")
 			.append(Component.translatable("entity.thebetweenlands.anadia.tail_" + tail)).append(" ")
 			.append(Component.translatable("entity.thebetweenlands.anadia.head_" + head));
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<Anadia> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		return level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER) && pos.getY() <= TheBetweenlands.LAYER_HEIGHT;
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.isUnobstructed(this);
 	}
 }

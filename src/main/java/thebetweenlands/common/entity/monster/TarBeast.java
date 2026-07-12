@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.monster;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -10,16 +14,24 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -28,20 +40,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import java.util.List;
-
-public class TarBeast extends Monster implements BLEntity {
+public class TarBeast extends Monster implements BLEntityWithSpawnRules <TarBeast> {
 
 	private static final AttributeModifier KNOCKBACK_PRONE_MODIFIER = new AttributeModifier(TheBetweenlands.prefix("knockback_prone"), -0.25D, AttributeModifier.Operation.ADD_VALUE);
 
@@ -382,5 +393,23 @@ public class TarBeast extends Monster implements BLEntity {
 
 	public void setGrowTimer(int timer) {
 		this.getEntityData().set(GROW_TIMER, timer);
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<TarBeast> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		boolean isInTar = true;
+		AABB searchBox = getBoundingBox();
+		BlockPos minPos = BlockPos.containing(searchBox.minX, searchBox.minY, searchBox.minZ);
+		BlockPos maxPos = BlockPos.containing(searchBox.maxX, searchBox.maxY, searchBox.maxZ);
+		for (BlockPos posCheck : BlockPos.betweenClosed(minPos, maxPos))
+			if (!level.getBlockState(posCheck).is(BlockRegistry.TAR))
+				isInTar = false;
+
+		return level.getDifficulty() != Difficulty.PEACEFUL && isInTar;
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 }

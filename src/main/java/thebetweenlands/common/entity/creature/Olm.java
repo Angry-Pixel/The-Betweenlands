@@ -27,13 +27,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class Olm extends WaterAnimal {
+public class Olm extends WaterAnimal implements BLEntityWithSpawnRules <Olm> {
 
 	public long cooldown;
 
@@ -184,5 +187,15 @@ public class Olm extends WaterAnimal {
 				this.olm.setSpeed(0.0F);
 			}
 		}
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<Olm> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		  return pos.getY() <= TheBetweenlands.CAVE_WATER_HEIGHT && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER);
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 }

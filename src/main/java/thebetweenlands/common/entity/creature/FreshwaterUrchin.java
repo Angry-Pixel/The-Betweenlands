@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,6 +24,8 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -30,11 +33,13 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.SpikeParticle;
 import thebetweenlands.client.particle.options.SpikeParticleOptions;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ProximitySpawner;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DamageTypeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner {
+public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner, BLEntityWithSpawnRules <FreshwaterUrchin> {
 
 	private static final EntityDataAccessor<Integer> SPIKE_COOLDOWN = SynchedEntityData.defineId(FreshwaterUrchin.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> SPIKE_BOX_SIZE = SynchedEntityData.defineId(FreshwaterUrchin.class, EntityDataSerializers.INT);
@@ -232,5 +237,15 @@ public class FreshwaterUrchin extends PathfinderMob implements ProximitySpawner 
 	@Override
 	public boolean isSingleUse() {
 		return false;
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<FreshwaterUrchin> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		 return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER);
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 }

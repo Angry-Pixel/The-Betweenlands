@@ -37,12 +37,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class Angler extends Monster implements BLEntity {
+public class Angler extends Monster implements BLEntityWithSpawnRules <Angler> {
 	private static final EntityDataAccessor<Boolean> IS_LEAPING = SynchedEntityData.defineId(Angler.class, EntityDataSerializers.BOOLEAN);
 
 	public Angler(EntityType<? extends Angler> type, Level level) {
@@ -296,4 +299,9 @@ public class Angler extends Monster implements BLEntity {
 	          }
 	       }
     }
+
+	@Override
+	public boolean canSpawnHere(EntityType<Angler> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) { 
+		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER) && pos.getY() <= TheBetweenlands.LAYER_HEIGHT;
+	}
 }
