@@ -1,0 +1,144 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "thebetweenlands:patchy_islands",
+  "spawners": [
+    {
+      "type": "thebetweenlands:dragonfly",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 35
+    },
+    {
+      "type": "thebetweenlands:firefly",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 60
+    },
+    {
+      "type": "thebetweenlands:mire_snail",
+      "maxCount": 5,
+      "minCount": 1,
+      "weight": 60
+    },
+    {
+      "type": "thebetweenlands:frog",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 32
+    },
+    {
+      "type": "thebetweenlands:olm",
+      "maxCount": 5,
+      "minCount": 3,
+      "weight": 30
+    },
+    {
+      "type": "thebetweenlands:gecko",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 40
+    },
+    {
+      "type": "thebetweenlands:sporeling",
+      "maxCount": 5,
+      "minCount": 2,
+      "weight": 80
+    },
+    {
+      "type": "thebetweenlands:greebling",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 20
+    },
+    {
+      "type": "thebetweenlands:emberling",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 20
+    },
+    {
+      "type": "thebetweenlands:lurker",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 35
+    },
+    {
+      "type": "thebetweenlands:angler",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 45
+    },
+    {
+      "type": "thebetweenlands:swamp_hag",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 90
+    },
+    {
+      "type": "thebetweenlands:wight",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 16
+    },
+    {
+      "type": "thebetweenlands:silt_crab",
+      "maxCount": 8,
+      "minCount": 2,
+      "weight": 50
+    },
+    {
+      "type": "thebetweenlands:blood_snail",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 30
+    },
+    {
+      "type": "thebetweenlands:leech",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 35
+    },
+    {
+      "type": "thebetweenlands:chiromaw",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 40
+    },
+    {
+      "type": "thebetweenlands:chiromaw_greebling_rider",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 20
+    },
+    {
+      "type": "thebetweenlands:stalker",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 13
+    },
+    {
+      "type": "thebetweenlands:infestation",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 50
+    },
+    {
+      "type": "thebetweenlands:shambler",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 30
+    },
+    {
+      "type": "thebetweenlands:anadia",
+      "maxCount": 5,
+      "minCount": 1,
+      "weight": 60
+    },
+    {
+      "type": "thebetweenlands:cave_fish",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 30
+    }
+  ]
+}

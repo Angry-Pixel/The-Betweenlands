@@ -1,0 +1,5 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "thebetweenlands:sludge_plains",
+  "spawners": []
+}

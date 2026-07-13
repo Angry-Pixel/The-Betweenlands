@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.phys.Vec3;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.AshSpriteChargeGoal;
 import thebetweenlands.common.entity.ai.goals.AshSpriteMoveGoal;
 import thebetweenlands.common.entity.movement.AshSpriteMoveControl;

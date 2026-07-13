@@ -32,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.neoforged.neoforge.common.ItemAbilities;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.entity.ai.goals.CryptCrawlerBlockGoal;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

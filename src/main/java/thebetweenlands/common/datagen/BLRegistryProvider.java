@@ -1,16 +1,29 @@
 package thebetweenlands.common.datagen;
 
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.*;
-
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
+import thebetweenlands.common.registries.AspectItemRegistry;
+import thebetweenlands.common.registries.AspectTypeRegistry;
+import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.ConfiguredFeatureRegistry;
+import thebetweenlands.common.registries.DamageTypeRegistry;
+import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.common.registries.EarlyGeneratorRegistry;
+import thebetweenlands.common.registries.ElixirRecipeRegistry;
+import thebetweenlands.common.registries.FrogVariantRegistry;
+import thebetweenlands.common.registries.MusicRegistry;
+import thebetweenlands.common.registries.PlacedFeatureRegistry;
+import thebetweenlands.common.registries.StructureRegistry;
+import thebetweenlands.common.world.spawning.BiomeModifiersSpawning;
 
 public class BLRegistryProvider extends DatapackBuiltinEntriesProvider {
 
@@ -30,7 +43,8 @@ public class BLRegistryProvider extends DatapackBuiltinEntriesProvider {
 		.add(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipeRegistry::bootstrap)
 		.add(Registries.DAMAGE_TYPE, DamageTypeRegistry::bootstrap)
 		.add(BLRegistries.Keys.FROG_VARIANT, FrogVariantRegistry::bootstrap)
-		.add(BLRegistries.Keys.CONFIGURED_GENERATORS, EarlyGeneratorRegistry::bootstrapConfigured);
+		.add(BLRegistries.Keys.CONFIGURED_GENERATORS, EarlyGeneratorRegistry::bootstrapConfigured)
+		.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifiersSpawning::bootstrap);
 
 	public BLRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, provider, BUILDER, Set.of("minecraft", TheBetweenlands.ID));
