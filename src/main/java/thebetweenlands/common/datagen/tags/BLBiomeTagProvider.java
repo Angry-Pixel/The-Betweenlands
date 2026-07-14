@@ -20,6 +20,18 @@ import thebetweenlands.common.registries.BiomeRegistry;
 public class BLBiomeTagProvider extends TagsProvider<Biome> {
 
 	public static final TagKey<Biome> IN_BETWEENLANDS = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("in_betweenlands"));
+	
+	public static final TagKey<Biome> PATCHY_ISLANDS = TagKey.create(Registries.BIOME, BiomeRegistry.PATCHY_ISLANDS.location());
+	public static final TagKey<Biome> SWAMPLANDS = TagKey.create(Registries.BIOME, BiomeRegistry.SWAMPLANDS.location());
+	public static final TagKey<Biome> DEEP_WATERS = TagKey.create(Registries.BIOME, BiomeRegistry.DEEP_WATERS.location());
+	public static final TagKey<Biome> COARSE_ISLANDS = TagKey.create(Registries.BIOME, BiomeRegistry.COARSE_ISLANDS.location());
+	public static final TagKey<Biome> RAISED_ISLES = TagKey.create(Registries.BIOME, BiomeRegistry.RAISED_ISLES.location());
+	public static final TagKey<Biome> SLUDGE_PLAINS = TagKey.create(Registries.BIOME, BiomeRegistry.SLUDGE_PLAINS.location());
+	public static final TagKey<Biome> ERODED_MARSH = TagKey.create(Registries.BIOME, BiomeRegistry.ERODED_MARSH.location());
+	public static final TagKey<Biome> MARSH = TagKey.create(Registries.BIOME, BiomeRegistry.MARSH.location());
+	public static final TagKey<Biome> SWAMPLANDS_CLEARING = TagKey.create(Registries.BIOME, BiomeRegistry.SWAMPLANDS_CLEARING.location());
+	public static final TagKey<Biome> SLUDGE_PLAINS_CLEARING = TagKey.create(Registries.BIOME, BiomeRegistry.SLUDGE_PLAINS_CLEARING.location());
+
 	public static final TagKey<Biome> CORRODING_AURA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("corroding_aura"));
 	public static final TagKey<Biome> DISABLE_CORROSION = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("disable_corrosion"));
 
@@ -38,6 +50,17 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
+		this.tag(PATCHY_ISLANDS);
+		this.tag(SWAMPLANDS);
+		this.tag(DEEP_WATERS);
+		this.tag(COARSE_ISLANDS);
+		this.tag(RAISED_ISLES);
+		this.tag(SLUDGE_PLAINS);
+		this.tag(ERODED_MARSH);
+		this.tag(MARSH);
+		this.tag(SWAMPLANDS_CLEARING);
+		this.tag(SLUDGE_PLAINS_CLEARING);
+		
 		this.tag(CORRODING_AURA);
 		this.tag(DISABLE_CORROSION).add(BiomeRegistry.SWAMPLANDS_CLEARING);
 

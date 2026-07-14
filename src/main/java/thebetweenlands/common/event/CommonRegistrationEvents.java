@@ -27,7 +27,6 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.CapabilityHooks;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -59,7 +58,6 @@ import thebetweenlands.common.block.entity.util.ItemHandlerProvidingBlockEntity;
 import thebetweenlands.common.capability.AnimatorWrapper;
 import thebetweenlands.common.capability.CenserWrapper;
 import thebetweenlands.common.capability.MortarWrapper;
-import thebetweenlands.common.capability.MothHouseWrapper;
 import thebetweenlands.common.capability.SmokingRackWrapper;
 import thebetweenlands.common.capability.corrosion.DefaultCorrosionHandler;
 import thebetweenlands.common.capability.lifecrystal.DamageLifeCrystalHandler;
@@ -120,7 +118,15 @@ import thebetweenlands.common.network.clientbound.UpdateBetweenlandsBossBarPacke
 import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
 import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
 import thebetweenlands.common.network.clientbound.WightVolatileParticlesPacket;
-import thebetweenlands.common.network.serverbound.*;
+import thebetweenlands.common.network.serverbound.ChiromawDoubleJumpPacket;
+import thebetweenlands.common.network.serverbound.EquipItemPacket;
+import thebetweenlands.common.network.serverbound.HandleSwingPacket;
+import thebetweenlands.common.network.serverbound.OpenPouchPacket;
+import thebetweenlands.common.network.serverbound.RenameItemPacket;
+import thebetweenlands.common.network.serverbound.RowboatRowPacket;
+import thebetweenlands.common.network.serverbound.SetGalleryUrlPacket;
+import thebetweenlands.common.network.serverbound.SetLastPageDataPacket;
+import thebetweenlands.common.network.serverbound.UpdateRingStatePacket;
 import thebetweenlands.common.registries.AttributeRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -336,6 +342,7 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {
+		event.register(DataMapRegistry.CUSTOM_SPAWNS);
 		event.register(DataMapRegistry.AMULET_SPAWNS);
 		event.register(DataMapRegistry.ANIMATOR_FUEL);
 		event.register(DataMapRegistry.COMPOSTABLE);

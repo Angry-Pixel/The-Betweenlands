@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -8,13 +10,17 @@ import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datamap.block.WaterPlant;
 import thebetweenlands.common.datamap.entity.AmuletSpawn;
+import thebetweenlands.common.datamap.entity.MobSpawnDataMap;
 import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.datamap.item.CompostableItem;
 import thebetweenlands.common.datamap.item.DecayFood;
 import thebetweenlands.common.datamap.item.FluxMultiplier;
 import thebetweenlands.common.datamap.item.LightningConversion;
+import thebetweenlands.common.world.spawning.ICustomSpawnEntry;
 
 public class DataMapRegistry {
+	
+    public static final DataMapType<EntityType<?>, List<ICustomSpawnEntry>> CUSTOM_SPAWNS = DataMapType.builder(TheBetweenlands.prefix("custom_spawns"), Registries.ENTITY_TYPE, MobSpawnDataMap.MASTER_LIST_CODEC).synced(MobSpawnDataMap.MASTER_LIST_CODEC, false).build();
 
 	public static final DataMapType<EntityType<?>, AmuletSpawn> AMULET_SPAWNS = DataMapType.builder(TheBetweenlands.prefix("amulet_spawn"), Registries.ENTITY_TYPE, AmuletSpawn.CODEC).synced(AmuletSpawn.CODEC, false).build();
 
