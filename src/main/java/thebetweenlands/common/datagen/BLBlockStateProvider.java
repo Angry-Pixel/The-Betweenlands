@@ -990,9 +990,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.lichenBlockWithItem(BlockRegistry.DEAD_LICHEN);
 //		this.tintedCrossBlockWithItem(BlockRegistry.HANGER);
 		this.basicItemTex(BlockRegistry.HANGER, false);
-		this.simpleBlock(BlockRegistry.SEEDED_HANGER.get(), this.models().withExistingParent(BlockRegistry.SEEDED_HANGER.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
-			.texture("cross", this.modLoc("block/seeded_hanger_tinted"))
-			.texture("cross2", this.modLoc("block/seeded_hanger_untinted")));
+//		this.simpleBlock(BlockRegistry.SEEDED_HANGER.get(), this.models().withExistingParent(BlockRegistry.SEEDED_HANGER.getId().getPath(), this.modLoc("block/2layercross")).renderType("cutout")
+//			.texture("cross", this.modLoc("block/seeded_hanger_tinted"))
+//			.texture("cross2", this.modLoc("block/seeded_hanger_untinted")));
 		this.basicItemTex(BlockRegistry.SEEDED_HANGER, false);
 		//more bushes
 		this.simpleBlock(BlockRegistry.FALLEN_LEAVES.get(), this.models().carpet("fallen_leaves", this.modLoc("block/fallen_leaves")).renderType("cutout"));

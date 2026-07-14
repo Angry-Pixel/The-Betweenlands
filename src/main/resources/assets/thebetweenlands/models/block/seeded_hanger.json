@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/block",
+	"loader": "neoforge:composite",
+    "children": {
+        "base": {
+            "parent": "thebetweenlands:block/hanger"
+        },
+        "seeds": {
+            "parent": "thebetweenlands:block/hanger_seeds"
+        }
+    }
+}
