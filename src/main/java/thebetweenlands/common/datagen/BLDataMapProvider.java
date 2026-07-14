@@ -28,6 +28,7 @@ import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.spawning.BaseSpawnProperties;
+import thebetweenlands.common.world.spawning.CaveSpawnEntry;
 import thebetweenlands.common.world.spawning.SurfaceSpawnEntry;
 
 public class BLDataMapProvider extends DataMapProvider {
@@ -362,7 +363,14 @@ public class BLDataMapProvider extends DataMapProvider {
 		var baseNumbers = new BaseSpawnProperties(biomeList, (short) 20, (short) 100, true, 2, 4, -64, 0, 16.0, 8.0, 4.0, 20);
 
 		// Dragonfly setup test
-		var dragonfly = new BaseSpawnProperties(patchy_islands, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 400);
-		cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonfly, true, false)), false);
+		var dragonflySurface = new BaseSpawnProperties(patchy_islands, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 400);
+		var dragonflyCave = new BaseSpawnProperties(patchy_islands, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 100);
+		var dragonflyMarshSurface = new BaseSpawnProperties(marsh, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 400);
+		var dragonflyMarshCave = new BaseSpawnProperties(marsh, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 100);
+		
+		
+		//cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonfly, true, false)), false);
+		
+		cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonflySurface, true, false), new CaveSpawnEntry(dragonflyCave, true, false, true),new SurfaceSpawnEntry(dragonflyMarshSurface, true, false), new CaveSpawnEntry(dragonflyMarshCave, true, false, true)), false);
 	}
 }
