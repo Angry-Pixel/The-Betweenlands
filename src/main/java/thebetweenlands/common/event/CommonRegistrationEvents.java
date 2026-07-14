@@ -201,7 +201,7 @@ public class CommonRegistrationEvents {
 		BLRegistryProvider datapack = new BLRegistryProvider(output, event.getLookupProvider());
 		CompletableFuture<HolderLookup.Provider> dataProvider = datapack.getRegistryProvider();
 		gen.addProvider(data, datapack);
-
+		
 		// Tags
 		BLBlockTagProvider blockTags = new BLBlockTagProvider(output, dataProvider, helper);
 		gen.addProvider(data, blockTags);
