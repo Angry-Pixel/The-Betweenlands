@@ -99,7 +99,6 @@ import thebetweenlands.client.model.baked.barnacle.BarnacleModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.custom.CustomElementsModel;
-import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
 import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
@@ -1017,7 +1016,7 @@ public class ClientRegistrationEvents {
 		
 //		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
 
 //		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("wooden_support_beam_2"), WoodenSupportBeam2ModelLoader.INSTANCE);

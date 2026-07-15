@@ -69,6 +69,7 @@ import thebetweenlands.common.block.plant.VenusFlyTrapBlock;
 import thebetweenlands.common.block.structure.BeamRelayBlock;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.block.structure.DruidStoneBlock;
+import thebetweenlands.common.block.structure.DungeonWallCandleBlock;
 import thebetweenlands.common.block.structure.PortalFrameBlock;
 import thebetweenlands.common.block.structure.SpikeTrapBlock;
 import thebetweenlands.common.block.structure.TreePortalBlock;
@@ -1041,7 +1042,9 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.lantern(BlockRegistry.PAPER_LANTERN_3, "lantern_paper_3", this.modLoc("block/lantern_paper"), this.modLoc("block/lantern_paper_rotated"), this.modLoc("block/lantern_rope"), this.modLoc("block/lantern_paper_3"), this.modLoc("block/amate_paper_pane_1_ct_0"));
 		this.lantern(BlockRegistry.SILT_GLASS_LANTERN, this.modLoc("block/lantern_silt_glass"), this.modLoc("block/lantern_silt_glass_rotated"), this.modLoc("block/lantern_rope"));
 		
-		this.dungeonWallCandle(BlockRegistry.DUNGEON_WALL_CANDLE);
+		this.models().withExistingParent("dungeon_wall_candle_unlit", this.modLoc("block/dungeon_wall_candle")).texture("texture", this.modLoc("block/dungeon_wall_candle_unlit"));
+		
+		this.dungeonWallCandle(BlockRegistry.DUNGEON_WALL_CANDLE, this.modLoc("block/dungeon_wall_candle"), this.modLoc("block/dungeon_wall_candle_unlit"));
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_1, this.modLoc("block/wooden_support_beam_1"));
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_2, this.modLoc("block/wooden_support_beam_2"));
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, this.modLoc("block/wooden_support_beam_3"));
@@ -1747,13 +1750,28 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(whitePearCrop).addModel();
 	}
 
-	public void dungeonWallCandle(DeferredBlock<Block> block) {
-		ModelFile dungeonWallCandle = this.customLoaderModel("dungeon_wall_candle", this.modLoc("dungeon_wall_candle"), this.modLoc("block/dungeon_wall_candle"), this.modLoc("block/particle/dungeon_wall_candle_particle"));
-		this.getVariantBuilder(block.get())
-			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.NORTH).modelForState().modelFile(dungeonWallCandle).addModel()
-			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.EAST).modelForState().modelFile(dungeonWallCandle).rotationY(90).addModel()
-			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.SOUTH).modelForState().modelFile(dungeonWallCandle).rotationY(180).addModel()
-			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.WEST).modelForState().modelFile(dungeonWallCandle).rotationY(270).addModel();
+	public void dungeonWallCandle(DeferredBlock<Block> block, ResourceLocation litModel, ResourceLocation unlitModel) {
+		ModelFile dungeonWallCandle = this.models().getExistingFile(litModel);
+		ModelFile dungeonWallCandleUnlit = this.models().getExistingFile(unlitModel);
+		
+		var builder = this.getVariantBuilder(block.get());
+
+		for (Direction direction : HorizontalDirectionalBlock.FACING.getPossibleValues()) {
+			builder = builder.partialState()
+					.with(HorizontalDirectionalBlock.FACING, direction)
+					.with(DungeonWallCandleBlock.LIT, true)
+					.modelForState().modelFile(dungeonWallCandle)
+					.rotationY(((direction.get2DDataValue() + 2) & 3) * 90).addModel();
+		}
+
+		for (Direction direction : HorizontalDirectionalBlock.FACING.getPossibleValues()) {
+			builder = builder.partialState()
+					.with(HorizontalDirectionalBlock.FACING, direction)
+					.with(DungeonWallCandleBlock.LIT, false)
+					.modelForState().modelFile(dungeonWallCandleUnlit)
+					.rotationY(((direction.get2DDataValue() + 2) & 3) * 90).addModel();
+		}
+		
 		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "item/mud_flower_pot_candle"));
 	}

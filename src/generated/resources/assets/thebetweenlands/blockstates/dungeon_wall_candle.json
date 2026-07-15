@@ -1,17 +1,32 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,lit=false": {
+      "model": "thebetweenlands:block/dungeon_wall_candle_unlit",
+      "y": 90
+    },
+    "facing=east,lit=true": {
       "model": "thebetweenlands:block/dungeon_wall_candle",
       "y": 90
     },
-    "facing=north": {
+    "facing=north,lit=false": {
+      "model": "thebetweenlands:block/dungeon_wall_candle_unlit"
+    },
+    "facing=north,lit=true": {
       "model": "thebetweenlands:block/dungeon_wall_candle"
     },
-    "facing=south": {
+    "facing=south,lit=false": {
+      "model": "thebetweenlands:block/dungeon_wall_candle_unlit",
+      "y": 180
+    },
+    "facing=south,lit=true": {
       "model": "thebetweenlands:block/dungeon_wall_candle",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,lit=false": {
+      "model": "thebetweenlands:block/dungeon_wall_candle_unlit",
+      "y": 270
+    },
+    "facing=west,lit=true": {
       "model": "thebetweenlands:block/dungeon_wall_candle",
       "y": 270
     }

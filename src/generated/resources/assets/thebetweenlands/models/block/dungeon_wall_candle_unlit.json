@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/dungeon_wall_candle",
+  "textures": {
+    "texture": "thebetweenlands:block/dungeon_wall_candle_unlit"
+  }
+}

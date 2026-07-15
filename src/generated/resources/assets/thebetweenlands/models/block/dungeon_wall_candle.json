@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:dungeon_wall_candle",
-  "textures": {
-    "particle": "thebetweenlands:block/particle/dungeon_wall_candle_particle",
-    "texture": "thebetweenlands:block/dungeon_wall_candle"
-  }
-}
