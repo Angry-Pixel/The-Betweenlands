@@ -1,7 +1,82 @@
 {
-  "variants": {
-    "": {
-      "model": "thebetweenlands:block/lantern_paper_3"
+  "multipart": [
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3"
+      },
+      "when": {
+        "rotation": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3_rotated",
+        "y": 270
+      },
+      "when": {
+        "rotation": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3",
+        "y": 270
+      },
+      "when": {
+        "rotation": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3_rotated",
+        "y": 180
+      },
+      "when": {
+        "rotation": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3",
+        "y": 180
+      },
+      "when": {
+        "rotation": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3_rotated",
+        "y": 90
+      },
+      "when": {
+        "rotation": "5"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3",
+        "y": 90
+      },
+      "when": {
+        "rotation": "6"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_paper_3_rotated"
+      },
+      "when": {
+        "rotation": "7"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/lantern_rope"
+      },
+      "when": {
+        "hanging": "true"
+      }
     }
-  }
+  ]
 }

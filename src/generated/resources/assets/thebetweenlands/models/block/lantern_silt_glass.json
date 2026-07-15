@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/block",
-  "loader": "thebetweenlands:silt_glass_lantern",
-  "textures": {
-    "particle": "thebetweenlands:block/silt_glass",
-    "rope": "thebetweenlands:block/lantern_rope",
-    "texture": "thebetweenlands:block/lantern_silt_glass"
-  }
-}

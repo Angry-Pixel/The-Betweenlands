@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import com.mojang.math.Transformation;
+
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
@@ -44,6 +46,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.util.TransformationHelper.TransformOrigin;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
@@ -52,9 +55,12 @@ import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
 import thebetweenlands.common.block.farming.DugSoilBlock;
 import thebetweenlands.common.block.farming.FungusCropBlock;
 import thebetweenlands.common.block.farming.MiddleFruitBushBlock;
+import thebetweenlands.common.block.misc.BLLanternBlock;
 import thebetweenlands.common.block.misc.GlowingGoopBlock;
 import thebetweenlands.common.block.misc.MistBridgeBlock;
 import thebetweenlands.common.block.misc.MudFlowerPotCandleBlock;
+import thebetweenlands.common.block.misc.RopeBlock;
+import thebetweenlands.common.block.misc.RopeBlock.RopeVariant;
 import thebetweenlands.common.block.misc.SamiteCanvasPanelBlock;
 import thebetweenlands.common.block.plant.BulbCappedMushroomStemBlock;
 import thebetweenlands.common.block.plant.EdgePlantBlock;
@@ -1014,10 +1020,26 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.flatHeadMushroom(BlockRegistry.FLATHEAD_MUSHROOM);
 		this.blackHatMushroom(BlockRegistry.BLACK_HAT_MUSHROOM);
 		this.barnacle(BlockRegistry.BARNACLE);
-		this.lantern(BlockRegistry.PAPER_LANTERN_1, "lantern_paper_1", this.modLoc("paper_lantern"), this.modLoc("block/lantern_paper_1"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
-		this.lantern(BlockRegistry.PAPER_LANTERN_2, "lantern_paper_2", this.modLoc("paper_lantern"), this.modLoc("block/lantern_paper_2"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
-		this.lantern(BlockRegistry.PAPER_LANTERN_3, "lantern_paper_3", this.modLoc("paper_lantern"), this.modLoc("block/lantern_paper_3"), this.modLoc("block/amate_paper_pane_1_ct_0"), this.modLoc("block/lantern_rope"));
-		this.lantern(BlockRegistry.SILT_GLASS_LANTERN, "lantern_silt_glass", this.modLoc("silt_glass_lantern"), this.modLoc("block/lantern_silt_glass"), this.modLoc("block/silt_glass"), this.modLoc("block/lantern_rope"));
+
+		this.models().cross("rope_single", this.modLoc("block/rope_single")).renderType("cutout");
+		this.models().cross("rope_top", this.modLoc("block/rope_top")).renderType("cutout");
+		this.models().cross("rope_middle", this.modLoc("block/rope_middle")).renderType("cutout");
+		this.models().cross("rope_bottom", this.modLoc("block/rope_bottom")).renderType("cutout");
+		
+		this.rope(BlockRegistry.ROPE, this.modLoc("block/rope_single"), this.modLoc("block/rope_top"), this.modLoc("block/rope_middle"), this.modLoc("block/rope_bottom"));
+		
+		// Lantern Rope model
+		this.models().cross("lantern_rope", this.modLoc("block/lantern_rope")).renderType("cutout");
+		// Paper lantern base model
+		this.withRotation("lantern_paper_rotated", this.modLoc("block/lantern_paper"), 0, 45, 0, true, TransformOrigin.CENTER);
+		// Silt glass lantern base model
+		this.withRotation("lantern_silt_glass_rotated", this.modLoc("block/lantern_silt_glass"), 0, 45, 0, true, TransformOrigin.CENTER);
+		
+		this.lantern(BlockRegistry.PAPER_LANTERN_1, "lantern_paper_1", this.modLoc("block/lantern_paper"), this.modLoc("block/lantern_paper_rotated"), this.modLoc("block/lantern_rope"), this.modLoc("block/lantern_paper_1"), this.modLoc("block/amate_paper_pane_1_ct_0"));
+		this.lantern(BlockRegistry.PAPER_LANTERN_2, "lantern_paper_2", this.modLoc("block/lantern_paper"), this.modLoc("block/lantern_paper_rotated"), this.modLoc("block/lantern_rope"), this.modLoc("block/lantern_paper_2"), this.modLoc("block/amate_paper_pane_1_ct_0"));
+		this.lantern(BlockRegistry.PAPER_LANTERN_3, "lantern_paper_3", this.modLoc("block/lantern_paper"), this.modLoc("block/lantern_paper_rotated"), this.modLoc("block/lantern_rope"), this.modLoc("block/lantern_paper_3"), this.modLoc("block/amate_paper_pane_1_ct_0"));
+		this.lantern(BlockRegistry.SILT_GLASS_LANTERN, this.modLoc("block/lantern_silt_glass"), this.modLoc("block/lantern_silt_glass_rotated"), this.modLoc("block/lantern_rope"));
+		
 		this.dungeonWallCandle(BlockRegistry.DUNGEON_WALL_CANDLE);
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_1, this.modLoc("block/wooden_support_beam_1"));
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_2, this.modLoc("block/wooden_support_beam_2"));
@@ -1581,12 +1603,73 @@ public class BLBlockStateProvider extends BlockStateProvider {
 			.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0, -315, 0).scale(0.34f).end();
 	}
 
-	public void lantern(DeferredBlock<Block> block, String name, ResourceLocation model, ResourceLocation modelTexture, ResourceLocation particleTexture, ResourceLocation ropeTexture) {
-		ModelFile lantern = this.customLoaderModelWithExtraTexture(name, model, modelTexture, particleTexture, new Tuple<>("rope", ropeTexture));
+	public void rope(DeferredBlock<Block> block, ResourceLocation singleModel, ResourceLocation topModel, ResourceLocation middleModel, ResourceLocation bottomModel) {
+		this.getVariantBuilder(block.get())
+				.partialState().with(RopeBlock.VARIANT, RopeVariant.SINGLE).modelForState().modelFile(this.models().getExistingFile(singleModel)).addModel()
+				.partialState().with(RopeBlock.VARIANT, RopeVariant.TOP).modelForState().modelFile(this.models().getExistingFile(topModel)).addModel()
+				.partialState().with(RopeBlock.VARIANT, RopeVariant.MIDDLE).modelForState().modelFile(this.models().getExistingFile(middleModel)).addModel()
+				.partialState().with(RopeBlock.VARIANT, RopeVariant.BOTTOM).modelForState().modelFile(this.models().getExistingFile(bottomModel)).addModel();
+	}
 
-		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(lantern).addModel();
+	public void withRotation(String name, ResourceLocation originalModel, float x, float y, float z, boolean isDegrees) {
+		this.models().withExistingParent(name, originalModel)
+			.rootTransforms()
+			.rotation(x, y, z, isDegrees)
+			.end();
+	}
 
-		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/" + name))
+	public void withRotation(String name, ResourceLocation originalModel, float x, float y, float z, boolean isDegrees, TransformOrigin origin) {
+		this.models().withExistingParent(name, originalModel)
+			.rootTransforms()
+			.rotation(x, y, z, isDegrees)
+			.origin(origin)
+			.end();
+	}
+	
+	public void withTransformation(String name, ResourceLocation originalModel, Transformation transformation) {
+		this.models().withExistingParent(name, originalModel)
+			.rootTransforms()
+			.transform(transformation)
+			.end();
+	}
+
+	public void lantern(DeferredBlock<Block> block, String name, ResourceLocation lanternModel, ResourceLocation rotatedLanternModel, ResourceLocation ropeModel, ResourceLocation modelTexture, ResourceLocation particleTexture) {
+		ModelFile modelBase = this.models().withExistingParent(name, lanternModel)
+				.texture("texture", modelTexture)
+				.texture("particle", particleTexture);
+		ModelFile modelRotated = this.models().withExistingParent(name + "_rotated", rotatedLanternModel)
+				.texture("texture", modelTexture)
+				.texture("particle", particleTexture);
+		
+		this.lantern(block, modelBase, modelRotated, ropeModel);
+	}
+
+	public void lantern(DeferredBlock<Block> block, ResourceLocation lanternModel, ResourceLocation rotatedLanternModel, ResourceLocation ropeModel) {
+		this.lantern(block, this.models().getExistingFile(lanternModel), this.models().getExistingFile(rotatedLanternModel), ropeModel);
+	}
+	
+	public void lantern(DeferredBlock<Block> block, ModelFile lanternModel, ModelFile lanternModelRotated, ResourceLocation ropeModel) {
+		var multipartBuilder = this.getMultipartBuilder(block.get());
+		
+		for(int i = 0; i < 4; ++i) {
+			multipartBuilder = multipartBuilder
+				// unrotated model
+					.part().modelFile(lanternModel).rotationY((360 - 90 * i) % 360).addModel()
+					.condition(BLLanternBlock.ROTATION, i * 2)
+					.end()
+				// rotated model
+					.part().modelFile(lanternModelRotated).rotationY((360 - 90 * (i + 1)) % 360).addModel()
+					.condition(BLLanternBlock.ROTATION, i * 2 + 1)
+					.end();
+		}
+		
+		// Hanging rope
+		multipartBuilder = multipartBuilder
+				.part().modelFile(this.models().getExistingFile(ropeModel)).addModel()
+				.condition(BLLanternBlock.HANGING, true)
+				.end();
+		
+		this.itemModels().withExistingParent(block.getId().toString(), lanternModel.getLocation())
 			.transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, 1.6f, 0).scale(0.85f).end()
 			.transform(ItemDisplayContext.GROUND).translation(0, 1.8f, 0).scale(0.5f).end()

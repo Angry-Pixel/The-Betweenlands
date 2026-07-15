@@ -1,5 +1,5 @@
 {
-  "parent": "thebetweenlands:block/lantern_paper",
+  "parent": "thebetweenlands:block/lantern_paper_rotated",
   "textures": {
     "particle": "thebetweenlands:block/amate_paper_pane_1_ct_0",
     "texture": "thebetweenlands:block/lantern_paper_1"

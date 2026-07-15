@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "variant=bottom": {
+      "model": "thebetweenlands:block/rope_bottom"
+    },
+    "variant=middle": {
+      "model": "thebetweenlands:block/rope_middle"
+    },
+    "variant=single": {
+      "model": "thebetweenlands:block/rope_single"
+    },
+    "variant=top": {
+      "model": "thebetweenlands:block/rope_top"
+    }
+  }
+}

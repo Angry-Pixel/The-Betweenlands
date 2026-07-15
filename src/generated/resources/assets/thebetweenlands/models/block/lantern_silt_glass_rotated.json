@@ -1,0 +1,12 @@
+{
+  "parent": "thebetweenlands:block/lantern_silt_glass",
+  "transform": {
+    "origin": "center",
+    "rotation": [
+      0.0,
+      0.38268346,
+      0.0,
+      0.9238795
+    ]
+  }
+}
