@@ -101,8 +101,6 @@ import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeom
 import thebetweenlands.client.model.baked.custom.CustomElementsModel;
 import thebetweenlands.client.model.baked.dungeonwallcandle.DungeonWallCandleModelLoader;
 import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
-import thebetweenlands.client.model.baked.paperlantern.PaperLanternModelLoader;
-import thebetweenlands.client.model.baked.siltglasslantern.SiltGlassLanternModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
 import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
@@ -1017,8 +1015,8 @@ public class ClientRegistrationEvents {
 		event.register(TheBetweenlands.prefix("white_pear_crop"), WhitePearCropModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("barnacle"), BarnacleModelLoader.INSTANCE);
 		
-		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
 		event.register(TheBetweenlands.prefix("dungeon_wall_candle"), DungeonWallCandleModelLoader.INSTANCE);
 
 //		event.register(TheBetweenlands.prefix("wooden_support_beam_1"), WoodenSupportBeam1ModelLoader.INSTANCE);
