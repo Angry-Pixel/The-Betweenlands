@@ -40,6 +40,27 @@ public record BiomeLayerConfigured(BiomeLayer biomeLayer, ContextResolverHolder 
 	}
 
 	/**
+	 * @see BiomeLayer#acquireReferences(BiomeLayerContext, BiomeLayerReferenceAcquirer)
+	 * @param <A>
+	 * @param context
+	 * @param referenceAcquirer
+	 */
+	public <A extends Area> void acquireReferences(BiomeLayerContext<A> context, BiomeLayerReferenceAcquirer referenceAcquirer) {
+		this.acquireReferences(context.areaContext(), context.randomContext().getRandomFactory(), referenceAcquirer);
+	}
+
+	/**
+	 * @see BiomeLayer#acquireReferences(BiomeLayerContext, BiomeLayerReferenceAcquirer)
+	 * @param <A>
+	 * @param randomContext
+	 * @param referenceAcquirer
+	 */
+	public <A extends Area> void acquireReferences(AreaFactoryContextSupplier<A> areaFactory, BiomeLayerRandomFactoryContext randomFactory, BiomeLayerReferenceAcquirer referenceAcquirer) {
+		BiomeLayerRandomContext randomState = this.contextResolver().createContext(randomFactory);
+		this.biomeLayer().acquireReferences(new BiomeLayerContext<>(areaFactory, randomState), referenceAcquirer);
+	}
+
+	/**
 	 * @see BiomeLayer#createAreaFactory(BiomeLayerContext, BiomeLayerChainState)
 	 * @param <A>
 	 * @param context
