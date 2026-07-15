@@ -22,7 +22,7 @@ public interface BiomeLayerChainState {
 	};
 	
 	/**
-	 * @return a ref to the layer immediately before this one
+	 * {@return a ref to the layer immediately before this one}
 	 */
 	public Optional<BiomeLayerRef> getPreviousLayer();
 
@@ -34,7 +34,7 @@ public interface BiomeLayerChainState {
 	public Optional<BiomeLayerRef> getBackwardRef(String name);
 	
 	/**
-	 * @return an immutable map of all present backward refs
+	 * {@return an immutable map of all present backward refs}
 	 */
 	public Map<String, BiomeLayerRef> getAllBackwardRefs();
 }
