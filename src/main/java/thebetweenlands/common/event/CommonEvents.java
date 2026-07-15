@@ -14,6 +14,7 @@ import thebetweenlands.common.handler.ArmorHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.CorrosionHandler;
 import thebetweenlands.common.handler.CorrosiveBootsHandler;
+import thebetweenlands.common.handler.CustomDimensionSpawningHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EntityUnmountHandler;
@@ -47,13 +48,14 @@ public class CommonEvents {
 		SimulacrumHandler.init();
 		WorldEventHandler.init();
 		PlayerGunkHandler.init();
-
+		NeoForge.EVENT_BUS.register(CustomDimensionSpawningHandler.class);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::syncAspects);
 		NeoForge.EVENT_BUS.addListener(CommonEvents::tickSwarm);
 		NeoForge.EVENT_BUS.addListener(EntitySpawnHandler::handleAmuletSpawns);
 		NeoForge.EVENT_BUS.addListener(EntityUnmountHandler::onEntityMountEvent);
 		NeoForge.EVENT_BUS.addListener(CorrosiveBootsHandler::onPlayerTick);
 		NeoForge.EVENT_BUS.addListener(MagicItemMagnetHandler::onItemPickup);
+		NeoForge.EVENT_BUS.addListener(VolarkiteMountHandler::onMountEvent);
 		NeoForge.EVENT_BUS.addListener(VolarkiteMountHandler::onMountEvent);
 	}
 

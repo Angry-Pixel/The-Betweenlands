@@ -340,7 +340,8 @@ public class BLDataMapProvider extends DataMapProvider {
 		var biomeLookup = provider.lookupOrThrow(Registries.BIOME);
 
 		// Single biome for ref (redundant if we use the tags instead)
-		HolderSet<Biome> singleBiome = HolderSet.direct(biomeLookup.getOrThrow(BiomeRegistry.PATCHY_ISLANDS));
+		HolderSet<Biome> patchy_islands_single = HolderSet.direct(biomeLookup.getOrThrow(BiomeRegistry.PATCHY_ISLANDS));
+		HolderSet<Biome> marsh_single = HolderSet.direct(biomeLookup.getOrThrow(BiomeRegistry.MARSH));
 
 		// List of specific biomes for ref
 		HolderSet<Biome> biomeList = HolderSet.direct(
@@ -363,14 +364,13 @@ public class BLDataMapProvider extends DataMapProvider {
 		var baseNumbers = new BaseSpawnProperties(biomeList, (short) 20, (short) 100, true, 2, 4, -64, 0, 16.0, 8.0, 4.0, 20);
 
 		// Dragonfly setup test
-		var dragonflySurface = new BaseSpawnProperties(patchy_islands, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 400);
-		var dragonflyCave = new BaseSpawnProperties(patchy_islands, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 100);
-		var dragonflyMarshSurface = new BaseSpawnProperties(marsh, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 400);
-		var dragonflyMarshCave = new BaseSpawnProperties(marsh, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 100);
-		
-		
-		//cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonfly, true, false)), false);
-		
+		var dragonflySurface = new BaseSpawnProperties(patchy_islands_single, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 100);
+		var dragonflyCave = new BaseSpawnProperties(patchy_islands_single, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 400);
+		var dragonflyMarshSurface = new BaseSpawnProperties(marsh_single, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 100);
+		var dragonflyMarshCave = new BaseSpawnProperties(marsh_single, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 400);
+
+		//cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonflySurface, true, false)), false);
+
 		cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonflySurface, true, false), new CaveSpawnEntry(dragonflyCave, true, false, true),new SurfaceSpawnEntry(dragonflyMarshSurface, true, false), new CaveSpawnEntry(dragonflyMarshCave, true, false, true)), false);
 	}
 }

@@ -1,14 +1,21 @@
 package thebetweenlands.common.entity.creature;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -17,13 +24,15 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class Dragonfly extends AmbientCreature implements BLEntity {
+public class Dragonfly extends AmbientCreature implements BLEntityWithSpawnRules <Dragonfly> {
 
 	@Nullable
 	private BlockPos currentFlightTarget;
@@ -209,6 +218,7 @@ public class Dragonfly extends AmbientCreature implements BLEntity {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		this.spawnPos = this.blockPosition();
@@ -229,6 +239,17 @@ public class Dragonfly extends AmbientCreature implements BLEntity {
 		if (tag.contains("spawn_pos", Tag.TAG_LONG)) {
 			this.spawnPos = BlockPos.of(tag.getLong("spawn_pos"));
 		}
+	}
+
+	//this isn't needed but I need some test case
+	@Override
+	public boolean canSpawnHere(EntityType<Dragonfly> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) { 
+		return pos.getY() >= TheBetweenlands.CAVE_WATER_HEIGHT && !level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER);
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 
 //	@Override
