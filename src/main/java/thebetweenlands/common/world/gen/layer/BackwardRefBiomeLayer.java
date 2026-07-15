@@ -12,6 +12,7 @@ import thebetweenlands.api.world.biome.layer.BiomeLayer;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerReferenceAcquirer;
 
 public record BackwardRefBiomeLayer(String refName) implements BiomeLayer {
 
@@ -22,8 +23,9 @@ public record BackwardRefBiomeLayer(String refName) implements BiomeLayer {
 		);
 
 	@Override
-	public boolean referencesPreviousLayer() {
-		return false;
+	public <A extends Area> void acquireReferences(BiomeLayerContext<A> context, BiomeLayerReferenceAcquirer referenceAcquirer) {
+		BiomeLayer.super.acquireReferences(context, referenceAcquirer);
+		referenceAcquirer.acquireBackwardsRef(this.refName());
 	}
 	
 	@Override

@@ -151,9 +151,13 @@ public class BetweenlandsBiomeSource extends BiomeSource implements IBetweenland
 		BiomeLayerChain biomeLayerChain = new BiomeLayerChain();
 		BiomeLayerContext<LazyArea> context = new BiomeLayerContext<LazyArea>(areaContext, randomContext);
 		
+		// Prepare biome layer chain for processing
+		biomeLayerChain.nextLayer(biomeLayer, context);
+		
 		// Compose & create area factory
 		biomeLayer.compose(context, biomeLayerChain);
-		AreaFactory<LazyArea> areaFactory = biomeLayer.createAreaFactory(context, biomeLayerChain);
+		biomeLayer.acquireReferences(context, biomeLayerChain.createReferenceAcquirer());
+		AreaFactory<LazyArea> areaFactory = biomeLayerChain.finish().orElseThrow().createAreaFactory(context);
 		
 		return new Layer(areaFactory);
 	}

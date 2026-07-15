@@ -14,6 +14,7 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerReferenceAcquirer;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
 public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements BiomeLayer {
@@ -28,10 +29,11 @@ public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements B
 		// Immutable copy of layers
 		this.layers = layers == null ? null : List.copyOf(layers);
 	}
-	
+
 	@Override
-	public boolean referencesPreviousLayer() {
-		return true;
+	public <A extends Area> void acquireReferences(BiomeLayerContext<A> context, BiomeLayerReferenceAcquirer referenceAcquirer) {
+		BiomeLayer.super.acquireReferences(context, referenceAcquirer);
+		referenceAcquirer.acquireFullContext();
 	}
 	
 	@Override
@@ -62,6 +64,9 @@ public record SequenceBiomeLayer(List<BiomeLayerConfigured> layers) implements B
 			
 			// Compose each child
 			childLayer.compose(childContext, chain);
+			
+			// Let the child acquire references
+			childLayer.acquireReferences(childContext, chain.createReferenceAcquirer());
 		}
 		
 		// Finish the chain

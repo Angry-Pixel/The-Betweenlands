@@ -11,6 +11,7 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerChainState;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerConfigured;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerReferenceAcquirer;
 
 public class PreviousLayerBiomeLayer implements BiomeLayer {
 	public static final PreviousLayerBiomeLayer INSTANCE = new PreviousLayerBiomeLayer();
@@ -19,8 +20,9 @@ public class PreviousLayerBiomeLayer implements BiomeLayer {
 	public static final MapCodec<PreviousLayerBiomeLayer> CODEC = MapCodec.unit(INSTANCE);
 
 	@Override
-	public boolean referencesPreviousLayer() {
-		return true;
+	public <A extends Area> void acquireReferences(BiomeLayerContext<A> context, BiomeLayerReferenceAcquirer referenceAcquirer) {
+		BiomeLayer.super.acquireReferences(context, referenceAcquirer);
+		referenceAcquirer.acquirePreviousLayer();
 	}
 	
 	@Override

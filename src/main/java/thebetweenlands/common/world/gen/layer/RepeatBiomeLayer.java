@@ -15,6 +15,7 @@ import thebetweenlands.api.world.biome.layer.context.BiomeLayerContext;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRandomContextResolver.ContextResolverHolder;
 import thebetweenlands.api.world.biome.layer.context.BiomeLayerRef;
+import thebetweenlands.api.world.biome.layer.context.BiomeLayerReferenceAcquirer;
 import thebetweenlands.api.world.biome.layer.util.BiomeLayerChain;
 
 public record RepeatBiomeLayer(BiomeLayer biomeLayer, List<ContextResolverHolder> contextResolvers) implements BiomeLayer {
@@ -31,10 +32,11 @@ public record RepeatBiomeLayer(BiomeLayer biomeLayer, List<ContextResolverHolder
 		// Immutable copy of context resolvers
 		this.contextResolvers = contextResolvers == null ? null : List.copyOf(contextResolvers);
 	}
-	
+
 	@Override
-	public boolean referencesPreviousLayer() {
-		return true;
+	public <A extends Area> void acquireReferences(BiomeLayerContext<A> context, BiomeLayerReferenceAcquirer referenceAcquirer) {
+		BiomeLayer.super.acquireReferences(context, referenceAcquirer);
+		referenceAcquirer.acquireFullContext();
 	}
 	
 	@Override
@@ -65,6 +67,9 @@ public record RepeatBiomeLayer(BiomeLayer biomeLayer, List<ContextResolverHolder
 			
 			// Compose each child
 			biomeLayer.compose(childContext, chain);
+			
+			// Let the child acquire references
+			biomeLayer.acquireReferences(childContext, chain.createReferenceAcquirer());
 		}
 		
 		// Finish the chain
