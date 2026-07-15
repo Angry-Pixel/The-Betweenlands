@@ -702,7 +702,213 @@
         "if_true": {
           "type": "minecraft:biome",
           "biome_is": [
+            "thebetweenlands:marsh_clearing"
+          ]
+        },
+        "then_run": {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:water",
+                "add_stone_depth": false,
+                "offset": 0,
+                "surface_depth_multiplier": 0
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "add_surface_depth": false,
+                      "offset": 0,
+                      "secondary_depth_range": 0,
+                      "surface_type": "floor"
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "thebetweenlands:swamp_grass"
+                      }
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "add_surface_depth": false,
+                      "offset": 2,
+                      "secondary_depth_range": 0,
+                      "surface_type": "floor"
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "thebetweenlands:swamp_dirt"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:stone_depth",
+                    "add_surface_depth": false,
+                    "offset": 0,
+                    "secondary_depth_range": 0,
+                    "surface_type": "floor"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": {
+                      "Name": "thebetweenlands:mud",
+                      "Properties": {
+                        "in_water": "false"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:stone_depth",
+                    "add_surface_depth": false,
+                    "offset": 2,
+                    "secondary_depth_range": 0,
+                    "surface_type": "floor"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": {
+                      "Name": "thebetweenlands:mud",
+                      "Properties": {
+                        "in_water": "false"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "minecraft:condition",
+        "if_true": {
+          "type": "minecraft:biome",
+          "biome_is": [
             "thebetweenlands:eroded_marsh"
+          ]
+        },
+        "then_run": {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:water",
+                "add_stone_depth": false,
+                "offset": 0,
+                "surface_depth_multiplier": 0
+              },
+              "then_run": {
+                "type": "minecraft:sequence",
+                "sequence": [
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "add_surface_depth": false,
+                      "offset": 0,
+                      "secondary_depth_range": 0,
+                      "surface_type": "floor"
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "thebetweenlands:swamp_grass"
+                      }
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:stone_depth",
+                      "add_surface_depth": false,
+                      "offset": 2,
+                      "secondary_depth_range": 0,
+                      "surface_type": "floor"
+                    },
+                    "then_run": {
+                      "type": "minecraft:block",
+                      "result_state": {
+                        "Name": "thebetweenlands:swamp_dirt"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:stone_depth",
+                    "add_surface_depth": false,
+                    "offset": 0,
+                    "secondary_depth_range": 0,
+                    "surface_type": "floor"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": {
+                      "Name": "thebetweenlands:mud",
+                      "Properties": {
+                        "in_water": "false"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:stone_depth",
+                    "add_surface_depth": false,
+                    "offset": 2,
+                    "secondary_depth_range": 0,
+                    "surface_type": "floor"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": {
+                      "Name": "thebetweenlands:mud",
+                      "Properties": {
+                        "in_water": "false"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "minecraft:condition",
+        "if_true": {
+          "type": "minecraft:biome",
+          "biome_is": [
+            "thebetweenlands:eroded_marsh_clearing"
           ]
         },
         "then_run": {

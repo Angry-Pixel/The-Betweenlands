@@ -10,7 +10,9 @@
       "thebetweenlands:patchy_islands",
       "thebetweenlands:sludge_plains",
       "thebetweenlands:swamplands_clearing",
-      "thebetweenlands:sludge_plains_clearing"
+      "thebetweenlands:sludge_plains_clearing",
+      "thebetweenlands:marsh_clearing",
+      "thebetweenlands:eroded_marsh_clearing"
     ],
     "buffer_noise_limit": 0.25,
     "buffer_replaceable": "#thebetweenlands:bl_caves_buffer_replacable",

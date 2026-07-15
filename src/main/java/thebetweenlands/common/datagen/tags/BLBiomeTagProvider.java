@@ -35,6 +35,8 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 	public static final TagKey<Biome> CORRODING_AURA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("corroding_aura"));
 	public static final TagKey<Biome> DISABLE_CORROSION = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("disable_corrosion"));
 
+	public static final TagKey<Biome> MARSHES = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("marshes"));
+
 	public static final TagKey<Biome> SPAWNS_SILVER_ANADIA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("spawns_silver_anadia"));
 	public static final TagKey<Biome> SPAWNS_PURPLE_ANADIA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("spawns_purple_anadia"));
 	public static final TagKey<Biome> SPAWNS_GREEN_ANADIA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("spawns_green_anadia"));
@@ -70,13 +72,18 @@ public class BLBiomeTagProvider extends TagsProvider<Biome> {
 		this.tag(DREADFUL_PEAT_MUMMY_SUMMONABLE).add(BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH);
 
 		this.tag(GENERATES_DRUID_CIRCLE).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP);
-		this.tag(GENERATES_WIGHT_FORTRESS).add(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH);
+		this.tag(GENERATES_WIGHT_FORTRESS).add(BiomeRegistry.MARSH_CLEARING, BiomeRegistry.ERODED_MARSH_CLEARING);
 		this.tag(GENERATES_SPIRIT_TREE).add(BiomeRegistry.SWAMPLANDS_CLEARING);
 
+		this.tag(MARSHES).add(
+				BiomeRegistry.ERODED_MARSH, BiomeRegistry.ERODED_MARSH_CLEARING,
+				BiomeRegistry.MARSH, BiomeRegistry.MARSH_CLEARING);
+		
 		this.tag(IN_BETWEENLANDS).add(BiomeRegistry.COARSE_ISLANDS,
-			BiomeRegistry.DEEP_WATERS, BiomeRegistry.ERODED_MARSH, BiomeRegistry.MARSH,
-			BiomeRegistry.PATCHY_ISLANDS, BiomeRegistry.RAISED_ISLES, BiomeRegistry.SLUDGE_PLAINS,
-			BiomeRegistry.SLUDGE_PLAINS_CLEARING, BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING);
+			BiomeRegistry.DEEP_WATERS, BiomeRegistry.ERODED_MARSH, BiomeRegistry.ERODED_MARSH_CLEARING,
+			BiomeRegistry.MARSH, BiomeRegistry.MARSH_CLEARING, BiomeRegistry.PATCHY_ISLANDS,
+			BiomeRegistry.RAISED_ISLES, BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.SLUDGE_PLAINS_CLEARING,
+			BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING);
 
 		this.tag(BiomeTags.SPAWNS_WARM_VARIANT_FROGS).addTag(IN_BETWEENLANDS);
 		this.tag(BiomeTags.WITHOUT_PATROL_SPAWNS).addTag(IN_BETWEENLANDS);

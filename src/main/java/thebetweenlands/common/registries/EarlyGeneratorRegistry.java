@@ -121,7 +121,9 @@ public class EarlyGeneratorRegistry {
 								BiomeRegistry.PATCHY_ISLANDS,
 								BiomeRegistry.SLUDGE_PLAINS,
 								BiomeRegistry.SWAMPLANDS_CLEARING,
-								BiomeRegistry.SLUDGE_PLAINS_CLEARING
+								BiomeRegistry.SLUDGE_PLAINS_CLEARING,
+								BiomeRegistry.MARSH_CLEARING,
+								BiomeRegistry.ERODED_MARSH_CLEARING
 							),
 						// How much to increase the noise limit near the surface of biomes without surface openings
 						3.5 * 0.85

@@ -289,6 +289,7 @@ public class BiomeLayerRegistry {
 			// Zoom biomeSize times
 			legacyZoom(2345L),
 			marker("sludge_plains_clearing_zoom"),
+			marker("marsh_clearing_zoom"),
 			multiZoom(biomeSize - 1, 2345L, false),
 			
 			// Swamplands Clearing mixer
@@ -347,6 +348,65 @@ public class BiomeLayerRegistry {
 						multiSpread(biomeSize - 1 - 2, 2345L, false),
 						circleMask(registry, 3, true, BiomeRegistry.SLUDGE_PLAINS_CLEARING),
 						multiZoom(2, 2542L, false)
+					)
+				),
+
+			// Marsh Clearing mixer
+			mix(
+					sequence(
+						surrounded(
+								registry,
+									reference("marsh_clearing_zoom"),
+								2, // 2 check radius
+								25_00, // 25.00% placement chance
+								true, // mask (anything that wasn't placed by this is removed)
+								BiomeRegistry.MARSH_CLEARING, // place a marsh clearing
+								BiomeRegistry.MARSH, // when it's surrounded by marsh
+								142L // seed offset
+							),
+						repeatThin(
+								registry,
+								4, // 4 check radius
+								20_00, // 20.00% removal chance
+								false, // Don't treat this as a mask (though it doesn't matter here)
+								BiomeRegistry.MARSH_CLEARING, // when you find a marsh clearing
+								BiomeRegistry.MARSH_CLEARING, // maybe remove if there's a nearby marsh clearing
+								10, // repeat 10 times
+								165L, // seed offset
+								true
+							),
+						multiSpread(biomeSize - 1, 2345L, false),
+						circleMask(registry, 6, true, BiomeRegistry.MARSH_CLEARING)
+					)
+				),
+			
+
+			// Eroded Marsh Clearing mixer
+			mix(
+					sequence(
+						surrounded(
+								registry,
+									reference("marsh_clearing_zoom"),
+								2, // 2 check radius
+								25_00, // 25.00% placement chance
+								true, // mask (anything that wasn't placed by this is removed)
+								BiomeRegistry.ERODED_MARSH_CLEARING, // place an eroded marsh clearing
+								BiomeRegistry.ERODED_MARSH, // when it's surrounded by eroded marsh
+								142L // seed offset
+							),
+						repeatThin(
+								registry,
+								4, // 4 check radius
+								20_00, // 20.00% removal chance
+								false, // Don't treat this as a mask (though it doesn't matter here)
+								BiomeRegistry.ERODED_MARSH_CLEARING, // when you find a marsh clearing
+								BiomeRegistry.ERODED_MARSH_CLEARING, // maybe remove if there's a nearby marsh clearing
+								10, // repeat 10 times
+								165L, // seed offset
+								true
+							),
+						multiSpread(biomeSize - 1, 2345L, false),
+						circleMask(registry, 6, true, BiomeRegistry.ERODED_MARSH_CLEARING)
 					)
 				)
 		);

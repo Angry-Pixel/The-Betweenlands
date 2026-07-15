@@ -30,6 +30,8 @@ public class BiomeRegistry {
 	public static final ResourceKey<Biome> MARSH = makeKey("marsh");
 	public static final ResourceKey<Biome> SWAMPLANDS_CLEARING = makeKey("swamplands_clearing");
 	public static final ResourceKey<Biome> SLUDGE_PLAINS_CLEARING = makeKey("sludge_plains_clearing");
+	public static final ResourceKey<Biome> MARSH_CLEARING = makeKey("marsh_clearing");
+	public static final ResourceKey<Biome> ERODED_MARSH_CLEARING = makeKey("eroded_marsh_clearing");
 
 	private static ResourceKey<Biome> makeKey(String name) {
 		return ResourceKey.create(Registries.BIOME, TheBetweenlands.prefix(name));
@@ -243,6 +245,33 @@ public class BiomeRegistry {
 			)
 			.build());
 
+		context.register(ERODED_MARSH_CLEARING, new Biome.BiomeBuilder()
+			.temperature(0.8F)
+			.downfall(0.9F)
+			.specialEffects(new BiomeSpecialEffects.Builder()
+				.waterColor(/*0x485E18*/ 0xFF0000)
+				.grassColorOverride(0x627017)
+				.foliageColorOverride(0x63B581)
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
+				.skyColor(0x78A7FF)
+				.build())
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ARROW_ARUM_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.PICKERELWEED_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_HIBISCUS_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_MALLOW_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BUTTON_BUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SOFT_RUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BROOMSEDGE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BOTTLE_BRUSH_GRASS_PATCH)
+				.build()
+			)
+			.build());
+
 		context.register(MARSH, new Biome.BiomeBuilder()
 			.temperature(0.8F)
 			.downfall(0.9F)
@@ -258,6 +287,33 @@ public class BiomeRegistry {
 			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.WEEDWOOD_TREE_SUPER_RARE)
 
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_UNCOMMON)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ARROW_ARUM_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.PICKERELWEED_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_HIBISCUS_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.MARSH_MALLOW_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BUTTON_BUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SOFT_RUSH_PATCH)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BROOMSEDGE)
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.BOTTLE_BRUSH_GRASS_PATCH)
+				.build()
+			)
+			.build());
+
+		context.register(MARSH_CLEARING, new Biome.BiomeBuilder()
+			.temperature(0.8F)
+			.downfall(0.9F)
+			.specialEffects(new BiomeSpecialEffects.Builder()
+				.waterColor(/*0x485E18*/ 0xFF0000)
+				.grassColorOverride(0x627017)
+				.foliageColorOverride(0x63B581)
+				.waterFogColor(0x184220)
+				.fogColor(0xC0D8FF)
+				.skyColor(0x78A7FF)
+				.build())
+			.mobSpawnSettings(MobSpawnSettings.EMPTY)
+			.generationSettings(addUniversalFeatures(new BiomeGenerationSettings.Builder(featureGetter, carverGetter))
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.SHORT_SWAMP_GRASS_PATCH_MORE_RARE)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.NETTLE_PATCH_UNCOMMON)
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacedFeatureRegistry.ARROW_ARUM_PATCH)
@@ -341,7 +397,7 @@ public class BiomeRegistry {
 			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, ERODED_MARSH)
 				.addGenerator(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS)
 				.build(),
-				
+
 			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, MARSH)
 				.addGenerator(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS)
 				.build(),
@@ -350,6 +406,14 @@ public class BiomeRegistry {
 				.build(),
 				
 			BLBiomeData.builder(generatorRegistry, registry, 0.4F, 0.05F, SLUDGE_PLAINS_CLEARING)
+				.build(),
+				
+			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, MARSH_CLEARING)
+				.addGenerator(EarlyGeneratorRegistry.Configured.MARSH_ISLANDS)
+				.build(),
+
+			BLBiomeData.builder(generatorRegistry, registry, -0.1F, 0.11F, ERODED_MARSH_CLEARING)
+				.addGenerator(EarlyGeneratorRegistry.Configured.ERODED_MARSH_ISLANDS)
 				.build()
 		);
 	}

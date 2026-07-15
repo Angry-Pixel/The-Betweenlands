@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-14T15:20:07.3060268	Tags for minecraft:worldgen/biome mod id thebetweenlands
+// 1.21.1	2026-07-15T20:17:29.5717124	Tags for minecraft:worldgen/biome mod id thebetweenlands
 46db2353181edb61141d15cc5773cd25480ad4f1 data/c/tags/worldgen/biome/no_default_monsters.json
 46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/has_closer_water_fog.json
 46db2353181edb61141d15cc5773cd25480ad4f1 data/minecraft/tags/worldgen/biome/spawns_warm_variant_frogs.json
@@ -13,9 +13,10 @@
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/eroded_marsh.json
 6525dda69924a36f16797ed873bffc083e1f4de5 data/thebetweenlands/tags/worldgen/biome/generates_druid_circle.json
 5b1e41881166590b7d1165ad29750d03a2b9f449 data/thebetweenlands/tags/worldgen/biome/generates_spirit_tree.json
-0cf3cc98a4195f93f26d35bc50fb449346e79823 data/thebetweenlands/tags/worldgen/biome/generates_wight_fortress.json
-543636c66d009b702ed0bb4732fb9ffcf07f1d9a data/thebetweenlands/tags/worldgen/biome/in_betweenlands.json
+dde74cb4bb54935c02c4fb3bf9fdc5d7b5e48a79 data/thebetweenlands/tags/worldgen/biome/generates_wight_fortress.json
+ba14d4c9a3e88d3904489ae3a4d62c5b399c0454 data/thebetweenlands/tags/worldgen/biome/in_betweenlands.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/marsh.json
+6e67986b014d336e5aaba005462459869cac904a data/thebetweenlands/tags/worldgen/biome/marshes.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/patchy_islands.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/raised_isles.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/thebetweenlands/tags/worldgen/biome/sludge_plains.json

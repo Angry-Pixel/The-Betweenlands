@@ -127,8 +127,40 @@ public class BetweenlandsSurfaceRuleData extends SurfaceRuleData {
 				SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(2, false, CaveSurface.FLOOR), MUD)
 			)
 		)));
+		// Marsh
+		builder.add(SurfaceRules.ifTrue(SurfaceRules.isBiome(BiomeRegistry.MARSH_CLEARING), SurfaceRules.sequence(
+			// Top layer: e.g. dirt and grass
+			SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0),
+				SurfaceRules.sequence(
+					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(0, false, CaveSurface.FLOOR), SWAMP_GRASS),
+					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(2, false, CaveSurface.FLOOR), SWAMP_DIRT)
+				)
+			),
+			// Underwater blocks
+			SurfaceRules.sequence(
+				// Underwater state
+				SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(0, false, CaveSurface.FLOOR), MUD_UNDERWATER),
+				SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(2, false, CaveSurface.FLOOR), MUD)
+			)
+		)));
 		// Eroded marsh
 		builder.add(SurfaceRules.ifTrue(SurfaceRules.isBiome(BiomeRegistry.ERODED_MARSH), SurfaceRules.sequence(
+			// Top layer: e.g. dirt and grass
+			SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0),
+				SurfaceRules.sequence(
+					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(0, false, CaveSurface.FLOOR), SWAMP_GRASS),
+					SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(2, false, CaveSurface.FLOOR), SWAMP_DIRT)
+				)
+			),
+			// Underwater blocks
+			SurfaceRules.sequence(
+				// Underwater state
+				SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(0, false, CaveSurface.FLOOR), MUD_UNDERWATER),
+				SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(2, false, CaveSurface.FLOOR), MUD)
+			)
+		)));
+		// Eroded marsh
+		builder.add(SurfaceRules.ifTrue(SurfaceRules.isBiome(BiomeRegistry.ERODED_MARSH_CLEARING), SurfaceRules.sequence(
 			// Top layer: e.g. dirt and grass
 			SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0),
 				SurfaceRules.sequence(

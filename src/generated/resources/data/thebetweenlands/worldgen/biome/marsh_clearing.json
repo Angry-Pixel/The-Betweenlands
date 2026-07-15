@@ -1,0 +1,60 @@
+{
+  "carvers": {},
+  "downfall": 0.9,
+  "effects": {
+    "fog_color": 12638463,
+    "foliage_color": 6534529,
+    "grass_color": 6451223,
+    "sky_color": 7907327,
+    "water_color": 16711680,
+    "water_fog_color": 1589792
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [
+      "thebetweenlands:tar_pool_dungeon",
+      "thebetweenlands:underground_dungeon"
+    ],
+    [],
+    [],
+    [
+      "thebetweenlands:sulfur",
+      "thebetweenlands:syrmorite",
+      "thebetweenlands:bone_ore",
+      "thebetweenlands:octine",
+      "thebetweenlands:swamp_dirt",
+      "thebetweenlands:valonite",
+      "thebetweenlands:scabyst",
+      "thebetweenlands:life_gem"
+    ],
+    [],
+    [],
+    [
+      "thebetweenlands:short_swamp_grass_patch_more_rare",
+      "thebetweenlands:nettle_patch_uncommon",
+      "thebetweenlands:arrow_arum_patch",
+      "thebetweenlands:pickerelweed_patch",
+      "thebetweenlands:marsh_hibiscus_patch",
+      "thebetweenlands:marsh_mallow_patch",
+      "thebetweenlands:button_bush_patch",
+      "thebetweenlands:soft_rush_patch",
+      "thebetweenlands:broomsedge",
+      "thebetweenlands:bottle_brush_grass_patch"
+    ]
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.8
+}

@@ -108,7 +108,8 @@ public class DimensionRegistries {
 
 		BetweenlandsChunkGeneratorSettings blSettings = new BetweenlandsChunkGeneratorSettings(
 				BiomeWeightGroups.builder(biome)
-//					.addBiomeGroup(BiomeRegistry.MARSH, BiomeRegistry.ERODED_MARSH) // Debug to check this actually works
+					.addBiomeGroup(BiomeRegistry.MARSH, BiomeRegistry.MARSH_CLEARING) // Marsh and Marsh Clearing should be seamless
+					.addBiomeGroup(BiomeRegistry.ERODED_MARSH, BiomeRegistry.ERODED_MARSH_CLEARING) // Eroded Marsh and Eroded Marsh Clearing should be seamless
 					.build(),
 				GlobalEarlyGenerators.builder(generators)
 					.addLateGroup(EarlyGeneratorRegistry.Configured.BETWEENLANDS_CAVES)

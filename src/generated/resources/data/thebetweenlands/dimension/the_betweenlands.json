@@ -68,6 +68,10 @@
             "ref_name": "sludge_plains_clearing_zoom"
           },
           {
+            "type": "thebetweenlands:marker",
+            "ref_name": "marsh_clearing_zoom"
+          },
+          {
             "type": "thebetweenlands:repeat",
             "biome_layer": {
               "type": "thebetweenlands:zoom"
@@ -215,6 +219,130 @@
                 }
               ]
             }
+          },
+          {
+            "type": "thebetweenlands:mask_mixer",
+            "mask_layer": {
+              "type": "thebetweenlands:sequence",
+              "layers": [
+                {
+                  "type": "thebetweenlands:surrounded",
+                  "parent": {
+                    "type": "thebetweenlands:reference",
+                    "ref_name": "marsh_clearing_zoom"
+                  },
+                  "biome": "thebetweenlands:marsh_clearing",
+                  "mask": true,
+                  "random_seed": 142,
+                  "spawn_chance": 2500,
+                  "surround_range": 2,
+                  "surrounding_biome": "thebetweenlands:marsh"
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:thinning_mask",
+                    "biome": "thebetweenlands:marsh_clearing",
+                    "check_range": 4,
+                    "mask": false,
+                    "removal_chance": 2000,
+                    "remove_when_near": "thebetweenlands:marsh_clearing"
+                  },
+                  "random_seeds": [
+                    165,
+                    166,
+                    167,
+                    168,
+                    169,
+                    170,
+                    171,
+                    172,
+                    173,
+                    174
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:spread",
+                    "quadrant": "XNZN"
+                  },
+                  "random_seeds": [
+                    2345,
+                    2345,
+                    2345
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:circle_mask",
+                  "biome": "thebetweenlands:marsh_clearing",
+                  "check_range": 6,
+                  "mask": true
+                }
+              ]
+            }
+          },
+          {
+            "type": "thebetweenlands:mask_mixer",
+            "mask_layer": {
+              "type": "thebetweenlands:sequence",
+              "layers": [
+                {
+                  "type": "thebetweenlands:surrounded",
+                  "parent": {
+                    "type": "thebetweenlands:reference",
+                    "ref_name": "marsh_clearing_zoom"
+                  },
+                  "biome": "thebetweenlands:eroded_marsh_clearing",
+                  "mask": true,
+                  "random_seed": 142,
+                  "spawn_chance": 2500,
+                  "surround_range": 2,
+                  "surrounding_biome": "thebetweenlands:eroded_marsh"
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:thinning_mask",
+                    "biome": "thebetweenlands:eroded_marsh_clearing",
+                    "check_range": 4,
+                    "mask": false,
+                    "removal_chance": 2000,
+                    "remove_when_near": "thebetweenlands:eroded_marsh_clearing"
+                  },
+                  "random_seeds": [
+                    165,
+                    166,
+                    167,
+                    168,
+                    169,
+                    170,
+                    171,
+                    172,
+                    173,
+                    174
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:repeat",
+                  "biome_layer": {
+                    "type": "thebetweenlands:spread",
+                    "quadrant": "XNZN"
+                  },
+                  "random_seeds": [
+                    2345,
+                    2345,
+                    2345
+                  ]
+                },
+                {
+                  "type": "thebetweenlands:circle_mask",
+                  "biome": "thebetweenlands:eroded_marsh_clearing",
+                  "check_range": 6,
+                  "mask": true
+                }
+              ]
+            }
           }
         ]
       },
@@ -310,12 +438,41 @@
             "depth": 0.4,
             "scale": 0.05
           }
+        },
+        {
+          "biome": "thebetweenlands:marsh_clearing",
+          "generators": [
+            "thebetweenlands:marsh_islands"
+          ],
+          "parameters": {
+            "depth": -0.1,
+            "scale": 0.11
+          }
+        },
+        {
+          "biome": "thebetweenlands:eroded_marsh_clearing",
+          "generators": [
+            "thebetweenlands:eroded_marsh_islands"
+          ],
+          "parameters": {
+            "depth": -0.1,
+            "scale": 0.11
+          }
         }
       ],
       "surface_depth": 0.46875
     },
     "bl_settings": {
-      "biome_weight_groups": [],
+      "biome_weight_groups": [
+        [
+          "thebetweenlands:marsh",
+          "thebetweenlands:marsh_clearing"
+        ],
+        [
+          "thebetweenlands:eroded_marsh",
+          "thebetweenlands:eroded_marsh_clearing"
+        ]
+      ],
       "global_generators": {
         "early": [
           "thebetweenlands:bl_caves"
