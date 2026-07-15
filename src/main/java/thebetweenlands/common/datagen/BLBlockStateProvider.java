@@ -1048,8 +1048,8 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_1, this.modLoc("block/wooden_support_beam_1"));
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_2, this.modLoc("block/wooden_support_beam_2"));
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, this.modLoc("block/wooden_support_beam_3"));
-//		this.brazier(BlockRegistry.BRAZIER);
-//		this.walkway(BlockRegistry.WALKWAY);
+		this.brazier(BlockRegistry.BRAZIER);
+		this.walkway(BlockRegistry.WALKWAY);
 //		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
 
 
@@ -1797,14 +1797,12 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void brazier(DeferredBlock<Block> block) {
-		ModelFile brazier = this.customLoaderModel("brazier", this.modLoc("brazier"), this.modLoc("block/mud_tower_brazier"), this.modLoc("block/particle/mud_tower_brazier_particle"), false);
-		ModelFile brazierTop = this.models().withExistingParent("brazier_top", this.mcLoc("block/air")).texture("particle", this.modLoc("block/particle/mud_tower_brazier_particle"));
-
+		ModelFile brazier = this.models().getExistingFile(this.modLoc("block/brazier_base"));
+		ModelFile brazierTop = this.models().getExistingFile(this.modLoc("block/brazier_top"));
 
 		this.getVariantBuilder(block.get())
 			.partialState().with(BrazierBlock.HALF, DoubleBlockHalf.LOWER).modelForState().modelFile(brazier).addModel()
 			.partialState().with(BrazierBlock.HALF, DoubleBlockHalf.UPPER).modelForState().modelFile(brazierTop).addModel();
-
 
 		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/brazier")).transforms()
 			.transform(ItemDisplayContext.GUI).rotation(30, 225, 0).translation(0, -2.4f, 0).scale(0.35f).end()
@@ -1817,7 +1815,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void walkway(DeferredBlock<Block> block) {
-		ModelFile walkway = this.customLoaderModel("walkway", this.modLoc("walkway"), this.modLoc("block/walkway"), this.modLoc("block/weedwood_planks"), false);
+		ModelFile walkway = this.models().getExistingFile(this.modLoc("block/walkway"));
 
 		this.getVariantBuilder(block.get())
 			.partialState().with(HorizontalDirectionalBlock.FACING, Direction.NORTH).modelForState().modelFile(walkway).addModel()
