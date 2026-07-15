@@ -1658,11 +1658,11 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		for(int i = 0; i < 4; ++i) {
 			multipartBuilder = multipartBuilder
 				// unrotated model
-					.part().modelFile(lanternModel).rotationY((360 - 90 * i) % 360).addModel()
+					.part().modelFile(lanternModel).rotationY((90 * i) % 360).addModel()
 					.condition(BLLanternBlock.ROTATION, i * 2)
 					.end()
 				// rotated model
-					.part().modelFile(lanternModelRotated).rotationY((360 - 90 * (i + 1)) % 360).addModel()
+					.part().modelFile(lanternModelRotated).rotationY((90 * (i + 1)) % 360).addModel()
 					.condition(BLLanternBlock.ROTATION, i * 2 + 1)
 					.end();
 		}
@@ -1775,6 +1775,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), "item/mud_flower_pot_candle"));
 	}
+	
 	public void woodenSupportBeam(DeferredBlock<Block> block, ResourceLocation model) {
 		ModelFile woodenSupportBeam = this.models().getExistingFile(model);
 

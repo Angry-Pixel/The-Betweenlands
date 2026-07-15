@@ -11,7 +11,7 @@
     {
       "apply": {
         "model": "thebetweenlands:block/lantern_paper_2_rotated",
-        "y": 270
+        "y": 90
       },
       "when": {
         "rotation": "1"
@@ -20,7 +20,7 @@
     {
       "apply": {
         "model": "thebetweenlands:block/lantern_paper_2",
-        "y": 270
+        "y": 90
       },
       "when": {
         "rotation": "2"
@@ -47,7 +47,7 @@
     {
       "apply": {
         "model": "thebetweenlands:block/lantern_paper_2_rotated",
-        "y": 90
+        "y": 270
       },
       "when": {
         "rotation": "5"
@@ -56,7 +56,7 @@
     {
       "apply": {
         "model": "thebetweenlands:block/lantern_paper_2",
-        "y": 90
+        "y": 270
       },
       "when": {
         "rotation": "6"
