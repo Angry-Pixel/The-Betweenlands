@@ -1,4 +1,4 @@
-// 1.21.1	2026-07-15T15:44:31.1617586	Block States: thebetweenlands
+// 1.21.1	2026-07-15T16:11:40.0336399	Block States: thebetweenlands
 fa546c87e1baa04f6587e9a34150dc201e23e9e2 assets/thebetweenlands/blockstates/alembic.json
 5e616fe21bb0abaab4f1e2c2a994e516eb5c0af3 assets/thebetweenlands/blockstates/algae.json
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
@@ -2406,6 +2406,7 @@ f3e15a3804e8af3a53a1bc55dd3e33c39f6fbec8 assets/thebetweenlands/models/item/root
 f3e15a3804e8af3a53a1bc55dd3e33c39f6fbec8 assets/thebetweenlands/models/item/rootman_simulacrum_2.json
 f3e15a3804e8af3a53a1bc55dd3e33c39f6fbec8 assets/thebetweenlands/models/item/rootman_simulacrum_3.json
 dc8bbd111c072b37eaf9cf2885f504895e1260bf assets/thebetweenlands/models/item/root_pod.json
+75af37fc6bf6552760ddcd6e826e93bea351f7d7 assets/thebetweenlands/models/item/rope.json
 6bd319330946966de32427ec2c00aba9fcf2d451 assets/thebetweenlands/models/item/rotbulb.json
 5676a454edc17ad3e4f40249f4485b1c3ef71dec assets/thebetweenlands/models/item/rotten_bark.json
 443416c7e3625cbb93fa99c3e7dd6729772ef96b assets/thebetweenlands/models/item/rotten_door.json

@@ -1027,6 +1027,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.models().cross("rope_bottom", this.modLoc("block/rope_bottom")).renderType("cutout");
 		
 		this.rope(BlockRegistry.ROPE, this.modLoc("block/rope_single"), this.modLoc("block/rope_top"), this.modLoc("block/rope_middle"), this.modLoc("block/rope_bottom"));
+		this.basicItemTex(BlockRegistry.ROPE, false);
 		
 		// Lantern Rope model
 		this.models().cross("lantern_rope", this.modLoc("block/lantern_rope")).renderType("cutout");
