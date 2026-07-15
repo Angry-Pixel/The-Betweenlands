@@ -44,6 +44,7 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder.PartBuilder;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.util.TransformationHelper.TransformOrigin;
@@ -74,6 +75,7 @@ import thebetweenlands.common.block.structure.PortalFrameBlock;
 import thebetweenlands.common.block.structure.SpikeTrapBlock;
 import thebetweenlands.common.block.structure.TreePortalBlock;
 import thebetweenlands.common.block.terrain.MossyCragrockBottomBlock;
+import thebetweenlands.common.block.terrain.PebblePileBlock;
 import thebetweenlands.common.block.terrain.PuddleBlock;
 import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.datagen.builders.model.BushModelBuilder;
@@ -1050,8 +1052,7 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.woodenSupportBeam(BlockRegistry.WOODEN_SUPPORT_BEAM_3, this.modLoc("block/wooden_support_beam_3"));
 		this.brazier(BlockRegistry.BRAZIER);
 		this.walkway(BlockRegistry.WALKWAY);
-//		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
-
+		this.pebblePile(BlockRegistry.BETWEENSTONE_PEBBLE);
 
 		this.flowerPot(BlockRegistry.POTTED_WEEDWOOD_SAPLING);
 		this.flowerPot(BlockRegistry.POTTED_SAP_SAPLING);
@@ -1462,6 +1463,20 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		return ret;
 	}
 
+	private <T> ConfiguredModel.Builder<T> addRotatedModels(ConfiguredModel.Builder<T> builder, ModelFile... model) {
+		builder = builder.modelFile(model[0]).nextModel()
+			.modelFile(model[0]).rotationY(90).nextModel()
+			.modelFile(model[0]).rotationY(180).nextModel()
+			.modelFile(model[0]).rotationY(270);
+		for (int i = 1; i < model.length; i++) {
+			builder = builder.nextModel().modelFile(model[i])
+				.nextModel().modelFile(model[i]).rotationY(90)
+				.nextModel().modelFile(model[i]).rotationY(180)
+				.nextModel().modelFile(model[i]).rotationY(270);
+		}
+		return builder;
+	}
+
 	private VariantBlockStateBuilder addRotatedVariants(VariantBlockStateBuilder.PartialBlockstate partialBuilder, ModelFile... model) {
 		ConfiguredModel.Builder<VariantBlockStateBuilder> cmb = partialBuilder.modelForState();
 		cmb = cmb.modelFile(model[0]).nextModel()
@@ -1834,13 +1849,26 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void pebblePile(DeferredBlock<Block> block) {
-		ModelFile pebblePile = this.customLoaderModel("pebble_pile", this.modLoc("pebble_pile"), this.modLoc("block/betweenstone_pebble_pile"), this.modLoc("block/betweenstone"), false);
-		ModelFile pebblePileWater = this.customLoaderModel("pebble_pile_water", this.modLoc("pebble_pile"), this.modLoc("block/betweenstone_pebble_pile_water"), this.modLoc("block/betweenstone"), false);
+		MultiPartBlockStateBuilder builder = this.getMultipartBuilder(block.get());
 
-		this.addRotatedVariants(this.addRotatedVariants(this.addRotatedVariants(this.getVariantBuilder(block.get()).partialState()
-		.with(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.NONE), pebblePile).partialState()
-		.with(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.WATER), pebblePileWater).partialState()
-		.with(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.SWAMP_WATER), pebblePileWater);
+		builder = addRotatedModels(builder.part(), this.models().getExistingFile(this.modLoc("block/pebble_pile_1"))).addModel()
+			.condition(PebblePileBlock.PEBBLES, 1).end();
+
+		builder = addRotatedModels(builder.part(), this.models().getExistingFile(this.modLoc("block/pebble_pile_2"))).addModel()
+			.condition(PebblePileBlock.PEBBLES, 2).end();
+
+		builder = addRotatedModels(builder.part(), this.models().getExistingFile(this.modLoc("block/pebble_pile_3"))).addModel()
+			.condition(PebblePileBlock.PEBBLES, 3).end();
+
+		builder = addRotatedModels(builder.part(), this.models().getExistingFile(this.modLoc("block/pebble_pile_4"))).addModel()
+			.condition(PebblePileBlock.PEBBLES, 4).end();
+		
+		builder = addRotatedModels(builder.part(), this.models().getExistingFile(this.modLoc("block/pebble_pile_plants"))).addModel() 
+				.nestedGroup().useOr()
+					.condition(PebblePileBlock.PLANT, true)
+					.condition(SwampWaterLoggable.WATER_TYPE, SwampWaterLoggable.WaterType.WATER, SwampWaterLoggable.WaterType.SWAMP_WATER)
+				.end()
+			.end();
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {

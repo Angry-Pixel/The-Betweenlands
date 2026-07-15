@@ -1,0 +1,125 @@
+{
+  "multipart": [
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/pebble_pile_1"
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_1",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_1",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_1",
+          "y": 270
+        }
+      ],
+      "when": {
+        "pebbles": "1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/pebble_pile_2"
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_2",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_2",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_2",
+          "y": 270
+        }
+      ],
+      "when": {
+        "pebbles": "2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/pebble_pile_3"
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_3",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_3",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_3",
+          "y": 270
+        }
+      ],
+      "when": {
+        "pebbles": "3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/pebble_pile_4"
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_4",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_4",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_4",
+          "y": 270
+        }
+      ],
+      "when": {
+        "pebbles": "4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "thebetweenlands:block/pebble_pile_plants"
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_plants",
+          "y": 90
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_plants",
+          "y": 180
+        },
+        {
+          "model": "thebetweenlands:block/pebble_pile_plants",
+          "y": 270
+        }
+      ],
+      "when": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "plant": "true"
+              },
+              {
+                "water_type": "water|swamp_water"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
