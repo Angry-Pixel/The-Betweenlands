@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
-import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.FenceBlock;
@@ -35,7 +34,9 @@ import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.WallSide;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
@@ -44,7 +45,6 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder.PartBuilder;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.util.TransformationHelper.TransformOrigin;
@@ -53,6 +53,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.DualSulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SulfurFurnaceBlock;
 import thebetweenlands.common.block.container.SyrmoriteHopperBlock;
+import thebetweenlands.common.block.farming.BarnacleBlock;
 import thebetweenlands.common.block.farming.DugSoilBlock;
 import thebetweenlands.common.block.farming.FungusCropBlock;
 import thebetweenlands.common.block.farming.MiddleFruitBushBlock;
@@ -1018,8 +1019,13 @@ public class BLBlockStateProvider extends BlockStateProvider {
 		this.existingBaseDoublePlantBlock(BlockRegistry.SUNDEW, "sundew", this.modLoc("block/particle/sundew_particle"));
 		this.volarpad(BlockRegistry.VOLARPAD);
 		this.builtinEntity(BlockRegistry.ASPECTRUS_CROP, this.modLoc("block/particle/aspectrus_crop_particle"));
-		this.fungusCrop(BlockRegistry.FUNGUS_CROP);
-		this.middleFruitBush(BlockRegistry.MIDDLE_FRUIT_BUSH);
+		this.matureDecayableCrop(BlockRegistry.FUNGUS_CROP,
+				FungusCropBlock.DECAYED, this.modLoc("block/fungus_crop_4_decayed"),
+				FungusCropBlock.AGE, this.modLoc("block/fungus_crop_1"), this.modLoc("block/fungus_crop_2"), this.modLoc("block/fungus_crop_3"), this.modLoc("block/fungus_crop_4"));
+		this.matureDecayableCrop(BlockRegistry.MIDDLE_FRUIT_BUSH,
+				MiddleFruitBushBlock.DECAYED, this.modLoc("block/white_pear_crop_6_decayed"),
+				MiddleFruitBushBlock.AGE, this.modLoc("block/white_pear_crop_1"), this.modLoc("block/white_pear_crop_2"), this.modLoc("block/white_pear_crop_3"),
+				                          this.modLoc("block/white_pear_crop_4"), this.modLoc("block/white_pear_crop_5"), this.modLoc("block/white_pear_crop_6"));
 		this.flatHeadMushroom(BlockRegistry.FLATHEAD_MUSHROOM);
 		this.blackHatMushroom(BlockRegistry.BLACK_HAT_MUSHROOM);
 		this.barnacle(BlockRegistry.BARNACLE);
@@ -1719,50 +1725,72 @@ public class BLBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void barnacle(DeferredBlock<Block> block) {
-		ModelFile barnacle = this.customLoaderModelWithExtraTexture("barnacle", this.modLoc("barnacle"),
-			this.modLoc("block/barnacle_1"), this.modLoc("block/barnacle_1"),
-			new Tuple<>("barnacle_2", this.modLoc("block/barnacle_2")),
-			new Tuple<>("barnacle_3", this.modLoc("block/barnacle_3")),
-			new Tuple<>("barnacle_4", this.modLoc("block/barnacle_4")));
+		ModelFile barnacle1 = this.models().getExistingFile(this.modLoc("block/barnacle_1"));
+		ModelFile barnacle2 = this.models().getExistingFile(this.modLoc("block/barnacle_2"));
+		ModelFile barnacle3 = this.models().getExistingFile(this.modLoc("block/barnacle_3"));
+		ModelFile barnacle4 = this.models().getExistingFile(this.modLoc("block/barnacle_4"));
+		
+		this.getVariantBuilder(block.get()).forAllStatesExcept(state -> {
+			final ModelFile model = switch (state.getValue(BarnacleBlock.STAGE)) {
+				case 1 -> barnacle1;
+				case 2 -> barnacle2;
+				case 3 -> barnacle3;
+				case 4 -> barnacle4;
+				default -> { throw new IllegalStateException("Illegal Barnacle stage " + state.getValue(BarnacleBlock.STAGE)); }
+			};
+			
+			ConfiguredModel.Builder<?> builder = ConfiguredModel.builder();
+			
+			builder.modelFile(model);
 
-		VariantBlockStateBuilder vbsb = this.getVariantBuilder(block.get());
-		for (Direction dir : new Direction[]{Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
-			ConfiguredModel.Builder<VariantBlockStateBuilder> bvbsb = vbsb.partialState().with(DirectionalBlock.FACING, dir).modelForState().modelFile(barnacle);
+			Direction dir = state.getValue(BarnacleBlock.FACING);
+			
 			switch (dir) {
-				case DOWN -> bvbsb.rotationX(180);
-				case SOUTH -> bvbsb.rotationX(270);
-				case WEST -> bvbsb.rotationX(270).rotationY(90);
-				case NORTH -> bvbsb.rotationX(270).rotationY(180);
-				case EAST -> bvbsb.rotationX(270).rotationY(270);
+				case DOWN -> builder.rotationX(180);
+				case SOUTH -> builder.rotationX(270);
+				case WEST -> builder.rotationX(270).rotationY(90);
+				case NORTH -> builder.rotationX(270).rotationY(180);
+				case EAST -> builder.rotationX(270).rotationY(270);
 				default -> {} // UP: default orientation
 			}
-			vbsb = bvbsb.addModel();
+			
+			return builder.build();
+		}, BarnacleBlock.IS_SWAMP_WATER);
+	}
+
+	
+//	private <T> ConfiguredModel.Builder<T> addRotatedModels3D(ConfiguredModel.Builder<T> builder, ModelFile... model) {
+//
+//		for (Direction dir : new Direction[]{Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+//			ConfiguredModel.Builder<VariantBlockStateBuilder> bvbsb = vbsb.partialState().with(DirectionalBlock.FACING, dir).modelForState().modelFile(barnacle);
+//			switch (dir) {
+//				case DOWN -> bvbsb.rotationX(180);
+//				case SOUTH -> bvbsb.rotationX(270);
+//				case WEST -> bvbsb.rotationX(270).rotationY(90);
+//				case NORTH -> bvbsb.rotationX(270).rotationY(180);
+//				case EAST -> bvbsb.rotationX(270).rotationY(270);
+//				default -> {} // UP: default orientation
+//			}
+//			vbsb = bvbsb.addModel();
+//		}
+//	}
+
+	// Decayable crop that only has a decayed model for its final (mature) age stage
+	public void matureDecayableCrop(DeferredBlock<? extends Block> block, BooleanProperty decayProperty, ResourceLocation decayModel, IntegerProperty ageProperty, ResourceLocation ...ageModels) {
+		var builder = this.getVariantBuilder(block.get());
+		
+		final int decayedAgeStage = ageModels.length - 1;
+		for(int i = 0; i < decayedAgeStage; ++i) {
+			ModelFile model = this.models().getExistingFile(ageModels[i]);
+			
+			addRotatedVariants(builder.partialState().with(ageProperty, i), model);
 		}
-		//hacky? kinda, but oh well
-	}
 
-	public void fungusCrop(DeferredBlock<FungusCropBlock> block) {
-		ModelFile fungusCrop = this.customLoaderModelWithExtraTexture("fungus_crop", this.modLoc("fungus_crop"),
-			this.modLoc("block/fungus_crop_1"), this.modLoc("block/particle/fungus_crop_particle"),
-			new Tuple<>("fungus_crop_2", this.modLoc("block/fungus_crop_2")),
-			new Tuple<>("fungus_crop_3", this.modLoc("block/fungus_crop_3")),
-			new Tuple<>("fungus_crop_4", this.modLoc("block/fungus_crop_4")),
-			new Tuple<>("fungus_crop_4_decayed", this.modLoc("block/fungus_crop_4_decayed")));
+		ModelFile matureModel = this.models().getExistingFile(ageModels[decayedAgeStage]);
+		addRotatedVariants(builder.partialState().with(ageProperty, decayedAgeStage).with(decayProperty, false), matureModel);
 
-		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(fungusCrop).addModel();
-	}
-
-	public void middleFruitBush(DeferredBlock<MiddleFruitBushBlock> block) {
-		ModelFile whitePearCrop = this.customLoaderModelWithExtraTexture("white_pear_crop", this.modLoc("white_pear_crop"),
-			this.modLoc("block/white_pear_crop_1"), this.modLoc("block/particle/white_pear_crop_particle"),
-			new Tuple<>("white_pear_crop_2", this.modLoc("block/white_pear_crop_2")),
-			new Tuple<>("white_pear_crop_3", this.modLoc("block/white_pear_crop_3")),
-			new Tuple<>("white_pear_crop_4", this.modLoc("block/white_pear_crop_4")),
-			new Tuple<>("white_pear_crop_5", this.modLoc("block/white_pear_crop_5")),
-			new Tuple<>("white_pear_crop_6", this.modLoc("block/white_pear_crop_6")),
-			new Tuple<>("white_pear_crop_6_decayed", this.modLoc("block/white_pear_crop_6_decayed")));
-
-		this.getVariantBuilder(block.get()).partialState().modelForState().modelFile(whitePearCrop).addModel();
+		ModelFile decayedMatureModel = this.models().getExistingFile(decayModel);
+		addRotatedVariants(builder.partialState().with(ageProperty, decayedAgeStage).with(decayProperty, true), decayedMatureModel);
 	}
 
 	public void dungeonWallCandle(DeferredBlock<Block> block, ResourceLocation litModel, ResourceLocation unlitModel) {

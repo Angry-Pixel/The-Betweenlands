@@ -1,0 +1,177 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "cutout",
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "thebetweenlands:block/barnacle_3",
+		"texture": "thebetweenlands:block/barnacle_3"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "Bornacle1",
+			"from": [9, 2, 4],
+			"to": [12, 4, 7],
+			"rotation": {"x": -12.5019, "y": -15, "z": 0, "origin": [9, 2, 7]},
+			"faces": {
+				"north": {"uv": [1.5, 1.5, 3, 2.5], "texture": "#texture"},
+				"east": {"uv": [0, 1.5, 1.5, 2.5], "texture": "#texture"},
+				"south": {"uv": [4.5, 1.5, 6, 2.5], "texture": "#texture"},
+				"west": {"uv": [3, 1.5, 4.5, 2.5], "texture": "#texture"},
+				"up": {"uv": [3, 1.5, 1.5, 0], "texture": "#texture"},
+				"down": {"uv": [4.5, 0, 3, 1.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "flesh1a_r1",
+			"from": [9.43997, 3.62787, 5.5555],
+			"to": [12.43997, 6.62787, 5.5555],
+			"rotation": {"x": -5.0019, "y": -15, "z": 0, "origin": [10.93997, 3.62787, 5.5555]},
+			"faces": {
+				"north": {"uv": [4.5, 12, 6, 13.5], "texture": "#texture"},
+				"south": {"uv": [6, 12, 7.5, 13.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "Flesh1b",
+			"from": [10.93997, 3.62787, 4.0555],
+			"to": [10.93997, 6.62787, 7.0555],
+			"rotation": {"x": -14.3409, "y": -13.2566, "z": 7.5228, "origin": [10.93997, 3.62787, 5.5555]},
+			"faces": {
+				"east": {"uv": [4.5, 7.5, 6, 9], "texture": "#texture"},
+				"west": {"uv": [6, 7.5, 7.5, 9], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "Stalk1",
+			"from": [9.01, 0, 5],
+			"to": [11.01, 2, 7],
+			"rotation": {"x": -5.0019, "y": -15, "z": 0, "origin": [9, 2, 7]},
+			"faces": {
+				"north": {"uv": [1, 7, 2, 8], "texture": "#texture"},
+				"east": {"uv": [0, 7, 1, 8], "texture": "#texture"},
+				"south": {"uv": [3, 7, 4, 8], "texture": "#texture"},
+				"west": {"uv": [2, 7, 3, 8], "texture": "#texture"},
+				"down": {"uv": [3, 6, 2, 7], "texture": "#texture", "cullface": "down"}
+			}
+		},
+		{
+			"name": "Bornacle2",
+			"from": [4, 2, 9],
+			"to": [7, 4, 12],
+			"rotation": {"x": 5.0019, "y": -7.5, "z": 7.5, "origin": [7, 2, 9]},
+			"faces": {
+				"north": {"uv": [8, 1.5, 9.5, 2.5], "texture": "#texture"},
+				"east": {"uv": [6.5, 1.5, 8, 2.5], "texture": "#texture"},
+				"south": {"uv": [11, 1.5, 12.5, 2.5], "texture": "#texture"},
+				"west": {"uv": [9.5, 1.5, 11, 2.5], "texture": "#texture"},
+				"up": {"uv": [9.5, 1.5, 8, 0], "texture": "#texture"},
+				"down": {"uv": [11, 0, 9.5, 1.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "Stalk2",
+			"from": [5, 0, 9.01],
+			"to": [7, 2, 11.01],
+			"rotation": {"x": 5.9387, "y": -6.784, "z": -0.0242, "origin": [7, 2, 9]},
+			"faces": {
+				"north": {"uv": [1, 10.5, 2, 11.5], "texture": "#texture"},
+				"east": {"uv": [0, 10.5, 1, 11.5], "texture": "#texture"},
+				"south": {"uv": [3, 10.5, 4, 11.5], "texture": "#texture"},
+				"west": {"uv": [2, 10.5, 3, 11.5], "texture": "#texture"},
+				"down": {"uv": [3, 9.5, 2, 10.5], "texture": "#texture", "cullface": "down"}
+			}
+		},
+		{
+			"name": "Flesh2a",
+			"from": [5.06663, 3.62313, 8.9586],
+			"to": [5.06663, 6.62313, 11.9586],
+			"rotation": {"x": 6.2285, "y": -6.5192, "z": -2.5251, "origin": [5.06663, 3.62313, 10.4586]},
+			"faces": {
+				"east": {"uv": [8, 7.5, 9.5, 9], "texture": "#texture"},
+				"west": {"uv": [9.5, 7.5, 11, 9], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "Flesh2b",
+			"from": [3.56663, 3.62313, 10.4586],
+			"to": [6.56663, 6.62313, 10.4586],
+			"rotation": {"x": -4.9962, "y": -7.5, "z": 7.5, "origin": [5.06663, 3.62313, 10.4586]},
+			"faces": {
+				"north": {"uv": [8, 12, 9.5, 13.5], "texture": "#texture"},
+				"south": {"uv": [9.5, 12, 11, 13.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "Bornacle3",
+			"from": [5, 1, 5],
+			"to": [8, 3, 8],
+			"rotation": {"x": -5.0019, "y": -37.5001, "z": 12.5019, "origin": [8, 0, 5]},
+			"faces": {
+				"north": {"uv": [1.5, 4.5, 3, 5.5], "texture": "#texture"},
+				"east": {"uv": [0, 4.5, 1.5, 5.5], "texture": "#texture"},
+				"south": {"uv": [4.5, 4.5, 6, 5.5], "texture": "#texture"},
+				"west": {"uv": [3, 4.5, 4.5, 5.5], "texture": "#texture"},
+				"up": {"uv": [3, 4.5, 1.5, 3], "texture": "#texture"},
+				"down": {"uv": [4.5, 3, 3, 4.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bornacle4_r1",
+			"from": [6, 1, 10],
+			"to": [9, 3, 13],
+			"rotation": {"x": 178.683, "y": 60.0574, "z": 165.0232, "origin": [9, 1, 10]},
+			"faces": {
+				"north": {"uv": [8, 4.5, 9.5, 5.5], "texture": "#texture"},
+				"east": {"uv": [6.5, 4.5, 8, 5.5], "texture": "#texture"},
+				"south": {"uv": [11, 4.5, 12.5, 5.5], "texture": "#texture"},
+				"west": {"uv": [9.5, 4.5, 11, 5.5], "texture": "#texture"},
+				"up": {"uv": [9.5, 4.5, 8, 3], "texture": "#texture"},
+				"down": {"uv": [11, 3, 9.5, 4.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "Bornacle5",
+			"from": [5.5, 0, 12],
+			"to": [7.5, 1, 14],
+			"rotation": {"x": 159.998, "y": 72.5017, "z": 155.0019, "origin": [7.5, 0, 12]},
+			"faces": {
+				"north": {"uv": [5.5, 10.5, 6.5, 11], "texture": "#texture"},
+				"east": {"uv": [4.5, 10.5, 5.5, 11], "texture": "#texture"},
+				"south": {"uv": [7.5, 10.5, 8.5, 11], "texture": "#texture"},
+				"west": {"uv": [6.5, 10.5, 7.5, 11], "texture": "#texture"},
+				"up": {"uv": [6.5, 10.5, 5.5, 9.5], "texture": "#texture"},
+				"down": {"uv": [7.5, 9.5, 6.5, 10.5], "texture": "#texture", "cullface": "down"}
+			}
+		},
+		{
+			"name": "bornacle6_r1",
+			"from": [8.5, 0, 4],
+			"to": [10.5, 1, 6],
+			"rotation": {"x": -134.5621, "y": 75.8964, "z": -147.9408, "origin": [8.5, 0, 4]},
+			"faces": {
+				"north": {"uv": [10, 10.5, 11, 11], "texture": "#texture"},
+				"east": {"uv": [9, 10.5, 10, 11], "texture": "#texture"},
+				"south": {"uv": [12, 10.5, 13, 11], "texture": "#texture"},
+				"west": {"uv": [11, 10.5, 12, 11], "texture": "#texture"},
+				"up": {"uv": [11, 10.5, 10, 9.5], "texture": "#texture"},
+				"down": {"uv": [12, 9.5, 11, 10.5], "texture": "#texture", "cullface": "down"}
+			}
+		},
+		{
+			"name": "bornacle7_r1",
+			"from": [3.5, 0, 5.5],
+			"to": [5.5, 1, 7.5],
+			"rotation": {"x": -174.1732, "y": 50.2885, "z": -161.8975, "origin": [3.5, 0, 7.5]},
+			"faces": {
+				"north": {"uv": [1, 13, 2, 13.5], "texture": "#texture"},
+				"east": {"uv": [0, 13, 1, 13.5], "texture": "#texture"},
+				"south": {"uv": [3, 13, 4, 13.5], "texture": "#texture"},
+				"west": {"uv": [2, 13, 3, 13.5], "texture": "#texture"},
+				"up": {"uv": [2, 13, 1, 12], "texture": "#texture"},
+				"down": {"uv": [3, 12, 2, 13], "texture": "#texture", "cullface": "down"}
+			}
+		}
+	]
+}

@@ -1,7 +1,123 @@
 {
   "variants": {
-    "": {
-      "model": "thebetweenlands:block/white_pear_crop"
-    }
+    "age=0": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_1"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_1",
+        "y": 270
+      }
+    ],
+    "age=1": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_2"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_2",
+        "y": 270
+      }
+    ],
+    "age=2": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_3"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_3",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_3",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_3",
+        "y": 270
+      }
+    ],
+    "age=3": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_4"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_4",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_4",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_4",
+        "y": 270
+      }
+    ],
+    "age=4": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_5"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_5",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_5",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_5",
+        "y": 270
+      }
+    ],
+    "age=5,decayed=false": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6",
+        "y": 270
+      }
+    ],
+    "age=5,decayed=true": [
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6_decayed"
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6_decayed",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6_decayed",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/white_pear_crop_6_decayed",
+        "y": 270
+      }
+    ]
   }
 }

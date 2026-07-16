@@ -1,0 +1,115 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "cutout",
+	"texture_size": [64, 32],
+	"textures": {
+		"particle": "thebetweenlands:block/particle/fungus_crop_particle",
+		"texture": "thebetweenlands:block/fungus_crop_3"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "stalkfluff",
+			"from": [6, -2, 6],
+			"to": [10, 3, 10],
+			"rotation": {"x": -23.48, "y": -18.26, "z": 0, "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [4.25, 8, 5.25, 10.5], "texture": "#texture"},
+				"east": {"uv": [3.25, 8, 4.25, 10.5], "texture": "#texture"},
+				"south": {"uv": [6.25, 8, 7.25, 10.5], "texture": "#texture"},
+				"west": {"uv": [5.25, 8, 6.25, 10.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stalkfluff_inverted",
+			"from": [10, 3, 10],
+			"to": [6, -2, 6],
+			"rotation": {"x": -23.48, "y": -18.26, "z": 0, "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [6.25, 10.5, 7.25, 8], "texture": "#texture"},
+				"east": {"uv": [5.25, 10.5, 6.25, 8], "texture": "#texture"},
+				"south": {"uv": [4.25, 10.5, 5.25, 8], "texture": "#texture"},
+				"west": {"uv": [3.25, 10.5, 4.25, 8], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stalk2",
+			"from": [7.44044, 3.07115, 5.18002],
+			"to": [10.44044, 7.07115, 8.18002],
+			"rotation": {"x": -13.05, "y": -18.26, "z": 0, "origin": [8.93044, 3.07115, 5.18002]},
+			"faces": {
+				"north": {"uv": [0.75, 6.5, 1.5, 8.5], "texture": "#texture"},
+				"east": {"uv": [0, 6.5, 0.75, 8.5], "texture": "#texture"},
+				"south": {"uv": [2.25, 6.5, 3, 8.5], "texture": "#texture"},
+				"west": {"uv": [1.5, 6.5, 2.25, 8.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "hat1",
+			"from": [6.79836, 10.83244, 3.58031],
+			"to": [10.79836, 12.83244, 7.58031],
+			"rotation": {"x": 2.6, "y": -18.26, "z": 0, "origin": [8.79836, 10.83244, 5.58031]},
+			"faces": {
+				"north": {"uv": [4.25, 2, 5.25, 3], "texture": "#texture"},
+				"east": {"uv": [3.25, 2, 4.25, 3], "texture": "#texture"},
+				"south": {"uv": [6.25, 2, 7.25, 3], "texture": "#texture"},
+				"west": {"uv": [5.25, 2, 6.25, 3], "texture": "#texture"},
+				"up": {"uv": [5.25, 2, 4.25, 0], "texture": "#texture"},
+				"down": {"uv": [6.25, 0, 5.25, 2], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "hat2",
+			"from": [7.26993, 12.83038, 4.16647],
+			"to": [10.26993, 13.83038, 7.16647],
+			"rotation": {"x": 2.6, "y": -18.26, "z": 0, "origin": [8.76993, 12.83038, 5.66647]},
+			"faces": {
+				"north": {"uv": [4, 5, 4.75, 5.5], "texture": "#texture"},
+				"east": {"uv": [3.25, 5, 4, 5.5], "texture": "#texture"},
+				"south": {"uv": [5.5, 5, 6.25, 5.5], "texture": "#texture"},
+				"west": {"uv": [4.75, 5, 5.5, 5.5], "texture": "#texture"},
+				"up": {"uv": [4.75, 5, 4, 3.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stalk3",
+			"from": [7.73344, 6.96785, 4.32229],
+			"to": [10.73344, 10.96785, 7.32229],
+			"rotation": {"x": -2.62, "y": -18.26, "z": 0, "origin": [9.21344, 6.96785, 4.32229]},
+			"faces": {
+				"north": {"uv": [0.75, 10.5, 1.5, 12.5], "texture": "#texture"},
+				"east": {"uv": [0, 10.5, 0.75, 12.5], "texture": "#texture"},
+				"south": {"uv": [2.25, 10.5, 3, 12.5], "texture": "#texture"},
+				"west": {"uv": [1.5, 10.5, 2.25, 12.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stalk1",
+			"from": [6.5, -2, 6.5],
+			"to": [9.5, 4, 9.5],
+			"rotation": {"x": -23.48, "y": -18.26, "z": 0, "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0.75, 1.5, 1.5, 4.5], "texture": "#texture"},
+				"east": {"uv": [0, 1.5, 0.75, 4.5], "texture": "#texture"},
+				"south": {"uv": [2.25, 1.5, 3, 4.5], "texture": "#texture"},
+				"west": {"uv": [1.5, 1.5, 2.25, 4.5], "texture": "#texture"},
+				"down": {"uv": [2.25, 0, 1.5, 1.5], "texture": "#texture", "cullface": "down"}
+			}
+		},
+		{
+			"name": "hat3",
+			"from": [2, -2, 8],
+			"to": [4, 1, 10],
+			"rotation": {"x": -7.83, "y": 15.65, "z": 7.83, "origin": [3, 0, 9]},
+			"faces": {
+				"north": {"uv": [8, 1, 8.5, 2.5], "texture": "#texture"},
+				"east": {"uv": [7.5, 1, 8, 2.5], "texture": "#texture"},
+				"south": {"uv": [9, 1, 9.5, 2.5], "texture": "#texture"},
+				"west": {"uv": [8.5, 1, 9, 2.5], "texture": "#texture"},
+				"up": {"uv": [8.5, 1, 8, 0], "texture": "#texture"},
+				"down": {"uv": [9, 0, 8.5, 1], "texture": "#texture", "cullface": "down"}
+			}
+		}
+	]
+}

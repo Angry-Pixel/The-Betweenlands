@@ -1,14 +1,11 @@
 package thebetweenlands.common.block.farming;
 
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -21,11 +18,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.registries.ItemRegistry;
 
-import java.util.List;
-
 public class MiddleFruitBushBlock extends DecayableCropBlock {
 
-	private static final IntegerProperty AGE = IntegerProperty.create("age", 0, 5);
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 5);
 	private static final List<VoxelShape> SHAPES = List.of(
 		Block.box(7, 0, 7, 9, 4, 9),
 		Block.box(5, 0, 5, 11, 10, 11),

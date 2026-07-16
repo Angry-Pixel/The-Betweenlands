@@ -22,7 +22,7 @@ import java.util.List;
 
 public class FungusCropBlock extends DecayableCropBlock {
 
-	private static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
 	private static final List<VoxelShape> SHAPES = List.of(
 		Block.box(6, 0, 6, 10, 4, 10),
 		Block.box(5, 0, 5, 11, 8, 11),

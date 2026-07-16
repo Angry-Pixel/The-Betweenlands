@@ -36,6 +36,7 @@ import java.util.Map;
 public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContainer {
 
 	public static final IntegerProperty STAGE = IntegerProperty.create("stage", 1, 4);
+	public static final BooleanProperty IS_SWAMP_WATER = BooleanProperty.create("swamp_water");
 	private static final Map<Direction, VoxelShape> SHAPE_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(
 		Direction.NORTH, Block.box(4.0D, 4.0D, 12.0D, 12.0D, 12.0D, 16.0D),
 		Direction.WEST, Block.box(12.0D, 4.0D, 4.0D, 16.0D, 12.0D, 12.0D),
@@ -44,7 +45,6 @@ public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContai
 		Direction.UP, Block.box(4.0D, 0.0D, 4.0D, 12.0D, 4.0D, 12.0D),
 		Direction.DOWN, Block.box(4.0D, 12.0D, 4.0D, 12.0D, 16.0D, 12.0D)
 	));
-	private static final BooleanProperty IS_SWAMP_WATER = BooleanProperty.create("swamp_water");
 
 	public BarnacleBlock(Properties properties) {
 		super(properties);

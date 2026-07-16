@@ -1,0 +1,41 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "solid",
+	"texture_size": [16, 16],
+	"textures": {
+		"particle": "thebetweenlands:block/barnacle_1",
+		"texture": "thebetweenlands:block/barnacle_1"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "Bornacle1",
+			"from": [9, 0, 5],
+			"to": [11, 1, 7],
+			"rotation": {"x": -12.5019, "y": -15, "z": 0, "origin": [9, 0, 7]},
+			"faces": {
+				"north": {"uv": [2, 2, 4, 3], "texture": "#texture"},
+				"east": {"uv": [0, 2, 2, 3], "texture": "#texture"},
+				"south": {"uv": [6, 2, 8, 3], "texture": "#texture"},
+				"west": {"uv": [4, 2, 6, 3], "texture": "#texture"},
+				"up": {"uv": [4, 2, 2, 0], "texture": "#texture"},
+				"down": {"uv": [6, 0, 4, 2], "texture": "#texture", "cullface": "down"}
+			}
+		},
+		{
+			"name": "Bornacle2",
+			"from": [5, 0, 9],
+			"to": [7, 1, 11],
+			"rotation": {"x": 5.0019, "y": -7.5, "z": 7.5, "origin": [7, 0, 9]},
+			"faces": {
+				"north": {"uv": [2, 6, 4, 7], "texture": "#texture"},
+				"east": {"uv": [0, 6, 2, 7], "texture": "#texture"},
+				"south": {"uv": [6, 6, 8, 7], "texture": "#texture"},
+				"west": {"uv": [4, 6, 6, 7], "texture": "#texture"},
+				"up": {"uv": [4, 6, 2, 4], "texture": "#texture"},
+				"down": {"uv": [6, 4, 4, 6], "texture": "#texture", "cullface": "down"}
+			}
+		}
+	]
+}

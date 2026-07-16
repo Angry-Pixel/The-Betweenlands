@@ -1,0 +1,52 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "solid",
+	"texture_size": [32, 16],
+	"textures": {
+		"particle": "thebetweenlands:block/particle/fungus_crop_particle",
+		"texture": "thebetweenlands:block/fungus_crop_2"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "stalk2",
+			"from": [7.63764, 2.44692, 6.09773],
+			"to": [9.63764, 5.44692, 8.09773],
+			"rotation": {"x": -10.44, "y": -18.26, "z": 0, "origin": [8.62764, 2.44692, 6.09773]},
+			"faces": {
+				"north": {"uv": [1, 10, 2, 13], "texture": "#texture"},
+				"east": {"uv": [0, 10, 1, 13], "texture": "#texture"},
+				"south": {"uv": [3, 10, 4, 13], "texture": "#texture"},
+				"west": {"uv": [2, 10, 3, 13], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "hat1",
+			"from": [6.97848, 5.38178, 5.04983],
+			"to": [9.97848, 7.38178, 8.04983],
+			"rotation": {"x": -2.61, "y": -18.26, "z": 0, "origin": [8.47848, 5.38178, 6.54983]},
+			"faces": {
+				"north": {"uv": [6, 3, 7.5, 5], "texture": "#texture"},
+				"east": {"uv": [4.5, 3, 6, 5], "texture": "#texture"},
+				"south": {"uv": [9, 3, 10.5, 5], "texture": "#texture"},
+				"west": {"uv": [7.5, 3, 9, 5], "texture": "#texture"},
+				"up": {"uv": [7.5, 3, 6, 0], "texture": "#texture"},
+				"down": {"uv": [9, 0, 7.5, 3], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stalk1",
+			"from": [7, -2, 7],
+			"to": [9, 3, 9],
+			"rotation": {"x": -20.87, "y": -18.26, "z": 0, "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [1, 2, 2, 7], "texture": "#texture"},
+				"east": {"uv": [0, 2, 1, 7], "texture": "#texture"},
+				"south": {"uv": [3, 2, 4, 7], "texture": "#texture"},
+				"west": {"uv": [2, 2, 3, 7], "texture": "#texture"},
+				"down": {"uv": [3, 0, 2, 2], "texture": "#texture", "cullface": "down"}
+			}
+		}
+	]
+}

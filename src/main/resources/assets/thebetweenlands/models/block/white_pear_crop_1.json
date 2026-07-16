@@ -1,0 +1,67 @@
+{
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"render_type": "cutout",
+	"texture_size": [16, 16],
+	"textures": {
+		"particle": "thebetweenlands:block/particle/white_pear_crop_particle",
+		"texture": "thebetweenlands:block/white_pear_crop_1"
+	},
+	"loader": "thebetweenlands:elements",
+	"custom_elements": [
+		{
+			"name": "leaf1a",
+			"from": [6.45558, 1.76059, 8.30649],
+			"to": [8.45558, 1.76059, 10.30649],
+			"rotation": {"x": -59.4604, "y": -24.0154, "z": -1.2003, "origin": [7.45558, 1.76059, 8.30649]},
+			"faces": {
+				"up": {"uv": [7, 2, 5, 0], "texture": "#texture"},
+				"down": {"uv": [7, 0, 5, 2], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "leaf1b",
+			"from": [6.07815, 3.49143, 9.23479],
+			"to": [8.07815, 3.49143, 11.23479],
+			"rotation": {"x": -20.3304, "y": -24.0154, "z": -1.2003, "origin": [7.07815, 3.49143, 9.23479]},
+			"faces": {
+				"up": {"uv": [7, 5, 5, 3], "texture": "#texture"},
+				"down": {"uv": [7, 3, 5, 5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "leaf2a",
+			"from": [6.36265, 1.76148, 4.3931],
+			"to": [9.36265, 1.76148, 7.3931],
+			"rotation": {"x": 50.1096, "y": -24.0154, "z": -1.2003, "origin": [7.86265, 1.76148, 7.3931]},
+			"faces": {
+				"up": {"uv": [13, 3, 10, 0], "texture": "#texture"},
+				"down": {"uv": [13, 0, 10, 3], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "leaf2b",
+			"from": [7.19372, 4.04639, 2.73568],
+			"to": [10.19372, 4.04639, 5.73568],
+			"rotation": {"x": 24.0196, "y": -24.0154, "z": -1.2003, "origin": [8.69372, 4.04639, 5.63568]},
+			"faces": {
+				"up": {"uv": [13, 7, 10, 4], "texture": "#texture"},
+				"down": {"uv": [13, 4, 10, 7], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [7.5, -1, 7.5],
+			"to": [8.5, 2, 8.5],
+			"rotation": {"x": -5.22, "y": -23.48, "z": 13.04, "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [1, 1, 2, 4], "texture": "#texture"},
+				"east": {"uv": [0, 1, 1, 4], "texture": "#texture"},
+				"south": {"uv": [3, 1, 4, 4], "texture": "#texture"},
+				"west": {"uv": [2, 1, 3, 4], "texture": "#texture"},
+				"up": {"uv": [2, 1, 1, 0], "texture": "#texture"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#texture", "cullface": "down"}
+			}
+		}
+	]
+}

@@ -1,7 +1,89 @@
 {
   "variants": {
-    "": {
-      "model": "thebetweenlands:block/fungus_crop"
-    }
+    "age=0": [
+      {
+        "model": "thebetweenlands:block/fungus_crop_1"
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_1",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_1",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_1",
+        "y": 270
+      }
+    ],
+    "age=1": [
+      {
+        "model": "thebetweenlands:block/fungus_crop_2"
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_2",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_2",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_2",
+        "y": 270
+      }
+    ],
+    "age=2": [
+      {
+        "model": "thebetweenlands:block/fungus_crop_3"
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_3",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_3",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_3",
+        "y": 270
+      }
+    ],
+    "age=3,decayed=false": [
+      {
+        "model": "thebetweenlands:block/fungus_crop_4"
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_4",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_4",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_4",
+        "y": 270
+      }
+    ],
+    "age=3,decayed=true": [
+      {
+        "model": "thebetweenlands:block/fungus_crop_4_decayed"
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_4_decayed",
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_4_decayed",
+        "y": 180
+      },
+      {
+        "model": "thebetweenlands:block/fungus_crop_4_decayed",
+        "y": 270
+      }
+    ]
   }
 }

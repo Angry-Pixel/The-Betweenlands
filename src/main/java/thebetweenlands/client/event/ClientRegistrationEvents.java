@@ -95,13 +95,10 @@ import thebetweenlands.client.model.armor.ExplorersHatModel;
 import thebetweenlands.client.model.armor.SilkMaskModel;
 import thebetweenlands.client.model.armor.SyrmoriteArmorModel;
 import thebetweenlands.client.model.baked.RootGeometry;
-import thebetweenlands.client.model.baked.barnacle.BarnacleModelLoader;
 import thebetweenlands.client.model.baked.bush.BushModelLoader;
 import thebetweenlands.client.model.baked.connectedtextures.ConnectedTextureGeometry;
 import thebetweenlands.client.model.baked.custom.CustomElementsModel;
-import thebetweenlands.client.model.baked.funguscrop.FungusCropModelLoader;
 import thebetweenlands.client.model.baked.slant.SlantModelLoader;
-import thebetweenlands.client.model.baked.whitepearcrop.WhitePearCropModelLoader;
 import thebetweenlands.client.model.block.AlcoveModel;
 import thebetweenlands.client.model.block.AlembicModel;
 import thebetweenlands.client.model.block.AnimatorModel;
@@ -1010,9 +1007,9 @@ public class ClientRegistrationEvents {
 //		event.register(TheBetweenlands.prefix("black_hat_mushroom_2"), BlackHatMushroom2ModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("black_hat_mushroom_3"), BlackHatMushroom3ModelLoader.INSTANCE);
 
-		event.register(TheBetweenlands.prefix("fungus_crop"), FungusCropModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("white_pear_crop"), WhitePearCropModelLoader.INSTANCE);
-		event.register(TheBetweenlands.prefix("barnacle"), BarnacleModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("fungus_crop"), FungusCropModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("white_pear_crop"), WhitePearCropModelLoader.INSTANCE);
+//		event.register(TheBetweenlands.prefix("barnacle"), BarnacleModelLoader.INSTANCE);
 		
 //		event.register(TheBetweenlands.prefix("paper_lantern"), PaperLanternModelLoader.INSTANCE);
 //		event.register(TheBetweenlands.prefix("silt_glass_lantern"), SiltGlassLanternModelLoader.INSTANCE);
