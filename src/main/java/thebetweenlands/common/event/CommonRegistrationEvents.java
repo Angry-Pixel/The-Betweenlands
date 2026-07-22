@@ -342,7 +342,7 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {
-		event.register(DataMapRegistry.CUSTOM_SPAWNS);
+		event.register(DataMapRegistry.BIOME_SPAWNS);
 		event.register(DataMapRegistry.AMULET_SPAWNS);
 		event.register(DataMapRegistry.ANIMATOR_FUEL);
 		event.register(DataMapRegistry.COMPOSTABLE);

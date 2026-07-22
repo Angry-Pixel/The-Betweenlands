@@ -5,6 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -56,6 +60,11 @@ public class Dragonfly extends AmbientCreature implements BLEntityWithSpawnRules
 		return Mob.createMobAttributes()
 			.add(Attributes.MAX_HEALTH, 10.0D)
 			.add(Attributes.MOVEMENT_SPEED, 0.9D);
+	}
+	
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+	    return new ClientboundAddEntityPacket(this, serverEntity);
 	}
 
 	@Override

@@ -4,17 +4,13 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.datamap.block.WaterPlant;
 import thebetweenlands.common.datamap.entity.AmuletSpawn;
 import thebetweenlands.common.datamap.item.AnimatorFuel;
@@ -28,6 +24,8 @@ import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.spawning.BaseSpawnProperties;
+import thebetweenlands.common.world.spawning.BiomeSpawnerList;
+import thebetweenlands.common.world.spawning.BiomeSpawnerZone;
 import thebetweenlands.common.world.spawning.CaveSpawnEntry;
 import thebetweenlands.common.world.spawning.SurfaceSpawnEntry;
 
@@ -336,41 +334,67 @@ public class BLDataMapProvider extends DataMapProvider {
 		gunkMap.add(BlockRegistry.ALGAE, new WaterPlant(10.0f, 0.05f), false);
 		
 		// Custom Mob Spawning
-		var cutomSpawnsMap = builder(DataMapRegistry.CUSTOM_SPAWNS);
-		var biomeLookup = provider.lookupOrThrow(Registries.BIOME);
+		var biome_spawns = builder(DataMapRegistry.BIOME_SPAWNS);
 
-		// Single biome for ref (redundant if we use the tags instead)
-		HolderSet<Biome> patchy_islands_single = HolderSet.direct(biomeLookup.getOrThrow(BiomeRegistry.PATCHY_ISLANDS));
-		HolderSet<Biome> marsh_single = HolderSet.direct(biomeLookup.getOrThrow(BiomeRegistry.MARSH));
+		// EntityType<?> mobType,
+		// int weight,
+		// short baseWeight,
+		// boolean hostile,
+		// int minGroupSize,
+		// int maxGroupSize,
+		// int minHeight,
+		// int maxHeight,
+		// double spawnCheckRadius, // Shouldn't be lower than 24 (vanilla) or will explode atm
+		// double spawnCheckRangeY,
+		// double groupSpawnRadius,
+		// int spawningInterval,
+		// boolean canSpawnOnWater,
+		// boolean canSpawnInWater,
+		// boolean constantWeight)
 
-		// List of specific biomes for ref
-		HolderSet<Biome> biomeList = HolderSet.direct(
-			biomeLookup.getOrThrow(BiomeRegistry.PATCHY_ISLANDS),
-			biomeLookup.getOrThrow(BiomeRegistry.SWAMPLANDS)
-		);
+		var patchyIslandsSurface = new BiomeSpawnerZone(new SurfaceSpawnEntry(),
+				List.of(new BaseSpawnProperties(EntityRegistry.DRAGONFLY.get(), 30, (short) 100, false, 10, 30,
+						(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT, 64.0, 6.0, 6.0, 100, true,
+						false, false)));
 
-		// Single tags for ref
-		HolderSet<Biome> patchy_islands = biomeLookup.getOrThrow(BLBiomeTagProvider.PATCHY_ISLANDS);
-		HolderSet<Biome> swamplands = biomeLookup.getOrThrow(BLBiomeTagProvider.SWAMPLANDS);
-		HolderSet<Biome> deep_waters = biomeLookup.getOrThrow(BLBiomeTagProvider.DEEP_WATERS);
-		HolderSet<Biome> coarse_islands = biomeLookup.getOrThrow(BLBiomeTagProvider.COARSE_ISLANDS);
-		HolderSet<Biome> raised_isles = biomeLookup.getOrThrow(BLBiomeTagProvider.RAISED_ISLES);
-		HolderSet<Biome> sludge_plains = biomeLookup.getOrThrow(BLBiomeTagProvider.SLUDGE_PLAINS);
-		HolderSet<Biome> eroded_marsh = biomeLookup.getOrThrow(BLBiomeTagProvider.ERODED_MARSH);
-		HolderSet<Biome> marsh = biomeLookup.getOrThrow(BLBiomeTagProvider.MARSH);
-		HolderSet<Biome> swamplands_clearing = biomeLookup.getOrThrow(BLBiomeTagProvider.SWAMPLANDS_CLEARING);
-		HolderSet<Biome> sludge_plains_clearing = biomeLookup.getOrThrow(BLBiomeTagProvider.SLUDGE_PLAINS_CLEARING);
+		var patchyIslandsCave = new BiomeSpawnerZone(new CaveSpawnEntry(),
+				List.of(new BaseSpawnProperties(EntityRegistry.DRAGONFLY.get(), 30, (short) 100, false, 1, 3,
+						(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 24, 6.0, 6.0, 400,
+						true, false, false)));
 
-		var baseNumbers = new BaseSpawnProperties(biomeList, (short) 20, (short) 100, true, 2, 4, -64, 0, 16.0, 8.0, 4.0, 20);
+	/*	TODO OLD Entries to add for this biome
+		entries.add(new SurfaceSpawnEntry(0, EntityDragonFly.class, EntityDragonFly::new, (short) 35).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setSpawningInterval(400));
+		entries.add(new SurfaceSpawnEntry(1, EntityFirefly.class, EntityFirefly::new, (short) 60).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(2, EntityMireSnail.class, EntityMireSnail::new, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, EntityFrog::new, (short) 32).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
+		entries.add(new CaveSpawnEntry(4, EntityOlm.class, EntityOlm::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(5, EntityGecko.class, EntityGecko::new, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
+		entries.add(new SporelingSpawnEntry(6, EntitySporeling.class, EntitySporeling::new, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new GreeblingSpawnEntry(7, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
+		
+		entries.add(new SurfaceSpawnEntry(8, EntityEmberlingWild.class, EntityEmberlingWild::new, (short) 20).setSurfacePredicate(state -> state.getBlock() == BlockRegistry.LOG_HEARTHGROVE).setHostile(true).setGroupSize(1, 1).setSpawnCheckRadius(32));
+		entries.add(new SurfaceSpawnEntry(9, EntityLurker.class, EntityLurker::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
+		entries.add(new SurfaceSpawnEntry(10, EntityAngler.class, EntityAngler::new, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		entries.add(new CaveSpawnEntry(11, EntityAngler.class, EntityAngler::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(12, EntitySwampHag.class, EntitySwampHag::new, (short) 90).setHostile(true));
+		entries.add(new SwampHagCaveSpawnEntry(13, (short) 80).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(14, EntityWight.class, EntityWight::new, (short) 16).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16.0D).setSpawningInterval(6000));
+		entries.add(new CaveSpawnEntry(15, EntityWight.class, EntityWight::new, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
+		entries.add(new SurfaceSpawnEntry(16, EntitySiltCrab.class, EntitySiltCrab::new, (short) 50).setSurfacePredicate((state) -> state.getBlock() == BlockRegistry.SILT).setHostile(true).setGroupSize(2, 8).setSpawnCheckRadius(32.0D).setSpawnCheckRangeY(16.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(17, EntityBloodSnail.class, EntityBloodSnail::new, (short) 30).setHostile(true).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(18, EntityLeech.class, EntityLeech::new, (short) 35).setHostile(true).setSpawnCheckRadius(24.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(19, EntityChiromaw.class, EntityChiromaw::new, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
+		entries.add(new CaveSpawnEntry(20, EntityChiromaw.class, EntityChiromaw::new, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		entries.add(new BetweenstoneCaveSpawnEntry(21, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
+		entries.add(new SkySpawnEntry(22, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
+		entries.add(new PitstoneCaveSpawnEntry(23, EntityStalker.class, EntityStalker::new, (short) 13).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
+		entries.add(new CaveSpawnEntry(24, EntitySwarm.class, EntitySwarm::new, (short) 50).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(25, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
+		entries.add(new SurfaceSpawnEntry(26, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
+		entries.add(new CaveSpawnEntry(27, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
+	*/	
 
-		// Dragonfly setup test
-		var dragonflySurface = new BaseSpawnProperties(patchy_islands_single, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 100);
-		var dragonflyCave = new BaseSpawnProperties(patchy_islands_single, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 400);
-		var dragonflyMarshSurface = new BaseSpawnProperties(marsh_single, (short) 100, (short) 30, false, 10, 30, TheBetweenlands.CAVE_START, TheBetweenlands.LAYER_HEIGHT, 64, 6, 6, 100);
-		var dragonflyMarshCave = new BaseSpawnProperties(marsh_single, (short) 100, (short) 30, false, 1, 3, TheBetweenlands.CAVE_WATER_HEIGHT, TheBetweenlands.CAVE_START, 16, 6, 6, 400);
+		biome_spawns.add(BiomeRegistry.PATCHY_ISLANDS, new BiomeSpawnerList(List.of(patchyIslandsSurface, patchyIslandsCave)), false);
 
-		//cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonflySurface, true, false)), false);
-
-		cutomSpawnsMap.add(EntityRegistry.DRAGONFLY, List.of(new SurfaceSpawnEntry(dragonflySurface, true, false), new CaveSpawnEntry(dragonflyCave, true, false, true),new SurfaceSpawnEntry(dragonflyMarshSurface, true, false), new CaveSpawnEntry(dragonflyMarshCave, true, false, true)), false);
 	}
 }
