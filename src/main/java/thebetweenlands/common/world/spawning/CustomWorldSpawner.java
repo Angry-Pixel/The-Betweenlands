@@ -138,18 +138,19 @@ public class CustomWorldSpawner {
 	    }
 
 	    else if (spawnEntry instanceof PitstoneCaveSpawnEntry pitstone) {
-	        boolean isPitstone = blockBelow.is(BlockRegistry.PITSTONE);
+	        boolean isPitstone = SurfaceType.MIXED_GROUND_AND_UNDERGROUND.matches(blockBelow);
 	        return (isPitstone && !exposedToSky) ? activePos : null;
 	    }
 
 	    else if (spawnEntry instanceof TreeSpawnEntry) {
-	        boolean isLeavesOrLogs = blockBelow.is(BlockTags.LEAVES) || blockBelow.is(BlockTags.LOGS);
-	        return isLeavesOrLogs ? activePos : null;
+	        //boolean isLeavesOrLogs = blockBelow.is(BlockTags.LEAVES) || blockBelow.is(BlockTags.LOGS);
+	    	boolean isShelfFungus = blockBelow.is(BlockRegistry.SHELF_FUNGUS.get());
+	        return /*isLeavesOrLogs*/ isShelfFungus ? activePos : null;
 	        
 	    } 
 
 	    else if (spawnEntry instanceof SkySpawnEntry) {
-	        boolean isAboveLayer = pos.getY() > TheBetweenlands.LAYER_HEIGHT;
+	        boolean isAboveLayer = pos.getY() > TheBetweenlands.LAYER_HEIGHT + 30;
 	        return (level.canSeeSky(pos) && isAboveLayer) ? pos : null;
 	    }
 

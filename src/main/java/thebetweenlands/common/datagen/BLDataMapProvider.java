@@ -27,7 +27,10 @@ import thebetweenlands.common.world.spawning.BaseSpawnProperties;
 import thebetweenlands.common.world.spawning.BiomeSpawnerList;
 import thebetweenlands.common.world.spawning.BiomeSpawnerZone;
 import thebetweenlands.common.world.spawning.CaveSpawnEntry;
+import thebetweenlands.common.world.spawning.PitstoneCaveSpawnEntry;
+import thebetweenlands.common.world.spawning.SkySpawnEntry;
 import thebetweenlands.common.world.spawning.SurfaceSpawnEntry;
+import thebetweenlands.common.world.spawning.TreeSpawnEntry;
 
 public class BLDataMapProvider extends DataMapProvider {
 
@@ -335,66 +338,160 @@ public class BLDataMapProvider extends DataMapProvider {
 		
 		// Custom Mob Spawning
 		var biome_spawns = builder(DataMapRegistry.BIOME_SPAWNS);
-
+		// order of entries and meaning
 		// EntityType<?> mobType,
 		// int weight,
 		// short baseWeight,
-		// boolean hostile,
-		// int minGroupSize,
-		// int maxGroupSize,
+		boolean hostile_base = false;
+		int minGroupSize_base = 1;
+		int maxGroupSize_base = 1;
 		// int minHeight,
 		// int maxHeight,
-		// double spawnCheckRadius, // Shouldn't be lower than 24 (vanilla) or will explode atm
-		// double spawnCheckRangeY,
-		// double groupSpawnRadius,
-		// int spawningInterval,
-		// boolean canSpawnOnWater,
-		// boolean canSpawnInWater,
-		// boolean constantWeight)
+		double spawnCheckRadius_base = 24.0D; // Shouldn't be lower than 24 (vanilla) or will explode atm
+		double spawnCheckRangeY_base = 6.0D;
+		double groupSpawnRadius_base = 6.0D;
+		int spawningInterval_base = 0;
+		boolean canSpawnOnWater_base = false;
+		boolean canSpawnInWater_base = false;
+		boolean constantWeight_base = false;
 
 		var patchyIslandsSurface = new BiomeSpawnerZone(new SurfaceSpawnEntry(),
-				List.of(new BaseSpawnProperties(EntityRegistry.DRAGONFLY.get(), 30, (short) 100, false, 10, 30,
-						(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT, 64.0, 6.0, 6.0, 100, true,
-						false, false)));
+				List.of(
+						new BaseSpawnProperties(EntityRegistry.DRAGONFLY.get(), (short) 35, (short) 100, false, 1, 3,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 64.0, spawnCheckRangeY_base, groupSpawnRadius_base, 400, true,
+								false, false),
+
+						new BaseSpawnProperties(EntityRegistry.FIREFLY.get(), (short) 60, (short) 100, false, minGroupSize_base, maxGroupSize_base,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, true,
+								false, false),
+
+						new BaseSpawnProperties(EntityRegistry.MIRE_SNAIL.get(), (short) 60, (short) 100, false, 1, 3,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.FROG.get(), (short) 32, (short) 100, false, 1, 3,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, true,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.FROG.get(), (short) 32, (short) 100, false, 1, 3,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, true,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.GECKO.get(), (short) 40, (short) 100, false, 1, 3,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.LURKER.get(), (short) 35, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								true, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.ANGLER.get(), (short) 45, (short) 100, true, 1, 3,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								true, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.SWAMP_HAG.get(), (short) 90, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.WIGHT.get(), (short) 16, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 64, 16, groupSpawnRadius_base, 6000, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.BLOOD_SNAIL.get(), (short) 30, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 64, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.LEECH.get(), (short) 35, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 64, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.CHIROMAW.get(), (short) 40, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 30, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.SHAMBLER.get(), (short) 30, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.ANADIA.get(), (short) 60, (short) 100, false, 1, 5,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								true, constantWeight_base),
+
+						// TODO these need surface rules for hearthgrove log blocks
+						new BaseSpawnProperties(EntityRegistry.EMBERLING.get(), (short) 20, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						// TODO these need surface rules for silt blocks
+						new BaseSpawnProperties(EntityRegistry.SILT_CRAB.get(), (short) 50, (short) 100, true, 2, 8,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32, 16, groupSpawnRadius_base, 1000, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						// TODO these need spawn rules for direction facing on top of block
+						new BaseSpawnProperties(EntityRegistry.GREEBLING.get(), (short) 20, (short) 100, true, 1, 2,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 64, spawnCheckRangeY_base, 4, 2400, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base)
+						));
 
 		var patchyIslandsCave = new BiomeSpawnerZone(new CaveSpawnEntry(),
-				List.of(new BaseSpawnProperties(EntityRegistry.DRAGONFLY.get(), 30, (short) 100, false, 1, 3,
-						(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 24, 6.0, 6.0, 400,
-						true, false, false)));
+				List.of(
+						new BaseSpawnProperties(EntityRegistry.OLM.get(), (short) 30, (short) 100, false, 3, 5,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
+								canSpawnOnWater_base, true, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.ANGLER.get(), (short) 35, (short) 100, true, 1, 3,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								true, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.WIGHT.get(), (short) 18, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 64, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.CHIROMAW.get(), (short) 60, (short) 100, true, 1, 3,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base),
+
+						new BaseSpawnProperties(EntityRegistry.INFESTATION.get(), (short) 50, (short) 100, true, 1, 3,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, true),
+
+						new BaseSpawnProperties(EntityRegistry.CAVE_FISH.get(), (short) 30, (short) 100, false, 1, 3,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
+								canSpawnOnWater_base, true, constantWeight_base),
+
+						//TODO This needs the multipliers for amplified attributes based on depth on spawning
+						new BaseSpawnProperties(EntityRegistry.SWAMP_HAG.get(), (short) 80, (short) 100, true, 1, 3,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
+								canSpawnInWater_base, constantWeight_base)
+						));
+		
+		var patchyIslandsPitstone = new BiomeSpawnerZone(new PitstoneCaveSpawnEntry(),
+				List.of(
+						new BaseSpawnProperties(EntityRegistry.STALKER.get(), (short) 13, (short) 100, true, 1, 1,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.PITSTONE_HEIGHT, 64, 16, groupSpawnRadius_base, 6000,
+								canSpawnOnWater_base, canSpawnInWater_base, true)
+						));
+		
+		var patchyIslandsSky = new BiomeSpawnerZone(new SkySpawnEntry(),
+				List.of(
+						new BaseSpawnProperties(EntityRegistry.CHIROMAW_GREEBLING_RIDER.get(), (short) 20, (short) 100, true, 1, 3,
+								(int) TheBetweenlands.LAYER_HEIGHT + 30, (int) TheBetweenlands.LAYER_HEIGHT + 130, 64, 32, groupSpawnRadius_base, 600,
+								canSpawnOnWater_base, canSpawnInWater_base, constantWeight_base)
+						));
+		
+		var patchyIslandsTree = new BiomeSpawnerZone(new TreeSpawnEntry(),
+				List.of(
+						// TODO This needs spawn rules to sometimes spawn riding a gecko (1:10)
+						new BaseSpawnProperties(EntityRegistry.SPORELING.get(), (short) 80, (short) 100, true, 2, 5,
+								(int) TheBetweenlands.LAYER_HEIGHT, (int) TheBetweenlands.LAYER_HEIGHT + 8, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
+								canSpawnOnWater_base, canSpawnInWater_base, constantWeight_base)
+						));
 
 	/*	TODO OLD Entries to add for this biome
-		entries.add(new SurfaceSpawnEntry(0, EntityDragonFly.class, EntityDragonFly::new, (short) 35).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setSpawningInterval(400));
-		entries.add(new SurfaceSpawnEntry(1, EntityFirefly.class, EntityFirefly::new, (short) 60).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(2, EntityMireSnail.class, EntityMireSnail::new, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, EntityFrog::new, (short) 32).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new CaveSpawnEntry(4, EntityOlm.class, EntityOlm::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(5, EntityGecko.class, EntityGecko::new, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
-		entries.add(new SporelingSpawnEntry(6, EntitySporeling.class, EntitySporeling::new, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new GreeblingSpawnEntry(7, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
-		
-		entries.add(new SurfaceSpawnEntry(8, EntityEmberlingWild.class, EntityEmberlingWild::new, (short) 20).setSurfacePredicate(state -> state.getBlock() == BlockRegistry.LOG_HEARTHGROVE).setHostile(true).setGroupSize(1, 1).setSpawnCheckRadius(32));
-		entries.add(new SurfaceSpawnEntry(9, EntityLurker.class, EntityLurker::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
-		entries.add(new SurfaceSpawnEntry(10, EntityAngler.class, EntityAngler::new, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		entries.add(new CaveSpawnEntry(11, EntityAngler.class, EntityAngler::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		entries.add(new SurfaceSpawnEntry(12, EntitySwampHag.class, EntitySwampHag::new, (short) 90).setHostile(true));
-		entries.add(new SwampHagCaveSpawnEntry(13, (short) 80).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
-		entries.add(new SurfaceSpawnEntry(14, EntityWight.class, EntityWight::new, (short) 16).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16.0D).setSpawningInterval(6000));
-		entries.add(new CaveSpawnEntry(15, EntityWight.class, EntityWight::new, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
-		entries.add(new SurfaceSpawnEntry(16, EntitySiltCrab.class, EntitySiltCrab::new, (short) 50).setSurfacePredicate((state) -> state.getBlock() == BlockRegistry.SILT).setHostile(true).setGroupSize(2, 8).setSpawnCheckRadius(32.0D).setSpawnCheckRangeY(16.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(17, EntityBloodSnail.class, EntityBloodSnail::new, (short) 30).setHostile(true).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(18, EntityLeech.class, EntityLeech::new, (short) 35).setHostile(true).setSpawnCheckRadius(24.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(19, EntityChiromaw.class, EntityChiromaw::new, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
-		entries.add(new CaveSpawnEntry(20, EntityChiromaw.class, EntityChiromaw::new, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		entries.add(new BetweenstoneCaveSpawnEntry(21, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
-		entries.add(new SkySpawnEntry(22, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
-		entries.add(new PitstoneCaveSpawnEntry(23, EntityStalker.class, EntityStalker::new, (short) 13).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
-		entries.add(new CaveSpawnEntry(24, EntitySwarm.class, EntitySwarm::new, (short) 50).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(25, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
-		entries.add(new SurfaceSpawnEntry(26, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
-		entries.add(new CaveSpawnEntry(27, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
-	*/	
+	 */
 
-		biome_spawns.add(BiomeRegistry.PATCHY_ISLANDS, new BiomeSpawnerList(List.of(patchyIslandsSurface, patchyIslandsCave)), false);
+		biome_spawns.add(BiomeRegistry.PATCHY_ISLANDS, new BiomeSpawnerList(List.of(patchyIslandsSurface, patchyIslandsCave, patchyIslandsPitstone, patchyIslandsSky, patchyIslandsTree)), false);
 
 	}
 }

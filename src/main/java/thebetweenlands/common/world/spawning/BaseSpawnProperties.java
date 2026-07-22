@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EntityType;
 
 public record BaseSpawnProperties(
     EntityType<?> mobType,
-    int weight,
+    short weight,
     short baseWeight,
     boolean hostile,
     int minGroupSize,
@@ -25,7 +25,7 @@ public record BaseSpawnProperties(
 ) {
     public static final Codec<BaseSpawnProperties> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("_mob").forGetter(BaseSpawnProperties::mobType),
-            Codec.INT.fieldOf("weight").forGetter(BaseSpawnProperties::weight),
+            Codec.SHORT.fieldOf("weight").forGetter(BaseSpawnProperties::weight),
             Codec.SHORT.fieldOf("base_weight").forGetter(BaseSpawnProperties::baseWeight),
             Codec.BOOL.fieldOf("hostile").forGetter(BaseSpawnProperties::hostile),
             Codec.INT.fieldOf("min_group_size").forGetter(BaseSpawnProperties::minGroupSize),
