@@ -373,20 +373,16 @@ public class BLDataMapProvider extends DataMapProvider {
 								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, true,
 								canSpawnInWater_base, constantWeight_base),
 
-						new BaseSpawnProperties(EntityRegistry.FROG.get(), (short) 32, (short) 100, false, 1, 3,
-								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 1000, true,
-								canSpawnInWater_base, constantWeight_base),
-
 						new BaseSpawnProperties(EntityRegistry.GECKO.get(), (short) 40, (short) 100, false, 1, 3,
 								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
 								canSpawnInWater_base, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.LURKER.get(), (short) 35, (short) 100, true, 1, 1,
-								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
 								true, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.ANGLER.get(), (short) 45, (short) 100, true, 1, 3,
-								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
 								true, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.SWAMP_HAG.get(), (short) 90, (short) 100, true, 1, 1,
@@ -436,11 +432,11 @@ public class BLDataMapProvider extends DataMapProvider {
 		var patchyIslandsCave = new BiomeSpawnerZone(new CaveSpawnEntry(),
 				List.of(
 						new BaseSpawnProperties(EntityRegistry.OLM.get(), (short) 30, (short) 100, false, 3, 5,
-								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT - 10, (int) TheBetweenlands.CAVE_WATER_HEIGHT, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
 								canSpawnOnWater_base, true, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.ANGLER.get(), (short) 35, (short) 100, true, 1, 3,
-								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT - 10, (int) TheBetweenlands.CAVE_WATER_HEIGHT, spawnCheckRadius_base, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
 								true, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.WIGHT.get(), (short) 18, (short) 100, true, 1, 1,
@@ -456,7 +452,7 @@ public class BLDataMapProvider extends DataMapProvider {
 								canSpawnInWater_base, true),
 
 						new BaseSpawnProperties(EntityRegistry.CAVE_FISH.get(), (short) 30, (short) 100, false, 1, 3,
-								(int) TheBetweenlands.CAVE_WATER_HEIGHT, (int) TheBetweenlands.CAVE_START, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
+								(int) TheBetweenlands.CAVE_WATER_HEIGHT - 10, (int) TheBetweenlands.CAVE_WATER_HEIGHT, 32, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base,
 								canSpawnOnWater_base, true, constantWeight_base),
 
 						//TODO This needs the multipliers for amplified attributes based on depth on spawning

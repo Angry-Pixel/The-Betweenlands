@@ -202,8 +202,7 @@ public class CustomWorldSpawner {
 			if (SpawnPlacements.checkSpawnRules(type, level, MobSpawnType.NATURAL, finalSpawnPos, level.getRandom())) {
 				Entity entity = type.create(level);
 				if (entity instanceof Mob mob) {
-					mob.moveTo(finalSpawnPos.getX() + 0.5, finalSpawnPos.getY(), finalSpawnPos.getZ() + 0.5,
-							level.random.nextFloat() * 360F, 0.0F);
+					mob.moveTo(finalSpawnPos.getX() + 0.5, finalSpawnPos.getY(), finalSpawnPos.getZ() + 0.5, level.random.nextFloat() * 360F, 0.0F);
 					mob.finalizeSpawn(level, level.getCurrentDifficultyAt(finalSpawnPos), MobSpawnType.NATURAL, null);
 					if (level.addFreshEntity(mob)) {
 						System.out.println("Spawned: " + mob.getDisplayName().getString() + " at " + finalSpawnPos.toShortString() + " Zone: " + zone.getType().getSerializedName());
@@ -213,6 +212,9 @@ public class CustomWorldSpawner {
 					}
 				}
 
+			}
+			else {
+				System.out.println("Spawn Placements check Failed");
 			}
 		}
 	}
