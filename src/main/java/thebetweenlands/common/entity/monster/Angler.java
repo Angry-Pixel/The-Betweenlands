@@ -133,10 +133,6 @@ public class Angler extends Monster implements BLEntityWithSpawnRules <Angler> {
         return LootTableRegistry.ANGLER;
     }
 */
- 
-	public static boolean canSpawnHere(EntityType<Angler> entity, LevelAccessor level, MobSpawnType spawn, BlockPos pos, RandomSource random) {
-		return level.getDifficulty() != Difficulty.PEACEFUL && (spawn == MobSpawnType.SPAWNER || level.getFluidState(pos).is(FluidTags.WATER));
-	}
 
 	@Override
 	public int getMaxSpawnClusterSize() {
@@ -302,6 +298,6 @@ public class Angler extends Monster implements BLEntityWithSpawnRules <Angler> {
 
 	@Override
 	public boolean canSpawnHere(EntityType<Angler> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) { 
-		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER) && pos.getY() <= TheBetweenlands.LAYER_HEIGHT;
+		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER) && pos.getY() <= TheBetweenlands.LAYER_HEIGHT +3;
 	}
 }

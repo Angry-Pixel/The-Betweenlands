@@ -2,13 +2,17 @@ package thebetweenlands.common.entity.monster;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreakDoorGoal;
@@ -25,13 +29,15 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.common.entity.BLEntity;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ai.goals.ThrowWormGoal;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
-public class SwampHag extends Monster implements BLEntity {
+public class SwampHag extends Monster implements BLEntityWithSpawnRules <SwampHag> {
 
 	public static final EntityDataAccessor<Byte> TALK_SOUND = SynchedEntityData.defineId(SwampHag.class, EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Boolean> SHOULD_JAW_MOVE = SynchedEntityData.defineId(SwampHag.class, EntityDataSerializers.BOOLEAN);
@@ -249,5 +255,15 @@ public class SwampHag extends Monster implements BLEntity {
 	public boolean isInvulnerableTo(DamageSource source) {
 		if (source.is(DamageTypes.IN_WALL) && this.isRidingMummy()) return false;
 		return super.isInvulnerableTo(source);
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<SwampHag> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos.below()).isValidSpawn(level, pos.below(), entityType);
+	}
+
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.isUnobstructed(this);
 	}
 }

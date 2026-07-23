@@ -9,13 +9,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.LightLayer;
@@ -134,6 +134,7 @@ public class CustomWorldSpawner {
 
 	    else if (spawnEntry instanceof CaveSpawnEntry cave) {
 	        boolean surfaceMatches = SurfaceType.UNDERGROUND.matches(blockBelow);
+	        
 	        return (!exposedToSky && surfaceMatches) ? activePos : null;
 	    }
 
@@ -180,24 +181,53 @@ public class CustomWorldSpawner {
 			int targetZ = originPos.getZ() + (int) Math.round(offsetZ);
 			BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(targetX, originPos.getY(), targetZ);
 
-			if (!level.getBlockState(mutablePos).isAir()) {
-				int maxUp = originPos.getY() + 4;
-				while (mutablePos.getY() < maxUp && !level.getBlockState(mutablePos).isAir()) {
-					mutablePos.move(Direction.UP);
-				}
+			BlockPos finalSpawnPos;
+			EntityType<?> type = spec.mobType();
+			boolean isWaterMob = type.getCategory() == MobCategory.WATER_CREATURE || type.getCategory() == MobCategory.WATER_AMBIENT || type.getCategory() == MobCategory.UNDERGROUND_WATER_CREATURE;
+
+			if (isWaterMob) {
+			    // Water Mob 
+			    boolean isOpenSpace = level.getBlockState(mutablePos).isAir() || level.getBlockState(mutablePos).getFluidState().isSource();
+			    if (!isOpenSpace) {
+			        int maxUp = originPos.getY() + 4;
+			        while (mutablePos.getY() < maxUp && !(level.getBlockState(mutablePos).isAir() || level.getBlockState(mutablePos).getFluidState().isSource()))
+			            mutablePos.move(Direction.UP);
+			    } else {
+			        while (mutablePos.getY() > minWorldHeight && (level.getBlockState(mutablePos).isAir() || level.getBlockState(mutablePos).getFluidState().isSource()))
+			            mutablePos.move(Direction.DOWN);
+
+			        mutablePos.move(Direction.UP);
+			    }
 			} else {
-				while (mutablePos.getY() > minWorldHeight && level.getBlockState(mutablePos).isAir()) {
-					mutablePos.move(Direction.DOWN);
-				}
-				mutablePos.move(Direction.UP);
+			    // Land Mob 
+			    if (!level.getBlockState(mutablePos).isAir()) {
+			        int maxUp = originPos.getY() + 4;
+			        while (mutablePos.getY() < maxUp && !level.getBlockState(mutablePos).isAir())
+			            mutablePos.move(Direction.UP);
+			    } else {
+			        boolean hitFluid = false;
+			        while (mutablePos.getY() > minWorldHeight && level.getBlockState(mutablePos).isAir()) {
+			            mutablePos.move(Direction.DOWN);
+			            if (!level.getBlockState(mutablePos).getFluidState().isEmpty()) {
+			                hitFluid = true;
+			                break;
+			            }
+			        }
+			        
+			        if (hitFluid)
+			            continue;
+			        
+			        mutablePos.move(Direction.UP);
+			    }
+			    
+			    if (!level.getBlockState(mutablePos.below()).getFluidState().isEmpty())
+			        continue; 
 			}
 
-			BlockPos finalSpawnPos = mutablePos.immutable();
+			finalSpawnPos = mutablePos.immutable();
 
 			if (!level.getWorldBorder().isWithinBounds(finalSpawnPos))
 				continue;
-
-			EntityType<?> type = spec.mobType();
 
 			if (SpawnPlacements.checkSpawnRules(type, level, MobSpawnType.NATURAL, finalSpawnPos, level.getRandom())) {
 				Entity entity = type.create(level);
