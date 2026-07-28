@@ -35,7 +35,6 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -155,34 +154,40 @@ public class Angler extends Monster implements BLEntityWithSpawnRules <Angler> {
 
 	@Override
 	public void aiStep() {
-		if (level().isClientSide()) {
-			if(level().getGameTime()%5 == 0)
-				if (isInWater()) {
-					for (int i = 0; i < 2; ++i) {
-						double a = Math.toRadians(this.getYRot());
-						double offSetX = -Math.sin(a) * this.getBbWidth() * 0.5D;
-						double offSetZ = Math.cos(a) * this.getBbWidth() * 0.5D;
-						this.level().addParticle(ParticleTypes.BUBBLE, this.getX() + offSetX, this.getY() + this.getBbHeight() * 0.5D + this.getRandom().nextDouble() * 0.5D, this.getZ() + offSetZ, 0.0D, 0.4D, 0.0D);
-					}
-				}
-		}
+	    super.aiStep();
+	    if (level().isClientSide()) {
+	        if (level().getGameTime() % 5 == 0 && isInWater()) {
+	            for (int i = 0; i < 2; ++i) {
+	                double a = Math.toRadians(this.getYRot());
+	                double offSetX = -Math.sin(a) * this.getBbWidth() * 0.5D;
+	                double offSetZ = Math.cos(a) * this.getBbWidth() * 0.5D;
+	                this.level().addParticle(ParticleTypes.BUBBLE, this.getX() + offSetX, this.getY() + this.getBbHeight() * 0.5D + this.getRandom().nextDouble() * 0.5D, this.getZ() + offSetZ, 0.0D, 0.4D, 0.0D);
+	            }
+	        }
+	    }
 
-		if (isInWater()) {
-			setAirSupply(300);
-		} else if (onGround()) {
-			setDeltaMovement(this.getDeltaMovement().add((double)((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F), 0.5D, (double)((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F)));
-			setYRot(random.nextFloat() * 360.0F);
-			if(isLeaping())
-				setIsLeaping(false);
-			setOnGround(false);
-			hasImpulse = true;
-			if(level().getGameTime()%5==0) {
-				level().playSound(null, getX(), getY(), getZ(), SoundRegistry.FISH_FLOP.get(), SoundSource.HOSTILE, 1F, 1F);
-				this.hurt(this.damageSources().drown(), 0.5F);
-			}
-		}
+	    if (!level().isClientSide()) {
+	        if (isInWater()) {
+	            this.setAirSupply(this.getMaxAirSupply());
+	        } else if (onGround()) {
+	            setDeltaMovement(this.getDeltaMovement().add((double)((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F), 0.5D, (double)((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F)));
+	            setYRot(random.nextFloat() * 360.0F);
+	            if (isLeaping())
+	                setIsLeaping(false);
+	            setOnGround(false);
+	            hasImpulse = true;
 
-		super.aiStep();
+	            if (level().getGameTime() % 5 == 0) {
+	                level().playSound(null, getX(), getY(), getZ(), SoundRegistry.FISH_FLOP.get(), SoundSource.HOSTILE, 1F, 1F);
+	                this.hurt(this.damageSources().drown(), 0.5F);
+	            }
+	        }
+	    }
+	}
+
+	@Override
+	protected int decreaseAirSupply(int currentAir) {
+	    return currentAir;
 	}
 
 	@Override
@@ -297,7 +302,7 @@ public class Angler extends Monster implements BLEntityWithSpawnRules <Angler> {
     }
 
 	@Override
-	public boolean canSpawnHere(EntityType<Angler> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) { 
-		return level.getDifficulty() != Difficulty.PEACEFUL && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER) && pos.getY() <= TheBetweenlands.LAYER_HEIGHT +3;
+	public boolean canSpawnHere(EntityType<Angler> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		return!level.canSeeSkyFromBelowWater(pos) && level.getDifficulty() != Difficulty.PEACEFUL && pos.getY() <= TheBetweenlands.LAYER_HEIGHT +3 && (MobSpawnType.isSpawner(spawnType) || level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER));
 	}
 }

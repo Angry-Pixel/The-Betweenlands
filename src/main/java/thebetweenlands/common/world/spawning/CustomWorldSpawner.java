@@ -183,7 +183,7 @@ public class CustomWorldSpawner {
 
 			BlockPos finalSpawnPos;
 			EntityType<?> type = spec.mobType();
-			boolean isWaterMob = type.getCategory() == MobCategory.WATER_CREATURE || type.getCategory() == MobCategory.WATER_AMBIENT || type.getCategory() == MobCategory.UNDERGROUND_WATER_CREATURE;
+			boolean isWaterMob =  spec.canSpawnOnWater() || spec.canSpawnInWater() || type.getCategory() == MobCategory.WATER_CREATURE || type.getCategory() == MobCategory.WATER_AMBIENT || type.getCategory() == MobCategory.UNDERGROUND_WATER_CREATURE;
 
 			if (isWaterMob) {
 			    // Water Mob 

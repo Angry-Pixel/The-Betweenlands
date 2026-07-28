@@ -378,11 +378,11 @@ public class BLDataMapProvider extends DataMapProvider {
 								canSpawnInWater_base, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.LURKER.get(), (short) 35, (short) 100, true, 1, 1,
-								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
 								true, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.ANGLER.get(), (short) 45, (short) 100, true, 1, 3,
-								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, 600, canSpawnOnWater_base,
+								(int) TheBetweenlands.CAVE_START, (int) TheBetweenlands.LAYER_HEIGHT + 3, 32.0D, spawnCheckRangeY_base, groupSpawnRadius_base, spawningInterval_base, canSpawnOnWater_base,
 								true, constantWeight_base),
 
 						new BaseSpawnProperties(EntityRegistry.SWAMP_HAG.get(), (short) 90, (short) 100, true, 1, 1,

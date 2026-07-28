@@ -1,10 +1,14 @@
 package thebetweenlands.common.block.terrain;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -22,10 +26,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.TriState;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.common.entity.BLEntity;
 import thebetweenlands.common.item.armor.RubberBootsItem;
 import thebetweenlands.common.registries.AttachmentRegistry;
-
-import javax.annotation.Nullable;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class MudBlock extends Block {
 
@@ -69,8 +73,15 @@ public class MudBlock extends Block {
 		}
 	}
 
+	// TODO Implement the Elixir
 	public boolean canEntityWalkOnMud(@Nullable Entity entity) {
-		return RubberBootsItem.canEntityWalkOnMud(entity) || (entity instanceof Player player && player.getData(AttachmentRegistry.MUD_WALKER).isActive(player));
+		//if (entity instanceof LivingEntity && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((LivingEntity) entity))
+			//return false;
+		boolean canWalk = entity instanceof Player && RubberBootsItem.canEntityWalkOnMud(entity);
+		boolean hasLurkerArmor = entity instanceof Player && entity.isInWater() && !((Player) entity).getItemBySlot(EquipmentSlot.HEAD).isEmpty() && ((Player) entity).getItemBySlot(EquipmentSlot.FEET).getItem() == ItemRegistry.LURKER_SKIN_BOOTS.get();
+		//MudWalkerCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_MUD_WALKER, null);
+		boolean mudWalker = (entity instanceof Player player && player.getData(AttachmentRegistry.MUD_WALKER).isActive(player));
+		return entity instanceof BLEntity || entity instanceof ItemEntity || canWalk || hasLurkerArmor || mudWalker || (entity instanceof Player && ((Player) entity).isCreative() && ((Player) entity).isFallFlying());
 	}
 
 	@Override

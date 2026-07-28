@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -41,6 +43,8 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
@@ -50,7 +54,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ai.goals.LurkerFindBaitGoal;
 import thebetweenlands.common.entity.ai.goals.NearestSmellyAttackableTargetGoal;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
@@ -60,7 +64,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 
-public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy {
+public class Lurker extends PathfinderMob implements BLEntityWithSpawnRules<Lurker>, NeutralMob, Enemy {
 	private static final EntityDataAccessor<Boolean> IS_LEAPING = SynchedEntityData.defineId(Lurker.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> SHOULD_MOUTH_BE_OPEN = SynchedEntityData.defineId(Lurker.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Float> MOUTH_MOVE_SPEED = SynchedEntityData.defineId(Lurker.class, EntityDataSerializers.FLOAT);
@@ -165,7 +169,8 @@ public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy
 			.add(Attributes.ATTACK_DAMAGE, 5.5D)
 			.add(Attributes.FOLLOW_RANGE, 16.0D)
 			.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-			.add(Attributes.STEP_HEIGHT, 1.0D);
+			.add(Attributes.STEP_HEIGHT, 1.0D)
+			.add(Attributes.WATER_MOVEMENT_EFFICIENCY, 1.0D);
 	}
 
 	private BlockState getRelativeBlock(int offsetY) {
@@ -176,6 +181,7 @@ public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy
 	public void aiStep() {
 		super.aiStep();
 		if (this.isInWater()) {
+			setAirSupply(this.getMaxAirSupply());
 			if (!this.level().isClientSide()) {
 				if (this.getDeltaMovement().y() < 0 && this.isLeaping()) {
 					this.setIsLeaping(false);
@@ -218,6 +224,11 @@ public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy
 		if (Math.abs(this.rotationPitchBody) < 0.05F) {
 			this.rotationPitchBody = 0;
 		}
+	}
+
+	@Override
+	protected int decreaseAirSupply(int currentAir) {
+	    return currentAir;
 	}
 
 	private void breachWater() {
@@ -526,5 +537,15 @@ public class Lurker extends PathfinderMob implements BLEntity, NeutralMob, Enemy
 	@Override
 	public void startPersistentAngerTimer() {
 		this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<Lurker> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+	return !level.canSeeSkyFromBelowWater(pos) && level.getDifficulty() != Difficulty.PEACEFUL && (MobSpawnType.isSpawner(spawnType) || level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER));
+	}
+	
+	@Override
+	public boolean checkSpawnObstruction(LevelReader level) {
+		return level.noCollision(this);
 	}
 }

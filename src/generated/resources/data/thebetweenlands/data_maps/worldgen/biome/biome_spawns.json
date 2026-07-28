@@ -105,7 +105,7 @@
             "min_height": 110,
             "spawn_check_radius": 32.0,
             "spawn_check_range_y": 6.0,
-            "spawning_interval": 600,
+            "spawning_interval": 0,
             "weight": 35
           },
           {
@@ -122,7 +122,7 @@
             "min_height": 110,
             "spawn_check_radius": 32.0,
             "spawn_check_range_y": 6.0,
-            "spawning_interval": 600,
+            "spawning_interval": 0,
             "weight": 45
           },
           {

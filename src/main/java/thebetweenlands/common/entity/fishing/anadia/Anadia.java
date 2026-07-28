@@ -32,6 +32,7 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
@@ -51,6 +52,7 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.entity.BLEntityWithSpawnRules;
+import thebetweenlands.common.entity.creature.Lurker;
 import thebetweenlands.common.entity.fishing.BLFishHook;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -122,7 +124,7 @@ public class Anadia extends PathfinderMob implements BLEntityWithSpawnRules <Ana
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 0.7D, true));
-		//this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Lurker.class, 8F, 4D, 8D));
+		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Lurker.class, 8F, 4D, 8D));
 		this.goalSelector.addGoal(2, new MoveTowardsRestrictionGoal(this, 0.4D));
 		this.goalSelector.addGoal(3, new AnadiaWanderGoal(this, 0.5D, 20));
 		this.goalSelector.addGoal(4, new PanicWhenUnhookedGoal(this));
