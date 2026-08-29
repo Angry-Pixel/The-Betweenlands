@@ -8,23 +8,29 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.pathfinder.PathType;
-import thebetweenlands.common.entity.BLEntity;
+import thebetweenlands.common.entity.BLEntityWithSpawnRules;
 import thebetweenlands.common.entity.ai.goals.ShelterFromRainGoal;
 import thebetweenlands.common.entity.movement.BLFlightMoveControl;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.WorldStorageGetter;
 
-public class Firefly extends PathfinderMob implements BLEntity {
+public class Firefly extends PathfinderMob implements BLEntityWithSpawnRules <Firefly> {
 
 	private static final EntityDataAccessor<Float> GLOW_STRENGTH = SynchedEntityData.defineId(Firefly.class, EntityDataSerializers.FLOAT);
 
@@ -134,6 +140,14 @@ public class Firefly extends PathfinderMob implements BLEntity {
 
 	public float getGlowTicks(float partialTicks) {
 		return Mth.lerp(partialTicks, this.prevGlowTicks, this.glowTicks);
+	}
+
+	@Override
+	public boolean canSpawnHere(EntityType<Firefly> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+		float darkness = level.getSkyDarken();
+		BetweenlandsWorldStorage worldStorage = WorldStorageGetter.getNullable(this.level());
+		return (darkness >= 7F || worldStorage != null && EnvironmentEventRegistry.BLOOD_SKY.get().isActive());
+	
 	}
 
 //	@Override

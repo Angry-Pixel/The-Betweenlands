@@ -11,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedEntry.Wrapper;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -43,33 +44,61 @@ public class CustomWorldSpawner {
 	        return;
 
 	    for (BiomeSpawnerZone zone : spawnerList.zones()) {
-	        List<WeightedEntry.Wrapper<BaseSpawnProperties>> pool = new ArrayList<>();
+	        List<WeightedEntry.Wrapper<BaseSpawnProperties>> Ambientpool = new ArrayList<>();
+	        List<WeightedEntry.Wrapper<BaseSpawnProperties>> Creaturepool = new ArrayList<>();
+	        List<WeightedEntry.Wrapper<BaseSpawnProperties>> Hostilepool = new ArrayList<>();
 	        for (BaseSpawnProperties mobSpec : zone.weightedMobPool()) {
 	            if (playerPos.getY() < mobSpec.minHeight() - mobSpec.spawnCheckRangeY() || playerPos.getY() > mobSpec.maxHeight() + mobSpec.spawnCheckRangeY())
 	                continue;
 
-	            if (level.getRandom().nextInt(Math.max(1, mobSpec.spawningInterval())) != 0)
-	                continue;
+				if (level.getRandom().nextInt(Math.max(1, mobSpec.spawningInterval())) != 0)
+					continue;
 
-	            pool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
-	        }
+				if (mobSpec.mobType().getCategory() == MobCategory.AMBIENT || mobSpec.mobType().getCategory() == MobCategory.WATER_AMBIENT)
+					Ambientpool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
 
-	        if (pool.isEmpty())
-	            continue;
+				else if (mobSpec.mobType().getCategory() == MobCategory.MONSTER)
+					Hostilepool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
 
-	        Optional<WeightedEntry.Wrapper<BaseSpawnProperties>> selectedSpec = WeightedRandom.getRandomItem(level.getRandom(), pool);
+				else
+					Creaturepool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
 
-	        if (selectedSpec.isPresent()) {
-	            BaseSpawnProperties mobSpanwPops = selectedSpec.get().data();
+			}
+
+			if (Ambientpool.isEmpty())
+				continue;
+
+			spawnCatagoryType(level, Ambientpool, playerPos, zone, "Ambient");
+			
+
+			if (Creaturepool.isEmpty())
+				continue;
+
+			spawnCatagoryType(level, Creaturepool, playerPos, zone, "Creature");
+
+			if (Hostilepool.isEmpty())
+				continue;
+
+			spawnCatagoryType(level, Hostilepool, playerPos, zone, "Hostile");
+
+			return;
+		}
+	}
+
+	private static void spawnCatagoryType(ServerLevel level, List<Wrapper<BaseSpawnProperties>> pool, BlockPos playerPos, BiomeSpawnerZone zone, String string) {
+		 System.out.println("[SPAWNER DEBUG] Checking weighted list for: " + string);
+		Optional<WeightedEntry.Wrapper<BaseSpawnProperties>> selectedSpec = WeightedRandom.getRandomItem(level.getRandom(), pool);
+		 if (selectedSpec.isPresent()) {
+	            BaseSpawnProperties mobSpawnPops = selectedSpec.get().data();
 
 	            double minRadius = 24.0; 
-	            double maxRadius = Math.max(minRadius + 16.0, mobSpanwPops.spawnCheckRadius());
+	            double maxRadius = Math.max(minRadius + 16.0, mobSpawnPops.spawnCheckRadius());
 	            double angle = level.getRandom().nextDouble() * 2.0 * Math.PI;
 	            double distance = minRadius + (level.getRandom().nextDouble() * (maxRadius - minRadius));
 	            int targetX = playerPos.getX() + (int) (Math.cos(angle) * distance);
 	            int targetZ = playerPos.getZ() + (int) (Math.sin(angle) * distance);
-	            int minAllowed = mobSpanwPops.minHeight();
-	            int maxAllowed = mobSpanwPops.maxHeight();
+	            int minAllowed = mobSpawnPops.minHeight();
+	            int maxAllowed = mobSpawnPops.maxHeight();
 
 	            if (minAllowed > maxAllowed) {
 	                int temp = minAllowed;
@@ -82,26 +111,24 @@ public class CustomWorldSpawner {
 	            BlockPos finalSpawnPos = isValidLocationForZone(level, potentialSpawnPos, zone.locationType());
 
 	            if (finalSpawnPos == null)
-	                continue;
+	                return;
 
-	            if (finalSpawnPos.getY() < mobSpanwPops.minHeight() || finalSpawnPos.getY() > mobSpanwPops.maxHeight())
-	                continue;
+	            if (finalSpawnPos.getY() < mobSpawnPops.minHeight() || finalSpawnPos.getY() > mobSpawnPops.maxHeight())
+	                return;
 
 	            boolean isWater = level.getBlockState(finalSpawnPos).getFluidState().isSource();
 
-	            if (isWater && !mobSpanwPops.canSpawnInWater())
-	                continue;
+	            if (isWater && !mobSpawnPops.canSpawnInWater())
+	                return;
 
-	            if (!isWater && !mobSpanwPops.canSpawnOnWater() && level.getBlockState(finalSpawnPos.below()).isAir())
-	                continue;
+	            if (!isWater && !mobSpawnPops.canSpawnOnWater() && level.getBlockState(finalSpawnPos.below()).isAir())
+	                return;
 
-	            if (isDensityCapReached(level, finalSpawnPos, mobSpanwPops))
-	                continue;
+	            if (isDensityCapReached(level, finalSpawnPos, mobSpawnPops))
+	                return;
 
-	            executeGroupSpawn(level, finalSpawnPos, mobSpanwPops, zone.locationType());
-	            return;
-	        }
-	    }
+	            executeGroupSpawn(level, finalSpawnPos, mobSpawnPops, zone.locationType());
+		 }
 	}
 
 	private static BlockPos isValidLocationForZone(ServerLevel level, BlockPos pos, ICustomSpawnEntry spawnEntry) {
