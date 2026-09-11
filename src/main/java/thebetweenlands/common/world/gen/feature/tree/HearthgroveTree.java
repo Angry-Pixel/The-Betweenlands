@@ -26,8 +26,8 @@ import java.util.function.Predicate;
 
 public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 
-	private final BlockState log = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState();
-	private final BlockState logY = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+	private final BlockState bark = BlockRegistry.HEARTHGROVE_BARK.get().defaultBlockState();
+	private final BlockState log = BlockRegistry.HEARTHGROVE_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
 	private final BlockState leaves = BlockRegistry.HEARTHGROVE_LEAVES.get().defaultBlockState().setValue(BlockStateProperties.DISTANCE, 1);
 	private final BlockState hangers = BlockRegistry.HANGER.get().defaultBlockState();
 
@@ -56,7 +56,7 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 			int canopyStart = canopySize / 2 - 1;
 
 			for(int i = rootHeight; i <= height - canopyStart - 1; i++) {
-				this.setBlock(level, pos.above(i), logY);
+				this.setBlock(level, pos.above(i), log);
 			}
 
 			List<BlockPos> blobs = new ArrayList<>();
@@ -99,7 +99,7 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 					for(int j = 0; j < steps; j++) {
 						BlockPos branchPos = BlockPos.containing(spline.interpolate(1.0F / (steps-1) * j));
 						if(!branchPos.equals(setBranchPos) && level.isEmptyBlock(branchPos)) {
-							this.setBlock(level, branchPos, log);
+							this.setBlock(level, branchPos, bark);
 
 							if(!support && branchPos.distToCenterSqr(x, branchPos.getY(), z) >= 2.5D) {
 								Direction supportDir = Direction.getNearest(branchPos.getX() - x, 0, branchPos.getZ() - z);
@@ -111,7 +111,7 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 								int supportHeight = height - (branchPos.getY() - y) + (canopySize <= 6 ? -1 : 0);
 
 								for(int k = 0; k < supportHeight; k++) {
-									this.setBlock(level,branchPos.offset(supportXO, 1 + supportYO, supportZO), logY);
+									this.setBlock(level,branchPos.offset(supportXO, 1 + supportYO, supportZO), log);
 
 									if((k+1) % 3 == 0) {
 										supportXO += supportDir.getStepX();
@@ -178,8 +178,8 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 				Direction branchDir = Direction.getNearest(endpoint.getX() - x, 0, endpoint.getZ() - z);
 				BlockPos branch1 = endpoint.offset(branchDir.getNormal()).offset(branchDir.getClockWise().getNormal());
 				BlockPos branch2 = endpoint.offset(branchDir.getNormal()).offset(branchDir.getCounterClockWise().getNormal());
-				if(level.isEmptyBlock(branch1)) this.setBlock(level, branch1, log);
-				if(level.isEmptyBlock(branch2)) this.setBlock(level, branch2, log);
+				if(level.isEmptyBlock(branch1)) this.setBlock(level, branch1, bark);
+				if(level.isEmptyBlock(branch2)) this.setBlock(level, branch2, bark);
 			}
 
 			boolean[] generatedRoots = new boolean[5*5];
@@ -210,7 +210,7 @@ public class HearthgroveTree extends WorldGenHelper<NoneFeatureConfiguration> {
 							}
 							BlockPos rootPos = pos.offset(rootX + rootXO, j, rootZ + rootZO);
 							if(level.getBlockState(rootPos).getBlock().defaultBlockState().canBeReplaced()) {
-								this.setBlock(level, rootPos, log);
+								this.setBlock(level, rootPos, bark);
 							} else {
 								break;
 							}
