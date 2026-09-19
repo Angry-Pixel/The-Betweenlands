@@ -69,11 +69,17 @@ public class EntitySpawnPlacementsHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean passiveFallback(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource rand) {
-        return Animal.checkAnimalSpawnRules((EntityType<? extends Animal>) type, level, spawnType, pos, rand);
+	private static boolean passiveFallback(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource rand) {
+        return checkAnimalSpawnRules((EntityType<? extends Animal>) type, level, spawnType, pos, rand);
     }
 
-    @SuppressWarnings({ "deprecation" }) //Just what vanilla does atm
+    // This should probably be a bit more robust with tags and stuff, as we need to NOT use the vanilla method
+    @SuppressWarnings("deprecation")
+	private static boolean checkAnimalSpawnRules(EntityType<? extends Animal> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource rand) {
+		return level.getBlockState(pos.below()).isSolid();
+	}
+
+	@SuppressWarnings({ "deprecation" }) //Just what vanilla does atm
     private static boolean undergroundWaterFallback(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource rand) {
         return pos.getY() <= level.getSeaLevel() - 33  && level.getRawBrightness(pos, 0) == 0  && level.getBlockState(pos).is(Blocks.WATER);
     }

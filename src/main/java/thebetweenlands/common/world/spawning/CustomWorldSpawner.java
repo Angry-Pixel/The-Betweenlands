@@ -30,11 +30,14 @@ import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
 
 public class CustomWorldSpawner {
-	// TODO these numbers are sort of a smudged and simpler analogue to what vanilla counts are in 1.12.2
+	// TODO these numbers are sort of a smudged and san analogue to what vanilla counts are in 1.21.1
 	// we will probably need to adjust them a lot and make it some sort of config or data (again)
-    public static final int HOSTILE_CAP_PER_PLAYER = 70; 
-    public static final int CREATURE_CAP_PER_PLAYER = 15;
+    public static final int HOSTILE_CAP_PER_PLAYER = 70;
+    public static final int CREATURE_CAP_PER_PLAYER = 10;
     public static final int AMBIENT_CAP_PER_PLAYER = 15;
+    public static final int WATER_CREATURE_CAP_PER_PLAYER = 5;
+    public static final int WATER_AMBIENT_CAP_PER_PLAYER = 20;
+    public static final int UNDERGROUND_WATER_CREATURE_CAP_PER_PLAYER = 5;
 
     public static int getMaxHostileCap(ServerLevel level) {
         int playerQuantity = level.players().size();
@@ -50,16 +53,37 @@ public class CustomWorldSpawner {
         int playerQuantity = level.players().size();
         return playerQuantity * AMBIENT_CAP_PER_PLAYER;
     }
-    
+
+    public static int getMaxWaterCreatureCap(ServerLevel level) {
+        int playerQuantity = level.players().size();
+        return playerQuantity * WATER_CREATURE_CAP_PER_PLAYER;
+    }
+
+    public static int getMaxUndergroundWaterCreatureCap(ServerLevel level) {
+        int playerQuantity = level.players().size();
+        return playerQuantity * UNDERGROUND_WATER_CREATURE_CAP_PER_PLAYER;
+    }
+
+    public static int getMaxWaterAmbientCap(ServerLevel level) {
+        int playerQuantity = level.players().size();
+        return playerQuantity * WATER_AMBIENT_CAP_PER_PLAYER;
+    }
+
     public static  boolean isUnderMobCap(ServerLevel level, MobCategory category) {
         int maxAllowed = 0;
-        
+
         if (category == MobCategory.MONSTER)
             maxAllowed = getMaxHostileCap(level);
-        else if (category == MobCategory.CREATURE || category == MobCategory.WATER_CREATURE)
+        else if (category == MobCategory.CREATURE)
             maxAllowed = getMaxCreatureCap(level);
-        else if (category == MobCategory.AMBIENT || category == MobCategory.WATER_AMBIENT)
+        else if (category == MobCategory.WATER_CREATURE)
+            maxAllowed = getMaxWaterCreatureCap(level);
+        else if (category == MobCategory.UNDERGROUND_WATER_CREATURE)
+            maxAllowed = getMaxUndergroundWaterCreatureCap(level);
+        else if (category == MobCategory.AMBIENT)
             maxAllowed = getMaxAmbientCap(level);
+        else if (category == MobCategory.WATER_AMBIENT)
+            maxAllowed = getMaxWaterAmbientCap(level);
         else
             return true;
 
@@ -101,22 +125,23 @@ public class CustomWorldSpawner {
 	            if (playerPos.getY() < mobSpec.minHeight() - mobSpec.spawnCheckRangeY() || playerPos.getY() > mobSpec.maxHeight() + mobSpec.spawnCheckRangeY())
 	                continue;
 
-				if (level.getRandom().nextInt(Math.max(1, mobSpec.spawningInterval())) != 0)
+				if (level.getRandom().nextInt(Math.max(1, mobSpec.spawningInterval()/20)) != 0)
 					continue;
 
-				if ((mobSpec.mobType().getCategory() == MobCategory.AMBIENT || mobSpec.mobType().getCategory() == MobCategory.WATER_AMBIENT) && isUnderMobCap(level, MobCategory.AMBIENT))
-					Ambientpool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
-
-				else if (mobSpec.mobType().getCategory() == MobCategory.MONSTER && isUnderMobCap(level, MobCategory.MONSTER))
-					Hostilepool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
-
-				else if (isUnderMobCap(level, mobSpec.mobType().getCategory())) // dumps everything else here atm
-					Creaturepool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
+				if (isUnderMobCap(level, mobSpec.mobType().getCategory())) {
+					if (mobSpec.mobType().getCategory() == MobCategory.AMBIENT || mobSpec.mobType().getCategory() == MobCategory.WATER_AMBIENT)
+						Ambientpool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
+	
+					else if (mobSpec.mobType().getCategory() == MobCategory.MONSTER)
+						Hostilepool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
+	
+					else  // dumps everything else here atm
+						Creaturepool.add(WeightedEntry.wrap(mobSpec, mobSpec.weight()));
+				}
 			}
 
 			if (!Ambientpool.isEmpty())
 				preSpawnPosCheck(level, Ambientpool, playerPos, zone, "Ambient");
-			
 
 			if (!Creaturepool.isEmpty())
 				preSpawnPosCheck(level, Creaturepool, playerPos, zone, "Creature");
@@ -190,10 +215,10 @@ public class CustomWorldSpawner {
 			groundPos = groundPos.below();
 
 	    BlockState blockBelow = level.getBlockState(groundPos);
-	    
+
 	    if (groundPos.getY() <= level.getMinBuildHeight())
 	        return null;
-	    
+
 	    BlockPos lightCheckPos = groundPos.above();
 	    boolean exposedToSky = level.getBrightness(LightLayer.SKY, lightCheckPos) > 4;
 
@@ -204,7 +229,6 @@ public class CustomWorldSpawner {
 
 	    else if (spawnEntry instanceof CaveSpawnEntry cave) {
 	        boolean surfaceMatches = SurfaceType.UNDERGROUND.matches(blockBelow);
-	        
 	        return (!exposedToSky && surfaceMatches) ? activePos : null;
 	    }
 
@@ -217,7 +241,6 @@ public class CustomWorldSpawner {
 	        //boolean isLeavesOrLogs = blockBelow.is(BlockTags.LEAVES) || blockBelow.is(BlockTags.LOGS);
 	    	boolean isShelfFungus = blockBelow.is(BlockRegistry.SHELF_FUNGUS.get());
 	        return /*isLeavesOrLogs*/ isShelfFungus ? activePos : null;
-	        
 	    } 
 
 	    else if (spawnEntry instanceof SkySpawnEntry) {
@@ -283,13 +306,13 @@ public class CustomWorldSpawner {
 			                break;
 			            }
 			        }
-			        
+
 			        if (hitFluid)
 			            continue;
-			        
+
 			        mutablePos.move(Direction.UP);
 			    }
-			    
+
 			    if (!level.getBlockState(mutablePos.below()).getFluidState().isEmpty())
 			        continue; 
 			}
