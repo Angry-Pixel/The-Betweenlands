@@ -19,16 +19,18 @@ public class LazyArea implements Area {
     @Override
     public int get(int pX, int pZ) {
         long i = ChunkPos.asLong(pX, pZ);
-        synchronized(this.cache) {
-            int j = this.cache.get(i);
+        final Long2IntLinkedOpenHashMap cache = this.cache;
+        final int maxCache = this.maxCache;
+        synchronized(cache) {
+            int j = cache.getAndMoveToFirst(i);
             if (j != Integer.MIN_VALUE) {
                 return j;
             } else {
                 int k = this.transformer.apply(pX, pZ);
-                this.cache.put(i, k);
-                if (this.cache.size() > this.maxCache) {
-                    for(int l = 0; l < this.maxCache / 16; ++l) {
-                        this.cache.removeFirstInt();
+                cache.putAndMoveToFirst(i, k);
+                if (cache.size() > maxCache) {
+                    for(int l = 0; l < maxCache / 16; ++l) {
+                        cache.removeLastInt();
                     }
                 }
 
