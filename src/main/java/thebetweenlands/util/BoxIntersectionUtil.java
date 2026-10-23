@@ -3,8 +3,6 @@ package thebetweenlands.util;
 import java.util.Arrays;
 import java.util.Objects;
 
-import com.sk89q.worldedit.jlibnoise.MathHelper;
-
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.phys.AABB;

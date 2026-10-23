@@ -253,6 +253,8 @@ public final class GunkData {
 		// If the player hasn't significantly moved, do nothing
 		if (deltaMovement.lengthSqr() < 1.0E-4 * 1.0E-4) return;
 		
+		final Vec3 reverseDeltaMovement = deltaMovement.reverse();
+		
 		final Pose forcedPose = player.getForcedPose();
 		Pose pose = forcedPose != null ? forcedPose : player.getPose();
 		
@@ -265,7 +267,7 @@ public final class GunkData {
 		//       that is, someone 10x the size should gain less gunk for the same movement through a single block because they are bigger
 		
 		// Currently, we assume the bounding box size has not changed since the start of this tick
-		AABB totalBounds = localBounds.move(playerPos).expandTowards(deltaMovement.reverse());
+		AABB totalBounds = localBounds.move(playerPos).expandTowards(reverseDeltaMovement);
 //		AABB totalBounds = oldBounds.expandTowards(deltaMovement);
 		
 		// We want to:
@@ -302,8 +304,8 @@ public final class GunkData {
 				for(AABB aabb : aabbs) {
 //					TheBetweenlands.LOGGER.info("Water plant {} at pos {} has an aabb of {}", state, pos, aabb);
 					final double volume = aabb.getXsize() * aabb.getYsize() * aabb.getZsize();
-					// TODO volume for the center
-					final double volumeIntersected = BoxIntersectionUtil.findPercentIntersectionVolume(localBounds, deltaMovement, aabb.move(oldPlayerPosNeg), false) * volume;
+					AABB relativeAABB = aabb.move(oldPlayerPosNeg);
+					final double volumeIntersected = BoxIntersectionUtil.findPercentIntersectionVolume(relativeAABB, reverseDeltaMovement, localBounds, false) * volume;
 					
 					intersectionVolume += volumeIntersected;
 					totalVolume += volume;
