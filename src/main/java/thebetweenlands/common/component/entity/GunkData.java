@@ -191,7 +191,7 @@ public final class GunkData {
 			return;
 		}
 		
-//		tickMoveThroughWaterPlants(player);
+		tickPassiveWaterPlants(player);
 	}
 
 	public static void tickOutOfWater(Player player) {
@@ -231,6 +231,90 @@ public final class GunkData {
 			if(gunkChanged) {
 				player.syncData(AttachmentRegistry.GUNK);
 			}
+		}
+	}
+	
+	public static void tickPassiveWaterPlants(Player player) {
+		// Updates gunk for moving through algae and certain water plants
+		
+		// Where the player currently is (this is called in the Player.Pre phase)
+		Vec3 playerPos = player.position();
+
+		final Pose forcedPose = player.getForcedPose();
+		Pose pose = forcedPose != null ? forcedPose : player.getPose();
+		
+		// local bounding box (centred on 0, 0) for the player in this pose
+		// 0, 0, 0 is the bottom centre of this AABB
+		AABB localBounds = player.getLocalBoundsForPose(pose);
+
+		// the player's bounding box (centred on their position)
+		AABB totalBounds = localBounds.move(playerPos);
+
+		// We want to:
+		// 1. Find every gunk plant between the player is inside
+		// 2. Calculate the percentage of each plant's bounding box that the player intersects
+		// 3. Use that to determine the total amount of partial gunk to add from the plant's passive gunk
+
+		// TODO profiler
+		
+		Level level = player.level();
+
+		GunkData gunkData = player.getData(AttachmentRegistry.GUNK);
+		final int prevGunk = gunkData.getGunk();
+
+		BlockPos.betweenClosedStream(totalBounds)
+			.forEachOrdered(pos -> {
+				BlockState state = level.getBlockState(pos);
+				WaterPlant waterPlant = state.getBlockHolder().getData(DataMapRegistry.WATER_PLANT);
+				
+				if(waterPlant == null || waterPlant.passiveGunk() == 0.0f || !Float.isFinite(waterPlant.passiveGunk())) {
+					return;
+				}
+				
+				// If the gunk type is FLAT, just add the gunk directly
+				if (waterPlant.passiveGunkType() == WaterPlant.WaterPlantVolumeType.FLAT) {
+					gunkData.addPartialGunk(waterPlant.passiveGunk());
+					return;
+				}
+				
+				// Find all the aabbs
+				VoxelShape shape = state.getShape(level, pos, CollisionContext.of(player)).move(pos.getX(), pos.getY(), pos.getZ());
+				List<AABB> aabbs = shape.toAabbs();
+				
+				// Total volume that the player has passed through
+				double[] intersectionVolume = new double[2];
+				// Total volume of the block
+				double[] totalVolume = new double[2];
+				
+				// Calculate intersection volume
+				for(AABB aabb : aabbs) {
+					// Total volume
+					final double volume = aabb.getXsize() * aabb.getYsize() * aabb.getZsize();
+					// Intersection volume
+					final AABB intersectionAABB = aabb.intersect(totalBounds);
+					final double volumeIntersected = intersectionAABB.getXsize() * intersectionAABB.getYsize() * intersectionAABB.getZsize();
+
+					MathUtils.precisionSum(intersectionVolume, volumeIntersected);
+					MathUtils.precisionSum(totalVolume, volume);
+				}
+				
+				// Note: it should genuinely be faster to compute totalVolume even if gunk type is VOLUME due to branch prediction
+				//       TODO properly benchmark this on multiple devices though
+				
+
+				final double gunkRatio;
+				switch (waterPlant.passiveGunkType()) {
+					case PERCENT -> gunkRatio = intersectionVolume[0] / totalVolume[0];
+					case VOLUME ->  gunkRatio = intersectionVolume[0];
+					default -> throw new IllegalStateException("unreachable");
+				}
+				
+				gunkData.addPartialGunk(gunkRatio * waterPlant.movementGunk());
+			});
+
+		final int newGunk = gunkData.getGunk();
+		if(prevGunk != newGunk) {
+			player.syncData(AttachmentRegistry.GUNK);
 		}
 	}
 	
@@ -295,6 +379,13 @@ public final class GunkData {
 				if(waterPlant == null || waterPlant.movementGunk() == 0.0f || !Float.isFinite(waterPlant.movementGunk())) {
 					return;
 				}
+				
+				// If the gunk type is FLAT, just add the gunk directly
+				if (waterPlant.movementGunkType() == WaterPlant.WaterPlantVolumeType.FLAT) {
+					gunkData.addPartialGunk(waterPlant.movementGunk());
+					return;
+				}
+				
 //				TheBetweenlands.LOGGER.info("Water plant found plant {} at pos {} with value {}", state, pos, waterPlant.movementGunk());
 				VoxelShape shape = state.getShape(level, pos, CollisionContext.of(player)).move(pos.getX(), pos.getY(), pos.getZ());
 				List<AABB> aabbs = shape.toAabbs();
@@ -320,7 +411,6 @@ public final class GunkData {
 				switch (waterPlant.movementGunkType()) {
 					case PERCENT -> gunkRatio = intersectionVolume[0] / totalVolume[0];
 					case VOLUME ->  gunkRatio = intersectionVolume[0];
-					case FLAT ->    gunkRatio = 1.0; // TODO don't calculate volume if type is FLAT
 					default -> throw new IllegalStateException("unreachable");
 				}
 				

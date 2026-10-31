@@ -31,6 +31,12 @@ public record WaterPlant(
 	public WaterPlant {
 		Objects.requireNonNull(movementGunkType);
 		Objects.requireNonNull(passiveGunkType);
+		if (!Float.isFinite(movementGunk)) {
+			throw new IllegalArgumentException("expected finite movementGunk, got " + movementGunk);
+		}
+		if (!Float.isFinite(passiveGunk)) {
+			throw new IllegalArgumentException("expected finite passiveGunk, got " + passiveGunk);
+		}
 	}
 	
 	public static enum WaterPlantVolumeType implements StringRepresentable {
