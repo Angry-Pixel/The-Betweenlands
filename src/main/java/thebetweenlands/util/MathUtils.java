@@ -1,5 +1,7 @@
 package thebetweenlands.util;
 
+import java.util.Arrays;
+
 import net.minecraft.util.Mth;
 
 public final class MathUtils {
@@ -116,35 +118,175 @@ public final class MathUtils {
 		}
 		return prevX;
 	}
-    /*
-    public static int degToByte(float angle) {
-        return Math.floor(angle * (256F / 360));
-    }
+	/*
+	public static int degToByte(float angle) {
+		return Math.floor(angle * (256F / 360));
+	}
 
-    public static int hash(int x) {
-        x = (x >> 16 ^ x) * 0x45D9F3B;
-        x = (x >> 16 ^ x) * 0x45D9F3B;
-        x = x >> 16 ^ x;
-        return x;
-    }
+	public static int hash(int x) {
+		x = (x >> 16 ^ x) * 0x45D9F3B;
+		x = (x >> 16 ^ x) * 0x45D9F3B;
+		x = x >> 16 ^ x;
+		return x;
+	}
 
-    public static void minmax( min, Point3f max, float x, float y, float z) {
-        if (min.x != min.x) {
-            min.x = x;
-            min.y = y;
-            min.z = z;
-        }
-        if (max.x != max.x) {
-            max.x = x;
-            max.y = y;
-            max.z = z;
-        }
-        min.x = x < min.x ? x : min.x;
-        min.y = y < min.y ? y : min.y;
-        min.z = z < min.z ? z : min.z;
-        max.x = x > max.x ? x : max.x;
-        max.y = y > max.y ? y : max.y;
-        max.z = z > max.z ? z : max.z;
-    }
-    */
+	public static void minmax( min, Point3f max, float x, float y, float z) {
+		if (min.x != min.x) {
+			min.x = x;
+			min.y = y;
+			min.z = z;
+		}
+		if (max.x != max.x) {
+			max.x = x;
+			max.y = y;
+			max.z = z;
+		}
+		min.x = x < min.x ? x : min.x;
+		min.y = y < min.y ? y : min.y;
+		min.z = z < min.z ? z : min.z;
+		max.x = x > max.x ? x : max.x;
+		max.y = y > max.y ? y : max.y;
+		max.z = z > max.z ? z : max.z;
+	}
+	*/
+
+	/**
+	 * Precision summation via Kahan's Summation Algorithm.
+	 * The output is stored in {@code out}
+	 * @param out       an array containing the {@code total} and correction sum {@code c}
+	 * @param fromIndex the index of {@code input} to start summation from; inclusive
+	 * @param toIndex   the index of {@code input} to end summation at;     exclusive
+	 * @param input     an array containing the input values to sum
+	 */
+	public static void precisionSum(double[] out, int fromIndex, int toIndex, double[] input) {
+		assert out.length == 2;
+
+		// Get total and correction sum
+		double total = out[0];
+		double c = out[1];
+
+		for (int i = fromIndex; i < toIndex; ++i) {
+			final double value = input[i];
+			final double y = value - c;
+			final double t = total + y;
+			c = (t - total) - y;
+			total = t;
+		}
+		
+		// Put total and correction sum in output
+		out[0] = total;
+		out[1] = c;
+	}
+	
+	/**
+	 * Precision summation via Kahan's Summation Algorithm
+	 * @param fromIndex the index of {@code input} to start summation from; inclusive
+	 * @param toIndex   the index of {@code input} to end summation at;     exclusive
+	 * @param input     an array containing the input values to sum
+	 * @return the total result
+	 */
+	public static double precisionSum(int fromIndex, int toIndex, double[] input) {
+		rangeCheck(input.length, fromIndex, toIndex);
+		
+		// Get total and correction sum
+		double total = 0.0;
+		double c = 0.0;
+		
+		for (int i = fromIndex; i < toIndex; ++i) {
+			final double value = input[i];
+			final double y = value - c;
+			final double t = total + y;
+			c = (t - total) - y;
+			total = t;
+		}
+		
+		// Return total sum
+		return total;
+	}
+
+	/**
+	 * Precision summation via Kahan's Summation Algorithm.
+	 * The output is stored in {@code out}
+	 * @param out   an array containing the {@code total} and correction sum {@code c}
+	 * @param input an array containing the input values to sum
+	 */
+	public static void precisionSum(double[] out, double[] input) {
+		assert out.length == 2;
+
+		// Get total and correction sum
+		double total = out[0];
+		double c = out[1];
+		
+		for (final double value : input) {
+			final double y = value - c;
+			final double t = total + y;
+			c = (t - total) - y;
+			total = t;
+		}
+		
+		// Put total and correction sum in output
+		out[0] = total;
+		out[1] = c;
+	}
+
+	/**
+	 * Precision summation via Kahan's Summation Algorithm
+	 * @param input an array containing the input values to sum
+	 * @return the total result
+	 */
+	public static double precisionSum(double[] input) {
+		// Get total and correction sum
+		double total = 0.0;
+		double c = 0.0;
+		
+		for (final double value : input) {
+			final double y = value - c;
+			final double t = total + y;
+			c = (t - total) - y;
+			total = t;
+		}
+		
+		// Return total sum
+		return total;
+	}
+
+	// varargs versions of precisionSum
+	/**
+	 * Precision summation via Kahan's Summation Algorithm.
+	 * The output is stored in {@code out}
+	 * @param out   an array containing the {@code total} and correction sum {@code c}
+	 * @param input an array containing the input values to sum
+	 */
+	@SafeVarargs
+	public static void precisionSumAll(double[] out, double ...input) {
+		precisionSum(out, input);
+	}
+	
+	/**
+	 * Precision summation via Kahan's Summation Algorithm
+	 * @param input an array containing the input values to sum
+	 * @return the total result
+	 */
+	@SafeVarargs
+	public static double precisionSumAll(double ...input) {
+		return precisionSum(input);
+	}
+	
+	 
+	/**
+	 * Checks that {@code fromIndex} and {@code toIndex} are in
+	 * the range and throws an exception if they aren't.
+	 */
+	private static void rangeCheck(int arrayLength, int fromIndex, int toIndex) {
+		if (fromIndex > toIndex) {
+			throw new IllegalArgumentException(
+				"fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
+		}
+		if (fromIndex < 0) {
+			throw new ArrayIndexOutOfBoundsException(fromIndex);
+		}
+		if (toIndex > arrayLength) {
+			throw new ArrayIndexOutOfBoundsException(toIndex);
+		}
+	}
 }

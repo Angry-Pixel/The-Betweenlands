@@ -297,30 +297,6 @@ public class BoxIntersectionUtil {
 	}
 	
 	/**
-	 * Precision summation via Kahan's Summation Algorithm
-	 * @param out an array containing the {@code total} and correction sum {@code c]
-	 * @param input the input array
-	 */
-	@SafeVarargs
-	private static void precisionSum(double[] out, double ...input) {
-		assert out.length == 2;
-		// Get total and correction sum
-		double total = out[0];
-		double c = out[1];
-		
-		for (double value : input) {
-			final double y = value - c;
-			final double t = total + y;
-			c = (t - total) - y;
-			total = t;
-		}
-		
-		// Put total and correction sum in output
-		out[0] = total;
-		out[1] = c;
-	}
-	
-	/**
 	 * In this method we "move" the unit aabb from (0, 0, 0) to movementDelta.
 	 * We accept a sorted array of {@link Intersection Intersections} that we can iterate through in ascending time order.
 	 * We use this to keep track of where the unit aabb is relative to the target aabb and use that to construct our formulas.
@@ -389,7 +365,7 @@ public class BoxIntersectionUtil {
 			}
 			
 			// Precision sum
-			precisionSum(totalVolume, xVolume, yVolume, zVolume, xSecondaryVol, ySecondaryVol, zSecondaryVol);
+			MathUtils.precisionSumAll(totalVolume, xVolume, yVolume, zVolume, xSecondaryVol, ySecondaryVol, zSecondaryVol);
 			
 			// Update prevTime
 			prevTime = currentTime;
