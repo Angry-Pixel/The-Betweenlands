@@ -250,6 +250,30 @@ public final class MathUtils {
 		return total;
 	}
 
+
+	/**
+	 * Precision summation via Kahan's Summation Algorithm.
+	 * The output is stored in {@code out}
+	 * @param out   an array containing the {@code total} and correction sum {@code c}
+	 * @param value the value to add to {@code total}
+	 */
+	public static void precisionSum(double[] out, double value) {
+		assert out.length == 2;
+
+		// Get total and correction sum
+		double total = out[0];
+		double c = out[1];
+		
+		final double y = value - c;
+		final double t = total + y;
+		c = (t - total) - y;
+		total = t;
+		
+		// Put total and correction sum in output
+		out[0] = total;
+		out[1] = c;
+	}
+
 	// varargs versions of precisionSum
 	/**
 	 * Precision summation via Kahan's Summation Algorithm.

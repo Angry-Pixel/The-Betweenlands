@@ -297,6 +297,7 @@ public final class GunkData {
 //				TheBetweenlands.LOGGER.info("Water plant found plant {} at pos {} with value {}", state, pos, waterPlant.movementGunk());
 				VoxelShape shape = state.getShape(level, pos, CollisionContext.of(player)).move(pos.getX(), pos.getY(), pos.getZ());
 				List<AABB> aabbs = shape.toAabbs();
+
 				// Total volume that the player has passed through
 				double intersectionVolume = 0.0d;
 				// Total volume of the block
