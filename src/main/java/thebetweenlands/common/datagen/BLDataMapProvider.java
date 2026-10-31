@@ -12,6 +12,7 @@ import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datamap.block.WaterPlant;
+import thebetweenlands.common.datamap.block.WaterPlant.WaterPlantVolumeType;
 import thebetweenlands.common.datamap.entity.AmuletSpawn;
 import thebetweenlands.common.datamap.item.AnimatorFuel;
 import thebetweenlands.common.datamap.item.CompostableItem;
@@ -334,7 +335,7 @@ public class BLDataMapProvider extends DataMapProvider {
 		compostMap.add(ItemRegistry.CRYPTWEED_BLADES, new CompostableItem(3, 4000), false);
 		
 		var gunkMap = this.builder(DataMapRegistry.WATER_PLANT);
-		gunkMap.add(BlockRegistry.ALGAE, new WaterPlant(10.0f, 0.05f), false);
+		gunkMap.add(BlockRegistry.ALGAE, new WaterPlant(10.0f, WaterPlantVolumeType.PERCENT, 0.05f, WaterPlantVolumeType.FLAT), false);
 		
 		// Custom Mob Spawning
 		var biome_spawns = builder(DataMapRegistry.BIOME_SPAWNS);

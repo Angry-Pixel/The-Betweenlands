@@ -27,6 +27,7 @@ import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataMapRegistry;
 import thebetweenlands.common.registries.FluidTypeRegistry;
 import thebetweenlands.util.BoxIntersectionUtil;
+import thebetweenlands.util.MathUtils;
 
 public final class GunkData {
 
@@ -285,7 +286,7 @@ public final class GunkData {
 		final int prevGunk = gunkData.getGunk();
 
 		
-		// TODO more efficient method of finding blocks (this is slow at higher speeds)
+		// TODO more efficient method of finding blocks (this is slow at higher movement speeds)
 		BlockPos.betweenClosedStream(totalBounds)
 			.forEachOrdered(pos -> {
 				BlockState state = level.getBlockState(pos);
@@ -299,23 +300,32 @@ public final class GunkData {
 				List<AABB> aabbs = shape.toAabbs();
 
 				// Total volume that the player has passed through
-				double intersectionVolume = 0.0d;
+				double[] intersectionVolume = new double[2];
 				// Total volume of the block
-				double totalVolume = 0.0d;
+				double[] totalVolume = new double[2];
 				for(AABB aabb : aabbs) {
 //					TheBetweenlands.LOGGER.info("Water plant {} at pos {} has an aabb of {}", state, pos, aabb);
 					final double volume = aabb.getXsize() * aabb.getYsize() * aabb.getZsize();
 					AABB relativeAABB = aabb.move(oldPlayerPosNeg);
 					final double volumeIntersected = BoxIntersectionUtil.findPercentIntersectionVolume(relativeAABB, reverseDeltaMovement, localBounds, false) * volume;
-					
-					intersectionVolume += volumeIntersected;
-					totalVolume += volume;
+
+					MathUtils.precisionSum(intersectionVolume, volumeIntersected);
+					MathUtils.precisionSum(totalVolume, volume);
 				}
 				
-				double percentIntersection = intersectionVolume / totalVolume;
+				// Note: it should genuinely be faster to compute totalVolume even if gunk type is VOLUME due to branch prediction
+				//       TODO properly benchmark this on multiple devices though
 				
-//				TheBetweenlands.LOGGER.info("Intersection with {} for {} vol and {} amount gives a total of {} partial gunk", state, percentIntersection, waterPlant.movementGunk(), percentIntersection * waterPlant.movementGunk());
-				gunkData.addPartialGunk(percentIntersection * waterPlant.movementGunk());
+				final double gunkRatio;
+				switch (waterPlant.movementGunkType()) {
+					case PERCENT -> gunkRatio = intersectionVolume[0] / totalVolume[0];
+					case VOLUME ->  gunkRatio = intersectionVolume[0];
+					case FLAT ->    gunkRatio = 1.0; // TODO don't calculate volume if type is FLAT
+					default -> throw new IllegalStateException("unreachable");
+				}
+				
+//				TheBetweenlands.LOGGER.info("Intersection with {} for {} vol and {} amount gives a total of {} partial gunk", state, percentIntersection, waterPlant.movementGunk(), gunkRatio * waterPlant.movementGunk());
+				gunkData.addPartialGunk(gunkRatio * waterPlant.movementGunk());
 			});
 
 		final int newGunk = gunkData.getGunk();
