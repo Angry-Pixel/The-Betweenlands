@@ -3,6 +3,8 @@ package thebetweenlands.client.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage;
@@ -102,8 +104,19 @@ public class BeamOriginMirrorWorldRenderHandler {
 	/**
 	 * Represents a Beam Origin instance
 	 */
-	public static record BeamOriginInstance() {
+	public static record BeamOriginInstance(PoseStack.Pose pose, float visibility, float rotation, int packedLight, int packedOverlay) {
 		
+	}
+	
+	public static void submitBeamOrigin(PoseStack.Pose pose, float visibility, float rotation, int packedLight, int packedOverlay) {
+		// Get the context
+		MirrorWorldContext context = MIRROR_WORLD_CONTEXT.get();
+		
+		if (!context.isActive()) {
+			return;
+		}
+		
+		context.submit(new BeamOriginInstance(pose.copy(), visibility, rotation, packedLight, packedOverlay));
 	}
 	
 	/**
@@ -138,12 +151,14 @@ public class BeamOriginMirrorWorldRenderHandler {
 			// Get the context
 			MirrorWorldContext context = MIRROR_WORLD_CONTEXT.get();
 			
-			// Render mirror worlds
-			renderMirrorWorlds(event, context.getInstances());
-			
-			// Clear and mark inactive
-			context.clear();
-			context.setActive(false);
+			try {
+				// Render mirror worlds
+				renderMirrorWorlds(event, context.getInstances());
+			} finally {
+				// Clear and mark inactive
+				context.clear();
+				context.setActive(false);
+			}
 		}
 	}
 	

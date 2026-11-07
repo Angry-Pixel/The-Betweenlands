@@ -60,6 +60,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.GlStateBackup;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
 import thebetweenlands.client.renderer.util.ProxyMultiBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
@@ -200,6 +201,11 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 		float rotation = Mth.lerp(partialTick, blockEntity.prevRotation, blockEntity.rotation);
 
+		// If we're in-world, submit this to the mirror world renderer to render the mirror world
+		if (blockEntity.hasLevel() && blockEntity.getLevel() != null) {
+			BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(poseStack.last(), visibility, rotation, packedLight, packedOverlay);
+		}
+		
 		Quaternionf quat = new Quaternionf().rotationY(rotation);
 
 		// render mirror triangles
