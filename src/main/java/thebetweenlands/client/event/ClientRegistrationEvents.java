@@ -257,6 +257,7 @@ import thebetweenlands.client.particle.SpiritButterflyParticle;
 import thebetweenlands.client.particle.SwarmParticle;
 import thebetweenlands.client.particle.WaterRippleParticle;
 import thebetweenlands.client.renderer.BLItemRenderer;
+import thebetweenlands.client.renderer.BeamOriginMirrorWorldRenderer;
 import thebetweenlands.client.renderer.block.AlcoveRenderer;
 import thebetweenlands.client.renderer.block.AlembicRenderer;
 import thebetweenlands.client.renderer.block.AnimatorRenderer;
@@ -1044,6 +1045,7 @@ public class ClientRegistrationEvents {
 		event.registerReloadListener(BLItemRenderer.INSTANCE.get());
 		event.registerReloadListener(aspectIcons = new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
 		event.registerReloadListener(circleGems = new CircleGemTextureManager(Minecraft.getInstance().getTextureManager()));
+		event.registerReloadListener(BeamOriginMirrorWorldRenderer.INSTANCE);
 
 		// Armour extensions
 		event.registerReloadListener(AmphibiousArmorRenderer.INSTANCE);
