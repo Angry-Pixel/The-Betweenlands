@@ -13,7 +13,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.PartEntity;
 import thebetweenlands.client.handler.*;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
-import thebetweenlands.client.renderer.BeamOriginMirrorWorldRenderer;
 import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.common.entity.fishing.anadia.Anadia;
@@ -39,7 +38,7 @@ public class ClientEvents {
 		RadialMenuHandler.INSTANCE.init();
 		ScreenHandler.init();
 		WeedwoodRowboatHandler.INSTANCE.init();
-		BeamOriginMirrorWorldRenderer.init();
+		BeamOriginMirrorWorldRenderHandler.init();
 
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
 
