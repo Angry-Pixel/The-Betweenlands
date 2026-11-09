@@ -165,6 +165,10 @@ public class BLRenderTypes extends RenderType {
 				.createCompositeState(true));
 	}
 
+	public static final ShaderStateShard BEAM_ORIGIN_GLASS_SHADER = new ShaderStateShard(() -> BetweenlandsShaders.BEAM_ORIGIN_GLASS);
+	
+	public static final ShaderStateShard DUNGEON_DOOR_RUNES_SHADER = new ShaderStateShard(() -> BetweenlandsShaders.DUNGEON_DOOR_RUNES);
+
 	// Creates a new dungeon door rune RenderType, without memoizing it
 	// However, memoized is preferred because there should only around 8 rune textures
 	@Deprecated
@@ -177,7 +181,7 @@ public class BLRenderTypes extends RenderType {
 				true,
 				false, 
 				RenderType.CompositeState.builder()
-					.setShaderState(new ShaderStateShard(() -> BetweenlandsShaders.DUNGEON_DOOR_RUNES))
+					.setShaderState(DUNGEON_DOOR_RUNES_SHADER)
 					.setTextureState(
 							MultiTextureStateShard.builder()
 								.add(DungeonDoorRunesModel.TEXTURE_RUNE_GLOW, false, false) // Rune glow is texture 0

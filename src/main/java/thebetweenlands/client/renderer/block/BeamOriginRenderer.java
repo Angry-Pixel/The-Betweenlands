@@ -60,7 +60,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.GlStateBackup;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import thebetweenlands.client.event.BetweenlandsShaders;
 import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler;
+import thebetweenlands.client.handler.ShaderHandler;
+import thebetweenlands.client.renderer.BLRenderTypes;
+import thebetweenlands.client.renderer.BLVertexFormats;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
 import thebetweenlands.client.renderer.util.ProxyMultiBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
@@ -86,65 +90,65 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			TheBetweenlands.prefix("textures/entity/block/prism_mirror.png"), false, false
 		);
 
-    public static final RenderType BEAM_ORIGIN_MIRROR_STENCIL_LAYER = RenderType.create(
-    			"thebetweenlands:beam_origin_mirror",
-    			DefaultVertexFormat.POSITION,
-    			Mode.TRIANGLES,
-    			RenderType.TRANSIENT_BUFFER_SIZE,
-    			true,
-    			true,
-    			RenderType.CompositeState.builder()
-                	.setShaderState(RenderType.POSITION_SHADER)
-	                .setLightmapState(RenderType.NO_LIGHTMAP)
-	                .setTextureState(RenderType.NO_TEXTURE)
-	                .setWriteMaskState(WriteMaskStateShard.DEPTH_WRITE)
-	                .createCompositeState(true)
-	            );
+	public static final RenderType BEAM_ORIGIN_MIRROR_STENCIL_LAYER = RenderType.create(
+				"thebetweenlands:beam_origin_mirror",
+				DefaultVertexFormat.POSITION,
+				Mode.TRIANGLES,
+				RenderType.TRANSIENT_BUFFER_SIZE,
+				true,
+				true,
+				RenderType.CompositeState.builder()
+					.setShaderState(RenderType.POSITION_SHADER)
+					.setLightmapState(RenderType.NO_LIGHTMAP)
+					.setTextureState(RenderType.NO_TEXTURE)
+					.setWriteMaskState(WriteMaskStateShard.DEPTH_WRITE)
+					.createCompositeState(true)
+				);
 
-    public static final RenderModifiers BEAM_ORIGIN_MIRROR_MODIFIERS = RenderModifiers.build()
-    		.add(StencilModifier.INSTANCE) // main stencil, locks to the mirror tri
-    		.add(InvertCullingModifier.INSTANCE)
-    		.add(RunnableModifier.INSTANCE) // should probably be replaced in future
-    		.build("thebetweenlands:beam_origin_mirror");
+	public static final RenderModifiers BEAM_ORIGIN_MIRROR_MODIFIERS = RenderModifiers.build()
+			.add(StencilModifier.INSTANCE) // main stencil, locks to the mirror tri
+			.add(InvertCullingModifier.INSTANCE)
+			.add(RunnableModifier.INSTANCE) // should probably be replaced in future
+			.build("thebetweenlands:beam_origin_mirror");
 
-    public static final RenderModifiers BEAM_ORIGIN_MIRROR_WORLD_MODIFIERS = RenderModifiers.build()
-    		.add(RunnableModifier.INSTANCE) // should be replaced by a "No Writing To Render Buffers" modifier instead
-    		.build("thebetweenlands:beam_origin_mirror_world");
-
-    public static final RenderType BEAM_ORIGIN_LAYER = RenderType.create(
+	public static final RenderModifiers BEAM_ORIGIN_MIRROR_WORLD_MODIFIERS = RenderModifiers.build()
+			.add(RunnableModifier.INSTANCE) // should be replaced by a "No Writing To Render Buffers" modifier instead
+			.build("thebetweenlands:beam_origin_mirror_world");
+	
+	public static final RenderType BEAM_ORIGIN_LAYER = RenderType.create(
 			"thebetweenlands:beam_origin",
-			DefaultVertexFormat.BLOCK,
+			BLVertexFormats.BEAM_ORIGIN_GLASS,
 			Mode.TRIANGLES,
 			RenderType.TRANSIENT_BUFFER_SIZE,
 			true,
 			true,
 			RenderType.CompositeState.builder()
-                .setLightmapState(RenderType.NO_LIGHTMAP)
-                .setShaderState(RenderType.POSITION_COLOR_TEX_LIGHTMAP_SHADER) // TODO no POSITION_TEX_COLOR_NORMAL shader
-                .setTextureState(PRISM_MIRROR_TEXTURE)
-                .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-                .setCullState(RenderType.CULL)
-                .createCompositeState(true)
-            );
+				.setLightmapState(RenderType.NO_LIGHTMAP)
+				.setShaderState(BLRenderTypes.BEAM_ORIGIN_GLASS_SHADER)
+				.setTextureState(PRISM_MIRROR_TEXTURE)
+				.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+				.setCullState(RenderType.CULL)
+				.createCompositeState(true)
+			);
 
-    public static final RenderType BEAM_ORIGIN_TOP_LAYER = RenderType.create(
-    			"thebetweenlands:beam_origin_top",
-    			DefaultVertexFormat.BLOCK,
-    			Mode.QUADS,
-    			RenderType.TRANSIENT_BUFFER_SIZE,
-    			true,
-    			true,
-    			RenderType.CompositeState.builder()
-	                .setLightmapState(RenderType.NO_LIGHTMAP)
-	                .setShaderState(RenderType.POSITION_COLOR_TEX_LIGHTMAP_SHADER) // TODO no POSITION_TEX_COLOR_NORMAL shader
-	                .setTextureState(PRISM_MIRROR_TEXTURE)
-	                .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-	                .setCullState(RenderType.CULL)
-	                .createCompositeState(true)
-	            );
+	public static final RenderType BEAM_ORIGIN_TOP_LAYER = RenderType.create(
+				"thebetweenlands:beam_origin_top",
+				BLVertexFormats.BEAM_ORIGIN_GLASS,
+				Mode.QUADS,
+				RenderType.TRANSIENT_BUFFER_SIZE,
+				true,
+				true,
+				RenderType.CompositeState.builder()
+					.setLightmapState(RenderType.NO_LIGHTMAP)
+					.setShaderState(BLRenderTypes.BEAM_ORIGIN_GLASS_SHADER) 
+					.setTextureState(PRISM_MIRROR_TEXTURE)
+					.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+					.setCullState(RenderType.CULL)
+					.createCompositeState(true)
+				);
 
-    // This is just a little bit of memoization to help make some of the old code clearer, I'm happy with this
-    // also, I flipped vertex 1 and vertex 2 so the faces are facing the front instead of the back
+	// This is just a little bit of memoization to help make some of the old code clearer, I'm happy with this
+	// also, I flipped vertex 1 and vertex 2 so the faces are facing the front instead of the back
 
 	public static final double TRIANGLE_HEIGHT = 1.65D;
 	public static final double TRIANGLE_WIDTH  = 0.45D;
@@ -172,7 +176,7 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 	protected BeamOriginMirrorWorld mirrorWorld;
 	// only used for immediate rendering
 	protected final Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
-    protected final ByteBufferBuilder sharedBuffer;
+	protected final ByteBufferBuilder sharedBuffer;
 
 	public BeamOriginRenderer(BlockEntityRendererProvider.Context context) {
 		this.blockRenderDispatcher = context.getBlockRenderDispatcher();
@@ -234,9 +238,11 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 		VertexConsumer bufferBuilder = bufferSource.getBuffer(BEAM_ORIGIN_TOP_LAYER);
 
-		final float alpha = 0.75f + 0.25f * (1 - visibility);
-		int color = FastColor.ARGB32.colorFromFloat(alpha, visibility, visibility, visibility);
+//		final float alpha = 0.75f + 0.25f * (1 - visibility);
+//		int color = FastColor.ARGB32.colorFromFloat(alpha, visibility, visibility, visibility);
 
+		int color = Float.floatToIntBits(visibility);
+		
 		Pose pose = poseStack.last();
 
 		bufferBuilder.addVertex(pose, p3).setColor(color).setUv(0.25f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
@@ -266,8 +272,7 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 		// draw the actual mirror
 		{
-			final float alpha = 0.75f + 0.25f * (1 - visibility);
-			int color = FastColor.ARGB32.colorFromFloat(alpha, visibility, visibility, visibility);
+			int color = Float.floatToIntBits(visibility);
 
 			VertexConsumer consumer = bufferSource.getBuffer(BEAM_ORIGIN_LAYER);
 
@@ -507,30 +512,30 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 				RenderSystem.backupGlState(backup);
 				poseStack.pushPose();
 
-		        double renderX = Mth.lerp((double)partialTick, entity.xo, entity.getX()) - renderCenter.x;
-		        double renderY = Mth.lerp((double)partialTick, entity.yo, entity.getY()) - renderCenter.y;
-		        double renderZ = Mth.lerp((double)partialTick, entity.zo, entity.getZ()) - renderCenter.z;
+				double renderX = Mth.lerp((double)partialTick, entity.xo, entity.getX()) - renderCenter.x;
+				double renderY = Mth.lerp((double)partialTick, entity.yo, entity.getY()) - renderCenter.y;
+				double renderZ = Mth.lerp((double)partialTick, entity.zo, entity.getZ()) - renderCenter.z;
 
-		        float rotationYaw = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+				float rotationYaw = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
 
-		        this.entityRenderer.setRenderShadow(false);
+				this.entityRenderer.setRenderShadow(false);
 
-		        this.entityRenderer.render(
-		        		entity,
-		        		renderX, renderY, renderZ,
-		        		rotationYaw,
-		        		partialTick,
-		        		poseStack,
-		        		bufferSource,
-		        		255
-	        		);
+				this.entityRenderer.render(
+						entity,
+						renderX, renderY, renderZ,
+						rotationYaw,
+						partialTick,
+						poseStack,
+						bufferSource,
+						255
+					);
 
 				poseStack.popPose();
 				RenderSystem.restoreGlState(backup);
 			}
 		}
 
-        this.entityRenderer.setRenderShadow(true);
+		this.entityRenderer.setRenderShadow(true);
 	}
 
 	protected void renderEntireMirrorWorldImmediately(BeamOriginBlockEntity blockEntity, float partialTick, PoseStack poseStack) {
@@ -1013,8 +1018,8 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 		@Override
 		public void draw(MeshData meshData) {
 			this.setupRenderState();
-	        BufferUploader.drawWithShader(meshData);
-	        this.clearRenderState();
+			BufferUploader.drawWithShader(meshData);
+			this.clearRenderState();
 		}
 
 		@Override
