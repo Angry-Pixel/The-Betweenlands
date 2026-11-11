@@ -29,6 +29,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import com.mojang.math.Axis;
@@ -241,14 +242,14 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 //		final float alpha = 0.75f + 0.25f * (1 - visibility);
 //		int color = FastColor.ARGB32.colorFromFloat(alpha, visibility, visibility, visibility);
 
-		int color = Float.floatToIntBits(visibility);
+//		int color = Float.floatToIntBits(visibility);
 		
 		Pose pose = poseStack.last();
 
-		bufferBuilder.addVertex(pose, p3).setColor(color).setUv(0.25f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-		bufferBuilder.addVertex(pose, p2).setColor(color).setUv(0.25f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-		bufferBuilder.addVertex(pose, p1).setColor(color).setUv(0.75f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-		bufferBuilder.addVertex(pose, p0).setColor(color).setUv(0.75f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p3).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p2).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p1).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p0).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
 
 	}
 
@@ -272,13 +273,13 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 		// draw the actual mirror
 		{
-			int color = Float.floatToIntBits(visibility);
+//			int color = Float.floatToIntBits(visibility);
 
 			VertexConsumer consumer = bufferSource.getBuffer(BEAM_ORIGIN_LAYER);
 
-			consumer.addVertex(mirrorPose, (float)vertex0.x, (float)vertex0.y, (float)vertex0.z).setColor(color).setUv(0.5f, 1f).setLight(255).setNormal(mirrorPose, normalF.x(), normalF.y(), normalF.z());
-			consumer.addVertex(mirrorPose, (float)vertex1.x, (float)vertex1.y, (float)vertex1.z).setColor(color).setUv(0.75f, 0).setLight(255).setNormal(mirrorPose, normalF.x(), normalF.y(), normalF.z());
-			consumer.addVertex(mirrorPose, (float)vertex2.x, (float)vertex2.y, (float)vertex2.z).setColor(color).setUv(0.25f, 0).setLight(255).setNormal(mirrorPose, normalF.x(), normalF.y(), normalF.z());
+			consumer.addVertex(mirrorPose, (float)vertex0.x, (float)vertex0.y, (float)vertex0.z).setColor(visibility, visibility, visibility, visibility).setUv(0.5f, 1f).setLight(255).setNormal(mirrorPose, normalF.x(), normalF.y(), normalF.z());
+			consumer.addVertex(mirrorPose, (float)vertex1.x, (float)vertex1.y, (float)vertex1.z).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0).setLight(255).setNormal(mirrorPose, normalF.x(), normalF.y(), normalF.z());
+			consumer.addVertex(mirrorPose, (float)vertex2.x, (float)vertex2.y, (float)vertex2.z).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0).setLight(255).setNormal(mirrorPose, normalF.x(), normalF.y(), normalF.z());
 		}
 
 

@@ -3,7 +3,7 @@
 #moj_import <fog.glsl>
 
 in vec3 Position;
-in float Visibility;
+in vec4 Visibility;
 in vec2 UV0;
 in vec3 Normal;
 
@@ -21,6 +21,6 @@ void main() {
 	gl_Position = ProjMat * ModelViewMat * vec4(pos, 1.0);
 
 	vertexDistance = fog_distance(pos, FogShape);
-	vertexColor = Visibility;
+	vertexColor = Visibility.r;
 	texCoord0 = UV0;
 }
