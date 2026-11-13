@@ -103,8 +103,22 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	private static record Context(
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
 			Stencil stencil, Tesselator tessellator,
+			VertexBuffer mirrorTriBuffer,
 			boolean renderDebugNormals, @Nullable MultiBufferSource debugBufferSource
 	) {
+
+		/**
+		 * Renders a vertex buffer immediately
+		 * @param pose
+		 * @param vertexBuffer
+		 */
+		public void renderVbo(VertexBuffer vertexBuffer) {
+			if(!Objects.requireNonNull(vertexBuffer).isInvalid()) {
+				vertexBuffer.bind();
+				vertexBuffer.drawWithShader(this.modelViewMatrix(), this.projectionMatrix(), RenderSystem.getShader());
+				VertexBuffer.unbind();
+			}
+		}
 
 		/**
 		 * Renders a vertex buffer immediately with a modified view matrix
@@ -135,6 +149,11 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
 			List<BeamOriginInstance> beamOrigins,
 			boolean renderDebugNormals) {
+		// Do nothing if there are no beam origins to render
+		if (beamOrigins.isEmpty()) {
+			return;
+		}
+		
 		this.createMissingMirrorWorldVbos();
 		
 		// We can reuse one stencil bit for the entire bulk render
@@ -143,11 +162,16 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				return;
 			}
 			
+			VertexBuffer triVertexBuffer = new VertexBuffer(Usage.DYNAMIC);
+			
+			MultiBufferSource.BufferSource debugBufferSource = renderDebugNormals ? MultiBufferSource.immediate(sharedBuffer) : null;
+			
 			// Create context
 			Context context = new Context(
 					modelViewMatrix, projectionMatrix,
 					stencil, Tesselator.getInstance(),
-					renderDebugNormals, renderDebugNormals ? MultiBufferSource.immediate(sharedBuffer) : null
+					triVertexBuffer,
+					renderDebugNormals, debugBufferSource
 			);
 			
 			// Quaternion for rendering
@@ -173,6 +197,12 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			// Disable stencilling
 			// TODO put this in a "finally { ... }" block
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
+			
+			if (debugBufferSource != null) {
+				debugBufferSource.endBatch();
+			}
+			
+			triVertexBuffer.close();
 		}
 	}
 	
@@ -192,24 +222,25 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		GlStateBackup backup = new GlStateBackup();
 		RenderSystem.backupGlState(backup);
 
-		// Create our mirror triangle mesh
+		// Create our mirror triangle mesh and upload it for reuse
+		VertexBuffer mirrorTriBuffer = context.mirrorTriBuffer();
 		MeshData mirrorTriMesh = createMirrorMesh(context, beamOrigin, vertex0, vertex1, vertex2);
+		mirrorTriBuffer.bind();
+		mirrorTriBuffer.upload(mirrorTriMesh);
 		
 		Stencil stencil = context.stencil();
 		
 		// Set up our stencil mask
-		drawMirrorAsStencil(stencil, mirrorTriMesh);
+		drawMirrorAsStencil(context, stencil, mirrorTriBuffer);
 
 		// Set the depth in the mirror to a really large value
-		mirrorTriMesh = createMirrorMesh(context, beamOrigin, vertex0, vertex1, vertex2);
-		drawMirrorAsDepth(stencil, mirrorTriMesh, true, GL11.GL_ALWAYS, 1000000.0f, 1000000.0f);
+		drawMirrorAsDepth(context, stencil, mirrorTriBuffer, true, GL11.GL_ALWAYS, 1000000.0f, 1000000.0f);
 		
 		// Draw our mirror world
 		drawMirrorWorld(context, beamOrigin, vertex0, vertex1, vertex2);
 
-		mirrorTriMesh = createMirrorMesh(context, beamOrigin, vertex0, vertex1, vertex2);
 		// Reset the depth to the original prism triangle depth
-		drawMirrorAsDepth(stencil, mirrorTriMesh, true, GL11.GL_ALWAYS, 0.0f, 0.0f);
+		drawMirrorAsDepth(context, stencil, mirrorTriBuffer, true, GL11.GL_ALWAYS, 0.0f, 0.0f);
 		
 		// Reset GL state
 		RenderSystem.restoreGlState(backup);
@@ -231,8 +262,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		// debug normals
 		if (context.renderDebugNormals()) {
-			MultiBufferSource bufferSource = context.debugBufferSource();
-			VertexConsumer lineConsumer = bufferSource.getBuffer(RenderType.LINES);
+			VertexConsumer lineConsumer = context.debugBufferSource().getBuffer(RenderType.LINES);
 
 			lineConsumer.addVertex(pose, vertex0)
 				.setColor(0, 0, 255, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
@@ -275,7 +305,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param stencil       the stencil to render to
 	 * @param mirrorTriMesh the mesh of the mirror tri
 	 */
-	private void drawMirrorAsStencil(Stencil stencil, MeshData mirrorTriMesh) {
+	private void drawMirrorAsStencil(Context context, Stencil stencil, VertexBuffer mirrorTriBuffer) {
 		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.setupRenderState();
 		
 		// Prevent depth writes, but still require LEQUAL
@@ -298,7 +328,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
 		
 		// Render our mirror tri
-		BufferUploader.drawWithShader(mirrorTriMesh);
+		context.renderVbo(mirrorTriBuffer);
 		
 		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.clearRenderState();
 	}
@@ -308,7 +338,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param stencil       the stencil to render to
 	 * @param mirrorTriMesh the mesh of the mirror tri
 	 */
-	private void drawMirrorAsDepth(Stencil stencil, MeshData mirrorTriMesh,
+	private void drawMirrorAsDepth(Context context, Stencil stencil, VertexBuffer mirrorTriBuffer,
 			boolean depthMask, int depthFunc, float offsetFactor, float offsetUnits) {
 		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.setupRenderState();
 		
@@ -328,9 +358,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		// Never change the stencil
 		stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-		
+
 		// Render our mirror tri
-		BufferUploader.drawWithShader(mirrorTriMesh);
+		context.renderVbo(mirrorTriBuffer);
 		
 		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.clearRenderState();
 	}
@@ -618,8 +648,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		return renderType == null || this.blockRenderDispatcher.getBlockModel(state).getRenderTypes(state, random, ModelData.EMPTY).contains(renderType);
 	}
 	// #endregion
-
-
+	
 	@Override
 	public void onResourceManagerReload(ResourceManager resourceManager) {
 		// Invalidate VBOs
