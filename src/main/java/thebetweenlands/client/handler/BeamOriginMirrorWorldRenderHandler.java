@@ -6,6 +6,7 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage;
@@ -106,20 +107,28 @@ public class BeamOriginMirrorWorldRenderHandler {
 	/**
 	 * Represents a Beam Origin instance
 	 */
-	public static record BeamOriginInstance(PoseStack.Pose pose, float visibility, float rotation, int packedLight, int packedOverlay) {
+	public static record BeamOriginInstance(
+			PoseStack.Pose pose, float visibility, float rotation,
+			int packedLight, int packedOverlay,
+			List<? extends Entity> mirrorEntities
+	) {
 		
 	}
 	
 	/**
 	 * Attempts to submit a beam origin to mirror world rendering.
-	 * @param pose
-	 * @param visibility
-	 * @param rotation
-	 * @param packedLight
-	 * @param packedOverlay
+	 * @param pose           the pose that the beam origin should be rendered with
+	 * @param visibility     the beam origin's visibility
+	 * @param rotation       the beam origin's rotation
+	 * @param packedLight    packed light at the beam origin
+	 * @param packedOverlay  packed overlay at the beam origin
+	 * @param mirrorEntities entities to render in the mirror world
 	 * @return {@code true} if the beam origin will be rendered by the render handler
 	 */
-	public static boolean submitBeamOrigin(PoseStack.Pose pose, float visibility, float rotation, int packedLight, int packedOverlay) {
+	public static boolean submitBeamOrigin(
+			PoseStack.Pose pose, float visibility, float rotation,
+			int packedLight, int packedOverlay,
+			List<? extends Entity> mirrorEntities) {
 		// Get the context
 		MirrorWorldContext context = MIRROR_WORLD_CONTEXT.get();
 		
@@ -127,7 +136,12 @@ public class BeamOriginMirrorWorldRenderHandler {
 			return false;
 		}
 		
-		return context.submit(new BeamOriginInstance(pose.copy(), visibility, rotation, packedLight, packedOverlay));
+		BeamOriginInstance instance = new BeamOriginInstance(
+				pose.copy(), visibility, rotation,
+				packedLight, packedOverlay,
+				mirrorEntities);
+		
+		return context.submit(instance);
 	}
 	
 	/**

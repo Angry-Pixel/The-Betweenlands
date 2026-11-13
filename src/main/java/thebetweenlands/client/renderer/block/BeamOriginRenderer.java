@@ -144,7 +144,10 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 		// If we're in-world, submit this to the mirror world renderer to render the mirror world
 		if (blockEntity.hasLevel() && blockEntity.getLevel() != null) {
-			BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(poseStack.last(), visibility, rotation, packedLight, packedOverlay);
+			BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(
+					poseStack.last(), visibility, rotation,
+					packedLight, packedOverlay,
+					blockEntity.clientMirrorEntities);
 		}
 		
 		// Render the beam origin prism

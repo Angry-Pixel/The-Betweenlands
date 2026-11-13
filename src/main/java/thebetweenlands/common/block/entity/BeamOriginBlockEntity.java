@@ -57,7 +57,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 	public static void tick(Level level, BlockPos pos, BlockState state, BeamOriginBlockEntity entity) {
 		if (level.isClientSide()) {
-			entity.clientMirrorEntities = level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(20));
+			entity.clientMirrorEntities = List.copyOf(level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(20)));
 		}
 		
 		int litBraziers = entity.checkForLitBraziers(level, pos);

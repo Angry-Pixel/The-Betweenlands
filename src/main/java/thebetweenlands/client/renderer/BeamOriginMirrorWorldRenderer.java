@@ -39,6 +39,7 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler.BeamOriginInstance;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
+import thebetweenlands.client.renderer.util.Stencil;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -88,6 +89,10 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	
 	
 	// #region Mirror World Rendering
+	private static record Context() {
+		
+	}
+	
 	/**
 	 * Renders multiple mirror worlds directly to the framebuffer
 	 * @param poseStack
@@ -98,7 +103,13 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	public void render(PoseStack poseStack, DeltaTracker partialTicks, List<BeamOriginInstance> beamOrigins, boolean renderDebugNormals) {
 		this.createMissingMirrorWorldVbos();
 		
-		
+		// We can reuse one stencil bit for the entire bulk render
+		try (Stencil stencil = Stencil.reserve(Minecraft.getInstance().getMainRenderTarget())) {
+			if (!stencil.isValid()) {
+				return;
+			}
+			
+		}
 	}
 	// #endregion Rendering
 
