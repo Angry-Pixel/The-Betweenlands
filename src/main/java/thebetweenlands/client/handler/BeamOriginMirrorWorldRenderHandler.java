@@ -196,8 +196,8 @@ public class BeamOriginMirrorWorldRenderHandler {
 		final boolean renderDebugNormals = entityRenderDispatcher != null && entityRenderDispatcher.shouldRenderHitBoxes();
 		
 		BeamOriginMirrorWorldRenderer.INSTANCE.render(
-				event.getPoseStack(),
-				event.getPartialTick(),
+				event.getPoseStack(), event.getPartialTick(),
+				event.getModelViewMatrix(), event.getProjectionMatrix(),
 				beamOrigins,
 				renderDebugNormals);
 	}

@@ -6,9 +6,11 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.MeshData;
@@ -89,8 +91,30 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	
 	
 	// #region Mirror World Rendering
-	private static record Context() {
-		
+	/**
+	 * Context used so we don't have to pass around a million arguments
+	 */
+	private static record Context(
+			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
+			Stencil stencil, Tesselator tessellator,
+			boolean renderDebugNormals
+	) {
+
+		/**
+		 * Renders a vertex buffer immediately with a modified view matrix
+		 * @param pose
+		 * @param vertexBuffer
+		 */
+		public void renderVboWithPose(Matrix4f pose, VertexBuffer vertexBuffer) {
+			if(!Objects.requireNonNull(vertexBuffer).isInvalid()) {
+				Matrix4f modelViewMatrix = new Matrix4f(this.modelViewMatrix());
+				modelViewMatrix.mul(pose);
+
+				vertexBuffer.bind();
+				vertexBuffer.drawWithShader(modelViewMatrix, this.projectionMatrix(), RenderSystem.getShader());
+				VertexBuffer.unbind();
+			}
+		}
 	}
 	
 	/**
@@ -100,7 +124,11 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param beamOrigins
 	 * @param renderDebugNormals
 	 */
-	public void render(PoseStack poseStack, DeltaTracker partialTicks, List<BeamOriginInstance> beamOrigins, boolean renderDebugNormals) {
+	public void render(
+			PoseStack poseStack, DeltaTracker partialTicks,
+			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
+			List<BeamOriginInstance> beamOrigins,
+			boolean renderDebugNormals) {
 		this.createMissingMirrorWorldVbos();
 		
 		// We can reuse one stencil bit for the entire bulk render
@@ -108,8 +136,50 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			if (!stencil.isValid()) {
 				return;
 			}
+
+			Tesselator tessellator = Tesselator.getInstance();
 			
+			// Create context
+			Context context = new Context(
+					modelViewMatrix, projectionMatrix,
+					stencil, tessellator,
+					renderDebugNormals
+			);
+			
+			// Quaternion for rendering
+			Quaternionf quat = new Quaternionf();
+			
+			Vector3f[] triOut = new Vector3f[] {new Vector3f(), new Vector3f(), new Vector3f()};
+			
+			for (int i = 0; i < beamOrigins.size(); ++i) {
+				BeamOriginInstance beamOrigin = beamOrigins.get(i);
+				
+				quat.identity().rotationY(beamOrigin.rotation());
+				
+				// Render the beam origin mirrors
+				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN, triOut[2]));
+				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN, triOut[2]));
+				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN, triOut[2]));
+				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN, triOut[2]));
+			}
 		}
+	}
+	
+	/**
+	 * Renders a beam origin mirror immediately to framebuffer
+	 * @param context
+	 * @param beamOrigin
+	 * @param vertex0
+	 * @param vertex1
+	 * @param vertex2
+	 */
+	private void renderBeamOriginMirror(
+			Context context, BeamOriginInstance beamOrigin,
+			Vector3f vertex0, Vector3f vertex1, Vector3f vertex2
+	) {
+		
+		
+		
 	}
 	// #endregion Rendering
 
@@ -218,9 +288,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 
 	/**
 	 * Transforms/Rotates the given point around the given center and returns the result
-	 * @param quat			Quaternion to use for the transform
-	 * @param point			Point to rotate
-	 * @param centerPoint	Rotation center
+	 * @param quat        Quaternion to use for the transform
+	 * @param point       Point to rotate
+	 * @param centerPoint Rotation center
 	 * @return
 	 */
 	public static Vec3 transformVec(Quaternionf quat, Vec3 point, Vec3 centerPoint) {
@@ -229,13 +299,37 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 
 	/**
 	 * Transforms/Rotates the given point around the given center and returns the result
-	 * @param quat			Quaternion to use for the transform
-	 * @param point			Point to rotate
-	 * @param centerPoint	Rotation center
+	 * @param quat        Quaternion to use for the transform
+	 * @param point       Point to rotate
+	 * @param centerPoint Rotation center
+	 * @param out         The output vector
+	 * @return
+	 */
+	public static Vector3f transformVec(Quaternionf quat, Vec3 point, Vec3 centerPoint, Vector3f out) {
+		return transformVec(quat, point.toVector3f(), centerPoint.toVector3f(), out);
+	}
+
+	/**
+	 * Transforms/Rotates the given point around the given center and returns the result
+	 * @param quat        Quaternion to use for the transform
+	 * @param point       Point to rotate
+	 * @param centerPoint Rotation center
 	 * @return
 	 */
 	public static Vector3f transformVec(Quaternionf quat, Vector3f point, Vector3f centerPoint) {
-		return quat.transform(point.sub(centerPoint, new Vector3f())).add(centerPoint);
+		return transformVec(quat, point, centerPoint, new Vector3f());
+	}
+
+	/**
+	 * Transforms/Rotates the given point around the given center and returns the result
+	 * @param quat        Quaternion to use for the transform
+	 * @param point       Point to rotate
+	 * @param centerPoint Rotation center
+	 * @param out         The output vector
+	 * @return
+	 */
+	public static Vector3f transformVec(Quaternionf quat, Vector3f point, Vector3f centerPoint, Vector3f out) {
+		return quat.transform(point.sub(centerPoint, out)).add(centerPoint);
 	}
 	// #endregion
 
