@@ -3,6 +3,7 @@ package thebetweenlands.client.renderer;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -527,6 +528,16 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		}
 	}
 
+	private void clearMirrorWorldVBOs() {
+		Set<RenderType> mirrorKeys = Set.copyOf(this.mirrorWorldVbos.keySet());
+		for(RenderType renderType : mirrorKeys) {
+			VertexBuffer buffer = this.mirrorWorldVbos.remove(renderType);
+			if(buffer != null) {
+				buffer.close();
+			}
+		}
+	}
+
 	private void createMissingMirrorWorldVbos() {
 		this.createMirrorWorld();
 		
@@ -652,11 +663,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	@Override
 	public void onResourceManagerReload(ResourceManager resourceManager) {
 		// Invalidate VBOs
-		for (VertexBuffer buffer : this.mirrorWorldVbos.values()) {
-			buffer.close();
-		}
-		
-		this.mirrorWorldVbos.clear();
+		this.clearMirrorWorldVBOs();
 		
 		// Reset mirror world
 		this.mirrorWorld = null;
