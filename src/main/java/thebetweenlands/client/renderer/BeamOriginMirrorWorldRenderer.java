@@ -13,16 +13,18 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexSorting;
-import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
 import com.mojang.math.Axis;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.core.BlockPos;
@@ -85,7 +87,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	}
 	
 	
-	// #region Rendering
+	// #region Mirror World Rendering
 	/**
 	 * Renders multiple mirror worlds directly to the framebuffer
 	 * @param poseStack
@@ -98,8 +100,82 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		
 	}
-	
 	// #endregion Rendering
+
+
+	// #region Prism rendering
+	/**
+	 * Renders the beam origin prism to a {@link MultiBufferSource}
+	 * @param poseStack    the pose stack
+	 * @param bufferSource the buffer source to render the prism to
+	 * @param rotation     the beam origin's rotation at the time of rendering
+	 * @param visibility   how visible the beam origin prism is right now
+	 */
+	public void renderPrism(PoseStack poseStack, MultiBufferSource bufferSource, float rotation, float visibility) {
+		Quaternionf quat = new Quaternionf().rotationY(rotation);
+
+		this.renderPrism(poseStack, bufferSource, quat, visibility);
+	}
+
+	/**
+	 * Renders the beam origin prism to a {@link MultiBufferSource}
+	 * @param poseStack    the pose stack
+	 * @param bufferSource the buffer source to render the prism to
+	 * @param quat         a quaternion representing the beam origin's rotation
+	 * @param visibility   how visible the beam origin prism is right now
+	 */
+	public void renderPrism(PoseStack poseStack, MultiBufferSource bufferSource, Quaternionf quat, float visibility) {
+		renderPrismTop(poseStack, bufferSource, quat, visibility);
+		
+		VertexConsumer triVertexConsumer = bufferSource.getBuffer(BLRenderTypes.BEAM_ORIGIN_PRISM_LAYER);
+
+		renderPrismTri(poseStack, triVertexConsumer, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN), visibility);
+		renderPrismTri(poseStack, triVertexConsumer, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN), visibility);
+		renderPrismTri(poseStack, triVertexConsumer, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN), visibility);
+		renderPrismTri(poseStack, triVertexConsumer, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN), visibility);
+	}
+
+	protected void renderPrismTop(PoseStack poseStack, MultiBufferSource bufferSource, Quaternionf quat, float visibility) {
+		Vector3f p0 = transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN).toVector3f();
+		Vector3f p1 = transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN).toVector3f();
+		Vector3f p2 = transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN).toVector3f();
+		Vector3f p3 = transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN).toVector3f();
+
+
+		VertexConsumer bufferBuilder = bufferSource.getBuffer(BLRenderTypes.BEAM_ORIGIN_TOP_LAYER);
+
+		Pose pose = poseStack.last();
+
+		bufferBuilder.addVertex(pose, p3).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p2).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p1).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+		bufferBuilder.addVertex(pose, p0).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
+	}
+
+	protected void renderPrismTri(PoseStack poseStack, MultiBufferSource bufferSource, Vec3 vertex0, Vec3 vertex1, Vec3 vertex2, float visibility) {
+		renderPrismTri(poseStack, bufferSource.getBuffer(BLRenderTypes.BEAM_ORIGIN_PRISM_LAYER), vertex0, vertex1, vertex2, visibility);
+	}
+	
+	protected void renderPrismTri(PoseStack poseStack, VertexConsumer consumer, Vec3 vertex0, Vec3 vertex1, Vec3 vertex2, float visibility) {
+		final Vec3 mirrorNormal;
+		{
+			Vec3 normal = vertex1.subtract(vertex0).cross(vertex2.subtract(vertex0)).normalize();
+//			normal = normal.multiply(1, 0, 1).normalize(); // DEBUG - render on the xz axis
+			mirrorNormal = normal;
+		}
+		Vector3f normalF = mirrorNormal.toVector3f();
+
+		Pose pose = poseStack.last();
+		
+		renderPrismTri(pose, consumer, vertex0, vertex1, vertex2, normalF, visibility);
+	}
+
+	protected void renderPrismTri(Pose pose, VertexConsumer consumer, Vec3 vertex0, Vec3 vertex1, Vec3 vertex2, Vector3f normalF, float visibility) {		
+		consumer.addVertex(pose, (float)vertex0.x, (float)vertex0.y, (float)vertex0.z).setColor(visibility, visibility, visibility, visibility).setUv(0.5f, 1f).setLight(255).setNormal(pose, normalF.x(), normalF.y(), normalF.z());
+		consumer.addVertex(pose, (float)vertex1.x, (float)vertex1.y, (float)vertex1.z).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0).setLight(255).setNormal(pose, normalF.x(), normalF.y(), normalF.z());
+		consumer.addVertex(pose, (float)vertex2.x, (float)vertex2.y, (float)vertex2.z).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0).setLight(255).setNormal(pose, normalF.x(), normalF.y(), normalF.z());
+	}
+	// #endregion Prism Rendering
 
 	
 	

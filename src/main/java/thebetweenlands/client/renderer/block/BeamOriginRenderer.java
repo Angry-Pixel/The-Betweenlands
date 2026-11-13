@@ -66,6 +66,7 @@ import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler;
 import thebetweenlands.client.handler.ShaderHandler;
 import thebetweenlands.client.renderer.BLRenderTypes;
 import thebetweenlands.client.renderer.BLVertexFormats;
+import thebetweenlands.client.renderer.BeamOriginMirrorWorldRenderer;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
 import thebetweenlands.client.renderer.util.ProxyMultiBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
@@ -104,30 +105,6 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			.build("thebetweenlands:beam_origin_mirror_world");
 	
 	public static final RenderType BEAM_ORIGIN_LAYER = BLRenderTypes.BEAM_ORIGIN_PRISM_LAYER;
-
-	public static final RenderType BEAM_ORIGIN_TOP_LAYER = BLRenderTypes.BEAM_ORIGIN_TOP_LAYER;
-
-	// This is just a little bit of memoization to help make some of the old code clearer, I'm happy with this
-	// also, I flipped vertex 1 and vertex 2 so the faces are facing the front instead of the back
-
-	public static final double TRIANGLE_HEIGHT = 1.65D;
-	public static final double TRIANGLE_WIDTH  = 0.45D;
-
-	protected static final Vec3 TRIANGLE_ORIGIN = Vec3.ZERO;
-	protected static final Vec3[][] TRIANGLE_VERTICES;
-
-	static {
-		Vec3 vertex0 = TRIANGLE_ORIGIN.add(-TRIANGLE_WIDTH, 0, 0).add(TRIANGLE_WIDTH, 1, 0);
-		Vec3 vertex1 = TRIANGLE_ORIGIN.add(0, TRIANGLE_HEIGHT, -TRIANGLE_WIDTH).add(TRIANGLE_WIDTH, 1, 0);
-		Vec3 vertex2 = TRIANGLE_ORIGIN.add(0, TRIANGLE_HEIGHT, TRIANGLE_WIDTH).add(TRIANGLE_WIDTH, 1, 0);
-
-		TRIANGLE_VERTICES = new Vec3[][] {
-			{vertex0, vertex1, vertex2},
-			{vertex0, vertex1.add(0, 0, TRIANGLE_WIDTH*2), vertex2.add(-TRIANGLE_WIDTH*2, 0, 0)},
-			{vertex0, vertex1.add(-TRIANGLE_WIDTH*2, 0, TRIANGLE_WIDTH*2), vertex2.add(-TRIANGLE_WIDTH*2, 0, -TRIANGLE_WIDTH*2)},
-			{vertex0, vertex1.add(-TRIANGLE_WIDTH*2, 0, 0), vertex2.add(0, 0, -TRIANGLE_WIDTH*2)},
-		};
-	}
 
 	protected final BlockRenderDispatcher blockRenderDispatcher;
 	protected final EntityRenderDispatcher entityRenderer;
@@ -170,17 +147,19 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(poseStack.last(), visibility, rotation, packedLight, packedOverlay);
 		}
 		
-		Quaternionf quat = new Quaternionf().rotationY(rotation);
-
-		// render mirror triangles
-
-		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN), visibility);
-		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN), visibility);
-		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN), visibility);
-		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN), visibility);
-
-		// render top quad
-		renderTop(blockEntity, partialTick, poseStack, bufferSource, quat, visibility);
+		// Render the beam origin prism
+		BeamOriginMirrorWorldRenderer.INSTANCE.renderPrism(poseStack, bufferSource, rotation, visibility);
+		
+//		Quaternionf quat = new Quaternionf().rotationY(rotation);
+//
+//		// render mirror triangles
+//		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN), visibility);
+//		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN), visibility);
+//		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN), visibility);
+//		renderMirrorTri(blockEntity, partialTick, poseStack, bufferSource, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN), visibility);
+//
+//		// render top quad
+//		renderTop(blockEntity, partialTick, poseStack, bufferSource, quat, visibility);
 
 		poseStack.popPose();
 
@@ -188,29 +167,6 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 	}
 
 	// TODO this needs to have the three mirror layers done
-	protected void renderTop(BeamOriginBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, Quaternionf quat, float visibility) {
-
-		Vector3f p0 = transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN).toVector3f();
-		Vector3f p1 = transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN).toVector3f();
-		Vector3f p2 = transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN).toVector3f();
-		Vector3f p3 = transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN).toVector3f();
-
-
-		VertexConsumer bufferBuilder = bufferSource.getBuffer(BEAM_ORIGIN_TOP_LAYER);
-
-//		final float alpha = 0.75f + 0.25f * (1 - visibility);
-//		int color = FastColor.ARGB32.colorFromFloat(alpha, visibility, visibility, visibility);
-
-//		int color = Float.floatToIntBits(visibility);
-		
-		Pose pose = poseStack.last();
-
-		bufferBuilder.addVertex(pose, p3).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-		bufferBuilder.addVertex(pose, p2).setColor(visibility, visibility, visibility, visibility).setUv(0.25f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-		bufferBuilder.addVertex(pose, p1).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0.75f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-		bufferBuilder.addVertex(pose, p0).setColor(visibility, visibility, visibility, visibility).setUv(0.75f, 0.25f).setNormal(pose, 0.0f, 1.0f, 0.0f).setLight(255);
-
-	}
 
 	protected void renderMirrorTri(BeamOriginBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, Vec3 vertex0, Vec3 vertex1, Vec3 vertex2, float visibility) {
 		poseStack.pushPose();

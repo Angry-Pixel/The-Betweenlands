@@ -110,15 +110,24 @@ public class BeamOriginMirrorWorldRenderHandler {
 		
 	}
 	
-	public static void submitBeamOrigin(PoseStack.Pose pose, float visibility, float rotation, int packedLight, int packedOverlay) {
+	/**
+	 * Attempts to submit a beam origin to mirror world rendering.
+	 * @param pose
+	 * @param visibility
+	 * @param rotation
+	 * @param packedLight
+	 * @param packedOverlay
+	 * @return {@code true} if the beam origin will be rendered by the render handler
+	 */
+	public static boolean submitBeamOrigin(PoseStack.Pose pose, float visibility, float rotation, int packedLight, int packedOverlay) {
 		// Get the context
 		MirrorWorldContext context = MIRROR_WORLD_CONTEXT.get();
 		
 		if (!context.isActive()) {
-			return;
+			return false;
 		}
 		
-		context.submit(new BeamOriginInstance(pose.copy(), visibility, rotation, packedLight, packedOverlay));
+		return context.submit(new BeamOriginInstance(pose.copy(), visibility, rotation, packedLight, packedOverlay));
 	}
 	
 	/**
