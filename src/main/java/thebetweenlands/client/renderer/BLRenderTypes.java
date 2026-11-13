@@ -1,19 +1,22 @@
 package thebetweenlands.client.renderer;
 
+import java.util.OptionalDouble;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.event.BetweenlandsShaders;
 import thebetweenlands.client.model.block.DungeonDoorRunesModel;
-
-import java.util.OptionalDouble;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import thebetweenlands.common.TheBetweenlands;
 
 public class BLRenderTypes extends RenderType {
 
@@ -166,6 +169,57 @@ public class BLRenderTypes extends RenderType {
 	}
 
 	public static final ShaderStateShard BEAM_ORIGIN_GLASS_SHADER = new ShaderStateShard(() -> BetweenlandsShaders.BEAM_ORIGIN_GLASS);
+	
+	public static final TextureStateShard BEAM_ORIGIN_PRISM_MIRROR_TEXTURE = new RenderStateShard.TextureStateShard(
+			TheBetweenlands.prefix("textures/entity/block/prism_mirror.png"), false, false
+		);
+
+	public static final RenderType BEAM_ORIGIN_STENCIL_LAYER = RenderType.create(
+				"thebetweenlands:beam_origin_mirror",
+				DefaultVertexFormat.POSITION,
+				Mode.TRIANGLES,
+				RenderType.TRANSIENT_BUFFER_SIZE,
+				true,
+				true,
+				RenderType.CompositeState.builder()
+					.setShaderState(RenderType.POSITION_SHADER)
+					.setLightmapState(RenderType.NO_LIGHTMAP)
+					.setTextureState(RenderType.NO_TEXTURE)
+					.setWriteMaskState(WriteMaskStateShard.DEPTH_WRITE)
+					.createCompositeState(true)
+				);
+
+	public static final RenderType BEAM_ORIGIN_PRISM_LAYER = RenderType.create(
+			"thebetweenlands:beam_origin",
+			BLVertexFormats.BEAM_ORIGIN_GLASS,
+			Mode.TRIANGLES,
+			RenderType.TRANSIENT_BUFFER_SIZE,
+			true,
+			true,
+			RenderType.CompositeState.builder()
+				.setLightmapState(RenderType.NO_LIGHTMAP)
+				.setShaderState(BLRenderTypes.BEAM_ORIGIN_GLASS_SHADER)
+				.setTextureState(BEAM_ORIGIN_PRISM_MIRROR_TEXTURE)
+				.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+				.setCullState(RenderType.CULL)
+				.createCompositeState(true)
+			);
+
+	public static final RenderType BEAM_ORIGIN_TOP_LAYER = RenderType.create(
+				"thebetweenlands:beam_origin_top",
+				BLVertexFormats.BEAM_ORIGIN_GLASS,
+				Mode.QUADS,
+				RenderType.TRANSIENT_BUFFER_SIZE,
+				true,
+				true,
+				RenderType.CompositeState.builder()
+					.setLightmapState(RenderType.NO_LIGHTMAP)
+					.setShaderState(BLRenderTypes.BEAM_ORIGIN_GLASS_SHADER) 
+					.setTextureState(BEAM_ORIGIN_PRISM_MIRROR_TEXTURE)
+					.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+					.setCullState(RenderType.CULL)
+					.createCompositeState(true)
+				);
 	
 	public static final ShaderStateShard DUNGEON_DOOR_RUNES_SHADER = new ShaderStateShard(() -> BetweenlandsShaders.DUNGEON_DOOR_RUNES);
 

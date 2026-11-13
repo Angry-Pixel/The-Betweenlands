@@ -91,20 +91,7 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			TheBetweenlands.prefix("textures/entity/block/prism_mirror.png"), false, false
 		);
 
-	public static final RenderType BEAM_ORIGIN_MIRROR_STENCIL_LAYER = RenderType.create(
-				"thebetweenlands:beam_origin_mirror",
-				DefaultVertexFormat.POSITION,
-				Mode.TRIANGLES,
-				RenderType.TRANSIENT_BUFFER_SIZE,
-				true,
-				true,
-				RenderType.CompositeState.builder()
-					.setShaderState(RenderType.POSITION_SHADER)
-					.setLightmapState(RenderType.NO_LIGHTMAP)
-					.setTextureState(RenderType.NO_TEXTURE)
-					.setWriteMaskState(WriteMaskStateShard.DEPTH_WRITE)
-					.createCompositeState(true)
-				);
+	public static final RenderType BEAM_ORIGIN_MIRROR_STENCIL_LAYER = BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER;
 
 	public static final RenderModifiers BEAM_ORIGIN_MIRROR_MODIFIERS = RenderModifiers.build()
 			.add(StencilModifier.INSTANCE) // main stencil, locks to the mirror tri
@@ -116,37 +103,9 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			.add(RunnableModifier.INSTANCE) // should be replaced by a "No Writing To Render Buffers" modifier instead
 			.build("thebetweenlands:beam_origin_mirror_world");
 	
-	public static final RenderType BEAM_ORIGIN_LAYER = RenderType.create(
-			"thebetweenlands:beam_origin",
-			BLVertexFormats.BEAM_ORIGIN_GLASS,
-			Mode.TRIANGLES,
-			RenderType.TRANSIENT_BUFFER_SIZE,
-			true,
-			true,
-			RenderType.CompositeState.builder()
-				.setLightmapState(RenderType.NO_LIGHTMAP)
-				.setShaderState(BLRenderTypes.BEAM_ORIGIN_GLASS_SHADER)
-				.setTextureState(PRISM_MIRROR_TEXTURE)
-				.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-				.setCullState(RenderType.CULL)
-				.createCompositeState(true)
-			);
+	public static final RenderType BEAM_ORIGIN_LAYER = BLRenderTypes.BEAM_ORIGIN_PRISM_LAYER;
 
-	public static final RenderType BEAM_ORIGIN_TOP_LAYER = RenderType.create(
-				"thebetweenlands:beam_origin_top",
-				BLVertexFormats.BEAM_ORIGIN_GLASS,
-				Mode.QUADS,
-				RenderType.TRANSIENT_BUFFER_SIZE,
-				true,
-				true,
-				RenderType.CompositeState.builder()
-					.setLightmapState(RenderType.NO_LIGHTMAP)
-					.setShaderState(BLRenderTypes.BEAM_ORIGIN_GLASS_SHADER) 
-					.setTextureState(PRISM_MIRROR_TEXTURE)
-					.setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-					.setCullState(RenderType.CULL)
-					.createCompositeState(true)
-				);
+	public static final RenderType BEAM_ORIGIN_TOP_LAYER = BLRenderTypes.BEAM_ORIGIN_TOP_LAYER;
 
 	// This is just a little bit of memoization to help make some of the old code clearer, I'm happy with this
 	// also, I flipped vertex 1 and vertex 2 so the faces are facing the front instead of the back
