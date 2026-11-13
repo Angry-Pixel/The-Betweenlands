@@ -9,16 +9,20 @@ import javax.annotation.Nonnull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import com.mojang.math.Axis;
@@ -38,6 +42,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.GlStateBackup;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler.BeamOriginInstance;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
@@ -136,13 +141,11 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			if (!stencil.isValid()) {
 				return;
 			}
-
-			Tesselator tessellator = Tesselator.getInstance();
 			
 			// Create context
 			Context context = new Context(
 					modelViewMatrix, projectionMatrix,
-					stencil, tessellator,
+					stencil, Tesselator.getInstance(),
 					renderDebugNormals
 			);
 			
@@ -150,6 +153,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			Quaternionf quat = new Quaternionf();
 			
 			Vector3f[] triOut = new Vector3f[] {new Vector3f(), new Vector3f(), new Vector3f()};
+
+			// Enable stenciling
+			GL11.glEnable(GL11.GL_STENCIL_TEST);
 			
 			for (int i = 0; i < beamOrigins.size(); ++i) {
 				BeamOriginInstance beamOrigin = beamOrigins.get(i);
@@ -162,24 +168,148 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN, triOut[2]));
 			}
+			
+			// Disable stencilling
+			// TODO finally block
+			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
 	}
 	
 	/**
 	 * Renders a beam origin mirror immediately to framebuffer
-	 * @param context
-	 * @param beamOrigin
-	 * @param vertex0
-	 * @param vertex1
-	 * @param vertex2
+	 * @param context    the context that this mirror will be rendered in
+	 * @param beamOrigin the beam origin instance this mirror is for
+	 * @param vertex0    triangle vertex 0
+	 * @param vertex1    triangle vertex 1
+	 * @param vertex2    triangle vertex 2
 	 */
 	private void renderBeamOriginMirror(
 			Context context, BeamOriginInstance beamOrigin,
 			Vector3f vertex0, Vector3f vertex1, Vector3f vertex2
 	) {
+		// GL state backup
+		GlStateBackup backup = new GlStateBackup();
+		RenderSystem.backupGlState(backup);
+
+		// Create our mirror triangle mesh
+		MeshData mirrorTriMesh = createMirrorMesh(context, beamOrigin, vertex0, vertex1, vertex2);
 		
+		Stencil stencil = context.stencil();
 		
+		// Set up our stencil mask
+		drawMirrorAsStencil(stencil, mirrorTriMesh);
+
+		// Set the depth in the mirror to a really large value
+		drawMirrorAsDepth(stencil, mirrorTriMesh, true, GL11.GL_ALWAYS, 1000000.0f, 1000000.0f);
 		
+		// Draw our mirror world
+		drawMirrorWorld(context, beamOrigin, vertex0, vertex1, vertex2);
+
+		// Reset the depth to the original prism triangle depth
+		drawMirrorAsDepth(stencil, mirrorTriMesh, true, GL11.GL_ALWAYS, 0.0f, 0.0f);
+		
+		// Reset GL state
+		RenderSystem.restoreGlState(backup);
+	}
+
+	/**
+	 * Draws the beam origin mirror world to the stencilled area
+	 * @param context    the context that the mirror world will be rendered in
+	 * @param beamOrigin the beam origin instance this mirror world is being rendered for
+	 * @param vertex0    triangle vertex 0
+	 * @param vertex1    triangle vertex 1
+	 * @param vertex2    triangle vertex 2
+	 */
+	private void drawMirrorWorld(Context context, BeamOriginInstance beamOrigin, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
+		
+	}
+
+	/**
+	 * Creates the mesh for a mirror triangle with the specified context and instance
+	 * @param context    the context that this mesh will be rendered in
+	 * @param beamOrigin the beam origin instance this mesh is for
+	 * @param vertex0    triangle vertex 0
+	 * @param vertex1    triangle vertex 1
+	 * @param vertex2    triangle vertex 2
+	 */
+	private MeshData createMirrorMesh(Context context, BeamOriginInstance beamOrigin, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
+		Tesselator tessellator = context.tessellator();
+		Pose mirrorPose = beamOrigin.pose();
+		
+		BufferBuilder builder = tessellator.begin(Mode.TRIANGLES, DefaultVertexFormat.POSITION);
+
+		builder.addVertex(mirrorPose, vertex0);
+		builder.addVertex(mirrorPose, vertex1);
+		builder.addVertex(mirrorPose, vertex2);
+		
+		MeshData mesh = builder.buildOrThrow();
+		
+		return mesh;
+	}
+	
+	/**
+	 * Renders a beam origin mirror as a stencil to the framebuffer
+	 * @param stencil       the stencil to render to
+	 * @param mirrorTriMesh the mesh of the mirror tri
+	 */
+	private void drawMirrorAsStencil(Stencil stencil, MeshData mirrorTriMesh) {
+		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.setupRenderState();
+		
+		// Prevent depth writes, but still require LEQUAL
+		RenderSystem.depthMask(false);
+		RenderSystem.depthFunc(GL11.GL_LEQUAL);
+		
+		// Shift slightly towards the camera so the stencil renders in front of the
+		//       exist prism, but behind any blocks that might obscure it
+		RenderSystem.enablePolygonOffset();
+		RenderSystem.polygonOffset(0.0f, -10.0f);
+		
+		// Setup stencil state
+		
+		// Clear stencil so everything is discarded by default
+		stencil.setAllZeros();
+		// Every time a pixel is drawn, the stencil bit will be set to 1
+		stencil.func(GL11.GL_ALWAYS, true);
+
+		// Only draw pixels when the stencil test and depth test succeed
+		stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+		
+		// Render our mirror tri
+		BufferUploader.drawWithShader(mirrorTriMesh);
+		
+		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.clearRenderState();
+	}
+
+	/**
+	 * Renders a beam origin mirror as depth
+	 * @param stencil       the stencil to render to
+	 * @param mirrorTriMesh the mesh of the mirror tri
+	 */
+	private void drawMirrorAsDepth(Stencil stencil, MeshData mirrorTriMesh,
+			boolean depthMask, int depthFunc, float offsetFactor, float offsetUnits) {
+		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.setupRenderState();
+		
+		// Prevent depth writes, but still require LEQUAL
+		RenderSystem.depthMask(depthMask);
+		RenderSystem.depthFunc(depthFunc);
+		
+		// Shift slightly towards the camera so the stencil renders in front of the
+		//       exist prism, but behind any blocks that might obscure it
+		RenderSystem.enablePolygonOffset();
+		RenderSystem.polygonOffset(offsetFactor, offsetUnits);
+
+		// Setup stencil state
+		
+		// Only draw pixels where our bit is set in the stencil
+		stencil.func(GL11.GL_EQUAL, true);
+		
+		// Never change the stencil
+		stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+		
+		// Render our mirror tri
+		BufferUploader.drawWithShader(mirrorTriMesh);
+		
+		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.clearRenderState();
 	}
 	// #endregion Rendering
 
