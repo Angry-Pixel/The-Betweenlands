@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -102,7 +103,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	private static record Context(
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
 			Stencil stencil, Tesselator tessellator,
-			boolean renderDebugNormals
+			boolean renderDebugNormals, @Nullable MultiBufferSource debugBufferSource
 	) {
 
 		/**
@@ -146,7 +147,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			Context context = new Context(
 					modelViewMatrix, projectionMatrix,
 					stencil, Tesselator.getInstance(),
-					renderDebugNormals
+					renderDebugNormals, renderDebugNormals ? MultiBufferSource.immediate(sharedBuffer) : null
 			);
 			
 			// Quaternion for rendering
@@ -170,7 +171,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			}
 			
 			// Disable stencilling
-			// TODO finally block
+			// TODO put this in a "finally { ... }" block
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
 	}
@@ -200,11 +201,13 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		drawMirrorAsStencil(stencil, mirrorTriMesh);
 
 		// Set the depth in the mirror to a really large value
+		mirrorTriMesh = createMirrorMesh(context, beamOrigin, vertex0, vertex1, vertex2);
 		drawMirrorAsDepth(stencil, mirrorTriMesh, true, GL11.GL_ALWAYS, 1000000.0f, 1000000.0f);
 		
 		// Draw our mirror world
 		drawMirrorWorld(context, beamOrigin, vertex0, vertex1, vertex2);
 
+		mirrorTriMesh = createMirrorMesh(context, beamOrigin, vertex0, vertex1, vertex2);
 		// Reset the depth to the original prism triangle depth
 		drawMirrorAsDepth(stencil, mirrorTriMesh, true, GL11.GL_ALWAYS, 0.0f, 0.0f);
 		
@@ -221,6 +224,26 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param vertex2    triangle vertex 2
 	 */
 	private void drawMirrorWorld(Context context, BeamOriginInstance beamOrigin, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
+		final Vector3f normalF = new Vector3f(vertex1).sub(vertex0).cross(vertex2.x - vertex0.x, vertex2.y - vertex0.y, vertex2.z - vertex0.z).normalize();
+		final Vector3f mirrorCenter = vertex0;
+		
+		Pose pose = beamOrigin.pose();
+		
+		// debug normals
+		if (context.renderDebugNormals()) {
+			MultiBufferSource bufferSource = context.debugBufferSource();
+			VertexConsumer lineConsumer = bufferSource.getBuffer(RenderType.LINES);
+
+			lineConsumer.addVertex(pose, vertex0)
+				.setColor(0, 0, 255, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
+			lineConsumer.addVertex(pose, vertex0.x + normalF.x, vertex0.y + normalF.y, vertex0.z + normalF.z)
+				.setColor(0, 0, 255, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
+
+			lineConsumer.addVertex(pose, mirrorCenter)
+				.setColor(255, 0, 0, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
+			lineConsumer.addVertex(pose, mirrorCenter.x + normalF.x, mirrorCenter.y + normalF.y, mirrorCenter.z + normalF.z)
+				.setColor(255, 0, 0, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
+		}
 		
 	}
 
