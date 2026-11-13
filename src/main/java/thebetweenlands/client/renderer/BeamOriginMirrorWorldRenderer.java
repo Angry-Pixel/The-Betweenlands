@@ -1,9 +1,13 @@
 package thebetweenlands.client.renderer;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
@@ -14,8 +18,10 @@ import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
+import com.mojang.math.Axis;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -29,6 +35,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler.BeamOriginInstance;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -36,6 +43,32 @@ import thebetweenlands.common.registries.BlockRegistry;
 public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloadListener {
 	public static final BeamOriginMirrorWorldRenderer INSTANCE = new BeamOriginMirrorWorldRenderer();
 
+	// #region Triangle Dimensions
+	// This is just a little bit of memoization to help make some of the old code clearer, I'm happy with this
+	// also, I flipped vertex 1 and vertex 2 so the faces are facing the front instead of the back
+
+	public static final double TRIANGLE_HEIGHT = 1.65D;
+	public static final double TRIANGLE_WIDTH  = 0.45D;
+
+	protected static final Vec3 TRIANGLE_ORIGIN = Vec3.ZERO;
+	protected static final Vec3[][] TRIANGLE_VERTICES;
+
+	static {
+		Vec3 vertex0 = TRIANGLE_ORIGIN.add(-TRIANGLE_WIDTH, 0, 0).add(TRIANGLE_WIDTH, 1, 0);
+		Vec3 vertex1 = TRIANGLE_ORIGIN.add(0, TRIANGLE_HEIGHT, -TRIANGLE_WIDTH).add(TRIANGLE_WIDTH, 1, 0);
+		Vec3 vertex2 = TRIANGLE_ORIGIN.add(0, TRIANGLE_HEIGHT, TRIANGLE_WIDTH).add(TRIANGLE_WIDTH, 1, 0);
+
+		TRIANGLE_VERTICES = new Vec3[][] {
+			{vertex0, vertex1, vertex2},
+			{vertex0, vertex1.add(0, 0, TRIANGLE_WIDTH*2), vertex2.add(-TRIANGLE_WIDTH*2, 0, 0)},
+			{vertex0, vertex1.add(-TRIANGLE_WIDTH*2, 0, TRIANGLE_WIDTH*2), vertex2.add(-TRIANGLE_WIDTH*2, 0, -TRIANGLE_WIDTH*2)},
+			{vertex0, vertex1.add(-TRIANGLE_WIDTH*2, 0, 0), vertex2.add(0, 0, -TRIANGLE_WIDTH*2)},
+		};
+	}
+	// #endregion
+	
+	
+	// #region Class fields
 	protected BlockRenderDispatcher blockRenderDispatcher = null;
 	
 	// Mirror world, to build the models
@@ -43,13 +76,85 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	// Only used for immediate rendering
 	protected final Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
 	// Buffer used to construct VBOs
-    protected final ByteBufferBuilder sharedBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
+	protected final ByteBufferBuilder sharedBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
+	// #endregion
 	
+	// Singleton class constructor
 	private BeamOriginMirrorWorldRenderer() {
 		// Unit
 	}
+	
+	
+	// #region Rendering
+	/**
+	 * Renders multiple mirror worlds directly to the framebuffer
+	 * @param poseStack
+	 * @param partialTicks
+	 * @param beamOrigins
+	 * @param renderDebugNormals
+	 */
+	public void render(PoseStack poseStack, DeltaTracker partialTicks, List<BeamOriginInstance> beamOrigins, boolean renderDebugNormals) {
+		this.createMissingMirrorWorldVbos();
+		
+		
+	}
+	
+	// #endregion Rendering
 
-	// #region Create the Mirror World VBOs
+	
+	
+	// #region Mirror Transformations
+
+	// This is okay I think
+	// look into whether it's possible to rewrite so changing the culled faces from BACK to FRONT isn't necessary
+
+	public static void mirrorTransform(PoseStack poseStack, Vec3 mirrorCenter, Vec3 mirrorNormal) {
+		poseStack.translate(mirrorCenter.x, mirrorCenter.y, mirrorCenter.z);
+
+		scaleTransform(poseStack, mirrorNormal, -1);
+
+		poseStack.translate(-mirrorCenter.x, -mirrorCenter.y, -mirrorCenter.z);
+	}
+
+	public static void scaleTransform(PoseStack poseStack, Vec3 axis, float scale) {
+		float yaw = -(float)Math.atan2(axis.z, axis.x);
+		float pitch = (float)(Math.atan2(Math.sqrt(axis.x*axis.x + axis.z*axis.z), -axis.y) + Math.PI);
+
+		poseStack.mulPose(Axis.YP.rotation(yaw));
+		poseStack.mulPose(Axis.ZP.rotation(pitch));
+
+		poseStack.scale(1, scale, 1);
+
+		poseStack.mulPose(Axis.ZN.rotation(pitch));
+		poseStack.mulPose(Axis.YN.rotation(yaw));
+	}
+
+	/**
+	 * Transforms/Rotates the given point around the given center and returns the result
+	 * @param quat			Quaternion to use for the transform
+	 * @param point			Point to rotate
+	 * @param centerPoint	Rotation center
+	 * @return
+	 */
+	public static Vec3 transformVec(Quaternionf quat, Vec3 point, Vec3 centerPoint) {
+		return new Vec3(transformVec(quat, point.toVector3f(), centerPoint.toVector3f()));
+	}
+
+	/**
+	 * Transforms/Rotates the given point around the given center and returns the result
+	 * @param quat			Quaternion to use for the transform
+	 * @param point			Point to rotate
+	 * @param centerPoint	Rotation center
+	 * @return
+	 */
+	public static Vector3f transformVec(Quaternionf quat, Vector3f point, Vector3f centerPoint) {
+		return quat.transform(point.sub(centerPoint, new Vector3f())).add(centerPoint);
+	}
+	// #endregion
+
+	
+	
+	// #region Create mirror world VBOs
 	private void createMirrorWorld() {
 		if(this.mirrorWorld == null) {
 			this.mirrorWorld = new BeamOriginMirrorWorld();
@@ -180,6 +285,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	}
 	// #endregion
 
+
 	@Override
 	public void onResourceManagerReload(ResourceManager resourceManager) {
 		// Invalidate VBOs
@@ -188,6 +294,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		}
 		
 		this.mirrorWorldVbos.clear();
+		
+		// Reset mirror world
+		this.mirrorWorld = null;
 		
 		// Update block render dispatcher
 		this.blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();

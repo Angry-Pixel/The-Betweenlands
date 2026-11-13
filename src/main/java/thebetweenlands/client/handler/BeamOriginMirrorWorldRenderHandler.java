@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage;
 import net.neoforged.neoforge.common.NeoForge;
+import thebetweenlands.client.renderer.BeamOriginMirrorWorldRenderer;
 
 /**
  * Handles rendering all beam origin mirror worlds.
@@ -167,6 +169,13 @@ public class BeamOriginMirrorWorldRenderHandler {
 	 * @param beamOrigins
 	 */
 	private static void renderMirrorWorlds(RenderLevelStageEvent event, List<BeamOriginInstance> beamOrigins) {
-		final boolean renderDebugNormals = event.getLevelRenderer().entityRenderDispatcher.shouldRenderHitBoxes();
+		final EntityRenderDispatcher entityRenderDispatcher = event.getLevelRenderer().entityRenderDispatcher;
+		final boolean renderDebugNormals = entityRenderDispatcher != null && entityRenderDispatcher.shouldRenderHitBoxes();
+		
+		BeamOriginMirrorWorldRenderer.INSTANCE.render(
+				event.getPoseStack(),
+				event.getPartialTick(),
+				beamOrigins,
+				renderDebugNormals);
 	}
 }
