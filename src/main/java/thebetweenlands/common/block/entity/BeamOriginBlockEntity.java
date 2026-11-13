@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -7,12 +9,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import thebetweenlands.common.block.structure.BeamOriginBlock;
@@ -40,12 +45,21 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 	public boolean beam_2_active = false;
 	public boolean beam_3_active = false;
 	public boolean beam_4_active = false;
+	
+	/**
+	 * Client-side-only list of all entities to be rendered in the mirror world
+	 */
+	public List<? extends Entity> clientMirrorEntities = List.of();
 
 	public BeamOriginBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.BEAM_ORIGIN.get(), pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, BeamOriginBlockEntity entity) {
+		if (level.isClientSide()) {
+			entity.clientMirrorEntities = level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(20));
+		}
+		
 		int litBraziers = entity.checkForLitBraziers(level, pos);
 
 		if (litBraziers == 4) {
