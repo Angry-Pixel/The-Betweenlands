@@ -694,8 +694,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 
 		for(RenderType renderType : renderTypes) {
 			VertexBuffer buffer = this.mirrorWorldVbos.get(renderType);
-			if(buffer != null && !buffer.isInvalid()) continue;
-			this.regenerateMirrorWorldVBO(renderType);
+			if(buffer == null || buffer.isInvalid()) {
+				this.regenerateMirrorWorldVBO(renderType);
+			}
 		}
 	}
 
