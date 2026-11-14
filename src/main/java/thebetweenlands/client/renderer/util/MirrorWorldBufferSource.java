@@ -40,8 +40,8 @@ public class MirrorWorldBufferSource extends MultiBufferSource.BufferSource {
 		return new MirrorWorldBufferSource(sharedBuffer, fixedBuffers);
 	}
 	
-	private boolean isMirror = false;
-	private Stencil stencil = null;
+	protected boolean isMirror = false;
+	protected Stencil stencil = null;
 	
 	protected MirrorWorldBufferSource(ByteBufferBuilder sharedBuffer, SequencedMap<RenderType, ByteBufferBuilder> fixedBuffers) {
 		super(sharedBuffer, fixedBuffers);
@@ -79,20 +79,13 @@ public class MirrorWorldBufferSource extends MultiBufferSource.BufferSource {
 		return this.isMirror;
 	}
 	
-	@Override
-	public void endBatch(RenderType renderType) {
-		BufferBuilder bufferbuilder = this.startedBuilders.remove(renderType);
-		if (bufferbuilder != null) {
-			this.endBatch(renderType, bufferbuilder);
-		}
-	}
-
 	/**
 	 * Renders a rendertype batch
 	 * @param renderType
 	 * @param builder
 	 */
-	private void endBatch(RenderType renderType, BufferBuilder builder) {
+	@Override
+	protected void endBatch(RenderType renderType, BufferBuilder builder) {
 		MeshData meshdata = builder.build();
 		if (meshdata != null) {
 			if (renderType.sortOnUpload()) {
