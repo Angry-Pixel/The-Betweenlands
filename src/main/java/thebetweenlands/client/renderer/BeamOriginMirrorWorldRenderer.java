@@ -697,12 +697,10 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				getRenderTypes(fireState,          random)
 			);
 
-		Tesselator tesselator = Tesselator.getInstance();
-
 		for(RenderType renderType : renderTypes) {
 			VertexBuffer buffer = this.mirrorWorldVbos.get(renderType);
 			if(buffer != null && !buffer.isInvalid()) continue;
-			this.regenerateMirrorWorldVBO(tesselator, renderType);
+			this.regenerateMirrorWorldVBO(renderType);
 		}
 	}
 
@@ -710,7 +708,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * Rebuild and store the mirror world vertex buffer for the specified render type
 	 * @param renderType the render type to generate a VBO for
 	 */
-	private void regenerateMirrorWorldVBO(Tesselator tessellator, @Nonnull RenderType renderType) {
+	private void regenerateMirrorWorldVBO(@Nonnull RenderType renderType) {
 		Objects.requireNonNull(renderType);
 
 		VertexBuffer vbo = this.mirrorWorldVbos.compute(renderType, (key, oldVbo) -> {
@@ -722,12 +720,14 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 
 		PoseStack poseStack = new PoseStack();
 
-		BufferBuilder builder = tessellator.begin(renderType.mode(), renderType.format());
+		// Create a buffer builder on our shared buffer
+		BufferBuilder builder = new BufferBuilder(this.sharedBuffer, renderType.mode(), renderType.format());
 
+		// Render our mirror world to that buffer
 		renderMirrorWorldTo(poseStack, builder, renderType);
 
+		// Build our mesh, sort the quads, and upload to the VBO
 		MeshData meshData = builder.build();
-
 		if(meshData != null) {
 			if(renderType.sortOnUpload()) {
 				meshData.sortQuads(this.sharedBuffer, VertexSorting.DISTANCE_TO_ORIGIN);
@@ -735,6 +735,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 
 			vbo.bind();
 			vbo.upload(meshData);
+			VertexBuffer.unbind();
 
 			this.mirrorWorldVbos.put(renderType, vbo);
 		} else {
