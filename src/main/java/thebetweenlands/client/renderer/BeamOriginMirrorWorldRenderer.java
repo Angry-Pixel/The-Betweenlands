@@ -87,7 +87,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	protected BeamOriginMirrorWorld mirrorWorld;
 	// Only used for immediate rendering
 	protected final Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
-	// Buffer used to construct VBOs
+	// Buffer used to construct VBOs and debug rendering
 	protected final ByteBufferBuilder sharedBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
 	// #endregion
 	
@@ -102,6 +102,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * Context used so we don't have to pass around a million arguments
 	 */
 	private static record Context(
+			PoseStack poseStack, DeltaTracker partialTicks,
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
 			Stencil stencil, Tesselator tessellator,
 			VertexBuffer mirrorTriBuffer,
@@ -169,6 +170,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			
 			// Create context
 			Context context = new Context(
+					poseStack, partialTicks,
 					modelViewMatrix, projectionMatrix,
 					stencil, Tesselator.getInstance(),
 					triVertexBuffer,
@@ -187,12 +189,23 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				BeamOriginInstance beamOrigin = beamOrigins.get(i);
 				
 				quat.identity().rotationY(beamOrigin.rotation());
+
+				// Setup poseStack
+				poseStack.pushPose();
+				Pose pose = beamOrigin.pose();
+
+				// Override pose
+				poseStack.setIdentity();
+				poseStack.last().pose().set(pose.pose());
+				poseStack.last().normal().set(pose.normal());
 				
 				// Render the beam origin mirrors
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN, triOut[2]));
+				
+				poseStack.popPose();
 			}
 			
 			// Disable stencilling
@@ -220,6 +233,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			Vector3f vertex0, Vector3f vertex1, Vector3f vertex2
 	) {
 		// GL state backup
+
 		GlStateBackup backup = new GlStateBackup();
 		RenderSystem.backupGlState(backup);
 
@@ -238,7 +252,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		drawMirrorAsDepth(context, stencil, mirrorTriBuffer, true, GL11.GL_ALWAYS, 1000000.0f, 1000000.0f);
 		
 		// Draw our mirror world
-		drawMirrorWorld(context, beamOrigin, vertex0, vertex1, vertex2);
+		drawMirrorWorld(context, beamOrigin, backup, vertex0, vertex1, vertex2);
 
 		// Reset the depth to the original prism triangle depth
 		drawMirrorAsDepth(context, stencil, mirrorTriBuffer, true, GL11.GL_ALWAYS, 0.0f, 0.0f);
@@ -255,7 +269,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param vertex1    triangle vertex 1
 	 * @param vertex2    triangle vertex 2
 	 */
-	private void drawMirrorWorld(Context context, BeamOriginInstance beamOrigin, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
+	private void drawMirrorWorld(Context context, BeamOriginInstance beamOrigin, GlStateBackup backup, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
 		final Vector3f normalF = new Vector3f(vertex1).sub(vertex0).cross(vertex2.x - vertex0.x, vertex2.y - vertex0.y, vertex2.z - vertex0.z).normalize();
 		final Vector3f mirrorCenter = vertex0;
 		
@@ -266,16 +280,59 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			VertexConsumer lineConsumer = context.debugBufferSource().getBuffer(RenderType.LINES);
 
 			lineConsumer.addVertex(pose, vertex0)
-				.setColor(0, 0, 255, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
+				.setColor(255, 0, 255, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
 			lineConsumer.addVertex(pose, vertex0.x + normalF.x, vertex0.y + normalF.y, vertex0.z + normalF.z)
 				.setColor(0, 0, 255, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
 
 			lineConsumer.addVertex(pose, mirrorCenter)
-				.setColor(255, 0, 0, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
+				.setColor(255, 255, 0, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
 			lineConsumer.addVertex(pose, mirrorCenter.x + normalF.x, mirrorCenter.y + normalF.y, mirrorCenter.z + normalF.z)
 				.setColor(255, 0, 0, 255).setNormal(pose, normalF.x, normalF.y, normalF.z);
 		}
+
+		PoseStack poseStack = context.poseStack();
+		poseStack.pushPose();
 		
+		// Mirror transform
+		mirrorTransform(poseStack, mirrorCenter, normalF);
+		
+		// translate to make sure we're at (0, 0, 0) in the fake world
+		poseStack.translate(-0.5F, -2.5F, -0.5F);
+		
+		renderMirrorWorldGeometry(context, beamOrigin, backup, mirrorCenter, normalF);
+		
+		poseStack.popPose();
+	}
+	
+	private void renderMirrorWorldGeometry(Context context, BeamOriginInstance beamOrigin, GlStateBackup backup, Vector3f mirrorCenter, Vector3f normalF) {
+		PoseStack poseStack = context.poseStack();
+		
+		for (RenderType renderType : ChunkRenderTypeSet.all().asList()) {
+			VertexBuffer vertexBuffer = this.mirrorWorldVbos.get(renderType);
+
+			if(vertexBuffer != null && !vertexBuffer.isInvalid()) {
+				// Setup render type
+				renderType.setupRenderState();
+				
+				// Only draw pixels where our bit is set in the stencil
+				context.stencil().func(GL11.GL_EQUAL, true);
+				
+				// Never change the stencil
+				context.stencil().op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+				
+				// Flip cullface
+				GL11.glCullFace(GL11.GL_FRONT);
+				
+				// Render geometry vbo
+				context.renderVboWithPose(poseStack.last().pose(), vertexBuffer);
+				
+				// Clear render type
+				renderType.clearRenderState();
+				RenderSystem.restoreGlState(backup);
+			}
+		}
+		
+		GL11.glCullFace(GL11.GL_BACK);
 	}
 
 	/**
@@ -343,12 +400,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			boolean depthMask, int depthFunc, float offsetFactor, float offsetUnits) {
 		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.setupRenderState();
 		
-		// Prevent depth writes, but still require LEQUAL
 		RenderSystem.depthMask(depthMask);
 		RenderSystem.depthFunc(depthFunc);
 		
-		// Shift slightly towards the camera so the stencil renders in front of the
-		//       exist prism, but behind any blocks that might obscure it
 		RenderSystem.enablePolygonOffset();
 		RenderSystem.polygonOffset(offsetFactor, offsetUnits);
 
@@ -362,7 +416,9 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 
 		// Render our mirror tri
 		context.renderVbo(mirrorTriBuffer);
-		
+
+		RenderSystem.disablePolygonOffset();
+
 		BLRenderTypes.BEAM_ORIGIN_STENCIL_LAYER.clearRenderState();
 	}
 	// #endregion Rendering
@@ -449,7 +505,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	// This is okay I think
 	// look into whether it's possible to rewrite so changing the culled faces from BACK to FRONT isn't necessary
 
-	public static void mirrorTransform(PoseStack poseStack, Vec3 mirrorCenter, Vec3 mirrorNormal) {
+	public static void mirrorTransform(PoseStack poseStack, Vector3f mirrorCenter, Vector3f mirrorNormal) {
 		poseStack.translate(mirrorCenter.x, mirrorCenter.y, mirrorCenter.z);
 
 		scaleTransform(poseStack, mirrorNormal, -1);
@@ -457,7 +513,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		poseStack.translate(-mirrorCenter.x, -mirrorCenter.y, -mirrorCenter.z);
 	}
 
-	public static void scaleTransform(PoseStack poseStack, Vec3 axis, float scale) {
+	public static void scaleTransform(PoseStack poseStack, Vector3f axis, float scale) {
 		float yaw = -(float)Math.atan2(axis.z, axis.x);
 		float pitch = (float)(Math.atan2(Math.sqrt(axis.x*axis.x + axis.z*axis.z), -axis.y) + Math.PI);
 
