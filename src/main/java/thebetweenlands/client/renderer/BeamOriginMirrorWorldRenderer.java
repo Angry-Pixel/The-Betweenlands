@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -15,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
@@ -24,8 +22,8 @@ import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import com.mojang.math.Axis;
 
@@ -35,10 +33,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.TickRateManager;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -48,6 +51,7 @@ import net.neoforged.neoforge.client.GlStateBackup;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler.BeamOriginInstance;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
+import thebetweenlands.client.renderer.util.MirrorWorldBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -87,15 +91,20 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	protected BeamOriginMirrorWorld mirrorWorld;
 	// Only used for immediate rendering
 	protected final Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
-	// Buffer used to render beam origin prisms
-	protected final ByteBufferBuilder prismBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
-	// Buffer used to construct VBOs and debug rendering
+	
+	// Buffer used for debug rendering
+	protected final ByteBufferBuilder debugBuffer = new ByteBufferBuilder(RenderType.TRANSIENT_BUFFER_SIZE);
+	protected final MultiBufferSource.BufferSource debugBufferSource;
+	
+	// Buffer used to construct VBOs, render beam origin prisms, and render entities
 	protected final ByteBufferBuilder sharedBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
+	protected final MirrorWorldBufferSource mirrorWorldBufferSource;
 	// #endregion
 	
 	// Singleton class constructor
 	private BeamOriginMirrorWorldRenderer() {
-		// Unit
+		this.debugBufferSource = MultiBufferSource.immediate(sharedBuffer);
+		this.mirrorWorldBufferSource = MirrorWorldBufferSource.immediate(this.sharedBuffer);
 	}
 	
 	
@@ -106,9 +115,10 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	private static record Context(
 			PoseStack poseStack, DeltaTracker partialTicks,
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
+			EntityRenderDispatcher entityRenderDispatcher,
 			Stencil stencil, Tesselator tessellator,
-			VertexBuffer mirrorTriBuffer, MultiBufferSource.BufferSource prismBufferSource,
-			boolean renderDebugNormals, @Nullable MultiBufferSource debugBufferSource
+			VertexBuffer mirrorTriBuffer, MultiBufferSource.BufferSource mirrorWorldBufferSource,
+			boolean renderDebugNormals, MultiBufferSource debugBufferSource
 	) {
 
 		/**
@@ -151,6 +161,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	public void render(
 			PoseStack poseStack, DeltaTracker partialTicks,
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
+			EntityRenderDispatcher entityRenderDispatcher,
 			List<BeamOriginInstance> beamOrigins,
 			boolean renderDebugNormals) {
 		// Do nothing if there are no beam origins to render
@@ -160,25 +171,25 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		this.createMissingMirrorWorldVbos();
 		
-		// We can reuse one stencil bit for the entire bulk render
-		try (Stencil stencil = Stencil.reserve(Minecraft.getInstance().getMainRenderTarget())) {
-			if (!stencil.isValid()) {
+		try (
+				// We can reuse one stencil bit for the entire bulk render
+				Stencil stencil = Stencil.reserve(Minecraft.getInstance().getMainRenderTarget());
+				VertexBuffer triVertexBuffer = new VertexBuffer(Usage.DYNAMIC)
+		) {
+			if (!stencil.isValid() || triVertexBuffer.isInvalid()) {
 				return;
 			}
 			
-			VertexBuffer triVertexBuffer = new VertexBuffer(Usage.DYNAMIC);
-			
-			MultiBufferSource.BufferSource prismBufferSource = MultiBufferSource.immediate(prismBuffer);
-			
-			MultiBufferSource.BufferSource debugBufferSource = renderDebugNormals ? MultiBufferSource.immediate(sharedBuffer) : null;
+			this.mirrorWorldBufferSource.setStencil(stencil);
 			
 			// Create context
 			Context context = new Context(
 					poseStack, partialTicks,
 					modelViewMatrix, projectionMatrix,
+					entityRenderDispatcher,
 					stencil, Tesselator.getInstance(),
-					triVertexBuffer, prismBufferSource,
-					renderDebugNormals, debugBufferSource
+					triVertexBuffer,    this.mirrorWorldBufferSource,
+					renderDebugNormals, this.debugBufferSource
 			);
 			
 			// Quaternion for rendering
@@ -204,10 +215,12 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				poseStack.last().normal().set(pose.normal());
 				
 				// Draw prism immediately
-				this.renderPrism(poseStack, context.prismBufferSource(), beamOrigin.rotation(), beamOrigin.visibility());
-				context.prismBufferSource().endLastBatch();
+				this.mirrorWorldBufferSource.setIsMirror(false);
+				this.renderPrism(poseStack, context.mirrorWorldBufferSource(), beamOrigin.rotation(), beamOrigin.visibility());
+				context.mirrorWorldBufferSource().endBatch();
 				
 				// Render the beam origin mirrors
+				this.mirrorWorldBufferSource.setIsMirror(true);
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN, triOut[2]));
@@ -216,15 +229,15 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				poseStack.popPose();
 			}
 			
-			// Disable stencilling
 			// TODO put this in a "finally { ... }" block
+			
+			this.debugBufferSource.endBatch();
+			this.mirrorWorldBufferSource.endBatch();
+		} finally {
+			// Clear the mirror world stencil
+			this.mirrorWorldBufferSource.clearStencil();
+			// Disable stencilling
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
-			
-			if (debugBufferSource != null) {
-				debugBufferSource.endBatch();
-			}
-			
-			triVertexBuffer.close();
 		}
 	}
 	
@@ -279,6 +292,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 */
 	private void drawMirrorWorld(Context context, BeamOriginInstance beamOrigin, GlStateBackup backup, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
 		final Vector3f normalF = new Vector3f(vertex1).sub(vertex0).cross(vertex2.x - vertex0.x, vertex2.y - vertex0.y, vertex2.z - vertex0.z).normalize();
+		final BlockPos pos = beamOrigin.pos();
 		final Vector3f mirrorCenter = vertex0;
 		
 		Pose pose = beamOrigin.pose();
@@ -309,9 +323,23 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		renderMirrorWorldGeometry(context, beamOrigin, backup, mirrorCenter, normalF);
 		
+		MultiBufferSource.BufferSource bufferSource = context.mirrorWorldBufferSource();
+		
+		renderMirrorEntities(context, beamOrigin, new Vector3f(mirrorCenter).add(pos.getX(), pos.getY() - 5F, pos.getZ()), bufferSource);
+		
+		bufferSource.endLastBatch();
+		
 		poseStack.popPose();
 	}
 	
+	/**
+	 * Renders the fixed blocks in our mirror world
+	 * @param context
+	 * @param beamOrigin
+	 * @param backup
+	 * @param mirrorCenter
+	 * @param normalF
+	 */
 	private void renderMirrorWorldGeometry(Context context, BeamOriginInstance beamOrigin, GlStateBackup backup, Vector3f mirrorCenter, Vector3f normalF) {
 		PoseStack poseStack = context.poseStack();
 		
@@ -343,6 +371,54 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		GL11.glCullFace(GL11.GL_BACK);
 	}
 
+	/**
+	 * Renders the entities that exist in our mirror world
+	 * @param context
+	 * @param beamOrigin
+	 * @param renderCenter
+	 * @param bufferSource
+	 */
+	protected void renderMirrorEntities(Context context, BeamOriginInstance beamOrigin, Vector3f renderCenter, MultiBufferSource bufferSource) {
+		List<? extends Entity> entities = beamOrigin.mirrorEntities();
+		EntityRenderDispatcher entityRenderer = context.entityRenderDispatcher();
+		PoseStack poseStack = context.poseStack;
+		DeltaTracker deltaTracker = context.partialTicks();
+		TickRateManager tickratemanager = Minecraft.getInstance().level.tickRateManager();
+		GlStateBackup backup = new GlStateBackup();
+		for(Entity entity : entities) {
+			EntityRenderer<? super Entity> renderer = entityRenderer.getRenderer(entity);
+			if(renderer != null) {
+				RenderSystem.backupGlState(backup);
+				poseStack.pushPose();
+				
+				float partialTick = deltaTracker.getGameTimeDeltaPartialTick(!tickratemanager.isEntityFrozen(entity));
+
+				double renderX = Mth.lerp((double)partialTick, entity.xo, entity.getX()) - renderCenter.x;
+				double renderY = Mth.lerp((double)partialTick, entity.yo, entity.getY()) - renderCenter.y;
+				double renderZ = Mth.lerp((double)partialTick, entity.zo, entity.getZ()) - renderCenter.z;
+
+				float rotationYaw = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+
+				entityRenderer.setRenderShadow(false);
+
+				entityRenderer.render(
+						entity,
+						renderX, renderY, renderZ,
+						rotationYaw,
+						partialTick,
+						poseStack,
+						bufferSource,
+						255
+					);
+
+				poseStack.popPose();
+				RenderSystem.restoreGlState(backup);
+			}
+		}
+
+		entityRenderer.setRenderShadow(true);
+	}
+	
 	/**
 	 * Creates the mesh for a mirror triangle with the specified context and instance
 	 * @param context    the context that this mesh will be rendered in

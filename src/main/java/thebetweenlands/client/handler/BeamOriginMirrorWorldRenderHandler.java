@@ -6,6 +6,7 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -110,7 +111,7 @@ public class BeamOriginMirrorWorldRenderHandler {
 	public static record BeamOriginInstance(
 			PoseStack.Pose pose, float visibility, float rotation,
 			int packedLight, int packedOverlay,
-			List<? extends Entity> mirrorEntities
+			List<? extends Entity> mirrorEntities, BlockPos pos
 	) {
 		
 	}
@@ -128,7 +129,7 @@ public class BeamOriginMirrorWorldRenderHandler {
 	public static boolean submitBeamOrigin(
 			PoseStack.Pose pose, float visibility, float rotation,
 			int packedLight, int packedOverlay,
-			List<? extends Entity> mirrorEntities) {
+			List<? extends Entity> mirrorEntities, BlockPos pos) {
 		// Get the context
 		MirrorWorldContext context = MIRROR_WORLD_CONTEXT.get();
 		
@@ -139,7 +140,7 @@ public class BeamOriginMirrorWorldRenderHandler {
 		BeamOriginInstance instance = new BeamOriginInstance(
 				pose.copy(), visibility, rotation,
 				packedLight, packedOverlay,
-				mirrorEntities);
+				mirrorEntities, pos);
 		
 		return context.submit(instance);
 	}
@@ -193,11 +194,16 @@ public class BeamOriginMirrorWorldRenderHandler {
 	 */
 	private static void renderMirrorWorlds(RenderLevelStageEvent event, List<BeamOriginInstance> beamOrigins) {
 		final EntityRenderDispatcher entityRenderDispatcher = event.getLevelRenderer().entityRenderDispatcher;
-		final boolean renderDebugNormals = entityRenderDispatcher != null && entityRenderDispatcher.shouldRenderHitBoxes();
+		if (entityRenderDispatcher == null) {
+			return;
+		}
+		
+		final boolean renderDebugNormals = entityRenderDispatcher.shouldRenderHitBoxes();
 		
 		BeamOriginMirrorWorldRenderer.INSTANCE.render(
 				event.getPoseStack(), event.getPartialTick(),
 				event.getModelViewMatrix(), event.getProjectionMatrix(),
+				entityRenderDispatcher,
 				beamOrigins,
 				renderDebugNormals);
 	}

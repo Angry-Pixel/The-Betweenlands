@@ -148,7 +148,7 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 			renderDeferred = BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(
 					poseStack.last(), visibility, rotation,
 					packedLight, packedOverlay,
-					blockEntity.clientMirrorEntities);
+					blockEntity.clientMirrorEntities, blockEntity.getBlockPos());
 		}
 		
 		// Render the beam origin prism
