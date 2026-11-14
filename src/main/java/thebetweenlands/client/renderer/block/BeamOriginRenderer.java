@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler;
@@ -13,6 +14,10 @@ import thebetweenlands.common.block.entity.BeamOriginBlockEntity;
 
 public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEntity> {
 
+	public BeamOriginRenderer(BlockEntityRendererProvider.Context context) {
+		// NO-OP
+	}
+	
 	@Override
 	public AABB getRenderBoundingBox(BeamOriginBlockEntity blockEntity) {
 		return new AABB(-2.0D / 16.0, -8.0D / 16.0, -2.0D / 16.0, 18.0D / 16.0, 19.0D / 16.0, 18.0D / 16.0).move(blockEntity.getBlockPos());
