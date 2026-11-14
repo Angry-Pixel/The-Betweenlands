@@ -87,6 +87,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	protected BeamOriginMirrorWorld mirrorWorld;
 	// Only used for immediate rendering
 	protected final Map<RenderType, VertexBuffer> mirrorWorldVbos = new Object2ObjectArrayMap<>();
+	// Buffer used to render beam origin prisms
+	protected final ByteBufferBuilder prismBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
 	// Buffer used to construct VBOs and debug rendering
 	protected final ByteBufferBuilder sharedBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
 	// #endregion
@@ -105,7 +107,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			PoseStack poseStack, DeltaTracker partialTicks,
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
 			Stencil stencil, Tesselator tessellator,
-			VertexBuffer mirrorTriBuffer,
+			VertexBuffer mirrorTriBuffer, MultiBufferSource.BufferSource prismBufferSource,
 			boolean renderDebugNormals, @Nullable MultiBufferSource debugBufferSource
 	) {
 
@@ -166,6 +168,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			
 			VertexBuffer triVertexBuffer = new VertexBuffer(Usage.DYNAMIC);
 			
+			MultiBufferSource.BufferSource prismBufferSource = MultiBufferSource.immediate(prismBuffer);
+			
 			MultiBufferSource.BufferSource debugBufferSource = renderDebugNormals ? MultiBufferSource.immediate(sharedBuffer) : null;
 			
 			// Create context
@@ -173,7 +177,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 					poseStack, partialTicks,
 					modelViewMatrix, projectionMatrix,
 					stencil, Tesselator.getInstance(),
-					triVertexBuffer,
+					triVertexBuffer, prismBufferSource,
 					renderDebugNormals, debugBufferSource
 			);
 			
@@ -198,6 +202,10 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				poseStack.setIdentity();
 				poseStack.last().pose().set(pose.pose());
 				poseStack.last().normal().set(pose.normal());
+				
+				// Draw prism immediately
+				this.renderPrism(poseStack, context.prismBufferSource(), beamOrigin.rotation(), beamOrigin.visibility());
+				context.prismBufferSource().endLastBatch();
 				
 				// Render the beam origin mirrors
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN, triOut[2]));

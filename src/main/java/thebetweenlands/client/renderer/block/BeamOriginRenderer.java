@@ -142,16 +142,19 @@ public class BeamOriginRenderer implements BlockEntityRenderer<BeamOriginBlockEn
 
 		float rotation = Mth.lerp(partialTick, blockEntity.prevRotation, blockEntity.rotation);
 
+		boolean renderDeferred = false;
 		// If we're in-world, submit this to the mirror world renderer to render the mirror world
 		if (blockEntity.hasLevel() && blockEntity.getLevel() != null) {
-			BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(
+			renderDeferred = BeamOriginMirrorWorldRenderHandler.submitBeamOrigin(
 					poseStack.last(), visibility, rotation,
 					packedLight, packedOverlay,
 					blockEntity.clientMirrorEntities);
 		}
 		
 		// Render the beam origin prism
-		BeamOriginMirrorWorldRenderer.INSTANCE.renderPrism(poseStack, bufferSource, rotation, visibility);
+		if (!renderDeferred) {
+			BeamOriginMirrorWorldRenderer.INSTANCE.renderPrism(poseStack, bufferSource, rotation, visibility);
+		}
 		
 //		Quaternionf quat = new Quaternionf().rotationY(rotation);
 //
