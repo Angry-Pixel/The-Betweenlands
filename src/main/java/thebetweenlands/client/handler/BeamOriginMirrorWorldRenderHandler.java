@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -193,8 +195,10 @@ public class BeamOriginMirrorWorldRenderHandler {
 	 * @param beamOrigins
 	 */
 	private static void renderMirrorWorlds(RenderLevelStageEvent event, List<BeamOriginInstance> beamOrigins) {
-		final EntityRenderDispatcher entityRenderDispatcher = event.getLevelRenderer().entityRenderDispatcher;
-		if (entityRenderDispatcher == null) {
+		final LevelRenderer levelRenderer = event.getLevelRenderer();
+		final EntityRenderDispatcher entityRenderDispatcher = levelRenderer.entityRenderDispatcher;
+		final RenderBuffers renderBuffers = levelRenderer.renderBuffers;
+		if (entityRenderDispatcher == null || renderBuffers == null) {
 			return;
 		}
 		
@@ -203,7 +207,7 @@ public class BeamOriginMirrorWorldRenderHandler {
 		BeamOriginMirrorWorldRenderer.INSTANCE.render(
 				event.getPoseStack(), event.getPartialTick(),
 				event.getModelViewMatrix(), event.getProjectionMatrix(),
-				entityRenderDispatcher,
+				entityRenderDispatcher, renderBuffers.bufferSource(),
 				beamOrigins,
 				renderDebugNormals);
 	}

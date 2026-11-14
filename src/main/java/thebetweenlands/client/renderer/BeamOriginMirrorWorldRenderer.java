@@ -51,7 +51,7 @@ import net.neoforged.neoforge.client.GlStateBackup;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler.BeamOriginInstance;
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
-import thebetweenlands.client.renderer.util.MirrorWorldBufferSource;
+import thebetweenlands.client.renderer.util.StealingMirrorWorldBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -98,15 +98,14 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	
 	// Buffer used to construct VBOs, render beam origin prisms, and render entities
 	protected final ByteBufferBuilder sharedBuffer = new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE);
-	protected final MirrorWorldBufferSource mirrorWorldBufferSource;
+	protected final StealingMirrorWorldBufferSource mirrorWorldBufferSource;
 	// #endregion
 	
 	// Singleton class constructor
 	private BeamOriginMirrorWorldRenderer() {
-		this.debugBufferSource = MultiBufferSource.immediate(sharedBuffer);
-		this.mirrorWorldBufferSource = MirrorWorldBufferSource.immediate(this.sharedBuffer);
+		this.debugBufferSource = MultiBufferSource.immediate(this.debugBuffer);
+		this.mirrorWorldBufferSource = StealingMirrorWorldBufferSource.immediate(this.sharedBuffer);
 	}
-	
 	
 	// #region Mirror World Rendering
 	/**
@@ -162,6 +161,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			PoseStack poseStack, DeltaTracker partialTicks,
 			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
 			EntityRenderDispatcher entityRenderDispatcher,
+			MultiBufferSource.BufferSource entityBufferSource,
 			List<BeamOriginInstance> beamOrigins,
 			boolean renderDebugNormals) {
 		// Do nothing if there are no beam origins to render
@@ -180,7 +180,16 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				return;
 			}
 			
-			this.mirrorWorldBufferSource.setStencil(stencil);
+			final StealingMirrorWorldBufferSource mirrorWorldBufferSource = this.mirrorWorldBufferSource;
+			
+			// Set the stencil to be used by the mirror world
+			mirrorWorldBufferSource.setStencil(stencil);
+			// "Steal" the fixed buffers from RenderBuffers
+			// This is necessary because certain entity rendering behaviours (e.g. enchantment glints) 
+			//      write to multiple render buffers at once.
+			// Without fixed buffers, we can only write to one buffer at once, and attempting to write to
+			//      multiple at the same time would result in a crash.
+			mirrorWorldBufferSource.stealFixedBuffers(entityBufferSource);
 			
 			// Create context
 			Context context = new Context(
@@ -188,7 +197,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 					modelViewMatrix, projectionMatrix,
 					entityRenderDispatcher,
 					stencil, Tesselator.getInstance(),
-					triVertexBuffer,    this.mirrorWorldBufferSource,
+					triVertexBuffer,    mirrorWorldBufferSource,
 					renderDebugNormals, this.debugBufferSource
 			);
 			
@@ -215,12 +224,12 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				poseStack.last().normal().set(pose.normal());
 				
 				// Draw prism immediately
-				this.mirrorWorldBufferSource.setIsMirror(false);
+				mirrorWorldBufferSource.setIsMirror(false);
 				this.renderPrism(poseStack, context.mirrorWorldBufferSource(), beamOrigin.rotation(), beamOrigin.visibility());
-				context.mirrorWorldBufferSource().endBatch();
+				mirrorWorldBufferSource.endBatch();
 				
 				// Render the beam origin mirrors
-				this.mirrorWorldBufferSource.setIsMirror(true);
+				mirrorWorldBufferSource.setIsMirror(true);
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[0][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[0][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[0][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN, triOut[2]));
@@ -229,13 +238,13 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				poseStack.popPose();
 			}
 			
-			// TODO put this in a "finally { ... }" block
-			
 			this.debugBufferSource.endBatch();
 			this.mirrorWorldBufferSource.endBatch();
 		} finally {
 			// Clear the mirror world stencil
 			this.mirrorWorldBufferSource.clearStencil();
+			// Clear the stolen buffers
+			this.mirrorWorldBufferSource.clearFixedBuffers();
 			// Disable stencilling
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
@@ -328,7 +337,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		renderMirrorEntities(context, beamOrigin, new Vector3f(mirrorCenter).add(pos.getX(), pos.getY() - 5F, pos.getZ()), bufferSource);
 		
-		bufferSource.endLastBatch();
+		bufferSource.endBatch();
 		
 		poseStack.popPose();
 	}
@@ -379,7 +388,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param renderCenter
 	 * @param bufferSource
 	 */
-	protected void renderMirrorEntities(Context context, BeamOriginInstance beamOrigin, Vector3f renderCenter, MultiBufferSource bufferSource) {
+	protected void renderMirrorEntities(Context context, BeamOriginInstance beamOrigin, Vector3f renderCenter, MultiBufferSource.BufferSource bufferSource) {
 		List<? extends Entity> entities = beamOrigin.mirrorEntities();
 		EntityRenderDispatcher entityRenderer = context.entityRenderDispatcher();
 		PoseStack poseStack = context.poseStack;
