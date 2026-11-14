@@ -168,6 +168,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		if (beamOrigins.isEmpty()) {
 			return;
 		}
+
+		Minecraft.getInstance().getProfiler().push("Beam Origin Mirror World");
 		
 		this.createMissingMirrorWorldVbos();
 		
@@ -247,6 +249,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			this.mirrorWorldBufferSource.clearFixedBuffers();
 			// Disable stencilling
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+			Minecraft.getInstance().getProfiler().pop();
 		}
 	}
 	
