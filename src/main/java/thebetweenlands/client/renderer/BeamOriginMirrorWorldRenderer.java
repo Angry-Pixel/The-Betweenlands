@@ -291,7 +291,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * @param vertex2    triangle vertex 2
 	 */
 	private void drawMirrorWorld(Context context, BeamOriginInstance beamOrigin, GlStateBackup backup, Vector3f vertex0, Vector3f vertex1, Vector3f vertex2) {
-		final Vector3f normalF = new Vector3f(vertex1).sub(vertex0).cross(vertex2.x - vertex0.x, vertex2.y - vertex0.y, vertex2.z - vertex0.z).normalize();
+		Vector3f normalF = new Vector3f(vertex1).sub(vertex0).cross(vertex2.x - vertex0.x, vertex2.y - vertex0.y, vertex2.z - vertex0.z).normalize();
+		// normalF = normalF.mul(1, 0, 1).normalize();  // DEBUG - render on the xz axis
 		final BlockPos pos = beamOrigin.pos();
 		final Vector3f mirrorCenter = vertex0;
 		
@@ -562,13 +563,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	}
 	
 	protected void renderPrismTri(PoseStack poseStack, VertexConsumer consumer, Vec3 vertex0, Vec3 vertex1, Vec3 vertex2, float visibility) {
-		final Vec3 mirrorNormal;
-		{
-			Vec3 normal = vertex1.subtract(vertex0).cross(vertex2.subtract(vertex0)).normalize();
-//			normal = normal.multiply(1, 0, 1).normalize(); // DEBUG - render on the xz axis
-			mirrorNormal = normal;
-		}
-		Vector3f normalF = mirrorNormal.toVector3f();
+		Vector3f normalF = vertex1.subtract(vertex0).cross(vertex2.subtract(vertex0)).normalize().toVector3f();
 
 		Pose pose = poseStack.last();
 		
