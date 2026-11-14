@@ -41,6 +41,7 @@ public class MirrorWorldBufferSource extends MultiBufferSource.BufferSource {
 	}
 	
 	protected boolean isMirror = false;
+	protected StencilReadType stencilReadType = StencilReadType.STENCIL_IS_KEPT;
 	protected Stencil stencil = null;
 	
 	protected MirrorWorldBufferSource(ByteBufferBuilder sharedBuffer, SequencedMap<RenderType, ByteBufferBuilder> fixedBuffers) {
@@ -51,8 +52,9 @@ public class MirrorWorldBufferSource extends MultiBufferSource.BufferSource {
 	 * Sets the stencil instance associated with this buffer source
 	 * @param stencil
 	 */
-	public void setStencil(Stencil stencil) {
+	public void setStencil(Stencil stencil, StencilReadType stencilReadType) {
 		this.stencil = Objects.requireNonNull(stencil);
+		this.stencilReadType = Objects.requireNonNull(stencilReadType);
 	}
 	
 	/**
@@ -101,11 +103,7 @@ public class MirrorWorldBufferSource extends MultiBufferSource.BufferSource {
 			
 			// If we're a mirror and have a stencil
 			if (isMirror && stencil != null) {
-				// Only draw pixels where our bit is set in the stencil
-				stencil.func(GL11.GL_EQUAL, true);
-				
-				// Never change the stencil
-				stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+				this.stencilReadType.setupStencil(stencil);
 			}
 			
 			// If we're a mirror, flip the cullface

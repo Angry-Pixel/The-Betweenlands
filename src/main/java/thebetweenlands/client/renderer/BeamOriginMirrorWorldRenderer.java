@@ -53,6 +53,8 @@ import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler.BeamOri
 import thebetweenlands.client.renderer.util.BeamOriginMirrorWorld;
 import thebetweenlands.client.renderer.util.StealingMirrorWorldBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
+import thebetweenlands.client.renderer.util.StencilReadType;
+import thebetweenlands.client.renderer.util.StencilWriteType;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -185,7 +187,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			final StealingMirrorWorldBufferSource mirrorWorldBufferSource = this.mirrorWorldBufferSource;
 			
 			// Set the stencil to be used by the mirror world
-			mirrorWorldBufferSource.setStencil(stencil);
+			mirrorWorldBufferSource.setStencil(stencil, StencilReadType.STENCIL_IS_KEPT);
 			// "Steal" the fixed buffers from RenderBuffers
 			// This is necessary because certain entity rendering behaviours (e.g. enchantment glints) 
 			//      write to multiple render buffers at once.
@@ -339,7 +341,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		
 		MultiBufferSource.BufferSource bufferSource = context.mirrorWorldBufferSource();
 		
-		renderMirrorEntities(context, beamOrigin, new Vector3f(mirrorCenter).add(pos.getX(), pos.getY() - 5F, pos.getZ()), bufferSource);
+		renderMirrorEntities(context, beamOrigin, new Vector3f(mirrorCenter).add(pos.getX(), pos.getY() - 5.0F, pos.getZ()), bufferSource);
 		
 		bufferSource.endBatch();
 		
@@ -474,14 +476,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		RenderSystem.polygonOffset(0.0f, -10.0f);
 		
 		// Setup stencil state
-		
-		// Clear stencil so everything is discarded by default
-		stencil.setAllZeros();
-		// Every time a pixel is drawn, the stencil bit will be set to 1
-		stencil.func(GL11.GL_ALWAYS, true);
-
-		// Only draw pixels when the stencil test and depth test succeed
-		stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+		StencilWriteType.STENCIL_IS_SET.setupStencil(stencil, true);
 		
 		// Render our mirror tri
 		context.renderVbo(mirrorTriBuffer);
@@ -505,12 +500,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		RenderSystem.polygonOffset(offsetFactor, offsetUnits);
 
 		// Setup stencil state
-		
-		// Only draw pixels where our bit is set in the stencil
-		stencil.func(GL11.GL_EQUAL, true);
-		
-		// Never change the stencil
-		stencil.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+		StencilReadType.STENCIL_IS_KEPT.setupStencil(stencil);
 
 		// Render our mirror tri
 		context.renderVbo(mirrorTriBuffer);

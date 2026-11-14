@@ -34,11 +34,6 @@ public final class Stencil implements AutoCloseable {
 		return this.bit != -1;
 	}
 
-	@Deprecated(forRemoval = true)
-	public int getMask() {
-		return this.mask;
-	}
-
 	/**
 	 * Clears the stencil bit
 	 * @param value Value of the bit: 1 or 0
@@ -129,14 +124,5 @@ public final class Stencil implements AutoCloseable {
 		}
 
 		return Stencil.INVALID;
-	}
-	
-	/**
-	 * Last resort method to prevent lost stencil bits in the rare case where an error that would normally crash is thrown, but another mod prevents that crash from going through.
-	 */
-	@Override
-	protected void finalize() throws Throwable {
-		this.close();
-		super.finalize();
 	}
 }
