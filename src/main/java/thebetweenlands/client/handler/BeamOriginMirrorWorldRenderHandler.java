@@ -5,12 +5,14 @@ import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent.Stage;
 import net.neoforged.neoforge.common.NeoForge;
@@ -153,6 +155,16 @@ public class BeamOriginMirrorWorldRenderHandler {
 	public static void init() {
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOW,  BeamOriginMirrorWorldRenderHandler::onBeforeRenderBlockEntities);
 		NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, BeamOriginMirrorWorldRenderHandler::onAfterRenderBlockEntities);
+		
+		// Stencils get enabled in ClientRegistrationEvents#clientSetup
+	}
+	
+	/**
+	 * Called during a {@link FMLClientSetupEvent#enqueueWork(Runnable)} to enable stencils on the main render target.
+	 * <p>Stencils are enabled at that time to ensure depth formats match elsewhere</p>
+	 */
+	public static void enableStencils() {
+		Minecraft.getInstance().getMainRenderTarget().enableStencil();
 	}
 	
 	/**

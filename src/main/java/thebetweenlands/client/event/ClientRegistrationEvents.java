@@ -86,6 +86,7 @@ import thebetweenlands.client.gui.screen.MortarScreen;
 import thebetweenlands.client.gui.screen.PurifierScreen;
 import thebetweenlands.client.gui.screen.SilkBundleScreen;
 import thebetweenlands.client.gui.screen.SmokingRackScreen;
+import thebetweenlands.client.handler.BeamOriginMirrorWorldRenderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.model.armor.AmphibiousArmorModel;
@@ -480,6 +481,7 @@ public class ClientRegistrationEvents {
 		event.enqueueWork(() -> {
 			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
 			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
+			BeamOriginMirrorWorldRenderHandler.enableStencils();
 		});
 	}
 
