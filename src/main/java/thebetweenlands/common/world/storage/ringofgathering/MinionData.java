@@ -40,7 +40,8 @@ public class MinionData implements INBTSerializable<CompoundTag> {
 	 */
 	private UUID minionUuid;
 	/**
-	 * Used to identify duplicate minions
+	 * Used to identify duplicate minions.
+	 * Incremented every time the minion is recreated from NBT or teleported from unloaded chunks.
 	 */
 	private long minionGeneration;
 

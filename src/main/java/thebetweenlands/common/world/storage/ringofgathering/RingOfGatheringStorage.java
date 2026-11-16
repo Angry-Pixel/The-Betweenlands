@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -28,6 +27,10 @@ public class RingOfGatheringStorage extends SavedData {
 			);
 	}
 
+	/**
+	 * Does the player have a Ring of Gathering currently equipped?
+	 */
+	private boolean hasRingEquipped = false;
 	private ObjectList<UUID> minionUuids;
 	private Object2ObjectMap<UUID, MinionData> minionData;
 	
