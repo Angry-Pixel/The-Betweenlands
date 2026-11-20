@@ -12,6 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import thebetweenlands.client.particle.options.BeamPuzzleParticleOptions;
 import thebetweenlands.client.particle.options.DripParticleOptions;
 import thebetweenlands.client.particle.options.EntitySwirlParticleOptions;
 import thebetweenlands.client.particle.options.LightningArcParticleOptions;
@@ -65,6 +66,8 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, ParticleType<LightningArcParticleOptions>> LIGHTNING_ARC = register("lightning_arc", false, type -> LightningArcParticleOptions.CODEC, type -> LightningArcParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> WIGHT_FACE_SWIRL = register("wight_face_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WIGHT_FACE = PARTICLES.register("wight_face", () -> new SimpleParticleType(false));
+
+	public static final DeferredHolder<ParticleType<?>, ParticleType<BeamPuzzleParticleOptions>> BEAM_PUZZLE_BEAM = register("beam_puzzle_beam", true, type -> BeamPuzzleParticleOptions.CODEC, type -> BeamPuzzleParticleOptions.STREAM_CODEC);
 
 	
 	private static <T extends ParticleOptions> DeferredHolder<ParticleType<?>, ParticleType<T>> register(String name, boolean overrideLimiter, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
