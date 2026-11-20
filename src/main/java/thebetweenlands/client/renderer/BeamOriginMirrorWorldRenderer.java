@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -115,7 +116,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 */
 	private static record Context(
 			PoseStack poseStack, DeltaTracker partialTicks,
-			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
+			Matrix4f modelViewMatrix, Matrix4f projectionMatrix, Matrix4f originalProjectionMatrix,
 			EntityRenderDispatcher entityRenderDispatcher,
 			Stencil stencil, Tesselator tessellator,
 			VertexBuffer mirrorTriBuffer, MultiBufferSource.BufferSource mirrorWorldBufferSource,
@@ -198,7 +199,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			// Create context
 			Context context = new Context(
 					poseStack, partialTicks,
-					modelViewMatrix, projectionMatrix,
+					modelViewMatrix, new Matrix4f(projectionMatrix), projectionMatrix,
 					entityRenderDispatcher,
 					stencil, Tesselator.getInstance(),
 					triVertexBuffer,    mirrorWorldBufferSource,
@@ -337,15 +338,96 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		// translate to make sure we're at (0, 0, 0) in the fake world
 		poseStack.translate(-0.5F, -2.5F, -0.5F);
 		
+		// Set up oblique projection
+		setupObliqueProjection(context, mirrorCenter, normalF);
+		
+		// Render the mirror world blocks
 		renderMirrorWorldGeometry(context, beamOrigin, backup, mirrorCenter, normalF);
 		
+		// Render the mirror world entities to mesh
 		MultiBufferSource.BufferSource bufferSource = context.mirrorWorldBufferSource();
-		
 		renderMirrorEntities(context, beamOrigin, new Vector3f(mirrorCenter).add(pos.getX(), pos.getY() - 5.0F, pos.getZ()), bufferSource);
 		
+		// Draw mirror world entities
 		bufferSource.endBatch();
 		
+		// Clear oblique projection
+		clearObliqueProjection(context);
+		
 		poseStack.popPose();
+	}
+	
+	/**
+	 * Sets up an oblique projection matrix with a near plane equal to the mirror triangle plane.
+	 * <p>This prevents any mirrored blocks/entities from rendering "in front of" the mirror triangle.</p>
+	 * @param context      the context the mirror world is being rendered in
+	 * @param mirrorCenter a position on the mirror triangle; world coordinates
+	 * @param mirrorNormal the mirror triangle's normal; world coordinates
+	 */
+	private void setupObliqueProjection(Context context, Vector3f mirrorCenter, Vector3f mirrorNormal) {
+		// TODO give this a helper class or something so we don't need to allocate so much memory
+		
+		// Negate the mirror normal so we're including things *inside* the mirror (not outside it)
+		mirrorNormal = mirrorNormal.negate(new Vector3f());
+		
+		// Convert mirror center and mirror normal to camera space
+		final Matrix4f modelViewMatrix = context.modelViewMatrix();
+		Vector3f mirrorCenterCameraSpace = modelViewMatrix.transformPosition(mirrorCenter, new Vector3f());
+		Vector3f mirrorNormalCameraSpace = modelViewMatrix.transformPosition(mirrorNormal);
+		
+		// Get projection matrix and set to original
+		final Matrix4f projectionMatrix = context.projectionMatrix();
+		projectionMatrix.set(context.originalProjectionMatrix());
+
+		// Retrieve matrix data
+		float[] matrix = new float[16];
+		projectionMatrix.get(matrix);
+		
+		// Our clip plane
+		Vector4f clipPlane = new Vector4f(mirrorNormalCameraSpace, -mirrorNormalCameraSpace.dot(mirrorCenterCameraSpace));
+		
+		// Taken from https://terathon.com/blog/oblique-clipping.html
+		
+		Vector4f q = new Vector4f();
+		Vector4f c = new Vector4f();
+		
+		// Calculate the clip-space corner point opposite the clipping plane
+		// as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
+		// transform it into camera space by multiplying it
+		// by the inverse of the projection matrix
+		
+		q.x = (Math.signum(clipPlane.x) + matrix[8]) / matrix[0];
+		q.y = (Math.signum(clipPlane.y) + matrix[9]) / matrix[5];
+		q.z = -1.0F;
+		q.w = (1.0F + matrix[10]) / matrix[14];
+		
+		// Calculate the scaled plane vector
+		c = clipPlane.mul(2.0F / clipPlane.dot(q));
+		
+		// Replace the third row of the projection matrix
+		matrix[2] = c.x;
+		matrix[6] = c.y;
+		matrix[10] = c.z + 1.0F;
+		matrix[14] = c.w;
+		
+		// Set matrix data
+		projectionMatrix.set(matrix);
+		
+		// Set our projection matrix in the render system as well
+		RenderSystem.backupProjectionMatrix();
+		RenderSystem.setProjectionMatrix(projectionMatrix, RenderSystem.getVertexSorting());
+	}
+	
+	/**
+	 * Clears the oblique projection caused by {@link #setupObliqueProjection(Context, Vector3f, Vector3f)}
+	 * @param context the context the oblique projection was setup on
+	 */
+	private void clearObliqueProjection(Context context) {
+		// Restore the render system projection matrix
+		RenderSystem.restoreProjectionMatrix();
+
+		// Reset projection matrix
+		context.projectionMatrix().set(context.originalProjectionMatrix());
 	}
 	
 	/**
