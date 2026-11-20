@@ -20,6 +20,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
+import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.particle.options.BeamPuzzleParticleOptions;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BeamOriginBlock;
 import thebetweenlands.common.block.structure.BeamRelayBlock;
 import thebetweenlands.common.block.structure.DiagonalEnergyBarrierBlock;
@@ -185,7 +188,19 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 	}
 
 	private void spawnBrazierParticles(Level level, BlockPos pos, Vec3 target) {
-//		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(level, pos.getX() + 0.5 + target.x, pos.getY() + 0.5 + target.y, pos.getZ() + 0.5 + target.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(255F, 102F, 0F, 1F).withScale(1.5F).withData(30, target.scale(-1))));
+		BeamPuzzleParticleOptions options = new BeamPuzzleParticleOptions(1.0f, 10, false);
+		
+		TheBetweenlands.createParticle(
+				options,
+				level,
+				pos.getX() + 0.5 + target.x, pos.getY() + 0.5 + target.y, pos.getZ() + 0.5 + target.z,
+				ParticleArgs.get()
+					.withMotion(0, 0, 0)
+					.withColor(255F / 255F, 102F / 255F, 0F / 255F, 1F)
+					.withScale(1.5F)
+					.withData(30, target.scale(-1))
+			);
+		
 //		for (int i = 0; i < 2; i++) {
 //			float offsetLen = level.getRandom().nextFloat();
 //			Vec3 offset = new Vec3(target.x * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.y * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f, target.z * offsetLen + level.getRandom().nextFloat() * 0.2f - 0.1f);
