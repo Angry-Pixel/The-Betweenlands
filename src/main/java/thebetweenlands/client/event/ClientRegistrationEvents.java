@@ -237,6 +237,7 @@ import thebetweenlands.client.model.item.WeedwoodShieldModel;
 import thebetweenlands.client.particle.AnimatorParticle;
 import thebetweenlands.client.particle.BLBubbleParticle;
 import thebetweenlands.client.particle.BLRainParticle;
+import thebetweenlands.client.particle.BeamPuzzleParticle;
 import thebetweenlands.client.particle.BugParticle;
 import thebetweenlands.client.particle.ColoredDripParticle;
 import thebetweenlands.client.particle.DruidCastingParticle;
@@ -1198,6 +1199,7 @@ public class ClientRegistrationEvents {
 		event.registerSpriteSet(ParticleRegistry.FLY_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 		event.registerSpriteSet(ParticleRegistry.WIGHT_FACE_SWIRL.get(), EntitySwirlParticle.DefaultFactory::new);
 		event.registerSpriteSet(ParticleRegistry.WIGHT_FACE.get(), BugParticle.FlyFactory::new);
+		event.registerSpecial(ParticleRegistry.BEAM_PUZZLE_BEAM.get(), new BeamPuzzleParticle.Factory());
 
 	}
 
