@@ -27,6 +27,8 @@ public class BeamPuzzleParticle extends Particle {
 	private final Vec3 targetOffset;
 	private final int fadeTime;
 	private final boolean useShaders;
+	private final float rotationFactor;
+	private final float initalRotation;
 	
 	private float maxAlpha;
 
@@ -35,6 +37,9 @@ public class BeamPuzzleParticle extends Particle {
 	
 	private float texUOffset = 0.0f;
 	private float prevTexUOffset = 0.0f;
+
+	private float rotation = 0.0f;
+	private float prevRotation = 0.0f;
 	
 	protected BeamPuzzleParticle(
 			BeamPuzzleParticleOptions options,
@@ -46,13 +51,15 @@ public class BeamPuzzleParticle extends Particle {
 		this.maxAlpha = options.maxAlpha();
 		this.fadeTime = options.fadeTime();
 		this.useShaders = options.useShaders();
+		this.rotationFactor = options.rotationFactor();
+		this.initalRotation = options.intialRotation() ? (float) (this.random.nextFloat() * 2 * Math.PI) : 0.0f;
 		
 		this.targetOffset = targetOffset;
 		
 		this.gravity = 0;
 		this.hasPhysics = false;
 		this.setParticleSpeed(0, 0, 0);
-
+		
 		this.setAlpha(this.fadeTime == 0 ? this.maxAlpha : 0.0F);
 		this.setLifetime(lifetime);
 	}
@@ -68,6 +75,8 @@ public class BeamPuzzleParticle extends Particle {
 		this.maxAlpha = options.maxAlpha();
 		this.fadeTime = options.fadeTime();
 		this.useShaders = options.useShaders();
+		this.rotationFactor = options.rotationFactor();
+		this.initalRotation = options.intialRotation() ? (float) (this.random.nextFloat() * 2 * Math.PI) : 0.0f;
 		
 		this.targetOffset = targetOffset;
 		
@@ -107,16 +116,14 @@ public class BeamPuzzleParticle extends Particle {
 		// Update alpha from fade time
 		this.alpha = getFadedAlpha(this.fadeTime, this.maxAlpha, this.age, this.lifetime);
 		
+		this.prevRotation = this.rotation;
+		this.rotation = (float) ((this.age / (float)this.lifetime) * (Math.PI * this.rotationFactor));
+		
 		// Update tex offset
 		this.prevTexUOffset = this.texUOffset;
 		this.texUOffset = -this.age / (float)this.lifetime * 4;
 	}
-	
-	@Override
-	public void move(double x, double y, double z) {
-		// NO-OP
-	}
-	
+
 	/**
 	 * Linearly fades {@code maxAlpha} to zero as {@code age} approaches {@code 0} or {@code lifetime}.
 	 * @param fadeTime
@@ -169,10 +176,13 @@ public class BeamPuzzleParticle extends Particle {
 			
 			Vec3 pos = renderInfo.getPosition();
 			
+			final float rotationOffset = this.initalRotation + Mth.lerp(partialTicks, this.prevRotation, this.rotation);
+			
 			BeamRenderer.buildNewBeam(
 					px - pos.x(), py - pos.y(), pz - pos.z(),
-					this.targetOffset,
-					this.renderScale, texOffset, this.texUScale,
+					this.targetOffset.x, this.targetOffset.y, this.targetOffset.z,
+					this.renderScale, rotationOffset,
+					texOffset, this.texUScale,
 					quat, beamConsumerImpl);
 		} finally {
 			beamConsumerImpl.buffer = null;

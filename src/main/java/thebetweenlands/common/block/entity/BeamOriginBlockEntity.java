@@ -34,6 +34,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
+	public static final BeamPuzzleParticleOptions BRAZIER_BEAM_PARTICLE_OPTIONS = new BeamPuzzleParticleOptions(1.0F, 10, false, 0.5F, true);
+	
 	public boolean active;
 
 	public float prevVisibility = 0.0f;
@@ -188,7 +190,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 	}
 
 	private void spawnBrazierParticles(Level level, BlockPos pos, Vec3 target) {
-		BeamPuzzleParticleOptions options = new BeamPuzzleParticleOptions(1.0f, 10, false);
+		BeamPuzzleParticleOptions options = BRAZIER_BEAM_PARTICLE_OPTIONS;
 		
 		TheBetweenlands.createParticle(
 				options,
