@@ -172,9 +172,9 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 	public int checkForLitBraziers(Level level, BlockPos pos) {
 		int braziers = 0;
-		if (this.checkForLitBrazier(level, pos.offset(3, -1, 3))) braziers++;
-		if (this.checkForLitBrazier(level, pos.offset(3, -1, -3))) braziers++;
-		if (this.checkForLitBrazier(level, pos.offset(-3, -1, 3))) braziers++;
+		if (this.checkForLitBrazier(level, pos.offset(3, -1, 3)))   braziers++;
+		if (this.checkForLitBrazier(level, pos.offset(3, -1, -3)))  braziers++;
+		if (this.checkForLitBrazier(level, pos.offset(-3, -1, 3)))  braziers++;
 		if (this.checkForLitBrazier(level, pos.offset(-3, -1, -3))) braziers++;
 		return braziers;
 	}
