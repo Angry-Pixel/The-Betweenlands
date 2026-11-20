@@ -339,7 +339,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		poseStack.translate(-0.5F, -2.5F, -0.5F);
 		
 		// Set up oblique projection
-		setupObliqueProjection(context, mirrorCenter, normalF);
+		setupObliqueProjection(context, pose, mirrorCenter, normalF);
 		
 		// Render the mirror world blocks
 		renderMirrorWorldGeometry(context, beamOrigin, backup, mirrorCenter, normalF);
@@ -361,18 +361,23 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 * Sets up an oblique projection matrix with a near plane equal to the mirror triangle plane.
 	 * <p>This prevents any mirrored blocks/entities from rendering "in front of" the mirror triangle.</p>
 	 * @param context      the context the mirror world is being rendered in
+	 * @param pose         the pose that the mirror triangle was originally rendered in
 	 * @param mirrorCenter a position on the mirror triangle; world coordinates
 	 * @param mirrorNormal the mirror triangle's normal; world coordinates
 	 */
-	private void setupObliqueProjection(Context context, Vector3f mirrorCenter, Vector3f mirrorNormal) {
+	private void setupObliqueProjection(Context context, PoseStack.Pose pose, Vector3f mirrorCenter, Vector3f mirrorNormal) {
 		// TODO give this a helper class or something so we don't need to allocate so much memory
 		
 		// Negate the mirror normal so we're including things *inside* the mirror (not outside it)
 		mirrorNormal = mirrorNormal.negate(new Vector3f());
 		
+		// Transform the mirror plane by the pose it was rendered in
+		pose.transformNormal(mirrorNormal, mirrorNormal);
+		mirrorCenter = pose.pose().transformPosition(mirrorCenter, new Vector3f());
+		
 		// Convert mirror center and mirror normal to camera space
 		final Matrix4f modelViewMatrix = context.modelViewMatrix();
-		Vector3f mirrorCenterCameraSpace = modelViewMatrix.transformPosition(mirrorCenter, new Vector3f());
+		Vector3f mirrorCenterCameraSpace = modelViewMatrix.transformPosition(mirrorCenter);
 		Vector3f mirrorNormalCameraSpace = modelViewMatrix.transformPosition(mirrorNormal);
 		
 		// Get projection matrix and set to original
