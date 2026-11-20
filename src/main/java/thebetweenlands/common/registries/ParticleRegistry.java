@@ -27,7 +27,7 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PORTAL_EFFECT = PARTICLES.register("portal_effect", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ANIMATOR = PARTICLES.register("animator", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FLY = PARTICLES.register("fly", () -> new SimpleParticleType(false));
-	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> FLY_SWIRL = register("fly_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> FLY_SWIRL = register("fly_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOSQUITO = PARTICLES.register("mosquito", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOTH = PARTICLES.register("moth", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SWARM = PARTICLES.register("swarm", () -> new SimpleParticleType(false));
@@ -61,10 +61,10 @@ public class ParticleRegistry {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CORRUPTED = PARTICLES.register("corrupted", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EMBER = PARTICLES.register("ember", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SMOOTH_SMOKE = PARTICLES.register("smooth_smoke", () -> new SimpleParticleType(false));
-	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> LEAF_SWIRL = register("leaf_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> LEAF_SWIRL = register("leaf_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WATER_RIPPLE = PARTICLES.register("water_ripple", () -> new SimpleParticleType(false));
 	public static final DeferredHolder<ParticleType<?>, ParticleType<LightningArcParticleOptions>> LIGHTNING_ARC = register("lightning_arc", false, type -> LightningArcParticleOptions.CODEC, type -> LightningArcParticleOptions.STREAM_CODEC);
-	public static final DeferredHolder<ParticleType<?>,  ParticleType<EntitySwirlParticleOptions>> WIGHT_FACE_SWIRL = register("wight_face_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
+	public static final DeferredHolder<ParticleType<?>, ParticleType<EntitySwirlParticleOptions>> WIGHT_FACE_SWIRL = register("wight_face_swirl", false, type -> EntitySwirlParticleOptions.CODEC, type -> EntitySwirlParticleOptions.STREAM_CODEC);
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WIGHT_FACE = PARTICLES.register("wight_face", () -> new SimpleParticleType(false));
 
 	public static final DeferredHolder<ParticleType<?>, ParticleType<BeamPuzzleParticleOptions>> BEAM_PUZZLE_BEAM = register("beam_puzzle_beam", true, type -> BeamPuzzleParticleOptions.CODEC, type -> BeamPuzzleParticleOptions.STREAM_CODEC);
