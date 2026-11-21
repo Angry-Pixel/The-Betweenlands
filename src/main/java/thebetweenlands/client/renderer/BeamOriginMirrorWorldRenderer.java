@@ -4,14 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -57,7 +55,6 @@ import thebetweenlands.client.renderer.util.StealingMirrorWorldBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
 import thebetweenlands.client.renderer.util.StencilReadType;
 import thebetweenlands.client.renderer.util.StencilWriteType;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.ObliqueProjectionHelper;
