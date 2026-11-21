@@ -86,7 +86,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 		if (level.getGameTime() % 10 == 0) {
 			if (entity.checkForLitBrazier(level, pos.offset(3, -1, 3))) {
 				if (level.isClientSide())
-					entity.spawnBrazierParticles(level, pos, new Vec3(3, -1, 3));
+					entity.spawnBrazierParticles(level, pos, new Vec3(3, -1.25, 3));
 				if (!level.isClientSide())
 					if (!entity.beam_1_active) {
 						entity.setBeam1Active(true);
@@ -100,7 +100,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 			if (entity.checkForLitBrazier(level, pos.offset(3, -1, -3))) {
 				if (level.isClientSide())
-					entity.spawnBrazierParticles(level, pos, new Vec3(3, -1, -3));
+					entity.spawnBrazierParticles(level, pos, new Vec3(3, -1.25, -3));
 				if (!level.isClientSide())
 					if (!entity.beam_2_active) {
 						entity.setBeam2Active(true);
@@ -114,7 +114,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 			if (entity.checkForLitBrazier(level, pos.offset(-3, -1, 3))) {
 				if (level.isClientSide())
-					entity.spawnBrazierParticles(level, pos, new Vec3(-3, -1, 3));
+					entity.spawnBrazierParticles(level, pos, new Vec3(-3, -1.25, 3));
 				if (!level.isClientSide())
 					if (!entity.beam_3_active) {
 						entity.setBeam3Active(true);
@@ -128,7 +128,7 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 			if (entity.checkForLitBrazier(level, pos.offset(-3, -1, -3))) {
 				if (level.isClientSide())
-					entity.spawnBrazierParticles(level, pos, new Vec3(-3, -1, -3));
+					entity.spawnBrazierParticles(level, pos, new Vec3(-3, -1.25, -3));
 				if (!level.isClientSide())
 					if (!entity.beam_4_active) {
 						entity.setBeam4Active(true);
