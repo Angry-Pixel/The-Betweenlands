@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
@@ -56,8 +57,10 @@ import thebetweenlands.client.renderer.util.StealingMirrorWorldBufferSource;
 import thebetweenlands.client.renderer.util.Stencil;
 import thebetweenlands.client.renderer.util.StencilReadType;
 import thebetweenlands.client.renderer.util.StencilWriteType;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BrazierBlock;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.util.ObliqueProjectionHelper;
 
 public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloadListener {
 	public static final BeamOriginMirrorWorldRenderer INSTANCE = new BeamOriginMirrorWorldRenderer();
@@ -116,7 +119,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 	 */
 	private static record Context(
 			PoseStack poseStack, DeltaTracker partialTicks,
-			Matrix4f modelViewMatrix, Matrix4f projectionMatrix, Matrix4f originalProjectionMatrix,
+			Matrix4f modelViewMatrix, Matrix4f projectionMatrix,
+			ObliqueProjectionHelper obliqueProjectionHelper,
 			EntityRenderDispatcher entityRenderDispatcher,
 			Stencil stencil, Tesselator tessellator,
 			VertexBuffer mirrorTriBuffer, MultiBufferSource.BufferSource mirrorWorldBufferSource,
@@ -172,7 +176,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			return;
 		}
 
-		Minecraft.getInstance().getProfiler().push("Beam Origin Mirror World");
+		Minecraft.getInstance().getProfiler().push("thebetweenlands:beam_origin_mirror_world");
 		
 		this.createMissingMirrorWorldVbos();
 		
@@ -199,7 +203,8 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			// Create context
 			Context context = new Context(
 					poseStack, partialTicks,
-					modelViewMatrix, new Matrix4f(projectionMatrix), projectionMatrix,
+					modelViewMatrix, new Matrix4f(projectionMatrix),
+					new ObliqueProjectionHelper(projectionMatrix),
 					entityRenderDispatcher,
 					stencil, Tesselator.getInstance(),
 					triVertexBuffer,    mirrorWorldBufferSource,
@@ -239,6 +244,7 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[1][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[1][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[1][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[2][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[2][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[2][2], TRIANGLE_ORIGIN, triOut[2]));
 				renderBeamOriginMirror(context, beamOrigin, transformVec(quat, TRIANGLE_VERTICES[3][0], TRIANGLE_ORIGIN, triOut[0]), transformVec(quat, TRIANGLE_VERTICES[3][1], TRIANGLE_ORIGIN, triOut[1]), transformVec(quat, TRIANGLE_VERTICES[3][2], TRIANGLE_ORIGIN, triOut[2]));
+				// mirrorWorldBufferSource.endBatch() is called inside each renderBeamOriginMirror(...)
 				
 				poseStack.popPose();
 			}
@@ -338,9 +344,10 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		// translate to make sure we're at (0, 0, 0) in the fake world
 		poseStack.translate(-0.5F, -2.5F, -0.5F);
 		
-		// Set up oblique projection
-		setupObliqueProjection(context, pose, mirrorCenter, normalF);
-		
+		// Sets up an oblique projection matrix with a near plane equal to the mirror triangle plane.
+		// This prevents any mirrored blocks/entities from rendering "in front of" the mirror triangle
+		context.obliqueProjectionHelper().setupObliqueProjection(pose, mirrorCenter, normalF, true, context.modelViewMatrix(), context.projectionMatrix());
+
 		// Render the mirror world blocks
 		renderMirrorWorldGeometry(context, beamOrigin, backup, mirrorCenter, normalF);
 		
@@ -351,88 +358,10 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 		// Draw mirror world entities
 		bufferSource.endBatch();
 		
-		// Clear oblique projection
-		clearObliqueProjection(context);
+		// Clears the oblique projection we set up earlier
+		context.obliqueProjectionHelper().clearObliqueProjection(context.projectionMatrix());
 		
 		poseStack.popPose();
-	}
-	
-	/**
-	 * Sets up an oblique projection matrix with a near plane equal to the mirror triangle plane.
-	 * <p>This prevents any mirrored blocks/entities from rendering "in front of" the mirror triangle.</p>
-	 * @param context      the context the mirror world is being rendered in
-	 * @param pose         the pose that the mirror triangle was originally rendered in
-	 * @param mirrorCenter a position on the mirror triangle; world coordinates
-	 * @param mirrorNormal the mirror triangle's normal; world coordinates
-	 */
-	private void setupObliqueProjection(Context context, PoseStack.Pose pose, Vector3f mirrorCenter, Vector3f mirrorNormal) {
-		// TODO give this a helper class or something so we don't need to allocate so much memory
-		
-		// Negate the mirror normal so we're including things *inside* the mirror (not outside it)
-		mirrorNormal = mirrorNormal.negate(new Vector3f());
-		
-		// Transform the mirror plane by the pose it was rendered in
-		pose.transformNormal(mirrorNormal, mirrorNormal);
-		mirrorCenter = pose.pose().transformPosition(mirrorCenter, new Vector3f());
-		
-		// Convert mirror center and mirror normal to camera space
-		final Matrix4f modelViewMatrix = context.modelViewMatrix();
-		Vector3f mirrorCenterCameraSpace = modelViewMatrix.transformPosition(mirrorCenter);
-		Vector3f mirrorNormalCameraSpace = modelViewMatrix.transformPosition(mirrorNormal);
-		
-		// Get projection matrix and set to original
-		final Matrix4f projectionMatrix = context.projectionMatrix();
-		projectionMatrix.set(context.originalProjectionMatrix());
-
-		// Retrieve matrix data
-		float[] matrix = new float[16];
-		projectionMatrix.get(matrix);
-		
-		// Our clip plane
-		Vector4f clipPlane = new Vector4f(mirrorNormalCameraSpace, -mirrorNormalCameraSpace.dot(mirrorCenterCameraSpace));
-		
-		// Taken from https://terathon.com/blog/oblique-clipping.html
-		
-		Vector4f q = new Vector4f();
-		Vector4f c = new Vector4f();
-		
-		// Calculate the clip-space corner point opposite the clipping plane
-		// as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
-		// transform it into camera space by multiplying it
-		// by the inverse of the projection matrix
-		
-		q.x = (Math.signum(clipPlane.x) + matrix[8]) / matrix[0];
-		q.y = (Math.signum(clipPlane.y) + matrix[9]) / matrix[5];
-		q.z = -1.0F;
-		q.w = (1.0F + matrix[10]) / matrix[14];
-		
-		// Calculate the scaled plane vector
-		c = clipPlane.mul(2.0F / clipPlane.dot(q));
-		
-		// Replace the third row of the projection matrix
-		matrix[2] = c.x;
-		matrix[6] = c.y;
-		matrix[10] = c.z + 1.0F;
-		matrix[14] = c.w;
-		
-		// Set matrix data
-		projectionMatrix.set(matrix);
-		
-		// Set our projection matrix in the render system as well
-		RenderSystem.backupProjectionMatrix();
-		RenderSystem.setProjectionMatrix(projectionMatrix, RenderSystem.getVertexSorting());
-	}
-	
-	/**
-	 * Clears the oblique projection caused by {@link #setupObliqueProjection(Context, Vector3f, Vector3f)}
-	 * @param context the context the oblique projection was setup on
-	 */
-	private void clearObliqueProjection(Context context) {
-		// Restore the render system projection matrix
-		RenderSystem.restoreProjectionMatrix();
-
-		// Reset projection matrix
-		context.projectionMatrix().set(context.originalProjectionMatrix());
 	}
 	
 	/**
