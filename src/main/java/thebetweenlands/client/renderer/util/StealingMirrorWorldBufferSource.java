@@ -2,8 +2,14 @@ package thebetweenlands.client.renderer.util;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
+import java.util.SequencedCollection;
 import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 
@@ -57,70 +63,183 @@ public class StealingMirrorWorldBufferSource extends MirrorWorldBufferSource {
 	private static class DelegateSequencedMap<K, V> implements SequencedMap<K, V> {
 
 		private SequencedMap<K, V> delegate = Object2ObjectSortedMaps.emptyMap();
-		
+
 		@Override
 		public int size() {
-			return this.delegate.size();
+			return delegate.size();
 		}
 
 		@Override
 		public boolean isEmpty() {
-			return this.delegate.isEmpty();
+			return delegate.isEmpty();
 		}
 
 		@Override
 		public boolean containsKey(Object key) {
-			return this.delegate.containsKey(key);
+			return delegate.containsKey(key);
 		}
 
 		@Override
 		public boolean containsValue(Object value) {
-			return this.delegate.containsKey(value);
+			return delegate.containsKey(value);
 		}
 
 		@Override
 		public V get(Object key) {
-			return this.delegate.get(key);
+			return delegate.get(key);
 		}
 
 		@Override
 		public V put(K key, V value) {
-			return this.delegate.put(key, value);
+			return delegate.put(key, value);
 		}
 
 		@Override
 		public V remove(Object key) {
-			return this.delegate.remove(key);
+			return delegate.remove(key);
 		}
 
 		@Override
 		public void putAll(Map<? extends K, ? extends V> m) {
-			this.delegate.putAll(m);
+			delegate.putAll(m);
 		}
 
 		@Override
 		public void clear() {
-			this.delegate.clear();
+			delegate.clear();
 		}
 
 		@Override
 		public Set<K> keySet() {
-			return this.delegate.keySet();
+			return delegate.keySet();
 		}
 
 		@Override
 		public Collection<V> values() {
-			return this.delegate.values();
+			return delegate.values();
 		}
 
 		@Override
 		public Set<Entry<K, V>> entrySet() {
-			return this.delegate.entrySet();
+			return delegate.entrySet();
 		}
 
 		@Override
 		public SequencedMap<K, V> reversed() {
-			return this.delegate.reversed();
+			return delegate.reversed();
+		}
+
+		@Override
+		public Entry<K, V> firstEntry() {
+			return delegate.firstEntry();
+		}
+
+		@Override
+		public Entry<K, V> lastEntry() {
+			return delegate.lastEntry();
+		}
+
+		@Override
+		public Entry<K, V> pollFirstEntry() {
+			return delegate.pollFirstEntry();
+		}
+
+		@Override
+		public Entry<K, V> pollLastEntry() {
+			return delegate.pollLastEntry();
+		}
+
+		@Override
+		public V putFirst(K k, V v) {
+			return delegate.putFirst(k, v);
+		}
+
+		@Override
+		public V putLast(K k, V v) {
+			return delegate.putLast(k, v);
+		}
+
+		@Override
+		public SequencedSet<K> sequencedKeySet() {
+			return delegate.sequencedKeySet();
+		}
+
+		@Override
+		public SequencedCollection<V> sequencedValues() {
+			return delegate.sequencedValues();
+		}
+
+		@Override
+		public SequencedSet<Entry<K, V>> sequencedEntrySet() {
+			return delegate.sequencedEntrySet();
+		}
+
+		@Override
+		public V getOrDefault(Object key, V defaultValue) {
+			return delegate.getOrDefault(key, defaultValue);
+		}
+
+		@Override
+		public void forEach(BiConsumer<? super K, ? super V> action) {
+			delegate.forEach(action);
+		}
+
+		@Override
+		public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
+			delegate.replaceAll(function);
+		}
+
+		@Override
+		public V putIfAbsent(K key, V value) {
+			return delegate.putIfAbsent(key, value);
+		}
+
+		@Override
+		public boolean remove(Object key, Object value) {
+			return delegate.remove(key, value);
+		}
+
+		@Override
+		public boolean replace(K key, V oldValue, V newValue) {
+			return delegate.replace(key, oldValue, newValue);
+		}
+
+		@Override
+		public V replace(K key, V value) {
+			return delegate.replace(key, value);
+		}
+
+		@Override
+		public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+			return delegate.computeIfAbsent(key, mappingFunction);
+		}
+
+		@Override
+		public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+			return delegate.computeIfPresent(key, remappingFunction);
+		}
+
+		@Override
+		public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+			return delegate.compute(key, remappingFunction);
+		}
+
+		@Override
+		public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+			return delegate.merge(key, value, remappingFunction);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(this.delegate);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof DelegateSequencedMap map) {
+				return Objects.equals(this.delegate, map.delegate);
+			}
+			return false;
 		}
 	}
 }
