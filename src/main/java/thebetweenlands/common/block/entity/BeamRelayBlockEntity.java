@@ -8,12 +8,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.particle.options.BeamPuzzleParticleOptions;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BeamRelayBlock;
 import thebetweenlands.common.block.structure.DungeonDoorRunesBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class BeamRelayBlockEntity extends SyncedBlockEntity {
 
+	public static final BeamPuzzleParticleOptions BEAM_PARTICLE_OPTIONS = new BeamPuzzleParticleOptions(1.0F, 10, false, 0.7F / 3.0F, false);
+	
 	public boolean active;
 	public boolean in_down, in_up, in_north, in_south, in_west, in_east;
 
@@ -39,11 +44,25 @@ public class BeamRelayBlockEntity extends SyncedBlockEntity {
 	}
 
 	private void spawnBeamParticles(Level level, BlockPos pos, Vec3 target) {
-//		Vec3 dir = target.normalize();
-//		float beamScale = 2.5F;
-//		float beamScaleInset = 0.75f;
-//		Vec3 beamStart = new Vec3(pos.getX() + 0.5 - dir.x * beamScale * beamScaleInset * 0.1f, pos.getY() + 0.5 - dir.y * beamScale * beamScaleInset * 0.1f, pos.getZ() + 0.5 - dir.z * beamScale * beamScaleInset * 0.1f);
-//		Vec3 beamEnd = new Vec3(target.x + dir.x * beamScale * beamScaleInset * 0.1f * 2, target.y + dir.y * beamScale * beamScaleInset * 0.1f * 2, target.z + dir.z * beamScale * beamScaleInset * 0.1f * 2);
+		Vec3 dir = target.normalize();
+		float beamScale = 2.5F;
+		float beamScaleInset = 0.75f;
+		Vec3 beamStart = new Vec3(pos.getX() + 0.5 - dir.x * beamScale * beamScaleInset * 0.1f, pos.getY() + 0.5 - dir.y * beamScale * beamScaleInset * 0.1f, pos.getZ() + 0.5 - dir.z * beamScale * beamScaleInset * 0.1f);
+		Vec3 beamEnd = new Vec3(target.x + dir.x * beamScale * beamScaleInset * 0.1f * 2, target.y + dir.y * beamScale * beamScaleInset * 0.1f * 2, target.z + dir.z * beamScale * beamScaleInset * 0.1f * 2);
+
+		BeamPuzzleParticleOptions options = BEAM_PARTICLE_OPTIONS;
+		
+		TheBetweenlands.createParticle(
+				options,
+				level,
+				beamStart.x, beamStart.y, beamStart.z,
+				ParticleArgs.get()
+					.withMotion(0, 0, 0)
+					.withColor(40F / 255F, 220F / 255F, 130F / 255F, 1F)
+					.withScale(beamScale)
+					.withData(30, beamEnd)
+			);
+		
 //		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(level, beamStart.x, beamStart.y, beamStart.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(40F, 220F, 130F, 1F).withScale(beamScale).withData(30, beamEnd)));
 //		for(int i = 0; i < 3; i++) {
 //			float offsetLen = level.getRandom().nextFloat();

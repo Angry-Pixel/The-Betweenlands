@@ -35,6 +35,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class BeamOriginBlockEntity extends SyncedBlockEntity {
 
 	public static final BeamPuzzleParticleOptions BRAZIER_BEAM_PARTICLE_OPTIONS = new BeamPuzzleParticleOptions(1.0F, 10, false, 0.5F, true);
+	public static final BeamPuzzleParticleOptions BEAM_PARTICLE_OPTIONS         = BeamRelayBlockEntity.BEAM_PARTICLE_OPTIONS;
 	
 	public boolean active;
 
@@ -219,6 +220,19 @@ public class BeamOriginBlockEntity extends SyncedBlockEntity {
 	}
 
 	private void spawnBeamParticles(Level level, BlockPos pos, Vec3 target) {
+		BeamPuzzleParticleOptions options = BEAM_PARTICLE_OPTIONS;
+		
+		TheBetweenlands.createParticle(
+				options,
+				level,
+				pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+				ParticleArgs.get()
+					.withMotion(0, 0, 0)
+					.withColor(40F / 255F, 220F / 255F, 130F / 255F, 1F)
+					.withScale(2.5F)
+					.withData(30, target)
+			);
+		
 //		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ParticleArgs.get().withMotion(0, 0, 0).withColor(40F, 220F, 130F, 1F).withScale(2.5F).withData(30, target)));
 //		for (int i = 0; i < 3; i++) {
 //			float offsetLen = this.level.getRandom().nextFloat();
