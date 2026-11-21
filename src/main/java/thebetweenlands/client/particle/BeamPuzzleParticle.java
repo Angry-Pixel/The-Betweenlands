@@ -12,6 +12,7 @@ import net.minecraft.client.particle.SingleQuadParticle.FacingCameraMode;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.particle.options.BeamPuzzleParticleOptions;
 import thebetweenlands.client.renderer.BLParticleRenderType;
@@ -100,6 +101,11 @@ public class BeamPuzzleParticle extends Particle {
 		this.renderScale = 0.1F * scale;
 		this.texUScale = scale * 4.0F;
 		return super.scale(scale);
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(float partialTicks) {
+		return super.getRenderBoundingBox(partialTicks).expandTowards(this.targetOffset);
 	}
 	
 	@Override
