@@ -17,14 +17,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 public class BoneArmorModel extends BLArmorModel {
 	
 	private final EquipmentSlot slot;
-	private final ModelPart belt;
+	private final ModelPart beltLegs;
+	private final ModelPart beltBody;
 	private final ModelPart leftBoot;
 	private final ModelPart rightBoot;
 
 	public BoneArmorModel(EquipmentSlot slot, ModelPart root) {
 		super(root);
 		this.slot = slot;
-		this.belt = root.getChild("belt");
+		this.beltLegs = root.getChild("belt_legs");
+		this.beltBody = root.getChild("belt");
 		this.leftBoot = root.getChild("left_boot");
 		this.rightBoot = root.getChild("right_boot");
 	}
@@ -197,9 +199,26 @@ public class BoneArmorModel extends BLArmorModel {
 		// ============ BELT ============
 
 		// Originally "leggings" -> "belt", now "root" -> "belt"
-		PartDefinition belt = armour.addOrReplaceChild("belt", CubeListBuilder.create().texOffs(11, 72).addBox(-3.0F, 0.5F, 2.5F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.02F))
-		.texOffs(3, 72).addBox(-3.0F, 0.5F, -2.5F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.02F))
-		.texOffs(0, 65).addBox(-5.0F, -1.5F, -2.5F, 8.0F, 2.0F, 5.0F, new CubeDeformation(0.02F)), PartPose.offset(1.0F, 11.5F, 0.0F));
+		PartDefinition belt = armour.addOrReplaceChild("belt", CubeListBuilder.create(), PartPose.ZERO);
+
+		// Did not originally exist
+		// Attached to the body
+		PartDefinition belt_content = belt.addOrReplaceChild("belt_main",
+			CubeListBuilder.create()
+				.texOffs(11, 72).addBox(-3.0F, 0.5F, 2.5F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.02F))
+				.texOffs(0, 65).addBox(-5.0F, -1.5F, -2.5F, 8.0F, 2.0F, 5.0F, new CubeDeformation(0.02F)),
+			PartPose.offset(1.0F, 11.5F, 0.0F));
+
+		// Originally "leggings" -> "belt_legs", now "root" -> "belt_legs"
+		PartDefinition belt_legs = armour.addOrReplaceChild("belt_legs", CubeListBuilder.create(), PartPose.ZERO);
+
+		// Did not originally exist
+		// Attached the to the legs
+		PartDefinition belt_legs_content = belt_legs.addOrReplaceChild("belt_main",
+			CubeListBuilder.create()
+				.texOffs(3, 72).addBox(-3.0F, 0.5F, -2.5F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.02F))
+				.texOffs(0, 65).addBox(-5.0F, -1.5F, -2.5F, 8.0F, 2.0F, 5.0F, new CubeDeformation(0.02F)),
+			PartPose.offset(1.0F, 11.5F, 0.0F));
 
 		// ========== BELT END ==========
 
@@ -246,7 +265,7 @@ public class BoneArmorModel extends BLArmorModel {
 
 	@Override
 	protected Iterable<ModelPart> bodyParts() {
-		return Iterables.concat(super.bodyParts(), ImmutableList.of(this.belt, this.leftBoot, this.rightBoot));
+		return Iterables.concat(super.bodyParts(), ImmutableList.of(this.beltBody, this.beltLegs, this.leftBoot, this.rightBoot));
 	}
 
 	@Override
@@ -258,7 +277,8 @@ public class BoneArmorModel extends BLArmorModel {
 				this.body.visible = false;
 				this.rightArm.visible = false;
 				this.leftArm.visible = false;
-				this.belt.visible = false;
+				this.beltBody.visible = false;
+				this.beltLegs.visible = false;
 				this.rightLeg.visible = false;
 				this.leftLeg.visible = false;
 				this.leftBoot.visible = false;
@@ -270,7 +290,8 @@ public class BoneArmorModel extends BLArmorModel {
 				this.body.visible = true;
 				this.rightArm.visible = true;
 				this.leftArm.visible = true;
-				this.belt.visible = false;
+				this.beltBody.visible = false;
+				this.beltLegs.visible = false;
 				this.rightLeg.visible = false;
 				this.leftLeg.visible = false;
 				this.leftBoot.visible = false;
@@ -282,7 +303,8 @@ public class BoneArmorModel extends BLArmorModel {
 				this.body.visible = false;
 				this.rightArm.visible = false;
 				this.leftArm.visible = false;
-				this.belt.visible = true;
+				this.beltBody.visible = true;
+				this.beltLegs.visible = true;
 				this.rightLeg.visible = true;
 				this.leftLeg.visible = true;
 				this.leftBoot.visible = false;
@@ -294,13 +316,22 @@ public class BoneArmorModel extends BLArmorModel {
 				this.body.visible = false;
 				this.rightArm.visible = false;
 				this.leftArm.visible = false;
-				this.belt.visible = false;
+				this.beltBody.visible = false;
+				this.beltLegs.visible = false;
 				this.rightLeg.visible = false;
 				this.leftLeg.visible = false;
 				this.leftBoot.visible = true;
 				this.rightBoot.visible = true;
 			}
 			default -> { }
+		}
+		this.beltBody.copyFrom(this.body);
+		if (this.crouching) {
+			this.beltLegs.x = (this.leftLeg.x + this.rightLeg.x) * 0.5f;
+			this.beltLegs.y = (this.leftLeg.y + this.rightLeg.y) * 0.5f - 12.0f;
+			this.beltLegs.z = (this.leftLeg.z + this.rightLeg.z) * 0.5f;
+		} else {
+			this.beltLegs.copyFrom(this.beltBody);
 		}
 		this.rightBoot.copyFrom(this.rightLeg);
 		this.leftBoot.copyFrom(this.leftLeg);
