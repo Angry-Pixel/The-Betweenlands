@@ -188,6 +188,11 @@ public final class BeamOriginMirrorWorldRenderer implements ResourceManagerReloa
 			
 			final StealingMirrorWorldBufferSource mirrorWorldBufferSource = this.mirrorWorldBufferSource;
 			
+			// End any in-progress renders to entityBufferSource, because we're going to reuse those buffers
+			// Alternative: create our own RenderBuffers instead, so we don't need to end in-progress buffers here
+			// TODO add a client config option for this
+			entityBufferSource.endBatch();
+			
 			// Set the stencil to be used by the mirror world
 			mirrorWorldBufferSource.setStencil(stencil, StencilReadType.STENCIL_IS_KEPT);
 			// "Steal" the fixed buffers from RenderBuffers
