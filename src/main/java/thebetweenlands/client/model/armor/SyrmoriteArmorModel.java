@@ -183,6 +183,7 @@ public class SyrmoriteArmorModel extends BLArmorModel {
 			}
 			default -> { }
 		}
+		this.belt.copyFrom(this.body);
 		this.rightBoot.copyFrom(this.rightLeg);
 		this.leftBoot.copyFrom(this.leftLeg);
 		super.renderToBuffer(stack, consumer, light, overlay, color);
