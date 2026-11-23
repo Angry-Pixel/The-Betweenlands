@@ -111,9 +111,9 @@ public class AncientArmorModel extends BLArmorModel {
 		PartDefinition lowerplate_right = lowerplate_main.addOrReplaceChild("lowerplate_right", CubeListBuilder.create().texOffs(92, 25).addBox(-3.0F, 0.0F, -2.5F, 3.0F, 1.0F, 5.0F, CubeDeformation.NONE), PartPose.offsetAndRotation(-1.5F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0911F));
 
 		// Belt
-		PartDefinition leggings_mainrotation = partdefinition.addOrReplaceChild("belt", CubeListBuilder.create(), PartPose.offset(0.0F, 10.0F, 0.0F));
+		PartDefinition leggings_mainrotation = partdefinition.addOrReplaceChild("belt", CubeListBuilder.create(), PartPose.ZERO);
 
-		PartDefinition belt_main = leggings_mainrotation.addOrReplaceChild("belt_main", CubeListBuilder.create().texOffs(45, 0).addBox(-4.5F, 0.0F, -2.5F, 9.0F, 2.0F, 5.0F, CubeDeformation.NONE), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.0456F));
+		PartDefinition belt_main = leggings_mainrotation.addOrReplaceChild("belt_main", CubeListBuilder.create().texOffs(45, 0).addBox(-4.5F, 0.0F, -2.5F, 9.0F, 2.0F, 5.0F, CubeDeformation.NONE), PartPose.offsetAndRotation(0.0F, 10.0F, 0.0F, 0.0F, 0.0F, -0.0456F));
 
 		PartDefinition belt_add1 = belt_main.addOrReplaceChild("belt_add1", CubeListBuilder.create().texOffs(45, 8).addBox(0.0F, 0.0F, -2.5F, 2.0F, 1.0F, 5.0F, CubeDeformation.NONE), PartPose.offset(-2.5F, 2.0F, 0.0F));
 
@@ -222,6 +222,7 @@ public class AncientArmorModel extends BLArmorModel {
 			}
 			default -> { }
 		}
+		this.belt.copyFrom(this.body);
 		this.rightBoot.copyFrom(this.rightLeg);
 		this.leftBoot.copyFrom(this.leftLeg);
 		super.renderToBuffer(stack, consumer, light, overlay, color);
