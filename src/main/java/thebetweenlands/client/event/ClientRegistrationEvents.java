@@ -414,6 +414,7 @@ import thebetweenlands.common.block.entity.AspectrusCropBlockEntity;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.component.item.ShockwaveSwordData;
+import thebetweenlands.common.entity.FlameJet;
 import thebetweenlands.common.entity.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.fluid.BasicFluidTypeExtension;
 import thebetweenlands.common.fluid.ColoredFluidTypeExtension;
@@ -568,6 +569,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.OLM.get(), OlmRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.EMBERLING.get(), EmberlingRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.EMBERLING_SHAMAN.get(), EmberlingShamanRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FLAME_JET.get(), NoopRenderer<FlameJet>::new);
 		event.registerEntityRenderer(EntityRegistry.DRAGONFLY.get(), DragonflyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FIREFLY.get(), FireflyRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.JELLYFISH.get(), JellyfishRenderer::new);
